@@ -1,0 +1,25 @@
+---
+import fs from 'fs';
+const posts = [
+  { title: 'First Post', slug: 'first-post', summary: 'This is your first blog post.' }
+];
+---
+
+<html>
+  <head>
+    <title>Blog - fastvistos</title>
+  </head>
+  <body>
+    <h1>Blog</h1>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+    <ul>
+      {posts.map(post => (
+        <li>
+          <a href={`/blog/${post.slug}`}>{post.title}</a> - {post.summary}
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>

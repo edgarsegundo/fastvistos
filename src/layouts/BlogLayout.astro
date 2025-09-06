@@ -1,0 +1,19 @@
+---
+// Blog layout for posts
+const { title } = Astro.props;
+---
+<html>
+  <head>
+    <title>{title} - fastvistos</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Home</a> | <a href="/blog">Blog</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
