@@ -1,8 +1,9 @@
 ---
-import fs from 'fs';
-const posts = [
-  { title: 'First Post', slug: 'first-post', summary: 'This is your first blog post.' }
-];
+const allPosts = import.meta.glob('../../content/blog/*.md', { eager: true });
+const posts = Object.entries(allPosts).map(([path, post]) => ({
+  ...post,
+  slug: path.split('/').pop().replace('.md', '')
+}));
 ---
 
 <html>
@@ -17,7 +18,7 @@ const posts = [
     <ul>
       {posts.map(post => (
         <li>
-          <a href={`/blog/${post.slug}`}>{post.title}</a> - {post.summary}
+          <a href={`/blog/${post.slug}`}>{post.frontmatter.title}</a> - {post.frontmatter.description}
         </li>
       ))}
     </ul>
