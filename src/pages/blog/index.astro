@@ -1,8 +1,8 @@
 ---
 const allPosts = import.meta.glob('../../content/blog/*.md', { eager: true });
 const posts = Object.entries(allPosts).map(([path, post]) => ({
-  ...post,
-  slug: path.split('/').pop().replace('.md', '')
+  ...(post as any),
+  slug: path.split('/').pop()?.replace('.md', '') || ''
 }));
 ---
 
@@ -16,7 +16,7 @@ const posts = Object.entries(allPosts).map(([path, post]) => ({
       <a href="/">Home</a>
     </nav>
     <ul>
-      {posts.map(post => (
+      {posts.map((post: any) => (
         <li>
           <a href={`/blog/${post.slug}`}>{post.frontmatter.title}</a> - {post.frontmatter.description}
         </li>
