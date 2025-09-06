@@ -2,13 +2,13 @@
 export async function getStaticPaths() {
   const allPosts = import.meta.glob('../../content/blog/*.md', { eager: true });
   return Object.entries(allPosts).map(([path, post]) => ({
-    params: { slug: path.split('/').pop().replace('.md', '') },
+    params: { slug: path.split('/').pop()?.replace('.md', '') || '' },
     props: { post }
   }));
 }
 
 const { post } = Astro.props;
-const { frontmatter, Content } = post;
+const { frontmatter, Content } = post as any;
 ---
 <html>
   <head>
