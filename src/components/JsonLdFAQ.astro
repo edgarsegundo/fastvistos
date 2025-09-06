@@ -1,0 +1,28 @@
+---
+// JsonLdFAQ.astro
+import { faqData, type FaqItem } from '../config/faqConfig';
+
+export interface Props {
+    questions?: Array<FaqItem>;
+}
+
+const { questions } = Astro.props;
+
+// Use provided questions or fall back to default FAQ data
+const faqQuestions = questions || faqData;
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqQuestions.map(q => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: {
+            '@type': 'Answer',
+            text: q.answer,
+        },
+    })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

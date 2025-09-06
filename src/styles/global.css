@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Base Styles */
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        font-family: 'Source Sans Pro', sans-serif;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+}
+
+/* Custom Components */
+@layer components {
+    .gradient {
+        background: linear-gradient(270deg, #0077b6 0%, #1f4e7a 50%, #2a5e90 100%) !important;
+    }
+
+    .cta-button-wiggle {
+        color: #ff6901;
+        animation: wiggle 4s 2s infinite;
+    }
+
+    .carousel {
+        width: 100%;
+        overflow-x: scroll;
+        padding: 30px;
+        position: relative;
+        box-sizing: border-box;
+        scrollbar-width: none;
+    }
+
+    .carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .carousel__container {
+        white-space: nowrap;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    .categories__title {
+        color: #4d3766;
+        font-size: 28px;
+        position: absolute;
+        padding-left: 30px;
+    }
+
+    .carousel-item {
+        width: 200px;
+        height: 117px;
+        padding: 6px;
+        border-radius: 20px;
+        background-color: #ff8700;
+        overflow: hidden;
+        margin-right: 10px;
+        margin-top: 70px;
+        display: inline-block;
+        cursor: pointer;
+        transition: 1s all;
+        transform-origin: center left;
+        position: relative;
+    }
+
+    .carousel-item:hover ~ .carousel-item {
+        transform: translate3d(100px, 0, 0);
+    }
+
+    .carousel__container:hover .carousel-item {
+        opacity: 0.3;
+    }
+
+    .carousel__container:hover .carousel-item:hover {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+
+    .carousel-item__img {
+        width: 200px;
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .carousel-item__details:hover {
+        opacity: 1;
+    }
+
+    .carousel-item__details span {
+        font-size: 0.9rem;
+        color: #2ecc71;
+    }
+
+    .carousel-item__details .controls {
+        padding-top: 180px;
+    }
+
+    .carousel-item__details--title,
+    .carousel-item__details--subtitle {
+        color: #fff;
+        margin: 5px 0;
+    }
+
+    .typed-text {
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        width: 0;
+        animation:
+            typing 3s steps(60) 1s forwards,
+            blink 0.75s step-end infinite;
+    }
+
+    .chat-window {
+        background-image: url(assets/images/whatsapp/background-whatsapp.webp);
+        background-size: cover;
+        background-position: center;
+    }
+}
+
+/* Custom Utilities */
+@layer utilities {
+    .fill-current {
+        fill: #ff6901;
+    }
+
+    .text-brand-primary {
+        color: #1b375c !important;
+    }
+}
