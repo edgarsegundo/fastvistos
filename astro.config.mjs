@@ -1,11 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
-import remarkGfm from 'remark-gfm';
-import remarkSmartypants from 'remark-smartypants';
-import rehypeExternalLinks from 'rehype-external-links';
 
 // Constants
 const SITE_URL = 'https://fastvistos.com.br';
@@ -18,10 +15,6 @@ export default defineConfig({
     site: SITE_URL,
     integrations: [
         mdx(),
-        tailwind({
-            // Apply base styles to Astro components
-            applyBaseStyles: false, // We'll handle this in our global.css
-        }),
         sitemap({
             // Serialize each route with custom fields like `lastmod`
             serialize: ({ url, data }) => {
@@ -41,6 +34,7 @@ export default defineConfig({
     ],
     vite: {
         plugins: [
+            tailwindcss(),
             {
                 name: 'sitemap-xml-header',
                 configureServer(server) {
