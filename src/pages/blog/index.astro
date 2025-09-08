@@ -1,4 +1,6 @@
 ---
+import '../../styles/global.css'; // ✅ This makes Tailwind work
+
 const allPosts = import.meta.glob('../../content/blog/*.md', { eager: true });
 const posts = Object.entries(allPosts).map(([path, post]) => ({
   ...(post as any),
