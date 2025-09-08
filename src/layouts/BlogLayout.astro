@@ -1,121 +1,93 @@
 ---
-// Blog layout for posts
-const { title } = Astro.props;
+// Import our compiled Tailwind CSS
+import '../styles/global.css';
+
+export interface Props {
+    title: string;
+    description: string;
+    bodyClass?: string;
+}
+
+const { title, description, bodyClass = '' } = Astro.props;
 ---
-<html>
-  <head>
-    <title>{title} - fastvistos</title>
-  </head>
-  <body>
-    <header>
-    </header>
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-59SRNCQD');
+    </script>
+    <!-- End Google Tag Manager -->
 
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fastvistos.com.br" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap"
+        rel="stylesheet"
+    />
 
-    <nav id="header" class="w-full z-50 top-0 text-white gradient">
-        <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-4">
-            <div class="pl-4 flex items-center">
-                <a
-                    class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-                    href="https://fastvistos.com.br"
-                >
-                    <img
-                        src="/assets/images/logo/logo-desktop.png"
-                        class="w-32 sm:w-36 md:w-40 lg:w-48 xl:w-56 h-auto"
-                        alt="FastVistos Logo"
-                    />
-                </a>
-            </div>
-            <div class="block lg:hidden pr-4">
-                <button
-                    id="nav-toggle"
-                    aria-label="Abrir menu"
-                    class="flex items-center p-1 text-pink-800 hover:text-gray-900 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                >
-                    <svg
-                        class="fill-current h-6 w-6"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <title>Menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-                    </svg>
-                </button>
-            </div>
-            <div
-                id="nav-content"
-                class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 lg:bg-transparent p-4 lg:p-0 z-20"
-            >
-                <ul class="list-reset lg:flex justify-end flex-1 items-center">
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 py-2 px-4 font-bold no-underline link-click"
-                            href="#casos-de-sucesso"
-                            style="color: white !important;"
-                        >
-                            Casos de Sucesso</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click"
-                            style="color: white !important;"
-                            href="#nossos-servicos">Nossos Serviços</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click"
-                            style="color: white !important;"
-                            href="#faq">FAQ</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click"
-                            style="color: white !important;"
-                            href="/blog/">Blog</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="wpp_button_link inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
-                            style="color: white !important;"
-                            data-linkcode="%231"
-                            href="#">☎ (19) 2042-2785</a
-                        >
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- <hr class="border-b border-gray-100 opacity-25 my-0 py-0" /> -->
-    </nav>
+    <slot name="head" />
+</head>
 
+<body
+    class={`leading-normal tracking-normal text-white gradient ${bodyClass}`}
+    style="font-family: 'Source Sans Pro', sans-serif;"
+>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+        ><iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-59SRNCQD"
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden"></iframe></noscript
+    >
+    <!-- End Google Tag Manager (noscript) -->
 
-    <main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <slot />
-    </main>
-  </body>
+    <!-- Main content -->
+    <slot />
+</body>
 </html>
+
+<style is:global>
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        font-family: 'Source Sans Pro', sans-serif;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    /* Global utility classes */
+    .gradient {
+        background: linear-gradient(270deg, #0077b6 0%, #1f4e7a 50%, #2a5e90 100%) !important;
+    }
+    .fill-current {
+        fill: #ff6901;
+    }
+</style>

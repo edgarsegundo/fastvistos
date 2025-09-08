@@ -1,5 +1,7 @@
 ---
-import '../../styles/global.css'; // ✅ This makes Tailwind work
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import FooterSection from '../../components/FooterSection.astro';
 
 const allPosts = import.meta.glob('../../content/blog/*.md', { eager: true });
 const posts = Object.entries(allPosts).map(([path, post]) => ({
@@ -8,109 +10,104 @@ const posts = Object.entries(allPosts).map(([path, post]) => ({
 }));
 ---
 
-<html>
-  <head>
-    <title>Blog - fastvistos</title>
-  </head>
-  <body>
+<BlogLayout 
+    title="Blog - FastVistos | Dicas sobre Vistos Americanos" 
+    description="Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados."
+>
+    <Navigation />
+    
+    <main class="min-h-screen bg-gray-50 py-12">
+        <div class="container mx-auto px-4">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4" style="color: #1B375C;">
+                    Blog FastVistos
+                </h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Dicas, guias e novidades sobre vistos americanos, canadenses e mexicanos
+                </p>
+            </div>
 
+            <!-- Blog Posts Grid -->
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+                {posts.map((post: any) => (
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                        <!-- Featured Image Placeholder -->
+                        <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                            <div class="text-white text-center">
+                                <svg class="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                                </svg>
+                                <p class="text-sm opacity-75">Imagem do artigo</p>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h2 class="text-xl font-bold text-gray-900 mb-3">
+                                <a 
+                                    href={`/blog/${post.slug}`} 
+                                    class="hover:text-blue-600 transition-colors"
+                                >
+                                    {post.frontmatter.title}
+                                </a>
+                            </h2>
+                            
+                            <p class="text-gray-600 mb-4">
+                                {post.frontmatter.description}
+                            </p>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-500">
+                                    {post.frontmatter.pubDate ? 
+                                        new Date(post.frontmatter.pubDate).toLocaleDateString('pt-BR') : 
+                                        'Artigo recente'
+                                    }
+                                </span>
+                                
+                                <a 
+                                    href={`/blog/${post.slug}`} 
+                                    class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors"
+                                    style="background-color: #0c59be;"
+                                    onmouseover="this.style.backgroundColor='#0a4da0'"
+                                    onmouseout="this.style.backgroundColor='#0c59be'"
+                                >
+                                    Ler mais
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                ))}
+            </div>
 
+            <!-- Empty State -->
+            {posts.length === 0 && (
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">📝</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Nenhum post encontrado</h2>
+                    <p class="text-gray-600">Em breve teremos conteúdo incrível para você!</p>
+                </div>
+            )}
 
-    <nav id="header" class="w-full z-50 top-0 text-white gradient">
-        <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-4">
-            <div class="pl-4 flex items-center">
-                <a
-                    class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-                    href="https://fastvistos.com.br"
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a 
+                    href="/" 
+                    class="inline-flex items-center px-6 py-3 text-white font-medium rounded-lg transition-colors"
+                    style="background-color: #ff8700;"
+                    onmouseover="this.style.backgroundColor='#e67600'"
+                    onmouseout="this.style.backgroundColor='#ff8700'"
                 >
-                    <img
-                        src="/assets/images/logo/logo-desktop.png"
-                        class="w-32 sm:w-36 md:w-40 lg:w-48 xl:w-56 h-auto"
-                        alt="FastVistos Logo"
-                    />
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Voltar ao início
                 </a>
             </div>
-            <div class="block lg:hidden pr-4">
-                <button
-                    id="nav-toggle"
-                    aria-label="Abrir menu"
-                    class="flex items-center p-1 text-pink-800 hover:text-gray-900 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                >
-                    <svg
-                        class="fill-current h-6 w-6"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <title>Menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-                    </svg>
-                </button>
-            </div>
-            <div
-                id="nav-content"
-                class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 lg:bg-transparent p-4 lg:p-0 z-20"
-            >
-                <ul class="list-reset lg:flex justify-end flex-1 items-center">
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 py-2 px-4 font-bold no-underline link-click"
-                            href="#casos-de-sucesso"
-                            style="color: white !important;"
-                        >
-                            Casos de Sucesso</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click"
-                            style="color: white !important;"
-                            href="#nossos-servicos">Nossos Serviços</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click"
-                            style="color: white !important;"
-                            href="#faq">FAQ</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click"
-                            style="color: white !important;"
-                            href="/blog/">Blog</a
-                        >
-                    </li>
-                    <li class="mr-3">
-                        <a
-                            class="wpp_button_link inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
-                            style="color: white !important;"
-                            data-linkcode="%231"
-                            href="#">☎ (19) 2042-2785</a
-                        >
-                    </li>
-                </ul>
-            </div>
         </div>
-    </nav>
+    </main>
 
-
-
-
-
-
-
-
-
-
-
-    <ul>
-      {posts.map((post: any) => (
-        <li>
-          <a href={`/blog/${post.slug}`}>{post.frontmatter.title}</a> - {post.frontmatter.description}
-        </li>
-      ))}
-    </ul>
-  </body>
-</html>
-
+    <FooterSection />
+</BlogLayout>
