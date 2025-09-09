@@ -1,16 +1,19 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import { BlogService } from '../../lib/blog-service.js';
 
-const allPosts = import.meta.glob('../../content/blog/*.md', { eager: true });
-const posts = Object.entries(allPosts).map(([path, post]) => ({
-  ...(post as any),
-  slug: path.split('/').pop()?.replace('.md', '') || ''
-}));
+// Get blog configuration for dynamic title
+const blogConfig = await BlogService.getBlogConfig();
+const dynamicTitle = blogConfig?.title || "Blog - FastVistos | Dicas sobre Vistos Americanos";
+const dynamicDescription = blogConfig?.description || "Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados.";
+
+// Get all published articles from database
+const articles = await BlogService.getPublishedArticles();
 ---
 
 <BlogLayout 
-    title="Blog - FastVistos | Dicas sobre Vistos Americanos" 
-    description="Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados."
+    title={dynamicTitle}
+    description={dynamicDescription}
 >
 
     <!-- H1 -->
@@ -18,7 +21,9 @@ const posts = Object.entries(allPosts).map(([path, post]) => ({
         <div class="mx-auto" style="max-width: 1220px;">
             <div class="">
                 <!-- Main Title -->
-                <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">Dicas e Notícias sobre Vistos</h1>
+                <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">
+                    {blogConfig?.title || "Dicas e Notícias sobre Vistos"}
+                </h1>
                 <!-- Breadcrumb -->
                 <div class="mb-2 mt-6">
                     <nav class="text-sm">
@@ -28,7 +33,7 @@ const posts = Object.entries(allPosts).map(([path, post]) => ({
                                 <span class="mx-2 text-gray-400">|</span>
                             </li>
                             <li class="">
-                                <a href="../blog.html" class="hover:text-gray-300">Blog</a>
+                                <a href="/blog" class="hover:text-gray-300">Blog</a>
                             </li>
                         </ol>
                     </nav>
@@ -38,27 +43,54 @@ const posts = Object.entries(allPosts).map(([path, post]) => ({
     </section>
 
 
-    <section class="blog-posts">
-        <h2>Latest Posts</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post: any) => (
-                <article class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold mb-2">
-                        <a href={`/blog/${post.slug}`} class="text-blue-600 hover:text-blue-800">
-                            {post.frontmatter.title}
-                        </a>
-                    </h3>
-                    <p class="text-gray-600 mb-4">
-                        {post.frontmatter.description}
-                    </p>
-                    <a 
-                        href={`/blog/${post.slug}`} 
-                        class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    >
-                        Read More
-                    </a>
-                </article>
-            ))}
+    <section class="blog-posts py-16 px-4 lg:px-8">
+        <div class="mx-auto" style="max-width: 1220px;">
+            <h2 class="text-3xl font-bold text-center mb-12">Latest Posts</h2>
+            
+            {articles.length > 0 ? (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {articles.map((article) => (
+                        <article class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                            {article.featured_image && (
+                                <img 
+                                    src={article.featured_image} 
+                                    alt={article.title}
+                                    class="w-full h-48 object-cover rounded-lg mb-4"
+                                />
+                            )}
+                            <div class="mb-2">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                    {article.topic.name}
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">
+                                <a href={`/blog/${article.slug}`} class="text-blue-600 hover:text-blue-800">
+                                    {article.title}
+                                </a>
+                            </h3>
+                            <p class="text-gray-600 mb-4">
+                                {article.excerpt || article.content.slice(0, 150) + '...'}
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">
+                                    {new Date(article.created_at).toLocaleDateString('pt-BR')}
+                                </span>
+                                <a 
+                                    href={`/blog/${article.slug}`} 
+                                    class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                                >
+                                    Ler Mais
+                                </a>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            ) : (
+                <div class="text-center py-12">
+                    <p class="text-gray-600 text-lg">Nenhum artigo encontrado.</p>
+                    <p class="text-gray-500 mt-2">Volte em breve para conferir nossos artigos!</p>
+                </div>
+            )}
         </div>
     </section>
 
