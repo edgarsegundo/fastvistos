@@ -11,8 +11,10 @@
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
     "@astrojs/sitemap": "^3.5.1",
+    "@prisma/client": "^6.15.0",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.5",
+    "prisma": "^6.15.0",
     "rehype-external-links": "^3.0.0",
     "remark-gfm": "^4.0.1",
     "remark-smartypants": "^3.0.2",

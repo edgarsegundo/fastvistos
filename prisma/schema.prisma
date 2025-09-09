@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model BlogConfig {
+  id          String @id @default(uuid()) @db.Char(36)
+  title       String @db.VarChar(200)
+  description String @db.Text
+  keywords    String @db.Text
+  author      String @db.VarChar(100)
+  base_url    String @db.VarChar(255)
+  logo_url    String @db.VarChar(255)
+  
+  @@map("blog_config")
+}
+
+model BlogTopic {
+  id          String @id @default(uuid()) @db.Char(36)
+  name        String @db.VarChar(100)
+  description String @db.Text
+  slug        String @unique @db.VarChar(150)
+  
+  // Relationship to BlogArticle
+  articles    BlogArticle[]
+  
+  @@map("blog_topic")
+}
+
+model BlogArticle {
+  id           String   @id @default(uuid()) @db.Char(36)
+  title        String   @db.VarChar(200)
+  content      String   @db.LongText
+  excerpt      String?  @db.Text
+  slug         String   @unique @db.VarChar(200)
+  meta_title   String?  @db.VarChar(200)
+  meta_description String? @db.Text
+  meta_keywords String? @db.Text
+  featured_image String? @db.VarChar(255)
+  published    Boolean  @default(false)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  
+  // Foreign key relationship
+  topic_id     String   @db.Char(36)
+  topic        BlogTopic @relation(fields: [topic_id], references: [id], onDelete: Cascade)
+  
+  @@map("blog_article")
+}
