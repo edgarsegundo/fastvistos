@@ -7,6 +7,21 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    
+    "dev:fastvistos": "SITE_ID=fastvistos astro dev --config multi-sites.config.mjs",
+    "dev:conceptvistos": "SITE_ID=conceptvistos astro dev --config multi-sites.config.mjs",
+    "dev:vibecode": "SITE_ID=vibecode astro dev --config multi-sites.config.mjs",
+    
+    "build:fastvistos": "SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
+    "build:conceptvistos": "SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
+    "build:vibecode": "SITE_ID=vibecode astro build --config multi-sites.config.mjs",
+    
+    "build:all": "npm run build:fastvistos && npm run build:conceptvistos && npm run build:vibecode",
+    
+    "preview:fastvistos": "SITE_ID=fastvistos astro preview --config multi-sites.config.mjs",
+    "preview:conceptvistos": "SITE_ID=conceptvistos astro preview --config multi-sites.config.mjs",
+    "preview:vibecode": "SITE_ID=vibecode astro preview --config multi-sites.config.mjs",
+    
     "download-images": "node download-blog-images.js",
     "generate-blog": "node generate-blog-content.js",
     "generate-blog:watch": "node generate-blog-content.js --watch",

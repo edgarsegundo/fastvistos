@@ -1,0 +1,53 @@
+---
+// FastVistos main homepage
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+import AboutSection from '../components/AboutSection.astro';
+import PassportSection from '../components/PassportSection.astro';
+import CarouselSection from '../components/CarouselSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import CallToActionSection from '../components/CallToActionSection.astro';
+import JsonLdService from '../../../core/components/JsonLdService.astro';
+import JsonLdFAQ from '../../../core/components/JsonLdFAQ.astro';
+import { getCurrentSite } from '../../../core/lib/site-manager.js';
+
+// Get current site configuration
+const site = getCurrentSite();
+---
+
+<BaseLayout 
+  title="FastVistos - Especialistas em Vistos Americanos" 
+  description="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada."
+  bodyClass="home-layout"
+>
+  <!-- Additional JSON-LD for specific services -->
+  <JsonLdService
+    name="Processamento de Vistos Americanos"
+    description="Serviço completo de assessoria para obtenção de vistos americanos B1/B2, eTA do Canadá e vistos mexicanos"
+  />
+  <JsonLdFAQ />
+
+  <!-- FastVistos Main Content -->
+  <HeroSection />
+  <ServicesSection />
+  <AboutSection />
+  <PassportSection />
+  <CarouselSection />
+  <FaqSection />
+  <CallToActionSection />
+</BaseLayout>
+
+<style is:global>
+  .home-layout p,
+  .home-layout h3,
+  .home-layout ul,
+  .home-layout a,
+  .home-layout span {
+    color: #1b375c !important;
+  }
+  
+  .home-main {
+    min-height: 100vh;
+  }
+</style>

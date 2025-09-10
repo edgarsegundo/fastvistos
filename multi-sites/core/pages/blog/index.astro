@@ -1,0 +1,190 @@
+---
+// Shared blog index page for all sites
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCurrentSite } from '../../lib/site-manager.js';
+import { getTopicsWithArticles } from '../../lib/multi-blog-service.js';
+
+// Get current site configuration
+const site = getCurrentSite();
+
+// Get blog content
+const topicsWithArticles = await getTopicsWithArticles();
+
+// Site-specific blog configuration
+const getBlogConfig = (siteId: string) => {
+  switch (siteId) {
+    case 'fastvistos':
+      return {
+        title: 'Blog Fast Vistos',
+        description: 'Tudo sobre vistos americanos, dicas e atualizações',
+        subtitle: 'Fique por dentro das últimas novidades sobre vistos americanos'
+      };
+    case 'conceptvistos':
+      return {
+        title: 'Blog Concept Vistos',
+        description: 'Insights exclusivos sobre vistos internacionais e consultoria premium',
+        subtitle: 'Conteúdo especializado para vistos internacionais'
+      };
+    case 'vibecode':
+      return {
+        title: 'Blog VibeCode',
+        description: 'Desenvolvimento de software, tecnologias e tutoriais',
+        subtitle: 'Insights sobre desenvolvimento de software e tecnologias emergentes'
+      };
+    default:
+      return {
+        title: 'Blog',
+        description: 'Artigos e novidades',
+        subtitle: 'Confira nossos artigos mais recentes'
+      };
+  }
+};
+
+const blogConfig = getBlogConfig(site.id);
+---
+
+<BaseLayout
+  title={blogConfig.title}
+  description={blogConfig.description}
+>
+  <!-- Blog Header -->
+  <section class="site-gradient text-white py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+          {blogConfig.title}
+        </h1>
+        <p class="text-xl opacity-90">
+          {blogConfig.subtitle}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Content -->
+  <section class="py-12 bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4">
+      {topicsWithArticles.length === 0 ? (
+        <!-- No content state -->
+        <div class="text-center py-20">
+          <div class="text-6xl mb-6">📝</div>
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">
+            Blog em Construção
+          </h2>
+          <p class="text-gray-600 max-w-md mx-auto">
+            Estamos preparando conteúdo incrível para você. Volte em breve para conferir nossos artigos!
+          </p>
+        </div>
+      ) : (
+        <!-- Topics and Articles -->
+        <div class="space-y-16">
+          {topicsWithArticles.map((topic) => (
+            topic.articles.length > 0 && (
+              <div class="topic-section">
+                <!-- Topic Header -->
+                <div class="mb-8">
+                  <h2 class="text-3xl font-bold site-primary-text mb-3">
+                    {topic.name}
+                  </h2>
+                  {topic.description && (
+                    <p class="text-gray-600 text-lg">
+                      {topic.description}
+                    </p>
+                  )}
+                </div>
+
+                <!-- Articles Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {topic.articles.map((article) => (
+                    <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+                      <!-- Article Image -->
+                      <div class="aspect-video overflow-hidden">
+                        <img
+                          src={article.featured_image}
+                          alt={article.title}
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          onerror="this.src='/assets/images/blog/default-blog-image.jpg'"
+                        />
+                      </div>
+
+                      <!-- Article Content -->
+                      <div class="p-6">
+                        <!-- Topic Badge -->
+                        <div class="inline-block site-primary-bg text-white text-xs font-medium px-3 py-1 rounded-full mb-4">
+                          {topic.name}
+                        </div>
+
+                        <!-- Article Title -->
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:site-primary-text transition-colors">
+                          <a href={`/blog/${article.slug}`} class="hover:underline">
+                            {article.title}
+                          </a>
+                        </h3>
+
+                        <!-- Article Excerpt -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                          {article.excerpt}
+                        </p>
+
+                        <!-- Article Meta -->
+                        <div class="flex justify-between items-center text-sm text-gray-500 mb-4">
+                          <time datetime={article.published_at.toISOString()}>
+                            {new Intl.DateTimeFormat('pt-BR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            }).format(new Date(article.published_at))}
+                          </time>
+                          {article.reading_time && (
+                            <span>{article.reading_time} min de leitura</span>
+                          )}
+                        </div>
+
+                        <!-- Read More -->
+                        <a
+                          href={`/blog/${article.slug}`}
+                          class="inline-flex items-center site-primary-text font-medium hover:underline group"
+                        >
+                          Ler artigo completo
+                          <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .topic-section:not(:last-child) {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 2rem;
+  }
+
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+</style>

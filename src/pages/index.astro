@@ -1,74 +1,68 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Navigation from '../components/Navigation.astro';
-import HeroSection from '../components/HeroSection.astro';
-import ServicesSection from '../components/ServicesSection.astro';
-import AboutSection from '../components/AboutSection.astro';
-import PassportSection from '../components/PassportSection.astro';
-import CarouselSection from '../components/CarouselSection.astro';
-import FaqSection from '../components/FaqSection.astro';
-import CallToActionSection from '../components/CallToActionSection.astro';
-import FooterSection from '../components/FooterSection.astro';
-import Whatsapp from '../components/Whatsapp.astro';
-import JsonLdWebPage from '../components/JsonLdWebPage.astro';
-import JsonLdOrganization from '../components/JsonLdOrganization.astro';
-import JsonLdLocalBusiness from '../components/JsonLdLocalBusiness.astro';
-import JsonLdService from '../components/JsonLdService.astro';
-import JsonLdFAQ from '../components/JsonLdFAQ.astro';
-import MetaTags from '../components/MetaTags.astro';
-import { homePageSEO } from '../config/pages/index';
+// Main index - shows FastVistos by default (can be changed via SITE_ID env var)
+// For now, just import and show a simple working page
 
-export interface Props {
-    title?: string;
-    description?: string;
-}
-
-const { title = homePageSEO.meta.title, description = homePageSEO.meta.description } = Astro.props;
+// Simple test page to verify the multi-site setup
+const siteId = process.env.SITE_ID || 'fastvistos';
 ---
 
-<BaseLayout title={title} description={description} bodyClass="home-layout">
-    <Fragment slot="head">
-        <!-- SEO Meta Tags -->
-        <MetaTags seoConfig={homePageSEO} />
-
-        <!-- JSON-LD Structured Data for SEO -->
-        <JsonLdWebPage seoConfig={homePageSEO} />
-        <JsonLdOrganization seoConfig={homePageSEO} />
-        <JsonLdLocalBusiness seoConfig={homePageSEO} />
-        <JsonLdService
-            name="Processamento de Vistos Americanos"
-            description="Serviço completo de assessoria para obtenção de vistos americanos B1/B2, eTA do Canadá e vistos mexicanos"
-        />
-        <JsonLdFAQ />
-
-        <!-- Custom Styles for Home Page -->
-        <style></style>
-    </Fragment>
-
-    <Navigation />
-
-    <HeroSection />
-    <ServicesSection />
-    <AboutSection />
-    <PassportSection />
-    <CarouselSection />
-    <FaqSection />
-    <CallToActionSection />
-    <FooterSection />
-
-    <Whatsapp />
-
-    <main class="home-main">
-        <slot />
-    </main>
-</BaseLayout>
-
-<style is:global>
-    p,
-    h3,
-    ul,
-    a,
-    span {
-        color: #1b375c !important;
-    }
-</style>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Site Test - {siteId}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans bg-gray-50">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+      <div class="mb-6">
+        <div class="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center">
+          <span class="text-white text-2xl font-bold">
+            {siteId === 'fastvistos' ? 'F' : siteId === 'conceptvistos' ? 'C' : 'V'}
+          </span>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">
+          {siteId === 'fastvistos' ? 'FastVistos' : 
+           siteId === 'conceptvistos' ? 'ConceptVistos' : 
+           'VibeCode'}
+        </h1>
+        <p class="text-gray-600">
+          {siteId === 'fastvistos' ? 'Especialistas em Vistos Americanos' : 
+           siteId === 'conceptvistos' ? 'Consultoria Premium de Vistos' : 
+           'Desenvolvimento de Software Inovador'}
+        </p>
+      </div>
+      
+      <div class="space-y-4">
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-900 mb-2">Status do Site</h3>
+          <div class="text-sm text-gray-600 space-y-1">
+            <p><strong>Site ID:</strong> {siteId}</p>
+            <p><strong>Status:</strong> <span class="text-green-600">Funcionando</span></p>
+            <p><strong>Estrutura:</strong> Multi-site</p>
+          </div>
+        </div>
+        
+        <div class="flex flex-col space-y-2">
+          <a href="/blog" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Ver Blog
+          </a>
+          <a href="https://wa.me/5511999999999" class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+      
+      <div class="mt-6 pt-6 border-t border-gray-200">
+        <p class="text-xs text-gray-500">
+          Para testar outros sites, use:<br/>
+          <code class="bg-gray-100 px-2 py-1 rounded">SITE_ID=conceptvistos npm run dev</code><br/>
+          <code class="bg-gray-100 px-2 py-1 rounded">SITE_ID=vibecode npm run dev</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
