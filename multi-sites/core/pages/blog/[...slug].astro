@@ -1,7 +1,7 @@
 ---
 // Shared blog article page for all sites
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCurrentSite } from '../../lib/site-manager.js';
+import { getCurrentSite } from '../../lib/site-manager.ts';
 import { getArticleBySlug, getPublishedArticles } from '../../lib/multi-blog-service.js';
 import JsonLdArticle from '../../components/JsonLdArticle.astro';
 import JsonLdBreadcrumb from '../../components/JsonLdBreadcrumb.astro';
