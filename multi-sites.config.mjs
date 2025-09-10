@@ -27,6 +27,10 @@ const siteConfig = SITES[CURRENT_SITE] || SITES.fastvistos;
 export default defineConfig({
   site: siteConfig.url,
   
+  // Multi-site configuration - each site has its own source directory
+  srcDir: `./multi-sites/sites/${CURRENT_SITE}`,
+  publicDir: `./public-sites/${CURRENT_SITE}`,
+  
   // Multi-site output configuration
   outDir: `./dist/${CURRENT_SITE}`,
   
@@ -58,7 +62,7 @@ export default defineConfig({
       alias: {
         '@core': '/multi-sites/core',
         '@site': `/multi-sites/sites/${CURRENT_SITE}`,
-        '@': '/src'
+        '@': `/multi-sites/sites/${CURRENT_SITE}`
       }
     }
   },
