@@ -2,6 +2,16 @@
 
 This project implements a **Micro-Frontend Architecture** using Astro that supports multiple websites with shared core components while maintaining site-specific customization.
 
+## 🎨 **NEW: Site-Specific Tailwind Architecture**
+
+**Revolutionary styling system** where each site maintains its own dedicated Tailwind configuration for complete design autonomy:
+
+- **FastVistos**: Blue/orange professional theme with Source Sans Pro
+- **ConceptVistos**: Gold/luxury premium theme with Playfair Display  
+- **VibeCode**: Tech blue/green theme with JetBrains Mono
+
+**Key Innovation**: Dynamic Tailwind config loading based on `SITE_ID` environment variable, allowing shared components to automatically inherit site-specific styling without code duplication.
+
 ## 🏗️ Architecture Overview
 
 ```
@@ -15,8 +25,15 @@ fastvistos/
 │   │   │   ├── JsonLdLocalBusiness.astro
 │   │   │   ├── JsonLdOrganization.astro
 │   │   │   ├── JsonLdReview.astro
-│   │   │   ├── JsonLdService.astro
-│   │   │   └── JsonLdWebPage.astro
+│   │   │   ├── JsonLdService.astr## 🚀 Future Enhancements
+
+- **Multi-tenancy**: Add site_id columns to database tables for complete data separation
+- **Advanced Analytics**: Site-specific tracking and performance monitoring  
+- **A/B Testing**: Site-specific feature flags and experimentation
+- **Internationalization**: Multi-language support for global expansion
+- **Advanced Deployment**: CI/CD pipelines for independent site deployments
+- **Theme Variants**: Seasonal themes and dark/light mode support within each site's brand
+- **Component Library**: Expand shared component system with site-specific variants   │   └── JsonLdWebPage.astro
 │   │   ├── lib/                   # Core business logic
 │   │   │   └── site-manager.ts    # Site configuration manager
 │   │   └── pages/                 # Shared pages
@@ -55,34 +72,34 @@ fastvistos/
 
 ### Development - Tested & Working
 
-Run a specific site in development mode using environment variables:
+Run a specific site in development mode using the dedicated npm scripts:
 
 ```bash
-# FastVistos (default)
-npm run dev
+# FastVistos (blue/orange theme)
+npm run dev:fastvistos
 
-# ConceptVistos  
-SITE_ID=conceptvistos npm run dev
+# ConceptVistos (gold/luxury theme)
+npm run dev:conceptvistos
 
-# VibeCode
-SITE_ID=vibecode npm run dev
+# VibeCode (tech blue/green theme)  
+npm run dev:vibecode
 ```
 
-All sites successfully tested with:
-- ✅ Proper site detection
-- ✅ Database connectivity  
-- ✅ Blog functionality
-- ✅ Site-specific styling  
+Each site automatically loads its own:
+- ✅ Site-specific Tailwind configuration and theme
+- ✅ Proper site detection and environment  
+- ✅ Database connectivity and blog functionality
+- ✅ Brand-specific styling and components
 
 ### Build & Deploy
 
-Each site builds to its own directory using environment variables:
+Each site builds with its own Tailwind configuration:
 
 ```bash
-# Build specific sites
-SITE_ID=fastvistos npm run build
-SITE_ID=conceptvistos npm run build  
-SITE_ID=vibecode npm run build
+# Build specific sites with their themes
+npm run build:fastvistos    # Blue/orange FastVistos theme
+npm run build:conceptvistos # Gold/luxury ConceptVistos theme  
+npm run build:vibecode      # Tech VibeCode theme
 ```
 
 Build output structure:
@@ -94,6 +111,52 @@ dist/
 ```
 
 ## 🏛️ Core Architecture Components
+
+### Site-Specific Tailwind Architecture
+
+**Revolutionary Multi-Site Styling System**: Each site maintains complete design autonomy through dedicated Tailwind configurations while sharing core components.
+
+#### Dynamic Configuration Loading
+```javascript
+// multi-sites.config.mjs - Automatic Tailwind config selection
+const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
+
+export default defineConfig({
+  vite: {
+    plugins: [
+      tailwindcss({ 
+        config: `./tailwind.${CURRENT_SITE}.config.js` 
+      })
+    ]
+  }
+});
+```
+
+#### Site-Specific Themes
+
+| Site | Theme | Primary Colors | Font Family | Design Focus |
+|------|-------|---------------|-------------|--------------|
+| **FastVistos** | Business/Professional | Blue (#3b95fa) + Orange (#ff6b35) | Source Sans Pro | Visa services, trust, efficiency |
+| **ConceptVistos** | Luxury/Premium | Gold (#d4af37) + Dark (#1a1a1a) | Playfair Display | Premium consulting, elegance |
+| **VibeCode** | Tech/Modern | Blue/Green/Purple tech palette | JetBrains Mono | Development, innovation, code |
+
+#### Component Inheritance Model
+
+```astro
+---
+// Shared component with site-specific styling
+import { getCurrentSite } from '../core/lib/site-manager.js';
+const site = getCurrentSite();
+---
+
+<!-- Component automatically inherits site-specific Tailwind classes -->
+<div class="bg-primary-500 text-white">
+  <h1 class="font-sans">{site.name}</h1>
+  <!-- FastVistos: blue bg, Source Sans Pro -->
+  <!-- ConceptVistos: gold bg, Playfair Display -->  
+  <!-- VibeCode: tech blue bg, JetBrains Mono -->
+</div>
+```
 
 ### SiteManager (`multi-sites/core/lib/site-manager.ts`)
 
@@ -168,6 +231,86 @@ Shared structured data components for SEO optimization:
 
 ## 🎨 Site Customization
 
+### Site-Specific Tailwind Configurations
+
+Each site has its own dedicated Tailwind CSS configuration for complete design autonomy:
+
+```
+├── tailwind.fastvistos.config.js     # FastVistos blue/orange theme
+├── tailwind.conceptvistos.config.js  # ConceptVistos gold/luxury theme  
+└── tailwind.vibecode.config.js       # VibeCode tech blue/green theme
+```
+
+**FastVistos Theme** (`tailwind.fastvistos.config.js`):
+```javascript
+// Blue/orange visa service theme
+colors: {
+  primary: {
+    500: '#3b95fa',  // Bright blue
+    600: '#2575ef',  // Deeper blue
+  },
+  secondary: {
+    500: '#ff6b35',  // Orange accent
+    600: '#e85d2c',  // Darker orange
+  }
+},
+fontFamily: {
+  sans: ['Source Sans Pro', 'system-ui', 'sans-serif'],
+}
+```
+
+**ConceptVistos Theme** (`tailwind.conceptvistos.config.js`):
+```javascript
+// Gold/luxury premium theme
+colors: {
+  primary: {
+    500: '#d4af37',  // Luxury gold
+    600: '#b8941f',  // Deeper gold
+  },
+  secondary: {
+    500: '#1a1a1a',  // Premium dark
+    600: '#000000',  // Pure black
+  }
+},
+fontFamily: {
+  sans: ['Playfair Display', 'serif'],
+}
+```
+
+**VibeCode Theme** (`tailwind.vibecode.config.js`):
+```javascript
+// Tech blue/green/purple theme
+colors: {
+  primary: {
+    500: '#3b82f6',  // Tech blue
+    600: '#2563eb',  // Deeper blue
+  },
+  secondary: {
+    500: '#10b981',  // Tech green
+    600: '#059669',  // Deeper green
+  },
+  accent: {
+    500: '#8b5cf6',  // Purple accent
+  }
+},
+fontFamily: {
+  mono: ['JetBrains Mono', 'monospace'],
+}
+```
+
+### Dynamic Tailwind Loading
+
+The build system automatically loads the correct Tailwind config based on `SITE_ID`:
+
+```javascript
+// multi-sites.config.mjs
+plugins: [
+  tailwindcss({ 
+    config: `./tailwind.${process.env.SITE_ID || 'fastvistos'}.config.js` 
+  })
+]
+```
+
 ### Site-Specific Public Assets
 
 Each site has its own public folder with independent assets:
@@ -177,24 +320,6 @@ public-sites/
 ├── fastvistos/        # FastVistos assets (favicons, images, etc.)
 ├── conceptvistos/     # ConceptVistos assets  
 └── vibecode/          # VibeCode assets
-```
-
-### Dynamic CSS Variables
-
-Each BaseLayout generates site-specific CSS variables:
-
-```css
-:root {
-  --primary-color: #FF6B35;    /* Site-specific primary color */
-  --secondary-color: #1E3A8A;  /* Site-specific secondary color */
-  --site-font-family: "Inter", system-ui, sans-serif;
-}
-
-.site-primary-bg { background-color: var(--primary-color); }
-.site-primary-text { color: var(--primary-color); }
-.site-gradient { 
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); 
-}
 ```
 - Centralized site management
 - Type-safe site configurations
@@ -443,51 +568,52 @@ const site = getCurrentSite();
 ### How to Test Each Site
 
 ```bash
-# Test FastVistos (default)
-npm run dev
-# Open: http://localhost:4321
+# Test FastVistos with blue/orange theme
+npm run dev:fastvistos
+# Open: http://localhost:3000
 
-# Test ConceptVistos
-SITE_ID=conceptvistos npm run dev  
-# Open: http://localhost:4321
+# Test ConceptVistos with gold/luxury theme
+npm run dev:conceptvistos
+# Open: http://localhost:3000
 
-# Test VibeCode
-SITE_ID=vibecode npm run dev
-# Open: http://localhost:4321
+# Test VibeCode with tech theme
+npm run dev:vibecode
+# Open: http://localhost:3000
 
-# Test Blog (works on all sites)
-# Open: http://localhost:4321/blog
+# Test Blog (works on all sites with site-specific styling)
+# Open: http://localhost:3000/blog
 ```
 
 ## � Deployment Strategy
 
-### Environment-Based Builds
+### Environment-Based Builds with Site-Specific Theming
 
-Each site can be built and deployed independently:
+Each site builds with its dedicated Tailwind configuration and theme:
 
 ```bash
-# Production builds
-SITE_ID=fastvistos npm run build     # → dist/fastvistos/
-SITE_ID=conceptvistos npm run build  # → dist/conceptvistos/  
-SITE_ID=vibecode npm run build       # → dist/vibecode/
+# Production builds with site-specific Tailwind configs
+npm run build:fastvistos     # → dist/ with blue/orange theme
+npm run build:conceptvistos  # → dist/ with gold/luxury theme  
+npm run build:vibecode       # → dist/ with tech theme
 ```
 
 ### Deployment Workflow
 
-1. **Build the specific site**
-2. **Upload to appropriate domain**
-3. **Each site is completely independent**
+1. **Build the specific site with its theme**
+2. **Tailwind automatically compiles site-specific styles**
+3. **Upload to appropriate domain**
+4. **Each site maintains complete design independence**
 
 ```bash
 # Example deployment commands
-SITE_ID=fastvistos npm run build
-# Deploy dist/fastvistos/ to fastvistos.com.br
+npm run build:fastvistos
+# Deploy dist/ to fastvistos.com.br (blue/orange theme)
 
-SITE_ID=conceptvistos npm run build
-# Deploy dist/conceptvistos/ to conceptvistos.com.br
+npm run build:conceptvistos
+# Deploy dist/ to conceptvistos.com.br (gold/luxury theme)
 
-SITE_ID=vibecode npm run build
-# Deploy dist/vibecode/ to vibecode-lovable.com.br
+npm run build:vibecode
+# Deploy dist/ to vibecode-lovable.com.br (tech theme)
 ```
 
 ## 🔧 Adding a New Site
@@ -556,14 +682,14 @@ To add a new site to the architecture:
 ### Daily Development
 
 ```bash
-# Work on FastVistos (default)
-npm run dev
+# Work on FastVistos with blue/orange theme
+npm run dev:fastvistos
 
-# Work on ConceptVistos  
-SITE_ID=conceptvistos npm run dev
+# Work on ConceptVistos with gold/luxury theme
+npm run dev:conceptvistos
 
-# Work on VibeCode
-SITE_ID=vibecode npm run dev
+# Work on VibeCode with tech theme
+npm run dev:vibecode
 ```
 
 ### Before Committing
@@ -572,17 +698,16 @@ Test all sites to ensure changes don't break other sites:
 
 ```bash
 # Test FastVistos
-npm run dev
-# Verify functionality
+npm run dev:fastvistos
+# Verify functionality and blue/orange theme
 
 # Test ConceptVistos
-SITE_ID=conceptvistos npm run dev  
-# Verify functionality
+npm run dev:conceptvistos
+# Verify functionality and gold/luxury theme
 
 # Test VibeCode
-SITE_ID=vibecode npm run dev
-
-# Verify functionality
+npm run dev:vibecode
+# Verify functionality and tech theme
 ```
 
 ## 📚 Implementation Notes

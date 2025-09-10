@@ -46,7 +46,9 @@ export default defineConfig({
   ],
   
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss({
+      config: `./tailwind.${CURRENT_SITE}.config.js`
+    })],
     define: {
       // Make site configuration available to client-side code
       __SITE_CONFIG__: JSON.stringify(siteConfig),
@@ -61,7 +63,8 @@ export default defineConfig({
     }
   },
   
-  // Build configuration
+  // Build configuration for static generation
+  output: 'static',
   build: {
     format: 'directory'
   },
