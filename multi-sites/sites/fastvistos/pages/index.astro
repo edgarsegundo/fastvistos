@@ -1,6 +1,6 @@
 ---
 // FastVistos main homepage
-import BaseLayout from '../layouts/BaseLayout.astro';
+import SimpleBaseLayout from '../layouts/SimpleBaseLayout.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import AboutSection from '../components/AboutSection.astro';
@@ -10,13 +10,11 @@ import FaqSection from '../components/FaqSection.astro';
 import CallToActionSection from '../components/CallToActionSection.astro';
 import JsonLdService from '../../../core/components/JsonLdService.astro';
 import JsonLdFAQ from '../../../core/components/JsonLdFAQ.astro';
-import { getCurrentSite } from '../../../core/lib/site-manager.ts';
 
-// Get current site configuration
-const site = getCurrentSite();
+// No need for site manager - this is already FastVistos specific
 ---
 
-<BaseLayout 
+<SimpleBaseLayout 
   title="FastVistos - Especialistas em Vistos Americanos" 
   description="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada."
   bodyClass="home-layout"
@@ -36,7 +34,7 @@ const site = getCurrentSite();
   <CarouselSection />
   <FaqSection />
   <CallToActionSection />
-</BaseLayout>
+</SimpleBaseLayout>
 
 <style is:global>
   .home-layout p,

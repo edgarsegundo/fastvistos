@@ -1,6 +1,6 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import { BlogService } from '../../lib/blog-service.js';
+import { BlogService } from '../../../core/lib/multi-blog-service.js';
 
 // Get blog configuration for dynamic title
 const blogConfig = await BlogService.getBlogConfig();
