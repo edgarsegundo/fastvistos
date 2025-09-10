@@ -1,0 +1,1164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model BlogConfig {
+  created     DateTime    @db.DateTime(6)
+  modified    DateTime    @db.DateTime(6)
+  is_removed  Boolean
+  id          String      @id @default(uuid()) @db.Char(32)
+  title       String      @db.VarChar(255)
+  slug        String?     @unique(map: "slug") @db.VarChar(255)
+  config      Json
+  business_id String      @db.Char(32)
+  business    business    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  blog_topic  BlogTopic[]
+
+  @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
+  @@map("blog_config")
+}
+
+model BlogTopic {
+  created        DateTime      @db.DateTime(6)
+  modified       DateTime      @db.DateTime(6)
+  is_removed     Boolean
+  id             String        @id @default(uuid()) @db.Char(32)
+  title          String        @db.VarChar(255)
+  slug           String?       @unique(map: "slug") @db.VarChar(255)
+  image          String?       @db.VarChar(100)
+  order          Int           @db.UnsignedInt
+  blog_config_id String        @db.Char(32)
+  business_id    String        @db.Char(32)
+  metatitle      String?       @db.LongText
+  blog_article   BlogArticle[]
+  blog_config    BlogConfig    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
+  business       business      @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
+
+  @@index([blog_config_id], map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
+  @@index([business_id], map: "blog_topic_business_id_787b32b6_fk_business_id")
+  @@index([order], map: "blog_topic_order_72ad0658")
+  @@map("blog_topic")
+}
+
+model BlogArticle {
+  created       DateTime  @db.DateTime(6)
+  modified      DateTime  @db.DateTime(6)
+  is_removed    Boolean
+  id            String    @id @default(uuid()) @db.Char(32)
+  title         String    @db.LongText
+  content_raw   String?   @db.LongText
+  content_html  String?   @db.LongText
+  content_md    String?   @db.LongText
+  type          String    @db.VarChar(50)
+  slug          String?   @unique(map: "slug") @db.VarChar(255)
+  published     DateTime  @db.DateTime(6)
+  image         String?   @db.VarChar(100)
+  business_id   String    @db.Char(32)
+  blog_topic_id String    @db.Char(32)
+  metatitle     String?   @db.LongText
+  blog_topic    BlogTopic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  business      business  @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+
+  @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
+  @@map("blog_article")
+}
+
+model actionable_group {
+  created                       DateTime                        @db.DateTime(6)
+  modified                      DateTime                        @db.DateTime(6)
+  is_removed                    Boolean
+  id                            String                          @id @db.Char(32)
+  sequence                      Int?
+  business_id                   String                          @db.Char(32)
+  catalog_item_id               String                          @db.Char(32)
+  estimated_execution_hours     Int?
+  name                          String?                         @db.VarChar(255)
+  business                      business                        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "actionable_group_business_id_ea979cb2_fk_business_id")
+  catalog_item                  catalog_item                    @relation(fields: [catalog_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "actionable_group_catalog_item_id_853e72c2_fk_catalog_item_id")
+  order_catalog_item_actionable order_catalog_item_actionable[]
+
+  @@index([business_id], map: "actionable_group_business_id_ea979cb2_fk_business_id")
+  @@index([catalog_item_id], map: "actionable_group_catalog_item_id_853e72c2_fk_catalog_item_id")
+}
+
+model appointment_status_1 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "appointment_status_1_business_id_975f0e22_fk_business_id")
+  customer_order customer_order[]
+
+  @@index([business_id], map: "appointment_status_1_business_id_975f0e22_fk_business_id")
+}
+
+model appointment_status_2 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "appointment_status_2_business_id_5072b25c_fk_business_id")
+  customer_order customer_order[]
+
+  @@index([business_id], map: "appointment_status_2_business_id_5072b25c_fk_business_id")
+}
+
+model appointment_status_3 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "appointment_status_3_business_id_8e2d49d5_fk_business_id")
+  customer_order customer_order[]
+
+  @@index([business_id], map: "appointment_status_3_business_id_8e2d49d5_fk_business_id")
+}
+
+model appointment_status_4 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "appointment_status_4_business_id_e880b198_fk_business_id")
+  customer_order customer_order[]
+
+  @@index([business_id], map: "appointment_status_4_business_id_e880b198_fk_business_id")
+}
+
+model assessment {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @db.DateTime(6)
+  form_data  Json?
+  video_data Json?
+  processed  Boolean
+  video_name String?   @db.VarChar(255)
+  email      String?   @db.VarChar(255)
+
+  @@index([created_at], map: "assessment_created_at_c9d3e5c7")
+}
+
+model auth_group {
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @unique(map: "name") @db.VarChar(150)
+  auth_group_permissions auth_group_permissions[]
+  auth_user_groups       auth_user_groups[]
+}
+
+model auth_group_permissions {
+  id              Int             @id @default(autoincrement())
+  group_id        Int
+  permission_id   Int
+  auth_permission auth_permission @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm")
+  auth_group      auth_group      @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id")
+
+  @@unique([group_id, permission_id], map: "auth_group_permissions_group_id_permission_id_0cd325b0_uniq")
+  @@index([permission_id], map: "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm")
+}
+
+model auth_permission {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @db.VarChar(255)
+  content_type_id            Int
+  codename                   String                       @db.VarChar(100)
+  auth_group_permissions     auth_group_permissions[]
+  django_content_type        django_content_type          @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_permission_content_type_id_2f476e4b_fk_django_co")
+  auth_user_user_permissions auth_user_user_permissions[]
+
+  @@unique([content_type_id, codename], map: "auth_permission_content_type_id_codename_01ab375a_uniq")
+}
+
+model auth_user {
+  id                         Int                          @id @default(autoincrement())
+  password                   String                       @db.VarChar(128)
+  last_login                 DateTime?                    @db.DateTime(6)
+  is_superuser               Boolean
+  username                   String                       @unique(map: "username") @db.VarChar(150)
+  first_name                 String                       @db.VarChar(150)
+  last_name                  String                       @db.VarChar(150)
+  email                      String                       @db.VarChar(254)
+  is_staff                   Boolean
+  is_active                  Boolean
+  date_joined                DateTime                     @db.DateTime(6)
+  auth_user_groups           auth_user_groups[]
+  auth_user_user_permissions auth_user_user_permissions[]
+  django_admin_log           django_admin_log[]
+  profile                    profile?
+}
+
+model auth_user_groups {
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  group_id   Int
+  auth_group auth_group @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_groups_group_id_97559544_fk_auth_group_id")
+  auth_user  auth_user  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id")
+
+  @@unique([user_id, group_id], map: "auth_user_groups_user_id_group_id_94350c0c_uniq")
+  @@index([group_id], map: "auth_user_groups_group_id_97559544_fk_auth_group_id")
+}
+
+model auth_user_user_permissions {
+  id              Int             @id @default(autoincrement())
+  user_id         Int
+  permission_id   Int
+  auth_permission auth_permission @relation(fields: [permission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm")
+  auth_user       auth_user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id")
+
+  @@unique([user_id, permission_id], map: "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq")
+  @@index([permission_id], map: "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm")
+}
+
+model binary_option {
+  id              BigInt @id @default(autoincrement())
+  approval_option String @db.VarChar(100)
+  access_option   String @db.VarChar(100)
+}
+
+model blog_owner {
+  id         String      @id @db.Char(32)
+  name       String      @db.VarChar(255)
+  slug       String      @unique(map: "slug") @db.VarChar(255)
+  created_at DateTime    @db.DateTime(6)
+  updated_at DateTime    @db.DateTime(6)
+  config     Json        @default(dbgenerated("(_utf8mb4\\'{}\\')"))
+  html_div   String?     @db.LongText
+  blog_post  blog_post[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model blog_post {
+  id            String          @id @db.Char(32)
+  title         String          @db.VarChar(255)
+  created_at    DateTime        @db.DateTime(6)
+  updated_at    DateTime        @db.DateTime(6)
+  blog_owner_id String          @db.Char(32)
+  slug          String?         @unique(map: "slug") @db.VarChar(255)
+  keywords      String?         @db.VarChar(255)
+  image         String?         @db.VarChar(100)
+  section       String?         @db.VarChar(255)
+  order         Int             @db.UnsignedInt
+  blog_owner    blog_owner      @relation(fields: [blog_owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_post_blog_owner_id_8216da5b_fk_blog_owner_id")
+  post_question post_question[]
+
+  @@index([blog_owner_id], map: "blog_post_blog_owner_id_8216da5b_fk_blog_owner_id")
+  @@index([created_at], map: "blog_post_created_at_6c5db3cc")
+  @@index([order], map: "blog_post_order_19cd170e")
+}
+
+model business {
+  created                        DateTime                         @db.DateTime(6)
+  modified                       DateTime                         @db.DateTime(6)
+  is_removed                     Boolean
+  id                             String                           @id @db.Char(32)
+  name                           String                           @db.VarChar(255)
+  display_name                   String?                          @db.VarChar(255)
+  phone1_country_code            String?                          @db.VarChar(5)
+  phone1_area_code               String?                          @db.VarChar(5)
+  phone1_number                  String?                          @db.VarChar(15)
+  phone2_country_code            String?                          @db.VarChar(5)
+  phone2_area_code               String?                          @db.VarChar(5)
+  phone2_number                  String?                          @db.VarChar(15)
+  email                          String?                          @db.VarChar(255)
+  custom_config                  Json?
+  actionable_group               actionable_group[]
+  appointment_status_1           appointment_status_1[]
+  appointment_status_2           appointment_status_2[]
+  appointment_status_3           appointment_status_3[]
+  appointment_status_4           appointment_status_4[]
+  blog_article                   BlogArticle[]
+  blog_config                    BlogConfig[]
+  blog_topic                     BlogTopic[]
+  catalog_item                   catalog_item[]
+  chatbot                        chatbot[]
+  customer                       customer[]
+  customer_order                 customer_order[]
+  customer_order_catalog_item    customer_order_catalog_item[]
+  customer_order_ofx_transaction customer_order_ofx_transaction[]
+  customer_origin                customer_origin[]
+  customer_status                customer_status[]
+  field_attribute                field_attribute[]
+  finance_account                finance_account[]
+  finance_accounttype            finance_accounttype[]
+  finance_budgetallocation       finance_budgetallocation[]
+  finance_budgetevidence         finance_budgetevidence[]
+  finance_budgetperiod           finance_budgetperiod[]
+  finance_category               finance_category[]
+  finance_dasnrevenuetype        finance_dasnrevenuetype[]
+  finance_evidenceattachment     finance_evidenceattachment[]
+  finance_evidenceofx            finance_evidenceofx[]
+  next_action                    next_action[]
+  ofx_transaction                ofx_transaction[]
+  order_catalog_item_actionable  order_catalog_item_actionable[]
+  phone_device                   phone_device[]
+  profile                        profile[]
+  quick_response                 quick_response[]
+  sales_funnel_stage             sales_funnel_stage[]
+  status_1                       status_1[]
+  status_2                       status_2[]
+  status_3                       status_3[]
+  status_4                       status_4[]
+  status_5                       status_5[]
+
+  @@index([display_name], map: "business_display_name_aafdbe16")
+  @@index([name], map: "business_name_ad433fb7")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model business_info {
+  id                BigInt   @id @default(autoincrement())
+  name              String?  @db.VarChar(255)
+  rating            Decimal? @db.Decimal(3, 2)
+  ratings_total     Int?     @db.UnsignedInt
+  formatted_address String?  @db.LongText
+  primary_phone     String?  @db.VarChar(15)
+  secondary_phone   String?  @db.VarChar(15)
+  locality          String?  @db.VarChar(100)
+  state_or_province String?  @db.VarChar(100)
+  country           String?  @db.VarChar(100)
+  created_at        DateTime @db.DateTime(6)
+  modified_at       DateTime @db.DateTime(6)
+  maps_url          String?  @db.LongText
+  search_query      String?  @db.VarChar(255)
+  website           String?  @db.VarChar(255)
+  category          String?  @db.VarChar(100)
+  neighborhood      String?  @db.VarChar(100)
+  inhabitants       Int?     @db.UnsignedInt
+  contacted_for_crm Boolean
+}
+
+model catalog_item {
+  created                     DateTime                      @db.DateTime(6)
+  modified                    DateTime                      @db.DateTime(6)
+  is_removed                  Boolean
+  id                          String                        @id @db.Char(32)
+  name                        String?                       @db.VarChar(255)
+  short_name                  String?                       @db.VarChar(15)
+  price                       Float?
+  sequence                    Int?
+  business_id                 String                        @db.Char(32)
+  actionable_group            actionable_group[]
+  business                    business                      @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "catalog_item_business_id_4e587b2b_fk_business_id")
+  customer_order_catalog_item customer_order_catalog_item[]
+
+  @@index([business_id], map: "catalog_item_business_id_4e587b2b_fk_business_id")
+}
+
+model chatbot {
+  created         DateTime     @db.DateTime(6)
+  modified        DateTime     @db.DateTime(6)
+  is_removed      Boolean
+  id              String       @id @db.Char(32)
+  name            String       @db.VarChar(255)
+  desc            String?      @db.LongText
+  is_published    Boolean
+  is_active       Boolean
+  is_archived     Boolean
+  dataflow        Json?
+  business_id     String       @db.Char(32)
+  phone_device_id String       @db.Char(32)
+  business        business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chatbot_business_id_a64c62eb_fk_business_id")
+  phone_device    phone_device @relation(fields: [phone_device_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chatbot_phone_device_id_d49d2846_fk_phone_device_id")
+
+  @@index([business_id], map: "chatbot_business_id_a64c62eb_fk_business_id")
+  @@index([phone_device_id], map: "chatbot_phone_device_id_d49d2846_fk_phone_device_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model customer {
+  created               DateTime            @db.DateTime(6)
+  modified              DateTime            @db.DateTime(6)
+  is_removed            Boolean
+  id                    String              @id @db.Char(32)
+  name                  String              @db.VarChar(255)
+  phone1_country_code   String?             @db.VarChar(5)
+  phone1_area_code      String?             @db.VarChar(5)
+  phone1_number         String?             @db.VarChar(15)
+  email                 String?             @db.VarChar(255)
+  cpf_cnpj              String?             @db.VarChar(18)
+  phone2_country_code   String?             @db.VarChar(5)
+  phone2_area_code      String?             @db.VarChar(5)
+  phone2_number         String?             @db.VarChar(15)
+  recall_date           DateTime?           @db.DateTime(6)
+  obs                   String?             @db.LongText
+  attention             String?             @db.LongText
+  wa_last_received_key  String?             @db.VarChar(32)
+  wa_timestamp          Int?                @db.UnsignedInt
+  textfield0            String?             @db.LongText
+  textfield1            String?             @db.LongText
+  textfield2            String?             @db.LongText
+  textfield3            String?             @db.LongText
+  textfield4            String?             @db.LongText
+  textfield5            String?             @db.LongText
+  textfield6            String?             @db.LongText
+  textfield7            String?             @db.LongText
+  textfield8            String?             @db.LongText
+  textfield9            String?             @db.LongText
+  business_id           String              @db.Char(32)
+  customer_origin_id    String?             @db.Char(32)
+  customer_status_id    String?             @db.Char(32)
+  sales_funnel_stage_id String?             @db.Char(32)
+  gads_url_params       Json?
+  is_robot_created      Boolean?
+  whatsapp              BigInt?
+  whats_image_uuid      String?             @db.Char(32)
+  business              business            @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_business_id_9c8f4e32_fk_business_id")
+  customer_origin       customer_origin?    @relation(fields: [customer_origin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_customer_origin_id_6bc96641_fk_customer_origin_id")
+  customer_status       customer_status?    @relation(fields: [customer_status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_customer_status_id_a38837dc_fk_customer_status_id")
+  sales_funnel_stage    sales_funnel_stage? @relation(fields: [sales_funnel_stage_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_sales_funnel_stage_id_4029c80e_fk_sales_funnel_stage_id")
+  customer_order        customer_order[]
+  next_action           next_action[]
+
+  @@index([business_id], map: "customer_business_id_9c8f4e32_fk_business_id")
+  @@index([cpf_cnpj], map: "customer_cpf_cnpj_90956086")
+  @@index([customer_origin_id], map: "customer_customer_origin_id_6bc96641_fk_customer_origin_id")
+  @@index([customer_status_id], map: "customer_customer_status_id_a38837dc_fk_customer_status_id")
+  @@index([name], map: "customer_name_c001e930")
+  @@index([recall_date], map: "customer_recall_date_5b4da6b6")
+  @@index([sales_funnel_stage_id], map: "customer_sales_funnel_stage_id_4029c80e_fk_sales_funnel_stage_id")
+  @@index([wa_timestamp], map: "customer_wa_timestamp_43b702b1")
+  @@index([whatsapp], map: "customer_whatsapp_05a2f19d")
+}
+
+model customer_order {
+  created                        DateTime                         @db.DateTime(6)
+  modified                       DateTime                         @db.DateTime(6)
+  is_removed                     Boolean
+  id                             String                           @id @db.Char(32)
+  timestamp                      DateTime?                        @db.DateTime(6)
+  charfield_1                    String?                          @db.VarChar(255)
+  appointment_date_1             DateTime?                        @db.DateTime(6)
+  appointment_start_at_1         DateTime?                        @db.Time(6)
+  appointment_end_at_1           DateTime?                        @db.Time(6)
+  appointment_notes_1            String?                          @db.VarChar(500)
+  appointment_date_2             DateTime?                        @db.DateTime(6)
+  appointment_start_at_2         DateTime?                        @db.Time(6)
+  appointment_end_at_2           DateTime?                        @db.Time(6)
+  appointment_notes_2            String?                          @db.VarChar(500)
+  appointment_date_3             DateTime?                        @db.DateTime(6)
+  appointment_start_at_3         DateTime?                        @db.Time(6)
+  appointment_end_at_3           DateTime?                        @db.Time(6)
+  appointment_notes_3            String?                          @db.VarChar(500)
+  appointment_date_4             DateTime?                        @db.DateTime(6)
+  appointment_start_at_4         DateTime?                        @db.Time(6)
+  appointment_end_at_4           DateTime?                        @db.Time(6)
+  appointment_notes_4            String?                          @db.VarChar(500)
+  notes                          String?                          @db.VarChar(1000)
+  appointment_status_1_id        String?                          @db.Char(32)
+  appointment_status_2_id        String?                          @db.Char(32)
+  appointment_status_3_id        String?                          @db.Char(32)
+  appointment_status_4_id        String?                          @db.Char(32)
+  business_id                    String                           @db.Char(32)
+  customer_id                    String                           @db.Char(32)
+  status_1_id                    String?                          @db.Char(32)
+  status_2_id                    String?                          @db.Char(32)
+  status_3_id                    String?                          @db.Char(32)
+  status_4_id                    String?                          @db.Char(32)
+  status_5_id                    String?                          @db.Char(32)
+  charfield_3                    String?                          @db.VarChar(255)
+  textfield_1                    String?                          @db.LongText
+  charfield_2                    String?                          @db.VarChar(255)
+  external_delivery_date         DateTime?                        @db.DateTime(6)
+  external_notes                 String?                          @db.VarChar(500)
+  external_send_date             DateTime?                        @db.DateTime(6)
+  appointment_status_1           appointment_status_1?            @relation(fields: [appointment_status_1_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_appointment_status_1_81196fd9_fk_appointme")
+  appointment_status_2           appointment_status_2?            @relation(fields: [appointment_status_2_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_appointment_status_2_a78325ee_fk_appointme")
+  appointment_status_3           appointment_status_3?            @relation(fields: [appointment_status_3_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_appointment_status_3_983e7543_fk_appointme")
+  appointment_status_4           appointment_status_4?            @relation(fields: [appointment_status_4_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_appointment_status_4_9ca2bbbf_fk_appointme")
+  business                       business                         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_business_id_6d57fc37_fk_business_id")
+  customer                       customer                         @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_customer_id_05fff94c_fk_customer_id")
+  status_1                       status_1?                        @relation(fields: [status_1_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_status_1_id_367f41d6_fk_status_1_id")
+  status_2                       status_2?                        @relation(fields: [status_2_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_status_2_id_6b6ae61d_fk_status_2_id")
+  status_3                       status_3?                        @relation(fields: [status_3_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_status_3_id_fa491355_fk_status_3_id")
+  status_4                       status_4?                        @relation(fields: [status_4_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_status_4_id_ed3aa437_fk_status_4_id")
+  status_5                       status_5?                        @relation(fields: [status_5_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_status_5_id_21e9b2f5_fk_status_5_id")
+  customer_order_catalog_item    customer_order_catalog_item[]
+  customer_order_ofx_transaction customer_order_ofx_transaction[]
+  finance_budgetevidence         finance_budgetevidence?
+
+  @@index([appointment_date_1], map: "customer_order_appointment_date_1_38f7d1b9")
+  @@index([appointment_date_2], map: "customer_order_appointment_date_2_cf3516f5")
+  @@index([appointment_date_3], map: "customer_order_appointment_date_3_d2484617")
+  @@index([appointment_date_4], map: "customer_order_appointment_date_4_1a904a97")
+  @@index([appointment_status_1_id], map: "customer_order_appointment_status_1_81196fd9_fk_appointme")
+  @@index([appointment_status_2_id], map: "customer_order_appointment_status_2_a78325ee_fk_appointme")
+  @@index([appointment_status_3_id], map: "customer_order_appointment_status_3_983e7543_fk_appointme")
+  @@index([appointment_status_4_id], map: "customer_order_appointment_status_4_9ca2bbbf_fk_appointme")
+  @@index([business_id], map: "customer_order_business_id_6d57fc37_fk_business_id")
+  @@index([customer_id], map: "customer_order_customer_id_05fff94c_fk_customer_id")
+  @@index([status_1_id], map: "customer_order_status_1_id_367f41d6_fk_status_1_id")
+  @@index([status_2_id], map: "customer_order_status_2_id_6b6ae61d_fk_status_2_id")
+  @@index([status_3_id], map: "customer_order_status_3_id_fa491355_fk_status_3_id")
+  @@index([status_4_id], map: "customer_order_status_4_id_ed3aa437_fk_status_4_id")
+  @@index([status_5_id], map: "customer_order_status_5_id_21e9b2f5_fk_status_5_id")
+  @@index([timestamp], map: "customer_order_timestamp_767c73a3")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model customer_order_catalog_item {
+  created                       DateTime                        @db.DateTime(6)
+  modified                      DateTime                        @db.DateTime(6)
+  is_removed                    Boolean
+  id                            String                          @id @db.Char(32)
+  quantity                      Int                             @db.UnsignedInt
+  default_value                 Float
+  agreed_value                  Float
+  extra_amount                  Float
+  notes                         String?                         @db.VarChar(255)
+  added_at                      DateTime                        @db.DateTime(6)
+  business_id                   String                          @db.Char(32)
+  catalog_item_id               String                          @db.Char(32)
+  customer_order_id             String                          @db.Char(32)
+  catalog_item                  catalog_item                    @relation(fields: [catalog_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_catal_catalog_item_id_243c3da7_fk_catalog_i")
+  customer_order                customer_order                  @relation(fields: [customer_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_catal_customer_order_id_d62909e8_fk_customer_")
+  business                      business                        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_catalog_item_business_id_22f2669d_fk_business_id")
+  order_catalog_item_actionable order_catalog_item_actionable[]
+
+  @@unique([customer_order_id, catalog_item_id], map: "unique_customer_order_catalog_item")
+  @@index([catalog_item_id], map: "customer_order_catal_catalog_item_id_243c3da7_fk_catalog_i")
+  @@index([business_id], map: "customer_order_catalog_item_business_id_22f2669d_fk_business_id")
+}
+
+model customer_order_ofx_transaction {
+  created            DateTime        @db.DateTime(6)
+  modified           DateTime        @db.DateTime(6)
+  is_removed         Boolean
+  id                 String          @id @db.Char(32)
+  business_id        String          @db.Char(32)
+  customer_order_id  String          @db.Char(32)
+  ofx_transaction_id String          @db.Char(32)
+  business           business        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_ofx_t_business_id_1d912414_fk_business_")
+  customer_order     customer_order  @relation(fields: [customer_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_ofx_t_customer_order_id_f7e0c5a3_fk_customer_")
+  ofx_transaction    ofx_transaction @relation(fields: [ofx_transaction_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_order_ofx_t_ofx_transaction_id_fe89f0b6_fk_ofx_trans")
+
+  @@unique([customer_order_id, ofx_transaction_id], map: "unique_customer_order_ofx_transaction")
+  @@index([business_id], map: "customer_order_ofx_t_business_id_1d912414_fk_business_")
+  @@index([ofx_transaction_id], map: "customer_order_ofx_t_ofx_transaction_id_fe89f0b6_fk_ofx_trans")
+}
+
+model customer_origin {
+  created     DateTime   @db.DateTime(6)
+  modified    DateTime   @db.DateTime(6)
+  is_removed  Boolean
+  id          String     @id @db.Char(32)
+  name        String     @db.VarChar(100)
+  acronym     String?    @db.VarChar(10)
+  business_id String     @db.Char(32)
+  id_reserved String?    @unique(map: "id_reserved") @db.Char(32)
+  customer    customer[]
+  business    business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_origin_business_id_506b080d_fk_business_id")
+
+  @@index([business_id], map: "customer_origin_business_id_506b080d_fk_business_id")
+}
+
+model customer_status {
+  created     DateTime   @db.DateTime(6)
+  modified    DateTime   @db.DateTime(6)
+  is_removed  Boolean
+  id          String     @id @db.Char(32)
+  status_name String     @db.VarChar(50)
+  desc        String?    @db.LongText
+  business_id String     @db.Char(32)
+  customer    customer[]
+  business    business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_status_business_id_56c066c9_fk_business_id")
+
+  @@index([business_id], map: "customer_status_business_id_56c066c9_fk_business_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model django_admin_log {
+  id                  Int                  @id @default(autoincrement())
+  action_time         DateTime             @db.DateTime(6)
+  object_id           String?              @db.LongText
+  object_repr         String               @db.VarChar(200)
+  action_flag         Int                  @db.UnsignedSmallInt
+  change_message      String               @db.LongText
+  content_type_id     Int?
+  user_id             Int
+  django_content_type django_content_type? @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "django_admin_log_content_type_id_c4bce8eb_fk_django_co")
+  auth_user           auth_user            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "django_admin_log_user_id_c564eba6_fk_auth_user_id")
+
+  @@index([content_type_id], map: "django_admin_log_content_type_id_c4bce8eb_fk_django_co")
+  @@index([user_id], map: "django_admin_log_user_id_c564eba6_fk_auth_user_id")
+}
+
+model django_content_type {
+  id                Int                 @id @default(autoincrement())
+  app_label         String              @db.VarChar(100)
+  model             String              @db.VarChar(100)
+  auth_permission   auth_permission[]
+  django_admin_log  django_admin_log[]
+  taggit_taggeditem taggit_taggeditem[]
+
+  @@unique([app_label, model], map: "django_content_type_app_label_model_76bd3d3b_uniq")
+}
+
+model django_migrations {
+  id      Int      @id @default(autoincrement())
+  app     String   @db.VarChar(255)
+  name    String   @db.VarChar(255)
+  applied DateTime @db.DateTime(6)
+}
+
+model django_session {
+  session_key  String   @id @db.VarChar(40)
+  session_data String   @db.LongText
+  expire_date  DateTime @db.DateTime(6)
+
+  @@index([expire_date], map: "django_session_expire_date_a5c62663")
+}
+
+model field_attribute {
+  created         DateTime  @db.DateTime(6)
+  modified        DateTime  @db.DateTime(6)
+  is_removed      Boolean
+  id              String    @id @db.Char(32)
+  name            String    @db.VarChar(100)
+  display_name    String?   @db.VarChar(255)
+  display_order   String?   @db.VarChar(10)
+  advanced_config Json?
+  business_id     String    @db.Char(32)
+  table_map_id    String    @db.VarChar(100)
+  business        business  @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "field_attribute_business_id_1ebe84cd_fk_business_id")
+  table_map       table_map @relation(fields: [table_map_id], references: [name], onDelete: NoAction, onUpdate: NoAction, map: "field_attribute_table_map_id_7ff175f1_fk_table_map_name")
+
+  @@unique([name, table_map_id], map: "field_attribute_name_table_map_id_f7981f39_uniq")
+  @@index([business_id], map: "field_attribute_business_id_1ebe84cd_fk_business_id")
+  @@index([table_map_id], map: "field_attribute_table_map_id_7ff175f1_fk_table_map_name")
+}
+
+model finance_account {
+  created                  DateTime                   @db.DateTime(6)
+  modified                 DateTime                   @db.DateTime(6)
+  is_removed               Boolean
+  id                       String                     @id @db.Char(32)
+  name                     String                     @unique(map: "name") @db.VarChar(200)
+  is_budgetable            Boolean
+  is_active                Boolean
+  business_id              String                     @db.Char(32)
+  account_type_id          String                     @db.Char(32)
+  finance_accounttype      finance_accounttype        @relation(fields: [account_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_account_account_type_id_33784dc9_fk_finance_a")
+  business                 business                   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_account_business_id_9b072048_fk_business_id")
+  finance_budgetallocation finance_budgetallocation[]
+
+  @@index([account_type_id], map: "finance_account_account_type_id_33784dc9_fk_finance_a")
+  @@index([business_id], map: "finance_account_business_id_9b072048_fk_business_id")
+}
+
+model finance_accounttype {
+  created                 DateTime                 @db.DateTime(6)
+  modified                DateTime                 @db.DateTime(6)
+  is_removed              Boolean
+  id                      String                   @id @db.Char(32)
+  name                    String                   @unique(map: "name") @db.VarChar(100)
+  is_active               Boolean
+  business_id             String                   @db.Char(32)
+  category_id             String                   @db.Char(32)
+  dasn_revenue_type_id    String?                  @db.Char(32)
+  finance_account         finance_account[]
+  business                business                 @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_accounttype_business_id_496f8e6a_fk_business_id")
+  finance_category        finance_category         @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_accounttype_category_id_018d2d70_fk_finance_category_id")
+  finance_dasnrevenuetype finance_dasnrevenuetype? @relation(fields: [dasn_revenue_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_accounttype_dasn_revenue_type_id_ae4ecf49_fk_finance_d")
+
+  @@index([business_id], map: "finance_accounttype_business_id_496f8e6a_fk_business_id")
+  @@index([category_id], map: "finance_accounttype_category_id_018d2d70_fk_finance_category_id")
+  @@index([dasn_revenue_type_id], map: "finance_accounttype_dasn_revenue_type_id_ae4ecf49_fk_finance_d")
+}
+
+model finance_budgetallocation {
+  created                DateTime                 @db.DateTime(6)
+  modified               DateTime                 @db.DateTime(6)
+  is_removed             Boolean
+  id                     String                   @id @db.Char(32)
+  budgeted               Decimal                  @db.Decimal(12, 2)
+  actual                 Decimal                  @db.Decimal(12, 2)
+  account_id             String                   @db.Char(32)
+  business_id            String                   @db.Char(32)
+  budget_period_id       String                   @db.Char(32)
+  finance_account        finance_account          @relation(fields: [account_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgetalloca_account_id_70eae7bc_fk_finance_a")
+  finance_budgetperiod   finance_budgetperiod     @relation(fields: [budget_period_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgetalloca_budget_period_id_faba1f03_fk_finance_b")
+  business               business                 @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgetallocation_business_id_b0bf2d92_fk_business_id")
+  finance_budgetevidence finance_budgetevidence[]
+
+  @@unique([budget_period_id, account_id], map: "finance_budgetallocation_budget_period_id_account_e8faa037_uniq")
+  @@index([account_id], map: "finance_budgetalloca_account_id_70eae7bc_fk_finance_a")
+  @@index([business_id], map: "finance_budgetallocation_business_id_b0bf2d92_fk_business_id")
+}
+
+model finance_budgetevidence {
+  created                    DateTime                     @db.DateTime(6)
+  modified                   DateTime                     @db.DateTime(6)
+  is_removed                 Boolean
+  id                         String                       @id @db.Char(32)
+  evidence_type              String                       @db.VarChar(32)
+  description                String?                      @db.VarChar(255)
+  total_value                Decimal?                     @db.Decimal(12, 2)
+  date                       DateTime                     @db.Date
+  budget_allocation_id       String                       @db.Char(32)
+  business_id                String                       @db.Char(32)
+  customer_order_id          String?                      @unique(map: "customer_order_id") @db.Char(32)
+  finance_budgetallocation   finance_budgetallocation     @relation(fields: [budget_allocation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgeteviden_budget_allocation_id_6471ec71_fk_finance_b")
+  customer_order             customer_order?              @relation(fields: [customer_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgeteviden_customer_order_id_1fe4e8ec_fk_customer_")
+  business                   business                     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgetevidence_business_id_d4c05100_fk_business_id")
+  finance_evidenceattachment finance_evidenceattachment[]
+  finance_evidenceofx        finance_evidenceofx?
+
+  @@index([budget_allocation_id], map: "finance_budgeteviden_budget_allocation_id_6471ec71_fk_finance_b")
+  @@index([business_id], map: "finance_budgetevidence_business_id_d4c05100_fk_business_id")
+}
+
+model finance_budgetperiod {
+  created                  DateTime                   @db.DateTime(6)
+  modified                 DateTime                   @db.DateTime(6)
+  is_removed               Boolean
+  id                       String                     @id @db.Char(32)
+  business_id              String                     @db.Char(32)
+  period_id                BigInt
+  finance_budgetallocation finance_budgetallocation[]
+  business                 business                   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgetperiod_business_id_98173fd7_fk_business_id")
+  finance_period           finance_period             @relation(fields: [period_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_budgetperiod_period_id_9f138a46_fk")
+
+  @@index([business_id], map: "finance_budgetperiod_business_id_98173fd7_fk_business_id")
+  @@index([period_id], map: "finance_budgetperiod_period_id_9f138a46_fk")
+}
+
+model finance_category {
+  created             DateTime              @db.DateTime(6)
+  modified            DateTime              @db.DateTime(6)
+  is_removed          Boolean
+  id                  String                @id @db.Char(32)
+  name                String                @unique(map: "name") @db.VarChar(100)
+  display_order       Int
+  is_active           Boolean
+  business_id         String                @db.Char(32)
+  finance_accounttype finance_accounttype[]
+  business            business              @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_category_business_id_2b824083_fk_business_id")
+
+  @@index([business_id], map: "finance_category_business_id_2b824083_fk_business_id")
+}
+
+model finance_dasnrevenuetype {
+  created             DateTime              @db.DateTime(6)
+  modified            DateTime              @db.DateTime(6)
+  is_removed          Boolean
+  id                  String                @id @db.Char(32)
+  label               String                @db.VarChar(100)
+  description         String?               @db.LongText
+  display_order       Int
+  is_active           Boolean
+  business_id         String                @db.Char(32)
+  finance_accounttype finance_accounttype[]
+  business            business              @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_dasnrevenuetype_business_id_fec61e04_fk_business_id")
+
+  @@index([business_id], map: "finance_dasnrevenuetype_business_id_fec61e04_fk_business_id")
+}
+
+model finance_evidenceattachment {
+  created                DateTime               @db.DateTime(6)
+  modified               DateTime               @db.DateTime(6)
+  is_removed             Boolean
+  id                     String                 @id @db.Char(32)
+  file                   String                 @db.VarChar(100)
+  description            String?                @db.VarChar(255)
+  uploaded_at            DateTime               @db.DateTime(6)
+  business_id            String                 @db.Char(32)
+  evidence_id            String                 @db.Char(32)
+  finance_budgetevidence finance_budgetevidence @relation(fields: [evidence_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_evidenceatta_evidence_id_f2a6c014_fk_finance_b")
+  business               business               @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_evidenceattachment_business_id_1b976188_fk_business_id")
+
+  @@index([evidence_id], map: "finance_evidenceatta_evidence_id_f2a6c014_fk_finance_b")
+  @@index([business_id], map: "finance_evidenceattachment_business_id_1b976188_fk_business_id")
+}
+
+model finance_evidenceofx {
+  created                DateTime               @db.DateTime(6)
+  modified               DateTime               @db.DateTime(6)
+  is_removed             Boolean
+  id                     String                 @id @db.Char(32)
+  linked_at              DateTime               @db.DateTime(6)
+  description            String?                @db.VarChar(255)
+  business_id            String                 @db.Char(32)
+  evidence_id            String                 @unique(map: "evidence_id") @db.Char(32)
+  ofx_transaction_id     String                 @unique(map: "ofx_transaction_id") @db.Char(32)
+  business               business               @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_evidenceofx_business_id_c2c7233a_fk_business_id")
+  finance_budgetevidence finance_budgetevidence @relation(fields: [evidence_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_evidenceofx_evidence_id_101720fa_fk_finance_b")
+  ofx_transaction        ofx_transaction        @relation(fields: [ofx_transaction_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "finance_evidenceofx_ofx_transaction_id_4245158d_fk_ofx_trans")
+
+  @@index([business_id], map: "finance_evidenceofx_business_id_c2c7233a_fk_business_id")
+}
+
+model finance_period {
+  id                   BigInt                 @id @default(autoincrement())
+  year                 Int
+  month                Int
+  finance_budgetperiod finance_budgetperiod[]
+
+  @@unique([year, month], map: "finance_period_year_month_86ade4a7_uniq")
+}
+
+model home_kanban {
+  id BigInt @id @default(autoincrement())
+}
+
+model imoveiscampinas_address {
+  id                               BigInt                             @id @default(autoincrement())
+  address                          String                             @db.VarChar(160)
+  neighborhood_id                  BigInt
+  imoveiscampinas_neighborhood     imoveiscampinas_neighborhood       @relation(fields: [neighborhood_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "imoveiscampinas_addr_neighborhood_id_7ab251e5_fk_imoveisca")
+  imoveiscampinas_apartmentlisting imoveiscampinas_apartmentlisting[]
+
+  @@index([neighborhood_id], map: "imoveiscampinas_addr_neighborhood_id_7ab251e5_fk_imoveisca")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model imoveiscampinas_apartmentlisting {
+  id                      BigInt                  @id @default(autoincrement())
+  listing_type            Int                     @db.UnsignedSmallInt
+  source                  Int                     @db.UnsignedSmallInt
+  property_type           Int                     @db.UnsignedSmallInt
+  area_sqm                Int                     @db.UnsignedInt
+  address_number          Int?                    @db.UnsignedSmallInt
+  bedrooms                Int?                    @db.UnsignedSmallInt
+  bathrooms               Int?                    @db.UnsignedSmallInt
+  parking_spaces          Int?                    @db.UnsignedSmallInt
+  price                   Decimal?                @db.Decimal(10, 2)
+  condo_fee               Decimal?                @db.Decimal(10, 2)
+  image_url               String?                 @db.VarChar(500)
+  contact_url             String?                 @db.VarChar(500)
+  created_at              DateTime                @db.DateTime(6)
+  updated_at              DateTime                @db.DateTime(6)
+  address_id              BigInt
+  imoveiscampinas_address imoveiscampinas_address @relation(fields: [address_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "imoveiscampinas_apar_address_id_c4659d9c_fk_imoveisca")
+
+  @@index([address_id], map: "imoveiscampinas_apar_address_id_c4659d9c_fk_imoveisca")
+}
+
+model imoveiscampinas_neighborhood {
+  id                      BigInt                    @id @default(autoincrement())
+  name                    String                    @db.VarChar(60)
+  imoveiscampinas_address imoveiscampinas_address[]
+}
+
+model next_action {
+  created               DateTime        @db.DateTime(6)
+  modified              DateTime        @db.DateTime(6)
+  is_removed            Boolean
+  id                    String          @id @db.Char(32)
+  dt_complete_date      DateTime?       @db.DateTime(6)
+  hh_complete_date      DateTime?       @db.Time(6)
+  dt_due_date           DateTime?       @db.DateTime(6)
+  hh_due_date           DateTime?       @db.Time(6)
+  allow_automation      Boolean
+  notes                 String?         @db.LongText
+  custom_quick_response String?         @db.LongText
+  business_id           String          @db.Char(32)
+  customer_id           String          @db.Char(32)
+  quick_response_id     String?         @db.Char(32)
+  failed                Boolean
+  business              business        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "next_action_business_id_f08607c1_fk_business_id")
+  customer              customer        @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "next_action_customer_id_d8bc98f1_fk_customer_id")
+  quick_response        quick_response? @relation(fields: [quick_response_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "next_action_quick_response_id_aed700de_fk_quick_response_id")
+
+  @@index([business_id], map: "next_action_business_id_f08607c1_fk_business_id")
+  @@index([customer_id], map: "next_action_customer_id_d8bc98f1_fk_customer_id")
+  @@index([dt_complete_date], map: "next_action_dt_complete_date_70503b79")
+  @@index([dt_due_date], map: "next_action_dt_due_date_96fac79e")
+  @@index([quick_response_id], map: "next_action_quick_response_id_aed700de_fk_quick_response_id")
+}
+
+model ofx_transaction {
+  created                        DateTime                         @db.DateTime(6)
+  modified                       DateTime                         @db.DateTime(6)
+  is_removed                     Boolean
+  id                             String                           @id @db.Char(32)
+  trntype                        String?                          @db.VarChar(20)
+  dtposted                       DateTime                         @db.DateTime(6)
+  trnamt                         Decimal                          @db.Decimal(12, 2)
+  fitid                          String                           @unique(map: "fitid") @db.VarChar(255)
+  name                           String?                          @db.VarChar(255)
+  memo                           String?                          @db.LongText
+  sic                            String?                          @db.VarChar(10)
+  acctid                         String?                          @db.VarChar(50)
+  branchid                       String?                          @db.VarChar(20)
+  bankid                         String?                          @db.VarChar(20)
+  accttype                       String?                          @db.VarChar(20)
+  curdef                         String?                          @db.VarChar(10)
+  org                            String?                          @db.VarChar(255)
+  fid                            String?                          @db.VarChar(10)
+  business_id                    String                           @db.Char(32)
+  metamemo                       String?                          @db.LongText
+  customer_order_ofx_transaction customer_order_ofx_transaction[]
+  finance_evidenceofx            finance_evidenceofx?
+  business                       business                         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ofx_transaction_business_id_6d3da2ac_fk_business_id")
+
+  @@unique([fitid, acctid, bankid], map: "unique_fitid_per_account")
+  @@index([fitid, acctid, bankid], map: "fitid_acctid_bankid_idx")
+  @@index([business_id], map: "ofx_transaction_business_id_6d3da2ac_fk_business_id")
+  @@index([dtposted], map: "ofx_transaction_dtposted_b6d29ca5")
+}
+
+model order_catalog_item_actionable {
+  created                        DateTime                    @db.DateTime(6)
+  modified                       DateTime                    @db.DateTime(6)
+  is_removed                     Boolean
+  id                             String                      @id @db.Char(32)
+  sequence                       Int?
+  checked                        Boolean
+  estimated_execution_date       DateTime?                   @db.DateTime(6)
+  business_id                    String                      @db.Char(32)
+  customer_order_catalog_item_id String                      @db.Char(32)
+  actionable_group_id            String?                     @db.Char(32)
+  actionable_group               actionable_group?           @relation(fields: [actionable_group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_catalog_item_a_actionable_group_id_f417378b_fk_actionabl")
+  business                       business                    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_catalog_item_a_business_id_8d23a7c3_fk_business_")
+  customer_order_catalog_item    customer_order_catalog_item @relation(fields: [customer_order_catalog_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "order_catalog_item_a_customer_order_catal_607fe84f_fk_customer_")
+
+  @@index([actionable_group_id], map: "order_catalog_item_a_actionable_group_id_f417378b_fk_actionabl")
+  @@index([business_id], map: "order_catalog_item_a_business_id_8d23a7c3_fk_business_")
+  @@index([customer_order_catalog_item_id], map: "order_catalog_item_a_customer_order_catal_607fe84f_fk_customer_")
+  @@index([estimated_execution_date], map: "order_catalog_item_actionable_estimated_execution_date_091f8190")
+}
+
+model p2d_draft_website_request {
+  id         Int       @id @default(autoincrement())
+  message    String?   @db.LongText
+  created_at DateTime? @db.DateTime(6)
+
+  @@index([created_at], map: "p2d_draft_website_request_created_at_04e7d4f5")
+}
+
+model phone_device {
+  created      DateTime  @db.DateTime(6)
+  modified     DateTime  @db.DateTime(6)
+  is_removed   Boolean
+  id           String    @id @db.Char(32)
+  name         String    @db.VarChar(30)
+  phone_number String    @db.VarChar(20)
+  business_id  String    @db.Char(32)
+  chatbot      chatbot[]
+  business     business  @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "phone_device_business_id_36e1f0eb_fk_business_id")
+
+  @@index([business_id], map: "phone_device_business_id_36e1f0eb_fk_business_id")
+  @@index([phone_number], map: "phone_device_phone_number_23830c54")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model post_question {
+  id           String    @id @db.Char(32)
+  question     String    @db.LongText
+  answer       String?   @db.LongText
+  html_div     String?   @db.LongText
+  entry_type   String    @db.VarChar(50)
+  slug         String    @unique(map: "slug") @db.VarChar(255)
+  created_at   DateTime  @db.DateTime(6)
+  updated_at   DateTime  @db.DateTime(6)
+  published_at DateTime  @db.DateTime(6)
+  order        Int       @db.UnsignedInt
+  blog_post_id String    @db.Char(32)
+  image        String?   @db.VarChar(100)
+  blog_post    blog_post @relation(fields: [blog_post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_question_blog_post_id_162f2534_fk_blog_post_id")
+
+  @@index([blog_post_id], map: "post_question_blog_post_id_162f2534_fk_blog_post_id")
+  @@index([created_at], map: "post_question_created_at_702a2d2e")
+  @@index([order], map: "post_question_order_8647a050")
+}
+
+model profile {
+  id             BigInt    @id @default(autoincrement())
+  name           String?   @db.VarChar(100)
+  position       String?   @db.VarChar(50)
+  business_id    String?   @db.Char(32)
+  user_id        Int       @unique(map: "user_id")
+  dark_mode      Boolean
+  ui_preferences Json?
+  business       business? @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_business_id_1cca4a43_fk_business_id")
+  auth_user      auth_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_user_id_2aeb6f6b_fk_auth_user_id")
+
+  @@index([business_id], map: "profile_business_id_1cca4a43_fk_business_id")
+}
+
+model prototype {
+  id           String    @id @db.Char(32)
+  prompt       Json
+  slug         String    @db.VarChar(100)
+  tags         String    @db.VarChar(255)
+  rating       Float
+  created_at   DateTime  @db.DateTime(6)
+  published_at DateTime? @db.DateTime(6)
+  generated_by String?   @db.VarChar(80)
+
+  @@index([created_at], map: "p2digital_prototype_created_at_d3727f10")
+  @@index([published_at], map: "p2digital_prototype_published_at_102eedf4")
+  @@index([slug], map: "p2digital_prototype_slug_fe325616")
+  @@index([tags], map: "p2digital_prototype_tags_c6fd1e86")
+}
+
+model quick_response {
+  created                 DateTime      @db.DateTime(6)
+  modified                DateTime      @db.DateTime(6)
+  is_removed              Boolean
+  id                      String        @id @db.Char(32)
+  id_reserved             Int?
+  title                   String        @db.VarChar(255)
+  shortened_title         String?       @db.VarChar(10)
+  shortcut                String        @db.VarChar(50)
+  response                String?       @db.LongText
+  preferred_delivery_time DateTime?     @db.Time(6)
+  business_id             String        @db.Char(32)
+  next_action             next_action[]
+  business                business      @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "quick_response_business_id_7fb95973_fk_business_id")
+
+  @@index([business_id], map: "quick_response_business_id_7fb95973_fk_business_id")
+  @@index([id_reserved], map: "quick_response_id_reserved_5d769a73")
+}
+
+model sales_funnel_stage {
+  created     DateTime   @db.DateTime(6)
+  modified    DateTime   @db.DateTime(6)
+  is_removed  Boolean
+  id          String     @id @db.Char(32)
+  title       String     @db.VarChar(100)
+  desc        String?    @db.LongText
+  action_plan String?    @db.LongText
+  stage_order Int?
+  business_id String     @db.Char(32)
+  customer    customer[]
+  business    business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sales_funnel_stage_business_id_53ab281f_fk_business_id")
+
+  @@index([business_id], map: "sales_funnel_stage_business_id_53ab281f_fk_business_id")
+}
+
+model status_1 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  customer_order customer_order[]
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status_1_business_id_04ba6f60_fk_business_id")
+
+  @@index([business_id], map: "status_1_business_id_04ba6f60_fk_business_id")
+}
+
+model status_2 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  customer_order customer_order[]
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status_2_business_id_dbc5e672_fk_business_id")
+
+  @@index([business_id], map: "status_2_business_id_dbc5e672_fk_business_id")
+}
+
+model status_3 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  customer_order customer_order[]
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status_3_business_id_8905e2f2_fk_business_id")
+
+  @@index([business_id], map: "status_3_business_id_8905e2f2_fk_business_id")
+}
+
+model status_4 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  customer_order customer_order[]
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status_4_business_id_6d8f8a45_fk_business_id")
+
+  @@index([business_id], map: "status_4_business_id_6d8f8a45_fk_business_id")
+}
+
+model status_5 {
+  created        DateTime         @db.DateTime(6)
+  modified       DateTime         @db.DateTime(6)
+  is_removed     Boolean
+  id             String           @id @db.Char(32)
+  name           String           @db.VarChar(255)
+  sequence       Int?
+  business_id    String           @db.Char(32)
+  customer_order customer_order[]
+  business       business         @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "status_5_business_id_1905b403_fk_business_id")
+
+  @@index([business_id], map: "status_5_business_id_1905b403_fk_business_id")
+}
+
+model table_map {
+  name            String            @id @db.VarChar(100)
+  field_attribute field_attribute[]
+}
+
+model taggit_tag {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique(map: "name") @db.VarChar(100)
+  slug              String              @unique(map: "slug") @db.VarChar(100)
+  taggit_taggeditem taggit_taggeditem[]
+}
+
+model taggit_taggeditem {
+  id                  Int                 @id @default(autoincrement())
+  object_id           Int
+  content_type_id     Int
+  tag_id              Int
+  django_content_type django_content_type @relation(fields: [content_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "taggit_taggeditem_content_type_id_9957a03c_fk_django_co")
+  taggit_tag          taggit_tag          @relation(fields: [tag_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "taggit_taggeditem_tag_id_f4f5b767_fk_taggit_tag_id")
+
+  @@unique([content_type_id, object_id, tag_id], map: "taggit_taggeditem_content_type_id_object_id_tag_id_4bb97a8e_uniq")
+  @@index([content_type_id, object_id], map: "taggit_tagg_content_8fc721_idx")
+  @@index([object_id], map: "taggit_taggeditem_object_id_e2d7d1df")
+  @@index([tag_id], map: "taggit_taggeditem_tag_id_f4f5b767_fk_taggit_tag_id")
+}
+
+model vt_lead {
+  id              Int       @id @default(autoincrement())
+  name            String?   @db.LongText
+  email           String?   @db.LongText
+  whats           String?   @db.LongText
+  message         String?   @db.LongText
+  visa_type       String?   @db.LongText
+  user_uuid       String?   @db.LongText
+  created_at      DateTime? @db.DateTime(6)
+  is_lead_handled Boolean?
+
+  @@index([created_at], map: "vt_lead_created_at_4e98439d")
+}
+
+model vt_visitor {
+  id         Int       @id @default(autoincrement())
+  user_uuid  String?   @db.LongText
+  user_ip    String?   @db.LongText
+  site       String?   @db.LongText
+  created_at DateTime? @db.DateTime(6)
+
+  @@index([created_at], map: "vt_visitor_created_at_2d20c06c")
+}
