@@ -22,6 +22,7 @@
 @layer components {
     .gradient {
         background: linear-gradient(270deg, #0077b6 0%, #1f4e7a 50%, #2a5e90 100%) !important;
+        /* background-color: #ff6901 !important; */
     }
 
     .cta-button-wiggle {

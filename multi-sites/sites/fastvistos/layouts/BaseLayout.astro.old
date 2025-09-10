@@ -231,7 +231,15 @@ const cssVariableString = Object.entries(cssVariables)
   </script>
 </head>
 
-<body class={`antialiased ${bodyClass}`}>
+<!-- <body class={`antialiased ${bodyClass}`}> -->
+
+<body
+    class={`leading-normal tracking-normal text-white gradient ${bodyClass}`}
+    style="font-family: 'Source Sans Pro', sans-serif; background: linear-gradient(270deg, #0077b6 0%, #1f4e7a 50%, #2a5e90 100%) !important;"
+>
+
+    <p style="font-size: 141px; color: #ffffff;">FastVistos - Especialistas em Vistos Americanos</p>
+
   <!-- FastVistos Navigation -->
   <Navigation />
   
@@ -388,3 +396,28 @@ const cssVariableString = Object.entries(cssVariables)
   </script>
 </body>
 </html>
+
+<style is:global>
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        font-family: 'Source Sans Pro', sans-serif;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    /* Global utility classes */
+    .gradient {
+        background: linear-gradient(270deg, #0077b6 0%, #1f4e7a 50%, #2a5e90 100%) !important;
+    }
+    .fill-current {
+        fill: #ff6901;
+    }
+</style>
