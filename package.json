@@ -7,7 +7,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "download-images": "node download-blog-images.js"
+    "download-images": "node download-blog-images.js",
+    "generate-blog": "node generate-blog-content.js",
+    "generate-blog:watch": "node generate-blog-content.js --watch",
+    "generate-blog:advanced": "node generate-blog-advanced.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
