@@ -203,3 +203,6 @@ cython_debug/
 chatwoot.sqlite3
 chatwoot.sqlite3-shm
 chatwoot.sqlite3-wal
+
+# Exception: Include src/lib directory
+!src/lib/
