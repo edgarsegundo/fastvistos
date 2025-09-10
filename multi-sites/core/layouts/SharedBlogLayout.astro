@@ -1,0 +1,72 @@
+---
+// Shared Blog Layout - Used across all sites
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  bodyClass?: string;
+  siteName?: string;
+  siteUrl?: string;
+}
+
+const { 
+  title, 
+  description, 
+  bodyClass = '', 
+  siteName = 'FastVistos',
+  siteUrl = 'https://fastvistos.com'
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content={description} />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={siteName} />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+</head>
+<body class={bodyClass}>
+  <!-- Simple Navigation -->
+  <nav class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="/" class="text-xl font-bold text-blue-600">{siteName}</a>
+        </div>
+        <div class="flex items-center space-x-8">
+          <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+          <a href="/blog" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <slot />
+  </main>
+
+  <!-- Simple Footer -->
+  <footer class="bg-gray-50 border-t">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <p class="text-gray-500">© 2024 {siteName}. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
