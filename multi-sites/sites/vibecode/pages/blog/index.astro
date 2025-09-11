@@ -3,7 +3,7 @@ import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import { siteConfig } from '../../site-config.ts';
 import { SiteConfigHelper } from '../../../../core/lib/site-config.ts';
 
-// Get page metadata using helper functions
+// Get page metadata using helper functions (auto-sync working!)
 const metadata = SiteConfigHelper.getMetadata(siteConfig, 'Blog', 'Artigos e dicas sobre vistos');
 const cssVars = SiteConfigHelper.getCssVariables(siteConfig);
 const hasBlog = SiteConfigHelper.hasFeature(siteConfig, 'blog');

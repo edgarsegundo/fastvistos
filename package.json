@@ -7,28 +7,25 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    
     "dev:fastvistos": "node sync-blog.js && SITE_ID=fastvistos astro dev --config multi-sites.config.mjs",
     "dev:conceptvistos": "node sync-blog.js && SITE_ID=conceptvistos astro dev --config multi-sites.config.mjs",
     "dev:vibecode": "node sync-blog.js && SITE_ID=vibecode astro dev --config multi-sites.config.mjs",
-    
+    "dev:watch:fastvistos": "node dev-with-sync.js fastvistos",
+    "dev:watch:conceptvistos": "node dev-with-sync.js conceptvistos",
+    "dev:watch:vibecode": "node dev-with-sync.js vibecode",
     "sync-blog": "node sync-blog.js",
+    "watch-sync": "node watch-and-sync.js",
     "generate-site-registry": "node generate-site-registry.js",
-    
     "build:fastvistos": "node sync-blog.js && SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
     "build:conceptvistos": "node sync-blog.js && SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
     "build:vibecode": "node sync-blog.js && SITE_ID=vibecode astro build --config multi-sites.config.mjs",
-    
     "_build:fastvistos": "SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
     "_build:conceptvistos": "SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
     "_build:vibecode": "SITE_ID=vibecode astro build --config multi-sites.config.mjs",
-    
     "build:all": "node sync-blog.js && npm run _build:fastvistos && npm run _build:conceptvistos && npm run _build:vibecode",
-    
     "preview:fastvistos": "SITE_ID=fastvistos astro preview --config multi-sites.config.mjs",
     "preview:conceptvistos": "SITE_ID=conceptvistos astro preview --config multi-sites.config.mjs",
     "preview:vibecode": "SITE_ID=vibecode astro preview --config multi-sites.config.mjs",
-    
     "download-images": "node download-blog-images.js",
     "generate-blog": "node generate-blog-content.js",
     "generate-blog:watch": "node generate-blog-content.js --watch",
@@ -40,6 +37,7 @@
     "@prisma/client": "^6.15.0",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.5",
+    "glob": "^11.0.3",
     "prisma": "^6.15.0",
     "rehype-external-links": "^3.0.0",
     "remark-gfm": "^4.0.1",
@@ -47,6 +45,7 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21"
+    "autoprefixer": "^10.4.21",
+    "chokidar": "^4.0.3"
   }
 }
