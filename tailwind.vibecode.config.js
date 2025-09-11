@@ -4,7 +4,7 @@ export default {
         './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', 
         './multi-sites/sites/vibecode/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/core/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-        './public/**/*.html'
+        './public-sites/vibecode/**/*.html'
     ],
     theme: {
         extend: {
