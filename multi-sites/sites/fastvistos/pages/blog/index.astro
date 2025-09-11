@@ -1,15 +1,19 @@
 ---
 import { BlogService } from '../../lib/blog-service.js';
-import '../../styles/global.css';
+import { getSiteConfig } from '../../lib/site-config.js';
+
+// Get site configuration
+const siteConfig = getSiteConfig();
+const siteId = 'fastvistos';
 
 // Get blog configuration and articles
 const blogConfig = await BlogService.getBlogConfig();
-const articles = await BlogService.getArticles('fastvistos', 10);
-const featuredArticles = await BlogService.getFeaturedArticles('fastvistos', 3);
+const articles = await BlogService.getArticles(siteId, 10);
+const featuredArticles = await BlogService.getFeaturedArticles(siteId, 3);
 const topics = await BlogService.getTopics();
 
-const title = `${blogConfig.title} - FastVistos | Dicas sobre Vistos Americanos`;
-const description = "Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados.";
+const title = `${blogConfig.title} - ${siteConfig.name}`;
+const description = siteConfig.blogDescription;
 ---
 
 <!DOCTYPE html>
@@ -27,25 +31,27 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <a href="/" class="text-xl font-bold text-blue-600">FastVistos</a>
+          <a href="/" class="text-xl font-bold" style={`color: ${siteConfig.brandColor};`}>
+            {siteConfig.name}
+          </a>
         </div>
         <div class="flex items-center space-x-8">
-          <a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
-          <a href="/blog" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a>
+          <a href="/" class={`text-gray-600 transition-colors ${siteConfig.linkColor}`}>Home</a>
+          <a href="/blog" class={`text-gray-600 transition-colors ${siteConfig.linkColor}`}>Blog</a>
         </div>
       </div>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
+  <section class={`bg-gradient-to-br ${siteConfig.gradientFrom} ${siteConfig.gradientTo} text-white py-16`}>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">
-          Blog FastVistos
+          {siteConfig.blogTitle}
         </h1>
-        <p class="text-xl text-blue-100 max-w-3xl mx-auto">
-          Dicas, guias e informações atualizadas sobre vistos americanos e processos consulares
+        <p class={`text-xl ${siteConfig.accentColor} max-w-3xl mx-auto`}>
+          {siteConfig.blogSubtitle}
         </p>
       </div>
     </div>
@@ -68,7 +74,7 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
                   </time>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                  <a href={`/blog/${article.slug}`} class="hover:text-blue-600 transition-colors">
+                  <a href={`/blog/${article.slug}`} class={`transition-colors ${siteConfig.linkColor}`}>
                     {article.title}
                   </a>
                 </h3>
@@ -78,14 +84,14 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
                 <div class="flex items-center justify-between">
                   <div class="flex flex-wrap gap-2">
                     {article.topics.map((topic: any) => (
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${siteConfig.tagColor}`}>
                         {topic}
                       </span>
                     ))}
                   </div>
                   <a 
                     href={`/blog/${article.slug}`}
-                    class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                    class={`font-medium text-sm ${siteConfig.linkColor}`}
                   >
                     Ler mais →
                   </a>
@@ -104,7 +110,7 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
       <div class="flex flex-wrap justify-center gap-4">
         <a 
           href="/blog" 
-          class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          class={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium text-white transition-colors ${siteConfig.buttonColor}`}
         >
           Todos os Artigos
         </a>
@@ -138,7 +144,7 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
                 <span>{article.author}</span>
               </div>
               <h3 class="text-lg font-semibold text-gray-900 mb-3">
-                <a href={`/blog/${article.slug}`} class="hover:text-blue-600 transition-colors">
+                <a href={`/blog/${article.slug}`} class={`transition-colors ${siteConfig.linkColor}`}>
                   {article.title}
                 </a>
               </h3>
@@ -155,7 +161,7 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
                 </div>
                 <a 
                   href={`/blog/${article.slug}`}
-                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                  class={`font-medium text-sm ${siteConfig.linkColor}`}
                 >
                   Ler mais →
                 </a>
@@ -168,19 +174,20 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
   </section>
 
   <!-- CTA Section -->
-  <section class="py-16 bg-blue-600">
+  <section class={`py-16 bg-gradient-to-br ${siteConfig.gradientFrom} ${siteConfig.gradientTo}`}>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl font-bold text-white mb-4">
-        Precisa de Ajuda com seu Visto?
+        {siteConfig.ctaTitle}
       </h2>
-      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-        Nossa equipe de especialistas está pronta para ajudá-lo em todo o processo
+      <p class={`text-xl ${siteConfig.accentColor} mb-8 max-w-2xl mx-auto`}>
+        {siteConfig.ctaSubtitle}
       </p>
       <a 
         href="/#contato"
-        class="inline-flex items-center px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
+        class="inline-flex items-center px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white transition-all duration-300"
+        style={`hover-color: ${siteConfig.brandColor};`}
       >
-        Falar com Especialista
+        {siteConfig.ctaButton}
       </a>
     </div>
   </section>
@@ -189,7 +196,7 @@ const description = "Artigos e dicas sobre como obter vistos americanos, eTA can
   <footer class="bg-gray-50 border-t">
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <p class="text-gray-500">© 2024 FastVistos. Todos os direitos reservados.</p>
+        <p class="text-gray-500">© {siteConfig.year} {siteConfig.name}. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>

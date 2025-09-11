@@ -1,10 +1,10 @@
 ---
-import { BlogService } from '../../lib/blog-service.js';
+import { BlogService } from '../../lib/multi-blog-service.js';
 import { getSiteConfig } from '../../lib/site-config.js';
 
 // Generate static paths for all articles
 export async function getStaticPaths() {
-  const siteId = 'vibecode';
+  const siteId = import.meta.env.SITE_ID || 'fastvistos';
   const articles = await BlogService.getArticles(siteId, 100);
   
   return articles.map((article: any) => ({

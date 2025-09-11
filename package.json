@@ -12,11 +12,13 @@
     "dev:conceptvistos": "SITE_ID=conceptvistos astro dev --config multi-sites.config.mjs",
     "dev:vibecode": "SITE_ID=vibecode astro dev --config multi-sites.config.mjs",
     
-    "build:fastvistos": "SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
-    "build:conceptvistos": "SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
-    "build:vibecode": "SITE_ID=vibecode astro build --config multi-sites.config.mjs",
+    "sync-blog": "node sync-blog.js",
     
-    "build:all": "npm run build:fastvistos && npm run build:conceptvistos && npm run build:vibecode",
+    "build:fastvistos": "node sync-blog.js && SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
+    "build:conceptvistos": "node sync-blog.js && SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
+    "build:vibecode": "node sync-blog.js && SITE_ID=vibecode astro build --config multi-sites.config.mjs",
+    
+    "build:all": "node sync-blog.js && npm run build:fastvistos && npm run build:conceptvistos && npm run build:vibecode",
     
     "preview:fastvistos": "SITE_ID=fastvistos astro preview --config multi-sites.config.mjs",
     "preview:conceptvistos": "SITE_ID=conceptvistos astro preview --config multi-sites.config.mjs",
