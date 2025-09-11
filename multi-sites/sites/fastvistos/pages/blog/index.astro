@@ -1,11 +1,13 @@
 ---
 import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
+import { siteManager } from '../../../../core/lib/site-manager.ts';
 // import { BlogService } from '../../lib/blog-service.js';
 // import { getSiteConfig } from '../../lib/site-config.js';
 
 // Get site configuration
-const siteConfig = getSiteConfig();
 const siteId = 'fastvistos';
+const siteConfig = await siteManager.init(siteId);
+
 
 // Get blog configuration and articles
 // const blogConfig = await BlogService.getBlogConfig();
@@ -22,9 +24,7 @@ const blogConfig = {
 };
 
 const title = `${blogConfig.title} - ${siteConfig.name}`;
-const description = siteConfig.blogDescription;
-
-
+const description = blogConfig.description;
 
 ---
 
