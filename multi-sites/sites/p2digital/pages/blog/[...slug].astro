@@ -1,182 +1,60 @@
 ---
-import { BlogService } from '../../lib/blog-service.ts';
+import { getCollection } from 'astro:content';
+import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import { siteConfig } from '../../site-config.ts';
 
-// Generate static paths for all articles  
+// Generate static paths from the markdown files in content/blog/
 export async function getStaticPaths() {
-  const articles = await BlogService.getPublishedArticles();
+  const blogEntries = await getCollection('blog');
   
-  return articles.map((article: any) => ({
-    params: { slug: article.slug },
-    props: { article }
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry }
   }));
 }
 
-// Get the article from props
-const { article } = Astro.props;
+// Get the markdown entry from props
+const { entry } = Astro.props;
 
-const title = `${article.title} - ${siteConfig.name} Blog`;
-const description = article.metatitle || article.title;
+// Render the markdown content
+const { Content } = await entry.render();
+
+const title = `${entry.data.title} - ${siteConfig.name} Blog`;
+const description = entry.data.description || entry.data.title;
 ---
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="description" content={description} />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>{title}</title>
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:type" content="article" />
-  
-  <!-- JSON-LD -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": article.title,
-    "description": description,
-    "author": {
-      "@type": "Organization",
-      "name": siteConfig.name
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": siteConfig.name,
-      "logo": {
-        "@type": "ImageObject",
-        "url": `${siteConfig.domain}${siteConfig.logo}`
-      }
-    },
-    "datePublished": new Date(article.published).toISOString(),
-    "dateModified": new Date(article.modified || article.published).toISOString()
-  })} />
-  
-  <!-- Tailwind CSS -->
-  <style>
-    :root {
-      --primary-color: {siteConfig.primaryColor};
-      --secondary-color: {siteConfig.secondaryColor};
-    }
-  </style>
-</head>
+<SharedBlogLayout 
+    title={title}
+    description={description}
+>
+    <article class="prose prose-lg max-w-4xl mx-auto px-4">
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
+            
+            <div class="flex items-center gap-4 text-gray-600 mb-6">
+                <time datetime={entry.data.pubDate}>
+                    {new Date(entry.data.pubDate).toLocaleDateString('pt-BR')}
+                </time>
+                
+                {entry.data.topic && (
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {entry.data.topic}
+                    </span>
+                )}
+            </div>
 
-<body class="min-h-screen bg-gray-50">
-  <!-- Hero Section with Breadcrumb -->
-  <div class="bg-gradient-to-br from-blue-600 to-indigo-800 text-white py-16">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <nav class="text-sm mb-4">
-        <a href="/" class="text-gray-200 hover:text-white">Início</a>
-        <span class="mx-2 text-gray-400">/</span>
-        <a href="/blog" class="text-gray-200 hover:text-white">Blog</a>
-        <span class="mx-2 text-gray-400">/</span>
-        <span class="text-white">{article.title}</span>
-      </nav>
-    </div>
-  </div>
+            {entry.data.image && entry.data.image !== "/assets/images/blog/" && (
+                <img 
+                    src={entry.data.image}
+                    alt={entry.data.title}
+                    class="w-full h-96 object-cover rounded-lg mb-8"
+                />
+            )}
+        </header>
 
-  <!-- Article Content -->
-  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Article Header -->
-    <header class="mb-8">
-      <div class="flex items-center text-sm text-gray-500 mb-4">
-        <time datetime={new Date(article.published).toISOString()}>
-          {BlogService.formatDate(new Date(article.published))}
-        </time>
-        <span class="mx-2">•</span>
-        <span>{article.blog_topic?.title || 'Blog'}</span>
-        <span class="mx-2">•</span>
-        <span>5 min de leitura</span>
-      </div>
-      
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-        {article.title}
-      </h1>
-      
-      <p class="text-xl text-gray-600 mb-6">
-        {article.metatitle || article.title}
-      </p>
-      
-      <div class="flex flex-wrap gap-2">
-        {article.blog_topic && (
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-            {article.blog_topic.title}
-          </span>
-        )}
-      </div>
-    </header>
-
-    <!-- Article Body -->
-    <div class="prose prose-lg max-w-none">
-      <div set:html={article.content_md || article.content_html || article.content_raw} />
-    </div>
-
-    <!-- Article Footer -->
-    <footer class="mt-12 pt-8 border-t border-gray-200">
-      <div class="flex items-center justify-between">
-        <div class="text-sm text-gray-500">
-          Publicado em {BlogService.formatDate(new Date(article.published))}
-          {article.modified && new Date(article.modified).getTime() !== new Date(article.published).getTime() && (
-            <span> • Atualizado em {BlogService.formatDate(new Date(article.modified))}</span>
-          )}
+        <!-- This is where the markdown content gets rendered -->
+        <div class="prose-content">
+            <Content />
         </div>
-        
-        <div class="flex items-center space-x-4">
-          <!-- Share buttons -->
-          <button 
-            onclick="shareArticle()"
-            class="text-sm text-gray-500 hover:text-gray-700"
-          >
-            Compartilhar
-          </button>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Related Articles or Call to Action -->
-    <section class="mt-16 p-8 bg-gray-100 rounded-lg">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">
-        Precisa de ajuda com seu visto americano?
-      </h3>
-      <p class="text-gray-600 mb-4">
-        Nossa equipe especializada pode ajudar você a obter seu visto americano com segurança e agilidade.
-      </p>
-      <a 
-        href={siteConfig.whatsapp || '#contato'}
-        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-      >
-        Fale Conosco
-      </a>
-    </section>
-  </article>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p>&copy; 2024 {siteConfig.name}. Todos os direitos reservados.</p>
-    </div>
-  </footer>
-
-  <script>
-    function shareArticle() {
-      const titleElement = document.querySelector('h1');
-      const title = titleElement ? titleElement.textContent : document.title;
-      const url = window.location.href;
-      
-      if (navigator.share) {
-        navigator.share({
-          title: title,
-          url: url
-        }).catch(err => console.log('Error sharing:', err));
-      } else {
-        // Fallback to Twitter share
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
-        window.open(twitterUrl, '_blank');
-      }
-    }
-  </script>
-</body>
-</html>
+    </article>
+</SharedBlogLayout>
