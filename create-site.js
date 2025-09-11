@@ -121,7 +121,19 @@ async function addNpmScripts(siteId) {
   try {
     // Read current package.json
     const packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8');
-    const packageJson = JSON.parse(packageJsonContent);
+    
+    // Validate and parse JSON
+    let packageJson;
+    try {
+      packageJson = JSON.parse(packageJsonContent);
+    } catch (parseError) {
+      throw new Error(`Invalid JSON in package.json: ${parseError.message}`);
+    }
+    
+    // Ensure scripts object exists
+    if (!packageJson.scripts || typeof packageJson.scripts !== 'object') {
+      packageJson.scripts = {};
+    }
     
     // Define the scripts to add
     const scriptsToAdd = {
@@ -142,8 +154,18 @@ async function addNpmScripts(siteId) {
     }
     
     if (addedScripts.length > 0) {
-      // Write back to package.json with proper formatting
-      await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+      // Create clean JSON string with proper formatting (no trailing commas)
+      const cleanJsonString = JSON.stringify(packageJson, null, 2);
+      
+      // Validate the generated JSON before writing
+      try {
+        JSON.parse(cleanJsonString);
+      } catch (validateError) {
+        throw new Error(`Generated invalid JSON: ${validateError.message}`);
+      }
+      
+      // Write back to package.json with proper formatting and newline
+      await fs.writeFile(packageJsonPath, cleanJsonString + '\n');
       console.log(`📦 Added npm scripts: ${addedScripts.join(', ')}`);
     } else {
       console.log(`📦 All npm scripts for ${siteId} already exist`);
