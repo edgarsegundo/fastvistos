@@ -1,6 +1,6 @@
 ---
 import { BlogService } from '../../lib/blog-service.js';
-import { getSiteConfig } from '../../lib/site-config.js';
+import { siteConfig } from '../../site-config.ts';
 
 // Generate static paths for all articles
 export async function getStaticPaths() {
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 // Get the article from props and site configuration
 const { article } = Astro.props;
-const siteConfig = getSiteConfig();
+// siteConfig imported directly
 const siteId = import.meta.env.SITE_ID || 'fastvistos';
 
 const title = `${article.title} - ${siteConfig.name} Blog`;
