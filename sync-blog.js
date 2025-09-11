@@ -60,6 +60,7 @@ async function syncBlogToSite(siteId) {
   // Read core library files
   const blogServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'blog-service.ts'), 'utf-8');
   const siteConfigContent = await fs.readFile(join(CORE_LIB_DIR, 'site-config.ts'), 'utf-8');
+  const siteConfigHelperContent = await fs.readFile(join(CORE_LIB_DIR, 'site-config-helper.ts'), 'utf-8');
   const prismaContent = await fs.readFile(join(CORE_LIB_DIR, 'prisma.js'), 'utf-8');
   
   // Replace core imports with local imports and make site-specific
@@ -101,6 +102,7 @@ async function syncBlogToSite(siteId) {
   // Sync core library files to site lib directory
   await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
   await fs.writeFile(join(siteLibDir, 'site-config.ts'), siteConfigContent);
+  await fs.writeFile(join(siteLibDir, 'site-config-helper.ts'), siteConfigHelperContent);
   await fs.writeFile(join(siteLibDir, 'prisma.js'), prismaContent);
   
   console.log(`✅ Blog synced to ${siteId}`);
