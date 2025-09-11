@@ -52,7 +52,7 @@ async function syncBlogToSite(siteId) {
   
   // Read core blog templates
   const indexTemplate = await fs.readFile(join(CORE_BLOG_DIR, 'index.astro'), 'utf-8');
-  const postTemplate = await fs.readFile(join(CORE_BLOG_DIR, '[slug].astro'), 'utf-8');
+  const postTemplate = await fs.readFile(join(CORE_BLOG_DIR, '[...slug].astro'), 'utf-8');
   
   // Read core layouts
   const sharedBlogLayout = await fs.readFile(join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'), 'utf-8');
@@ -73,7 +73,8 @@ async function syncBlogToSite(siteId) {
     .replace(/import '\.\.\/\.\.\/styles\/global\.css';/g, `import '../../styles/global.css';`);
     
   const localizedPostTemplate = postTemplate
-    .replace(/import \{ BlogService \} from '\.\.\/\.\.\/lib\/multi-blog-service\.js';/, `import { BlogService } from '../../lib/blog-service.js';`)
+    .replace(/import \{ BlogService \} from '\.\.\/\.\.\/lib\/blog-service\.ts';/, `import { BlogService } from '../../lib/blog-service.ts';`)
+    .replace(/import \{ siteConfig \} from '\.\.\/\.\.\/site-config\.ts';/, `import { siteConfig } from '../../site-config.ts';`)
     .replace(/import \{ getSiteConfig \} from '\.\.\/\.\.\/lib\/site-config\.js';/, `import { siteConfig } from '../../site-config.ts';`)
     .replace(/const siteConfig = getSiteConfig\(\);/, `// siteConfig imported directly`)
     .replace(/import BlogLayout from '\.\.\/\.\.\/\.\.\/\.\.\/core\/layouts\/SharedBlogLayout\.astro';/, `import BlogLayout from '../layouts/SharedBlogLayout.astro';`)
@@ -94,7 +95,7 @@ async function syncBlogToSite(siteId) {
   
   // Write localized templates
   await fs.writeFile(join(siteBlogDir, 'index.astro'), localizedIndexTemplate);
-  await fs.writeFile(join(siteBlogDir, '[slug].astro'), localizedPostTemplate);
+  await fs.writeFile(join(siteBlogDir, '[...slug].astro'), localizedPostTemplate);
   
   // Write localized layout
   await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);

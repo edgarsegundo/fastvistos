@@ -13,8 +13,36 @@ This project implements a **Multi-Site Architecture** using Astro v5.13.5 with c
 - **✅ Content Collections**: Proper Astro content collections with schema validation
 - **✅ Site-Specific Public Assets**: Independent public directories for each site
 - **✅ Dynamic Styling**: Site-specific Tailwind configurations with automatic loading
+- **✅ Multi-Site Blog Service**: Business-aware blog service with automatic business_id filtering
+- **✅ Blog Content Generation**: Automated scripts for database-to-markdown content generation with HTML conversion
 
-## 🚀 **Quick Start**
+## � **Recent Updates & Improvements**
+
+### **Blog System Enhancements** (Latest)
+
+- **🆕 Multi-Site Blog Service**: Implemented business-aware `blog-service.ts` with automatic `business_id` filtering
+- **🆕 Site Configuration Helpers**: Split `SiteConfigHelper` utilities into separate file for better organization
+- **🆕 Blog Content Generation**: Two powerful scripts for database-to-markdown content automation:
+  - `generate-blog-content.js` - Basic content generation with multi-site support
+  - `generate-blog-advanced.js` - Advanced generation with HTML-to-Markdown conversion
+- **🔧 Business ID Integration**: Proper UUID format handling and site-specific content filtering
+- **✅ Tested & Working**: All scripts tested with real data (5 articles for FastVistos, proper filtering for all sites)
+
+### **Architecture Improvements**
+
+- **📁 SiteConfigHelper**: Extracted from site-config.ts for better modularity and reusability
+- **🔍 Business ID Debugging**: Resolved UUID format issues (database format vs config format)
+- **�🚀 Content Automation**: Streamlined workflow from database articles to site-specific markdown files
+- **🛡️ Error Handling**: Comprehensive error handling in all content generation scripts
+
+### **Developer Experience**
+
+- **📖 Enhanced Documentation**: Updated README with detailed usage examples and troubleshooting
+- **⚡ Script Standardization**: Consistent command-line interface across all generation scripts
+- **🎯 Progress Reporting**: Clear feedback and status reporting in all automation tools
+- **🔧 Help Documentation**: Built-in help commands with examples and feature descriptions
+
+## 🚀 Future Enhancements
 
 ### **Development with Auto-Sync** (Recommended)
 
@@ -97,7 +125,82 @@ The development environment includes a file watcher that automatically syncs sha
 ```bash
 npm run sync-blog              # Manual sync all sites
 npm run watch-sync            # Just run the file watcher
-```Architecture with Astro Content Collections
+```
+
+## 📝 **Blog Content Generation Scripts**
+
+### **Multi-Site Blog Content Automation**
+
+The project includes two powerful scripts for generating markdown blog content from your database with multi-site support and business_id filtering:
+
+#### **1. Basic Content Generator** (`generate-blog-content.js`)
+
+Generates markdown files from database articles with basic content processing:
+
+```bash
+# Generate content for specific site
+node generate-blog-content.js fastvistos
+node generate-blog-content.js conceptvistos
+node generate-blog-content.js vibecode
+
+# Generate content for all sites
+node generate-blog-content.js all
+
+# Show help
+node generate-blog-content.js --help
+```
+
+#### **2. Advanced Content Generator** (`generate-blog-advanced.js`)
+
+Enhanced version with HTML-to-Markdown conversion and content prioritization:
+
+```bash
+# Generate content for specific site with HTML conversion
+node generate-blog-advanced.js fastvistos
+
+# Generate content for all sites with advanced processing
+node generate-blog-advanced.js all
+
+# Show help and features
+node generate-blog-advanced.js --help
+```
+
+### **Key Features**
+
+- **🏢 Multi-Tenant Support**: Automatically filters content by `business_id` from site configurations
+- **📁 Site-Specific Output**: Creates markdown files in correct site content directories
+- **🔄 HTML Conversion**: Advanced script converts HTML content to clean Markdown
+- **📊 Content Prioritization**: `content_md` > `content_html` > `content_raw`
+- **🛡️ Error Handling**: Graceful handling of missing configurations and content
+- **📈 Progress Reporting**: Clear feedback on generation progress and results
+
+### **Content Generation Workflow**
+
+```
+Database Article → Business ID Filter → Content Processing → Markdown Output
+                      ↓                        ↓                   ↓
+               (41a5c7f95e924...)    (HTML→Markdown)    (site/content/blog/)
+```
+
+### **Example Output**
+
+```bash
+🚀 Generating blog content for: fastvistos
+
+🔍 Fetching articles from database for site: fastvistos...
+🏢 Business ID: 41a5c7f95e924d54b120ab9a0e1843c8
+📁 Content directory: /multi-sites/sites/fastvistos/content/blog
+📝 Found 5 published articles for fastvistos
+✅ Generated: fechamento-do-consulado-de-porto-alegre.md
+✅ Generated: como-treinar-para-a-entrevista.md
+✅ Generated: como-tirar-o-visto-americano.md
+✅ Generated: o-consulado-agora-esta-olhando-para-as-redes-socia.md
+✅ Generated: nova-taxa-a-partir-de-outubro.md
+
+🎉 Content generation complete! Generated 5 articles for fastvistos
+```
+
+## 🏗️ Architecture Overview
 
 This project implements a **Multi-Site Architecture** using Astro v5.13.5 with content collections, supporting multiple websites with shared templates and site-specific content.
 
@@ -128,7 +231,10 @@ fastvistos/
 │   │   ├── layouts/               # Shared layouts
 │   │   │   └── SharedBlogLayout.astro
 │   │   ├── lib/                   # Core business logic & configuration
-│   │   │   └── site-config.ts           # 🆕 Site config interface & helpers
+│   │   │   ├── site-config.ts           # 🆕 Site config interface & helpers
+│   │   │   ├── site-config-helper.ts    # 🆕 Site configuration utility functions
+│   │   │   ├── blog-service.ts          # 🆕 Multi-site blog service with business_id filtering
+│   │   │   └── blog-service-integration.test.js # 🆕 Blog service integration tests
 │   │   └── pages/                 # Shared page templates
 │   │       └── blog/              # Blog templates (synced to sites)
 │   │           ├── index.astro    # Blog listing template
@@ -159,6 +265,8 @@ fastvistos/
 ├── dev-with-sync.js              # 🆕 Development environment with auto-sync
 ├── watch-and-sync.js             # 🆕 File watcher for auto-sync
 ├── sync-blog.js                  # Template synchronization script
+├── generate-blog-content.js      # 🆕 Basic blog content generator (database → markdown)
+├── generate-blog-advanced.js     # 🆕 Advanced blog content generator with HTML conversion
 └── multi-sites.config.mjs        # Astro multi-site configuration
 ```
 │       │   ├── layouts/           # ConceptVistos BaseLayout
