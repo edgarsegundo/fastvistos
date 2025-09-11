@@ -1,18 +1,16 @@
-/* mysite custom styles */
+/* Global styles for Mysite */
 
-/* Import Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS for mysite */
 @layer base {
   html {
-    scroll-behavior: smooth;
+    font-family: system-ui, sans-serif;
   }
   
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
@@ -22,20 +20,20 @@
   }
   
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700;
+    @apply bg-blue-600 text-white hover:bg-blue-700;
   }
   
   .btn-secondary {
-    @apply bg-secondary-600 text-white hover:bg-secondary-700;
+    @apply bg-gray-200 text-gray-900 hover:bg-gray-300;
   }
   
-  .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
   }
 }
