@@ -2,6 +2,105 @@
 
 This project implements a **Multi-Site Architecture** using Astro v5.13.5 with content collections, supporting multiple websites with shared templates and site-specific content.
 
+## 🎯 **Current Status: FULLY WORKING**
+
+**✅ All systems operational** - Multi-site architecture with simplified site configuration and auto-sync development:
+
+- **✅ Simplified Site Configuration**: Clean, type-safe site configs with centralized interface and helper functions
+- **✅ Auto-Sync Development**: File watcher automatically syncs shared templates when core files change
+- **✅ Site-Specific Content**: Each site maintains its own markdown content in dedicated directories
+- **✅ Shared Templates**: Blog templates automatically synced and localized for each site
+- **✅ Content Collections**: Proper Astro content collections with schema validation
+- **✅ Site-Specific Public Assets**: Independent public directories for each site
+- **✅ Dynamic Styling**: Site-specific Tailwind configurations with automatic loading
+
+## 🚀 **Quick Start**
+
+### **Development with Auto-Sync** (Recommended)
+
+```bash
+# Start development with automatic sync on file changes
+npm run dev:watch:fastvistos      # FastVistos with auto-sync
+npm run dev:watch:conceptvistos   # ConceptVistos with auto-sync
+npm run dev:watch:vibecode       # VibeCode with auto-sync
+```
+
+### **Regular Development**
+
+```bash
+# Start development with initial sync only
+npm run dev:fastvistos           # FastVistos
+npm run dev:conceptvistos        # ConceptVistos  
+npm run dev:vibecode            # VibeCode
+```
+
+### **Production Build**
+
+```bash
+npm run build:fastvistos         # Build FastVistos
+npm run build:conceptvistos      # Build ConceptVistos
+npm run build:vibecode          # Build VibeCode
+npm run build:all               # Build all sites
+```
+
+## 🔧 **Site Configuration System**
+
+### **Simple, Type-Safe Configuration**
+
+Each site has its own configuration file with a centralized interface:
+
+```typescript
+// multi-sites/sites/fastvistos/site-config.ts
+import type { SiteConfig } from '../../core/lib/site-config.ts';
+
+export const siteConfig: SiteConfig = {
+  id: 'fastvistos',
+  domain: 'fastvistos.com.br',
+  name: 'Fast Vistos',
+  primaryColor: '#FF6B35',
+  // ... site-specific data
+};
+```
+
+### **Helper Functions for Common Tasks**
+
+```typescript
+// In any Astro component
+import { siteConfig } from '../site-config.ts';
+import { SiteConfigHelper } from '../../core/lib/site-config.ts';
+
+// Get metadata
+const metadata = SiteConfigHelper.getMetadata(siteConfig, 'Page Title');
+
+// Get CSS variables
+const cssVars = SiteConfigHelper.getCssVariables(siteConfig);
+
+// Check features
+const hasBooking = SiteConfigHelper.hasFeature(siteConfig, 'booking');
+
+// Generate WhatsApp link
+const whatsappLink = SiteConfigHelper.getWhatsAppLink(siteConfig, 'Hello!');
+```
+
+## ⚡ **Auto-Sync Development Environment**
+
+### **Real-Time Template Synchronization**
+
+The development environment includes a file watcher that automatically syncs shared templates when core files change:
+
+- **Watches**: `multi-sites/core/pages/blog/**/*`, `multi-sites/core/layouts/**/*`, `multi-sites/core/components/**/*`
+- **Triggers**: Automatic `sync-blog.js` execution on file changes
+- **Result**: Edit core files → instant sync → hot reload in browser
+
+### **Manual Sync Operations**
+
+```bash
+npm run sync-blog              # Manual sync all sites
+npm run watch-sync            # Just run the file watcher
+```Architecture with Astro Content Collections
+
+This project implements a **Multi-Site Architecture** using Astro v5.13.5 with content collections, supporting multiple websites with shared templates and site-specific content.
+
 ## � **Current Status: FULLY WORKING**
 
 **✅ All systems operational** - Multi-site architecture with content collections successfully implemented:
@@ -28,26 +127,40 @@ fastvistos/
 │   │   │   └── JsonLdWebPage.astro
 │   │   ├── layouts/               # Shared layouts
 │   │   │   └── SharedBlogLayout.astro
-│   │   ├── lib/                   # Core business logic
-│   │   │   ├── multi-blog-service.js    # Blog service using Astro content collections
-│   │   │   └── site-config.js           # Site configuration utilities
+│   │   ├── lib/                   # Core business logic & configuration
+│   │   │   └── site-config.ts           # 🆕 Site config interface & helpers
 │   │   └── pages/                 # Shared page templates
 │   │       └── blog/              # Blog templates (synced to sites)
 │   │           ├── index.astro    # Blog listing template
 │   │           └── [slug].astro   # Blog article template
 │   └── sites/                     # Site-specific implementations
 │       ├── fastvistos/            # FastVistos site
+│       │   ├── site-config.ts     # 🆕 FastVistos configuration
 │       │   ├── components/        # FastVistos-specific components
-│       │   ├── content/           # 🆕 Site-specific content
+│       │   ├── content/           # Site-specific content
 │       │   │   ├── config.ts      # Content collection schema
 │       │   │   └── blog/          # Markdown articles for FastVistos
 │       │   ├── layouts/           # FastVistos BaseLayout
-│       │   ├── pages/             # FastVistos pages
+│       │   ├── pages/             # FastVistos pages (auto-synced from core)
 │       │   └── content.config.ts  # Astro content configuration
 │       ├── conceptvistos/         # ConceptVistos site  
-│       │   ├── content/           # 🆕 Site-specific content
+│       │   ├── site-config.ts     # 🆕 ConceptVistos configuration
+│       │   ├── content/           # Site-specific content
 │       │   │   ├── config.ts      # Content collection schema
 │       │   │   └── blog/          # Markdown articles for ConceptVistos
+│       │   └── ...                # Similar structure
+│       └── vibecode/              # VibeCode site
+│           ├── site-config.ts     # 🆕 VibeCode configuration
+│           └── ...                # Similar structure
+├── public-sites/                  # Site-specific public assets
+│   ├── fastvistos/               # FastVistos assets
+│   ├── conceptvistos/            # ConceptVistos assets
+│   └── vibecode/                 # VibeCode assets
+├── dev-with-sync.js              # 🆕 Development environment with auto-sync
+├── watch-and-sync.js             # 🆕 File watcher for auto-sync
+├── sync-blog.js                  # Template synchronization script
+└── multi-sites.config.mjs        # Astro multi-site configuration
+```
 │       │   ├── layouts/           # ConceptVistos BaseLayout
 │       │   ├── pages/             # ConceptVistos pages
 │       │   └── content.config.ts  # Astro content configuration
@@ -756,6 +869,126 @@ To add a new site to the architecture:
    ```bash
    SITE_ID=newsite npm run dev
    ```
+
+## 💻 **Development Workflow**
+
+### **1. Auto-Sync Development (Recommended)**
+
+Start development with automatic template synchronization:
+
+```bash
+npm run dev:watch:fastvistos
+```
+
+**What happens:**
+1. **Initial sync**: Runs `sync-blog.js` to copy latest templates
+2. **File watcher**: Monitors core template files for changes
+3. **Auto-sync**: Automatically runs sync when core files change
+4. **Hot reload**: Astro detects synced changes and reloads browser
+
+**Files watched:**
+- `multi-sites/core/pages/blog/**/*`
+- `multi-sites/core/layouts/**/*`
+- `multi-sites/core/components/**/*`
+
+### **2. Site Configuration Usage**
+
+Use the simple configuration system in your components:
+
+```typescript
+// Import site config and helpers
+import { siteConfig } from '../site-config.ts';
+import { SiteConfigHelper } from '../../core/lib/site-config.ts';
+
+// Direct access to config
+const siteName = siteConfig.name;
+const primaryColor = siteConfig.primaryColor;
+
+// Helper functions for common tasks
+const metadata = SiteConfigHelper.getMetadata(siteConfig, 'Page Title');
+const cssVars = SiteConfigHelper.getCssVariables(siteConfig);
+const hasBooking = SiteConfigHelper.hasFeature(siteConfig, 'booking');
+const whatsappLink = SiteConfigHelper.getWhatsAppLink(siteConfig, 'Hello!');
+```
+
+### **3. Adding New Sites**
+
+1. **Create site directory structure**:
+   ```bash
+   mkdir -p multi-sites/sites/newsite/{components,content/blog,layouts,pages}
+   ```
+
+2. **Create site configuration**:
+   ```typescript
+   // multi-sites/sites/newsite/site-config.ts
+   import type { SiteConfig } from '../../core/lib/site-config.ts';
+   
+   export const siteConfig: SiteConfig = {
+     id: 'newsite',
+     domain: 'newsite.com',
+     name: 'New Site',
+     // ... configure as needed
+   };
+   ```
+
+3. **Add npm scripts**:
+   ```json
+   {
+     "dev:newsite": "node sync-blog.js && SITE_ID=newsite astro dev --config multi-sites.config.mjs",
+     "dev:watch:newsite": "node dev-with-sync.js newsite",
+     "build:newsite": "node sync-blog.js && SITE_ID=newsite astro build --config multi-sites.config.mjs"
+   }
+   ```
+
+4. **Create public assets directory**:
+   ```bash
+   mkdir -p public-sites/newsite
+   # Add favicon, logo, etc.
+   ```
+
+### **4. Updating Templates**
+
+To modify shared blog templates:
+
+1. **Edit core templates** in `multi-sites/core/pages/blog/`
+2. **Auto-sync (if using watch mode)**: Changes automatically sync to all sites
+3. **Manual sync**: Run `npm run sync-blog` if not using watch mode
+4. **Test**: Verify changes in all affected sites
+
+### **5. Content Management**
+
+Each site manages its own content:
+
+```bash
+# Add new blog post for FastVistos
+touch multi-sites/sites/fastvistos/content/blog/new-post.md
+
+# Add new blog post for ConceptVistos  
+touch multi-sites/sites/conceptvistos/content/blog/new-post.md
+```
+
+Content is automatically picked up by Astro's content collections system.
+
+## 🔧 **Available Scripts**
+
+### **Development**
+- `npm run dev:watch:fastvistos` - FastVistos with auto-sync
+- `npm run dev:watch:conceptvistos` - ConceptVistos with auto-sync  
+- `npm run dev:watch:vibecode` - VibeCode with auto-sync
+- `npm run dev:fastvistos` - FastVistos (sync once at start)
+- `npm run dev:conceptvistos` - ConceptVistos (sync once at start)
+- `npm run dev:vibecode` - VibeCode (sync once at start)
+
+### **Build & Deploy**
+- `npm run build:all` - Build all sites
+- `npm run build:fastvistos` - Build FastVistos only
+- `npm run build:conceptvistos` - Build ConceptVistos only
+- `npm run build:vibecode` - Build VibeCode only
+
+### **Maintenance**
+- `npm run sync-blog` - Manual template sync
+- `npm run watch-sync` - File watcher only
+- `npm run generate-site-registry` - Update site registry (if using centralized approach)
 
 ## 🎯 Recent Architecture Achievements
 
