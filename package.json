@@ -29,7 +29,13 @@
     "download-images": "node download-blog-images.js",
     "generate-blog": "node generate-blog-content.js",
     "generate-blog:watch": "node generate-blog-content.js --watch",
-    "generate-blog:advanced": "node generate-blog-advanced.js"
+    "generate-blog:advanced": "node generate-blog-advanced.js",
+    "test": "node test-blog-service.js --real",
+    "test:blog": "node test-blog-service.js --real",
+    "test:blog:real": "tsx test-blog-service.js --real",
+    "test:blog:unit": "node test-blog-service.js --unit",
+    "test:blog:verbose": "node test-blog-service.js --unit --verbose",
+    "test:blog:integration": "node test-blog-service.js --integration"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
@@ -46,6 +52,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
-    "chokidar": "^4.0.3"
+    "chokidar": "^4.0.3",
+    "tsx": "^4.20.5"
   }
 }
