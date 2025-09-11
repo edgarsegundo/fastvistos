@@ -114,6 +114,51 @@ async function ensureDir(dirPath) {
   }
 }
 
+// Add npm scripts to package.json for the new site
+async function addNpmScripts(siteId) {
+  const packageJsonPath = join(__dirname, 'package.json');
+  
+  try {
+    // Read current package.json
+    const packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8');
+    const packageJson = JSON.parse(packageJsonContent);
+    
+    // Define the scripts to add
+    const scriptsToAdd = {
+      [`dev:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev --config multi-sites.config.mjs`,
+      [`dev:watch:${siteId}`]: `node dev-with-sync.js ${siteId}`,
+      [`build:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build --config multi-sites.config.mjs`,
+      [`preview:${siteId}`]: `SITE_ID=${siteId} astro preview --config multi-sites.config.mjs`
+    };
+    
+    let addedScripts = [];
+    
+    // Add scripts only if they don't already exist
+    for (const [scriptName, scriptCommand] of Object.entries(scriptsToAdd)) {
+      if (!packageJson.scripts[scriptName]) {
+        packageJson.scripts[scriptName] = scriptCommand;
+        addedScripts.push(scriptName);
+      }
+    }
+    
+    if (addedScripts.length > 0) {
+      // Write back to package.json with proper formatting
+      await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+      console.log(`📦 Added npm scripts: ${addedScripts.join(', ')}`);
+    } else {
+      console.log(`📦 All npm scripts for ${siteId} already exist`);
+    }
+    
+  } catch (error) {
+    console.error(`❌ Error adding npm scripts for ${siteId}:`, error.message);
+    console.log('💡 You can manually add these scripts to package.json:');
+    console.log(`   "dev:${siteId}": "node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev --config multi-sites.config.mjs"`);
+    console.log(`   "dev:watch:${siteId}": "node dev-with-sync.js ${siteId}"`);
+    console.log(`   "build:${siteId}": "node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build --config multi-sites.config.mjs"`);
+    console.log(`   "preview:${siteId}": "SITE_ID=${siteId} astro preview --config multi-sites.config.mjs"`);
+  }
+}
+
 // Main site creation function
 async function createSite() {
   console.log('🚀 Site Creation Wizard');
@@ -204,6 +249,9 @@ async function createSite() {
     const tailwindContent = await processTemplate(tailwindTemplate, replacements);
     await fs.writeFile(join(__dirname, `tailwind.${siteId}.config.js`), tailwindContent);
     console.log(`📝 Created: tailwind.${siteId}.config.js`);
+
+    // Add npm scripts for the new site
+    await addNpmScripts(siteId);
 
     console.log('\n✅ Site created successfully!');
     console.log('\n📋 Next steps:');
