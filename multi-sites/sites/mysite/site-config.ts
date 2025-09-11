@@ -1,7 +1,7 @@
 import type { SiteConfig } from '../../core/lib/site-config.ts';
 
 export const siteConfig: SiteConfig = {
-  business_id: '1ca090a483de60e6a76a7f097108c236', // Mysite business ID - Update this with your actual business ID
+  business_id: '4b787a4bcc47eb85b6b546710838a41e', // Mysite business ID - Update this with your actual business ID
   id: 'mysite',
   domain: 'mysite.com',
   name: 'Mysite',
