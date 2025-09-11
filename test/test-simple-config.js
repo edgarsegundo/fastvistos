@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 // Test file to demonstrate simple site-config usage
-import { SiteConfigHelper } from './multi-sites/core/lib/site-config.ts';
-import { siteConfig as fastvistos } from './multi-sites/sites/fastvistos/site-config.ts';
-import { siteConfig as conceptvistos } from './multi-sites/sites/conceptvistos/site-config.ts';
-import { siteConfig as vibecode } from './multi-sites/sites/vibecode/site-config.ts';
+import { SiteConfigHelper } from '../multi-sites/core/lib/site-config.ts';
+import { siteConfig as fastvistos } from '../multi-sites/sites/fastvistos/site-config.ts';
+import { siteConfig as conceptvistos } from '../multi-sites/sites/conceptvistos/site-config.ts';
+import { siteConfig as vibecode } from '../multi-sites/sites/vibecode/site-config.ts';
 
 function testSiteConfigs() {
   console.log('🧪 Testing Simple Site Configs\n');

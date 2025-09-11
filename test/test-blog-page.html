@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog Service Test</title>
+    <script type="module">
+        // Test if we can fetch blog data locally
+        console.log('Testing blog data fetch...');
+        
+        // This would normally be done on the server side in Astro
+        fetch('/api/blog-test')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Blog data:', data);
+                document.getElementById('result').innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = 'Error loading blog data';
+            });
+    </script>
+</head>
+<body>
+    <h1>Blog Service Test</h1>
+    <pre id="result">Loading...</pre>
+</body>
+</html>
+</content>
+</invoke>

@@ -1,6 +1,7 @@
 import type { SiteConfig } from '../../core/lib/site-config.ts';
 
 export const siteConfig: SiteConfig = {
+  business_id: 'd4f5e6a7890b123c456d789e012f3456', // Concept Vistos business ID from database
   id: 'conceptvistos',
   domain: 'conceptvistos.com.br',
   name: 'Concept Vistos',
