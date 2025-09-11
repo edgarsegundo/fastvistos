@@ -6,7 +6,82 @@
 import { siteManager } from './multi-sites/core/lib/site-manager.ts';
 
 async function testSiteManager() {
-  console.log('🧪 Testing Site Manager\n');
+  #!/usr/bin/env node
+
+// Test file to demonstrate simple site-config usage
+import { SiteConfigHelper } from './multi-sites/core/lib/site-config.ts';
+import { siteConfig as fastvistos } from './multi-sites/sites/fastvistos/site-config.ts';
+import { siteConfig as conceptvistos } from './multi-sites/sites/conceptvistos/site-config.ts';
+import { siteConfig as vibecode } from './multi-sites/sites/vibecode/site-config.ts';
+
+function testSiteConfigs() {
+  console.log('🧪 Testing Simple Site Configs
+');
+
+  const sites = { fastvistos, conceptvistos, vibecode };
+
+  // Test 1: Basic config access
+  console.log('1️⃣ Testing direct config access...');
+  Object.values(sites).forEach(site => {
+    console.log(`✅ ${site.name}: ${site.domain} (${site.primaryColor})`);
+  });
+
+  // Test 2: Helper functions
+  console.log('
+2️⃣ Testing helper functions...');
+  const metadata = SiteConfigHelper.getMetadata(fastvistos, 'Blog', 'Custom description');
+  console.log(`✅ Metadata: ${metadata.title}`);
+  
+  const cssVars = SiteConfigHelper.getCssVariables(conceptvistos);
+  console.log(`✅ CSS Variables: ${JSON.stringify(cssVars, null, 2)}`);
+
+  const hasBlog = SiteConfigHelper.hasFeature(vibecode, 'blog');
+  console.log(`✅ VibeCode has blog: ${hasBlog}`);
+
+  const whatsappLink = SiteConfigHelper.getWhatsAppLink(fastvistos, 'Olá! Gostaria de saber sobre vistos.');
+  console.log(`✅ WhatsApp link: ${whatsappLink}`);
+
+  const bookingUrl = SiteConfigHelper.getBookingUrl(conceptvistos);
+  console.log(`✅ Booking URL: ${bookingUrl}`);
+
+  console.log('
+🎉 All tests completed successfully!');
+  
+  // Show usage examples
+  console.log('
+📖 Usage Examples:');
+  console.log(`
+// In an Astro component:
+---
+import { siteConfig } from '../site-config.ts';
+import { SiteConfigHelper } from '../../core/lib/site-config.ts';
+
+// Direct access
+const siteName = siteConfig.name;
+const primaryColor = siteConfig.primaryColor;
+
+// Helper functions
+const metadata = SiteConfigHelper.getMetadata(siteConfig);
+const cssVars = SiteConfigHelper.getCssVariables(siteConfig);
+const hasBooking = SiteConfigHelper.hasFeature(siteConfig, 'booking');
+---
+
+<html>
+  <head>
+    <title>{metadata.title}</title>
+    <style>
+      :root { {Object.entries(cssVars).map(([k,v]) => `\${k}: \${v};`).join(' ')} }
+    </style>
+  </head>
+  <body>
+    <h1 style="color: {siteConfig.primaryColor}">{siteConfig.name}</h1>
+    {hasBooking && <button>Book Now</button>}
+  </body>
+</html>
+`);
+}
+
+testSiteConfigs();
 
   try {
     // Test 1: Initialize and get site config in one call

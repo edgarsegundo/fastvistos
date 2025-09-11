@@ -1,12 +1,27 @@
 ---
 import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
-import { siteManager } from '../../../../core/lib/site-manager.ts';
+import { SiteConfigHelper } from '../../../core/lib/site-manager.ts';
 // import { BlogService } from '../../lib/blog-service.js';
 // import { getSiteConfig } from '../../lib/site-config.js';
 
 // Get site configuration
 const siteId = 'conceptvistos';
 const siteConfig = await siteManager.init(siteId);
+
+
+
+// In any Astro page
+import { siteConfig } from '../site-config.ts';
+
+
+// Direct access
+const name = siteConfig.name;
+const color = siteConfig.primaryColor;
+
+// Helper functions
+const metadata = SiteConfigHelper.getMetadata(siteConfig);
+const whatsappLink = SiteConfigHelper.getWhatsAppLink(siteConfig, 'Hello!');
+
 
 
 // Get blog configuration and articles

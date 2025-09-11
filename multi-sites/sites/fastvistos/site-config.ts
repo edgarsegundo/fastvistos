@@ -1,4 +1,6 @@
-export const siteConfig = {
+import type { SiteConfig } from '../../core/lib/site-config.ts';
+
+export const siteConfig: SiteConfig = {
   id: 'fastvistos',
   domain: 'fastvistos.com.br',
   name: 'Fast Vistos',
@@ -43,8 +45,6 @@ export const siteConfig = {
   // Styling
   customStyles: {
     cssVars: {
-      '--primary-color': '#FF6B35',
-      '--secondary-color': '#1E3A8A',
       '--accent-color': '#F59E0B'
     }
   }
