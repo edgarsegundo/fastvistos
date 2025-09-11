@@ -15,6 +15,7 @@
     "dev:watch:vibecode": "node dev-with-sync.js vibecode",
     "sync-blog": "node sync-blog.js",
     "watch-sync": "node watch-and-sync.js",
+    "create-site": "node create-site.js",
     "generate-site-registry": "node generate-site-registry.js",
     "build:fastvistos": "node sync-blog.js fastvistos && SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
     "build:conceptvistos": "node sync-blog.js conceptvistos && SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
