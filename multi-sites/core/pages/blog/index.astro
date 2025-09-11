@@ -1,4 +1,5 @@
 ---
+import BlogLayout from '../../../../core/layouts/SharedBlogLayout.astro';
 import { BlogService } from '../../lib/multi-blog-service.js';
 import { getSiteConfig } from '../../lib/site-config.js';
 
@@ -16,189 +17,158 @@ const title = `${blogConfig.title} - ${siteConfig.name}`;
 const description = siteConfig.blogDescription;
 ---
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="description" content={description} />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>{title}</title>
-</head>
-<body class="blog-page">
-  <!-- Simple Navigation -->
-  <nav class="bg-white shadow-sm border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <a href="/" class="text-xl font-bold" style={`color: ${siteConfig.brandColor};`}>
-            {siteConfig.name}
-          </a>
-        </div>
-        <div class="flex items-center space-x-8">
-          <a href="/" class={`text-gray-600 transition-colors ${siteConfig.linkColor}`}>Home</a>
-          <a href="/blog" class={`text-gray-600 transition-colors ${siteConfig.linkColor}`}>Blog</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+<BlogLayout 
+    title={dynamicTitle}
+    description={dynamicDescription}
+>
 
-  <!-- Hero Section -->
-  <section class={`bg-gradient-to-br ${siteConfig.gradientFrom} ${siteConfig.gradientTo} text-white py-16`}>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">
-          {siteConfig.blogTitle}
-        </h1>
-        <p class={`text-xl ${siteConfig.accentColor} max-w-3xl mx-auto`}>
-          {siteConfig.blogSubtitle}
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured Articles -->
-  {featuredArticles.length > 0 && (
-    <section class="py-16 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
-          Artigos em Destaque
-        </h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          {featuredArticles.map((article: any) => (
-            <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div class="p-6">
-                <div class="flex items-center text-sm text-gray-500 mb-2">
-                  <time datetime={article.publishedAt}>
-                    {BlogService.formatDate(article.publishedAt)}
-                  </time>
+    <!-- H1 -->
+    <section class="bg-black py-20 px-4 lg:px-8">
+        <div class="mx-auto" style="max-width: 1220px;">
+            <div class="">
+                <!-- Main Title -->
+                <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">
+                    {blogConfig?.title || "Dicas e Notícias sobre Vistos"}
+                </h1>
+                <!-- Breadcrumb -->
+                <div class="mb-2 mt-6">
+                    <nav class="text-sm">
+                        <ol class="flex items-center text-white font-medium text-xl" style="font-size: 1.03rem;">
+                            <li class="flex items-center">
+                                <a href="https://fastvistos.com.br" class="hover:text-gray-300">Home</a>
+                                <span class="mx-2 text-gray-400">|</span>
+                            </li>
+                            <li class="">
+                                <a href="/blog" class="hover:text-gray-300">Blog</a>
+                            </li>
+                        </ol>
+                    </nav>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">
-                  <a href={`/blog/${article.slug}`} class={`transition-colors ${siteConfig.linkColor}`}>
-                    {article.title}
-                  </a>
-                </h3>
-                <p class="text-gray-600 mb-4">
-                  {article.excerpt}
-                </p>
-                <div class="flex items-center justify-between">
-                  <div class="flex flex-wrap gap-2">
-                    {article.topics.map((topic: any) => (
-                      <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${siteConfig.tagColor}`}>
-                        {topic}
-                      </span>
-                    ))}
-                  </div>
-                  <a 
-                    href={`/blog/${article.slug}`}
-                    class={`font-medium text-sm ${siteConfig.linkColor}`}
-                  >
-                    Ler mais →
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- Topics Filter -->
-  <section class="py-8 bg-white border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap justify-center gap-4">
-        <a 
-          href="/blog" 
-          class={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium text-white transition-colors ${siteConfig.buttonColor}`}
-        >
-          Todos os Artigos
-        </a>
-        {topics.map((topic: any) => (
-          <a 
-            href={`/blog/topic/${topic.id}`}
-            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-          >
-            {topic.name}
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- All Articles -->
-  <section class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8">
-        Todos os Artigos
-      </h2>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {articles.map((article: any) => (
-          <article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-            <div class="p-6">
-              <div class="flex items-center text-sm text-gray-500 mb-2">
-                <time datetime={article.publishedAt}>
-                  {BlogService.formatDate(article.publishedAt)}
-                </time>
-                <span class="mx-2">•</span>
-                <span>{article.author}</span>
-              </div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">
-                <a href={`/blog/${article.slug}`} class={`transition-colors ${siteConfig.linkColor}`}>
-                  {article.title}
-                </a>
-              </h3>
-              <p class="text-gray-600 mb-4 text-sm">
-                {article.excerpt}
-              </p>
-              <div class="flex items-center justify-between">
-                <div class="flex flex-wrap gap-1">
-                  {article.topics.slice(0, 2).map((topic: any) => (
-                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-600">
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-                <a 
-                  href={`/blog/${article.slug}`}
-                  class={`font-medium text-sm ${siteConfig.linkColor}`}
-                >
-                  Ler mais →
-                </a>
-              </div>
             </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+        </div>
+    </section>
 
-  <!-- CTA Section -->
-  <section class={`py-16 bg-gradient-to-br ${siteConfig.gradientFrom} ${siteConfig.gradientTo}`}>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl font-bold text-white mb-4">
-        {siteConfig.ctaTitle}
-      </h2>
-      <p class={`text-xl ${siteConfig.accentColor} mb-8 max-w-2xl mx-auto`}>
-        {siteConfig.ctaSubtitle}
-      </p>
-      <a 
-        href="/#contato"
-        class="inline-flex items-center px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white transition-all duration-300"
-        style={`hover-color: ${siteConfig.brandColor};`}
-      >
-        {siteConfig.ctaButton}
-      </a>
-    </div>
-  </section>
+    <!-- Main Blog Content -->
+    <main class="container mx-auto py-10 px-4">
+        <style>
+            /* Hide scrollbar but keep functionality */
+            .carousel-container::-webkit-scrollbar {
+                display: none;
+            }
+            .carousel-container {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            
+            /* Smooth scroll behavior */
+            .carousel-container {
+                scroll-behavior: smooth;
+            }
+        </style>
 
-  <!-- Simple Footer -->
-  <footer class="bg-gray-50 border-t">
-    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div class="text-center">
-        <p class="text-gray-500">© {siteConfig.year} {siteConfig.name}. Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+        {topicsWithArticles.length > 0 ? (
+            topicsWithArticles.map((topic) => (
+                <section class="relative mt-12">
+                    <!-- Carousel Container -->
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 id={topic.slug || topic.id} class="text-3xl font-semibold mb-8 text-black">
+                            {topic.title}
+                        </h2>
+            
+                        <div class="relative pt-8">
+                            <!-- Carousel Content -->
+                            <div 
+                                id={`carousel-${topic.slug || topic.id}`}
+                                class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
+                            >
+                                {topic.blog_article.map((article) => (
+                                    <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 flex-shrink-0 w-80">
+                                        <img 
+                                            src={article.image ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}` : 'https://via.placeholder.com/400x250'} 
+                                            alt={article.slug || article.title} 
+                                            class="w-full h-48 object-cover rounded-t-lg"
+                                        />
+                                        <div class="p-6">
+                                            <h3 class="text-xl font-semibold mb-2 text-black">
+                                                {article.title.length > 70 ? article.title.slice(0, 70) + '...' : article.title}
+                                            </h3>
+                                            <p class="text-gray-600 mb-4">
+                                                {article.content_html ? 
+                                                    article.content_html.replace(/<[^>]*>/g, '').slice(0, 150) + '...' : 
+                                                    ''
+                                                }
+                                            </p>
+                                            <a href={`/blog/${article.slug}`} class="text-blue-600 hover:underline font-medium">
+                                                Leia mais
+                                            </a>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            ))
+        ) : (
+            <div class="text-center py-12">
+                <p class="text-gray-600 text-lg">Nenhum artigo encontrado.</p>
+                <p class="text-gray-500 mt-2">Volte em breve para conferir nossos artigos!</p>
+            </div>
+        )}
+
+        <script>
+            // Get all carousel elements
+            const carousels = document.querySelectorAll('.carousel-container');
+            
+            // Scroll amount (width of one card plus gap)
+            const scrollAmount = 320; // 320px (card width) + 24px (gap)
+            
+            // Add keyboard navigation for each carousel
+            carousels.forEach(carousel => {
+                // Add keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    // Only scroll if the carousel is in view or focused
+                    const rect = carousel.getBoundingClientRect();
+                    const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                    
+                    if (isInView) {
+                        if (e.key === 'ArrowLeft') {
+                            carousel.scrollBy({
+                                left: -scrollAmount,
+                                behavior: 'smooth'
+                            });
+                        } else if (e.key === 'ArrowRight') {
+                            carousel.scrollBy({
+                                left: scrollAmount,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+                
+                // Add touch/swipe support for mobile
+                let startX = 0;
+                let scrollStart = 0;
+                
+                carousel.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    scrollStart = carousel.scrollLeft;
+                });
+                
+                carousel.addEventListener('touchmove', function(e) {
+                    if (!startX) return;
+                    
+                    const currentX = e.touches[0].clientX;
+                    const diff = startX - currentX;
+                    carousel.scrollLeft = scrollStart + diff;
+                });
+                
+                carousel.addEventListener('touchend', function() {
+                    startX = 0;
+                    scrollStart = 0;
+                });
+            });
+        </script>
+    </main>
+
+</BlogLayout>
