@@ -169,4 +169,47 @@ export class BlogService {
       return []
     }
   }
+
+  // Get articles with optional site filtering (for multi-site support)
+  static async getArticles(siteId?: string, limit?: number) {
+    try {
+      const now = new Date()
+      return await prisma.blogArticle.findMany({
+        where: {
+          is_removed: false,
+          published: {
+            lte: now  // Published date is less than or equal to now
+          }
+          // Note: Add business_id filtering here when business_id is available
+        },
+        include: {
+          blog_topic: true
+        },
+        orderBy: {
+          published: 'desc'
+        },
+        ...(limit && { take: limit })
+      })
+    } catch (error) {
+      console.error('Error fetching articles:', error)
+      return []
+    }
+  }
+
+  // Format date for display
+  static formatDate(date: Date | string | null | undefined, locale: string = 'pt-BR'): string {
+    if (!date) return 'Data não disponível'
+    
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date
+      return dateObj.toLocaleDateString(locale, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    } catch (error) {
+      console.error('Error formatting date:', error)
+      return 'Data inválida'
+    }
+  }
 }

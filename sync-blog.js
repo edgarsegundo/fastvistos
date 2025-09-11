@@ -57,24 +57,32 @@ async function syncBlogToSite(siteId) {
   // Read core layouts
   const sharedBlogLayout = await fs.readFile(join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'), 'utf-8');
   
+  // Read core library files
+  const blogServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'blog-service.ts'), 'utf-8');
+  const siteConfigContent = await fs.readFile(join(CORE_LIB_DIR, 'site-config.ts'), 'utf-8');
+  const prismaContent = await fs.readFile(join(CORE_LIB_DIR, 'prisma.js'), 'utf-8');
+  
   // Replace core imports with local imports and make site-specific
   const localizedIndexTemplate = indexTemplate
     .replace(/import \{ BlogService \} from '\.\.\/\.\.\/lib\/multi-blog-service\.js';/, `import { BlogService } from '../../lib/blog-service.js';`)
-    .replace(/import \{ getSiteConfig \} from '\.\.\/\.\.\/lib\/site-config\.js';/, `import { getSiteConfig } from '../../lib/site-config.js';`)
+    .replace(/import \{ getSiteConfig \} from '\.\.\/\.\.\/lib\/site-config\.js';/, `import { siteConfig } from '../../site-config.ts';`)
+    .replace(/const siteConfig = getSiteConfig\(\);/, `// siteConfig imported directly`)
     .replace(/import BlogLayout from '\.\.\/\.\.\/\.\.\/\.\.\/core\/layouts\/SharedBlogLayout\.astro';/, `import BlogLayout from '../layouts/SharedBlogLayout.astro';`)
     .replace(/const siteId = import\.meta\.env\.SITE_ID \|\| 'fastvistos';/, `const siteId = '${siteId}';`)
     .replace(/import '\.\.\/\.\.\/styles\/global\.css';/g, `import '../../styles/global.css';`);
     
   const localizedPostTemplate = postTemplate
     .replace(/import \{ BlogService \} from '\.\.\/\.\.\/lib\/multi-blog-service\.js';/, `import { BlogService } from '../../lib/blog-service.js';`)
-    .replace(/import \{ getSiteConfig \} from '\.\.\/\.\.\/lib\/site-config\.js';/, `import { getSiteConfig } from '../../lib/site-config.js';`)
+    .replace(/import \{ getSiteConfig \} from '\.\.\/\.\.\/lib\/site-config\.js';/, `import { siteConfig } from '../../site-config.ts';`)
+    .replace(/const siteConfig = getSiteConfig\(\);/, `// siteConfig imported directly`)
     .replace(/import BlogLayout from '\.\.\/\.\.\/\.\.\/\.\.\/core\/layouts\/SharedBlogLayout\.astro';/, `import BlogLayout from '../layouts/SharedBlogLayout.astro';`)
     .replace(/const siteId = import\.meta\.env\.SITE_ID \|\| 'fastvistos';/, `const siteId = '${siteId}';`)
     .replace(/import '\.\.\/\.\.\/styles\/global\.css';/g, `import '../../styles/global.css';`);
   
   // Localize SharedBlogLayout
   const localizedSharedBlogLayout = sharedBlogLayout
-    .replace(/import \{ getSiteConfig \} from '\.\.\/lib\/site-config\.js';/, `import { getSiteConfig } from '../lib/site-config.js';`)
+    .replace(/import \{ getSiteConfig \} from '\.\.\/lib\/site-config\.js';/, `import { siteConfig } from '../site-config.ts';`)
+    .replace(/const siteConfig = getSiteConfig\(\);/, `// siteConfig imported directly`)
     .replace(/const siteId = import\.meta\.env\.SITE_ID \|\| 'fastvistos';/, `const siteId = '${siteId}';`)
     .replace(/import '\.\.\/styles\/global\.css';/g, `import '../styles/global.css';`);
   
@@ -89,6 +97,11 @@ async function syncBlogToSite(siteId) {
   
   // Write localized layout
   await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);
+  
+  // Sync core library files to site lib directory
+  await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
+  await fs.writeFile(join(siteLibDir, 'site-config.ts'), siteConfigContent);
+  await fs.writeFile(join(siteLibDir, 'prisma.js'), prismaContent);
   
   console.log(`✅ Blog synced to ${siteId}`);
 }
