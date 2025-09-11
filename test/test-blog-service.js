@@ -72,7 +72,7 @@ if (testType === 'unit') {
   
   // Import and run integration tests with real database
   try {
-    const { runIntegrationTests } = await import('./multi-sites/core/lib/blog-service-integration.test.js');
+    const { runIntegrationTests } = await import('../multi-sites/core/lib/blog-service-integration.test.js');
     await runIntegrationTests();
   } catch (error) {
     if (error.message.includes('Cannot find module')) {

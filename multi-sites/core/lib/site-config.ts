@@ -3,6 +3,7 @@
 
 export interface SiteConfig {
   // Basic Info
+  business_id: string;
   id: string;
   domain: string;
   name: string;

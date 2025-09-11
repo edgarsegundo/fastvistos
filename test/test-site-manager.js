@@ -3,7 +3,7 @@
 // Test file to demonstrate site-manager.ts usage
 // Run with: node test-site-manager.js
 
-import { siteManager } from './multi-sites/core/lib/site-manager.ts';
+import { siteManager } from '../multi-sites/core/lib/site-manager.ts';
 
 async function testSiteManager() {
   #!/usr/bin/env node
