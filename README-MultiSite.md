@@ -1,16 +1,16 @@
-# Multi-Site Micro-Frontend Architecture
+# Multi-Site Architecture with Astro Content Collections
 
-This project implements a **Micro-Frontend Architecture** using Astro that supports multiple websites with shared core components while maintaining site-specific customization.
+This project implements a **Multi-Site Architecture** using Astro v5.13.5 with content collections, supporting multiple websites with shared templates and site-specific content.
 
-## 🎨 **NEW: Site-Specific Tailwind Architecture**
+## � **Current Status: FULLY WORKING**
 
-**Revolutionary styling system** where each site maintains its own dedicated Tailwind configuration for complete design autonomy:
+**✅ All systems operational** - Multi-site architecture with content collections successfully implemented:
 
-- **FastVistos**: Blue/orange professional theme with Source Sans Pro
-- **ConceptVistos**: Gold/luxury premium theme with Playfair Display  
-- **VibeCode**: Tech blue/green theme with JetBrains Mono
-
-**Key Innovation**: Dynamic Tailwind config loading based on `SITE_ID` environment variable, allowing shared components to automatically inherit site-specific styling without code duplication.
+- **Site-Specific Content**: Each site maintains its own markdown content in dedicated directories
+- **Shared Templates**: Blog templates automatically synced and localized for each site
+- **Content Collections**: Proper Astro content collections with schema validation
+- **Site-Specific Public Assets**: Independent public directories for each site
+- **Dynamic Styling**: Site-specific Tailwind configurations with automatic loading
 
 ## 🏗️ Architecture Overview
 
@@ -21,56 +21,63 @@ fastvistos/
 │   │   ├── components/            # Shared JSON-LD SEO components
 │   │   │   ├── JsonLdArticle.astro
 │   │   │   ├── JsonLdBreadcrumb.astro
-│   │   │   ├── JsonLdFAQ.astro
 │   │   │   ├── JsonLdLocalBusiness.astro
 │   │   │   ├── JsonLdOrganization.astro
 │   │   │   ├── JsonLdReview.astro
-│   │   │   ├── JsonLdService.astr## 🚀 Future Enhancements
-
-- **Multi-tenancy**: Add site_id columns to database tables for complete data separation
-- **Advanced Analytics**: Site-specific tracking and performance monitoring  
-- **A/B Testing**: Site-specific feature flags and experimentation
-- **Internationalization**: Multi-language support for global expansion
-- **Advanced Deployment**: CI/CD pipelines for independent site deployments
-- **Theme Variants**: Seasonal themes and dark/light mode support within each site's brand
-- **Component Library**: Expand shared component system with site-specific variants   │   └── JsonLdWebPage.astro
+│   │   │   ├── JsonLdService.astro
+│   │   │   └── JsonLdWebPage.astro
+│   │   ├── layouts/               # Shared layouts
+│   │   │   └── SharedBlogLayout.astro
 │   │   ├── lib/                   # Core business logic
-│   │   │   └── site-manager.ts    # Site configuration manager
-│   │   └── pages/                 # Shared pages
-│   │       └── blog/              # Shared blog functionality
-│   │           ├── index.astro    # Blog listing page
-│   │           └── [...slug].astro # Blog article page
+│   │   │   ├── multi-blog-service.js    # Blog service using Astro content collections
+│   │   │   └── site-config.js           # Site configuration utilities
+│   │   └── pages/                 # Shared page templates
+│   │       └── blog/              # Blog templates (synced to sites)
+│   │           ├── index.astro    # Blog listing template
+│   │           └── [slug].astro   # Blog article template
 │   └── sites/                     # Site-specific implementations
 │       ├── fastvistos/            # FastVistos site
 │       │   ├── components/        # FastVistos-specific components
+│       │   ├── content/           # 🆕 Site-specific content
+│       │   │   ├── config.ts      # Content collection schema
+│       │   │   └── blog/          # Markdown articles for FastVistos
 │       │   ├── layouts/           # FastVistos BaseLayout
-│       │   └── pages/             # FastVistos pages
+│       │   ├── pages/             # FastVistos pages
+│       │   └── content.config.ts  # Astro content configuration
 │       ├── conceptvistos/         # ConceptVistos site  
+│       │   ├── content/           # 🆕 Site-specific content
+│       │   │   ├── config.ts      # Content collection schema
+│       │   │   └── blog/          # Markdown articles for ConceptVistos
 │       │   ├── layouts/           # ConceptVistos BaseLayout
-│       │   └── pages/             # ConceptVistos pages
+│       │   ├── pages/             # ConceptVistos pages
+│       │   └── content.config.ts  # Astro content configuration
 │       └── vibecode/              # VibeCode site
+│           ├── content/           # 🆕 Site-specific content
+│           │   ├── config.ts      # Content collection schema
+│           │   └── blog/          # Markdown articles for VibeCode
 │           ├── layouts/           # VibeCode BaseLayout
-│           └── pages/             # VibeCode pages
-├── public-sites/                  # Site-specific public assets
-│   ├── fastvistos/               # FastVistos assets
-│   ├── conceptvistos/            # ConceptVistos assets  
+│           ├── pages/             # VibeCode pages
+│           └── content.config.ts  # Astro content configuration
+├── public-sites/                  # 🆕 Site-specific public assets
+│   ├── fastvistos/               # FastVistos assets (favicons, images, etc.)
+│   ├── conceptvistos/            # ConceptVistos assets
 │   └── vibecode/                 # VibeCode assets
-├── src/                          # Main routing and legacy compatibility
+├── sync-blog.js                  # 🆕 Blog template synchronization script
 ├── multi-sites.config.mjs        # Multi-site Astro configuration
 └── package.json                  # Project dependencies
 ```
 
 ## 🌐 Supported Websites
 
-| Site | Domain | Description | Status | Features |
-|------|--------|-------------|--------|----------|
-| **FastVistos** | fastvistos.com.br | Assessoria para visto americano | ✅ **Working** | Full components, Blog, Payments |
-| **ConceptVistos** | conceptvistos.com.br | Consultoria premium para vistos | ✅ **Working** | Simple homepage, Blog |
-| **VibeCode** | vibecode-lovable.com.br | Desenvolvimento de software | ✅ **Working** | Simple homepage, Blog |
+| Site | Domain | Description | Status | Content Articles |
+|------|--------|-------------|--------|------------------|
+| **FastVistos** | fastvistos.com.br | Assessoria para visto americano | ✅ **Working** | 3 visa articles |
+| **ConceptVistos** | conceptvistos.com.br | Consultoria premium para vistos | ✅ **Working** | 3 visa articles |
+| **VibeCode** | vibecode-lovable.com.br | Desenvolvimento de software | ✅ **Working** | 3 tech articles |
 
 ## 🚀 Quick Start
 
-### Development - Tested & Working
+### Development - All Sites Working
 
 Run a specific site in development mode using the dedicated npm scripts:
 
@@ -85,29 +92,32 @@ npm run dev:conceptvistos
 npm run dev:vibecode
 ```
 
-Each site automatically loads its own:
-- ✅ Site-specific Tailwind configuration and theme
-- ✅ Proper site detection and environment  
-- ✅ Database connectivity and blog functionality
-- ✅ Brand-specific styling and components
+Each site automatically:
+
+- ✅ Loads its own content from `multi-sites/sites/{site}/content/blog/`
+- ✅ Uses site-specific Tailwind configuration and theme
+- ✅ Serves assets from `public-sites/{site}/`
+- ✅ Syncs shared blog templates via `sync-blog.js`
+- ✅ Validates content with Astro content collections
 
 ### Build & Deploy
 
-Each site builds with its own Tailwind configuration:
+Each site builds independently with its own content and theme:
 
 ```bash
-# Build specific sites with their themes
-npm run build:fastvistos    # Blue/orange FastVistos theme
-npm run build:conceptvistos # Gold/luxury ConceptVistos theme  
-npm run build:vibecode      # Tech VibeCode theme
+# Build specific sites (automatically runs sync-blog.js first)
+npm run build:fastvistos    # → dist/fastvistos/ with 5 pages
+npm run build:conceptvistos # → dist/conceptvistos/ with 5 pages
+npm run build:vibecode      # → dist/vibecode/ with 5 pages
 ```
 
 Build output structure:
+
 ```
 dist/
-├── fastvistos/        # FastVistos build output
-├── conceptvistos/     # ConceptVistos build output
-└── vibecode/          # VibeCode build output
+├── fastvistos/        # FastVistos build (5 pages: home + blog + 3 articles)
+├── conceptvistos/     # ConceptVistos build (5 pages: home + blog + 3 articles)
+└── vibecode/          # VibeCode build (5 pages: home + blog + 3 articles)
 ```
 
 ## 🏛️ Core Architecture Components
@@ -199,24 +209,58 @@ Each site has its own BaseLayout with unique styling and functionality:
   - JetBrains Mono fonts and code syntax highlighting  
   - Organization schema with technical expertise
 
-### Shared Blog System (`multi-sites/core/pages/blog/`)
+### Shared Blog System with Site-Specific Content
 
-Site-aware blog system that works across all sites:
+**Revolutionary Architecture**: Shared blog templates with site-specific content using Astro content collections.
 
-```astro
-<!-- Shared blog index -->
-/multi-sites/core/pages/blog/index.astro
-
-<!-- Shared article page -->  
-/multi-sites/core/pages/blog/[...slug].astro
+```
+Blog Architecture:
+├── multi-sites/core/pages/blog/           # Shared templates (synced to all sites)
+│   ├── index.astro                        # Blog listing template
+│   └── [slug].astro                       # Article page template
+├── multi-sites/sites/fastvistos/content/blog/    # FastVistos articles
+│   ├── como-preparar-documentacao-visto-americano.md
+│   ├── dicas-entrevista-visto-americano.md
+│   └── tipos-visto-americano.md
+├── multi-sites/sites/conceptvistos/content/blog/ # ConceptVistos articles
+│   └── (same articles, can be customized per site)
+└── multi-sites/sites/vibecode/content/blog/      # VibeCode articles
+    └── (same articles, can be customized per site)
 ```
 
-**Features:**
+**Key Features:**
 
-- Site-aware content filtering via Prisma database
-- Shared blog functionality across all sites
-- Site-specific styling through BaseLayout inheritance
-- SEO optimization with JSON-LD structured data
+- ✅ **Astro Content Collections**: Proper schema validation and type safety
+- ✅ **Site-Specific Content**: Each site maintains its own markdown files
+- ✅ **Shared Templates**: Blog templates automatically synced via `sync-blog.js`
+- ✅ **Dynamic Styling**: Templates inherit site-specific branding automatically
+- ✅ **SEO Optimization**: JSON-LD structured data with site-specific information
+
+### Blog Sync System (`sync-blog.js`)
+
+Automated template synchronization system that keeps shared blog functionality in sync:
+
+```javascript
+// sync-blog.js - Runs before each build
+syncBlogToSite(siteId) {
+  // Copy and localize blog templates from core to each site
+  // - Replace imports with site-specific paths
+  // - Inject site-specific branding variables
+  // - Update library dependencies for local usage
+}
+```
+
+**What gets synced:**
+
+- `multi-sites/core/pages/blog/index.astro` → `multi-sites/sites/{site}/pages/blog/index.astro`
+- `multi-sites/core/pages/blog/[slug].astro` → `multi-sites/sites/{site}/pages/blog/[slug].astro`
+- `multi-sites/core/lib/multi-blog-service.js` → `multi-sites/sites/{site}/lib/blog-service.js`
+
+**What stays site-specific:**
+
+- Content: `multi-sites/sites/{site}/content/blog/*.md`
+- Styling: Each site's Tailwind configuration
+- Public assets: `public-sites/{site}/`
 
 ### JSON-LD SEO Components (`multi-sites/core/components/`)
 
@@ -553,35 +597,83 @@ const site = getCurrentSite();
 )}
 ```
 
-## 🧪 Testing Results
+## 🧪 Current Testing Results - ALL WORKING ✅
 
-**All sites have been successfully tested and are working:**
+**Latest Test Results (September 11, 2025)**: All systems operational after implementing content collections.
 
 | Test | FastVistos | ConceptVistos | VibeCode | Status |
 |------|------------|---------------|----------|---------|
-| Site Loading | ✅ Working | ✅ Working | ✅ Working | **PASS** |
-| Environment Detection | ✅ Working | ✅ Working | ✅ Working | **PASS** |
-| Database Connection | ✅ Connected | ✅ Connected | ✅ Connected | **PASS** |
-| Blog Functionality | ✅ Working | ✅ Working | ✅ Working | **PASS** |
+| Development Server | ✅ Working | ✅ Working | ✅ Working | **PASS** |
+| Content Collections | ✅ Working | ✅ Working | ✅ Working | **PASS** |
+| Site-Specific Content | ✅ 3 Articles | ✅ 3 Articles | ✅ 3 Articles | **PASS** |
+| Blog Sync System | ✅ Working | ✅ Working | ✅ Working | **PASS** |
+| Public Assets | ✅ Working | ✅ Working | ✅ Working | **PASS** |
+| Build Process | ✅ 5 Pages | ✅ 5 Pages | ✅ 5 Pages | **PASS** |
 | Site-Specific Styling | ✅ Applied | ✅ Applied | ✅ Applied | **PASS** |
+
+### Build Output Verification
+
+Each site successfully builds with proper content collections:
+
+```bash
+# FastVistos Build Output
+npm run build:fastvistos
+# ✅ 5 pages: home + blog listing + 3 articles
+# ✅ Content from: multi-sites/sites/fastvistos/content/blog/
+# ✅ Assets from: public-sites/fastvistos/
+
+# ConceptVistos Build Output  
+npm run build:conceptvistos
+# ✅ 5 pages: home + blog listing + 3 articles
+# ✅ Content from: multi-sites/sites/conceptvistos/content/blog/
+# ✅ Assets from: public-sites/conceptvistos/
+
+# VibeCode Build Output
+npm run build:vibecode
+# ✅ 5 pages: home + blog listing + 3 articles  
+# ✅ Content from: multi-sites/sites/vibecode/content/blog/
+# ✅ Assets from: public-sites/vibecode/
+```
 
 ### How to Test Each Site
 
 ```bash
-# Test FastVistos with blue/orange theme
+# Test FastVistos with site-specific content
 npm run dev:fastvistos
-# Open: http://localhost:3000
+# ✅ Loads content from: multi-sites/sites/fastvistos/content/blog/
+# ✅ Blog: http://localhost:3000/blog
 
-# Test ConceptVistos with gold/luxury theme
+# Test ConceptVistos with site-specific content  
 npm run dev:conceptvistos
-# Open: http://localhost:3000
+# ✅ Loads content from: multi-sites/sites/conceptvistos/content/blog/
+# ✅ Blog: http://localhost:3000/blog
 
-# Test VibeCode with tech theme
+# Test VibeCode with site-specific content
 npm run dev:vibecode
-# Open: http://localhost:3000
+# ✅ Loads content from: multi-sites/sites/vibecode/content/blog/
+# ✅ Blog: http://localhost:3000/blog
+```
 
-# Test Blog (works on all sites with site-specific styling)
-# Open: http://localhost:3000/blog
+### Content Collections Schema Validation
+
+All sites use proper Astro content collections with validated schemas:
+
+```typescript
+// Each site: multi-sites/sites/{site}/content/config.ts
+const blogCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.string(),
+    updatedDate: z.string().optional(),
+    topic: z.string(),
+    topicSlug: z.string(),
+    image: z.string().default(''),
+    type: z.string(),
+    published: z.boolean(),
+  }),
+});
 ```
 
 ## � Deployment Strategy
@@ -665,17 +757,56 @@ To add a new site to the architecture:
    SITE_ID=newsite npm run dev
    ```
 
+## 🎯 Recent Architecture Achievements
+
+### ✅ **Content Collections Implementation (September 2025)**
+
+Successfully migrated from file-system based blog to Astro content collections:
+
+- **Issue Resolved**: Content schema validation errors with slug fields
+- **Solution**: Removed explicit slug from schemas (Astro auto-generates from filename)
+- **Result**: Proper content collections with type safety and validation
+
+### ✅ **Site-Specific Content Architecture**
+
+Implemented true site-specific content while maintaining shared templates:
+
+- **Each site**: Own content directory at `multi-sites/sites/{site}/content/blog/`
+- **Shared templates**: Synced from `multi-sites/core/pages/blog/` to each site
+- **Dynamic imports**: Templates use `getCollection('blog')` for site-specific content
+
+### ✅ **Public Assets Separation**
+
+Fixed public directory structure for complete site independence:
+
+- **Issue**: Sites shared a single `/public` directory causing asset conflicts
+- **Solution**: Site-specific directories in `/public-sites/{site}/`
+- **Configuration**: Astro config uses `publicDir: ./public-sites/${CURRENT_SITE}`
+- **Result**: Each site serves assets independently
+
+### ✅ **Blog Sync System**
+
+Automated template synchronization ensuring consistency across sites:
+
+```bash
+# Before each build, sync-blog.js runs automatically:
+npm run build:fastvistos  # Syncs templates → builds with FastVistos content
+npm run build:conceptvistos  # Syncs templates → builds with ConceptVistos content
+npm run build:vibecode  # Syncs templates → builds with VibeCode content
+```
+
 ## 📋 Architecture Benefits
 
-✅ **Tested & Working**: All three sites successfully tested and operational  
-✅ **Shared Core**: JSON-LD components and blog system shared across sites  
-✅ **Independent Layouts**: Each site has complete design autonomy  
-✅ **Environment-Based**: Easy switching between sites via `SITE_ID`  
-✅ **Database Integration**: Prisma blog service working across all sites  
-✅ **SEO Optimized**: Site-specific meta tags and structured data  
-✅ **Scalable**: Easy to add new sites to the architecture  
-✅ **Maintainable**: Clean separation between shared and site-specific code  
+✅ **Content Collections**: Type-safe content with schema validation  
+✅ **Site-Specific Content**: Each site maintains independent markdown files  
+✅ **Shared Templates**: Blog functionality shared while content stays separate  
+✅ **Independent Assets**: Site-specific public directories  
+✅ **Automated Sync**: Template synchronization via sync-blog.js  
+✅ **Zero Conflicts**: Complete separation between sites  
+✅ **Easy Scaling**: Add new sites without affecting existing ones  
 ✅ **Performance**: Only loads what each site needs  
+✅ **SEO Optimized**: Site-specific meta tags and structured data  
+✅ **Developer Experience**: Clean development workflow with dedicated scripts  
 
 ## 🛠️ Development Workflow
 
@@ -730,7 +861,7 @@ npm run dev:vibecode
 
 The original FastVistos components have been moved to:
 
-- **From**: `src/components/` 
+- **From**: `src/components/`
 - **To**: `multi-sites/sites/fastvistos/components/`
 
 The core JSON-LD components are now shared:
