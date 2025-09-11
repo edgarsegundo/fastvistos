@@ -1,0 +1,34 @@
+---
+// Mysite homepage
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../site-config.ts';
+---
+
+<Layout title="Welcome to Mysite">
+  <main class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
+    <div class="container mx-auto px-4 py-20">
+      <div class="text-center">
+        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          Welcome to <span class="text-primary-600">Mysite</span>
+        </h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          {siteConfig.description}
+        </p>
+        <div class="space-x-4">
+          <a 
+            href="/blog" 
+            class="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+          >
+            Visit Blog
+          </a>
+          <a 
+            href="/contact" 
+            class="inline-block border border-primary-600 text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors"
+          >
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
