@@ -1,7 +1,7 @@
 import type { SiteConfig } from '../../core/lib/site-config.ts';
 
 export const siteConfig: SiteConfig = {
-  business_id: '5f75b88a1dd0e51527a449a13b0cc84f', // P2digital business ID - Update this with your actual business ID
+  business_id: '5810c2b6125c402a9cff53fcc9d61bf5', // P2digital business ID - Update this with your actual business ID
   id: 'p2digital',
   domain: 'p2digital.com.br',
   name: 'P2digital',
