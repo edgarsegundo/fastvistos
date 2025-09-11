@@ -44,7 +44,17 @@ node generate-blog-advanced.js all           # Generate for all sites with HTML 
 npm run generate-blog                         # Alternative command for content generation
 ```
 
-### **🔄 Manual Sync Operations**
+### **�️ Blog Image Downloads**
+
+```bash
+npm run download-images                       # Download images for all sites
+npm run download-images:fastvistos           # Download images for fastvistos only
+npm run download-images:conceptvistos        # Download images for conceptvistos only  
+npm run download-images:p2digital            # Download images for p2digital only
+node download-blog-images.js siteid          # Download for any specific site
+```
+
+### **�🔄 Manual Sync Operations**
 
 ```bash
 npm run sync-blog                 # Sync shared templates to all sites manually
