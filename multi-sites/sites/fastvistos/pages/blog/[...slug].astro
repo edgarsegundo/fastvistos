@@ -127,7 +127,7 @@ const description = article.metatitle || article.title;
         <div class="flex items-center space-x-4">
           <!-- Share buttons -->
           <button 
-            onclick={`navigator.share ? navigator.share({title: '${article.title}', url: window.location.href}) : window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(window.location.href)}', '_blank')`}
+            onclick="shareArticle()"
             class="text-sm text-gray-500 hover:text-gray-700"
           >
             Compartilhar
@@ -159,5 +159,24 @@ const description = article.metatitle || article.title;
       <p>&copy; 2024 {siteConfig.name}. Todos os direitos reservados.</p>
     </div>
   </footer>
+
+  <script>
+    function shareArticle() {
+      const titleElement = document.querySelector('h1');
+      const title = titleElement ? titleElement.textContent : document.title;
+      const url = window.location.href;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: title,
+          url: url
+        }).catch(err => console.log('Error sharing:', err));
+      } else {
+        // Fallback to Twitter share
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+        window.open(twitterUrl, '_blank');
+      }
+    }
+  </script>
 </body>
 </html>
