@@ -32,7 +32,7 @@
     "test:blog:real": "tsx test-blog-service.js --real",
     "test:blog:unit": "node test-blog-service.js --unit",
     "test:blog:verbose": "node test-blog-service.js --unit --verbose",
-    "test:blog:integration": "node test-blog-service.js --integration",
+    "test:blog:integration": "node test-blog-service.js --integration"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
