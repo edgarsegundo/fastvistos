@@ -105,9 +105,43 @@ async function syncAllSites() {
   console.log('🎉 All sites synced successfully!');
 }
 
-// Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  syncAllSites().catch(console.error);
+async function syncSpecificSite(siteId) {
+  console.log(`🔄 Starting blog sync for ${siteId} only...`);
+  
+  const sites = await getSites();
+  
+  if (!sites.includes(siteId)) {
+    console.error(`❌ Site '${siteId}' not found. Available sites: ${sites.join(', ')}`);
+    process.exit(1);
+  }
+  
+  await syncBlogToSite(siteId);
+  
+  console.log(`🎉 Site ${siteId} synced successfully!`);
 }
 
-export { syncAllSites, syncBlogToSite };
+async function main() {
+  // Get command line arguments
+  const args = process.argv.slice(2);
+  const siteArg = args.find(arg => arg.startsWith('--site='));
+  
+  if (siteArg) {
+    // Sync specific site: node sync-blog.js --site=fastvistos
+    const siteId = siteArg.split('=')[1];
+    await syncSpecificSite(siteId);
+  } else if (args.length === 1 && !args[0].startsWith('--')) {
+    // Sync specific site: node sync-blog.js fastvistos
+    const siteId = args[0];
+    await syncSpecificSite(siteId);
+  } else {
+    // Sync all sites: node sync-blog.js
+    await syncAllSites();
+  }
+}
+
+// Run if called directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
+}
+
+export { syncAllSites, syncBlogToSite, syncSpecificSite };

@@ -27,8 +27,8 @@ watcherProcess.stdout.on('data', (data) => {
 });
 
 // Start Astro dev server (after initial sync)
-console.log('🔄 Running initial sync...');
-const initialSync = spawn('node', ['sync-blog.js'], {
+console.log(`🔄 Running initial sync for ${siteId}...`);
+const initialSync = spawn('node', ['sync-blog.js', siteId], {
   stdio: 'inherit'
 });
 
