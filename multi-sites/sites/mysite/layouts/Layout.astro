@@ -1,0 +1,36 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+import { siteConfig } from '../site-config.ts';
+---
+
+<!DOCTYPE html>
+<html lang={siteConfig.language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description || siteConfig.description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description || siteConfig.description} />
+    <meta property="og:url" content={`https://${siteConfig.domain}${Astro.url.pathname}`} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:type" content="website" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description || siteConfig.description} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
