@@ -119,13 +119,28 @@ async function downloadBlogImages(siteId) {
       }
     });
     
+    // Get blog topics for this specific site using business_id
+    const topics = await prisma.blogTopic.findMany({
+      where: {
+        business_id: siteConfig.business_id,
+        is_removed: false
+      },
+      select: {
+        image: true,
+        title: true,
+        slug: true
+      }
+    });
+    
     console.log(`📄 Found ${articles.length} published articles for ${siteId}`);
+    console.log(`📂 Found ${topics.length} topics for ${siteId}`);
     
     const downloadPromises = [];
     const imageSet = new Set(); // To avoid downloading duplicates
     let downloadedCount = 0;
     let skippedCount = 0;
     
+    // Process article images
     for (const article of articles) {
       if (article.image && !imageSet.has(article.image)) {
         imageSet.add(article.image);
@@ -145,7 +160,33 @@ async function downloadBlogImages(siteId) {
         if (!fs.existsSync(localPath)) {
           downloadPromises.push(downloadImage(fullImageUrl, localPath));
         } else {
-          console.log('⏭️  Already exists:', localFilename);
+          console.log('⏭️  Already exists (article):', localFilename);
+          skippedCount++;
+        }
+      }
+    }
+    
+    // Process topic images
+    for (const topic of topics) {
+      if (topic.image && !imageSet.has(topic.image)) {
+        imageSet.add(topic.image);
+        
+        // Convert relative path to full URL
+        const fullImageUrl = MEDIA_BASE_URL + topic.image;
+        
+        // Create local filename (keep the same structure)
+        const localFilename = topic.image.replace(/^images\//, ''); // Remove 'images/' prefix if present
+        const localPath = path.join(LOCAL_ASSETS_DIR, localFilename);
+        
+        // Ensure subdirectories exist
+        const localDir = path.dirname(localPath);
+        ensureDirectoryExists(localDir);
+        
+        // Check if file already exists
+        if (!fs.existsSync(localPath)) {
+          downloadPromises.push(downloadImage(fullImageUrl, localPath));
+        } else {
+          console.log('⏭️  Already exists (topic):', localFilename);
           skippedCount++;
         }
       }
