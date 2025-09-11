@@ -8,9 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     
-    "dev:fastvistos": "SITE_ID=fastvistos astro dev --config multi-sites.config.mjs",
-    "dev:conceptvistos": "SITE_ID=conceptvistos astro dev --config multi-sites.config.mjs",
-    "dev:vibecode": "SITE_ID=vibecode astro dev --config multi-sites.config.mjs",
+    "dev:fastvistos": "node sync-blog.js && SITE_ID=fastvistos astro dev --config multi-sites.config.mjs",
+    "dev:conceptvistos": "node sync-blog.js && SITE_ID=conceptvistos astro dev --config multi-sites.config.mjs",
+    "dev:vibecode": "node sync-blog.js && SITE_ID=vibecode astro dev --config multi-sites.config.mjs",
     
     "sync-blog": "node sync-blog.js",
     
@@ -18,7 +18,11 @@
     "build:conceptvistos": "node sync-blog.js && SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
     "build:vibecode": "node sync-blog.js && SITE_ID=vibecode astro build --config multi-sites.config.mjs",
     
-    "build:all": "node sync-blog.js && npm run build:fastvistos && npm run build:conceptvistos && npm run build:vibecode",
+    "_build:fastvistos": "SITE_ID=fastvistos astro build --config multi-sites.config.mjs",
+    "_build:conceptvistos": "SITE_ID=conceptvistos astro build --config multi-sites.config.mjs",
+    "_build:vibecode": "SITE_ID=vibecode astro build --config multi-sites.config.mjs",
+    
+    "build:all": "node sync-blog.js && npm run _build:fastvistos && npm run _build:conceptvistos && npm run _build:vibecode",
     
     "preview:fastvistos": "SITE_ID=fastvistos astro preview --config multi-sites.config.mjs",
     "preview:conceptvistos": "SITE_ID=conceptvistos astro preview --config multi-sites.config.mjs",
