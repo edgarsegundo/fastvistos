@@ -15,6 +15,8 @@ async function loadSiteConfigurations() {
   const sites = {};
   
   try {
+    // Check if sites directory exists
+    await fs.access(sitesDir);
     const entries = await fs.readdir(sitesDir, { withFileTypes: true });
     
     for (const entry of entries) {
@@ -26,9 +28,34 @@ async function loadSiteConfigurations() {
           // Check if site-config.ts exists
           await fs.access(siteConfigPath);
           
-          // Import the site configuration
-          const siteConfigModule = await import(`./multi-sites/sites/${siteId}/site-config.ts`);
-          const siteConfig = siteConfigModule.siteConfig;
+          let siteConfig;
+          try {
+            // Try to import the site configuration
+            const siteConfigModule = await import(`./multi-sites/sites/${siteId}/site-config.ts`);
+            siteConfig = siteConfigModule.siteConfig;
+          } catch (importError) {
+            if (importError.message.includes('Unknown file extension ".ts"')) {
+              // Fallback: read the file and extract basic info using regex
+              console.log(`📝 Using fallback parsing for ${siteId} site config`);
+              const content = await fs.readFile(siteConfigPath, 'utf-8');
+              
+              // Extract domain using regex
+              const domainMatch = content.match(/domain:\s*['"`]([^'"`]+)['"`]/);
+              const nameMatch = content.match(/name:\s*['"`]([^'"`]+)['"`]/);
+              
+              if (domainMatch && nameMatch) {
+                siteConfig = {
+                  domain: domainMatch[1],
+                  name: nameMatch[1],
+                  id: siteId
+                };
+              } else {
+                throw new Error('Could not parse domain and name from site config file');
+              }
+            } else {
+              throw importError;
+            }
+          }
           
           // Extract the needed information for Astro config
           sites[siteId] = {
@@ -41,10 +68,8 @@ async function loadSiteConfigurations() {
           
           console.log(`✅ Loaded configuration for site: ${siteId} (${siteConfig.domain})`);
         } catch (error) {
-          // Only show non-TypeScript extension warnings
-          if (!error.message.includes('Unknown file extension ".ts"')) {
-            console.warn(`⚠️  Could not load configuration for site ${siteId}:`, error.message);
-          }
+          console.warn(`⚠️  Could not load configuration for site ${siteId}:`, error.message);
+          console.warn(`    Site config path: ${siteConfigPath}`);
         }
       }
     }
@@ -54,6 +79,8 @@ async function loadSiteConfigurations() {
     console.error('   1. multi-sites/sites/ directory exists');
     console.error('   2. Sites have valid site-config.ts files');
     console.error('   3. File permissions are correct');
+    console.error('   4. Current working directory is correct');
+    console.error(`   5. Attempted to read: ${sitesDir}`);
     process.exit(1);
   }
   
@@ -61,6 +88,16 @@ async function loadSiteConfigurations() {
   if (Object.keys(sites).length === 0) {
     console.error('❌ No valid site configurations found!');
     console.error('💥 Please ensure sites have valid site-config.ts files');
+    console.error(`   Searched in: ${sitesDir}`);
+    console.error('   Available directories:');
+    try {
+      const entries = await fs.readdir(sitesDir, { withFileTypes: true });
+      entries.forEach(entry => {
+        console.error(`     - ${entry.name} (${entry.isDirectory() ? 'directory' : 'file'})`);
+      });
+    } catch (e) {
+      console.error('     Could not list directory contents');
+    }
     process.exit(1);
   }
   
