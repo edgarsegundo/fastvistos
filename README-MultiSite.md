@@ -2,6 +2,64 @@
 
 This project implements a **Multi-Site Architecture** using Astro v5.13.5 with content collections, supporting multiple websites with shared templates and site-specific content.
 
+## 🚀 **QUICK START - Essential Commands**
+
+> **⚠️ IMPORTANT**: These are the key commands you need to know for working with this multi-site project!
+
+### **🆕 Create a New Site**
+
+```bash
+node create-site.js
+# Interactive script to create a new site with all necessary configuration files
+# Creates site structure, config files, and registers the site automatically
+```
+
+### **⚡ Development with Auto-Sync (RECOMMENDED)**
+
+```bash
+npm run dev:watch:fastvistos      # FastVistos with auto-sync on file changes
+npm run dev:watch:conceptvistos   # ConceptVistos with auto-sync on file changes  
+npm run dev:watch:vibecode       # VibeCode with auto-sync on file changes
+
+# For any new site you create:
+npm run dev:watch:mysite          # Replace 'mysite' with your site ID
+```
+
+### **🔨 Production Builds**
+
+```bash
+npm run build:fastvistos          # Build FastVistos for production
+npm run build:conceptvistos       # Build ConceptVistos for production
+npm run build:vibecode           # Build VibeCode for production
+
+# For any new site you create:
+# Add to package.json: "build:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro build --config multi-sites.config.mjs"
+```
+
+### **📝 Blog Content Generation**
+
+```bash
+node generate-blog-content.js fastvistos     # Generate blog content for specific site
+node generate-blog-advanced.js all           # Generate for all sites with HTML conversion
+npm run generate-blog                         # Alternative command for content generation
+```
+
+### **🔄 Manual Sync Operations**
+
+```bash
+npm run sync-blog                 # Sync shared templates to all sites manually
+npm run watch-sync               # Start file watcher for template synchronization
+```
+
+### **🧪 Testing**
+
+```bash
+npm run test:blog                 # Test blog service functionality
+npm run test:blog:integration     # Integration tests with real database
+```
+
+---
+
 ## 🎯 **Current Status: FULLY WORKING**
 
 **✅ All systems operational** - Multi-site architecture with simplified site configuration and auto-sync development:
@@ -17,6 +75,25 @@ This project implements a **Multi-Site Architecture** using Astro v5.13.5 with c
 - **✅ Blog Content Generation**: Automated scripts for database-to-markdown content generation with HTML conversion
 
 ## � **Recent Updates & Improvements**
+
+### **Latest Critical Fixes** (September 2025)
+
+#### **Blog System Bug Fixes**
+
+- **🐛 Fixed Server-Side Window Error**: Resolved "window is not defined" error in blog article pages
+  - **Issue**: `window.location.href` and `encodeURIComponent` were being used during server-side rendering in share button functionality
+  - **Solution**: Moved share button functionality to client-side script with proper browser API checks and null safety
+  - **Impact**: Blog articles now load successfully without SSR errors, share functionality works properly
+- **🔧 Dynamic Routing Fix**: Corrected `[...slug].astro` vs `[slug].astro` routing conflicts
+  - **Issue**: Conflicting route files causing template rendering problems and 404 errors
+  - **Solution**: Standardized on `[...slug].astro` for proper dynamic routing, updated sync scripts
+  - **Impact**: Blog article URLs now work correctly with Astro's getStaticPaths(), no more routing conflicts
+
+#### **Template Synchronization Improvements**
+
+- **🔄 Auto-Sync Core Templates**: File watcher detects changes in core templates and automatically syncs to all sites
+- **🔧 Sync Script Updates**: Updated `sync-blog.js` to handle `[...slug].astro` properly across all sites
+- **✅ Real-Time Development**: Edit core files → instant sync → hot reload in browser
 
 ### **Blog System Enhancements** (Latest)
 
@@ -1208,6 +1285,74 @@ The original FastVistos components have been moved to:
 The core JSON-LD components are now shared:
 
 - **Location**: `multi-sites/core/components/JsonLd*.astro`
+
+## 🔧 **Troubleshooting Common Issues**
+
+### **Blog Article Errors**
+
+#### "window is not defined" Error
+- **Symptoms**: Error when loading blog article pages during SSR
+- **Cause**: Client-side JavaScript (like `window.location.href`) running during server-side rendering
+- **Solution**: Move client-side code to `<script>` tags or use proper browser API checks
+- **Status**: ✅ Fixed in latest version
+
+#### 404 Errors on Blog Articles
+- **Symptoms**: Blog index loads but individual articles return 404
+- **Cause**: Missing or incorrect `getStaticPaths()` implementation, conflicting route files
+- **Solution**: Ensure `[...slug].astro` is used (not `[slug].astro`), check business_id filtering
+- **Status**: ✅ Fixed in latest version
+
+### **Development Issues**
+
+#### Templates Not Syncing
+- **Symptoms**: Changes to core templates not appearing in site-specific files
+- **Cause**: File watcher not running or sync script issues
+- **Solution**: Use `npm run dev:watch:siteid` instead of regular dev command
+- **Manual Fix**: Run `npm run sync-blog` manually
+
+#### Site Not Found Errors
+- **Symptoms**: "Could not load configuration for site" warnings
+- **Cause**: Missing site-config.ts file or incorrect site ID
+- **Solution**: Create site with `node create-site.js` or check site-config.ts exists
+
+### **Content Generation Issues**
+
+#### No Articles Generated
+- **Symptoms**: Script runs but no markdown files created
+- **Cause**: Business ID mismatch between config and database
+- **Solution**: Verify business_id in site-config.ts matches database records
+- **Debug**: Use `npm run test:blog` to test database connectivity
+
+#### HTML Not Converting to Markdown
+- **Symptoms**: Raw HTML appearing in generated markdown
+- **Cause**: Using basic script instead of advanced conversion
+- **Solution**: Use `node generate-blog-advanced.js` for HTML-to-Markdown conversion
+
+### **Build Issues**
+
+#### Build Fails with Missing Files
+- **Symptoms**: Build process fails with "file not found" errors
+- **Cause**: Templates not synced before build
+- **Solution**: Ensure sync runs before build (npm scripts handle this automatically)
+
+### **Quick Fixes**
+
+```bash
+# Restart development with clean sync
+npm run dev:watch:siteid
+
+# Force sync all templates
+npm run sync-blog
+
+# Test blog service connection
+npm run test:blog
+
+# Regenerate content
+node generate-blog-advanced.js siteid
+
+# Create new site properly
+node create-site.js
+```
 - **Usage**: Available to all sites for SEO optimization
 
 ## 🤝 Contributing

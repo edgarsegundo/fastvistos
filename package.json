@@ -32,7 +32,11 @@
     "test:blog:real": "tsx test-blog-service.js --real",
     "test:blog:unit": "node test-blog-service.js --unit",
     "test:blog:verbose": "node test-blog-service.js --unit --verbose",
-    "test:blog:integration": "node test-blog-service.js --integration"
+    "test:blog:integration": "node test-blog-service.js --integration",
+    "dev:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro dev --config multi-sites.config.mjs",
+    "dev:watch:p2digital": "node dev-with-sync.js p2digital",
+    "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build --config multi-sites.config.mjs",
+    "preview:p2digital": "SITE_ID=p2digital astro preview --config multi-sites.config.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
