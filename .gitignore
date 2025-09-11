@@ -206,3 +206,4 @@ chatwoot.sqlite3-wal
 
 # Exception: Include src/lib directory
 !src/lib/
+!multi-sites/core/lib
