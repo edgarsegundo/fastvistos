@@ -12,7 +12,24 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SITES = ['fastvistos', 'conceptvistos', 'vibecode'];
+// Dynamically discover all sites from the multi-sites/sites directory
+async function getSites() {
+  const sitesDir = join(__dirname, 'multi-sites/sites');
+  try {
+    const entries = await fs.readdir(sitesDir, { withFileTypes: true });
+    const sites = entries
+      .filter(entry => entry.isDirectory())
+      .map(entry => entry.name)
+      .sort(); // Sort alphabetically for consistent order
+    
+    console.log(`📁 Discovered sites: ${sites.join(', ')}`);
+    return sites;
+  } catch (error) {
+    console.error('❌ Error reading sites directory:', error);
+    // Fallback to hardcoded list if directory read fails
+    return ['fastvistos', 'conceptvistos', 'vibecode'];
+  }
+}
 const CORE_BLOG_DIR = join(__dirname, 'multi-sites/core/pages/blog');
 const CORE_LIB_DIR = join(__dirname, 'multi-sites/core/lib');
 const CORE_LAYOUTS_DIR = join(__dirname, 'multi-sites/core/layouts');
@@ -23,27 +40,6 @@ async function ensureDir(dirPath) {
   } catch {
     await fs.mkdir(dirPath, { recursive: true });
   }
-}
-
-async function copyDirectoryRecursive(src, dest) {
-  await ensureDir(dest);
-  const entries = await fs.readdir(src, { withFileTypes: true });
-  
-  for (const entry of entries) {
-    const srcPath = join(src, entry.name);
-    const destPath = join(dest, entry.name);
-    
-    if (entry.isDirectory()) {
-      await copyDirectoryRecursive(srcPath, destPath);
-    } else {
-      await fs.copyFile(srcPath, destPath);
-    }
-  }
-}
-
-async function copyFile(src, dest) {
-  await ensureDir(dirname(dest));
-  await fs.copyFile(src, dest);
 }
 
 async function syncBlogToSite(siteId) {
@@ -100,7 +96,9 @@ async function syncBlogToSite(siteId) {
 async function syncAllSites() {
   console.log('🔄 Starting blog sync to all sites...');
   
-  for (const siteId of SITES) {
+  const sites = await getSites();
+  
+  for (const siteId of sites) {
     await syncBlogToSite(siteId);
   }
   
