@@ -1,4 +1,6 @@
-export const siteConfig = {
+import type { SiteConfig } from '../../core/lib/site-config.ts';
+
+export const siteConfig: SiteConfig = {
   id: 'vibecode',
   domain: 'vibecode-lovable.com.br',
   name: 'VibeCode Lovable',
