@@ -2,7 +2,7 @@ import type { SiteConfig } from '../../core/lib/site-config.ts';
 
 export const siteConfig: SiteConfig = {
   // Business
-  business_id: 'd4f5e6a7890b123c456d789e012f3456', // Concept Vistos business ID from database
+  business_id: '41a5c7f95e924d54b120ab9a0e1843c8', // FastVistos business ID from database (without dashes)
   id: 'fastvistos',
   domain: 'fastvistos.com.br',
   name: 'Fast Vistos',
