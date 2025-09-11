@@ -33,10 +33,6 @@
     "test:blog:unit": "node test-blog-service.js --unit",
     "test:blog:verbose": "node test-blog-service.js --unit --verbose",
     "test:blog:integration": "node test-blog-service.js --integration",
-    "dev:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro dev --config multi-sites.config.mjs",
-    "dev:watch:mysite": "node dev-with-sync.js mysite",
-    "build:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro build --config multi-sites.config.mjs",
-    "preview:mysite": "SITE_ID=mysite astro preview --config multi-sites.config.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
