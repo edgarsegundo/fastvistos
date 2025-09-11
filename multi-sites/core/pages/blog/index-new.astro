@@ -1,5 +1,6 @@
 ---
-import { BlogService } from '../../lib/multi-blog-service.js';
+const blogServiceModule = await import('../../lib/multi-blog-service.js');
+const BlogService = blogServiceModule.BlogService;
 import { getSiteConfig } from '../../lib/site-config.js';
 
 // Get site configuration
