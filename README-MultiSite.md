@@ -48,13 +48,24 @@ npm run generate-blog                         # Alternative command for content 
 
 ```bash
 npm run download-images                       # Download images for all sites
-npm run download-images:fastvistos           # Download images for fastvistos only
-npm run download-images:conceptvistos        # Download images for conceptvistos only  
-npm run download-images:p2digital            # Download images for p2digital only
-node download-blog-images.js siteid          # Download for any specific site
+# Using npm scripts
+npm run download-images:fastvistos
+# All images
+npm run download-images 
 ```
 
-### **�🔄 Manual Sync Operations**
+```bash
+# Download images for a specific site
+node download-blog-images.js fastvistos
+
+# Download images for all sites
+node download-blog-images.js all
+
+# Get help
+node download-blog-images.js --help
+```
+
+### *** Syncing files
 
 ```bash
 npm run sync-blog                 # Sync shared templates to all sites manually
