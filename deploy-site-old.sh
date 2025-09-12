@@ -181,18 +181,64 @@ deploy_to_server() {
     echo -e "${GREEN}🎉 Deployment completed successfully!${NC}"
     echo -e "${BLUE}🌐 Site should be available at: https://${site_id}.com${NC}"
 }
+    
+    echo -e "${BLUE}🚀 Deploying $site_id...${NC}"
+    echo -e "${BLUE}📁 Remote path: $remote_path${NC}"
+    echo ""
+
+    # Step 1: Setup remote directory
+    echo -e "${YELLOW}📁 Setting up remote directory...${NC}"
+    local setup_command="ssh ${SERVER_USER}@${SERVER_HOST} \"sudo mkdir -p ${remote_path} && sudo chown ${SERVER_USER}:${SERVER_USER} ${remote_path}\""
+    echo "Running: $setup_command"
+    
+    if eval $setup_command; then
+        echo -e "${GREEN}✅ Remote directory setup completed${NC}"
+    else
+        echo -e "${RED}❌ Remote directory setup failed${NC}"
+        exit 1
+    fi
+
+    # Step 2: Rsync files
+    echo ""
+    echo -e "${YELLOW}📤 Syncing files...${NC}"
+    local rsync_command="rsync -avz --delete ./dist/ ${SERVER_USER}@${SERVER_HOST}:${remote_path}"
+    echo "Running: $rsync_command"
+    
+    if $rsync_command; then
+        echo -e "${GREEN}✅ Files synced successfully${NC}"
+    else
+        echo -e "${RED}❌ Rsync failed${NC}"
+        exit 1
+    fi
+
+    # Step 3: Fix ownership for web server
+    echo ""
+    echo -e "${YELLOW}🔧 Fixing file ownership for web server...${NC}"
+    local chown_command="ssh ${SERVER_USER}@${SERVER_HOST} \"sudo chown -R www-data:www-data ${remote_path}\""
+    echo "Running: $chown_command"
+    
+    if eval $chown_command; then
+        echo -e "${GREEN}✅ File ownership updated${NC}"
+    else
+        echo -e "${RED}❌ File ownership update failed${NC}"
+        exit 1
+    fi
+
+    echo ""
+    echo -e "${GREEN}🎉 Deployment completed successfully!${NC}"
+    echo -e "${BLUE}🌐 Site should be available at the configured domain${NC}"
+}
 
 main() {
     local site_id=$1
 
-    # If no site ID provided, prompt user to choose
     if [[ -z "$site_id" ]]; then
-        site_id=$(prompt_site_selection)
-    else
-        # Validate the provided site ID
-        validate_site_id "$site_id"
+        echo -e "${RED}❌ Error: Site ID is required.${NC}"
+        show_usage
+        exit 1
     fi
 
+    validate_site_id "$site_id"
     check_dist_folder "$site_id"
     deploy_to_server "$site_id"
 }

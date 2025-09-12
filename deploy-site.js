@@ -3,23 +3,11 @@
 import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import readline from 'readline';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Site configurations
-const SITES_CONFIG = {
-  fastvistos: {
-    domain: 'fastvistos.com',
-    path: '/var/www/fastvistos'
-  },
-  p2digital: {
-    domain: 'p2digital.com', 
-    path: '/var/www/p2digital'
-  }
-  // Add more sites as needed
-};
 
 // Server configuration
 const SERVER_CONFIG = {
@@ -27,39 +15,127 @@ const SERVER_CONFIG = {
   host: '72.60.57.150'
 };
 
-function showUsage() {
-  console.log('\nUsage: node deploy-site.js <siteid>');
-  console.log('\nAvailable site IDs:');
-  Object.keys(SITES_CONFIG).forEach(siteId => {
-    const config = SITES_CONFIG[siteId];
-    console.log(`  ${siteId} -> ${config.domain} (${config.path})`);
+// Function to get all available sites from dist folder
+function getAvailableSites() {
+  const distPath = path.join(process.cwd(), 'dist');
+  
+  if (!fs.existsSync(distPath)) {
+    console.error('❌ Error: ./dist folder not found. Please build at least one site first.');
+    console.log('Example: npm run build:fastvistos');
+    process.exit(1);
+  }
+
+  const sites = fs.readdirSync(distPath, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+    .filter(name => !name.startsWith('.')); // Filter out hidden directories
+
+  if (sites.length === 0) {
+    console.error('❌ Error: No site folders found in ./dist/');
+    console.log('Please build at least one site first.');
+    console.log('Example: npm run build:fastvistos');
+    process.exit(1);
+  }
+
+  return sites;
+}
+
+// Function to generate site config dynamically
+function generateSiteConfig(siteId) {
+  return {
+    domain: `${siteId}.com`,
+    path: `/var/www/${siteId}`
+  };
+}
+
+// Function to show available sites and prompt user to choose
+async function promptSiteSelection() {
+  const sites = getAvailableSites();
+  
+  console.log('\n🚀 Available sites for deployment:');
+  console.log('');
+  
+  sites.forEach((site, index) => {
+    const config = generateSiteConfig(site);
+    console.log(`${index + 1}) ${site} → ${config.domain} (${config.path})`);
   });
-  console.log('\nExample: node deploy-site.js fastvistos\n');
+  
+  console.log('');
+  
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise((resolve) => {
+    rl.question(`Please choose a site (1-${sites.length}) or enter site name: `, (answer) => {
+      rl.close();
+      
+      // Check if it's a number selection
+      const choice = parseInt(answer);
+      if (!isNaN(choice) && choice >= 1 && choice <= sites.length) {
+        resolve(sites[choice - 1]);
+        return;
+      }
+      
+      // Check if it's a direct site name
+      if (sites.includes(answer)) {
+        resolve(answer);
+        return;
+      }
+      
+      console.error(`❌ Error: Invalid selection "${answer}"`);
+      console.log(`Valid options: 1-${sites.length} or site names: ${sites.join(', ')}`);
+      process.exit(1);
+    });
+  });
+}
+
+function showUsage() {
+  const sites = getAvailableSites();
+  
+  console.log('\nUsage: node deploy-site.js [siteid]');
+  console.log('\nAvailable sites (auto-detected from ./dist/):');
+  sites.forEach(siteId => {
+    const config = generateSiteConfig(siteId);
+    console.log(`  ${siteId} → ${config.domain} (${config.path})`);
+  });
+  console.log('\nExamples:');
+  console.log('  node deploy-site.js fastvistos');
+  console.log('  node deploy-site.js p2digital');
+  console.log('  node deploy-site.js  (interactive mode)');
+  console.log('');
 }
 
 function validateSiteId(siteId) {
-  if (!SITES_CONFIG[siteId]) {
-    console.error(`❌ Error: Site ID '${siteId}' not found.`);
+  const sites = getAvailableSites();
+  
+  if (!sites.includes(siteId)) {
+    console.error(`❌ Error: Site '${siteId}' not found in ./dist/`);
+    console.log(`Available sites: ${sites.join(', ')}`);
     showUsage();
     process.exit(1);
   }
 }
 
-function checkDistFolder() {
-  const distPath = path.join(process.cwd(), 'dist');
-  if (!fs.existsSync(distPath)) {
-    console.error('❌ Error: ./dist folder not found. Please build the site first.');
-    console.log('Run: npm run build:' + process.argv[2]);
+function checkDistFolder(siteId) {
+  const siteDistPath = path.join(process.cwd(), 'dist', siteId);
+  
+  if (!fs.existsSync(siteDistPath)) {
+    console.error(`❌ Error: ./dist/${siteId} folder not found. Please build the site first.`);
+    console.log(`Run: npm run build:${siteId}`);
     process.exit(1);
   }
 }
 
 function deployToServer(siteId) {
-  const siteConfig = SITES_CONFIG[siteId];
+  const siteConfig = generateSiteConfig(siteId);
   const { user, host } = SERVER_CONFIG;
   const remotePath = siteConfig.path;
+  const localPath = `./dist/${siteId}/`;
   
   console.log(`🚀 Deploying ${siteId} to ${siteConfig.domain}...`);
+  console.log(`📁 Local path: ${localPath}`);
   console.log(`📁 Remote path: ${remotePath}`);
   console.log('');
 
@@ -73,7 +149,7 @@ function deployToServer(siteId) {
 
     // Step 2: Rsync files
     console.log('\n📤 Syncing files...');
-    const rsyncCommand = `rsync -avz --delete ./dist/ ${user}@${host}:${remotePath}`;
+    const rsyncCommand = `rsync -avz --delete ${localPath} ${user}@${host}:${remotePath}`;
     console.log(`Running: ${rsyncCommand}`);
     execSync(rsyncCommand, { stdio: 'inherit' });
     console.log('✅ Files synced successfully');
@@ -94,17 +170,23 @@ function deployToServer(siteId) {
   }
 }
 
-function main() {
-  const siteId = process.argv[2];
+async function main() {
+  let siteId = process.argv[2];
 
+  // If no site ID provided, prompt user to choose
   if (!siteId) {
-    console.error('❌ Error: Site ID is required.');
-    showUsage();
-    process.exit(1);
+    try {
+      siteId = await promptSiteSelection();
+    } catch (error) {
+      console.error('❌ Error during site selection:', error.message);
+      process.exit(1);
+    }
+  } else {
+    // Validate the provided site ID
+    validateSiteId(siteId);
   }
 
-  validateSiteId(siteId);
-  checkDistFolder();
+  checkDistFolder(siteId);
   deployToServer(siteId);
 }
 
