@@ -33,6 +33,7 @@ async function getSites() {
 const CORE_BLOG_DIR = join(__dirname, 'multi-sites/core/pages/blog');
 const CORE_LIB_DIR = join(__dirname, 'multi-sites/core/lib');
 const CORE_LAYOUTS_DIR = join(__dirname, 'multi-sites/core/layouts');
+const CORE_COMPONENTS_DIR = join(__dirname, 'multi-sites/core/components');
 const CORE_STYLES_DIR = join(__dirname, 'multi-sites/core/styles');
 
 async function ensureDir(dirPath) {
@@ -50,6 +51,7 @@ async function syncBlogToSite(siteId) {
   const siteBlogDir = join(siteDir, 'pages/blog');
   const siteLibDir = join(siteDir, 'lib');
   const siteLayoutsDir = join(siteDir, 'layouts');
+  const siteComponentsDir = join(siteDir, 'components');
   const siteStylesDir = join(siteDir, 'styles');
   
   // Read core blog templates
@@ -58,6 +60,9 @@ async function syncBlogToSite(siteId) {
   
   // Read core layouts
   const sharedBlogLayout = await fs.readFile(join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'), 'utf-8');
+  
+  // Read core components
+  const tableOfContentsComponent = await fs.readFile(join(CORE_COMPONENTS_DIR, 'TableOfContents.astro'), 'utf-8');
   
   // Read core styles
   const markdownBlogCSS = await fs.readFile(join(CORE_STYLES_DIR, 'markdown-blog.css'), 'utf-8');
@@ -97,6 +102,7 @@ async function syncBlogToSite(siteId) {
   await ensureDir(siteBlogDir);
   await ensureDir(siteLibDir);
   await ensureDir(siteLayoutsDir);
+  await ensureDir(siteComponentsDir);
   await ensureDir(siteStylesDir);
   
   // Write localized templates
@@ -105,6 +111,9 @@ async function syncBlogToSite(siteId) {
   
   // Write localized layout
   await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);
+  
+  // Write core components
+  await fs.writeFile(join(siteComponentsDir, 'TableOfContents.astro'), tableOfContentsComponent);
   
   // Write core styles
   await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
