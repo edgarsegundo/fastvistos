@@ -36,7 +36,98 @@ npm run build:vibecode           # Build VibeCode for production
 # Add to package.json: "build:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro build --config multi-sites.config.mjs"
 ```
 
+### **� Deployment to Server**
+
+Deploy your built sites to the production server using the deployment scripts:
+
+#### **Node.js Deployment Script**
+
+```bash
+node deploy-site.js <siteid>
+```
+
+#### **Bash Deployment Script** 
+
+```bash
+./deploy-site.sh <siteid>
+```
+
+#### **Example Usage:**
+
+```bash
+# Build and deploy FastVistos
+npm run build:fastvistos
+node deploy-site.js fastvistos
+
+# Build and deploy P2Digital
+npm run build:p2digital  
+./deploy-site.sh p2digital
+
+# Show available sites and usage
+node deploy-site.js
+./deploy-site.sh
+```
+
+#### **What the deployment scripts do:**
+
+1. **Validate inputs** - Check if site ID exists and dist folder is present
+2. **Setup remote directory** - `ssh edgar@72.60.57.150 "sudo mkdir -p /var/www/sitepath && sudo chown edgar:edgar /var/www/sitepath"`
+3. **Sync files** - `rsync -avz --delete ./dist/ edgar@72.60.57.150:/var/www/sitepath`
+4. **Fix permissions** - `ssh edgar@72.60.57.150 "sudo chown -R www-data:www-data /var/www/sitepath"`
+5. **Provide feedback** - Clear success/error messages with colored output
+4. **Provide feedback** - Clear success/error messages with colored output
+
+#### **Pre-configured Sites:**
+
+- `fastvistos` → `/var/www/fastvistos`
+- `p2digital` → `/var/www/p2digital`
+
+> **Note:** To add new sites, update the site configuration in `deploy-site.js` or `deploy-site.sh`
+
+#### **Troubleshooting Deployment Issues**
+
+**Permission Denied Error:**
+
+```bash
+rsync: [Receiver] mkdir "/var/www/sitename" failed: Permission denied (13)
+```
+
+**Solution:** Create the directory and set proper permissions on the server:
+
+```bash
+# SSH into your server
+ssh edgar@72.60.57.150
+
+# Create the directory with proper permissions
+sudo mkdir -p /var/www/p2digital
+sudo chown edgar:edgar /var/www/p2digital
+
+# Or for FastVistos
+sudo mkdir -p /var/www/fastvistos
+sudo chown edgar:edgar /var/www/fastvistos
+
+# Verify permissions
+ls -la /var/www/
+```
+
+**SSH Key Setup (Recommended):**
+
+To avoid password prompts, set up SSH key authentication:
+
+```bash
+# Generate SSH key (if you don't have one)
+ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"
+
+# Copy public key to server
+ssh-copy-id edgar@72.60.57.150
+
+# Test connection
+ssh edgar@72.60.57.150
+```
+
 ### **📝 Blog Content Generation**
+
+### **�📝 Blog Content Generation**
 
 ```bash
 node generate-blog-content.js fastvistos     # Generate blog content for specific site
@@ -80,6 +171,39 @@ npm run test:blog:integration     # Integration tests with real database
 ```
 
 ---
+
+## How to Allow passwordless sudo for specific commands
+
+On the VPS, run: sudo visudo
+
+Add this line (replace edgar with your username):
+
+edgar ALL=(ALL) NOPASSWD: /bin/mkdir, /bin/chown, /bin/rsync
+
+Now sudo mkdir / sudo chown / sudo rsync won’t ask for a password.
+After this, your script will run non-interactively (ideal for automation).
+
+**SSH Key Setup For Better Script Automation (Recommended):**
+
+To avoid password prompts, set up SSH key authentication:
+
+```bash
+# Check if you already have SSH keys
+ls ~/.ssh/
+
+# If you see id_rsa and id_rsa.pub, you already have keys!
+# Skip key generation and go directly to copying your public key:
+
+# Copy your existing public key to the server
+ssh-copy-id edgar@72.60.57.150
+
+# Test connection (should not ask for password)
+ssh edgar@72.60.57.150
+
+# If you don't have SSH keys, generate them first:
+# ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"
+# Then run ssh-copy-id edgar@72.60.57.150
+```
 
 ## 🎯 **Current Status: FULLY WORKING**
 
