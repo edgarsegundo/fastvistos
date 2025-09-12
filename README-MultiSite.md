@@ -46,10 +46,43 @@ Deploy your built sites to the production server using the deployment scripts:
 node deploy-site.js [siteid]
 ```
 
-#### **Bash Deployment Script**
+
+#### **Bash Nginx Configuration Script**
 
 ```bash
-./deploy-site.sh [siteid]
+# It creates the certificate, the respective volume at docker-compose.yml and the [siteid].conf file at sites/
+./create-astro-site-conf.sh 
+```
+
+The templares for the [siteid].conf is at astro/
+
+astro.nginx.http.template.conf  
+astro.nginx.https.template.conf
+
+```bash
+# It can be used to create the respective [siteid] volume but the `create-astro-site-conf.sh` already does that.
+./create-vol.sh
+```
+
+Pay Attention to the final instructions
+
+```bash
+# 1️⃣  Ensure your project folder exists and has correct permissions:
+  sudo mkdir -p $APP_PATH
+  sudo chown -R $USER_NAME:www-data $APP_PATH
+
+# 2️⃣  Copy your built project (dist) into this folder:
+  cp -r ./dist/* $APP_PATH/
+  # This ensures that Nginx serves your static files correctly.
+
+# 3️⃣  Ensure DNS is pointing correctly:
+  A      $DOMAIN      → <server IP>
+  CNAME  www.$DOMAIN  → <server IP>
+
+# 4️⃣  Commit & push to GitHub
+  git add docker-compose.yml $FINAL_CONF
+  git commit -m "Add auto-generated Nginx config"
+  git push
 ```
 
 #### **Example Usage:**
@@ -70,6 +103,7 @@ node deploy-site.js fastvistos
 # Show available sites
 node deploy-site.js --help
 ```
+
 
 #### **Key Features:**
 
