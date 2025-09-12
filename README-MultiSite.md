@@ -173,8 +173,6 @@ ssh edgar@72.60.57.150
 
 ### **📝 Blog Content Generation**
 
-### **�📝 Blog Content Generation**
-
 ```bash
 node generate-blog-content.js fastvistos     # Generate blog content for specific site
 node generate-blog-advanced.js all           # Generate for all sites with HTML conversion
@@ -1342,6 +1340,7 @@ const whatsappLink = SiteConfigHelper.getWhatsAppLink(siteConfig, 'Hello!');
     ```
 
 4. **Create public assets directory**:
+
     ```bash
     mkdir -p public-sites/newsite
     # Add favicon, logo, etc.
