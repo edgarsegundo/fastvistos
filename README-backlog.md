@@ -2,6 +2,11 @@
 
 ## To Do
 
+Missing footer at home page and whasapp links not working.
+
+---
+
+
 - Criar no blog_config model um campo para o sidebar (aside) do article?
 
 Coisas que vão:
