@@ -21,9 +21,23 @@ Criar um modelo para anexar imagens de um blog? Isso não vai sobrecarregar a mi
 
 * Criar um blog editor em microservicesadm com todas as md tags (ele pode arrastar esses tags) e conforme o usuario vai escrevendo o artigo, ele já vê o formato real como vai ficando e pode de lá mesmo pegar imagens e mandar para o servidor.
 
-
 ---
 
 * Facilitar e se possível automatizar a criação de todos esses arquivos, ver image.
 
 ![alt text](image.png)
+
+---
+
+* Criar campo Author default em blog_conf e campo imagem author
+* Criar campo author default em topic e campo imagem
+* Permitir colocar author diferente no article caso seja outro além de Author default de blog_conf e topic
+
+---
+
+* flag de conf para exibir data ou não no artigo
+* call to action do lado da foto do author no início do article. Achei interessante, veja:
+
+Espero que você goste desse artigo. Se você quer que meu time faça o seu marketing, clique aqui.
+
+![alt text](image-1.png)
