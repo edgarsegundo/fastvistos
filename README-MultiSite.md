@@ -64,7 +64,7 @@ astro.nginx.https.template.conf
 ./create-vol.sh
 ```
 
-Pay Attention to the final instructions
+Pay Attention to the final instructions:
 
 ```bash
 # 1️⃣  Ensure your project folder exists and has correct permissions:
