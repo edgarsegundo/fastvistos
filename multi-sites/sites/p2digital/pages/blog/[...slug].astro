@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import SidebarAbove from '../../components/SidebarAbove.astro';
+import SidebarBelow from '../../components/SidebarBelow.astro';
 import { siteConfig } from '../../site-config.ts';
 import '../../styles/markdown-blog.css';
 
@@ -67,7 +69,16 @@ const description = entry.data.description || entry.data.title;
         </article>
 
         <!-- Table of Contents Sidebar -->
-        <TableOfContents headings={headings} />
+        <aside class="sidebar-container">
+            <!-- Customização Acima do TOC -->
+            <SidebarAbove />
+            
+            <!-- Table of Contents -->
+            <TableOfContents headings={headings} />
+            
+            <!-- Customização Abaixo do TOC -->
+            <SidebarBelow />
+        </aside>
     </div>
 </SharedBlogLayout>
 
@@ -84,6 +95,12 @@ const description = entry.data.description || entry.data.title;
 
     .blog-article {
         min-width: 0; /* Prevents grid overflow */
+    }
+
+    .sidebar-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
     /* Responsive Design */
