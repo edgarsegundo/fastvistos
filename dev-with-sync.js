@@ -16,58 +16,57 @@ console.log(`🚀 Starting development environment for: ${siteId}`);
 // Start file watcher
 console.log('👀 Starting file watcher...');
 const watcherProcess = spawn('node', ['watch-and-sync.js'], {
-  stdio: ['inherit', 'pipe', 'inherit'],
-  env: { ...process.env, FORCE_COLOR: '1' }
+    stdio: ['inherit', 'pipe', 'inherit'],
+    env: { ...process.env, FORCE_COLOR: '1' },
 });
 
 // Color the watcher output
 watcherProcess.stdout.on('data', (data) => {
-  const output = data.toString();
-  process.stdout.write(`\x1b[36m[WATCHER]\x1b[0m ${output}`);
+    const output = data.toString();
+    process.stdout.write(`\x1b[36m[WATCHER]\x1b[0m ${output}`);
 });
 
 // Start Astro dev server (after initial sync)
 console.log(`🔄 Running initial sync for ${siteId}...`);
 const initialSync = spawn('node', ['sync-blog.js', siteId], {
-  stdio: 'inherit'
+    stdio: 'inherit',
 });
 
 initialSync.on('close', (code) => {
-  if (code === 0) {
-    console.log(`🌟 Starting Astro dev server for ${siteId}...`);
-    
-    const astroProcess = spawn('npx', ['astro', 'dev', '--config', 'multi-sites.config.mjs'], {
-      stdio: ['inherit', 'pipe', 'inherit'],
-      env: { ...process.env, SITE_ID: siteId, FORCE_COLOR: '1' }
-    });
+    if (code === 0) {
+        console.log(`🌟 Starting Astro dev server for ${siteId}...`);
 
-    // Color the Astro output
-    astroProcess.stdout.on('data', (data) => {
-      const output = data.toString();
-      process.stdout.write(`\x1b[32m[ASTRO]\x1b[0m ${output}`);
-    });
+        const astroProcess = spawn('npx', ['astro', 'dev', '--config', 'multi-sites.config.mjs'], {
+            stdio: ['inherit', 'pipe', 'inherit'],
+            env: { ...process.env, SITE_ID: siteId, FORCE_COLOR: '1' },
+        });
 
-    // Handle graceful shutdown
-    process.on('SIGINT', () => {
-      console.log('\n🛑 Shutting down development environment...');
-      watcherProcess.kill('SIGTERM');
-      astroProcess.kill('SIGTERM');
-      setTimeout(() => process.exit(0), 1000);
-    });
+        // Color the Astro output
+        astroProcess.stdout.on('data', (data) => {
+            const output = data.toString();
+            process.stdout.write(`\x1b[32m[ASTRO]\x1b[0m ${output}`);
+        });
 
-    astroProcess.on('close', (code) => {
-      console.log(`Astro dev server exited with code ${code}`);
-      watcherProcess.kill('SIGTERM');
-      process.exit(code);
-    });
+        // Handle graceful shutdown
+        process.on('SIGINT', () => {
+            console.log('\n🛑 Shutting down development environment...');
+            watcherProcess.kill('SIGTERM');
+            astroProcess.kill('SIGTERM');
+            setTimeout(() => process.exit(0), 1000);
+        });
 
-  } else {
-    console.error('❌ Initial sync failed, aborting...');
-    watcherProcess.kill('SIGTERM');
-    process.exit(1);
-  }
+        astroProcess.on('close', (code) => {
+            console.log(`Astro dev server exited with code ${code}`);
+            watcherProcess.kill('SIGTERM');
+            process.exit(code);
+        });
+    } else {
+        console.error('❌ Initial sync failed, aborting...');
+        watcherProcess.kill('SIGTERM');
+        process.exit(1);
+    }
 });
 
 watcherProcess.on('close', (code) => {
-  console.log(`File watcher exited with code ${code}`);
+    console.log(`File watcher exited with code ${code}`);
 });

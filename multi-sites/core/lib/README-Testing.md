@@ -12,6 +12,7 @@ This directory contains comprehensive tests for the `blog-service.ts` file.
 The test suite covers all public methods of the BlogService class:
 
 ### Core Methods Tested
+
 - ✅ `getBlogConfig()` - Fetching blog configuration
 - ✅ `getPublishedArticles()` - Retrieving published articles with topics
 - ✅ `getArticleBySlug(slug)` - Finding articles by slug
@@ -20,7 +21,9 @@ The test suite covers all public methods of the BlogService class:
 - ✅ `getTopicsWithArticles()` - Getting topics with their associated articles
 
 ### Test Scenarios
+
 Each method is tested for:
+
 - ✅ **Success cases** - Normal operation with valid data
 - ✅ **Edge cases** - Empty results, null values
 - ✅ **Error handling** - Database connection failures
@@ -29,6 +32,7 @@ Each method is tested for:
 ## Running Tests
 
 ### Unit Tests (Recommended)
+
 ```bash
 # Run all BlogService unit tests
 npm run test:blog
@@ -38,6 +42,7 @@ npm test
 ```
 
 ### Integration Tests (Requires Database)
+
 ```bash
 # Run with real database connection
 npm run test:blog:integration
@@ -46,11 +51,13 @@ npm run test:blog:integration
 ## Test Structure
 
 ### Mocking Strategy
+
 - **Mock Prisma Client**: Tests use a mock Prisma client to avoid database dependencies
 - **Function Validation**: Tests verify that correct parameters are passed to Prisma methods
 - **Error Simulation**: Tests simulate database errors to ensure proper error handling
 
 ### Test Organization
+
 ```
 BlogService
 ├── getBlogConfig
@@ -77,12 +84,14 @@ BlogService
 ## Test Features
 
 ### Assertions
+
 - **Data Validation**: Verifies returned data structure and content
 - **Query Validation**: Ensures correct Prisma query parameters
 - **Error Handling**: Confirms graceful error handling
 - **Type Safety**: Validates expected data types
 
 ### Mock Configuration
+
 - **Dynamic Mocking**: Each test configures mock responses independently
 - **Reset Between Tests**: Mocks are reset before each test case
 - **Realistic Data**: Mock data mirrors real database structure
@@ -91,27 +100,27 @@ BlogService
 
 ```javascript
 it('should return published articles ordered by date', async () => {
-  const mockArticles = [
-    {
-      id: 1,
-      title: 'Latest Article',
-      slug: 'latest-article',
-      published: new Date('2024-01-02'),
-      is_removed: false,
-      blog_topic: { id: 1, name: 'Topic 1', slug: 'topic-1' }
-    }
-  ];
+    const mockArticles = [
+        {
+            id: 1,
+            title: 'Latest Article',
+            slug: 'latest-article',
+            published: new Date('2024-01-02'),
+            is_removed: false,
+            blog_topic: { id: 1, name: 'Topic 1', slug: 'topic-1' },
+        },
+    ];
 
-  mockPrisma.blogArticle.findMany = (options) => {
-    // Verify query parameters
-    assert.strictEqual(options.where.is_removed, false);
-    assert.ok(options.where.published.lte instanceof Date);
-    return Promise.resolve(mockArticles);
-  };
-  
-  const result = await BlogService.getPublishedArticles();
-  assert.strictEqual(result.length, 1);
-  assert.strictEqual(result[0].title, 'Latest Article');
+    mockPrisma.blogArticle.findMany = (options) => {
+        // Verify query parameters
+        assert.strictEqual(options.where.is_removed, false);
+        assert.ok(options.where.published.lte instanceof Date);
+        return Promise.resolve(mockArticles);
+    };
+
+    const result = await BlogService.getPublishedArticles();
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(result[0].title, 'Latest Article');
 });
 ```
 
@@ -136,6 +145,7 @@ it('should return published articles ordered by date', async () => {
 ## Continuous Integration
 
 These tests are designed to run in CI/CD environments without requiring database setup, making them ideal for:
+
 - Pull request validation
 - Continuous integration pipelines
 - Local development testing

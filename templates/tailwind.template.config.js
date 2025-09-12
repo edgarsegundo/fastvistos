@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', 
+        './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/sites/{{SITE_ID}}/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/core/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-        './public-sites/{{SITE_ID}}/**/*.html'
+        './public-sites/{{SITE_ID}}/**/*.html',
     ],
     theme: {
         extend: {
@@ -35,11 +35,11 @@ export default {
                     800: '#075985',
                     900: '#0c4a6e',
                     950: '#082f49',
-                }
+                },
             },
             fontFamily: {
-                'sans': ['Inter', 'system-ui', 'sans-serif'],
-                'heading': ['Inter', 'system-ui', 'sans-serif'],
+                sans: ['Inter', 'system-ui', 'sans-serif'],
+                heading: ['Inter', 'system-ui', 'sans-serif'],
             },
             animation: {
                 'fade-in': 'fadeIn 0.5s ease-in-out',
@@ -53,8 +53,8 @@ export default {
                 slideUp: {
                     '0%': { transform: 'translateY(10px)', opacity: '0' },
                     '100%': { transform: 'translateY(0)', opacity: '1' },
-                }
-            }
+                },
+            },
         },
     },
     plugins: [
@@ -62,4 +62,4 @@ export default {
         require('@tailwindcss/forms'),
         require('@tailwindcss/aspect-ratio'),
     ],
-}
+};
