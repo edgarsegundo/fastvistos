@@ -1,8 +1,6 @@
 # Backog
 
-* publicar para testar e documentar os passos
-
----
+## To Do
 
 * Criar no blog_config model um campo para o sidebar (aside) do article?
 
@@ -49,3 +47,9 @@ Espero que você goste desse artigo. Se você quer que meu time faça o seu mark
 ---
 
 * Implementar possibilidade de adição de comentários e criar endpoints and modelos para isso na base de dados.
+
+## Completed
+
+* publicar para testar e documentar os passos
+
+---
