@@ -1,5 +1,9 @@
 # Backog
 
+* publicar para testar e documentar os passos
+
+---
+
 * Criar no blog_config model um campo para o sidebar (aside) do article?
 
 Coisas que vão:
@@ -41,3 +45,7 @@ Criar um modelo para anexar imagens de um blog? Isso não vai sobrecarregar a mi
 Espero que você goste desse artigo. Se você quer que meu time faça o seu marketing, clique aqui.
 
 ![alt text](image-1.png)
+
+---
+
+* Implementar possibilidade de adição de comentários e criar endpoints and modelos para isso na base de dados.
