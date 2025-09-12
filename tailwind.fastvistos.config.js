@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', 
+        './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/sites/fastvistos/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/core/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-        './public-sites/fastvistos/**/*.html'
+        './public-sites/fastvistos/**/*.html',
     ],
     theme: {
         extend: {

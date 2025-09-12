@@ -18,7 +18,7 @@ node create-site.js
 
 ```bash
 npm run dev:watch:fastvistos      # FastVistos with auto-sync on file changes
-npm run dev:watch:conceptvistos   # ConceptVistos with auto-sync on file changes  
+npm run dev:watch:conceptvistos   # ConceptVistos with auto-sync on file changes
 npm run dev:watch:vibecode       # VibeCode with auto-sync on file changes
 
 # For any new site you create:
@@ -46,12 +46,11 @@ Deploy your built sites to the production server using the deployment scripts:
 node deploy-site.js [siteid]
 ```
 
-
 #### **Bash Nginx Configuration Script**
 
 ```bash
 # It creates the certificate, the respective volume at docker-compose.yml and the [siteid].conf file at sites/
-./create-astro-site-conf.sh 
+./create-astro-site-conf.sh
 ```
 
 The templares for the [siteid].conf is at astro/
@@ -104,7 +103,6 @@ node deploy-site.js fastvistos
 node deploy-site.js --help
 ```
 
-
 #### **Key Features:**
 
 ✅ **Auto-Detection** - Automatically discovers sites from `./dist/` folder  
@@ -125,6 +123,7 @@ node deploy-site.js --help
 #### **Supported Sites:**
 
 Sites are **automatically detected** from your `./dist/` folder. Any site you build will be available for deployment:
+
 - `fastvistos` → `fastvistos.com` (`/var/www/fastvistos`)
 - `p2digital` → `p2digital.com` (`/var/www/p2digital`)
 - Any new site you create → `sitename.com` (`/var/www/sitename`)
@@ -189,7 +188,7 @@ npm run download-images                       # Download images for all sites
 # Using npm scripts
 npm run download-images:fastvistos
 # All images
-npm run download-images 
+npm run download-images
 ```
 
 ```bash
@@ -203,7 +202,7 @@ node download-blog-images.js all
 node download-blog-images.js --help
 ```
 
-### *** Syncing files
+### \*\*\* Syncing files
 
 ```bash
 npm run sync-blog                 # Sync shared templates to all sites manually
@@ -273,13 +272,13 @@ ssh edgar@72.60.57.150
 #### **Blog System Bug Fixes**
 
 - **🐛 Fixed Server-Side Window Error**: Resolved "window is not defined" error in blog article pages
-  - **Issue**: `window.location.href` and `encodeURIComponent` were being used during server-side rendering in share button functionality
-  - **Solution**: Moved share button functionality to client-side script with proper browser API checks and null safety
-  - **Impact**: Blog articles now load successfully without SSR errors, share functionality works properly
+    - **Issue**: `window.location.href` and `encodeURIComponent` were being used during server-side rendering in share button functionality
+    - **Solution**: Moved share button functionality to client-side script with proper browser API checks and null safety
+    - **Impact**: Blog articles now load successfully without SSR errors, share functionality works properly
 - **🔧 Dynamic Routing Fix**: Corrected `[...slug].astro` vs `[slug].astro` routing conflicts
-  - **Issue**: Conflicting route files causing template rendering problems and 404 errors
-  - **Solution**: Standardized on `[...slug].astro` for proper dynamic routing, updated sync scripts
-  - **Impact**: Blog article URLs now work correctly with Astro's getStaticPaths(), no more routing conflicts
+    - **Issue**: Conflicting route files causing template rendering problems and 404 errors
+    - **Solution**: Standardized on `[...slug].astro` for proper dynamic routing, updated sync scripts
+    - **Impact**: Blog article URLs now work correctly with Astro's getStaticPaths(), no more routing conflicts
 
 #### **Template Synchronization Improvements**
 
@@ -292,8 +291,8 @@ ssh edgar@72.60.57.150
 - **🆕 Multi-Site Blog Service**: Implemented business-aware `blog-service.ts` with automatic `business_id` filtering
 - **🆕 Site Configuration Helpers**: Split `SiteConfigHelper` utilities into separate file for better organization
 - **🆕 Blog Content Generation**: Two powerful scripts for database-to-markdown content automation:
-  - `generate-blog-content.js` - Basic content generation with multi-site support
-  - `generate-blog-advanced.js` - Advanced generation with HTML-to-Markdown conversion
+    - `generate-blog-content.js` - Basic content generation with multi-site support
+    - `generate-blog-advanced.js` - Advanced generation with HTML-to-Markdown conversion
 - **🔧 Business ID Integration**: Proper UUID format handling and site-specific content filtering
 - **✅ Tested & Working**: All scripts tested with real data (5 articles for FastVistos, proper filtering for all sites)
 
@@ -327,7 +326,7 @@ npm run dev:watch:vibecode       # VibeCode with auto-sync
 ```bash
 # Start development with initial sync only
 npm run dev:fastvistos           # FastVistos
-npm run dev:conceptvistos        # ConceptVistos  
+npm run dev:conceptvistos        # ConceptVistos
 npm run dev:vibecode            # VibeCode
 ```
 
@@ -351,11 +350,11 @@ Each site has its own configuration file with a centralized interface:
 import type { SiteConfig } from '../../core/lib/site-config.ts';
 
 export const siteConfig: SiteConfig = {
-  id: 'fastvistos',
-  domain: 'fastvistos.com.br',
-  name: 'Fast Vistos',
-  primaryColor: '#FF6B35',
-  // ... site-specific data
+    id: 'fastvistos',
+    domain: 'fastvistos.com.br',
+    name: 'Fast Vistos',
+    primaryColor: '#FF6B35',
+    // ... site-specific data
 };
 ```
 
@@ -518,7 +517,7 @@ fastvistos/
 │       │   ├── layouts/           # FastVistos BaseLayout
 │       │   ├── pages/             # FastVistos pages (auto-synced from core)
 │       │   └── content.config.ts  # Astro content configuration
-│       ├── conceptvistos/         # ConceptVistos site  
+│       ├── conceptvistos/         # ConceptVistos site
 │       │   ├── site-config.ts     # 🆕 ConceptVistos configuration
 │       │   ├── content/           # Site-specific content
 │       │   │   ├── config.ts      # Content collection schema
@@ -538,24 +537,26 @@ fastvistos/
 ├── generate-blog-advanced.js     # 🆕 Advanced blog content generator with HTML conversion
 └── multi-sites.config.mjs        # Astro multi-site configuration
 ```
-│       │   ├── layouts/           # ConceptVistos BaseLayout
-│       │   ├── pages/             # ConceptVistos pages
-│       │   └── content.config.ts  # Astro content configuration
-│       └── vibecode/              # VibeCode site
-│           ├── content/           # 🆕 Site-specific content
-│           │   ├── config.ts      # Content collection schema
-│           │   └── blog/          # Markdown articles for VibeCode
-│           ├── layouts/           # VibeCode BaseLayout
-│           ├── pages/             # VibeCode pages
-│           └── content.config.ts  # Astro content configuration
-├── public-sites/                  # 🆕 Site-specific public assets
-│   ├── fastvistos/               # FastVistos assets (favicons, images, etc.)
-│   ├── conceptvistos/            # ConceptVistos assets
-│   └── vibecode/                 # VibeCode assets
-├── sync-blog.js                  # 🆕 Blog template synchronization script
-├── multi-sites.config.mjs        # Multi-site Astro configuration
-└── package.json                  # Project dependencies
-```
+
+│ │ ├── layouts/ # ConceptVistos BaseLayout
+│ │ ├── pages/ # ConceptVistos pages
+│ │ └── content.config.ts # Astro content configuration
+│ └── vibecode/ # VibeCode site
+│ ├── content/ # 🆕 Site-specific content
+│ │ ├── config.ts # Content collection schema
+│ │ └── blog/ # Markdown articles for VibeCode
+│ ├── layouts/ # VibeCode BaseLayout
+│ ├── pages/ # VibeCode pages
+│ └── content.config.ts # Astro content configuration
+├── public-sites/ # 🆕 Site-specific public assets
+│ ├── fastvistos/ # FastVistos assets (favicons, images, etc.)
+│ ├── conceptvistos/ # ConceptVistos assets
+│ └── vibecode/ # VibeCode assets
+├── sync-blog.js # 🆕 Blog template synchronization script
+├── multi-sites.config.mjs # Multi-site Astro configuration
+└── package.json # Project dependencies
+
+````
 
 ## 🌐 Supported Websites
 
@@ -578,9 +579,9 @@ npm run dev:fastvistos
 # ConceptVistos (gold/luxury theme)
 npm run dev:conceptvistos
 
-# VibeCode (tech blue/green theme)  
+# VibeCode (tech blue/green theme)
 npm run dev:vibecode
-```
+````
 
 Each site automatically:
 
@@ -617,28 +618,29 @@ dist/
 **Revolutionary Multi-Site Styling System**: Each site maintains complete design autonomy through dedicated Tailwind configurations while sharing core components.
 
 #### Dynamic Configuration Loading
+
 ```javascript
 // multi-sites.config.mjs - Automatic Tailwind config selection
 const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
 
 export default defineConfig({
-  vite: {
-    plugins: [
-      tailwindcss({ 
-        config: `./tailwind.${CURRENT_SITE}.config.js` 
-      })
-    ]
-  }
+    vite: {
+        plugins: [
+            tailwindcss({
+                config: `./tailwind.${CURRENT_SITE}.config.js`,
+            }),
+        ],
+    },
 });
 ```
 
 #### Site-Specific Themes
 
-| Site | Theme | Primary Colors | Font Family | Design Focus |
-|------|-------|---------------|-------------|--------------|
-| **FastVistos** | Business/Professional | Blue (#3b95fa) + Orange (#ff6b35) | Source Sans Pro | Visa services, trust, efficiency |
-| **ConceptVistos** | Luxury/Premium | Gold (#d4af37) + Dark (#1a1a1a) | Playfair Display | Premium consulting, elegance |
-| **VibeCode** | Tech/Modern | Blue/Green/Purple tech palette | JetBrains Mono | Development, innovation, code |
+| Site              | Theme                 | Primary Colors                    | Font Family      | Design Focus                     |
+| ----------------- | --------------------- | --------------------------------- | ---------------- | -------------------------------- |
+| **FastVistos**    | Business/Professional | Blue (#3b95fa) + Orange (#ff6b35) | Source Sans Pro  | Visa services, trust, efficiency |
+| **ConceptVistos** | Luxury/Premium        | Gold (#d4af37) + Dark (#1a1a1a)   | Playfair Display | Premium consulting, elegance     |
+| **VibeCode**      | Tech/Modern           | Blue/Green/Purple tech palette    | JetBrains Mono   | Development, innovation, code    |
 
 #### Component Inheritance Model
 
@@ -653,7 +655,7 @@ const site = getCurrentSite();
 <div class="bg-primary-500 text-white">
   <h1 class="font-sans">{site.name}</h1>
   <!-- FastVistos: blue bg, Source Sans Pro -->
-  <!-- ConceptVistos: gold bg, Playfair Display -->  
+  <!-- ConceptVistos: gold bg, Playfair Display -->
   <!-- VibeCode: tech blue bg, JetBrains Mono -->
 </div>
 ```
@@ -685,19 +687,19 @@ const fastvistos = getSiteConfig('fastvistos');
 Each site has its own BaseLayout with unique styling and functionality:
 
 - **FastVistos**: `/multi-sites/sites/fastvistos/layouts/BaseLayout.astro`
-  - Visa-focused styling with business schema
-  - Enhanced navigation with visa-specific components
-  - Custom animations for visa cards and success badges
+    - Visa-focused styling with business schema
+    - Enhanced navigation with visa-specific components
+    - Custom animations for visa cards and success badges
 
-- **ConceptVistos**: `/multi-sites/sites/conceptvistos/layouts/BaseLayout.astro`  
-  - Premium consultancy styling with luxury design
-  - Playfair Display fonts and gold accents
-  - Professional service schema for high-end consulting
+- **ConceptVistos**: `/multi-sites/sites/conceptvistos/layouts/BaseLayout.astro`
+    - Premium consultancy styling with luxury design
+    - Playfair Display fonts and gold accents
+    - Professional service schema for high-end consulting
 
 - **VibeCode**: `/multi-sites/sites/vibecode/layouts/BaseLayout.astro`
-  - Modern tech styling with developer focus
-  - JetBrains Mono fonts and code syntax highlighting  
-  - Organization schema with technical expertise
+    - Modern tech styling with developer focus
+    - JetBrains Mono fonts and code syntax highlighting
+    - Organization schema with technical expertise
 
 ### Shared Blog System with Site-Specific Content
 
@@ -757,7 +759,7 @@ syncBlogToSite(siteId) {
 Shared structured data components for SEO optimization:
 
 - `JsonLdArticle.astro` - Blog article schema
-- `JsonLdLocalBusiness.astro` - Business information  
+- `JsonLdLocalBusiness.astro` - Business information
 - `JsonLdOrganization.astro` - Company details
 - `JsonLdService.astro` - Service offerings
 - `JsonLdFAQ.astro` - Frequently asked questions
@@ -771,11 +773,12 @@ Each site has its own dedicated Tailwind CSS configuration for complete design a
 
 ```
 ├── tailwind.fastvistos.config.js     # FastVistos blue/orange theme
-├── tailwind.conceptvistos.config.js  # ConceptVistos gold/luxury theme  
+├── tailwind.conceptvistos.config.js  # ConceptVistos gold/luxury theme
 └── tailwind.vibecode.config.js       # VibeCode tech blue/green theme
 ```
 
 **FastVistos Theme** (`tailwind.fastvistos.config.js`):
+
 ```javascript
 // Blue/orange visa service theme
 colors: {
@@ -794,6 +797,7 @@ fontFamily: {
 ```
 
 **ConceptVistos Theme** (`tailwind.conceptvistos.config.js`):
+
 ```javascript
 // Gold/luxury premium theme
 colors: {
@@ -812,6 +816,7 @@ fontFamily: {
 ```
 
 **VibeCode Theme** (`tailwind.vibecode.config.js`):
+
 ```javascript
 // Tech blue/green/purple theme
 colors: {
@@ -839,10 +844,10 @@ The build system automatically loads the correct Tailwind config based on `SITE_
 ```javascript
 // multi-sites.config.mjs
 plugins: [
-  tailwindcss({ 
-    config: `./tailwind.${process.env.SITE_ID || 'fastvistos'}.config.js` 
-  })
-]
+    tailwindcss({
+        config: `./tailwind.${process.env.SITE_ID || 'fastvistos'}.config.js`,
+    }),
+];
 ```
 
 ### Site-Specific Public Assets
@@ -852,9 +857,10 @@ Each site has its own public folder with independent assets:
 ```
 public-sites/
 ├── fastvistos/        # FastVistos assets (favicons, images, etc.)
-├── conceptvistos/     # ConceptVistos assets  
+├── conceptvistos/     # ConceptVistos assets
 └── vibecode/          # VibeCode assets
 ```
+
 - Centralized site management
 - Type-safe site configurations
 
@@ -871,6 +877,7 @@ const topics = await getTopicsWithArticles(3);
 ```
 
 **Features:**
+
 - Site-aware content filtering
 - Backward compatibility with existing blog service
 - Proper TypeScript types
@@ -894,6 +901,7 @@ import BaseLayout from '../multi-sites/core/layouts/BaseLayout.astro';
 ```
 
 **Features:**
+
 - Automatic site-specific meta tags
 - Dynamic CSS variables for site theming
 - Site-specific structured data
@@ -912,6 +920,7 @@ import Navigation from '../multi-sites/core/components/Navigation.astro';
 ```
 
 **Features:**
+
 - Site-specific navigation links
 - Dynamic logo and branding
 - Site-specific CTA buttons
@@ -951,13 +960,19 @@ Each site has automatic CSS variables applied:
 
 ```css
 :root {
-  --primary-color: #FF6B35;    /* Site-specific primary color */
-  --secondary-color: #1E3A8A;  /* Site-specific secondary color */
+    --primary-color: #ff6b35; /* Site-specific primary color */
+    --secondary-color: #1e3a8a; /* Site-specific secondary color */
 }
 
-.site-primary-bg { background-color: var(--primary-color); }
-.site-primary-text { color: var(--primary-color); }
-.site-gradient { background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); }
+.site-primary-bg {
+    background-color: var(--primary-color);
+}
+.site-primary-text {
+    color: var(--primary-color);
+}
+.site-gradient {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
 ```
 
 ## 🔄 Migration Guide
@@ -965,27 +980,29 @@ Each site has automatic CSS variables applied:
 ### From Single-Site to Multi-Site
 
 1. **Update imports** in your components:
-   ```astro
-   <!-- Old -->
-   import BaseLayout from '../layouts/BaseLayout.astro';
-   import { getPublishedArticles } from '../lib/blog-service.ts';
-   
-   <!-- New -->
-   import BaseLayout from '../multi-sites/core/layouts/BaseLayout.astro';
-   import { getPublishedArticles } from '../multi-sites/core/lib/multi-blog-service.ts';
-   ```
+
+    ```astro
+    <!-- Old -->
+    import BaseLayout from '../layouts/BaseLayout.astro';
+    import { getPublishedArticles } from '../lib/blog-service.ts';
+
+    <!-- New -->
+    import BaseLayout from '../multi-sites/core/layouts/BaseLayout.astro';
+    import { getPublishedArticles } from '../multi-sites/core/lib/multi-blog-service.ts';
+    ```
 
 2. **Update Astro config**:
-   ```bash
-   # Use multi-site config
-   astro dev --config multi-sites.config.mjs
-   ```
+
+    ```bash
+    # Use multi-site config
+    astro dev --config multi-sites.config.mjs
+    ```
 
 3. **Set site context**:
-   ```bash
-   # Set environment variable
-   SITE_ID=fastvistos astro dev --config multi-sites.config.mjs
-   ```
+    ```bash
+    # Set environment variable
+    SITE_ID=fastvistos astro dev --config multi-sites.config.mjs
+    ```
 
 ## 🚀 Deployment
 
@@ -996,7 +1013,7 @@ Set the appropriate site ID for each deployment:
 ```bash
 # Production deployment
 SITE_ID=fastvistos npm run build
-SITE_ID=conceptvistos npm run build  
+SITE_ID=conceptvistos npm run build
 SITE_ID=vibecode npm run build
 ```
 
@@ -1020,12 +1037,12 @@ You can deploy each site independently:
 SITE_ID=fastvistos npm run build
 # Upload dist/fastvistos/ to fastvistos.com.br
 
-# Deploy ConceptVistos to production  
+# Deploy ConceptVistos to production
 SITE_ID=conceptvistos npm run build
 # Upload dist/conceptvistos/ to conceptvistos.com.br
 
 # Deploy VibeCode to production
-SITE_ID=vibecode npm run build  
+SITE_ID=vibecode npm run build
 # Upload dist/vibecode/ to vibecode-lovable.com.br
 ```
 
@@ -1034,34 +1051,36 @@ SITE_ID=vibecode npm run build
 ### Adding a New Site
 
 1. **Add site to SiteManager**:
-   ```typescript
-   // multi-sites/core/lib/site-manager.ts
-   export const SITES = {
-     // ... existing sites
-     newsite: {
-       id: 'newsite',
-       domain: 'newsite.com',
-       name: 'New Site',
-       // ... site configuration
-     }
-   };
-   ```
+
+    ```typescript
+    // multi-sites/core/lib/site-manager.ts
+    export const SITES = {
+        // ... existing sites
+        newsite: {
+            id: 'newsite',
+            domain: 'newsite.com',
+            name: 'New Site',
+            // ... site configuration
+        },
+    };
+    ```
 
 2. **Create site configuration**:
-   ```bash
-   mkdir multi-sites/sites/newsite
-   touch multi-sites/sites/newsite/config.ts
-   ```
+
+    ```bash
+    mkdir multi-sites/sites/newsite
+    touch multi-sites/sites/newsite/config.ts
+    ```
 
 3. **Add build scripts**:
-   ```json
-   {
-     "scripts": {
-       "dev:newsite": "SITE_ID=newsite astro dev --config multi-sites.config.mjs",
-       "build:newsite": "SITE_ID=newsite astro build --config multi-sites.config.mjs"
-     }
-   }
-   ```
+    ```json
+    {
+        "scripts": {
+            "dev:newsite": "SITE_ID=newsite astro dev --config multi-sites.config.mjs",
+            "build:newsite": "SITE_ID=newsite astro build --config multi-sites.config.mjs"
+        }
+    }
+    ```
 
 ### Custom Components
 
@@ -1091,15 +1110,15 @@ const site = getCurrentSite();
 
 **Latest Test Results (September 11, 2025)**: All systems operational after implementing content collections.
 
-| Test | FastVistos | ConceptVistos | VibeCode | Status |
-|------|------------|---------------|----------|---------|
-| Development Server | ✅ Working | ✅ Working | ✅ Working | **PASS** |
-| Content Collections | ✅ Working | ✅ Working | ✅ Working | **PASS** |
+| Test                  | FastVistos    | ConceptVistos | VibeCode      | Status   |
+| --------------------- | ------------- | ------------- | ------------- | -------- |
+| Development Server    | ✅ Working    | ✅ Working    | ✅ Working    | **PASS** |
+| Content Collections   | ✅ Working    | ✅ Working    | ✅ Working    | **PASS** |
 | Site-Specific Content | ✅ 3 Articles | ✅ 3 Articles | ✅ 3 Articles | **PASS** |
-| Blog Sync System | ✅ Working | ✅ Working | ✅ Working | **PASS** |
-| Public Assets | ✅ Working | ✅ Working | ✅ Working | **PASS** |
-| Build Process | ✅ 5 Pages | ✅ 5 Pages | ✅ 5 Pages | **PASS** |
-| Site-Specific Styling | ✅ Applied | ✅ Applied | ✅ Applied | **PASS** |
+| Blog Sync System      | ✅ Working    | ✅ Working    | ✅ Working    | **PASS** |
+| Public Assets         | ✅ Working    | ✅ Working    | ✅ Working    | **PASS** |
+| Build Process         | ✅ 5 Pages    | ✅ 5 Pages    | ✅ 5 Pages    | **PASS** |
+| Site-Specific Styling | ✅ Applied    | ✅ Applied    | ✅ Applied    | **PASS** |
 
 ### Build Output Verification
 
@@ -1112,7 +1131,7 @@ npm run build:fastvistos
 # ✅ Content from: multi-sites/sites/fastvistos/content/blog/
 # ✅ Assets from: public-sites/fastvistos/
 
-# ConceptVistos Build Output  
+# ConceptVistos Build Output
 npm run build:conceptvistos
 # ✅ 5 pages: home + blog listing + 3 articles
 # ✅ Content from: multi-sites/sites/conceptvistos/content/blog/
@@ -1120,7 +1139,7 @@ npm run build:conceptvistos
 
 # VibeCode Build Output
 npm run build:vibecode
-# ✅ 5 pages: home + blog listing + 3 articles  
+# ✅ 5 pages: home + blog listing + 3 articles
 # ✅ Content from: multi-sites/sites/vibecode/content/blog/
 # ✅ Assets from: public-sites/vibecode/
 ```
@@ -1133,7 +1152,7 @@ npm run dev:fastvistos
 # ✅ Loads content from: multi-sites/sites/fastvistos/content/blog/
 # ✅ Blog: http://localhost:3000/blog
 
-# Test ConceptVistos with site-specific content  
+# Test ConceptVistos with site-specific content
 npm run dev:conceptvistos
 # ✅ Loads content from: multi-sites/sites/conceptvistos/content/blog/
 # ✅ Blog: http://localhost:3000/blog
@@ -1151,18 +1170,18 @@ All sites use proper Astro content collections with validated schemas:
 ```typescript
 // Each site: multi-sites/sites/{site}/content/config.ts
 const blogCollection = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    pubDate: z.string(),
-    updatedDate: z.string().optional(),
-    topic: z.string(),
-    topicSlug: z.string(),
-    image: z.string().default(''),
-    type: z.string(),
-    published: z.boolean(),
-  }),
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        pubDate: z.string(),
+        updatedDate: z.string().optional(),
+        topic: z.string(),
+        topicSlug: z.string(),
+        image: z.string().default(''),
+        type: z.string(),
+        published: z.boolean(),
+    }),
 });
 ```
 
@@ -1175,7 +1194,7 @@ Each site builds with its dedicated Tailwind configuration and theme:
 ```bash
 # Production builds with site-specific Tailwind configs
 npm run build:fastvistos     # → dist/ with blue/orange theme
-npm run build:conceptvistos  # → dist/ with gold/luxury theme  
+npm run build:conceptvistos  # → dist/ with gold/luxury theme
 npm run build:vibecode       # → dist/ with tech theme
 ```
 
@@ -1204,48 +1223,48 @@ To add a new site to the architecture:
 
 1. **Add site configuration to SiteManager**:
 
-   ```typescript
-   // multi-sites/core/lib/site-manager.ts
-   export const SITES = {
-     // ... existing sites
-     newsite: {
-       id: 'newsite',
-       domain: 'newsite.com',
-       name: 'New Site',
-       primaryColor: '#007acc',
-       secondaryColor: '#005999',
-       // ... additional configuration
-     }
-   };
-   ```
+    ```typescript
+    // multi-sites/core/lib/site-manager.ts
+    export const SITES = {
+        // ... existing sites
+        newsite: {
+            id: 'newsite',
+            domain: 'newsite.com',
+            name: 'New Site',
+            primaryColor: '#007acc',
+            secondaryColor: '#005999',
+            // ... additional configuration
+        },
+    };
+    ```
 
 2. **Create site directory structure**:
 
-   ```bash
-   mkdir -p multi-sites/sites/newsite/{layouts,pages,components}
-   mkdir -p public-sites/newsite
-   ```
+    ```bash
+    mkdir -p multi-sites/sites/newsite/{layouts,pages,components}
+    mkdir -p public-sites/newsite
+    ```
 
 3. **Create site-specific BaseLayout**:
 
-   ```bash
-   # Copy and customize from existing site
-   cp multi-sites/sites/fastvistos/layouts/BaseLayout.astro \
-      multi-sites/sites/newsite/layouts/BaseLayout.astro
-   ```
+    ```bash
+    # Copy and customize from existing site
+    cp multi-sites/sites/fastvistos/layouts/BaseLayout.astro \
+       multi-sites/sites/newsite/layouts/BaseLayout.astro
+    ```
 
 4. **Create homepage**:
 
-   ```bash
-   # Create simple homepage
-   touch multi-sites/sites/newsite/pages/index.astro
-   ```
+    ```bash
+    # Create simple homepage
+    touch multi-sites/sites/newsite/pages/index.astro
+    ```
 
 5. **Test the new site**:
 
-   ```bash
-   SITE_ID=newsite npm run dev
-   ```
+    ```bash
+    SITE_ID=newsite npm run dev
+    ```
 
 ## 💻 **Development Workflow**
 
@@ -1258,12 +1277,14 @@ npm run dev:watch:fastvistos
 ```
 
 **What happens:**
+
 1. **Initial sync**: Runs `sync-blog.js` to copy latest templates
 2. **File watcher**: Monitors core template files for changes
 3. **Auto-sync**: Automatically runs sync when core files change
 4. **Hot reload**: Astro detects synced changes and reloads browser
 
 **Files watched:**
+
 - `multi-sites/core/pages/blog/**/*`
 - `multi-sites/core/layouts/**/*`
 - `multi-sites/core/components/**/*`
@@ -1291,37 +1312,40 @@ const whatsappLink = SiteConfigHelper.getWhatsAppLink(siteConfig, 'Hello!');
 ### **3. Adding New Sites**
 
 1. **Create site directory structure**:
-   ```bash
-   mkdir -p multi-sites/sites/newsite/{components,content/blog,layouts,pages}
-   ```
+
+    ```bash
+    mkdir -p multi-sites/sites/newsite/{components,content/blog,layouts,pages}
+    ```
 
 2. **Create site configuration**:
-   ```typescript
-   // multi-sites/sites/newsite/site-config.ts
-   import type { SiteConfig } from '../../core/lib/site-config.ts';
-   
-   export const siteConfig: SiteConfig = {
-     id: 'newsite',
-     domain: 'newsite.com',
-     name: 'New Site',
-     // ... configure as needed
-   };
-   ```
+
+    ```typescript
+    // multi-sites/sites/newsite/site-config.ts
+    import type { SiteConfig } from '../../core/lib/site-config.ts';
+
+    export const siteConfig: SiteConfig = {
+        id: 'newsite',
+        domain: 'newsite.com',
+        name: 'New Site',
+        // ... configure as needed
+    };
+    ```
 
 3. **Add npm scripts**:
-   ```json
-   {
-     "dev:newsite": "node sync-blog.js && SITE_ID=newsite astro dev --config multi-sites.config.mjs",
-     "dev:watch:newsite": "node dev-with-sync.js newsite",
-     "build:newsite": "node sync-blog.js && SITE_ID=newsite astro build --config multi-sites.config.mjs"
-   }
-   ```
+
+    ```json
+    {
+        "dev:newsite": "node sync-blog.js && SITE_ID=newsite astro dev --config multi-sites.config.mjs",
+        "dev:watch:newsite": "node dev-with-sync.js newsite",
+        "build:newsite": "node sync-blog.js && SITE_ID=newsite astro build --config multi-sites.config.mjs"
+    }
+    ```
 
 4. **Create public assets directory**:
-   ```bash
-   mkdir -p public-sites/newsite
-   # Add favicon, logo, etc.
-   ```
+    ```bash
+    mkdir -p public-sites/newsite
+    # Add favicon, logo, etc.
+    ```
 
 ### **4. Updating Templates**
 
@@ -1340,7 +1364,7 @@ Each site manages its own content:
 # Add new blog post for FastVistos
 touch multi-sites/sites/fastvistos/content/blog/new-post.md
 
-# Add new blog post for ConceptVistos  
+# Add new blog post for ConceptVistos
 touch multi-sites/sites/conceptvistos/content/blog/new-post.md
 ```
 
@@ -1349,20 +1373,23 @@ Content is automatically picked up by Astro's content collections system.
 ## 🔧 **Available Scripts**
 
 ### **Development**
+
 - `npm run dev:watch:fastvistos` - FastVistos with auto-sync
-- `npm run dev:watch:conceptvistos` - ConceptVistos with auto-sync  
+- `npm run dev:watch:conceptvistos` - ConceptVistos with auto-sync
 - `npm run dev:watch:vibecode` - VibeCode with auto-sync
 - `npm run dev:fastvistos` - FastVistos (sync once at start)
 - `npm run dev:conceptvistos` - ConceptVistos (sync once at start)
 - `npm run dev:vibecode` - VibeCode (sync once at start)
 
 ### **Build & Deploy**
+
 - `npm run build:all` - Build all sites
 - `npm run build:fastvistos` - Build FastVistos only
 - `npm run build:conceptvistos` - Build ConceptVistos only
 - `npm run build:vibecode` - Build VibeCode only
 
 ### **Maintenance**
+
 - `npm run sync-blog` - Manual template sync
 - `npm run watch-sync` - File watcher only
 - `npm run generate-site-registry` - Update site registry (if using centralized approach)
@@ -1416,7 +1443,7 @@ npm run build:vibecode  # Syncs templates → builds with VibeCode content
 ✅ **Easy Scaling**: Add new sites without affecting existing ones  
 ✅ **Performance**: Only loads what each site needs  
 ✅ **SEO Optimized**: Site-specific meta tags and structured data  
-✅ **Developer Experience**: Clean development workflow with dedicated scripts  
+✅ **Developer Experience**: Clean development workflow with dedicated scripts
 
 ## 🛠️ Development Workflow
 
@@ -1483,12 +1510,14 @@ The core JSON-LD components are now shared:
 ### **Blog Article Errors**
 
 #### "window is not defined" Error
+
 - **Symptoms**: Error when loading blog article pages during SSR
 - **Cause**: Client-side JavaScript (like `window.location.href`) running during server-side rendering
 - **Solution**: Move client-side code to `<script>` tags or use proper browser API checks
 - **Status**: ✅ Fixed in latest version
 
 #### 404 Errors on Blog Articles
+
 - **Symptoms**: Blog index loads but individual articles return 404
 - **Cause**: Missing or incorrect `getStaticPaths()` implementation, conflicting route files
 - **Solution**: Ensure `[...slug].astro` is used (not `[slug].astro`), check business_id filtering
@@ -1497,12 +1526,14 @@ The core JSON-LD components are now shared:
 ### **Development Issues**
 
 #### Templates Not Syncing
+
 - **Symptoms**: Changes to core templates not appearing in site-specific files
 - **Cause**: File watcher not running or sync script issues
 - **Solution**: Use `npm run dev:watch:siteid` instead of regular dev command
 - **Manual Fix**: Run `npm run sync-blog` manually
 
 #### Site Not Found Errors
+
 - **Symptoms**: "Could not load configuration for site" warnings
 - **Cause**: Missing site-config.ts file or incorrect site ID
 - **Solution**: Create site with `node create-site.js` or check site-config.ts exists
@@ -1510,12 +1541,14 @@ The core JSON-LD components are now shared:
 ### **Content Generation Issues**
 
 #### No Articles Generated
+
 - **Symptoms**: Script runs but no markdown files created
 - **Cause**: Business ID mismatch between config and database
 - **Solution**: Verify business_id in site-config.ts matches database records
 - **Debug**: Use `npm run test:blog` to test database connectivity
 
 #### HTML Not Converting to Markdown
+
 - **Symptoms**: Raw HTML appearing in generated markdown
 - **Cause**: Using basic script instead of advanced conversion
 - **Solution**: Use `node generate-blog-advanced.js` for HTML-to-Markdown conversion
@@ -1523,6 +1556,7 @@ The core JSON-LD components are now shared:
 ### **Build Issues**
 
 #### Build Fails with Missing Files
+
 - **Symptoms**: Build process fails with "file not found" errors
 - **Cause**: Templates not synced before build
 - **Solution**: Ensure sync runs before build (npm scripts handle this automatically)
@@ -1545,6 +1579,7 @@ node generate-blog-advanced.js siteid
 # Create new site properly
 node create-site.js
 ```
+
 - **Usage**: Available to all sites for SEO optimization
 
 ## 🤝 Contributing
@@ -1552,14 +1587,14 @@ node create-site.js
 When adding features:
 
 1. **Shared functionality** → `multi-sites/core/`
-2. **Site-specific features** → `multi-sites/sites/{site}/`  
+2. **Site-specific features** → `multi-sites/sites/{site}/`
 3. **Test across all sites** using different `SITE_ID` values
 4. **Update documentation** for significant architectural changes
 
 ## � Future Enhancements
 
 - **Multi-tenancy**: Add site_id columns to database tables for complete data separation
-- **Advanced Analytics**: Site-specific tracking and performance monitoring  
+- **Advanced Analytics**: Site-specific tracking and performance monitoring
 - **A/B Testing**: Site-specific feature flags and experimentation
 - **Internationalization**: Multi-language support for global expansion
 - **Advanced Deployment**: CI/CD pipelines for independent site deployments
