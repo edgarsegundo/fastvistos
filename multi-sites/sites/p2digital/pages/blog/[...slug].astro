@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { siteConfig } from '../../site-config.ts';
 import '../../styles/markdown-blog.css';
 
@@ -18,7 +19,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 
 // Render the markdown content
-const { Content } = await entry.render();
+const { Content, headings } = await entry.render();
 
 const title = `${entry.data.title} - ${siteConfig.name} Blog`;
 const description = entry.data.description || entry.data.title;
@@ -28,39 +29,77 @@ const description = entry.data.description || entry.data.title;
     title={title}
     description={description}
 >
-    <article class="blog-article max-w-4xl mx-auto px-4 py-8">
-        <header class="article-header">
-            <h1 class="article-title">{entry.data.title}</h1>
-            
-            <div class="article-meta">
-                <time datetime={entry.data.pubDate}>
-                    {new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    })}
-                </time>
+    <div class="blog-layout-container">
+        <!-- Main Article Content -->
+        <article class="blog-article">
+            <header class="article-header">
+                <h1 class="article-title">{entry.data.title}</h1>
                 
-                {entry.data.topic && (
-                    <span class="article-topic">
-                        {entry.data.topic}
-                    </span>
+                <div class="article-meta">
+                    <time datetime={entry.data.pubDate}>
+                        {new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}
+                    </time>
+                    
+                    {entry.data.topic && (
+                        <span class="article-topic">
+                            {entry.data.topic}
+                        </span>
+                    )}
+                </div>
+
+                {entry.data.image && entry.data.image !== "/assets/images/blog/" && (
+                    <img 
+                        src={entry.data.image}
+                        alt={entry.data.title}
+                        class="article-image"
+                    />
                 )}
+            </header>
+
+            <!-- Professional styled markdown content -->
+            <div class="blog-content">
+                <Content />
             </div>
+        </article>
 
-            {entry.data.image && entry.data.image !== "/assets/images/blog/" && (
-                <img 
-                    src={entry.data.image}
-                    alt={entry.data.title}
-                    class="article-image"
-                />
-            )}
-        </header>
-
-        <!-- Professional styled markdown content -->
-        <div class="blog-content">
-            <Content />
-        </div>
-    </article>
+        <!-- Table of Contents Sidebar -->
+        <TableOfContents headings={headings} />
+    </div>
 </SharedBlogLayout>
+
+<style>
+    .blog-layout-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 3rem;
+        align-items: start;
+    }
+
+    .blog-article {
+        min-width: 0; /* Prevents grid overflow */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .blog-layout-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .blog-layout-container {
+            padding: 1rem;
+            gap: 1.5rem;
+        }
+    }
+</style>
 </SharedBlogLayout>
