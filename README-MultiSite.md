@@ -1394,6 +1394,32 @@ Content is automatically picked up by Astro's content collections system.
 - `npm run watch-sync` - File watcher only
 - `npm run generate-site-registry` - Update site registry (if using centralized approach)
 
+### **Database Schema Updates with Prisma**
+
+When you add new fields to your MySQL database and Django models, update the Prisma schema:
+
+```bash
+# 1. Pull latest database structure
+npx prisma db pull
+
+# 2. Generate updated client
+npx prisma generate
+
+# 3. Check what changed
+git diff prisma/schema.prisma
+
+# 4. Commit the changes
+git add prisma/schema.prisma
+git commit -m "Update Prisma schema with new blog fields"
+```
+
+**Why this approach:**
+
+- ✅ **Automatic** - No manual editing required
+- ✅ **Accurate** - Reflects exact database state
+- ✅ **Safe** - Preserves existing schema configuration
+- ✅ **Standard** - Official Prisma workflow
+
 ## 🎯 Recent Architecture Achievements
 
 ### ✅ **Content Collections Implementation (September 2025)**
@@ -1537,6 +1563,34 @@ The core JSON-LD components are now shared:
 - **Symptoms**: "Could not load configuration for site" warnings
 - **Cause**: Missing site-config.ts file or incorrect site ID
 - **Solution**: Create site with `node create-site.js` or check site-config.ts exists
+
+#### Vite Cache Issues
+
+- **Symptoms**: Build errors, compilation issues, hot reload not working, strange development server behavior
+- **Cause**: Corrupted Vite compilation cache
+- **Solution**: Clear cache and restart development server
+
+```bash
+# Clear Vite cache and restart dev server
+rm -rf node_modules/.vite .astro && npm run dev
+
+# For specific site development with auto-sync
+rm -rf node_modules/.vite .astro && npm run dev:watch:fastvistos
+
+# If cache clearing doesn't help, reinstall dependencies
+rm -rf node_modules package-lock.json && npm install
+
+# Nuclear option - reset everything
+rm -rf node_modules package-lock.json .astro node_modules/.vite && npm install
+```
+
+**When to use cache clearing:**
+
+- ✅ Build errors unrelated to code changes
+- ✅ Hot reload stops working
+- ✅ Compilation errors after switching branches
+- ✅ After major dependency updates
+- ✅ Unexplained development server issues
 
 ### **Content Generation Issues**
 
