@@ -43,46 +43,59 @@ Deploy your built sites to the production server using the deployment scripts:
 #### **Node.js Deployment Script**
 
 ```bash
-node deploy-site.js <siteid>
+node deploy-site.js [siteid]
 ```
 
-#### **Bash Deployment Script** 
+#### **Bash Deployment Script**
 
 ```bash
-./deploy-site.sh <siteid>
+./deploy-site.sh [siteid]
 ```
 
 #### **Example Usage:**
 
 ```bash
-# Build and deploy FastVistos
+# Interactive mode - shows menu of available sites
+node deploy-site.js
+./deploy-site.sh
+
+# Direct deployment by site name
+node deploy-site.js fastvistos
+./deploy-site.sh p2digital
+
+# Build and deploy workflow
 npm run build:fastvistos
 node deploy-site.js fastvistos
 
-# Build and deploy P2Digital
-npm run build:p2digital  
-./deploy-site.sh p2digital
-
-# Show available sites and usage
-node deploy-site.js
-./deploy-site.sh
+# Show available sites
+node deploy-site.js --help
 ```
+
+#### **Key Features:**
+
+✅ **Auto-Detection** - Automatically discovers sites from `./dist/` folder  
+✅ **Interactive Mode** - Shows numbered menu when no site specified  
+✅ **Site-Specific** - Only deploys the specific site folder (`./dist/sitename/`)  
+✅ **Dynamic Paths** - Automatically maps sites to `/var/www/sitename`  
+✅ **No Configuration** - No need to edit scripts when adding new sites
 
 #### **What the deployment scripts do:**
 
-1. **Validate inputs** - Check if site ID exists and dist folder is present
-2. **Setup remote directory** - `ssh edgar@72.60.57.150 "sudo mkdir -p /var/www/sitepath && sudo chown edgar:edgar /var/www/sitepath"`
-3. **Sync files** - `rsync -avz --delete ./dist/ edgar@72.60.57.150:/var/www/sitepath`
-4. **Fix permissions** - `ssh edgar@72.60.57.150 "sudo chown -R www-data:www-data /var/www/sitepath"`
-5. **Provide feedback** - Clear success/error messages with colored output
-4. **Provide feedback** - Clear success/error messages with colored output
+1. **Auto-detect sites** - Scan `./dist/` folder for available built sites
+2. **Validate selection** - Check if chosen site exists and is built
+3. **Setup remote directory** - `ssh edgar@72.60.57.150 "sudo mkdir -p /var/www/sitename && sudo chown edgar:edgar /var/www/sitename"`
+4. **Sync files** - `rsync -avz --delete ./dist/sitename/ edgar@72.60.57.150:/var/www/sitename`
+5. **Fix permissions** - `ssh edgar@72.60.57.150 "sudo chown -R www-data:www-data /var/www/sitename"`
+6. **Provide feedback** - Clear success/error messages with colored output
 
-#### **Pre-configured Sites:**
+#### **Supported Sites:**
 
-- `fastvistos` → `/var/www/fastvistos`
-- `p2digital` → `/var/www/p2digital`
+Sites are **automatically detected** from your `./dist/` folder. Any site you build will be available for deployment:
+- `fastvistos` → `fastvistos.com` (`/var/www/fastvistos`)
+- `p2digital` → `p2digital.com` (`/var/www/p2digital`)
+- Any new site you create → `sitename.com` (`/var/www/sitename`)
 
-> **Note:** To add new sites, update the site configuration in `deploy-site.js` or `deploy-site.sh`
+> **Note:** No configuration needed! Sites are discovered automatically when you build them.
 
 #### **Troubleshooting Deployment Issues**
 
