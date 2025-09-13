@@ -1,15 +1,14 @@
 ---
 /**
- * Documentation Viewer and Editor
+ * Simple Documentation Viewer
  * 
- * This page provides a comprehensive interface for viewing and editing
- * all markdown documentation files in the project using editor.md.
- * It demonstrates the revolutionary documentation system in action.
+ * A reliable documentation viewer that displays markdown files
+ * without complex dependencies. Shows actual file names organized by folders.
  */
 
-// For now, we'll use a static list of documents that will be populated via API
+// For now, we'll load documents via API
 const documents = [];
-const documentsByCategory = {};
+const documentsByFolder = {};
 const totalDocs = 0;
 const totalWords = 0;
 const totalSize = 0;
@@ -20,10 +19,10 @@ const totalSize = 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revolutionary Documentation System - Viewer & Editor</title>
+    <title>Documentation System - Simple Viewer</title>
     
-    <!-- Editor.md CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css" />
+    <!-- Marked.js for markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@9.1.2/marked.min.js"></script>
     
     <!-- Custom styles -->
     <style>
@@ -159,17 +158,6 @@ const totalSize = 0;
             font-size: 1rem;
         }
         
-        .doc-description {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-        
-        .doc-item.active .doc-description {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
         .doc-meta {
             display: flex;
             justify-content: space-between;
@@ -181,7 +169,7 @@ const totalSize = 0;
             color: rgba(255, 255, 255, 0.8);
         }
         
-        .editor-container {
+        .viewer-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
@@ -191,7 +179,7 @@ const totalSize = 0;
             flex-direction: column;
         }
         
-        .editor-header {
+        .viewer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -200,13 +188,13 @@ const totalSize = 0;
             border-bottom: 2px solid #e9ecef;
         }
         
-        .editor-title {
+        .viewer-title {
             font-size: 1.3rem;
             color: #333;
             font-weight: 600;
         }
         
-        .editor-actions {
+        .viewer-actions {
             display: flex;
             gap: 10px;
         }
@@ -219,6 +207,8 @@ const totalSize = 0;
             font-size: 0.9rem;
             transition: all 0.3s ease;
             font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .btn-primary {
@@ -241,7 +231,7 @@ const totalSize = 0;
             background: #e9ecef;
         }
         
-        .editor-wrapper {
+        .content-wrapper {
             flex: 1;
             min-height: 500px;
             border: 1px solid #e9ecef;
@@ -314,6 +304,104 @@ const totalSize = 0;
             100% { transform: rotate(360deg); }
         }
         
+        .content-display {
+            padding: 30px;
+            background: white;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .content-display h1,
+        .content-display h2,
+        .content-display h3,
+        .content-display h4,
+        .content-display h5,
+        .content-display h6 {
+            color: #333;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        .content-display h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .content-display h2 {
+            font-size: 1.8rem;
+        }
+        
+        .content-display h3 {
+            font-size: 1.4rem;
+        }
+        
+        .content-display p {
+            line-height: 1.6;
+            margin-bottom: 1em;
+            color: #555;
+        }
+        
+        .content-display code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #d63384;
+        }
+        
+        .content-display pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+        
+        .content-display pre code {
+            background: none;
+            padding: 0;
+            color: #333;
+        }
+        
+        .content-display ul,
+        .content-display ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        .content-display li {
+            margin-bottom: 0.5em;
+            line-height: 1.6;
+        }
+        
+        .content-display blockquote {
+            border-left: 4px solid #667eea;
+            margin: 1em 0;
+            padding: 0.5em 1em;
+            background: #f8f9fa;
+            color: #555;
+        }
+        
+        .content-display table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+        
+        .content-display th,
+        .content-display td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        .content-display th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
         @media (max-width: 968px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -336,8 +424,8 @@ const totalSize = 0;
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Revolutionary Documentation System</h1>
-            <p>Advanced Documentation Viewer & Editor - Explore the future of development documentation</p>
+            <h1>📚 Documentation System</h1>
+            <p>Browse and view your project documentation with actual file names organized by folders</p>
             
             <div class="stats">
                 <div class="stat-card">
@@ -353,7 +441,7 @@ const totalSize = 0;
                     <div class="stat-label">Total Size</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="categoriesCount">0</div>
+                    <div class="stat-number" id="foldersCount">0</div>
                     <div class="stat-label">Folders</div>
                 </div>
             </div>
@@ -361,13 +449,13 @@ const totalSize = 0;
         
         <div class="main-content">
             <div class="sidebar">
-                <h2>📚 Documentation Library</h2>
+                <h2>📁 Documentation Library</h2>
                 
                 <input 
                     type="text" 
                     id="searchBox" 
                     class="search-box" 
-                    placeholder="🔍 Search documentation..."
+                    placeholder="🔍 Search files..."
                 />
                 
                 <div id="documentList">
@@ -378,49 +466,33 @@ const totalSize = 0;
                 </div>
             </div>
             
-            <div class="editor-container">
-                <div class="editor-header">
-                    <div class="editor-title" id="editorTitle">Select a document to view</div>
-                    <div class="editor-actions">
-                        <button class="btn btn-secondary" id="viewModeBtn">👁️ View</button>
-                        <button class="btn btn-secondary" id="editModeBtn">✏️ Edit</button>
-                        <button class="btn btn-primary" id="saveBtn" style="display: none;">💾 Save</button>
+            <div class="viewer-container">
+                <div class="viewer-header">
+                    <div class="viewer-title" id="viewerTitle">Select a document to view</div>
+                    <div class="viewer-actions">
                         <button class="btn btn-secondary" id="downloadBtn" style="display: none;">⬇️ Download</button>
                     </div>
                 </div>
                 
-                <div class="editor-wrapper">
+                <div class="content-wrapper">
                     <div class="welcome-message" id="welcomeMessage">
                         <div class="welcome-icon">📖</div>
-                        <div class="welcome-text">Welcome to the Revolutionary Documentation System</div>
-                        <div class="welcome-subtext">Select a document from the sidebar to start viewing or editing</div>
+                        <div class="welcome-text">Welcome to the Documentation System</div>
+                        <div class="welcome-subtext">Select a markdown file from the sidebar to view its content</div>
                     </div>
                     
-                    <div id="editormd" style="display: none;"></div>
+                    <div id="contentDisplay" class="content-display" style="display: none;"></div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Editor.md JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/prettify.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/raphael.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/underscore.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/sequence-diagram.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/flowchart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/jquery.flowchart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.min.js"></script>
-    
     <script>
-        class DocumentationViewer {
+        class SimpleDocumentationViewer {
             constructor() {
-                this.editor = null;
-                this.currentDoc = null;
-                this.isEditMode = false;
                 this.documents = [];
                 this.documentsByFolder = {};
+                this.currentDoc = null;
                 this.init();
             }
             
@@ -428,22 +500,24 @@ const totalSize = 0;
                 await this.loadDocumentList();
                 this.setupEventListeners();
                 this.setupSearch();
-                this.initializeEditor();
             }
             
             async loadDocumentList() {
                 try {
+                    console.log('Loading document list...');
                     const response = await fetch('/api/docs-list');
                     if (!response.ok) {
                         throw new Error(`Failed to load documents: ${response.statusText}`);
                     }
                     
                     const data = await response.json();
-                    this.documents = data.documents;
-                    this.documentsByFolder = data.documentsByFolder;
+                    console.log('Document data loaded:', data);
+                    
+                    this.documents = data.documents || [];
+                    this.documentsByFolder = data.documentsByFolder || {};
                     
                     // Update statistics
-                    this.updateStats(data.stats);
+                    this.updateStats(data.stats || {});
                     
                     // Render document list
                     this.renderDocumentList();
@@ -455,10 +529,10 @@ const totalSize = 0;
             }
             
             updateStats(stats) {
-                document.getElementById('totalDocsCount').textContent = stats.totalDocs;
-                document.getElementById('totalWordsCount').textContent = Math.round(stats.totalWords / 1000) + 'K';
-                document.getElementById('totalSizeCount').textContent = Math.round(stats.totalSize / 1024) + 'KB';
-                document.getElementById('categoriesCount').textContent = stats.folders;
+                document.getElementById('totalDocsCount').textContent = stats.totalDocs || 0;
+                document.getElementById('totalWordsCount').textContent = Math.round((stats.totalWords || 0) / 1000) + 'K';
+                document.getElementById('totalSizeCount').textContent = Math.round((stats.totalSize || 0) / 1024) + 'KB';
+                document.getElementById('foldersCount').textContent = stats.folders || 0;
             }
             
             renderDocumentList() {
@@ -489,7 +563,7 @@ const totalSize = 0;
                 
                 documentListElement.innerHTML = html;
                 
-                // Re-setup event listeners for new elements
+                // Setup event listeners for new elements
                 this.setupDocumentEventListeners();
             }
             
@@ -502,20 +576,6 @@ const totalSize = 0;
             }
             
             setupEventListeners() {
-                // Mode switching
-                document.getElementById('viewModeBtn').addEventListener('click', () => {
-                    this.switchToViewMode();
-                });
-                
-                document.getElementById('editModeBtn').addEventListener('click', () => {
-                    this.switchToEditMode();
-                });
-                
-                // Save functionality
-                document.getElementById('saveBtn').addEventListener('click', () => {
-                    this.saveDocument();
-                });
-                
                 // Download functionality
                 document.getElementById('downloadBtn').addEventListener('click', () => {
                     this.downloadDocument();
@@ -546,54 +606,10 @@ const totalSize = 0;
                 });
             }
             
-            initializeEditor() {
-                // Wait for editormd to be available
-                if (typeof editormd === 'undefined') {
-                    console.log('Editor.md not ready yet, retrying...');
-                    setTimeout(() => this.initializeEditor(), 100);
-                    return;
-                }
-                
-                try {
-                    // Initialize editor.md but keep it hidden initially
-                    this.editor = editormd("editormd", {
-                        width: "100%",
-                        height: "500px",
-                        path: "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/",
-                        markdown: "",
-                        codeFold: true,
-                        saveHTMLToTextarea: true,
-                        searchReplace: true,
-                        htmlDecode: "style,script,iframe",
-                        emoji: true,
-                        taskList: true,
-                        tocm: true,
-                        tex: true,
-                        flowChart: true,
-                        sequenceDiagram: true,
-                        syncScrolling: "single",
-                        toolbar: true,
-                        previewCodeHighlight: true,
-                        watch: false, // Start in view mode
-                        toolbarIcons: [
-                            "undo", "redo", "|",
-                            "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
-                            "h1", "h2", "h3", "h4", "h5", "h6", "|",
-                            "list-ul", "list-ol", "hr", "|",
-                            "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-                            "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
-                            "help", "info"
-                        ]
-                    });
-                    console.log('Editor initialized successfully');
-                } catch (error) {
-                    console.error('Error initializing editor:', error);
-                    this.showError('Failed to initialize editor');
-                }
-            }
-            
             async selectDocument(path, title) {
                 try {
+                    console.log('Selecting document:', path, title);
+                    
                     // Update UI
                     document.querySelectorAll('.doc-item').forEach(item => {
                         item.classList.remove('active');
@@ -604,9 +620,9 @@ const totalSize = 0;
                         selectedItem.classList.add('active');
                     }
                     
-                    document.getElementById('editorTitle').textContent = title;
+                    document.getElementById('viewerTitle').textContent = title;
                     document.getElementById('welcomeMessage').style.display = 'none';
-                    document.getElementById('editormd').style.display = 'block';
+                    document.getElementById('contentDisplay').style.display = 'block';
                     document.getElementById('downloadBtn').style.display = 'inline-block';
                     
                     // Show loading state
@@ -621,22 +637,8 @@ const totalSize = 0;
                     const content = await response.text();
                     this.currentDoc = { path, title, content };
                     
-                    // Check if editor is available before using it
-                    if (this.editor && this.editor.setMarkdown) {
-                        this.editor.setMarkdown(content);
-                    } else {
-                        console.warn('Editor not ready yet, displaying content in preview mode');
-                        const editorElement = document.getElementById('editormd');
-                        if (editorElement) {
-                            editorElement.innerHTML = `
-                                <div style="padding: 20px; background: white; border-radius: 10px; max-height: 500px; overflow-y: auto;">
-                                    <h3>${title}</h3>
-                                    <pre style="white-space: pre-wrap; font-family: monospace; line-height: 1.5;">${content}</pre>
-                                </div>
-                            `;
-                        }
-                    }
-                    this.hideLoading();
+                    // Render markdown content
+                    this.renderContent(content);
                     
                 } catch (error) {
                     console.error('Error loading document:', error);
@@ -644,89 +646,33 @@ const totalSize = 0;
                 }
             }
             
-            switchToViewMode() {
-                if (this.editor && this.editor.previewing) {
-                    this.editor.previewing();
-                    this.isEditMode = false;
-                    
-                    const viewBtn = document.getElementById('viewModeBtn');
-                    const editBtn = document.getElementById('editModeBtn');
-                    const saveBtn = document.getElementById('saveBtn');
-                    
-                    if (viewBtn) {
-                        viewBtn.classList.add('btn-primary');
-                        viewBtn.classList.remove('btn-secondary');
-                    }
-                    if (editBtn) {
-                        editBtn.classList.add('btn-secondary');
-                        editBtn.classList.remove('btn-primary');
-                    }
-                    if (saveBtn) {
-                        saveBtn.style.display = 'none';
-                    }
-                } else {
-                    console.warn('Editor not available for view mode');
-                }
-            }
-            
-            switchToEditMode() {
-                if (this.editor && this.editor.watch) {
-                    this.editor.watch();
-                    this.isEditMode = true;
-                    
-                    const editBtn = document.getElementById('editModeBtn');
-                    const viewBtn = document.getElementById('viewModeBtn');
-                    const saveBtn = document.getElementById('saveBtn');
-                    
-                    if (editBtn) {
-                        editBtn.classList.add('btn-primary');
-                        editBtn.classList.remove('btn-secondary');
-                    }
-                    if (viewBtn) {
-                        viewBtn.classList.add('btn-secondary');
-                        viewBtn.classList.remove('btn-primary');
-                    }
-                    if (saveBtn) {
-                        saveBtn.style.display = 'inline-block';
-                    }
-                } else {
-                    console.warn('Editor not available for edit mode');
-                    this.showError('Editor not ready. Please wait a moment and try again.');
-                }
-            }
-            
-            async saveDocument() {
-                if (!this.currentDoc || !this.isEditMode) return;
-                
+            renderContent(markdownContent) {
                 try {
-                    const content = this.editor.getMarkdown();
-                    
-                    const response = await fetch(`/api/docs/${encodeURIComponent(this.currentDoc.path)}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'text/plain',
-                        },
-                        body: content
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`Failed to save document: ${response.statusText}`);
-                    }
-                    
-                    this.currentDoc.content = content;
-                    this.showSuccess('Document saved successfully!');
-                    
+                    // Use marked.js to convert markdown to HTML
+                    const htmlContent = marked.parse(markdownContent);
+                    document.getElementById('contentDisplay').innerHTML = htmlContent;
                 } catch (error) {
-                    console.error('Error saving document:', error);
-                    this.showError('Failed to save document. Please try again.');
+                    console.error('Error rendering markdown:', error);
+                    // Fallback to plain text
+                    document.getElementById('contentDisplay').innerHTML = `
+                        <pre style="white-space: pre-wrap; font-family: monospace; line-height: 1.5;">${markdownContent}</pre>
+                    `;
                 }
+            }
+            
+            showLoading() {
+                document.getElementById('contentDisplay').innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading document...
+                    </div>
+                `;
             }
             
             downloadDocument() {
                 if (!this.currentDoc) return;
                 
-                const content = this.isEditMode ? this.editor.getMarkdown() : this.currentDoc.content;
-                const blob = new Blob([content], { type: 'text/markdown' });
+                const blob = new Blob([this.currentDoc.content], { type: 'text/markdown' });
                 const url = URL.createObjectURL(blob);
                 
                 const a = document.createElement('a');
@@ -738,89 +684,22 @@ const totalSize = 0;
                 URL.revokeObjectURL(url);
             }
             
-            showLoading() {
-                const editorElement = document.getElementById('editormd');
-                editorElement.innerHTML = '<div class="loading"><div class="spinner"></div>Loading document...</div>';
-            }
-            
-            hideLoading() {
-                // Editor.md will replace the content automatically
-            }
-            
-            showSuccess(message) {
-                this.showNotification(message, 'success');
-            }
-            
             showError(message) {
-                this.showNotification(message, 'error');
-            }
-            
-            showNotification(message, type) {
-                // Simple notification system
-                const notification = document.createElement('div');
-                notification.className = `notification notification-${type}`;
-                notification.textContent = message;
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    padding: 15px 20px;
-                    border-radius: 8px;
-                    color: white;
-                    font-weight: 500;
-                    z-index: 10000;
-                    animation: slideIn 0.3s ease;
-                    background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                document.getElementById('contentDisplay').innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #dc3545;">
+                        <h3>Error</h3>
+                        <p>${message}</p>
+                    </div>
                 `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.animation = 'slideOut 0.3s ease';
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 300);
-                }, 3000);
+                document.getElementById('contentDisplay').style.display = 'block';
+                document.getElementById('welcomeMessage').style.display = 'none';
             }
         }
         
-        // Add notification animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Initialize the documentation viewer when the page loads
-        $(document).ready(function() {
-            // Wait a bit more for all scripts to load
-            setTimeout(() => {
-                try {
-                    new DocumentationViewer();
-                } catch (error) {
-                    console.error('Error initializing DocumentationViewer:', error);
-                }
-            }, 500);
-        });
-        
-        // Fallback initialization if jQuery is not available
+        // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof $ === 'undefined') {
-                setTimeout(() => {
-                    try {
-                        new DocumentationViewer();
-                    } catch (error) {
-                        console.error('Error initializing DocumentationViewer:', error);
-                    }
-                }, 1000);
-            }
+            console.log('DOM loaded, initializing viewer...');
+            new SimpleDocumentationViewer();
         });
     </script>
 </body>
