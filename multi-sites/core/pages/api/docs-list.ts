@@ -23,41 +23,29 @@ export const GET: APIRoute = async () => {
       ignore: ['node_modules/**', '.git/**', 'dist/**', 'build/**', '.astro/**']
     });
 
-    // Read file metadata
+        // Read file metadata
     const documentList = await Promise.all(
       markdownFiles.map(async (filePath) => {
         try {
           const content = await readFile(filePath, 'utf-8');
-          const lines = content.split('\n');
-          const firstHeading = lines.find(line => line.startsWith('#'));
-          const title = firstHeading 
-            ? firstHeading.replace(/^#+\s*/, '').trim()
-            : basename(filePath, '.md');
           
-          // Extract first paragraph as description
-          const descriptionLine = lines.find(line => 
-            line.trim().length > 0 && 
-            !line.startsWith('#') && 
-            !line.startsWith('```') &&
-            !line.startsWith('---')
-          );
+          // Use the actual filename as the title
+          const fileName = basename(filePath);
           
-          const description = descriptionLine 
-            ? descriptionLine.trim().substring(0, 150) + '...'
-            : 'No description available';
+          // Get the folder path for categorization
+          const folderPath = filePath.includes('/') 
+            ? filePath.substring(0, filePath.lastIndexOf('/'))
+            : 'Root';
 
           // Estimate word count
           const wordCount = content.split(/\s+/).length;
           
           return {
             path: filePath,
-            title,
-            description,
+            fileName,
             wordCount,
             size: content.length,
-            category: filePath.includes('docs/') ? 'Documentation' :
-                     filePath.includes('components/') ? 'Components' :
-                     filePath.startsWith('README') ? 'README' : 'Other'
+            folder: folderPath
           };
         } catch (error) {
           console.error(`Error reading file ${filePath}:`, error);
@@ -68,12 +56,12 @@ export const GET: APIRoute = async () => {
 
     const documents = documentList.filter(Boolean);
 
-    // Group documents by category
-    const documentsByCategory = documents.reduce((acc, doc) => {
-      if (!acc[doc.category]) {
-        acc[doc.category] = [];
+    // Group documents by folder
+    const documentsByFolder = documents.reduce((acc, doc) => {
+      if (!acc[doc.folder]) {
+        acc[doc.folder] = [];
       }
-      acc[doc.category].push(doc);
+      acc[doc.folder].push(doc);
       return acc;
     }, {});
 
@@ -82,12 +70,12 @@ export const GET: APIRoute = async () => {
       totalDocs: documents.length,
       totalWords: documents.reduce((sum, doc) => sum + doc.wordCount, 0),
       totalSize: documents.reduce((sum, doc) => sum + doc.size, 0),
-      categories: Object.keys(documentsByCategory).length
+      folders: Object.keys(documentsByFolder).length
     };
 
     return new Response(JSON.stringify({
       documents,
-      documentsByCategory,
+      documentsByFolder,
       stats
     }), {
       status: 200,
