@@ -1,0 +1,74 @@
+---
+// SEO Meta component that integrates with site-config
+import OpenGraph from './OpenGraph.astro';
+import TwitterCard from './TwitterCard.astro';
+import type { SiteConfig } from '../lib/site-config.ts';
+
+export interface Props {
+    siteConfig: SiteConfig;
+    title?: string;
+    description?: string;
+    pageUrl?: string;
+    ogImage?: string;
+    noIndex?: boolean;
+    canonical?: string;
+}
+
+const { 
+    siteConfig,
+    title,
+    description,
+    pageUrl,
+    ogImage,
+    noIndex = false,
+    canonical
+} = Astro.props;
+
+// Use page-specific values or fallback to site config
+const metaTitle = title || siteConfig.seo.title;
+const metaDescription = description || siteConfig.seo.description;
+const metaImage = ogImage || siteConfig.seo.ogImage;
+const fullUrl = pageUrl || `https://${siteConfig.domain}`;
+const canonicalUrl = canonical || fullUrl;
+
+// Build complete image URL if it's a relative path
+const fullImageUrl = metaImage.startsWith('http') 
+    ? metaImage 
+    : `https://${siteConfig.domain}${metaImage}`;
+---
+
+<!-- Basic SEO -->
+<title>{metaTitle}</title>
+<meta name="description" content={metaDescription} />
+<meta name="keywords" content={siteConfig.seo.keywords.join(', ')} />
+<link rel="canonical" href={canonicalUrl} />
+
+{noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Language & Locale -->
+<meta name="language" content={siteConfig.language} />
+<html lang={siteConfig.language.split('-')[0]} />
+
+<!-- Open Graph -->
+<OpenGraph 
+    title={metaTitle}
+    description={metaDescription}
+    url={fullUrl}
+    image={fullImageUrl}
+    siteName={siteConfig.name}
+    type="website"
+    locale={siteConfig.language.replace('-', '_')}
+/>
+
+<!-- Twitter Card -->
+<TwitterCard 
+    title={metaTitle}
+    description={metaDescription}
+    image={fullImageUrl}
+    url={fullUrl}
+    site={siteConfig.socialMedia.twitter}
+/>
+
+<!-- Additional Meta -->
+<meta name="theme-color" content={siteConfig.primaryColor} />
+<meta name="msapplication-TileColor" content={siteConfig.primaryColor} />

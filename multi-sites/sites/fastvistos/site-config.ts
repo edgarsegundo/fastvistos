@@ -24,6 +24,7 @@ export const siteConfig: SiteConfig = {
     // Social
     socialMedia: {
         facebook: 'https://facebook.com/fastvistos',
+        twitter: '@fastvistos',
         instagram: 'https://instagram.com/fastvistos',
         youtube: 'https://youtube.com/@fastvistos',
     },
@@ -33,7 +34,7 @@ export const siteConfig: SiteConfig = {
         title: 'Fast Vistos - Assessoria para Visto Americano',
         description: 'Especialistas em assessoria para obtenção de visto americano.',
         keywords: ['visto americano', 'assessoria visto', 'fast vistos'],
-        ogImage: '/og-image.jpg',
+        ogImage: '/og-image.jpg-kirk',
     },
 
     // Features

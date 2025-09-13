@@ -1,0 +1,112 @@
+---
+// Import our compiled Tailwind CSS
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  canonicalUrl?: string;
+  structuredData?: any;
+  bodyClass?: string;
+}
+
+const {
+  title = "FastVistos - Especialistas em Vistos Americanos",
+  description = "Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada.",
+  keywords = "visto americano, assessoria visa, consultoria visto, B1 B2, eTA Canada",
+  ogImage = "/logo.png",
+  ogType = 'website',
+  noindex = false,
+  canonicalUrl,
+  structuredData,
+  bodyClass = ''
+} = Astro.props;
+
+const currentUrl = canonicalUrl || Astro.url.href;
+const siteUrl = "https://fastvistos.com.br";
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-59SRNCQD');</script>
+  <!-- End Google Tag Manager -->  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Primary Meta Tags -->
+  <title>{title}</title>
+  <meta name="title" content={title} />
+  <meta name="description" content={description} />
+  {keywords && <meta name="keywords" content={keywords} />}
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href={currentUrl} />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={ogType} />
+  <meta property="og:url" content={currentUrl} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:site_name" content="FastVistos" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={currentUrl} />
+  <meta property="twitter:title" content={title} />
+  <meta property="twitter:description" content={description} />
+  <meta property="twitter:image" content={ogImage} />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  
+  <!-- Robot Meta -->
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap" rel="stylesheet" />
+  
+  {structuredData && (
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  )}
+</head>
+<body
+    class={`leading-normal tracking-normal text-white gradient ${bodyClass} antialiased`}
+    style="font-family: 'Source Sans Pro', sans-serif;"
+>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+        ><iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-59SRNCQD"
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden"></iframe></noscript
+    >
+    <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Navigation -->
+  <Navigation />
+
+  <!-- Main content -->
+  <main>
+    <slot />
+  </main>
+</body>
+</html>

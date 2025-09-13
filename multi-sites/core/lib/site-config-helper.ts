@@ -2,6 +2,23 @@ import type { SiteConfig } from './site-config.ts';
 
 // Helper functions that work with any SiteConfig
 export class SiteConfigHelper {
+    /**
+     * Dynamically load site config for Astro components
+     * Uses SITE_ID environment variable or falls back to fastvistos
+     */
+    static async loadSiteConfig(): Promise<SiteConfig> {
+        const siteId = import.meta.env.SITE_ID || 'fastvistos';
+        
+        try {
+            const module = await import(`../../sites/${siteId}/site-config.ts`);
+            return module.siteConfig;
+        } catch (error) {
+            console.warn(`Could not load site config for ${siteId}, falling back to fastvistos`);
+            const fallback = await import(`../../sites/fastvistos/site-config.ts`);
+            return fallback.siteConfig;
+        }
+    }
+
     static getMetadata(config: SiteConfig, pageTitle?: string, pageDescription?: string) {
         return {
             title: pageTitle ? `${pageTitle} | ${config.name}` : config.seo.title,
