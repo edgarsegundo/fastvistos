@@ -1,0 +1,706 @@
+---
+/**
+ * Simple Documentation Viewer
+ * 
+ * A reliable documentation viewer that displays markdown files
+ * without complex dependencies. Shows actual file names organized by folders.
+ */
+
+// For now, we'll load documents via API
+const documents = [];
+const documentsByFolder = {};
+const totalDocs = 0;
+const totalWords = 0;
+const totalSize = 0;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation System - Simple Viewer</title>
+    
+    <!-- Marked.js for markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@9.1.2/marked.min.js"></script>
+    
+    <!-- Custom styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            min-height: calc(100vh - 300px);
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 300px);
+        }
+        
+        .sidebar h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .category {
+            margin-bottom: 25px;
+        }
+        
+        .category h3 {
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .doc-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .doc-item:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .doc-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .doc-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #999;
+        }
+        
+        .doc-item.active .doc-meta {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .viewer-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .viewer-title {
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .viewer-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e9ecef;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            min-height: 500px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .welcome-message {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 500px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .welcome-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-subtext {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.1rem;
+            color: #667eea;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .content-display {
+            padding: 30px;
+            background: white;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .content-display h1,
+        .content-display h2,
+        .content-display h3,
+        .content-display h4,
+        .content-display h5,
+        .content-display h6 {
+            color: #333;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        
+        .content-display h1 {
+            font-size: 2.2rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .content-display h2 {
+            font-size: 1.8rem;
+        }
+        
+        .content-display h3 {
+            font-size: 1.4rem;
+        }
+        
+        .content-display p {
+            line-height: 1.6;
+            margin-bottom: 1em;
+            color: #555;
+        }
+        
+        .content-display code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #d63384;
+        }
+        
+        .content-display pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+        
+        .content-display pre code {
+            background: none;
+            padding: 0;
+            color: #333;
+        }
+        
+        .content-display ul,
+        .content-display ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        .content-display li {
+            margin-bottom: 0.5em;
+            line-height: 1.6;
+        }
+        
+        .content-display blockquote {
+            border-left: 4px solid #667eea;
+            margin: 1em 0;
+            padding: 0.5em 1em;
+            background: #f8f9fa;
+            color: #555;
+        }
+        
+        .content-display table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+        
+        .content-display th,
+        .content-display td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        .content-display th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                max-height: 400px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Documentation System</h1>
+            <p>Browse and view your project documentation with actual file names organized by folders</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalDocsCount">0</div>
+                    <div class="stat-label">Documents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalWordsCount">0K</div>
+                    <div class="stat-label">Words</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalSizeCount">0KB</div>
+                    <div class="stat-label">Total Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="foldersCount">0</div>
+                    <div class="stat-label">Folders</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <h2>📁 Documentation Library</h2>
+                
+                <input 
+                    type="text" 
+                    id="searchBox" 
+                    class="search-box" 
+                    placeholder="🔍 Search files..."
+                />
+                
+                <div id="documentList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading documentation...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="viewer-container">
+                <div class="viewer-header">
+                    <div class="viewer-title" id="viewerTitle">Select a document to view</div>
+                    <div class="viewer-actions">
+                        <button class="btn btn-secondary" id="downloadBtn" style="display: none;">⬇️ Download</button>
+                    </div>
+                </div>
+                
+                <div class="content-wrapper">
+                    <div class="welcome-message" id="welcomeMessage">
+                        <div class="welcome-icon">📖</div>
+                        <div class="welcome-text">Welcome to the Documentation System</div>
+                        <div class="welcome-subtext">Select a markdown file from the sidebar to view its content</div>
+                    </div>
+                    
+                    <div id="contentDisplay" class="content-display" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        class SimpleDocumentationViewer {
+            constructor() {
+                this.documents = [];
+                this.documentsByFolder = {};
+                this.currentDoc = null;
+                this.init();
+            }
+            
+            async init() {
+                await this.loadDocumentList();
+                this.setupEventListeners();
+                this.setupSearch();
+            }
+            
+            async loadDocumentList() {
+                try {
+                    console.log('Loading document list...');
+                    const response = await fetch('/api/docs-list');
+                    if (!response.ok) {
+                        throw new Error(`Failed to load documents: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('Document data loaded:', data);
+                    
+                    this.documents = data.documents || [];
+                    this.documentsByFolder = data.documentsByFolder || {};
+                    
+                    // Update statistics
+                    this.updateStats(data.stats || {});
+                    
+                    // Render document list
+                    this.renderDocumentList();
+                    
+                } catch (error) {
+                    console.error('Error loading document list:', error);
+                    this.showError('Failed to load documentation list');
+                }
+            }
+            
+            updateStats(stats) {
+                document.getElementById('totalDocsCount').textContent = stats.totalDocs || 0;
+                document.getElementById('totalWordsCount').textContent = Math.round((stats.totalWords || 0) / 1000) + 'K';
+                document.getElementById('totalSizeCount').textContent = Math.round((stats.totalSize || 0) / 1024) + 'KB';
+                document.getElementById('foldersCount').textContent = stats.folders || 0;
+            }
+            
+            renderDocumentList() {
+                const documentListElement = document.getElementById('documentList');
+                
+                if (Object.keys(this.documentsByFolder).length === 0) {
+                    documentListElement.innerHTML = '<div class="welcome-message">No documentation found</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (const [folder, docs] of Object.entries(this.documentsByFolder)) {
+                    html += `
+                        <div class="category">
+                            <h3>📁 ${folder === 'Root' ? 'Root Directory' : folder} (${docs.length})</h3>
+                            ${docs.map(doc => `
+                                <div class="doc-item" data-path="${doc.path}" data-title="${doc.fileName}">
+                                    <div class="doc-title">${doc.fileName}</div>
+                                    <div class="doc-meta">
+                                        <span>${doc.wordCount.toLocaleString()} words</span>
+                                        <span>${(doc.size / 1024).toFixed(1)}KB</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                
+                documentListElement.innerHTML = html;
+                
+                // Setup event listeners for new elements
+                this.setupDocumentEventListeners();
+            }
+            
+            setupDocumentEventListeners() {
+                document.querySelectorAll('.doc-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        this.selectDocument(item.dataset.path, item.dataset.title);
+                    });
+                });
+            }
+            
+            setupEventListeners() {
+                // Download functionality
+                document.getElementById('downloadBtn').addEventListener('click', () => {
+                    this.downloadDocument();
+                });
+            }
+            
+            setupSearch() {
+                const searchBox = document.getElementById('searchBox');
+                searchBox.addEventListener('input', (e) => {
+                    this.filterDocuments(e.target.value);
+                });
+            }
+            
+            filterDocuments(query) {
+                const normalizedQuery = query.toLowerCase();
+                
+                document.querySelectorAll('.doc-item').forEach(item => {
+                    const fileName = item.dataset.title.toLowerCase();
+                    const matches = fileName.includes(normalizedQuery);
+                    
+                    item.style.display = matches ? 'block' : 'none';
+                });
+                
+                // Hide empty categories
+                document.querySelectorAll('.category').forEach(category => {
+                    const visibleItems = category.querySelectorAll('.doc-item[style*="block"], .doc-item:not([style])');
+                    category.style.display = visibleItems.length > 0 ? 'block' : 'none';
+                });
+            }
+            
+            async selectDocument(path, title) {
+                try {
+                    console.log('Selecting document:', path, title);
+                    
+                    // Update UI
+                    document.querySelectorAll('.doc-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    const selectedItem = document.querySelector(`[data-path="${path}"]`);
+                    if (selectedItem) {
+                        selectedItem.classList.add('active');
+                    }
+                    
+                    document.getElementById('viewerTitle').textContent = title;
+                    document.getElementById('welcomeMessage').style.display = 'none';
+                    document.getElementById('contentDisplay').style.display = 'block';
+                    document.getElementById('downloadBtn').style.display = 'inline-block';
+                    
+                    // Show loading state
+                    this.showLoading();
+                    
+                    // Load document content
+                    const response = await fetch(`/api/docs/${encodeURIComponent(path)}`);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load document: ${response.statusText}`);
+                    }
+                    
+                    const content = await response.text();
+                    this.currentDoc = { path, title, content };
+                    
+                    // Render markdown content
+                    this.renderContent(content);
+                    
+                } catch (error) {
+                    console.error('Error loading document:', error);
+                    this.showError('Failed to load document. Please try again.');
+                }
+            }
+            
+            renderContent(markdownContent) {
+                try {
+                    // Use marked.js to convert markdown to HTML
+                    const htmlContent = marked.parse(markdownContent);
+                    document.getElementById('contentDisplay').innerHTML = htmlContent;
+                } catch (error) {
+                    console.error('Error rendering markdown:', error);
+                    // Fallback to plain text
+                    document.getElementById('contentDisplay').innerHTML = `
+                        <pre style="white-space: pre-wrap; font-family: monospace; line-height: 1.5;">${markdownContent}</pre>
+                    `;
+                }
+            }
+            
+            showLoading() {
+                document.getElementById('contentDisplay').innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading document...
+                    </div>
+                `;
+            }
+            
+            downloadDocument() {
+                if (!this.currentDoc) return;
+                
+                const blob = new Blob([this.currentDoc.content], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = this.currentDoc.path.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+            
+            showError(message) {
+                document.getElementById('contentDisplay').innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #dc3545;">
+                        <h3>Error</h3>
+                        <p>${message}</p>
+                    </div>
+                `;
+                document.getElementById('contentDisplay').style.display = 'block';
+                document.getElementById('welcomeMessage').style.display = 'none';
+            }
+        }
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing viewer...');
+            new SimpleDocumentationViewer();
+        });
+    </script>
+</body>
+</html>

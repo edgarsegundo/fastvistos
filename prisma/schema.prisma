@@ -8,16 +8,20 @@ datasource db {
 }
 
 model BlogConfig {
-  created     DateTime    @db.DateTime(6)
-  modified    DateTime    @db.DateTime(6)
-  is_removed  Boolean
-  id          String      @id @default(uuid()) @db.Char(32)
-  title       String      @db.VarChar(255)
-  slug        String?     @unique(map: "slug") @db.VarChar(255)
-  config      Json
-  business_id String      @db.Char(32)
-  business    business    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
-  blog_topic  BlogTopic[]
+  created      DateTime    @db.DateTime(6)
+  modified     DateTime    @db.DateTime(6)
+  is_removed   Boolean
+  id           String      @id @default(uuid()) @db.Char(32)
+  title        String      @db.VarChar(255)
+  slug         String?     @unique(map: "slug") @db.VarChar(255)
+  config       Json
+  business_id  String      @db.Char(32)
+  author_image String?     @db.VarChar(100)
+  author_name  String?     @db.VarChar(255)
+  description  String?     @db.VarChar(500)
+  theme_image  String?     @db.VarChar(100)
+  business     business    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  blog_topic   BlogTopic[]
 
   @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
   @@map("blog_config")

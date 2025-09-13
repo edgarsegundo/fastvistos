@@ -1,0 +1,191 @@
+---
+import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
+import { siteConfig } from '../../site-config.ts';
+import { SiteConfigHelper } from '../../lib/site-config-helper.ts';
+import { BlogService } from '../../lib/blog-service.ts';
+
+// Get page metadata using helper functions (auto-sync working!)
+const metadata = SiteConfigHelper.getMetadata(siteConfig, 'Blog', 'Artigos e dicas sobre vistos');
+const cssVars = SiteConfigHelper.getCssVariables(siteConfig);
+const hasBlog = SiteConfigHelper.hasFeature(siteConfig, 'blog');
+
+// Fetch blog data using the business-aware blog service
+const topicsWithArticles = await BlogService.getTopicsWithArticles();
+const blogConfig = await BlogService.getBlogConfig();
+
+// Use blog config from database or fallback to default
+const defaultConfig = {
+    title: "Blog - FastVistos | Dicas sobre Vistos Americanos",
+    description: "Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados."
+};
+
+const title = `${blogConfig?.title || defaultConfig.title} - ${siteConfig.name}`;
+const description = blogConfig?.description || defaultConfig.description;
+
+---
+
+<SharedBlogLayout 
+    title={title}
+    description={description}
+>
+
+    <!-- H1 -->
+    <section class="bg-black py-20 px-4 lg:px-8">
+        <div class="mx-auto" style="max-width: 1220px;">
+            <div class="">
+                <!-- Main Title -->
+                <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">
+                    {blogConfig?.title || defaultConfig.title}
+                </h1>
+
+                <!-- Description -->
+                <p class="mt-4 text-lg text-gray-300">
+                    {blogConfig?.description || defaultConfig.description}
+                </p>
+
+                <!-- Breadcrumb -->
+                <div class="mb-2 mt-6">
+                    <nav class="text-sm">
+                        <ol class="flex items-center text-white font-medium text-xl" style="font-size: 1.03rem;">
+                            <li class="flex items-center">
+                                <a href={`https://${siteConfig.domain}`} class="hover:text-gray-300">Home</a>
+                                <span class="mx-2 text-gray-400">|</span>
+                            </li>
+                            <li class="">
+                                <a href="/blog" class="hover:text-gray-300">Blog</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Main Blog Content -->
+    <main class="container mx-auto py-10 px-4">
+        <style>
+            /* Hide scrollbar but keep functionality */
+            .carousel-container::-webkit-scrollbar {
+                display: none;
+            }
+            .carousel-container {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            
+            /* Smooth scroll behavior */
+            .carousel-container {
+                scroll-behavior: smooth;
+            }
+        </style>
+
+        {topicsWithArticles.length > 0 ? (
+            topicsWithArticles.map((topic: any) => (
+                <section class="relative mt-12">
+                    <!-- Carousel Container -->
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 id={topic.slug || topic.id} class="text-3xl font-semibold mb-8 text-black">
+                            {topic.title}
+                        </h2>
+            
+                        <div class="relative pt-8">
+                            <!-- Carousel Content -->
+                            <div 
+                                id={`carousel-${topic.slug || topic.id}`}
+                                class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
+                            >
+                                {topic.blog_article.map((article: any) => (
+                                    <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 flex-shrink-0 w-80">
+                                        <img 
+                                            src={article.image ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}` : 'https://via.placeholder.com/400x250'} 
+                                            alt={article.slug || article.title} 
+                                            class="w-full h-48 object-cover rounded-t-lg"
+                                        />
+                                        <div class="p-6">
+                                            <h3 class="text-xl font-semibold mb-2 text-black">
+                                                {article.title.length > 70 ? article.title.slice(0, 70) + '...' : article.title}
+                                            </h3>
+                                            <p class="text-gray-600 mb-4">
+                                                {article.content_html ? 
+                                                    article.content_html.replace(/<[^>]*>/g, '').slice(0, 150) + '...' : 
+                                                    ''
+                                                }
+                                            </p>
+                                            <a href={`/blog/${article.slug}`} class="text-blue-600 hover:underline font-medium">
+                                                Leia mais
+                                            </a>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            ))
+        ) : (
+            <div class="text-center py-12">
+                <p class="text-gray-600 text-lg">Nenhum artigo encontrado.</p>
+                <p class="text-gray-500 mt-2">Volte em breve para conferir nossos artigos!</p>
+            </div>
+        )}
+
+        <script>
+            // Get all carousel elements
+            const carousels = document.querySelectorAll('.carousel-container');
+            
+            // Scroll amount (width of one card plus gap)
+            const scrollAmount = 320; // 320px (card width) + 24px (gap)
+            
+            // Add keyboard navigation for each carousel
+            carousels.forEach(carousel => {
+                // Add keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    // Only scroll if the carousel is in view or focused
+                    const rect = carousel.getBoundingClientRect();
+                    const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                    
+                    if (isInView) {
+                        if (e.key === 'ArrowLeft') {
+                            carousel.scrollBy({
+                                left: -scrollAmount,
+                                behavior: 'smooth'
+                            });
+                        } else if (e.key === 'ArrowRight') {
+                            carousel.scrollBy({
+                                left: scrollAmount,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+                
+                // Add touch/swipe support for mobile
+                let startX = 0;
+                let scrollStart = 0;
+                
+                carousel.addEventListener('touchstart', function(e) {
+                    const touchEvent = e as TouchEvent;
+                    startX = touchEvent.touches[0].clientX;
+                    scrollStart = carousel.scrollLeft;
+                });
+                
+                carousel.addEventListener('touchmove', function(e) {
+                    if (!startX) return;
+                    
+                    const touchEvent = e as TouchEvent;
+                    const currentX = touchEvent.touches[0].clientX;
+                    const diff = startX - currentX;
+                    carousel.scrollLeft = scrollStart + diff;
+                });
+                
+                carousel.addEventListener('touchend', function() {
+                    startX = 0;
+                    scrollStart = 0;
+                });
+            });
+        </script>
+    </main>
+
+
+</SharedBlogLayout>
