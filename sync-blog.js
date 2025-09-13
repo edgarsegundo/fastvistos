@@ -105,6 +105,7 @@ async function syncBlogToSite(siteId) {
 
     // Read core styles
     const markdownBlogCSS = await fs.readFile(join(CORE_STYLES_DIR, 'markdown-blog.css'), 'utf-8');
+    const markdownDocCSS = await fs.readFile(join(CORE_STYLES_DIR, 'markdown-doc.css'), 'utf-8');
 
     // Read core library files
     const blogServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'blog-service.ts'), 'utf-8');
@@ -231,6 +232,7 @@ async function syncBlogToSite(siteId) {
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
+    await fs.writeFile(join(siteStylesDir, 'markdown-doc.css'), markdownDocCSS);
 
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
