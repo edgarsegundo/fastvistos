@@ -1,0 +1,9 @@
+---
+// Multi-site homepage router
+const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
+
+// Dynamically import the site-specific index page
+const SiteIndex = await import(`../../../multi-sites/sites/${CURRENT_SITE}/pages/index.astro`);
+---
+
+<SiteIndex.default />

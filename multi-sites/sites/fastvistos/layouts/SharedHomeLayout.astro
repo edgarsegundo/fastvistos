@@ -1,0 +1,67 @@
+---
+// Shared Home Layout - Used across all sites
+import '../styles/global.css';
+import SEOMeta from '../components/SEOMeta.astro';
+import { SiteConfigHelper } from '../lib/site-config-helper.ts';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  bodyClass?: string;
+  pageUrl?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  canonical?: string;
+}
+
+const { 
+  title, 
+  description, 
+  bodyClass = '', 
+  pageUrl,
+  ogImage,
+  noIndex = false,
+  canonical
+} = Astro.props;
+
+// Load site configuration dynamically
+import { siteConfig } from '../site-config.ts';
+// const siteConfig = await SiteConfigHelper.loadSiteConfig();
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Tag Manager -->
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags from site-config -->
+    <SEOMeta 
+        siteConfig={siteConfig}
+        title={title}
+        description={description}
+        pageUrl={pageUrl}
+        ogImage={ogImage}
+        noIndex={noIndex}
+        canonical={canonical}
+    />
+    
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href={`https://${siteConfig.domain}`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap"
+        rel="stylesheet"
+    />
+
+    <slot name="head" />
+</head>
+    <!-- Body content -->
+    <slot />
+</html>
