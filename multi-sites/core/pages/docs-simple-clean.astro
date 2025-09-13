@@ -1,8 +1,6 @@
 ---
-import { SiteConfigHelper } from '../lib/site-config-helper.ts';
-
+import { siteMeta } from '../lib/site-config.ts';
 const title = "Documentation Viewer";
-const siteConfig = await SiteConfigHelper.loadSiteConfig();
 ---
 
 <!DOCTYPE html>
@@ -10,7 +8,7 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title} - {siteConfig.name}</title>
+    <title>{title} - {siteMeta.title}</title>
     
     <!-- Marked.js for markdown rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked@9.1.2/marked.min.js"></script>
