@@ -31,6 +31,8 @@ async function getSites() {
     }
 }
 const CORE_BLOG_DIR = join(__dirname, 'multi-sites/core/pages/blog');
+const CORE_PAGES_DIR = join(__dirname, 'multi-sites/core/pages');
+const CORE_API_DIR = join(__dirname, 'multi-sites/core/pages/api');
 const CORE_LIB_DIR = join(__dirname, 'multi-sites/core/lib');
 const CORE_LAYOUTS_DIR = join(__dirname, 'multi-sites/core/layouts');
 const CORE_COMPONENTS_DIR = join(__dirname, 'multi-sites/core/components');
@@ -49,6 +51,8 @@ async function syncBlogToSite(siteId) {
 
     const siteDir = join(__dirname, `multi-sites/sites/${siteId}`);
     const siteBlogDir = join(siteDir, 'pages/blog');
+    const sitePagesDir = join(siteDir, 'pages');
+    const siteApiDir = join(siteDir, 'pages/api');
     const siteLibDir = join(siteDir, 'lib');
     const siteLayoutsDir = join(siteDir, 'layouts');
     const siteComponentsDir = join(siteDir, 'components');
@@ -57,6 +61,15 @@ async function syncBlogToSite(siteId) {
     // Read core blog templates
     const indexTemplate = await fs.readFile(join(CORE_BLOG_DIR, 'index.astro'), 'utf-8');
     const postTemplate = await fs.readFile(join(CORE_BLOG_DIR, '[...slug].astro'), 'utf-8');
+
+    // Read core documentation pages
+    const docsViewerTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-viewer.astro'), 'utf-8');
+    const docsSimpleTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-simple.astro'), 'utf-8');
+    const docsHubTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-hub.astro'), 'utf-8');
+
+    // Read core API endpoints
+    const docsListApi = await fs.readFile(join(CORE_API_DIR, 'docs-list.ts'), 'utf-8');
+    const docsPathApi = await fs.readFile(join(CORE_API_DIR, 'docs/[...path].ts'), 'utf-8');
 
     // Read core layouts
     const sharedBlogLayout = await fs.readFile(
@@ -185,6 +198,9 @@ async function syncBlogToSite(siteId) {
 
     // Ensure directories exist
     await ensureDir(siteBlogDir);
+    await ensureDir(sitePagesDir);
+    await ensureDir(siteApiDir);
+    await ensureDir(join(siteApiDir, 'docs'));
     await ensureDir(siteLibDir);
     await ensureDir(siteLayoutsDir);
     await ensureDir(siteComponentsDir);
@@ -193,6 +209,15 @@ async function syncBlogToSite(siteId) {
     // Write localized templates
     await fs.writeFile(join(siteBlogDir, 'index.astro'), localizedIndexTemplate);
     await fs.writeFile(join(siteBlogDir, '[...slug].astro'), localizedPostTemplate);
+
+    // Write documentation pages
+    await fs.writeFile(join(sitePagesDir, 'docs-viewer.astro'), docsViewerTemplate);
+    await fs.writeFile(join(sitePagesDir, 'docs-simple.astro'), docsSimpleTemplate);
+    await fs.writeFile(join(sitePagesDir, 'docs-hub.astro'), docsHubTemplate);
+
+    // Write API endpoints
+    await fs.writeFile(join(siteApiDir, 'docs-list.ts'), docsListApi);
+    await fs.writeFile(join(siteApiDir, 'docs/[...path].ts'), docsPathApi);
 
     // Write localized layout
     await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);
