@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
         title: 'Fast Vistos - Assessoria para Visto Americano',
         description: 'Especialistas em assessoria para obtenção de visto americano.',
         keywords: ['visto americano', 'assessoria visto', 'fast vistos'],
-        ogImage: '/og-image.jpg-kirk',
+        ogImage: '/og-image.jpg',
     },
 
     // Features
