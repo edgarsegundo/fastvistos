@@ -25,6 +25,7 @@ export interface SiteConfig {
     // Social
     socialMedia: {
         facebook?: string;
+        twitter?: string;
         instagram?: string;
         youtube?: string;
         linkedin?: string;
