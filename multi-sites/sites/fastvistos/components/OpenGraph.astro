@@ -1,0 +1,31 @@
+---
+// Open Graph meta tags component
+export interface Props {
+    title?: string;
+    description?: string;
+    url?: string;
+    image?: string;
+    siteName?: string;
+    type?: string;
+    locale?: string;
+}
+
+const { 
+    title,
+    description,
+    url,
+    image,
+    siteName,
+    type = 'website',
+    locale = 'pt_BR'
+} = Astro.props;
+---
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+{url && <meta property="og:url" content={url} />}
+{title && <meta property="og:title" content={title} />}
+{description && <meta property="og:description" content={description} />}
+{image && <meta property="og:image" content={image} />}
+{siteName && <meta property="og:site_name" content={siteName} />}
+<meta property="og:locale" content={locale} />

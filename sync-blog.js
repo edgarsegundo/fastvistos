@@ -63,10 +63,30 @@ async function syncBlogToSite(siteId) {
         join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'),
         'utf-8'
     );
+    
+    const sharedHomeLayout = await fs.readFile(
+        join(CORE_LAYOUTS_DIR, 'SharedHomeLayout.astro'),
+        'utf-8'
+    );
 
     // Read core components
     const tableOfContentsComponent = await fs.readFile(
         join(CORE_COMPONENTS_DIR, 'TableOfContents.astro'),
+        'utf-8'
+    );
+    
+    const seoMetaComponent = await fs.readFile(
+        join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'),
+        'utf-8'
+    );
+    
+    const openGraphComponent = await fs.readFile(
+        join(CORE_COMPONENTS_DIR, 'OpenGraph.astro'),
+        'utf-8'
+    );
+    
+    const twitterCardComponent = await fs.readFile(
+        join(CORE_COMPONENTS_DIR, 'TwitterCard.astro'),
         'utf-8'
     );
 
@@ -140,6 +160,29 @@ async function syncBlogToSite(siteId) {
         )
         .replace(/import '\.\.\/styles\/global\.css';/g, `import '../styles/global.css';`);
 
+    // Localize SharedHomeLayout
+    const localizedSharedHomeLayout = sharedHomeLayout
+        .replace(
+            /import \{ SiteConfigHelper \} from '\.\.\/lib\/site-config-helper\.ts';/,
+            `import { SiteConfigHelper } from '../lib/site-config-helper.ts';`
+        )
+        .replace(
+            /const siteConfig = await SiteConfigHelper\.loadSiteConfig\(\);/,
+            `import { siteConfig } from '../site-config.ts';\n// const siteConfig = await SiteConfigHelper.loadSiteConfig();`
+        )
+        .replace(/import '\.\.\/styles\/global\.css';/g, `import '../styles/global.css';`);
+
+    // Localize SEO components
+    const localizedSeoMetaComponent = seoMetaComponent
+        .replace(
+            /import OpenGraph from '\.\/OpenGraph\.astro';/,
+            `import OpenGraph from './OpenGraph.astro';`
+        )
+        .replace(
+            /import TwitterCard from '\.\/TwitterCard\.astro';/,
+            `import TwitterCard from './TwitterCard.astro';`
+        );
+
     // Ensure directories exist
     await ensureDir(siteBlogDir);
     await ensureDir(siteLibDir);
@@ -153,9 +196,13 @@ async function syncBlogToSite(siteId) {
 
     // Write localized layout
     await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);
+    await fs.writeFile(join(siteLayoutsDir, 'SharedHomeLayout.astro'), localizedSharedHomeLayout);
 
     // Write core components
     await fs.writeFile(join(siteComponentsDir, 'TableOfContents.astro'), tableOfContentsComponent);
+    await fs.writeFile(join(siteComponentsDir, 'SEOMeta.astro'), localizedSeoMetaComponent);
+    await fs.writeFile(join(siteComponentsDir, 'OpenGraph.astro'), openGraphComponent);
+    await fs.writeFile(join(siteComponentsDir, 'TwitterCard.astro'), twitterCardComponent);
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
@@ -163,7 +210,23 @@ async function syncBlogToSite(siteId) {
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
     await fs.writeFile(join(siteLibDir, 'site-config.ts'), siteConfigContent);
-    await fs.writeFile(join(siteLibDir, 'site-config-helper.ts'), siteConfigHelperContent);
+    
+    // Localize site-config-helper.ts for this specific site
+    const localizedSiteConfigHelper = siteConfigHelperContent
+        .replace(
+            /const module = await import\(`\.\.\/\.\.\/sites\/\$\{siteId\}\/site-config\.ts`\);/,
+            `const module = await import('../site-config.ts');`
+        )
+        .replace(
+            /const fallback = await import\(`\.\.\/\.\.\/sites\/fastvistos\/site-config\.ts`\);/,
+            `const fallback = await import('../site-config.ts');`
+        )
+        .replace(
+            /const siteId = import\.meta\.env\.SITE_ID \|\| 'fastvistos';/,
+            `const siteId = '${siteId}';`
+        );
+        
+    await fs.writeFile(join(siteLibDir, 'site-config-helper.ts'), localizedSiteConfigHelper);
     await fs.writeFile(join(siteLibDir, 'prisma.js'), prismaContent);
 
     console.log(`✅ Blog synced to ${siteId}`);
