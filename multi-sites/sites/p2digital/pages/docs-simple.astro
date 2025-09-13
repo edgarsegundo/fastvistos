@@ -6,6 +6,9 @@
  * without complex dependencies. Shows actual file names organized by folders.
  */
 
+// Import the custom markdown styling
+import '../styles/markdown-doc.css';
+
 // For now, we'll load documents via API
 const documents = [];
 const documentsByFolder = {};
@@ -133,8 +136,8 @@ const totalSize = 0;
             background: #f8f9fa;
             border: 1px solid #e9ecef;
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -153,20 +156,13 @@ const totalSize = 0;
         }
         
         .doc-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 1rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #555;
         }
         
-        .doc-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #999;
-        }
-        
-        .doc-item.active .doc-meta {
-            color: rgba(255, 255, 255, 0.8);
+        .doc-item.active .doc-title {
+            color: white;
         }
         
         .viewer-container {
@@ -229,6 +225,30 @@ const totalSize = 0;
         
         .btn-secondary:hover {
             background: #e9ecef;
+        }
+        
+        .btn-expand {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-expand:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-expand.active {
+            background: linear-gradient(135deg, #e53e3e 0%, #dc2626 100%);
         }
         
         .content-wrapper {
@@ -471,6 +491,10 @@ const totalSize = 0;
                     <div class="viewer-title" id="viewerTitle">Select a document to view</div>
                     <div class="viewer-actions">
                         <button class="btn btn-secondary" id="downloadBtn" style="display: none;">⬇️ Download</button>
+                        <button class="btn-expand" id="expandBtn" style="display: none;" title="Expand to full screen">
+                            <span id="expandIcon">🔍</span>
+                            <span id="expandText">Expand All</span>
+                        </button>
                     </div>
                 </div>
                 
@@ -551,10 +575,6 @@ const totalSize = 0;
                             ${docs.map(doc => `
                                 <div class="doc-item" data-path="${doc.path}" data-title="${doc.fileName}">
                                     <div class="doc-title">${doc.fileName}</div>
-                                    <div class="doc-meta">
-                                        <span>${doc.wordCount.toLocaleString()} words</span>
-                                        <span>${(doc.size / 1024).toFixed(1)}KB</span>
-                                    </div>
                                 </div>
                             `).join('')}
                         </div>
@@ -580,6 +600,37 @@ const totalSize = 0;
                 document.getElementById('downloadBtn').addEventListener('click', () => {
                     this.downloadDocument();
                 });
+                
+                // Expand/Fullscreen functionality
+                document.getElementById('expandBtn').addEventListener('click', () => {
+                    this.toggleFullscreen();
+                });
+            }
+            
+            toggleFullscreen() {
+                const contentDisplay = document.getElementById('contentDisplay');
+                const expandBtn = document.getElementById('expandBtn');
+                const expandIcon = document.getElementById('expandIcon');
+                const expandText = document.getElementById('expandText');
+                const container = document.querySelector('.container');
+                
+                if (!contentDisplay.classList.contains('fullscreen-mode')) {
+                    // Enter fullscreen
+                    contentDisplay.classList.add('fullscreen-mode');
+                    expandBtn.classList.add('active');
+                    expandIcon.textContent = '❌';
+                    expandText.textContent = 'Exit Full Screen';
+                    container.style.display = 'none';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    // Exit fullscreen
+                    contentDisplay.classList.remove('fullscreen-mode');
+                    expandBtn.classList.remove('active');
+                    expandIcon.textContent = '🔍';
+                    expandText.textContent = 'Expand All';
+                    container.style.display = 'block';
+                    document.body.style.overflow = 'auto';
+                }
             }
             
             setupSearch() {
@@ -624,6 +675,7 @@ const totalSize = 0;
                     document.getElementById('welcomeMessage').style.display = 'none';
                     document.getElementById('contentDisplay').style.display = 'block';
                     document.getElementById('downloadBtn').style.display = 'inline-block';
+                    document.getElementById('expandBtn').style.display = 'inline-block';
                     
                     // Show loading state
                     this.showLoading();
@@ -650,7 +702,9 @@ const totalSize = 0;
                 try {
                     // Use marked.js to convert markdown to HTML
                     const htmlContent = marked.parse(markdownContent);
-                    document.getElementById('contentDisplay').innerHTML = htmlContent;
+                    const contentDisplay = document.getElementById('contentDisplay');
+                    contentDisplay.innerHTML = htmlContent;
+                    contentDisplay.className = 'content-display doc-content';
                 } catch (error) {
                     console.error('Error rendering markdown:', error);
                     // Fallback to plain text
