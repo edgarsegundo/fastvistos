@@ -299,8 +299,10 @@ async function createSite() {
     } catch (error) {
         console.error('❌ Error creating site:', error.message);
     } finally {
-    rl.close();
-    const child = spawn('npm', ['run', `dev:watch:${replacements.SITE_ID}`], { stdio: 'inherit' });
+        rl.close();
+        const child = spawn('npm', ['run', `dev:watch:${replacements.SITE_ID}`], {
+            stdio: 'inherit',
+        });
     }
 }
 
