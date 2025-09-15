@@ -26,10 +26,13 @@ const {
 
 // Load site configuration dynamically
 const siteConfig = await SiteConfigHelper.loadSiteConfig();
+
+// Use full language tag (pt-BR) or just language (pt) based on site config
+const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfig.language.split('-')[0];
 ---
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang={htmlLang}>
 <head>
     <!-- Google Tag Manager -->
     <!-- End Google Tag Manager -->
