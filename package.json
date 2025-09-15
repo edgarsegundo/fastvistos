@@ -45,7 +45,11 @@
     "dev:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro dev --config multi-sites.config.mjs",
     "dev:watch:p2digital": "node dev-with-sync.js p2digital",
     "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build --config multi-sites.config.mjs",
-    "preview:p2digital": "SITE_ID=p2digital astro preview --config multi-sites.config.mjs"
+    "preview:p2digital": "SITE_ID=p2digital astro preview --config multi-sites.config.mjs",
+    "dev:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro dev --config multi-sites.config.mjs",
+    "dev:watch:mysite": "node dev-with-sync.js mysite",
+    "build:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro build --config multi-sites.config.mjs",
+    "preview:mysite": "SITE_ID=mysite astro preview --config multi-sites.config.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
