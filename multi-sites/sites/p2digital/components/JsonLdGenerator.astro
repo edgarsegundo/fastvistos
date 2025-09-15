@@ -1,4 +1,6 @@
 ---
+import { SiteConfigHelper } from '../lib/site-config-helper.ts';
+
 /**
  * JsonLdGenerator.astro - Universal Structured Data Component
  * 
@@ -123,25 +125,10 @@ const {
 const siteId = Astro.url.hostname.includes('fastvistos') ? 'fastvistos' : 
               Astro.url.hostname.includes('p2digital') ? 'p2digital' : 'fastvistos';
 
-let siteConfig: any;
-try {
-  const { getSiteConfig } = await import(`../lib/site-config-helper.ts`);
-  siteConfig = await getSiteConfig(siteId);
-} catch (error) {
-  console.warn(`Failed to load site config for ${siteId}, using defaults:`, error);
-  siteConfig = {
-    name: 'Default Site',
-    url: Astro.url.origin,
-    description: 'Professional services website',
-    logo: `${Astro.url.origin}/logo.png`
-  };
-}
 
-// Apply site overrides
-const site = {
-  ...siteConfig,
-  ...siteOverride
-};
+
+// Load site configuration dynamically
+const siteConfig = await SiteConfigHelper.loadSiteConfig();
 
 // Current page URL
 const currentUrl = Astro.url.href;
@@ -155,27 +142,27 @@ if (!disable.organization) {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": site.name,
-    "url": site.url,
+    "name": siteConfig.name,
+    "url": currentUrl,
     "logo": {
       "@type": "ImageObject",
-      "url": site.logo
+      "url": siteConfig.logo
     },
-    "description": site.description,
+    "description": siteConfig.description,
     "sameAs": []
   };
 
   // Add social media profiles if available
-  if (site.social) {
-    if (site.social.facebook) organizationSchema.sameAs.push(site.social.facebook);
-    if (site.social.twitter) organizationSchema.sameAs.push(`https://twitter.com/${site.social.twitter.replace('@', '')}`);
-    if (site.social.linkedin) organizationSchema.sameAs.push(site.social.linkedin);
-    if (site.social.instagram) organizationSchema.sameAs.push(site.social.instagram);
+  if (siteConfig.socialMedia) {
+    if (siteConfig.socialMedia.facebook) organizationSchema.sameAs.push(siteConfig.socialMedia.facebook);
+    if (siteConfig.socialMedia.twitter) organizationSchema.sameAs.push(`https://twitter.com/${siteConfig.socialMedia.twitter.replace('@', '')}`);
+    if (siteConfig.socialMedia.linkedin) organizationSchema.sameAs.push(siteConfig.socialMedia.linkedin);
+    if (siteConfig.socialMedia.instagram) organizationSchema.sameAs.push(siteConfig.socialMedia.instagram);
   }
 
   // Add contact information if available
-  if (contact || site.contact) {
-    const contactInfo = contact || site.contact;
+  if (contact || siteConfig.contact) {
+    const contactInfo = contact || siteConfig.contact;
     if (contactInfo.telephone) {
       organizationSchema.telephone = contactInfo.telephone;
     }
@@ -198,12 +185,12 @@ if (!disable.website && pageType === 'homepage') {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": site.name,
-    "url": site.url,
-    "description": site.description,
+    "name": siteConfig.name,
+    "url": currentUrl,
+    "description": siteConfig.description,
     "publisher": {
       "@type": "Organization",
-      "name": site.name
+      "name": siteConfig.name
     }
   };
 
@@ -238,10 +225,10 @@ if (article && (pageType === 'article' || pageType === 'blog-post')) {
     },
     "publisher": {
       "@type": "Organization",
-      "name": site.name,
+      "name": siteConfig.name,
       "logo": {
         "@type": "ImageObject",
-        "url": site.logo
+        "url": siteConfig.logo
       }
     }
   };
@@ -448,21 +435,10 @@ if (customData.length > 0) {
 const jsonLd = structuredData.length === 1 ? structuredData[0] : structuredData;
 ---
 
-<!-- 
-  Universal Structured Data Generator
-  
-  This component represents a revolutionary approach to structured data where
-  developers don't need to manually craft JSON-LD for every page. Instead,
-  the system intelligently analyzes the page type, content, and site configuration
-  to generate optimal structured data automatically.
-  
-  Generated schemas: {structuredData.map(schema => schema['@type']).join(', ')}
-  Page type: {pageType}
-  Site: {site.name}
--->
+
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
 
-<!-- Structured Data Debug Information (Development Only) -->
+
 {import.meta.env.DEV && (
   <script>
     console.group('🔍 Structured Data Debug - JsonLdGenerator');
