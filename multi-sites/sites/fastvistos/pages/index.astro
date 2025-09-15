@@ -9,9 +9,7 @@ import CarouselSection from '../components/CarouselSection.astro';
 import FaqSection from '../components/FaqSection.astro';
 import FooterSection from '../components/FooterSection.astro';
 import Whatsapp from '../components/Whatsapp.astro';
-import JsonLdFAQ from '../components/JsonLdFAQ.astro';
 import CallToActionSection from '../components/CallToActionSection.astro';
-import JsonLdService from '../../../core/components/JsonLdService.astro';
 
 // No need for site manager - this is already FastVistos specific
 ---
@@ -21,13 +19,6 @@ import JsonLdService from '../../../core/components/JsonLdService.astro';
   description="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada."
   bodyClass="home-layout"
 >
-  <!-- Additional JSON-LD for specific services -->
-  <JsonLdService
-    name="Processamento de Vistos Americanos"
-    description="Serviço completo de assessoria para obtenção de vistos americanos B1/B2, eTA do Canadá e vistos mexicanos"
-  />
-  <JsonLdFAQ />
-
   <!-- FastVistos Main Content -->
   <HeroSection />
   <ServicesSection />
