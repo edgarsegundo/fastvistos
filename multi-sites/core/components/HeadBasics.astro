@@ -1,6 +1,7 @@
 ---
-// HeadBasics component - Essential head elements that must appear first
-// This includes charset, viewport, basic meta tags, and core resources
+
+import { siteConfig } from '../site-config.ts';
+import JsonLdGenerator from './JsonLdGenerator.astro';
 
 export interface Props {
     title?: string;           // Optional title override
@@ -48,8 +49,26 @@ const {
 -->
 <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
+
 <!-- Generator meta tag -->
 {generator && <meta name="generator" content={generator} />}
+
+<!-- JSON-LD Structured Data (Organization & Website) -->
+<JsonLdGenerator
+    pageType="homepage"
+    siteOverride={{
+        name: siteConfig.name,
+        logo: siteConfig.logo,
+        description: siteConfig.description,
+        url: `https://${siteConfig.domain}`
+    }}
+    disable={{
+        organization: false,
+        website: false,
+        breadcrumb: true,
+        searchAction: true
+    }}
+/>
 
 <!-- Site Speed Optimization: Resource Hints -->
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
