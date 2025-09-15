@@ -12,6 +12,7 @@ export interface Props {
     ogImage?: string;
     noIndex?: boolean;
     canonical?: string;
+    type?: string;           // Content type (website, article, product, etc.)
 }
 
 const { 
@@ -21,7 +22,8 @@ const {
     pageUrl,
     ogImage,
     noIndex = false,
-    canonical
+    canonical,
+    type = 'website',
 } = Astro.props;
 
 // Use page-specific values or fallback to site config
@@ -56,7 +58,7 @@ const fullImageUrl = metaImage.startsWith('http')
     url={fullUrl}
     image={fullImageUrl}
     siteName={siteConfig.name}
-    type="website"
+    type={type}
     locale={siteConfig.language.replace('-', '_')}
 />
 
