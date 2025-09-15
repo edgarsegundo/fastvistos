@@ -38,7 +38,6 @@ export interface SiteConfig {
         description: string;
         keywords: string[];
         ogImage: string;
-        type?: string;           // Content type (website, article, product, etc.)
     };
 
     // Features
