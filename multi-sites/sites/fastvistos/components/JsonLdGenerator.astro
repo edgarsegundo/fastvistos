@@ -448,21 +448,10 @@ if (customData.length > 0) {
 const jsonLd = structuredData.length === 1 ? structuredData[0] : structuredData;
 ---
 
-<!-- 
-  Universal Structured Data Generator
-  
-  This component represents a revolutionary approach to structured data where
-  developers don't need to manually craft JSON-LD for every page. Instead,
-  the system intelligently analyzes the page type, content, and site configuration
-  to generate optimal structured data automatically.
-  
-  Generated schemas: {structuredData.map(schema => schema['@type']).join(', ')}
-  Page type: {pageType}
-  Site: {site.name}
--->
+
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
 
-<!-- Structured Data Debug Information (Development Only) -->
+
 {import.meta.env.DEV && (
   <script>
     console.group('🔍 Structured Data Debug - JsonLdGenerator');

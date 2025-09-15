@@ -13,7 +13,7 @@ const gtmId = siteConfig.analytics?.gtmId;
 const facebookPixelId = siteConfig.analytics?.facebookPixelId;
 ---
 
-<!-- Google Tag Manager (noscript) -->
+
 {gtmId && (
     <noscript>
         <iframe
@@ -25,7 +25,7 @@ const facebookPixelId = siteConfig.analytics?.facebookPixelId;
     </noscript>
 )}
 
-<!-- Facebook Pixel (noscript) -->
+
 {facebookPixelId && (
     <noscript>
         <img 

@@ -8,6 +8,7 @@
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { stripAstroComments } from './utils/stripAstroComments.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -39,7 +40,13 @@ const CORE_STYLES_DIR = join(__dirname, 'multi-sites/core/styles');
 
 async function copyFile(src, dest) {
     try {
-        await fs.copyFile(src, dest);
+        if (src.endsWith('.astro')) {
+            const content = await fs.readFile(src, 'utf-8');
+            const stripped = stripAstroComments(content);
+            await fs.writeFile(dest, stripped);
+        } else {
+            await fs.copyFile(src, dest);
+        }
     } catch (error) {
         console.error(`❌ Error copying ${src} to ${dest}:`, error);
     }
@@ -217,19 +224,18 @@ async function syncBlogToSite(siteId) {
     await ensureDir(siteComponentsDir);
     await ensureDir(siteStylesDir);
 
-    // Write localized templates
-    await fs.writeFile(join(siteBlogDir, 'index.astro'), localizedIndexTemplate);
-    await fs.writeFile(join(siteBlogDir, '[...slug].astro'), localizedPostTemplate);
+    // Write localized templates (strip comments)
+    await fs.writeFile(join(siteBlogDir, 'index.astro'), stripAstroComments(localizedIndexTemplate));
+    await fs.writeFile(join(siteBlogDir, '[...slug].astro'), stripAstroComments(localizedPostTemplate));
 
-    // Write documentation pages
-    await fs.writeFile(join(sitePagesDir, 'docs-viewer.astro'), docsViewerTemplate);
-    await fs.writeFile(join(sitePagesDir, 'docs-simple.astro'), docsSimpleTemplate);
-    await fs.writeFile(join(sitePagesDir, 'docs-hub.astro'), docsHubTemplate);
+    // Write documentation pages (strip comments)
+    await fs.writeFile(join(sitePagesDir, 'docs-viewer.astro'), stripAstroComments(docsViewerTemplate));
+    await fs.writeFile(join(sitePagesDir, 'docs-simple.astro'), stripAstroComments(docsSimpleTemplate));
+    await fs.writeFile(join(sitePagesDir, 'docs-hub.astro'), stripAstroComments(docsHubTemplate));
 
-
-    // Write localized layout
-    await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);
-    await fs.writeFile(join(siteLayoutsDir, 'SharedHomeLayout.astro'), localizedSharedHomeLayout);
+    // Write localized layout (strip comments)
+    await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), stripAstroComments(localizedSharedBlogLayout));
+    await fs.writeFile(join(siteLayoutsDir, 'SharedHomeLayout.astro'), stripAstroComments(localizedSharedHomeLayout));
 
     // Copy all core components automatically (except SEOMeta which needs localization)
     // This approach automatically copies ALL .astro files from core/components,
@@ -238,7 +244,7 @@ async function syncBlogToSite(siteId) {
     await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir);
     
     // Overwrite SEOMeta with localized version (special case for site-specific config)
-    await fs.writeFile(join(siteComponentsDir, 'SEOMeta.astro'), localizedSeoMetaComponent);
+    await fs.writeFile(join(siteComponentsDir, 'SEOMeta.astro'), stripAstroComments(localizedSeoMetaComponent));
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);

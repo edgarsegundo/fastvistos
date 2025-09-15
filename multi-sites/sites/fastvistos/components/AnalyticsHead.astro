@@ -14,7 +14,7 @@ const gtagId = siteConfig.analytics?.gtagId;
 const facebookPixelId = siteConfig.analytics?.facebookPixelId;
 ---
 
-<!-- Google Tag Manager -->
+
 {gtmId && (
     <script define:vars={{ gtmId }}>
         (function (w, d, s, l, i) {
@@ -30,7 +30,7 @@ const facebookPixelId = siteConfig.analytics?.facebookPixelId;
     </script>
 )}
 
-<!-- Google Analytics 4 (GA4) -->
+
 {gtagId && (
     <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}></script>
@@ -43,7 +43,7 @@ const facebookPixelId = siteConfig.analytics?.facebookPixelId;
     </>
 )}
 
-<!-- Facebook Pixel -->
+
 {facebookPixelId && (
     <script define:vars={{ facebookPixelId }}>
         !function(f,b,e,v,n,t,s)
