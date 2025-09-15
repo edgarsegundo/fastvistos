@@ -328,6 +328,94 @@ When you use SEOMeta, here's what actually gets rendered:
 - **Easy Scaling**: Adding new sites inherits proven SEO patterns
 - **Brand Consistency**: Proper colors, themes, and messaging per site
 
+### 🎯 **Enhanced Search Visibility**
+
+The `SEOMeta` component includes an optional **Enhanced Indexing** feature that gives you powerful control over how your content appears in search results.
+
+#### **What is Enhanced Indexing?**
+
+Enhanced indexing is an opt-in feature that instructs search engines to display your content more prominently with richer previews. When enabled, it generates advanced robots meta tags that unlock:
+
+```html
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+```
+
+#### **Visual Impact in Search Results**
+
+**Standard Search Result (Default):**
+
+```text
+🔗 FastVistos - Expert Visa Consultation
+📝 Get your US visa approved with our expert guidance...
+🖼️ [small thumbnail]
+```
+
+**Enhanced Search Result (Enhanced Indexing Enabled):**
+
+```text
+🔗 FastVistos - Expert Visa Consultation  
+📝 Get your US visa approved with our expert guidance. Our proven 5-step
+   system has helped over 10,000 clients achieve visa approval with a 95%
+   success rate. We handle document preparation, interview coaching, and...
+🖼️ [LARGE PROMINENT IMAGE]
+```
+
+#### **Enhanced Indexing Directives Explained**
+
+- **`max-snippet:-1`**: Allows unlimited text length in search previews (instead of ~160 characters)
+- **`max-image-preview:large`**: Enables large, eye-catching images in search results  
+- **`max-video-preview:-1`**: Allows full-length video previews (if you add video content)
+
+#### **When to Use Enhanced Indexing**
+
+**✅ Enable for High-Value Content:**
+```astro
+<!-- Blog posts with expert content -->
+<SEOMeta 
+    title="Ultimate US Visa Guide - 95% Success Rate"
+    description="Complete step-by-step visa application process..."
+    enhancedIndexing={true}  // Rich, prominent search results
+    siteConfig={siteConfig}
+/>
+
+<!-- Important service pages -->
+<SEOMeta 
+    title="US Tourist Visa Consultation Services"  
+    description="Expert visa consultation with guaranteed results..."
+    enhancedIndexing={true}  // Stand out from competitors
+    siteConfig={siteConfig}
+/>
+```
+
+**⚖️ Default for Regular Content:**
+```astro
+<!-- Contact pages, regular informational content -->
+<SEOMeta 
+    title="Contact FastVistos"
+    description="Get in touch with our visa experts"
+    // No enhancedIndexing = clean, standard search results
+    siteConfig={siteConfig}
+/>
+```
+
+#### **Business Impact**
+
+**Enhanced indexing can significantly improve:**
+
+- **Click-through rates** (more prominent search results)
+- **Brand perception** (professional, trustworthy appearance)
+- **Competitive advantage** (stand out from competitors without enhanced indexing)
+- **User engagement** (richer previews provide better content preview)
+
+#### **Implementation Strategy**
+
+**Recommended approach for FastVistos:**
+
+1. **Enable for revenue-generating pages** (service pages, consultation booking)
+2. **Enable for expert content** (detailed guides, success stories)  
+3. **Keep standard for utility pages** (contact, about, privacy policy)
+4. **Test and measure** impact on click-through rates
+
 ## Common Pitfalls & How We Avoid Them
 
 ### ❌ **Pitfall 1: Inconsistent Meta Tags Across Platforms**
