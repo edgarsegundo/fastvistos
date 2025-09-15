@@ -38,6 +38,13 @@ export const siteConfig: SiteConfig = {
         ogImage: '/og-image.jpg',
     },
 
+    // Analytics
+    analytics: {
+        gtmId: 'GTM-59SRNCQD',  // Google Tag Manager ID
+        // gtagId: 'G-XXXXXXXXXX',  // Uncomment when adding GA4
+        // facebookPixelId: 'XXXXXXXXXXXXXXX',  // Uncomment when adding Facebook Pixel
+    },
+
     // Features
     features: {
         blog: true,

@@ -46,6 +46,9 @@ const {
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfig.language.split('-')[0];
+
+// Analytics configuration
+const gtmId = siteConfig.analytics?.gtmId;
 ---
 
 <!DOCTYPE html>
@@ -70,6 +73,23 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    
+    <!-- Google Tag Manager -->
+    {gtmId && (
+        <script define:vars={{ gtmId }}>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', gtmId);
+        </script>
+    )}
+    <!-- End Google Tag Manager -->
     
     <!-- SEO Meta Tags (includes Open Graph and Twitter Card) -->
     <SEOMeta 
@@ -103,13 +123,15 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
     style="font-family: 'Source Sans Pro', sans-serif;"
 >
     <!-- Google Tag Manager (noscript) -->
-    <noscript
-        ><iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-59SRNCQD"
-            height="0"
-            width="0"
-            style="display:none;visibility:hidden"></iframe></noscript
-    >
+    {gtmId && (
+        <noscript
+            ><iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"></iframe></noscript
+        >
+    )}
     <!-- End Google Tag Manager (noscript) -->
 
     <!-- Header with exact dimensions -->
