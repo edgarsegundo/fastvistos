@@ -4,6 +4,45 @@ import OpenGraph from './OpenGraph.astro';
 import TwitterCard from './TwitterCard.astro';
 import type { SiteConfig } from '../lib/site-config.ts';
 
+/*
+    Hreflang alternates example:
+        <link rel="alternate" hreflang="pt-BR" href="https://vibecode-lovable.com.br/">
+        <link rel="alternate" hreflang="en" href="https://vibecode-lovable.com.br/en/">
+        <link rel="alternate" hreflang="es" href="https://vibecode-lovable.com.br/es/">
+        <link rel="alternate" hreflang="x-default" href="https://vibecode-lovable.com.br/">
+
+    ⚠️ If your project is multilingual or multi-region, you should set these tags in the final site layout or a custom SEO component,
+    not directly in SEOMeta.astro, since the logic and URLs may vary per site.
+*/
+
+/*
+    ---
+    💡 Additional SEO/Branding Meta Tags
+
+    These meta tags control browser theme color, PWA/app appearance, and branding for your site.
+    They are useful for:
+        - Customizing browser UI color (theme-color, msapplication-TileColor)
+        - Branding the app name (application-name)
+        - Improving PWA/mobile experience (apple-mobile-web-app-*, format-detection)
+        - Windows tile color/config (msapplication-*)
+
+    🔧 How to parametrize:
+        - Add the values to your siteConfig.seo (or siteConfig.pwa, if you prefer)
+        - Example:
+                seo: {
+                    ...
+                    themeColor: '#3b82f6',
+                    msTileColor: '#3b82f6',
+                    msTileConfig: '/browserconfig.xml',
+                    applicationName: 'Vibecode com Lovable',
+                    appleMobileWebAppCapable: 'yes',
+                    appleMobileWebAppStatusBarStyle: 'default',
+                    formatDetection: 'telephone=no',
+                }
+        - Then, SEOMeta.astro will render these tags if the values are present.
+    ---
+*/
+
 export interface Props {
     siteConfig: SiteConfig;
     title?: string;
@@ -65,6 +104,9 @@ const fullImageUrl = metaImage.startsWith('http')
 <meta name="author" content={author || siteConfig.seo.author} />
 
 <link rel="canonical" href={canonicalUrl} />
+
+<!-- Hreflang x-default for SEO internationalization best practice -->
+<link rel="alternate" hreflang="x-default" href={fullUrl} />
 
 {siteConfig.verification?.googleSiteVerification && (
     <meta name="google-site-verification" content={siteConfig.verification.googleSiteVerification} />

@@ -48,6 +48,9 @@ export interface SiteConfig {
         keywords: string[];
         author?: string;
         ogImage: string;
+    ogImageWidth?: number | string; // Open Graph image width (optional)
+    ogImageHeight?: number | string; // Open Graph image height (optional)
+    ogImageAlt?: string; // Open Graph image alt text (optional)
     };
 
     // Analytics
