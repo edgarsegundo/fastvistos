@@ -55,11 +55,11 @@ Configure os analytics no `site-config.ts`:
 export const siteConfig: SiteConfig = {
     // ... outras configurações
     analytics: {
-        gtmId: 'GTM-XXXXXXX',      // Google Tag Manager
-        gtagId: 'G-XXXXXXXXXX',    // Google Analytics 4
-        facebookPixelId: '123456789' // Facebook Pixel
-    }
-}
+        gtmId: 'GTM-XXXXXXX', // Google Tag Manager
+        gtagId: 'G-XXXXXXXXXX', // Google Analytics 4
+        facebookPixelId: '123456789', // Facebook Pixel
+    },
+};
 ```
 
 ## ✨ **Vantagens da Solução**
@@ -85,6 +85,7 @@ Ambos `SharedBlogLayout.astro` e `SharedHomeLayout.astro` agora usam estes compo
 ## 📈 **Futuras Extensões**
 
 Facilmente extensível para outros analytics:
+
 - Google Ads Conversion Tracking
 - LinkedIn Insight Tag
 - Twitter Pixel

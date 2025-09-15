@@ -33,7 +33,7 @@ Poor social media previews cost you:
 ---
 /**
  * OpenGraph Component - Social Media Optimization Engine
- * 
+ *
  * Generates comprehensive OpenGraph meta tags that create compelling
  * social media previews across Facebook, LinkedIn, WhatsApp, and more.
  */
@@ -47,7 +47,7 @@ export interface Props {
     locale?: string;         // Language and region targeting
 }
 
-const { 
+const {
     title,
     description,
     url,
@@ -74,8 +74,12 @@ Our component implements intelligent conditional rendering:
 
 ```javascript
 // Only render tags when data is available
-{title && <meta property="og:title" content={title} />}
-{description && <meta property="og:description" content={description} />}
+{
+    title && <meta property="og:title" content={title} />;
+}
+{
+    description && <meta property="og:description" content={description} />;
+}
 ```
 
 This prevents empty meta tags that could confuse social media platforms.
@@ -120,7 +124,10 @@ This prevents empty meta tags that could confuse social media platforms.
 #### **og:description** - The Persuasion
 
 ```html
-<meta property="og:description" content="Our proven 5-step system has helped 10,000+ clients get approved. Get expert guidance, avoid common mistakes, and fast-track your visa application." />
+<meta
+    property="og:description"
+    content="Our proven 5-step system has helped 10,000+ clients get approved. Get expert guidance, avoid common mistakes, and fast-track your visa application."
+/>
 ```
 
 **Optimization techniques:**
@@ -178,8 +185,7 @@ https://fastvistos.com.br/blog/visa-guide?utm_source=google
 https://fastvistos.com.br/blog/visa-guide?utm_source=facebook
 
 <!-- Direct links -->
-https://fastvistos.com.br/blog/visa-guide/
-https://fastvistos.com.br/blog/visa-guide#tips
+https://fastvistos.com.br/blog/visa-guide/ https://fastvistos.com.br/blog/visa-guide#tips
 ```
 
 **The Problem Without og:url:**
@@ -187,7 +193,7 @@ https://fastvistos.com.br/blog/visa-guide#tips
 Social platforms see these as 5 different pieces of content:
 
 - Email version: 12 shares
-- Google version: 8 shares  
+- Google version: 8 shares
 - Facebook version: 15 shares
 - Direct link: 22 shares
 - Section link: 6 shares
@@ -208,10 +214,14 @@ All 63 shares (12+8+15+22+6) now count toward ONE canonical URL.
 
 ```html
 <!-- Different content types -->
-<meta property="og:type" content="website" />      <!-- Homepage -->
-<meta property="og:type" content="article" />      <!-- Blog posts -->
-<meta property="og:type" content="product" />      <!-- Service pages -->
-<meta property="og:type" content="video" />        <!-- Video content -->
+<meta property="og:type" content="website" />
+<!-- Homepage -->
+<meta property="og:type" content="article" />
+<!-- Blog posts -->
+<meta property="og:type" content="product" />
+<!-- Service pages -->
+<meta property="og:type" content="video" />
+<!-- Video content -->
 ```
 
 #### **OpenGraph Type Implementation Examples**
@@ -220,14 +230,14 @@ Here are practical examples showing how to use different `og:type` values for va
 
 ```astro
 <!-- Homepage -->
-<OpenGraph 
+<OpenGraph
     type="website"
     title="FastVistos - #1 Visa Consultancy in Brazil"
     description="Expert visa consultation services..."
 />
 
 <!-- Blog Posts -->
-<OpenGraph 
+<OpenGraph
     type="article"
     title="5 Visa Interview Secrets That Get Approval"
     description="Expert tips for visa approval success"
@@ -238,21 +248,21 @@ Here are practical examples showing how to use different `og:type` values for va
 />
 
 <!-- Service Pages -->
-<OpenGraph 
+<OpenGraph
     type="website"  // or "business.business"
     title="US Tourist Visa Consultation - 95% Success Rate"
     description="Complete visa assistance with expert guidance"
 />
 
 <!-- About Page -->
-<OpenGraph 
+<OpenGraph
     type="profile"  // or "website"
     title="About FastVistos - Our Story & Team"
     description="15+ years helping Brazilians travel to the US"
 />
 
 <!-- Success Stories -->
-<OpenGraph 
+<OpenGraph
     type="article"
     title="Client Success: Maria's US Visa Approval Story"
     description="How Maria got her US visa approved in 30 days"
@@ -280,9 +290,12 @@ Appears as: "Article from FastVistos" on Facebook
 #### **og:locale** - International Targeting
 
 ```html
-<meta property="og:locale" content="pt-BR" />          <!-- Portuguese Brazil -->
-<meta property="og:locale" content="en-US" />          <!-- English US -->
-<meta property="og:locale" content="es-ES" />          <!-- Spanish Spain -->
+<meta property="og:locale" content="pt-BR" />
+<!-- Portuguese Brazil -->
+<meta property="og:locale" content="en-US" />
+<!-- English US -->
+<meta property="og:locale" content="es-ES" />
+<!-- Spanish Spain -->
 ```
 
 ## Real-World Implementation Examples
@@ -302,7 +315,7 @@ const post = {
 };
 ---
 
-<OpenGraph 
+<OpenGraph
     title={post.title}
     description={post.excerpt}
     url={post.canonicalUrl}
@@ -316,7 +329,7 @@ const post = {
 **Social Media Result:**
 
 - 🎯 **Compelling headline** promises value and creates urgency
-- 🎯 **Social proof** with statistics builds credibility  
+- 🎯 **Social proof** with statistics builds credibility
 - 🎯 **Custom image** designed specifically for social sharing
 - 🎯 **Clear branding** with site name attribution
 
@@ -332,7 +345,7 @@ const service = {
 };
 ---
 
-<OpenGraph 
+<OpenGraph
     title={service.title}
     description={service.description}
     url={Astro.url.href}
@@ -357,7 +370,7 @@ const service = {
 // Homepage designed for brand awareness
 ---
 
-<OpenGraph 
+<OpenGraph
     title="FastVistos - #1 Visa Consultancy in Brazil"
     description="15+ years helping Brazilians travel to the US. Expert visa consultation, document preparation, and interview training. 10,000+ successful approvals."
     url="https://fastvistos.com.br"
@@ -386,7 +399,7 @@ While OpenGraph provides a universal foundation, **each social media platform ha
 Each platform serves different purposes and audiences:
 
 - **Facebook**: Family-oriented, community discussions, emotional content
-- **LinkedIn**: Professional networking, business content, industry insights  
+- **LinkedIn**: Professional networking, business content, industry insights
 - **WhatsApp**: Personal recommendations, trusted friend networks, mobile-first
 - **Twitter**: Breaking news, quick updates, trending topics
 - **Instagram**: Visual storytelling, lifestyle content, influencer marketing
@@ -397,11 +410,11 @@ Each platform serves different purposes and audiences:
 
 ```javascript
 const platformSpecs = {
-    facebook: { optimal: '1200×630', ratio: '1.91:1' },    // Landscape focus
-    linkedin: { optimal: '1200×627', ratio: '1.91:1' },    // Professional landscape
-    twitter: { optimal: '1200×600', ratio: '2:1' },        // Wide landscape
-    instagram: { optimal: '1080×1080', ratio: '1:1' },     // Square format
-    whatsapp: { optimal: '1080×1080', ratio: '1:1' }       // Square/mobile optimized
+    facebook: { optimal: '1200×630', ratio: '1.91:1' }, // Landscape focus
+    linkedin: { optimal: '1200×627', ratio: '1.91:1' }, // Professional landscape
+    twitter: { optimal: '1200×600', ratio: '2:1' }, // Wide landscape
+    instagram: { optimal: '1080×1080', ratio: '1:1' }, // Square format
+    whatsapp: { optimal: '1080×1080', ratio: '1:1' }, // Square/mobile optimized
 };
 ```
 
@@ -412,7 +425,7 @@ const characterLimits = {
     facebook: { title: 85, description: 155 },
     linkedin: { title: 70, description: 140 },
     twitter: { title: 70, description: 125 },
-    whatsapp: { title: 65, description: 100 }  // Mobile constraints
+    whatsapp: { title: 65, description: 100 }, // Mobile constraints
 };
 ```
 
@@ -422,7 +435,7 @@ const characterLimits = {
 
 ```astro
 <!-- Single set of tags for all platforms -->
-<OpenGraph 
+<OpenGraph
     title="US Visa Guide: Expert Tips for Approval"
     description="Complete guide with proven strategies for visa success"
     image="/social/visa-guide-universal.jpg"
@@ -461,14 +474,14 @@ const getOptimizedContent = (platform: string) => {
             image: "/social/whatsapp-personal-success.jpg"
         }
     };
-    
+
     return optimizations[platform] || optimizations.facebook;
 };
 
 const content = getOptimizedContent(platform);
 ---
 
-<OpenGraph 
+<OpenGraph
     title={content.title}
     description={content.description}
     image={content.image}
@@ -537,7 +550,7 @@ const generateSocialImage = (title: string, category: string) => {
 const socialImage = generateSocialImage(post.title, post.category);
 ---
 
-<OpenGraph 
+<OpenGraph
     image={socialImage}
     title={post.title}
     description={post.excerpt}
@@ -564,7 +577,7 @@ const variant = Math.random() > 0.5 ? 'A' : 'B';
 const socialCopy = socialVariants[variant];
 ---
 
-<OpenGraph 
+<OpenGraph
     title={socialCopy.title}
     description={socialCopy.description}
 />
@@ -592,7 +605,7 @@ const getLocalizedContent = (locale: string) => {
 const localContent = getLocalizedContent(currentLocale);
 ---
 
-<OpenGraph 
+<OpenGraph
     title={localContent.title}
     description={localContent.description}
     locale={currentLocale}
@@ -604,19 +617,19 @@ const localContent = getLocalizedContent(currentLocale);
 ### Essential Testing Tools
 
 1. **Facebook Sharing Debugger**
-   - URL: <https://developers.facebook.com/tools/debug/>
-   - **Purpose**: Preview how content appears on Facebook
-   - **Features**: Cache clearing, preview generation, error detection
+    - URL: <https://developers.facebook.com/tools/debug/>
+    - **Purpose**: Preview how content appears on Facebook
+    - **Features**: Cache clearing, preview generation, error detection
 
 2. **LinkedIn Post Inspector**
-   - URL: <https://www.linkedin.com/post-inspector/>
-   - **Purpose**: Validate LinkedIn social previews
-   - **Features**: Real-time preview, optimization suggestions
+    - URL: <https://www.linkedin.com/post-inspector/>
+    - **Purpose**: Validate LinkedIn social previews
+    - **Features**: Real-time preview, optimization suggestions
 
 3. **WhatsApp Business API**
-   - **Method**: Send test links to WhatsApp
-   - **Purpose**: Verify WhatsApp preview behavior
-   - **Note**: Caching delays may require patience
+    - **Method**: Send test links to WhatsApp
+    - **Purpose**: Verify WhatsApp preview behavior
+    - **Note**: Caching delays may require patience
 
 ### Automated Testing Strategy
 
@@ -628,7 +641,7 @@ describe('OpenGraph Component', () => {
             title: 'Test Title',
             description: 'Test Description',
             url: 'https://example.com',
-            image: 'https://example.com/image.jpg'
+            image: 'https://example.com/image.jpg',
         });
 
         expect(result).toContain('og:title');
@@ -639,7 +652,7 @@ describe('OpenGraph Component', () => {
 
     test('handles missing props gracefully', async () => {
         const result = await render(OpenGraph, {
-            title: 'Test Title'
+            title: 'Test Title',
             // description intentionally missing
         });
 
@@ -662,7 +675,7 @@ const optimizeSocialImage = (originalImage: string) => {
 };
 ---
 
-<OpenGraph 
+<OpenGraph
     image={optimizeSocialImage(post.featuredImage)}
 />
 ```
@@ -744,7 +757,7 @@ window.addEventListener('share', (event) => {
     gtag('event', 'social_share', {
         content_type: 'article',
         content_id: post.id,
-        method: event.platform
+        method: event.platform,
     });
 });
 ```
@@ -779,7 +792,7 @@ const aiOptimizedContent = await optimizeForSocial({
 });
 ---
 
-<OpenGraph 
+<OpenGraph
     title={aiOptimizedContent.title}
     description={aiOptimizedContent.description}
     image={aiOptimizedContent.generatedImage}
@@ -830,4 +843,4 @@ In **Chapter 6: Twitter Cards & Social Sharing**, we'll explore the `TwitterCard
 
 ---
 
-*Master the art of social media optimization with component-driven development. Every share counts, every preview matters.*
+_Master the art of social media optimization with component-driven development. Every share counts, every preview matters._

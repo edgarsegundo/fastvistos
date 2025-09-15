@@ -9,8 +9,8 @@ This document explains how and why to use resource hints and preloads in your `<
 Use for third-party resources you know you’ll use (fonts, analytics, CDN):
 
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 ```
 
 ---
@@ -20,8 +20,13 @@ Use for third-party resources you know you’ll use (fonts, analytics, CDN):
 If you have a main CSS file that’s render-blocking, preload it:
 
 ```html
-<link rel="preload" href="/path/to/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/path/to/main.css"></noscript>
+<link
+    rel="preload"
+    href="/path/to/main.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="/path/to/main.css" /></noscript>
 ```
 
 ---
@@ -31,7 +36,7 @@ If you have a main CSS file that’s render-blocking, preload it:
 For custom fonts, preload the WOFF2 file:
 
 ```html
-<link rel="preload" href="/fonts/your-font.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/your-font.woff2" as="font" type="font/woff2" crossorigin />
 ```
 
 ---
@@ -41,7 +46,7 @@ For custom fonts, preload the WOFF2 file:
 If you have a large hero/banner image, preload it as you did with your logo:
 
 ```html
-<link rel="preload" href="/assets/hero.webp" as="image" type="image/webp">
+<link rel="preload" href="/assets/hero.webp" as="image" type="image/webp" />
 ```
 
 ---
@@ -51,7 +56,7 @@ If you have a large hero/banner image, preload it as you did with your logo:
 If you have a critical JS file needed for above-the-fold interactivity, you can preload it:
 
 ```html
-<link rel="preload" href="/path/to/critical.js" as="script">
+<link rel="preload" href="/path/to/critical.js" as="script" />
 ```
 
 ---
@@ -61,7 +66,7 @@ If you have a critical JS file needed for above-the-fold interactivity, you can 
 For resources needed on the next page (not the current one), use prefetch:
 
 ```html
-<link rel="prefetch" href="/next-page.js" as="script">
+<link rel="prefetch" href="/next-page.js" as="script" />
 ```
 
 ---

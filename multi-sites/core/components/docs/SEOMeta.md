@@ -59,10 +59,10 @@ graph TD
 ---
 /**
  * SEOMeta Component - The Future of SEO Integration
- * 
+ *
  * This component represents a paradigm shift in how we approach SEO:
  * - Configuration-driven instead of manual
- * - Composable instead of monolithic  
+ * - Composable instead of monolithic
  * - Intelligent defaults with strategic overrides
  * - Multi-platform consistency built-in
  */
@@ -80,7 +80,7 @@ export interface Props {
     canonical?: string;       // Canonical URL override
 }
 
-const { 
+const {
     siteConfig,
     title,
     description,
@@ -98,8 +98,8 @@ const fullUrl = pageUrl || `https://${siteConfig.domain}`;
 const canonicalUrl = canonical || fullUrl;
 
 // 🔗 Smart URL Building
-const fullImageUrl = metaImage.startsWith('http') 
-    ? metaImage 
+const fullImageUrl = metaImage.startsWith('http')
+    ? metaImage
     : `https://${siteConfig.domain}${metaImage}`;
 ---
 
@@ -117,7 +117,7 @@ const fullImageUrl = metaImage.startsWith('http')
 <html lang={siteConfig.language.split('-')[0]} />
 
 <!-- 📱 Social Media Integration -->
-<OpenGraph 
+<OpenGraph
     title={metaTitle}
     description={metaDescription}
     url={fullUrl}
@@ -127,7 +127,7 @@ const fullImageUrl = metaImage.startsWith('http')
     locale={siteConfig.language.replace('-', '_')}
 />
 
-<TwitterCard 
+<TwitterCard
     title={metaTitle}
     description={metaDescription}
     image={fullImageUrl}
@@ -155,10 +155,10 @@ export const siteConfig: SiteConfig = {
         title: 'FastVistos - Especialistas em Vistos Americanos',
         description: 'Assessoria completa para vistos americanos B1/B2...',
         keywords: ['visto americano', 'assessoria visa'],
-        ogImage: '/og-image.jpg'
+        ogImage: '/og-image.jpg',
     },
     primaryColor: '#FF6B35',
-    language: 'pt-BR'
+    language: 'pt-BR',
     // ... more configuration
 };
 ```
@@ -173,7 +173,7 @@ Page Props → Site Config → Smart Defaults
 
 ```astro
 <!-- Example: Page-specific customization -->
-<SEOMeta 
+<SEOMeta
     siteConfig={siteConfig}
     title="Custom Page Title"           ← Overrides site default
     description="Custom description"    ← Overrides site default
@@ -187,9 +187,9 @@ The component intelligently handles different URL formats:
 
 ```javascript
 // Smart URL building logic
-const fullImageUrl = metaImage.startsWith('http') 
-    ? metaImage                                    // Already absolute
-    : `https://${siteConfig.domain}${metaImage}`;  // Make relative absolute
+const fullImageUrl = metaImage.startsWith('http')
+    ? metaImage // Already absolute
+    : `https://${siteConfig.domain}${metaImage}`; // Make relative absolute
 ```
 
 ## Real-World Usage Scenarios
@@ -207,7 +207,7 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 
 <html>
 <head>
-    <SEOMeta 
+    <SEOMeta
         siteConfig={siteConfig}
         title={`${post.title} | ${siteConfig.name}`}
         description={post.excerpt}
@@ -229,7 +229,7 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 
 <html>
 <head>
-    <SEOMeta 
+    <SEOMeta
         siteConfig={siteConfig}
         title="Special 50% Off Visa Services - Limited Time"
         description="Get professional visa assistance at 50% off. Limited time offer for US visa applications."
@@ -250,7 +250,7 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 
 <html>
 <head>
-    <SEOMeta 
+    <SEOMeta
         siteConfig={siteConfig}
         title="Admin Dashboard"
         description="Internal admin dashboard"
@@ -337,7 +337,10 @@ The `SEOMeta` component includes an optional **Enhanced Indexing** feature that 
 Enhanced indexing is an opt-in feature that instructs search engines to display your content more prominently with richer previews. When enabled, it generates advanced robots meta tags that unlock:
 
 ```html
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta
+    name="robots"
+    content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+/>
 ```
 
 #### **Visual Impact in Search Results**
@@ -353,7 +356,7 @@ Enhanced indexing is an opt-in feature that instructs search engines to display 
 **Enhanced Search Result (Enhanced Indexing Enabled):**
 
 ```text
-🔗 FastVistos - Expert Visa Consultation  
+🔗 FastVistos - Expert Visa Consultation
 📝 Get your US visa approved with our expert guidance. Our proven 5-step
    system has helped over 10,000 clients achieve visa approval with a 95%
    success rate. We handle document preparation, interview coaching, and...
@@ -363,15 +366,16 @@ Enhanced indexing is an opt-in feature that instructs search engines to display 
 #### **Enhanced Indexing Directives Explained**
 
 - **`max-snippet:-1`**: Allows unlimited text length in search previews (instead of ~160 characters)
-- **`max-image-preview:large`**: Enables large, eye-catching images in search results  
+- **`max-image-preview:large`**: Enables large, eye-catching images in search results
 - **`max-video-preview:-1`**: Allows full-length video previews (if you add video content)
 
 #### **When to Use Enhanced Indexing**
 
 **✅ Enable for High-Value Content:**
+
 ```astro
 <!-- Blog posts with expert content -->
-<SEOMeta 
+<SEOMeta
     title="Ultimate US Visa Guide - 95% Success Rate"
     description="Complete step-by-step visa application process..."
     enhancedIndexing={true}  // Rich, prominent search results
@@ -379,8 +383,8 @@ Enhanced indexing is an opt-in feature that instructs search engines to display 
 />
 
 <!-- Important service pages -->
-<SEOMeta 
-    title="US Tourist Visa Consultation Services"  
+<SEOMeta
+    title="US Tourist Visa Consultation Services"
     description="Expert visa consultation with guaranteed results..."
     enhancedIndexing={true}  // Stand out from competitors
     siteConfig={siteConfig}
@@ -388,9 +392,10 @@ Enhanced indexing is an opt-in feature that instructs search engines to display 
 ```
 
 **⚖️ Default for Regular Content:**
+
 ```astro
 <!-- Contact pages, regular informational content -->
-<SEOMeta 
+<SEOMeta
     title="Contact FastVistos"
     description="Get in touch with our visa experts"
     // No enhancedIndexing = clean, standard search results
@@ -412,7 +417,7 @@ Enhanced indexing is an opt-in feature that instructs search engines to display 
 **Recommended approach for FastVistos:**
 
 1. **Enable for revenue-generating pages** (service pages, consultation booking)
-2. **Enable for expert content** (detailed guides, success stories)  
+2. **Enable for expert content** (detailed guides, success stories)
 3. **Keep standard for utility pages** (contact, about, privacy policy)
 4. **Test and measure** impact on click-through rates
 
@@ -436,7 +441,7 @@ Enhanced indexing is an opt-in feature that instructs search engines to display 
 **Our Solution**: Automatic canonical URL generation
 
 ```javascript
-const canonicalUrl = canonical || fullUrl;  // Always has a canonical URL
+const canonicalUrl = canonical || fullUrl; // Always has a canonical URL
 ```
 
 ### ❌ **Pitfall 3: Hardcoded Domain References**
@@ -532,9 +537,9 @@ const structuredData = {
 test('SEOMeta generates complete meta tags', async () => {
     const component = await render(SEOMeta, {
         siteConfig: mockSiteConfig,
-        title: 'Test Page'
+        title: 'Test Page',
     });
-    
+
     expect(component).toContain('<title>Test Page</title>');
     expect(component).toContain('og:title');
     expect(component).toContain('twitter:card');
@@ -567,6 +572,7 @@ test('SEOMeta generates complete meta tags', async () => {
 ```
 
 **Problems:**
+
 - Inconsistent titles across platforms
 - Missing canonical URLs
 - No systematic keyword management
@@ -582,6 +588,7 @@ test('SEOMeta generates complete meta tags', async () => {
 ```
 
 **Results:**
+
 - ✅ **95% reduction** in meta tag code
 - ✅ **100% consistency** across all platforms
 - ✅ **Automatic best practices** implementation
@@ -590,6 +597,7 @@ test('SEOMeta generates complete meta tags', async () => {
 ### **SEO Performance Impact**
 
 **Metrics after 3 months:**
+
 - 📈 **23% increase** in organic traffic
 - 📈 **35% improvement** in social media click-through rates
 - 📈 **18% boost** in search engine rankings
@@ -618,7 +626,7 @@ test('SEOMeta generates complete meta tags', async () => {
 The `SEOMeta` component represents more than just a technical solution—it's a **paradigm shift** toward **intelligent, configuration-driven development**. By combining:
 
 - 🧠 **Smart defaults** with strategic customization
-- 🔗 **Centralized configuration** with flexible overrides  
+- 🔗 **Centralized configuration** with flexible overrides
 - 🚀 **Modern tooling** with proven SEO principles
 - 🎯 **Multi-site support** with consistent implementation
 
@@ -630,4 +638,4 @@ In **Chapter 5: Social Media Optimization with OpenGraph**, we'll dive deep into
 
 ---
 
-*This documentation is part of the "Multi-Site SEO with Astro" series. Each component tells its story, contributing to a comprehensive guide for modern web development.*
+_This documentation is part of the "Multi-Site SEO with Astro" series. Each component tells its story, contributing to a comprehensive guide for modern web development._

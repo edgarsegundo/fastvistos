@@ -5,12 +5,14 @@ A comprehensive documentation management system built with **Astro**, **editor.m
 ## 🌟 Features
 
 ### 📖 Advanced Documentation Viewer
+
 - **Interactive Document Browser**: Navigate through all markdown files in your project
 - **Category Organization**: Automatically categorizes documents (README, Components, Documentation, Other)
 - **Real-time Statistics**: Shows document count, word count, and file sizes
 - **Smart Search**: Filter documents by title and content
 
 ### ✏️ Powerful Editor
+
 - **Editor.md Integration**: Full-featured markdown editor with live preview
 - **Syntax Highlighting**: Code blocks with proper language highlighting
 - **Mathematical Expressions**: Support for LaTeX math rendering
@@ -19,12 +21,14 @@ A comprehensive documentation management system built with **Astro**, **editor.m
 - **Table Editing**: Advanced table creation and editing
 
 ### 🔄 Real-time Functionality
+
 - **Live Preview**: See changes as you type
 - **Auto-save**: Seamless saving without page refresh
 - **Download Documents**: Export any document as markdown
 - **View/Edit Modes**: Switch between reading and editing modes
 
 ### 🎨 Modern UI
+
 - **Responsive Design**: Works perfectly on desktop and mobile
 - **Glass Morphism**: Beautiful modern design with backdrop filters
 - **Smooth Animations**: Delightful micro-interactions
@@ -62,7 +66,9 @@ multi-sites/
 ## 🔧 API Endpoints
 
 ### GET `/api/docs-list`
+
 Returns a list of all markdown files with metadata:
+
 ```json
 {
   "documents": [...],
@@ -77,18 +83,22 @@ Returns a list of all markdown files with metadata:
 ```
 
 ### GET `/api/docs/{path}`
+
 Returns the content of a specific markdown file:
+
 ```
 # Document Title
 Document content in markdown format...
 ```
 
 ### PUT `/api/docs/{path}`
+
 Saves content to a specific markdown file.
 
 ## 🛠️ Technical Implementation
 
 ### Frontend Technologies
+
 - **Astro**: Static site generation with server-side rendering
 - **Editor.md**: Professional markdown editor
 - **Vanilla JavaScript**: Lightweight, framework-free implementation
@@ -96,12 +106,14 @@ Saves content to a specific markdown file.
 - **Backdrop Filter**: Modern glass morphism effects
 
 ### Backend Integration
+
 - **Node.js File System**: Direct file system access for reading/writing
 - **Glob Patterns**: Efficient file discovery
 - **Path Security**: Protection against directory traversal attacks
 - **JSON APIs**: RESTful endpoint design
 
 ### Security Features
+
 - **Path Validation**: Prevents access to files outside the project
 - **File Type Checking**: Only allows markdown files
 - **CORS Headers**: Proper cross-origin resource sharing
@@ -110,18 +122,21 @@ Saves content to a specific markdown file.
 ## 🎯 Use Cases
 
 ### For Developers
+
 - **Code Documentation**: Document components, functions, and APIs
 - **Project Notes**: Keep track of development decisions and ideas
 - **README Management**: Create and maintain project documentation
 - **Knowledge Base**: Build a comprehensive development knowledge base
 
 ### For Technical Writers
+
 - **Content Creation**: Write documentation with live preview
 - **Content Organization**: Automatically categorized content
 - **Collaborative Editing**: Real-time content updates
 - **Export Capabilities**: Download documentation for external use
 
 ### For Teams
+
 - **Shared Knowledge**: Centralized documentation access
 - **Version Control**: Integration with git for version tracking
 - **Search Functionality**: Quick access to relevant information
@@ -130,6 +145,7 @@ Saves content to a specific markdown file.
 ## 🔮 Future Enhancements
 
 ### Planned Features
+
 - **Dark Mode**: Complete dark theme implementation
 - **User Authentication**: Multi-user support with permissions
 - **Real-time Collaboration**: Multiple users editing simultaneously
@@ -138,6 +154,7 @@ Saves content to a specific markdown file.
 - **Export Formats**: PDF, HTML, and other format exports
 
 ### Advanced Features
+
 - **AI Integration**: Smart content suggestions and auto-completion
 - **Template System**: Pre-built documentation templates
 - **Analytics**: Usage statistics and popular content tracking
@@ -147,12 +164,14 @@ Saves content to a specific markdown file.
 ## 📊 Performance Metrics
 
 ### Load Times
+
 - **Initial Page Load**: < 1.5 seconds
 - **Document Switch**: < 200ms
 - **Search Results**: < 100ms
 - **Save Operation**: < 300ms
 
 ### File Support
+
 - **Maximum File Size**: 10MB per document
 - **Supported Files**: All `.md` files in the project
 - **Concurrent Users**: Optimized for multiple simultaneous users
@@ -170,18 +189,21 @@ This documentation system is part of the Revolutionary Documentation approach, w
 ## 📝 Examples
 
 ### Adding a New Document
+
 1. Create a new `.md` file in your project
 2. Refresh the documentation viewer
 3. Find your document in the appropriate category
 4. Click to edit and add content
 
 ### Searching for Content
+
 1. Use the search box in the sidebar
 2. Search by document title or content
 3. Results filter in real-time
 4. Click any result to open the document
 
 ### Editing Workflow
+
 1. Select a document from the sidebar
 2. Click "Edit" to enter edit mode
 3. Make your changes in the editor
@@ -209,4 +231,4 @@ This documentation system embodies the "Revolutionary Documentation" methodology
 
 **Built with ❤️ for the future of development documentation**
 
-*This system represents a new paradigm in development documentation, where beautiful interfaces meet powerful functionality to create the ultimate documentation experience.*
+_This system represents a new paradigm in development documentation, where beautiful interfaces meet powerful functionality to create the ultimate documentation experience._

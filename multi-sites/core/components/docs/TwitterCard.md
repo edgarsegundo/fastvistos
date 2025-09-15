@@ -91,7 +91,7 @@ Proper Twitter Card implementation delivers:
 ---
 /**
  * TwitterCard Component - Twitter-Optimized Social Sharing
- * 
+ *
  * Creates compelling Twitter Cards that drive engagement and click-through
  * rates specifically optimized for Twitter's algorithm and user behavior.
  */
@@ -105,7 +105,7 @@ export interface Props {
     creator?: string;       // @username for content creator
 }
 
-const { 
+const {
     card = 'summary_large_image',  // Default to large image for maximum impact
     title,
     description,
@@ -151,7 +151,7 @@ const article = {
 };
 ---
 
-<TwitterCard 
+<TwitterCard
     card="summary_large_image"
     title={article.title}
     description={article.excerpt}
@@ -175,7 +175,7 @@ const service = {
 };
 ---
 
-<TwitterCard 
+<TwitterCard
     card="summary_large_image"
     title={`${service.name} - 95% Success Rate`}
     description={service.pitch}
@@ -203,7 +203,7 @@ const video = {
 };
 ---
 
-<TwitterCard 
+<TwitterCard
     card="player"
     title={video.title}
     description={video.description}
@@ -244,16 +244,16 @@ const optimizeTwitterTitle = (title: string) => {
 const pageContent = {
     // SEO page title (for search engines)
     title: "Complete US Visa Interview Preparation Guide with Expert Tips and Strategies",
-    
+
     // Twitter-optimized title (designed for engagement, under 70 chars)
     twitterTitle: "Ace Your US Visa Interview: 5 Secrets That Get Approval ✈️",
-    
+
     description: "Expert guide with proven strategies...",
     twitterDescription: "Master these 5 interview secrets and get approved fast!"
 };
 ---
 
-<TwitterCard 
+<TwitterCard
     title={pageContent.twitterTitle}  // Purpose-built for Twitter
     description={pageContent.twitterDescription}
 />
@@ -314,7 +314,7 @@ const blogPost = {
 };
 ---
 
-<TwitterCard 
+<TwitterCard
     title={blogPost.title}
     image={blogPost.socialImage}
     url={Astro.url.href}
@@ -325,19 +325,19 @@ const blogPost = {
 **Image design principles**:
 
 - ✅ **High contrast** for mobile visibility  
-  *Use case: Dark text on light background, or white text on dark blue/green backgrounds*
+  _Use case: Dark text on light background, or white text on dark blue/green backgrounds_
 
 - ✅ **Clear typography** that remains readable at small sizes  
-  *Use case: Bold sans-serif fonts (Arial, Helvetica) at 24px+ size, avoid script fonts*
+  _Use case: Bold sans-serif fonts (Arial, Helvetica) at 24px+ size, avoid script fonts_
 
 - ✅ **Minimal text overlay** (let meta description provide context)  
-  *Use case: Show only key benefit like "95% Success Rate" instead of full paragraph*
+  _Use case: Show only key benefit like "95% Success Rate" instead of full paragraph_
 
 - ✅ **Brand elements** for recognition and trust  
-  *Use case: Include logo, brand colors, or website URL in consistent corner placement*
+  _Use case: Include logo, brand colors, or website URL in consistent corner placement_
 
 - ✅ **Brand elements** for recognition and trust  
-  *Use case: Embed logo, brand colors, and website URL as text on the image itself - not as separate metadata*
+  _Use case: Embed logo, brand colors, and website URL as text on the image itself - not as separate metadata_
 
 #### **Implementation Approaches**
 
@@ -367,7 +367,7 @@ const getTwitterImage = (contentType: string, category?: string) => {
 const twitterImage = getTwitterImage(content.type, content.category);
 ---
 
-<TwitterCard 
+<TwitterCard
     image={twitterImage}
     title={content.title}
     description={content.description}
@@ -404,7 +404,7 @@ If you prefer simplicity, you can absolutely use one high-quality generic image:
 const genericImage = "/images/social/fastvistos-professional.jpg";
 ---
 
-<TwitterCard 
+<TwitterCard
     image={genericImage}  // Same image everywhere
     title={content.title}
     description={content.description}
@@ -470,7 +470,7 @@ const serviceTitle = successRate ? `${serviceName} - ${successRate} Success Rate
 **Benefits of specialized components:**
 
 - ✅ **Clear purpose** - each component optimized for its content type
-- ✅ **Better defaults** - pre-configured for specific use cases  
+- ✅ **Better defaults** - pre-configured for specific use cases
 - ✅ **Easy maintenance** - modify blog cards without affecting service cards
 - ✅ **Type safety** - specific props for each content type
 
@@ -530,7 +530,7 @@ const testVariant = getTestVariant(userId);
 const twitterCopy = twitterVariants[testVariant];
 ---
 
-<TwitterCard 
+<TwitterCard
     title={twitterCopy.title}
     description={twitterCopy.description}
 />
@@ -544,28 +544,28 @@ const twitterCopy = twitterVariants[testVariant];
 const getSeasonalContent = () => {
     const now = new Date();
     const month = now.getMonth();
-    
+
     if (month >= 10 || month <= 2) {
         return {
             title: "Winter Travel: Get Your US Visa Before Holiday Season",
             image: "/seasonal/winter-travel-visa.jpg"
         };
     }
-    
+
     if (month >= 3 && month <= 5) {
         return {
             title: "Spring Break Plans? Secure Your US Visa Now",
             image: "/seasonal/spring-break-visa.jpg"
         };
     }
-    
+
     // Summer and fall variants...
 };
 
 const seasonalContent = getSeasonalContent();
 ---
 
-<TwitterCard 
+<TwitterCard
     title={seasonalContent.title}
     image={seasonalContent.image}
 />
@@ -595,13 +595,13 @@ const socialContent = {
 ---
 
 <!-- Twitter-optimized card -->
-<TwitterCard 
+<TwitterCard
     title={socialContent.twitter.title}
     description={socialContent.twitter.description}
 />
 
 <!-- Facebook/OpenGraph optimized -->
-<OpenGraph 
+<OpenGraph
     title={socialContent.facebook.title}
     description={socialContent.facebook.description}
 />
@@ -653,15 +653,15 @@ const socialContent = {
 // Validation function for Twitter limits
 const validateTwitterCard = (data: TwitterCardData) => {
     const errors = [];
-    
+
     if (data.title && data.title.length > 70) {
         errors.push('Title exceeds 70 character limit');
     }
-    
+
     if (data.description && data.description.length > 200) {
         errors.push('Description exceeds 200 character limit');
     }
-    
+
     return errors;
 };
 ```
@@ -700,18 +700,17 @@ To actually track visitors coming from Twitter, use these approaches:
 // Detect Twitter traffic automatically
 document.addEventListener('DOMContentLoaded', () => {
     const referrer = document.referrer;
-    const isFromTwitter = referrer.includes('t.co') || 
-                         referrer.includes('twitter.com') || 
-                         referrer.includes('x.com');
-    
+    const isFromTwitter =
+        referrer.includes('t.co') || referrer.includes('twitter.com') || referrer.includes('x.com');
+
     if (isFromTwitter) {
         // Track in your analytics platform
         gtag('event', 'twitter_card_click', {
-            'event_category': 'social_media',
-            'event_label': 'twitter_referral',
-            'page_title': document.title,
-            'page_url': window.location.href,
-            'referrer': referrer
+            event_category: 'social_media',
+            event_label: 'twitter_referral',
+            page_title: document.title,
+            page_url: window.location.href,
+            referrer: referrer,
         });
     }
 });
@@ -757,7 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.referrer.includes('t.co')) {
         gtag('event', 'twitter_card_click', {
             page_title: document.title,
-            page_url: window.location.href
+            page_url: window.location.href,
         });
     }
 });
@@ -795,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
 #### **Educational Content**
 
 ```astro
-<TwitterCard 
+<TwitterCard
     title="5 Visa Interview Questions That Stump Everyone"
     description="Master these tricky questions and increase your approval odds. Free preparation guide included."
     image="/twitter/interview-questions-guide.jpg"
@@ -809,7 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
 #### **Success Story**
 
 ```astro
-<TwitterCard 
+<TwitterCard
     title="Client Approved After 3 Previous Rejections ✈️"
     description="From denied to approved in 45 days. See how our personalized approach makes the difference."
     image="/twitter/success-story-maria.jpg"
@@ -822,7 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
 #### **Service Promotion**
 
 ```astro
-<TwitterCard 
+<TwitterCard
     title="US Visa Consultation - 95% Approval Rate"
     description="Expert document review + interview coaching. Book free 15-min consultation. Limited spots available."
     image="/twitter/consultation-promo.jpg"
@@ -852,12 +851,12 @@ const nextGenTwitterCard = {
     title: post.title,
     description: post.description,
     image: post.socialImage,
-    
+
     // Future features (experimental)
     interactive: true,
     actionType: 'learn_more',
     actionUrl: post.ctaUrl,
-    
+
     // Enhanced media support
     video: post.videoUrl,
     audio: post.audioUrl
@@ -909,4 +908,4 @@ In **Chapter 7: Structured Data & Rich Snippets**, we'll explore the `Structured
 
 ---
 
-*Master Twitter's ecosystem with precision-engineered social optimization. Every tweet tells a story, every card drives engagement.*
+_Master Twitter's ecosystem with precision-engineered social optimization. Every tweet tells a story, every card drives engagement._
