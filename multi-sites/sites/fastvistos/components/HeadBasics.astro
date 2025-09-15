@@ -1,8 +1,4 @@
 ---
-
-import { siteConfig } from '../site-config.ts';
-import JsonLdGenerator from './JsonLdGenerator.astro';
-
 export interface Props {
     title?: string;           // Optional title override
     faviconPath?: string;     // Custom favicon path
@@ -23,7 +19,6 @@ const {
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 
-
 <link rel="icon" type="image/svg+xml" href={faviconPath} />
 
 
@@ -42,25 +37,7 @@ const {
 <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
 
-
 {generator && <meta name="generator" content={generator} />}
-
-
-<JsonLdGenerator
-    pageType="homepage"
-    siteOverride={{
-        name: siteConfig.name,
-        logo: siteConfig.logo,
-        description: siteConfig.description,
-        url: `https://${siteConfig.domain}`
-    }}
-    disable={{
-        organization: false,
-        website: false,
-        breadcrumb: true,
-        searchAction: true
-    }}
-/>
 
 
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />

@@ -32,7 +32,7 @@ const description = entry.data.description || entry.data.title;
     description={description}
 >
     <div class="blog-layout-container">
-        <!-- Main Article Content -->
+        
         <article class="blog-article">
             <header class="article-header">
                 <h1 class="article-title">{entry.data.title}</h1>
@@ -62,21 +62,21 @@ const description = entry.data.description || entry.data.title;
                 )}
             </header>
 
-            <!-- Professional styled markdown content -->
+            
             <div class="blog-content">
                 <Content />
             </div>
         </article>
 
-        <!-- Table of Contents Sidebar -->
+        
         <aside class="sidebar-container">
-            <!-- Customização Acima do TOC -->
+            
             <SidebarAbove />
             
-            <!-- Table of Contents -->
+            
             <TableOfContents headings={headings} />
             
-            <!-- Customização Abaixo do TOC -->
+            
             <SidebarBelow />
         </aside>
     </div>
