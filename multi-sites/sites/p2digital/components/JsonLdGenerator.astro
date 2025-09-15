@@ -237,7 +237,7 @@ if (article && (pageType === 'article' || pageType === 'blog-post')) {
   if (article.image) {
     articleSchema.image = {
       "@type": "ImageObject",
-      "url": article.image.startsWith('http') ? article.image : `${site.url}${article.image}`
+      "url": article.image.startsWith('http') ? article.image : `${currentUrl}${article.image}`
     };
   }
 
@@ -362,7 +362,7 @@ if (contact && contact.address) {
     "@type": "LocalBusiness",
     "name": site.name,
     "description": site.description,
-    "url": site.url,
+    "url": currentUrl,
     "address": {
       "@type": "PostalAddress",
       ...contact.address
@@ -407,11 +407,11 @@ if (!disable.breadcrumb && pageType !== 'homepage') {
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": site.url
+      "item": currentUrl
     });
 
     // Add path segments
-    let currentPath = site.url;
+    let currentPath = currentUrl;
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`;
       breadcrumbList.itemListElement.push({

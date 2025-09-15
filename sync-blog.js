@@ -98,12 +98,6 @@ async function syncBlogToSite(siteId) {
     const indexTemplate = await fs.readFile(join(CORE_BLOG_DIR, 'index.astro'), 'utf-8');
     const postTemplate = await fs.readFile(join(CORE_BLOG_DIR, '[...slug].astro'), 'utf-8');
 
-    // Read core documentation pages
-    const docsViewerTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-viewer.astro'), 'utf-8');
-    const docsSimpleTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-simple.astro'), 'utf-8');
-    const docsHubTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-hub.astro'), 'utf-8');
-
-
     // Read core layouts
     const sharedBlogLayout = await fs.readFile(
         join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'),
@@ -217,8 +211,6 @@ async function syncBlogToSite(siteId) {
     // Ensure directories exist
     await ensureDir(siteBlogDir);
     await ensureDir(sitePagesDir);
-    await ensureDir(siteApiDir);
-    await ensureDir(join(siteApiDir, 'docs'));
     await ensureDir(siteLibDir);
     await ensureDir(siteLayoutsDir);
     await ensureDir(siteComponentsDir);
@@ -228,10 +220,6 @@ async function syncBlogToSite(siteId) {
     await fs.writeFile(join(siteBlogDir, 'index.astro'), stripAstroComments(localizedIndexTemplate));
     await fs.writeFile(join(siteBlogDir, '[...slug].astro'), stripAstroComments(localizedPostTemplate));
 
-    // Write documentation pages (strip comments)
-    await fs.writeFile(join(sitePagesDir, 'docs-viewer.astro'), stripAstroComments(docsViewerTemplate));
-    await fs.writeFile(join(sitePagesDir, 'docs-simple.astro'), stripAstroComments(docsSimpleTemplate));
-    await fs.writeFile(join(sitePagesDir, 'docs-hub.astro'), stripAstroComments(docsHubTemplate));
 
     // Write localized layout (strip comments)
     await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), stripAstroComments(localizedSharedBlogLayout));
