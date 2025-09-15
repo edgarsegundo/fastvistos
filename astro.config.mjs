@@ -13,6 +13,7 @@ const STANDARD_PRIORITY = 1.0;
 // https://astro.build/config
 export default defineConfig({
     site: SITE_URL,
+    output: 'static',
     integrations: [
         mdx(),
         sitemap({

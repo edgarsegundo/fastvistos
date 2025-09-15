@@ -466,10 +466,10 @@ const jsonLd = structuredData.length === 1 ? structuredData[0] : structuredData;
 {import.meta.env.DEV && (
   <script>
     console.group('🔍 Structured Data Debug - JsonLdGenerator');
-    console.log('Page Type:', {pageType});
-    console.log('Generated Schemas:', {structuredData.map(schema => schema['@type'])});
-    console.log('Site Config:', {siteId}, {site});
-    console.log('Full JSON-LD:', {jsonLd});
+    console.log('Page Type:', "{pageType}");
+    console.log('Generated Schemas:', "{structuredData.map(schema => schema['@type']).join(', ')}");
+    console.log('Site Config:', "{siteId}", "{JSON.stringify(site)}");
+    console.log('Full JSON-LD:', "{JSON.stringify(jsonLd)}");
     console.groupEnd();
   </script>
 )}
