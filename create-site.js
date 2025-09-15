@@ -9,6 +9,7 @@ import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import readline from 'readline';
+import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -188,6 +189,7 @@ async function addNpmScripts(siteId) {
 
 // Main site creation function
 async function createSite() {
+    let replacements = {};
     console.log('🚀 Site Creation Wizard');
     console.log('======================\n');
 
@@ -263,7 +265,7 @@ async function createSite() {
         const businessId = generateBusinessId();
 
         // Prepare template replacements
-        const replacements = {
+        replacements = {
             SITE_ID: siteId,
             DOMAIN: domain,
             SITE_NAME: siteName,
@@ -297,7 +299,8 @@ async function createSite() {
     } catch (error) {
         console.error('❌ Error creating site:', error.message);
     } finally {
-        rl.close();
+    rl.close();
+    const child = spawn('npm', ['run', `dev:watch:${replacements.SITE_ID}`], { stdio: 'inherit' });
     }
 }
 
