@@ -56,11 +56,11 @@ async function copyDirectory(src, dest) {
     try {
         await ensureDir(dest);
         const entries = await fs.readdir(src, { withFileTypes: true });
-        
+
         for (const entry of entries) {
             const srcPath = join(src, entry.name);
             const destPath = join(dest, entry.name);
-            
+
             if (entry.isDirectory()) {
                 await copyDirectory(srcPath, destPath);
             } else if (entry.isFile() && entry.name.endsWith('.astro')) {
@@ -103,17 +103,14 @@ async function syncBlogToSite(siteId) {
         join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'),
         'utf-8'
     );
-    
+
     const sharedHomeLayout = await fs.readFile(
         join(CORE_LAYOUTS_DIR, 'SharedHomeLayout.astro'),
         'utf-8'
     );
 
     // Read SEOMeta component for localization (special case)
-    const seoMetaComponent = await fs.readFile(
-        join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'),
-        'utf-8'
-    );
+    const seoMetaComponent = await fs.readFile(join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'), 'utf-8');
 
     // Read core styles
     const markdownBlogCSS = await fs.readFile(join(CORE_STYLES_DIR, 'markdown-blog.css'), 'utf-8');
@@ -217,22 +214,36 @@ async function syncBlogToSite(siteId) {
     await ensureDir(siteStylesDir);
 
     // Write localized templates (strip comments)
-    await fs.writeFile(join(siteBlogDir, 'index.astro'), stripAstroComments(localizedIndexTemplate));
-    await fs.writeFile(join(siteBlogDir, '[...slug].astro'), stripAstroComments(localizedPostTemplate));
-
+    await fs.writeFile(
+        join(siteBlogDir, 'index.astro'),
+        stripAstroComments(localizedIndexTemplate)
+    );
+    await fs.writeFile(
+        join(siteBlogDir, '[...slug].astro'),
+        stripAstroComments(localizedPostTemplate)
+    );
 
     // Write localized layout (strip comments)
-    await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), stripAstroComments(localizedSharedBlogLayout));
-    await fs.writeFile(join(siteLayoutsDir, 'SharedHomeLayout.astro'), stripAstroComments(localizedSharedHomeLayout));
+    await fs.writeFile(
+        join(siteLayoutsDir, 'SharedBlogLayout.astro'),
+        stripAstroComments(localizedSharedBlogLayout)
+    );
+    await fs.writeFile(
+        join(siteLayoutsDir, 'SharedHomeLayout.astro'),
+        stripAstroComments(localizedSharedHomeLayout)
+    );
 
     // Copy all core components automatically (except SEOMeta which needs localization)
     // This approach automatically copies ALL .astro files from core/components,
     // so we never need to update this script when adding new components
     console.log(`📦 Copying all components to ${siteId}...`);
     await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir);
-    
+
     // Overwrite SEOMeta with localized version (special case for site-specific config)
-    await fs.writeFile(join(siteComponentsDir, 'SEOMeta.astro'), stripAstroComments(localizedSeoMetaComponent));
+    await fs.writeFile(
+        join(siteComponentsDir, 'SEOMeta.astro'),
+        stripAstroComments(localizedSeoMetaComponent)
+    );
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
@@ -240,7 +251,7 @@ async function syncBlogToSite(siteId) {
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
     await fs.writeFile(join(siteLibDir, 'site-config.ts'), siteConfigContent);
-    
+
     // Localize site-config-helper.ts for this specific site
     const localizedSiteConfigHelper = siteConfigHelperContent
         .replace(
@@ -255,7 +266,7 @@ async function syncBlogToSite(siteId) {
             /const siteId = import\.meta\.env\.SITE_ID \|\| 'fastvistos';/,
             `const siteId = '${siteId}';`
         );
-        
+
     await fs.writeFile(join(siteLibDir, 'site-config-helper.ts'), localizedSiteConfigHelper);
     await fs.writeFile(join(siteLibDir, 'prisma.js'), prismaContent);
 

@@ -8,7 +8,7 @@ export class SiteConfigHelper {
      */
     static async loadSiteConfig(): Promise<SiteConfig> {
         const siteId = 'fastvistos';
-        
+
         try {
             const module = await import('../site-config.ts');
             return module.siteConfig;

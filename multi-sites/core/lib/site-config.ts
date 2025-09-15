@@ -9,7 +9,7 @@ export interface SiteConfig {
     name: string;
     description: string;
     language: string;
-    useFullLanguageTag?: boolean;  // Whether to use full language tag (pt-BR) or just language (pt) in HTML
+    useFullLanguageTag?: boolean; // Whether to use full language tag (pt-BR) or just language (pt) in HTML
     currency: string;
     timezone: string;
 
@@ -59,8 +59,8 @@ export interface SiteConfig {
          * Browser/OS/Branding meta tags (all optional, best-practice only):
          */
         // --- Optional Geo meta tags (legacy, rarely used by modern search engines) ---
-        geoRegion?: string;    // <meta name="geo.region" content="BR">
-        geoCountry?: string;   // <meta name="geo.country" content="Brazil">
+        geoRegion?: string; // <meta name="geo.region" content="BR">
+        geoCountry?: string; // <meta name="geo.country" content="Brazil">
         geoPlacename?: string; // <meta name="geo.placename" content="Brasil">
         themeColor?: string; // <meta name="theme-color">, browser UI color
         msTileColor?: string; // <meta name="msapplication-TileColor">, Windows tile color
@@ -73,8 +73,8 @@ export interface SiteConfig {
 
     // Analytics
     analytics?: {
-        gtmId?: string;          // Google Tag Manager ID (e.g., 'GTM-59SRNCQD')
-        gtagId?: string;         // Google Analytics GA4 ID (e.g., 'G-XXXXXXXXXX')
+        gtmId?: string; // Google Tag Manager ID (e.g., 'GTM-59SRNCQD')
+        gtagId?: string; // Google Analytics GA4 ID (e.g., 'G-XXXXXXXXXX')
         facebookPixelId?: string; // Facebook Pixel ID
     };
 

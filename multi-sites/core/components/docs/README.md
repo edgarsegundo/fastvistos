@@ -13,7 +13,7 @@ Handles Facebook Open Graph meta tags.
 import OpenGraph from '../core/components/OpenGraph.astro';
 ---
 
-<OpenGraph 
+<OpenGraph
     title="Page Title"
     description="Page description"
     url="https://example.com/page"
@@ -33,7 +33,7 @@ Handles Twitter Card meta tags.
 import TwitterCard from '../core/components/TwitterCard.astro';
 ---
 
-<TwitterCard 
+<TwitterCard
     title="Page Title"
     description="Page description"
     image="https://example.com/image.jpg"
@@ -55,7 +55,7 @@ import { SiteConfigHelper } from '../core/lib/site-config-helper.ts';
 const siteConfig = await SiteConfigHelper.loadSiteConfig();
 ---
 
-<SEOMeta 
+<SEOMeta
     siteConfig={siteConfig}
     title="Custom Page Title"
     description="Custom page description"
@@ -90,7 +90,7 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 
 <html>
 <head>
-    <SEOMeta 
+    <SEOMeta
         siteConfig={siteConfig}
         title={title}
         description={description}
@@ -107,7 +107,7 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 ✅ **Dynamic**: Automatically loads correct site config based on SITE_ID  
 ✅ **Fallbacks**: Page-specific values override site defaults  
 ✅ **Type Safe**: Full TypeScript support with proper interfaces  
-✅ **Consistent**: Same SEO structure across all sites  
+✅ **Consistent**: Same SEO structure across all sites
 
 ## Migration
 

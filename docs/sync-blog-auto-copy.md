@@ -7,19 +7,21 @@ O script `sync-blog.js` agora copia **automaticamente todos os componentes** da 
 ## ✅ **Antes vs Depois**
 
 ### ❌ **Antes (Manual)**
+
 ```javascript
 // Tinha que ler cada componente manualmente
 const tableOfContentsComponent = await fs.readFile(...)
 const openGraphComponent = await fs.readFile(...)
 const twitterCardComponent = await fs.readFile(...)
 
-// Tinha que escrever cada componente manualmente  
+// Tinha que escrever cada componente manualmente
 await fs.writeFile(join(siteComponentsDir, 'TableOfContents.astro'), tableOfContentsComponent);
 await fs.writeFile(join(siteComponentsDir, 'OpenGraph.astro'), openGraphComponent);
 await fs.writeFile(join(siteComponentsDir, 'TwitterCard.astro'), twitterCardComponent);
 ```
 
 ### ✅ **Depois (Automático)**
+
 ```javascript
 // Copia TODOS os componentes .astro automaticamente
 await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir);

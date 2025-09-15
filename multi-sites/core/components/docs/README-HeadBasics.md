@@ -5,6 +5,7 @@ Componente que centraliza os elementos essenciais do `<head>` que devem aparecer
 ## 🎯 **Propósito**
 
 Agrupa os elementos básicos e críticos que:
+
 1. **Devem aparecer primeiro** no `<head>` para compatibilidade máxima
 2. **São comuns a todos os layouts** (Blog, Home, etc.)
 3. **São essenciais para o funcionamento** básico da página
@@ -12,34 +13,37 @@ Agrupa os elementos básicos e críticos que:
 ## 📋 **Elementos Incluídos**
 
 ### ✅ **Elementos Críticos:**
+
 - `<meta charset="UTF-8" />` - Codificação de caracteres (DEVE ser primeiro)
 - `<meta name="viewport" />` - Configuração responsiva
 - `<link rel="icon" />` - Favicon do site
 - `<meta name="generator" />` - Meta tag do gerador (Astro)
 
 ### 🔧 **Props Opcionais:**
+
 ```typescript
 interface Props {
-    title?: string;           // Título opcional para páginas simples
-    faviconPath?: string;     // Caminho customizado do favicon (padrão: "/favicon.svg")
-    generator?: string;       // Conteúdo da meta tag generator
+    title?: string; // Título opcional para páginas simples
+    faviconPath?: string; // Caminho customizado do favicon (padrão: "/favicon.svg")
+    generator?: string; // Conteúdo da meta tag generator
 }
 ```
 
 ## 🚀 **Uso nos Layouts**
 
 ### `SharedBlogLayout.astro` e `SharedHomeLayout.astro`:
+
 ```astro
 <head>
     <!-- Elementos essenciais (charset, viewport, etc.) -->
     <HeadBasics generator={Astro.generator} />
-    
+
     <!-- Analytics Scripts -->
     <AnalyticsHead siteConfig={siteConfig} />
-    
+
     <!-- SEO Meta Tags -->
     <SEOMeta ... />
-    
+
     <!-- Outros elementos específicos -->
 </head>
 ```
@@ -55,6 +59,7 @@ interface Props {
 ## 🔄 **Antes vs Depois**
 
 ### ❌ **Antes (Duplicado)**
+
 ```astro
 <!-- SharedBlogLayout.astro -->
 <head>
@@ -76,6 +81,7 @@ interface Props {
 ```
 
 ### ✅ **Depois (Centralizado)**
+
 ```astro
 <!-- Ambos os layouts -->
 <head>
@@ -87,6 +93,7 @@ interface Props {
 ## 🎯 **Futuras Extensões**
 
 Pode ser facilmente estendido para incluir:
+
 - Preconnects essenciais
 - Meta tags de segurança
 - Progressive Web App manifests

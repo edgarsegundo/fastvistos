@@ -8,7 +8,7 @@ export const siteConfig: SiteConfig = {
     name: 'Fast Vistos',
     description: 'Assessoria completa para obtenção de vistos americanos',
     language: 'pt-BR',
-    useFullLanguageTag: true,  // Use pt-BR completo para SEO geo-targeting brasileiro
+    useFullLanguageTag: true, // Use pt-BR completo para SEO geo-targeting brasileiro
     currency: 'BRL',
     timezone: 'America/Sao_Paulo',
 
@@ -52,14 +52,14 @@ export const siteConfig: SiteConfig = {
 
     // Analytics
     analytics: {
-        gtmId: 'GTM-59SRNCQD',  // Google Tag Manager ID
+        gtmId: 'GTM-59SRNCQD', // Google Tag Manager ID
         // gtagId: 'G-XXXXXXXXXX',  // Uncomment when adding GA4
         // facebookPixelId: 'XXXXXXXXXXXXXXX',  // Uncomment when adding Facebook Pixel
     },
 
     // Site verification (Google, Bing, Yandex, Baidu, Pinterest, Facebook, etc)
     verification: {
-        googleSiteVerification: 'wPmMtzby8Xpg'
+        googleSiteVerification: 'wPmMtzby8Xpg',
     },
 
     // Features
