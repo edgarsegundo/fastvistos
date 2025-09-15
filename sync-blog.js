@@ -32,11 +32,40 @@ async function getSites() {
 }
 const CORE_BLOG_DIR = join(__dirname, 'multi-sites/core/pages/blog');
 const CORE_PAGES_DIR = join(__dirname, 'multi-sites/core/pages');
-const CORE_API_DIR = join(__dirname, 'multi-sites/core/pages/api');
 const CORE_LIB_DIR = join(__dirname, 'multi-sites/core/lib');
 const CORE_LAYOUTS_DIR = join(__dirname, 'multi-sites/core/layouts');
 const CORE_COMPONENTS_DIR = join(__dirname, 'multi-sites/core/components');
 const CORE_STYLES_DIR = join(__dirname, 'multi-sites/core/styles');
+
+async function copyFile(src, dest) {
+    try {
+        await fs.copyFile(src, dest);
+    } catch (error) {
+        console.error(`❌ Error copying ${src} to ${dest}:`, error);
+    }
+}
+
+async function copyDirectory(src, dest) {
+    try {
+        await ensureDir(dest);
+        const entries = await fs.readdir(src, { withFileTypes: true });
+        
+        for (const entry of entries) {
+            const srcPath = join(src, entry.name);
+            const destPath = join(dest, entry.name);
+            
+            if (entry.isDirectory()) {
+                await copyDirectory(srcPath, destPath);
+            } else if (entry.isFile() && entry.name.endsWith('.astro')) {
+                // Only copy .astro files from components
+                await copyFile(srcPath, destPath);
+                console.log(`📄 Copied component: ${entry.name}`);
+            }
+        }
+    } catch (error) {
+        console.error(`❌ Error copying directory ${src} to ${dest}:`, error);
+    }
+}
 
 async function ensureDir(dirPath) {
     try {
@@ -67,9 +96,6 @@ async function syncBlogToSite(siteId) {
     const docsSimpleTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-simple.astro'), 'utf-8');
     const docsHubTemplate = await fs.readFile(join(CORE_PAGES_DIR, 'docs-hub.astro'), 'utf-8');
 
-    // Read core API endpoints
-    const docsListApi = await fs.readFile(join(CORE_API_DIR, 'docs-list.ts'), 'utf-8');
-    const docsPathApi = await fs.readFile(join(CORE_API_DIR, 'docs/[...path].ts'), 'utf-8');
 
     // Read core layouts
     const sharedBlogLayout = await fs.readFile(
@@ -82,24 +108,9 @@ async function syncBlogToSite(siteId) {
         'utf-8'
     );
 
-    // Read core components
-    const tableOfContentsComponent = await fs.readFile(
-        join(CORE_COMPONENTS_DIR, 'TableOfContents.astro'),
-        'utf-8'
-    );
-    
+    // Read SEOMeta component for localization (special case)
     const seoMetaComponent = await fs.readFile(
         join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'),
-        'utf-8'
-    );
-    
-    const openGraphComponent = await fs.readFile(
-        join(CORE_COMPONENTS_DIR, 'OpenGraph.astro'),
-        'utf-8'
-    );
-    
-    const twitterCardComponent = await fs.readFile(
-        join(CORE_COMPONENTS_DIR, 'TwitterCard.astro'),
         'utf-8'
     );
 
@@ -215,19 +226,19 @@ async function syncBlogToSite(siteId) {
     await fs.writeFile(join(sitePagesDir, 'docs-simple.astro'), docsSimpleTemplate);
     await fs.writeFile(join(sitePagesDir, 'docs-hub.astro'), docsHubTemplate);
 
-    // Write API endpoints
-    await fs.writeFile(join(siteApiDir, 'docs-list.ts'), docsListApi);
-    await fs.writeFile(join(siteApiDir, 'docs/[...path].ts'), docsPathApi);
 
     // Write localized layout
     await fs.writeFile(join(siteLayoutsDir, 'SharedBlogLayout.astro'), localizedSharedBlogLayout);
     await fs.writeFile(join(siteLayoutsDir, 'SharedHomeLayout.astro'), localizedSharedHomeLayout);
 
-    // Write core components
-    await fs.writeFile(join(siteComponentsDir, 'TableOfContents.astro'), tableOfContentsComponent);
+    // Copy all core components automatically (except SEOMeta which needs localization)
+    // This approach automatically copies ALL .astro files from core/components,
+    // so we never need to update this script when adding new components
+    console.log(`📦 Copying all components to ${siteId}...`);
+    await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir);
+    
+    // Overwrite SEOMeta with localized version (special case for site-specific config)
     await fs.writeFile(join(siteComponentsDir, 'SEOMeta.astro'), localizedSeoMetaComponent);
-    await fs.writeFile(join(siteComponentsDir, 'OpenGraph.astro'), openGraphComponent);
-    await fs.writeFile(join(siteComponentsDir, 'TwitterCard.astro'), twitterCardComponent);
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);

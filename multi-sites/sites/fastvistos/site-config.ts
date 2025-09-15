@@ -8,6 +8,7 @@ export const siteConfig: SiteConfig = {
     name: 'Fast Vistos',
     description: 'Assessoria completa para obtenção de vistos americanos',
     language: 'pt-BR',
+    useFullLanguageTag: true,  // Use pt-BR completo para SEO geo-targeting brasileiro
     currency: 'BRL',
     timezone: 'America/Sao_Paulo',
 
@@ -35,6 +36,30 @@ export const siteConfig: SiteConfig = {
         description: 'Especialistas em assessoria para obtenção de visto americano.',
         keywords: ['visto americano', 'assessoria visto', 'fast vistos'],
         ogImage: '/og-image.jpg',
+        // --- Optional SEO/Branding meta tags (see SEOMeta.astro for details) ---
+        themeColor: '#FF6B35', // Browser UI color
+        msTileColor: '#FF6B35', // Windows tile color
+        msTileConfig: '/browserconfig.xml', // Path to browserconfig.xml
+        applicationName: 'Fast Vistos', // App/site name for OS
+        appleMobileWebAppCapable: 'yes', // Enable standalone mode on iOS
+        appleMobileWebAppStatusBarStyle: 'default', // iOS status bar style
+        formatDetection: 'telephone=no', // Prevent auto-linking phone numbers
+        // --- Optional Geo meta tags (legacy, rarely used by modern search engines) ---
+        geoRegion: 'BR',
+        geoCountry: 'Brazil',
+        geoPlacename: 'Brasil',
+    },
+
+    // Analytics
+    analytics: {
+        gtmId: 'GTM-59SRNCQD',  // Google Tag Manager ID
+        // gtagId: 'G-XXXXXXXXXX',  // Uncomment when adding GA4
+        // facebookPixelId: 'XXXXXXXXXXXXXXX',  // Uncomment when adding Facebook Pixel
+    },
+
+    // Site verification (Google, Bing, Yandex, Baidu, Pinterest, Facebook, etc)
+    verification: {
+        googleSiteVerification: 'wPmMtzby8Xpg'
     },
 
     // Features

@@ -4,6 +4,17 @@ import OpenGraph from './OpenGraph.astro';
 import TwitterCard from './TwitterCard.astro';
 import type { SiteConfig } from '../lib/site-config.ts';
 
+/*
+    Hreflang alternates example:
+        <link rel="alternate" hreflang="pt-BR" href="https://vibecode-lovable.com.br/">
+        <link rel="alternate" hreflang="en" href="https://vibecode-lovable.com.br/en/">
+        <link rel="alternate" hreflang="es" href="https://vibecode-lovable.com.br/es/">
+        <link rel="alternate" hreflang="x-default" href="https://vibecode-lovable.com.br/">
+
+    ⚠️ If your project is multilingual or multi-region, you should set these tags in the final site layout or a custom SEO component,
+    not directly in SEOMeta.astro, since the logic and URLs may vary per site.
+*/
+
 export interface Props {
     siteConfig: SiteConfig;
     title?: string;
@@ -12,6 +23,21 @@ export interface Props {
     ogImage?: string;
     noIndex?: boolean;
     canonical?: string;
+    enhancedIndexing?: boolean;  // Opt-in for rich snippets and prominent search results
+    type?: 'website' | 'article' | 'book' | 'profile' | 
+           'music.song' | 'music.album' | 'music.playlist' | 'music.radio_station' |
+           'video.movie' | 'video.episode' | 'video.tv_show' | 'video.other' |
+           'business.business' | 'place' | 'restaurant.menu' | 'restaurant.menu_item' | 
+           'restaurant.menu_section' | 'restaurant.restaurant' |
+           'product' | 'product.group' | 'product.item' |
+           'game.achievement' | 'fitness.course';           // Content type (website, article, product, etc.)
+    
+    // OpenGraph article-specific properties
+    author?: string;         // Author name for articles
+    publishedTime?: string;  // ISO date string (e.g., "2024-01-15T10:00:00Z")
+    modifiedTime?: string;   // ISO date string for last modification
+    section?: string;        // Article section/category
+    tags?: string[];         // Array of tags
 }
 
 const { 
@@ -21,11 +47,17 @@ const {
     pageUrl,
     ogImage,
     noIndex = false,
-    canonical
+    canonical,
+    enhancedIndexing = false,
+    type = 'website',
+    author,
+    publishedTime,
+    modifiedTime,
+    section,
+    tags
 } = Astro.props;
 
 // Use page-specific values or fallback to site config
-const metaTitle = title || siteConfig.seo.title;
 const metaDescription = description || siteConfig.seo.description;
 const metaImage = ogImage || siteConfig.seo.ogImage;
 const fullUrl = pageUrl || `https://${siteConfig.domain}`;
@@ -38,37 +70,148 @@ const fullImageUrl = metaImage.startsWith('http')
 ---
 
 <!-- Basic SEO -->
-<title>{metaTitle}</title>
+<meta name="title" content={title || siteConfig.seo.title} />
 <meta name="description" content={metaDescription} />
 <meta name="keywords" content={siteConfig.seo.keywords.join(', ')} />
+<meta name="author" content={author || siteConfig.seo.author} />
+
 <link rel="canonical" href={canonicalUrl} />
 
+<!-- Hreflang x-default for SEO internationalization best practice -->
+<link rel="alternate" hreflang="x-default" href={fullUrl} />
+
+{siteConfig.verification?.googleSiteVerification && (
+    <meta name="google-site-verification" content={siteConfig.verification.googleSiteVerification} />
+)}
+
 {noIndex && <meta name="robots" content="noindex, nofollow" />}
+<!-- Enhanced indexing: Enables rich snippets, large image previews, and extended text snippets in search results -->
+{enhancedIndexing && !noIndex && (
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+)}
+
 
 <!-- Language & Locale -->
 <meta name="language" content={siteConfig.language} />
-<html lang={siteConfig.language.split('-')[0]} />
+<!--
+    The <html> tag should not be rendered here. It belongs in your main layout, not in a component.
+    Remove or move this line to avoid invalid HTML and literal output.
+-->
 
 <!-- Open Graph -->
 <OpenGraph 
-    title={metaTitle}
+    title={siteConfig.seo.title}
     description={metaDescription}
     url={fullUrl}
     image={fullImageUrl}
     siteName={siteConfig.name}
-    type="website"
+    type={type}
     locale={siteConfig.language.replace('-', '_')}
+    author={author}
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
+    section={section}
+    tags={tags}
 />
 
 <!-- Twitter Card -->
 <TwitterCard 
-    title={metaTitle}
+    title={title || siteConfig.seo.title}
     description={metaDescription}
     image={fullImageUrl}
     url={fullUrl}
     site={siteConfig.socialMedia.twitter}
 />
 
-<!-- Additional Meta -->
-<meta name="theme-color" content={siteConfig.primaryColor} />
-<meta name="msapplication-TileColor" content={siteConfig.primaryColor} />
+<!--
+    theme-color meta tag:
+    Sets the browser UI color (address bar, tab, etc) on supported browsers and devices.
+    Use for branding and to create a more immersive, app-like experience.
+    - Parametrize via siteConfig.seo.themeColor for per-site branding.
+    - Falls back to siteConfig.primaryColor if not set.
+    - Example: <meta name="theme-color" content="#FF6B35" />
+-->
+{siteConfig.seo.themeColor ? (
+    <meta name="theme-color" content={siteConfig.seo.themeColor} />
+) : siteConfig.primaryColor ? (
+    <meta name="theme-color" content={siteConfig.primaryColor} />
+) : null}
+<!--
+    msapplication-TileColor meta tag:
+    Sets the tile color for Windows Start menu tiles (pinned sites) in Microsoft browsers.
+    Use for branding on Windows devices.
+    - Parametrize via siteConfig.seo.msTileColor.
+    - Falls back to siteConfig.primaryColor if not set.
+    - Example: <meta name="msapplication-TileColor" content="#FF6B35" />
+-->
+{siteConfig.seo.msTileColor ? (
+    <meta name="msapplication-TileColor" content={siteConfig.seo.msTileColor} />
+) : siteConfig.primaryColor ? (
+    <meta name="msapplication-TileColor" content={siteConfig.primaryColor} />
+) : null}
+<!--
+    msapplication-config meta tag:
+    Points to a browserconfig.xml file for advanced Windows tile configuration (e.g., pinned site icons, tile sizes).
+    Only needed if you support Windows Live Tiles.
+    - Parametrize via siteConfig.seo.msTileConfig.
+    - Example: <meta name="msapplication-config" content="/browserconfig.xml" />
+-->
+{siteConfig.seo.msTileConfig && (
+    <meta name="msapplication-config" content={siteConfig.seo.msTileConfig} />
+)}
+<!--
+    application-name meta tag:
+    Sets the name of the web application for OS-level UIs and some browsers.
+    Useful for branding, especially for PWAs and when the site is installed to home screen.
+    - Parametrize via siteConfig.seo.applicationName.
+    - Example: <meta name="application-name" content="Fast Vistos" />
+-->
+{siteConfig.seo.applicationName && (
+    <meta name="application-name" content={siteConfig.seo.applicationName} />
+)}
+<!--
+    apple-mobile-web-app-capable meta tag:
+    Enables standalone (app-like) mode when the site is added to the iOS home screen.
+    Use 'yes' to allow the site to launch without browser UI.
+    - Parametrize via siteConfig.seo.appleMobileWebAppCapable ('yes' or 'no').
+    - Example: <meta name="apple-mobile-web-app-capable" content="yes" />
+-->
+{siteConfig.seo.appleMobileWebAppCapable && (
+    <meta name="apple-mobile-web-app-capable" content={siteConfig.seo.appleMobileWebAppCapable} />
+)}
+<!--
+    apple-mobile-web-app-status-bar-style meta tag:
+    Controls the color of the iOS status bar when the site is launched in standalone mode.
+    Options: 'default', 'black', 'black-translucent'.
+    - Parametrize via siteConfig.seo.appleMobileWebAppStatusBarStyle.
+    - Example: <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+-->
+{siteConfig.seo.appleMobileWebAppStatusBarStyle && (
+    <meta name="apple-mobile-web-app-status-bar-style" content={siteConfig.seo.appleMobileWebAppStatusBarStyle} />
+)}
+<!--
+    format-detection meta tag:
+    Controls automatic detection and formatting of phone numbers, addresses, and emails on iOS Safari.
+    Common use: 'telephone=no' to prevent auto-linking phone numbers.
+    - Parametrize via siteConfig.seo.formatDetection.
+    - Example: <meta name="format-detection" content="telephone=no" />
+-->
+{siteConfig.seo.formatDetection && (
+    <meta name="format-detection" content={siteConfig.seo.formatDetection} />
+)}
+
+<!--
+    Geo meta tags (legacy, rarely used by modern search engines):
+    Provide geographic information about the site for legacy crawlers.
+    - Parametrize via siteConfig.seo.geoRegion, geoCountry, geoPlacename.
+    - Example: <meta name="geo.region" content="BR"> etc.
+-->
+{siteConfig.seo.geoRegion && (
+    <meta name="geo.region" content={siteConfig.seo.geoRegion} />
+)}
+{siteConfig.seo.geoCountry && (
+    <meta name="geo.country" content={siteConfig.seo.geoCountry} />
+)}
+{siteConfig.seo.geoPlacename && (
+    <meta name="geo.placename" content={siteConfig.seo.geoPlacename} />
+)}

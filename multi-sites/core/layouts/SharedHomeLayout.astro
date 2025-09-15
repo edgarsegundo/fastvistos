@@ -1,7 +1,10 @@
 ---
 // Shared Home Layout - Used across all sites
 import '../styles/global.css';
+import HeadBasics from '../components/HeadBasics.astro';
 import SEOMeta from '../components/SEOMeta.astro';
+import AnalyticsHead from '../components/AnalyticsHead.astro';
+import AnalyticsBody from '../components/AnalyticsBody.astro';
 import { SiteConfigHelper } from '../lib/site-config-helper.ts';
 
 export interface Props {
@@ -26,18 +29,19 @@ const {
 
 // Load site configuration dynamically
 const siteConfig = await SiteConfigHelper.loadSiteConfig();
+
+// Use full language tag (pt-BR) or just language (pt) based on site config
+const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfig.language.split('-')[0];
 ---
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang={htmlLang}>
 <head>
-    <!-- Google Tag Manager -->
-    <!-- End Google Tag Manager -->
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <!-- Essential head elements (charset, viewport, etc.) -->
+    <HeadBasics generator={Astro.generator} />
+    
+    <!-- Analytics Scripts -->
+    <AnalyticsHead siteConfig={siteConfig} />
     
     <!-- SEO Meta Tags from site-config -->
     <SEOMeta 
@@ -61,6 +65,10 @@ const siteConfig = await SiteConfigHelper.loadSiteConfig();
 
     <slot name="head" />
 </head>
+<body>
+    <!-- Analytics Body Tags -->
+    <AnalyticsBody siteConfig={siteConfig} />
+    
     <!-- Body content -->
     <slot />
-</html>
+</body>

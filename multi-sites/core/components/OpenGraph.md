@@ -214,6 +214,59 @@ All 63 shares (12+8+15+22+6) now count toward ONE canonical URL.
 <meta property="og:type" content="video" />        <!-- Video content -->
 ```
 
+#### **OpenGraph Type Implementation Examples**
+
+Here are practical examples showing how to use different `og:type` values for various FastVistos page types:
+
+```astro
+<!-- Homepage -->
+<OpenGraph 
+    type="website"
+    title="FastVistos - #1 Visa Consultancy in Brazil"
+    description="Expert visa consultation services..."
+/>
+
+<!-- Blog Posts -->
+<OpenGraph 
+    type="article"
+    title="5 Visa Interview Secrets That Get Approval"
+    description="Expert tips for visa approval success"
+    author="Edgar FastVistos"
+    publishedTime="2024-01-15T10:00:00Z"
+    section="Visa Tips"
+    tags={["visa", "interview", "tips", "approval"]}
+/>
+
+<!-- Service Pages -->
+<OpenGraph 
+    type="website"  // or "business.business"
+    title="US Tourist Visa Consultation - 95% Success Rate"
+    description="Complete visa assistance with expert guidance"
+/>
+
+<!-- About Page -->
+<OpenGraph 
+    type="profile"  // or "website"
+    title="About FastVistos - Our Story & Team"
+    description="15+ years helping Brazilians travel to the US"
+/>
+
+<!-- Success Stories -->
+<OpenGraph 
+    type="article"
+    title="Client Success: Maria's US Visa Approval Story"
+    description="How Maria got her US visa approved in 30 days"
+    section="Success Stories"
+/>
+```
+
+**Type Selection Guidelines:**
+
+- **`website`**: Homepage, service pages, general informational pages
+- **`article`**: Blog posts, guides, news articles, success stories
+- **`profile`**: About pages, team member bios, author pages
+- **`business.business`**: Alternative for service pages (more specific)
+
 ### Advanced Properties
 
 #### **og:site_name** - Brand Attribution
