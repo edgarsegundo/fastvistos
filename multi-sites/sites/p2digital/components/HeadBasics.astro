@@ -1,0 +1,66 @@
+---
+// HeadBasics component - Essential head elements that must appear first
+// This includes charset, viewport, basic meta tags, and core resources
+
+export interface Props {
+    title?: string;           // Optional title override
+    faviconPath?: string;     // Custom favicon path
+    generator?: string;       // Generator meta content
+}
+
+const {
+    title,
+    faviconPath = "/favicon.svg",
+    generator
+} = Astro.props;
+---
+
+<!-- Character encoding - MUST be first for proper detection -->
+<meta charset="UTF-8" />
+
+<!-- Viewport configuration for responsive design -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href={faviconPath} />
+
+<!--
+    Registers the PWA manifest, enabling installability and control over app appearance on devices.
+    Required for Add to Home Screen and PWA features.
+-->
+<link rel="manifest" href="/manifest.json" />
+
+<!--
+    Registers the service worker for offline support, caching, and advanced PWA features.
+    Place as early as possible in the <head> or at the end of <body>.
+-->
+<script type="module">
+    "serviceWorker" in navigator && window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js")
+            .then(e => { console.log("SW registered: ", e) })
+            .catch(e => { console.log("SW registration failed: ", e) })
+    });
+</script>
+
+<!--
+    Provides a reference to your XML sitemap for search engines to discover all site URLs.
+-->
+<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+<!-- Generator meta tag -->
+{generator && <meta name="generator" content={generator} />}
+
+<!-- Site Speed Optimization: Resource Hints -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" href="/assets/logo.webp" as="image" type="image/webp" />
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+</noscript>
+
+<!-- Optional title if provided (for simple pages) -->
+{title && <title>{title}</title>}
