@@ -8,6 +8,7 @@ export const siteConfig: SiteConfig = {
     name: 'Fast Vistos',
     description: 'Assessoria completa para obtenção de vistos americanos',
     language: 'pt-BR',
+    useFullLanguageTag: true,  // Use pt-BR completo para SEO geo-targeting brasileiro
     currency: 'BRL',
     timezone: 'America/Sao_Paulo',
 

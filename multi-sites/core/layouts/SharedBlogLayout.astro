@@ -43,10 +43,13 @@ const {
   ogImage = "/assets/images/logo/logo-fast-orange.png",
   enhancedIndexing = false
 } = Astro.props;
+
+// Use full language tag (pt-BR) or just language (pt) based on site config
+const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfig.language.split('-')[0];
 ---
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang={htmlLang}>
 <head>
     <!-- Google Tag Manager -->
     <script>

@@ -9,6 +9,7 @@ export interface SiteConfig {
     name: string;
     description: string;
     language: string;
+    useFullLanguageTag?: boolean;  // Whether to use full language tag (pt-BR) or just language (pt) in HTML
     currency: string;
     timezone: string;
 
