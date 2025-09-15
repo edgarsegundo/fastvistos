@@ -38,13 +38,13 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
 <!DOCTYPE html>
 <html lang={htmlLang}>
 <head>
-    <!-- Essential head elements (charset, viewport, etc.) -->
+    
     <HeadBasics generator={Astro.generator} />
     
-    <!-- Analytics Scripts -->
+    
     <AnalyticsHead siteConfig={siteConfig} />
     
-    <!-- SEO Meta Tags from site-config -->
+    
     <SEOMeta 
         siteConfig={siteConfig}
         title={title}
@@ -55,7 +55,7 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
         canonical={canonical}
     />
     
-    <!-- Fonts & Styles -->
+    
     <link rel="preconnect" href={`https://${siteConfig.domain}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,9 +67,9 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
     <slot name="head" />
 </head>
 <body>
-    <!-- Analytics Body Tags -->
+    
     <AnalyticsBody siteConfig={siteConfig} />
     
-    <!-- Body content -->
+    
     <slot />
 </body>

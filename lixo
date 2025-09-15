@@ -1,0 +1,77 @@
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap" rel="stylesheet" />
+  
+  {structuredData && (
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  )}
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Configurações Básicas -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Astro v5.13.5">
+    
+    <!-- Metatags Primárias -->
+    <title>FastVistos - Especialistas em Vistos Americanos</title>
+    <meta name="title" content="FastVistos - Especialistas em Vistos Americanos">
+    <meta name="description" content="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada.">
+    <meta name="keywords" content="visto americano, assessoria visa, consultoria visto, B1 B2, eTA Canada">
+    
+    <!-- URL Canônico -->
+    <link rel="canonical" href="https://fastvistos.com.br/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fastvistos.com.br/">
+    <meta property="og:title" content="FastVistos - Especialistas em Vistos Americanos">
+    <meta property="og:description" content="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada.">
+    <meta property="og:image" content="/logo.png">
+    <meta property="og:site_name" content="FastVistos">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://fastvistos.com.br/">
+    <meta property="twitter:title" content="FastVistos - Especialistas em Vistos Americanos">
+    <meta property="twitter:description" content="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada.">
+    <meta property="twitter:image" content="/logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap" rel="stylesheet">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/_astro/index.D6ZglsFq.css">
+    <style>
+        /* Estilos CSS inline (mantidos do original) */
+        .cta-button-wiggle[data-astro-cid-eieu5263] { color: #ff6901; animation: wiggle 4s 2s infinite; }
+        @keyframes wiggle { 
+            5%, 50% { transform: scale(1); }
+            10% { transform: scale(.9); }
+            15% { transform: scale(1.15); }
+            20% { transform: scale(1.15) rotate(-5deg); }
+            25% { transform: scale(1.15) rotate(5deg); }
+            30% { transform: scale(1.15) rotate(-3deg); }
+            35% { transform: scale(1.15) rotate(2deg); }
+            40% { transform: scale(1.15) rotate(0); }
+        }
+        
+        /* Outros estilos mantidos do original */
+        .carousel[data-astro-cid-vz7ryzte] { width: 100%; overflow-x: scroll; padding: 30px; position: relative; box-sizing: border-box; scrollbar-width: none; }
+        /* ... (demais estilos preservados) ... */
+        .home-layout p, .home-layout h3, .home-layout ul, .home-layout a, .home-layout span { color: #1b375c!important; }
+        .home-main { min-height: 100vh; }
+    </style>
+</head>
