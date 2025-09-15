@@ -41,6 +41,13 @@ export interface SiteConfig {
         ogImage: string;
     };
 
+    // Analytics
+    analytics?: {
+        gtmId?: string;          // Google Tag Manager ID (e.g., 'GTM-59SRNCQD')
+        gtagId?: string;         // Google Analytics GA4 ID (e.g., 'G-XXXXXXXXXX')
+        facebookPixelId?: string; // Facebook Pixel ID
+    };
+
     // Features
     features: {
         blog: boolean;
