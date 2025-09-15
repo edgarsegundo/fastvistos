@@ -1,6 +1,6 @@
 ---
 // FastVistos main homepage
-import BaseLayout from '../layouts/BaseLayout.astro';
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import HeroSection from '../components/HeroSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import AboutSection from '../components/AboutSection.astro';
@@ -10,26 +10,69 @@ import FaqSection from '../components/FaqSection.astro';
 import FooterSection from '../components/FooterSection.astro';
 import Whatsapp from '../components/Whatsapp.astro';
 import CallToActionSection from '../components/CallToActionSection.astro';
+import Navigation from '../components/Navigation.astro';
+import JsonLdGenerator from '../components/JsonLdGenerator.astro';
 
-// No need for site manager - this is already FastVistos specific
+export interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  canonicalUrl?: string;
+  structuredData?: any;
+  bodyClass?: string;
+  pageUrl?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage,
+  noindex = false,
+  canonicalUrl,
+  structuredData,
+  bodyClass = '',
+  pageUrl
+} = Astro.props;
+
+const currentUrl = canonicalUrl || Astro.url.href;
 ---
 
-<BaseLayout 
-  title="FastVistos - Especialistas em Vistos Americanos" 
-  description="Assessoria completa para vistos americanos B1/B2, eTA do Canadá e vistos mexicanos. Aprovação garantida com nossa equipe especializada."
-  bodyClass="home-layout"
+<SharedHomeLayout 
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  noIndex={noindex}
+  canonical={canonicalUrl}
+  pageUrl={pageUrl || currentUrl}
 >
-  <!-- FastVistos Main Content -->
-  <HeroSection />
-  <ServicesSection />
-  <AboutSection />
-  <PassportSection />
-  <CarouselSection />
-  <FaqSection />
-  <CallToActionSection />
-  <FooterSection />
-  <Whatsapp />  
-</BaseLayout>
+  <!-- Additional head content specific to this layout -->
+  <Fragment slot="head">
+    <JsonLdGenerator
+        pageType="blog-post"
+    />
+  </Fragment>
+
+  <!-- Body content -->
+  <body
+    class={`leading-normal tracking-normal text-white gradient ${bodyClass} antialiased`}
+    style="font-family: 'Source Sans Pro', sans-serif;"
+  >
+    <Navigation />
+    <HeroSection />
+    <ServicesSection />
+    <AboutSection />
+    <PassportSection />
+    <CarouselSection />
+    <FaqSection />
+    <CallToActionSection />
+    <FooterSection />
+    <Whatsapp />  
+  </body>
+
+</SharedHomeLayout>
 
 <style is:global>
   .home-layout p,
