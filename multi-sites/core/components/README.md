@@ -20,7 +20,7 @@ import OpenGraph from '../core/components/OpenGraph.astro';
     image="https://example.com/image.jpg"
     siteName="Site Name"
     type="website"
-    locale="pt_BR"
+    locale="pt-BR"
 />
 ```
 

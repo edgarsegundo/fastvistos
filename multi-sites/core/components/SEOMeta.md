@@ -31,6 +31,7 @@ Modern web applications face several critical SEO challenges:
 ```
 
 **Problems with this approach:**
+
 - 🚫 **Inconsistency**: Different titles for different platforms
 - 🚫 **Maintenance nightmare**: Changes require editing multiple files
 - 🚫 **Missing best practices**: No canonical URLs, proper locale settings
@@ -282,7 +283,7 @@ When you use SEOMeta, here's what actually gets rendered:
 <meta property="og:description" content="Assessoria completa para vistos americanos B1/B2..." />
 <meta property="og:image" content="https://fastvistos.com.br/og-image.jpg" />
 <meta property="og:site_name" content="FastVistos" />
-<meta property="og:locale" content="pt_BR" />
+<meta property="og:locale" content="pt-BR" />
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
