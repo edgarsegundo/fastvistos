@@ -1,0 +1,31 @@
+---
+// HeadBasics component - Essential head elements that must appear first
+// This includes charset, viewport, basic meta tags, and core resources
+
+export interface Props {
+    title?: string;           // Optional title override
+    faviconPath?: string;     // Custom favicon path
+    generator?: string;       // Generator meta content
+}
+
+const {
+    title,
+    faviconPath = "/favicon.svg",
+    generator
+} = Astro.props;
+---
+
+<!-- Character encoding - MUST be first for proper detection -->
+<meta charset="UTF-8" />
+
+<!-- Viewport configuration for responsive design -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href={faviconPath} />
+
+<!-- Generator meta tag -->
+{generator && <meta name="generator" content={generator} />}
+
+<!-- Optional title if provided (for simple pages) -->
+{title && <title>{title}</title>}

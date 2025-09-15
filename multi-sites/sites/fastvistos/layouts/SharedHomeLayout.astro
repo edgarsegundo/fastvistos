@@ -1,6 +1,7 @@
 ---
 // Shared Home Layout - Used across all sites
 import '../styles/global.css';
+import HeadBasics from '../components/HeadBasics.astro';
 import SEOMeta from '../components/SEOMeta.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
@@ -37,10 +38,8 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
 <!DOCTYPE html>
 <html lang={htmlLang}>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <!-- Essential head elements (charset, viewport, etc.) -->
+    <HeadBasics generator={Astro.generator} />
     
     <!-- Analytics Scripts -->
     <AnalyticsHead siteConfig={siteConfig} />
