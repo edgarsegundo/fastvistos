@@ -18,6 +18,14 @@ export interface SiteConfig {
     primaryColor: string;
     secondaryColor: string;
 
+    // Site verification (Google, Bing, Yandex, Baidu, Pinterest, Facebook, etc)
+    verification?: {
+        googleSiteVerification?: string;
+        bingSiteVerification?: string;
+        pinterestSiteVerification?: string;
+        facebookDomainVerification?: string;
+    };
+
     // Contact
     contactEmail: string;
     phone: string;
@@ -38,6 +46,7 @@ export interface SiteConfig {
         title: string;
         description: string;
         keywords: string[];
+        author?: string;
         ogImage: string;
     };
 

@@ -45,6 +45,11 @@ export const siteConfig: SiteConfig = {
         // facebookPixelId: 'XXXXXXXXXXXXXXX',  // Uncomment when adding Facebook Pixel
     },
 
+    // Site verification (Google, Bing, Yandex, Baidu, Pinterest, Facebook, etc)
+    verification: {
+        googleSiteVerification: 'wPmMtzby8Xpg'
+    },
+
     // Features
     features: {
         blog: true,

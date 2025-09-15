@@ -47,7 +47,6 @@ const {
 } = Astro.props;
 
 // Use page-specific values or fallback to site config
-const metaTitle = title || siteConfig.seo.title;
 const metaDescription = description || siteConfig.seo.description;
 const metaImage = ogImage || siteConfig.seo.ogImage;
 const fullUrl = pageUrl || `https://${siteConfig.domain}`;
@@ -60,10 +59,16 @@ const fullImageUrl = metaImage.startsWith('http')
 ---
 
 <!-- Basic SEO -->
-<title>{metaTitle}</title>
+<meta name="title" content={title || siteConfig.seo.title} />
 <meta name="description" content={metaDescription} />
 <meta name="keywords" content={siteConfig.seo.keywords.join(', ')} />
+<meta name="author" content={author || siteConfig.seo.author} />
+
 <link rel="canonical" href={canonicalUrl} />
+
+{siteConfig.verification?.googleSiteVerification && (
+    <meta name="google-site-verification" content={siteConfig.verification.googleSiteVerification} />
+)}
 
 {noIndex && <meta name="robots" content="noindex, nofollow" />}
 <!-- Enhanced indexing: Enables rich snippets, large image previews, and extended text snippets in search results -->
@@ -77,7 +82,7 @@ const fullImageUrl = metaImage.startsWith('http')
 
 <!-- Open Graph -->
 <OpenGraph 
-    title={metaTitle}
+    title={siteConfig.seo.title}
     description={metaDescription}
     url={fullUrl}
     image={fullImageUrl}
