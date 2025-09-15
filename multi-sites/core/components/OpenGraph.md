@@ -54,7 +54,7 @@ const {
     image,
     siteName,
     type = 'website',
-    locale = 'pt_BR'
+    locale = 'pt-BR'
 } = Astro.props;
 ---
 
@@ -256,7 +256,7 @@ const post = {
     image={post.featuredImage}
     siteName="FastVistos"
     type="article"
-    locale="pt_BR"
+    locale="pt-BR"
 />
 ```
 
@@ -524,16 +524,16 @@ const socialCopy = socialVariants[variant];
 // International content optimization
 const getLocalizedContent = (locale: string) => {
     const content = {
-        'pt_BR': {
+        'pt-BR': {
             title: 'Como Conseguir Visto Americano em 30 Dias',
             description: 'Guia completo com dicas de especialistas...'
         },
-        'en_US': {
+        'en-US': {
             title: 'How to Get US Visa Approved in 30 Days',
             description: 'Complete expert guide with proven strategies...'
         }
     };
-    return content[locale] || content['pt_BR'];
+    return content[locale] || content['pt-BR'];
 };
 
 const localContent = getLocalizedContent(currentLocale);
