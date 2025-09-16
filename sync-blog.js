@@ -88,7 +88,6 @@ async function syncBlogToSite(siteId) {
     const siteDir = join(__dirname, `multi-sites/sites/${siteId}`);
     const siteBlogDir = join(siteDir, 'pages/blog');
     const sitePagesDir = join(siteDir, 'pages');
-    const siteApiDir = join(siteDir, 'pages/api');
     const siteLibDir = join(siteDir, 'lib');
     const siteLayoutsDir = join(siteDir, 'layouts');
     const siteComponentsDir = join(siteDir, 'components');
