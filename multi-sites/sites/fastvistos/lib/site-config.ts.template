@@ -5,7 +5,6 @@
  *
  * - DO NOT use this file directly for your live site configuration.
  * - To configure a real site, COPY this file as `site-config.ts` into the root of your siteid folder (e.g. `/multi-sites/sites/your-siteid/site-config.ts`).
- * - You can also run the sync-blog.js script, which will copy this template to each site folder as `site-config.ts` if it does not exist.
  * - Fill in all fields with information specific to your website/project.
  * - All values here are placeholders and should be replaced with your actual business, branding, and SEO details.
  *
