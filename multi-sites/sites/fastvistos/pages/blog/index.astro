@@ -9,7 +9,8 @@ import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import { siteConfig } from '../../site-config.ts';
 import { SiteConfigHelper } from '../../lib/site-config-helper.ts';
 import { BlogService } from '../../lib/blog-service.ts';
-import JsonLdGenerator from '../../components/JsonLdGenerator.astro';
+import JsonLdBlogIndex from '../../components/JsonLdBlogIndex.astro';
+
 
 // Get page metadata using helper functions (auto-sync working!)
 const metadata = SiteConfigHelper.getMetadata(siteConfig, 'Blog', 'Artigos e dicas sobre vistos');
@@ -37,9 +38,7 @@ const description = blogConfig?.description || defaultConfig.description;
 >
     
     <Fragment slot="head">
-        <JsonLdGenerator
-            pageType="blog-post"
-        />
+        <JsonLdBlogIndex />
     </Fragment>
 
     

@@ -1,0 +1,122 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://fastvistos.com.br/#webpage",
+      "url": "https://fastvistos.com.br/",
+      "name": "Fast Vistos - Assessoria para Vistos e Passaportes",
+      "isPartOf": {
+        "@id": "https://fastvistos.com.br/#website"
+      },
+      "about": {
+        "@id": "https://fastvistos.com.br/#organization"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://fastvistos.com.br/#primaryimage"
+      },
+      "image": {
+        "@id": "https://fastvistos.com.br/#primaryimage"
+      },
+      "thumbnailUrl": "https://fastvistos.com.br/wp-content/uploads/2023/07/logo-fastvistos.png",
+      "datePublished": "2021-01-01T00:00:00+00:00",
+      "dateModified": "2025-09-16T00:00:00+00:00",
+      "description": "A Fast Vistos ajuda você a realizar o sonho de viajar com serviços de assessoria para visto americano, canadense, mexicano e emissão de passaporte. Converse com um especialista agora mesmo pelo WhatsApp.",
+      "breadcrumb": {
+        "@id": "https://fastvistos.com.br/#breadcrumb"
+      },
+      "inLanguage": "pt-BR",
+      "potentialAction": [
+        {
+          "@type": "ReadAction",
+          "target": [
+            "https://fastvistos.com.br/"
+          ]
+        },
+        {
+          "@type": "ContactAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://wa.me/5511992422765",
+            "actionPlatform": [
+              "https://web.whatsapp.com",
+              "https://api.whatsapp.com",
+              "https://mobile.whatsapp.com"
+            ]
+          },
+          "name": "Converse com um especialista via WhatsApp"
+        }
+      ]
+    },
+    {
+      "@type": "ImageObject",
+      "inLanguage": "pt-BR",
+      "@id": "https://fastvistos.com.br/#primaryimage",
+      "url": "https://fastvistos.com.br/wp-content/uploads/2023/07/logo-fastvistos.png",
+      "contentUrl": "https://fastvistos.com.br/wp-content/uploads/2023/07/logo-fastvistos.png",
+      "caption": "Fast Vistos"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://fastvistos.com.br/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://fastvistos.com.br/"
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://fastvistos.com.br/#website",
+      "url": "https://fastvistos.com.br/",
+      "name": "Fast Vistos",
+      "description": "Assessoria especializada em vistos e passaportes. Facilitamos sua viagem com serviços rápidos e seguros.",
+      "publisher": {
+        "@id": "https://fastvistos.com.br/#organization"
+      },
+      "inLanguage": "pt-BR"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://fastvistos.com.br/#organization",
+      "name": "Fast Vistos",
+      "url": "https://fastvistos.com.br/",
+      "logo": {
+        "@type": "ImageObject",
+        "inLanguage": "pt-BR",
+        "@id": "https://fastvistos.com.br/#/schema/logo/image/",
+        "url": "https://fastvistos.com.br/wp-content/uploads/2023/07/logo-fastvistos.png",
+        "contentUrl": "https://fastvistos.com.br/wp-content/uploads/2023/07/logo-fastvistos.png",
+        "caption": "Fast Vistos"
+      },
+      "image": {
+        "@id": "https://fastvistos.com.br/#/schema/logo/image/"
+      },
+      "description": "A Fast Vistos oferece assessoria completa para obtenção de vistos (americano, canadense, mexicano) e emissão de passaporte, ajudando brasileiros a viajar sem complicações.",
+      "telephone": "+55 11 99242-2765",
+      "email": "contato@fastvistos.com.br",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. João Dias, 217",
+        "addressLocality": "Santo Amaro",
+        "addressRegion": "SP",
+        "postalCode": "04724-000",
+        "addressCountry": "BR"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+55 11 99242-2765",
+        "contactType": "customer service",
+        "areaServed": "BR",
+        "availableLanguage": "Portuguese"
+      },
+      "sameAs": [
+        "https://www.facebook.com/fastvistos",
+        "https://www.instagram.com/fastvistos"
+      ]
+    }
+  ]
+}

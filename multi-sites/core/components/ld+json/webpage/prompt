@@ -1,0 +1,19 @@
+# JSON-LD Schema Markup Request
+
+Attached is an image of my website’s home page.
+
+Website URL: **[https://fastvistos.com.br/](https://fastvistos.com.br/)**
+
+Your task is to create a **JSON-LD schema markup** for my homepage that follows SEO best practices. Use the file **HomeWebPageLdJsonReference.json** only as a reference for structure (do not copy directly). Adapt the schema so it fully represents my business and homepage.
+
+### Instructions:
+
+1. Analyze the attached homepage image.
+2. Review the homepage through the website link previously provided.
+3. Generate a single **JSON-LD script** that includes at least these entities:
+   * **Organization** (with business details: name, description, logo, contact info, social links, etc.)
+   * **Website** (with site name, URL, potentialAction for site search if applicable)
+   * **WebPage** (representing the homepage, with `@type: WebPage`, headline, description, and primaryImage if available)
+4. Identify interactive elements on the homepage, especially the **duplicate WhatsApp buttons that allow users to click and start a chat**. Represent these as an appropriate `potentialAction` (e.g., `ContactAction` or `MessageAction`) in the structured data, linking to the WhatsApp Web/App URL.
+5. Ensure that all structured data entities are properly linked together (using `@id` references).
+6. Return only the final JSON-LD, formatted, valid, and ready to be embedded in the `<head>` of the homepage.
