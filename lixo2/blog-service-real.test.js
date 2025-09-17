@@ -6,8 +6,8 @@ import { config } from 'dotenv';
 config();
 
 // Import the real BlogService that connects to your database
-import { BlogService } from './blog-service.ts';
-import { prisma } from './prisma.js';
+import { BlogService } from '../multi-sites/core/lib/blog-service.ts';
+import { prisma } from '../multi-sites/core/lib/prisma.js';
 
 describe('BlogService - Real Database Tests', () => {
     before(async () => {

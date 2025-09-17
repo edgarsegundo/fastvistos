@@ -1,6 +1,6 @@
 // Example usage of BlogService with business_id filtering
 
-import { BlogService } from './blog-service.js';
+import { BlogService } from '../multi-sites/core/lib/blog-service.js';
 
 // Business IDs from your database
 const FAST_VISTOS_BUSINESS_ID = '41a5c7f95e924d54b120ab9a0e1843c8';
