@@ -1,0 +1,57 @@
+---
+/**
+ * JsonLdBase.astro
+ * Gera schemas básicos: Organization, Website, BreadcrumbList
+ * Extensível via props.
+ */
+export interface Props {
+  siteConfig: {
+    name: string;
+    logo: string;
+    description: string;
+    domain: string;
+  };
+  disable?: {
+    organization?: boolean;
+    website?: boolean;
+    breadcrumb?: boolean;
+  };
+  breadcrumbList?: any[];
+  customData?: any;
+}
+const { siteConfig, disable = {}, breadcrumbList = [], customData } = Astro.props;
+
+const schemas = [];
+
+if (!disable.organization) {
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": siteConfig.name,
+    "url": `https://${siteConfig.domain}`,
+    "logo": {
+      "@type": "ImageObject",
+      "url": siteConfig.logo
+    },
+    "description": siteConfig.description
+  });
+}
+if (!disable.website) {
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": siteConfig.name,
+    "url": `https://${siteConfig.domain}`,
+    "description": siteConfig.description
+  });
+}
+if (!disable.breadcrumb && breadcrumbList.length > 0) {
+  schemas.push({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbList
+  });
+}
+const jsonLd = customData ? customData : (schemas.length === 1 ? schemas[0] : schemas);
+---
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
