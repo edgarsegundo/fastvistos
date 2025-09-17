@@ -1,4 +1,4 @@
-import type { SiteConfig } from '../../core/lib/site-config.ts';
+import type { SiteConfig } from './lib/site-config.ts';
 
 export const siteConfig: SiteConfig = {
     business_id: '{{BUSINESS_ID}}', // {{SITE_NAME}} business ID - Update this with your actual business ID
