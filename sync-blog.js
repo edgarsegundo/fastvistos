@@ -232,11 +232,25 @@ async function syncBlogToSite(siteId) {
         stripAstroComments(localizedSharedHomeLayout)
     );
 
-    // Copy all core components automatically (except SEOMeta which needs localization)
-    // This approach automatically copies ALL .astro files from core/components,
-    // so we never need to update this script when adding new components
-    console.log(`📦 Copying all components to ${siteId}...`);
-    await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir);
+    // Copy all core components except JsonLdBlogIndex.astro (which will be generated per site)
+    console.log(`📦 Copying all components to ${siteId} (except JsonLdBlogIndex.astro)...`);
+    const componentEntries = await fs.readdir(CORE_COMPONENTS_DIR, { withFileTypes: true });
+    for (const entry of componentEntries) {
+        if (entry.isFile() && entry.name.endsWith('.astro') && entry.name !== 'JsonLdBlogIndex.astro') {
+            await copyFile(join(CORE_COMPONENTS_DIR, entry.name), join(siteComponentsDir, entry.name));
+            console.log(`� Copied component: ${entry.name}`);
+        }
+    }
+
+    // Generate site-specific JsonLdBlogIndex.astro with correct import paths
+    const jsonLdBlogIndexPath = join(CORE_COMPONENTS_DIR, 'JsonLdBlogIndex.astro');
+    let jsonLdBlogIndexContent = await fs.readFile(jsonLdBlogIndexPath, 'utf-8');
+    // Patch import paths for site folder depth
+    jsonLdBlogIndexContent = jsonLdBlogIndexContent
+        .replace("import { siteConfig } from '../site-config.ts';", "import { siteConfig } from '../../site-config.ts';")
+        .replace("import { BlogService } from '../lib/blog-service.ts';", "import { BlogService } from '../../lib/blog-service.ts';");
+    await fs.writeFile(join(siteComponentsDir, 'JsonLdBlogIndex.astro'), jsonLdBlogIndexContent);
+    console.log(`🟢 Generated and copied JsonLdBlogIndex.astro for ${siteId}`);
 
     // Overwrite SEOMeta with localized version (special case for site-specific config)
     await fs.writeFile(
