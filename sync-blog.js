@@ -116,7 +116,7 @@ async function syncBlogToSite(siteId) {
 
     // Read core library files
     const blogServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'blog-service.ts'), 'utf-8');
-    const siteConfigContent = await fs.readFile(join(CORE_LIB_DIR, 'site-config.ts.template'), 'utf-8');
+    const siteConfigContent = await fs.readFile(join(CORE_LIB_DIR, 'site-config-model.ts'), 'utf-8');
     const siteConfigHelperContent = await fs.readFile(
         join(CORE_LIB_DIR, 'site-config-helper.ts'),
         'utf-8'
@@ -249,7 +249,7 @@ async function syncBlogToSite(siteId) {
 
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
-    await fs.writeFile(join(siteLibDir, 'site-config.ts.template'), siteConfigContent);
+    await fs.writeFile(join(siteLibDir, 'site-config-model.ts'), siteConfigContent);
 
     // Localize site-config-helper.ts for this specific site
     const localizedSiteConfigHelper = siteConfigHelperContent

@@ -1,28 +1,30 @@
-import type { SiteConfig } from './lib/site-config.ts';
+import type { SiteConfig } from './lib/site-config-model.ts';
 
+// 🌐 Shared Site Config (business + branding + global stuff)
 export const siteConfig: SiteConfig = {
-    // Business
-    business_id: '41a5c7f95e924d54b120ab9a0e1843c8', // FastVistos business ID from database (without dashes)
+    business: {
+    business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
     id: 'fastvistos',
     domain: 'fastvistos.com.br',
     name: 'Fast Vistos',
-    description: 'Assessoria completa para obtenção de vistos americanos',
+    description: 'Fast Vistos - Your fast visa solution',
     language: 'pt-BR',
-    useFullLanguageTag: true, // Use pt-BR completo para SEO geo-targeting brasileiro
+    useFullLanguageTag: true, // true/false
     currency: 'BRL',
     timezone: 'America/Sao_Paulo',
+    },
 
-    // Branding
-    logo: '/logo.png',
-    primaryColor: '#FF6B35',
-    secondaryColor: '#1E3A8A',
+    branding: {
+        logo: '/path-to-logo.png',
+        primaryColor: '#0070f3',
+        secondaryColor: '#1c1c1e',
+    },
 
-    // Contact
-    contactEmail: 'contato@fastvistos.com.br',
-    phone: '+55 11 99999-9999',
-    whatsapp: '+5511999999999',
+    contact: {
+        email: 'contact@fastvistos.com.br',
+        whatsapp: '+5511999999999',
+    },
 
-    // Social
     socialMedia: {
         facebook: 'https://facebook.com/fastvistos',
         twitter: '@fastvistos',
@@ -30,50 +32,65 @@ export const siteConfig: SiteConfig = {
         youtube: 'https://youtube.com/@fastvistos',
     },
 
-    // SEO
-    seo: {
-        title: 'Fast Vistos - Assessoria para Visto Americano',
-        description: 'Especialistas em assessoria para obtenção de visto americano.',
-        keywords: ['visto americano', 'assessoria visto', 'fast vistos'],
-        ogImage: '/og-image.jpg',
-        // --- Optional SEO/Branding meta tags (see SEOMeta.astro for details) ---
-        themeColor: '#FF6B35', // Browser UI color
-        msTileColor: '#FF6B35', // Windows tile color
-        msTileConfig: '/browserconfig.xml', // Path to browserconfig.xml
-        applicationName: 'Fast Vistos', // App/site name for OS
-        appleMobileWebAppCapable: 'yes', // Enable standalone mode on iOS
-        appleMobileWebAppStatusBarStyle: 'default', // iOS status bar style
-        formatDetection: 'telephone=no', // Prevent auto-linking phone numbers
-        // --- Optional Geo meta tags (legacy, rarely used by modern search engines) ---
-        geoRegion: 'BR',
-        geoCountry: 'Brazil',
-        geoPlacename: 'Brasil',
-    },
-
-    // Analytics
     analytics: {
-        gtmId: 'GTM-59SRNCQD', // Google Tag Manager ID
-        // gtagId: 'G-XXXXXXXXXX',  // Uncomment when adding GA4
-        // facebookPixelId: 'XXXXXXXXXXXXXXX',  // Uncomment when adding Facebook Pixel
+        gtmId: 'GTM-59SRNCQD',
     },
 
-    // Site verification (Google, Bing, Yandex, Baidu, Pinterest, Facebook, etc)
     verification: {
         googleSiteVerification: 'wPmMtzby8Xpg',
     },
 
-    // Features
     features: {
-        blog: true,
-        booking: true,
-        payments: true,
-        multilingual: false,
+        blog: true, // true/false
+        booking: false, // true/false
+        payments: false, // true/false
+        multilingual: false, // true/false
     },
 
-    // Styling
     customStyles: {
         cssVars: {
-            '--accent-color': '#F59E0B',
+            '--accent-color': '#ACCENT',
         },
     },
+};
+
+export const homePageConfig = {
+    seo: {
+        title: 'Fast Vistos - Your fast visa solution',
+        description: 'Fast Vistos - Your fast visa solution',
+        keywords: ['fast vistos', 'visa', 'fast visa solution'],
+        ogImage: '/path-to-og-image.jpg',
+        themeColor: '#0070f3',
+        msTileColor: '#0070f3',
+        msTileConfig: '/browserconfig.xml',
+        applicationName: 'Fast Vistos',
+        appleMobileWebAppCapable: 'yes',
+        appleMobileWebAppStatusBarStyle: 'default',
+        formatDetection: 'telephone=no',
+        geoRegion: 'XX',
+        geoCountry: 'Country',
+        geoPlacename: 'Placename',
+    },
+};
+
+export const blogPageConfig = {
+    seo: {
+        title: 'Fast Vistos - Blog',
+        description: 'Fast Vistos - Your fast visa solution blog',
+        keywords: ['fast vistos', 'visa', 'blog'],
+        ogImage: '/path-to-blog-og-image.jpg',
+    },
+    pagination: {
+        postsPerPage: 10,
+    }
+};
+
+export const blogPostConfig = {
+    seoDefaults: {
+        titleSuffix: '| Fast Vistos',
+        ogImage: '/path-to-default-post-og-image.jpg',
+    },
+    readingTime: true, // true/false
+    showAuthor: true, // true/false
+    relatedPosts: true, // true/false
 };
