@@ -1,0 +1,182 @@
+
+https://fastvistos.com.br
+https://fastvistos.com.br/blog/
+
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "WebPage",
+        "CollectionPage"
+      ],
+      "@id": "https://seudominio.com.br/blog/",
+      "url": "https://seudominio.com.br/blog/",
+      "name": "Blog - Últimas Notícias e Dicas sobre Vistos",
+      "isPartOf": {
+        "@id": "https://seudominio.com.br/#website"
+      },
+      "datePublished": "2025-01-01T12:00:00+00:00",
+      "dateModified": "2025-09-16T12:00:00+00:00",
+      "description": "Confira as últimas notícias e dicas sobre vistos americanos e mexicanos no nosso blog.",
+      "inLanguage": "pt-BR",
+      "publisher": {
+        "@id": "https://seudominio.com.br/#organization"
+      },
+      "hasPart": [
+        {
+          "@type": "ItemList",
+          "name": "Últimas Notícias",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "BlogPosting",
+                "@id": "https://seudominio.com.br/blog/ultimas-noticias/nova-taxa-visto-eua.html",
+                "headline": "Nova taxa pode encarecer visto para os EUA",
+                "url": "https://seudominio.com.br/blog/ultimas-noticias/nova-taxa-visto-eua.html",
+                "image": "https://adm.p2digital.com.br/media/images/pexels-karolina-grabowska-4386421.jpg",
+                "datePublished": "2025-09-10T12:00:00+00:00",
+                "dateModified": "2025-09-10T12:00:00+00:00",
+                "inLanguage": "pt-BR",
+                "description": "Mudança ainda não tem data para começar, mas deve impactar brasileiros que solicitarem visto para os EUA."
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "BlogPosting",
+                "@id": "https://seudominio.com.br/blog/ultimas-noticias/volta-entrevistas-presenciais-vistos-eua-setembro-2025.html",
+                "headline": "Entrevistas obrigatórias voltam para vistos dos EUA a partir de setembro",
+                "url": "https://seudominio.com.br/blog/ultimas-noticias/volta-entrevistas-presenciais-vistos-eua-setembro-2025.html",
+                "image": "https://adm.p2digital.com.br/media/images/banner-3354784_1280.jpg",
+                "datePublished": "2025-09-02T12:00:00+00:00",
+                "dateModified": "2025-09-02T12:00:00+00:00",
+                "inLanguage": "pt-BR",
+                "description": "A partir de 2 de setembro de 2025, os Estados Unidos voltarão a exigir entrevistas presenciais para a emissão de vistos."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "name": "Dicas sobre o Visto Americano",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "BlogPosting",
+                "@id": "https://seudominio.com.br/blog/dicas-visto-americano/entrevista-dicas.html",
+                "headline": "Dicas para se sair bem na entrevista do visto americano",
+                "url": "https://seudominio.com.br/blog/dicas-visto-americano/entrevista-dicas.html",
+                "image": "https://seudominio.com.br/media/images/visto-americano-entrevista.jpg",
+                "datePublished": "2025-08-20T12:00:00+00:00",
+                "dateModified": "2025-08-20T12:00:00+00:00",
+                "inLanguage": "pt-BR",
+                "description": "Saiba como se preparar para a entrevista do visto americano com dicas práticas e exemplos de perguntas."
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "BlogPosting",
+                "@id": "https://seudominio.com.br/blog/dicas-visto-americano/documentacao-necessaria.html",
+                "headline": "Documentação necessária para o visto americano",
+                "url": "https://seudominio.com.br/blog/dicas-visto-americano/documentacao-necessaria.html",
+                "image": "https://seudominio.com.br/media/images/documentos-visto-americano.jpg",
+                "datePublished": "2025-07-15T12:00:00+00:00",
+                "dateModified": "2025-07-15T12:00:00+00:00",
+                "inLanguage": "pt-BR",
+                "description": "Veja a lista completa de documentos exigidos para solicitar o visto americano em 2025."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "name": "Dicas sobre o Visto Mexicano",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "BlogPosting",
+                "@id": "https://seudominio.com.br/blog/dicas-visto-mexicano/isencao-visto-mexico.html",
+                "headline": "Quem tem visto americano precisa de visto para o México?",
+                "url": "https://seudominio.com.br/blog/dicas-visto-mexicano/isencao-visto-mexico.html",
+                "image": "https://seudominio.com.br/media/images/visto-mexico-isencao.jpg",
+                "datePublished": "2025-06-10T12:00:00+00:00",
+                "dateModified": "2025-06-10T12:00:00+00:00",
+                "inLanguage": "pt-BR",
+                "description": "Descubra se brasileiros com visto americano válido precisam de visto para entrar no México."
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "BlogPosting",
+                "@id": "https://seudominio.com.br/blog/dicas-visto-mexicano/tempo-processo.html",
+                "headline": "Quanto tempo leva para tirar o visto mexicano?",
+                "url": "https://seudominio.com.br/blog/dicas-visto-mexicano/tempo-processo.html",
+                "image": "https://seudominio.com.br/media/images/visto-mexicano-tempo.jpg",
+                "datePublished": "2025-05-01T12:00:00+00:00",
+                "dateModified": "2025-05-01T12:00:00+00:00",
+                "inLanguage": "pt-BR",
+                "description": "Veja prazos médios de análise e emissão do visto mexicano em 2025."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://seudominio.com.br/#website",
+      "url": "https://seudominio.com.br/",
+      "name": "Meu Blog",
+      "description": "Notícias, dicas e novidades sobre vistos americanos e mexicanos.",
+      "publisher": {
+        "@id": "https://seudominio.com.br/#organization"
+      },
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://seudominio.com.br/?s={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      ],
+      "inLanguage": "pt-BR"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://seudominio.com.br/#organization",
+      "name": "Meu Blog",
+      "url": "https://seudominio.com.br/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://seudominio.com.br/#/schema/logo/image/",
+        "url": "https://seudominio.com.br/logo.png",
+        "contentUrl": "https://seudominio.com.br/logo.png",
+        "width": 200,
+        "height": 60,
+        "caption": "Meu Blog"
+      },
+      "image": {
+        "@id": "https://seudominio.com.br/#/schema/logo/image/"
+      },
+      "sameAs": [
+        "https://www.facebook.com/seublog",
+        "https://www.instagram.com/seublog",
+        "https://www.linkedin.com/company/seublog"
+      ]
+    }
+  ]
+}
