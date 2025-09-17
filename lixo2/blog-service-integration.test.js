@@ -1,4 +1,4 @@
-import { BlogService } from './blog-service.js';
+import { BlogService } from '../multi-sites/core/lib/blog-service.js';
 
 /**
  * Integration test for BlogService with real database
