@@ -4,7 +4,9 @@
  * To customize, edit the template.
 */
 
-import { siteConfig as siteConfigType } from './site-config.ts';
+// this's done on purpose to get the respective siteid site-config.ts customized by the user.
+import { siteConfig as siteConfigType } from '../site-config.ts'; 
+
 type SiteConfig = typeof siteConfigType;
 // Helper functions for the new nested siteConfig structure
 export class SiteConfigHelper {
