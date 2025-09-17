@@ -10,8 +10,10 @@
  *
  * This template helps ensure consistency and best practices across all site configs.
  */
+import type { SiteConfig } from './lib/site-config-model.ts';
+
 // 🌐 Shared Site Config (business + branding + global stuff)
-export const siteConfig = {
+export const siteConfig: SiteConfig = {
     business: {
     business_id: 'your-business-id',
     id: 'your-site-id',
