@@ -8,7 +8,6 @@
 // SEO Meta component that integrates with site-config
 import OpenGraph from './OpenGraph.astro';
 import TwitterCard from './TwitterCard.astro';
-import type { SiteConfig } from '../lib/site-config.ts';
 
 /*
     Hreflang alternates example:
@@ -21,70 +20,32 @@ import type { SiteConfig } from '../lib/site-config.ts';
     not directly in SEOMeta.astro, since the logic and URLs may vary per site.
 */
 
-export interface Props {
-    siteConfig: SiteConfig;
-    title?: string;
-    description?: string;
-    pageUrl?: string;
-    ogImage?: string;
-    noIndex?: boolean;
-    canonical?: string;
-    enhancedIndexing?: boolean;  // Opt-in for rich snippets and prominent search results
-    type?: 'website' | 'article' | 'book' | 'profile' | 
-           'music.song' | 'music.album' | 'music.playlist' | 'music.radio_station' |
-           'video.movie' | 'video.episode' | 'video.tv_show' | 'video.other' |
-           'business.business' | 'place' | 'restaurant.menu' | 'restaurant.menu_item' | 
-           'restaurant.menu_section' | 'restaurant.restaurant' |
-           'product' | 'product.group' | 'product.item' |
-           'game.achievement' | 'fitness.course';           // Content type (website, article, product, etc.)
-    
-    // OpenGraph article-specific properties
-    author?: string;         // Author name for articles
-    publishedTime?: string;  // ISO date string (e.g., "2024-01-15T10:00:00Z")
-    modifiedTime?: string;   // ISO date string for last modification
-    section?: string;        // Article section/category
-    tags?: string[];         // Array of tags
-}
-
 const { 
     siteConfig,
-    title,
-    description,
-    pageUrl,
-    ogImage,
+    seo,
     noIndex = false,
-    canonical,
     enhancedIndexing = false,
-    type = 'website',
-    author,
-    publishedTime,
-    modifiedTime,
-    section,
-    tags
 } = Astro.props;
 
 // Use page-specific values or fallback to site config
-const metaDescription = description || siteConfig.seo.description;
-const metaImage = ogImage || siteConfig.seo.ogImage;
-const fullUrl = pageUrl || `https://${siteConfig.domain}`;
-const canonicalUrl = canonical || fullUrl;
+const canonicalUrl = `https://${siteConfig.site.domain}`;
 
 // Build complete image URL if it's a relative path
-const fullImageUrl = metaImage.startsWith('http') 
-    ? metaImage 
-    : `https://${siteConfig.domain}${metaImage}`;
+const fullImageUrl = seo.ogImage.startsWith('http') 
+    ? seo.ogImage 
+    : `https://${siteConfig.site.domain}${seo.ogImage}`;
 ---
 
 <!-- Basic SEO -->
-<meta name="title" content={title || siteConfig.seo.title} />
-<meta name="description" content={metaDescription} />
-<meta name="keywords" content={siteConfig.seo.keywords.join(', ')} />
-<meta name="author" content={author || siteConfig.seo.author} />
+<meta name="title" content={seo.title} />
+<meta name="description" content={seo.description} />
+<meta name="keywords" content={seo.keywords.join(', ')} />
+<meta name="author" content={siteConfig.site.author} />
 
 <link rel="canonical" href={canonicalUrl} />
 
 <!-- Hreflang x-default for SEO internationalization best practice -->
-<link rel="alternate" hreflang="x-default" href={fullUrl} />
+<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
 
 {siteConfig.verification?.googleSiteVerification && (
     <meta name="google-site-verification" content={siteConfig.verification.googleSiteVerification} />
@@ -96,38 +57,33 @@ const fullImageUrl = metaImage.startsWith('http')
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 )}
 
-
 <!-- Language & Locale -->
-<meta name="language" content={siteConfig.language} />
-<!--
-    The <html> tag should not be rendered here. It belongs in your main layout, not in a component.
-    Remove or move this line to avoid invalid HTML and literal output.
--->
+<meta name="language" content={siteConfig.site.language} />
 
 <!-- Open Graph -->
 <OpenGraph 
-    title={siteConfig.seo.title}
-    description={metaDescription}
-    url={fullUrl}
+    title={seo.title}
+    description={seo.description}
+    url={canonicalUrl}
     image={fullImageUrl}
     siteName={siteConfig.name}
-    type={type}
-    locale={siteConfig.language.replace('-', '_')}
-    author={author}
-    publishedTime={publishedTime}
-    modifiedTime={modifiedTime}
-    section={section}
-    tags={tags}
+    type={seo.openGraph.type}
+    locale={seo.openGraph.locale.replace('-', '_')}
+    author={seo.openGraph.author}
+    publishedTime={seo.openGraph.publishedTime}
+    modifiedTime={seo.openGraph.modifiedTime}
+    section={seo.openGraph.section}
+    tags={seo.openGraph.tags}
 />
 
 <!-- Twitter Card -->
-<TwitterCard 
-    title={title || siteConfig.seo.title}
-    description={metaDescription}
+<!-- <TwitterCard 
+    title={title || seo.title}
+    description={seo.description}
     image={fullImageUrl}
-    url={fullUrl}
+    url={canonicalUrl}
     site={siteConfig.socialMedia.twitter}
-/>
+/> -->
 
 <!--
     theme-color meta tag:
@@ -137,11 +93,12 @@ const fullImageUrl = metaImage.startsWith('http')
     - Falls back to siteConfig.primaryColor if not set.
     - Example: <meta name="theme-color" content="#FF6B35" />
 -->
-{siteConfig.seo.themeColor ? (
-    <meta name="theme-color" content={siteConfig.seo.themeColor} />
-) : siteConfig.primaryColor ? (
-    <meta name="theme-color" content={siteConfig.primaryColor} />
+{seo.themeColor ? (
+    <meta name="theme-color" content={seo.themeColor} />
+) : siteConfig.branding.primaryColor ? (
+    <meta name="theme-color" content={siteConfig.branding.primaryColor} />
 ) : null}
+
 <!--
     msapplication-TileColor meta tag:
     Sets the tile color for Windows Start menu tiles (pinned sites) in Microsoft browsers.
@@ -150,11 +107,12 @@ const fullImageUrl = metaImage.startsWith('http')
     - Falls back to siteConfig.primaryColor if not set.
     - Example: <meta name="msapplication-TileColor" content="#FF6B35" />
 -->
-{siteConfig.seo.msTileColor ? (
+<!-- {siteConfig.seo.msTileColor ? (
     <meta name="msapplication-TileColor" content={siteConfig.seo.msTileColor} />
 ) : siteConfig.primaryColor ? (
     <meta name="msapplication-TileColor" content={siteConfig.primaryColor} />
-) : null}
+) : null} -->
+
 <!--
     msapplication-config meta tag:
     Points to a browserconfig.xml file for advanced Windows tile configuration (e.g., pinned site icons, tile sizes).
@@ -162,9 +120,10 @@ const fullImageUrl = metaImage.startsWith('http')
     - Parametrize via siteConfig.seo.msTileConfig.
     - Example: <meta name="msapplication-config" content="/browserconfig.xml" />
 -->
-{siteConfig.seo.msTileConfig && (
+<!-- {siteConfig.seo.msTileConfig && (
     <meta name="msapplication-config" content={siteConfig.seo.msTileConfig} />
-)}
+)} -->
+
 <!--
     application-name meta tag:
     Sets the name of the web application for OS-level UIs and some browsers.
@@ -172,9 +131,10 @@ const fullImageUrl = metaImage.startsWith('http')
     - Parametrize via siteConfig.seo.applicationName.
     - Example: <meta name="application-name" content="Fast Vistos" />
 -->
-{siteConfig.seo.applicationName && (
-    <meta name="application-name" content={siteConfig.seo.applicationName} />
+{siteConfig.site.name && (
+    <meta name="application-name" content={siteConfig.site.name} />
 )}
+
 <!--
     apple-mobile-web-app-capable meta tag:
     Enables standalone (app-like) mode when the site is added to the iOS home screen.
@@ -182,9 +142,10 @@ const fullImageUrl = metaImage.startsWith('http')
     - Parametrize via siteConfig.seo.appleMobileWebAppCapable ('yes' or 'no').
     - Example: <meta name="apple-mobile-web-app-capable" content="yes" />
 -->
-{siteConfig.seo.appleMobileWebAppCapable && (
+<!-- {siteConfig.seo.appleMobileWebAppCapable && (
     <meta name="apple-mobile-web-app-capable" content={siteConfig.seo.appleMobileWebAppCapable} />
-)}
+)} -->
+
 <!--
     apple-mobile-web-app-status-bar-style meta tag:
     Controls the color of the iOS status bar when the site is launched in standalone mode.
@@ -192,9 +153,10 @@ const fullImageUrl = metaImage.startsWith('http')
     - Parametrize via siteConfig.seo.appleMobileWebAppStatusBarStyle.
     - Example: <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 -->
-{siteConfig.seo.appleMobileWebAppStatusBarStyle && (
+<!-- {siteConfig.seo.appleMobileWebAppStatusBarStyle && (
     <meta name="apple-mobile-web-app-status-bar-style" content={siteConfig.seo.appleMobileWebAppStatusBarStyle} />
-)}
+)} -->
+
 <!--
     format-detection meta tag:
     Controls automatic detection and formatting of phone numbers, addresses, and emails on iOS Safari.
@@ -202,9 +164,9 @@ const fullImageUrl = metaImage.startsWith('http')
     - Parametrize via siteConfig.seo.formatDetection.
     - Example: <meta name="format-detection" content="telephone=no" />
 -->
-{siteConfig.seo.formatDetection && (
+<!-- {siteConfig.seo.formatDetection && (
     <meta name="format-detection" content={siteConfig.seo.formatDetection} />
-)}
+)} -->
 
 <!--
     Geo meta tags (legacy, rarely used by modern search engines):
@@ -212,7 +174,7 @@ const fullImageUrl = metaImage.startsWith('http')
     - Parametrize via siteConfig.seo.geoRegion, geoCountry, geoPlacename.
     - Example: <meta name="geo.region" content="BR"> etc.
 -->
-{siteConfig.seo.geoRegion && (
+<!-- {siteConfig.seo.geoRegion && (
     <meta name="geo.region" content={siteConfig.seo.geoRegion} />
 )}
 {siteConfig.seo.geoCountry && (
@@ -220,4 +182,4 @@ const fullImageUrl = metaImage.startsWith('http')
 )}
 {siteConfig.seo.geoPlacename && (
     <meta name="geo.placename" content={siteConfig.seo.geoPlacename} />
-)}
+)} -->

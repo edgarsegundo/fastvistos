@@ -7,39 +7,15 @@
 
 // Shared Home Layout - Used across all sites
 import '../styles/global.css';
+import { siteConfig } from '../site-config.ts';
 import HeadBasics from '../components/HeadBasics.astro';
 import SEOMeta from '../components/SEOMeta.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
-import { SiteConfigHelper } from '../lib/site-config-helper.ts';
 import JsonLdGenerator from '../components/JsonLdGenerator.astro';
 
-export interface Props {
-  title?: string;
-  description?: string;
-  bodyClass?: string;
-  pageUrl?: string;
-  ogImage?: string;
-  noIndex?: boolean;
-  canonical?: string;
-}
-
-const { 
-  title, 
-  description, 
-  bodyClass = '', 
-  pageUrl,
-  ogImage,
-  noIndex = false,
-  canonical
-} = Astro.props;
-
-// Load site configuration dynamically
-import { siteConfig } from '../site-config.ts';
-// const siteConfig = await SiteConfigHelper.loadSiteConfig();
-
 // Use full language tag (pt-BR) or just language (pt) based on site config
-const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfig.language.split('-')[0];
+const htmlLang = siteConfig.site.useFullLanguageTag ? siteConfig.site.language : siteConfig.site.language.split('-')[0];
 ---
 
 <!DOCTYPE html>
@@ -54,12 +30,9 @@ const htmlLang = siteConfig.useFullLanguageTag ? siteConfig.language : siteConfi
     
     <SEOMeta 
         siteConfig={siteConfig}
-        title={title}
-        description={description}
-        pageUrl={pageUrl}
-        ogImage={ogImage}
-        noIndex={noIndex}
-        canonical={canonical}
+        seo={siteConfig.homePageConfig.seo}
+        noIndex={false}
+        enhancedIndexing={false}
     />
     
     

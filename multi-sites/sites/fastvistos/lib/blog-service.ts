@@ -14,12 +14,12 @@ export class BlogService {
     // Get the business_id from site config (cached)
     private static getBusinessId(): string {
         if (this._businessId === null) {
-            if (!siteConfig?.business_id) {
+            if (!siteConfig?.site?.business_id) {
                 throw new Error(
-                    'business_id not found in site configuration. Please ensure site-config.ts has a valid business_id.'
+                    'business_id not found in site configuration. Please ensure site-config.ts has a valid site.business_id.'
                 );
             }
-            this._businessId = siteConfig.business_id;
+            this._businessId = siteConfig.site.business_id;
         }
         return this._businessId!;
     }
