@@ -68,7 +68,6 @@ export const siteConfig: SiteConfig = {
             title: 'Your Site Title',
             description: 'Your site description here.',
             keywords: ['keyword1', 'keyword2', 'keyword3'],
-            ogImage: '/path-to-og-image.jpg',
             themeColor: '#PRIMARY',
             msTileColor: '#PRIMARY',
             msTileConfig: '/browserconfig.xml',
@@ -87,6 +86,11 @@ export const siteConfig: SiteConfig = {
                 modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
                 section: 'your-section', // Default section
                 tags: ['tag1', 'tag2'], // Default tags
+                image: '/path-to-og-image.jpg',
+                imageWidth: 1200,
+                imageHeight: 630,
+                imageType: 'image/jpeg',
+                imageAlt: 'Your Image Alt Text'
             },
         },
     },
@@ -107,7 +111,6 @@ export const siteConfig: SiteConfig = {
             geoRegion: 'XX',
             geoCountry: 'Country',
             geoPlacename: 'Placename',
-
             openGraph: {
                 type: 'blog', // Default type for Open Graph
                 locale: 'your-language-tag', // e.g. en_US
@@ -116,8 +119,12 @@ export const siteConfig: SiteConfig = {
                 modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
                 section: 'your-section', // Default section
                 tags: ['tag1', 'tag2'], // Default tags
+                image: '/path-to-og-image.jpg',
+                imageWidth: 1200,
+                imageHeight: 630,
+                imageType: 'image/jpeg',
+                imageAlt: 'Your Image Alt Text'
             },
-
         },
         pagination: {
             postsPerPage: 10,
@@ -140,15 +147,19 @@ export const siteConfig: SiteConfig = {
             geoRegion: 'XX',
             geoCountry: 'Country',
             geoPlacename: 'Placename',
-
             openGraph: {
-                type: 'blog', // Default type for Open Graph
+                type: 'article', // Default type for Open Graph
                 locale: 'your-language-tag', // e.g. en_US
                 author: 'your-author-name', // Default author name
                 publishedTime: '2024-01-01T00:00:00Z', // Default published time
                 modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
                 section: 'your-section', // Default section
                 tags: ['tag1', 'tag2'], // Default tags
+                image: '/path-to-og-image.jpg',
+                imageWidth: 1200,
+                imageHeight: 630,
+                imageType: 'image/jpeg',
+                imageAlt: 'Your Image Alt Text'
             },
         },
         readingTime: true, // true/false
