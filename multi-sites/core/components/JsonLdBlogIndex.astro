@@ -12,7 +12,7 @@ import { siteConfig } from '../site-config.ts';
 import { BlogService } from '../lib/blog-service.ts';
 
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const domain = siteConfig.domain.startsWith('http') ? siteConfig.domain : `https://${siteConfig.domain}`;
+const domain = siteConfig.site.domain.startsWith('http') ? siteConfig.site.domain : `https://${siteConfig.site.domain}`;
 const orgId = `${domain}/#organization`;
 const websiteId = `${domain}/#website`;
 const pageId = `${domain}/blog/#webpage`;
@@ -44,9 +44,9 @@ const jsonLd = {
       "@type": ["WebPage", "CollectionPage"],
       "@id": pageId,
       "url": `${domain}/blog/`,
-      "name": `Blog - ${siteConfig.name}`,
+      "name": `Blog - ${siteConfig.site.name}`,
       "isPartOf": { "@id": websiteId },
-      "description": siteConfig.description || '',
+      "description": siteConfig.blogPageConfig.seo.description || '',
       "inLanguage": "pt-BR",
       "publisher": { "@id": orgId },
       "hasPart": itemLists
@@ -55,19 +55,19 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": websiteId,
       "url": domain + '/',
-      "name": siteConfig.name,
-      "description": siteConfig.description || '',
+      "name": siteConfig.site.name,
+      "description": siteConfig.site.description || '',
       "publisher": { "@id": orgId },
       "inLanguage": "pt-BR"
     },
     {
       "@type": "Organization",
       "@id": orgId,
-      "name": siteConfig.name,
+      "name": siteConfig.site.name,
       "url": domain + '/',
       "logo": {
         "@type": "ImageObject",
-        "url": siteConfig.logo
+        "url": siteConfig.site.logo
       }
     }
   ]

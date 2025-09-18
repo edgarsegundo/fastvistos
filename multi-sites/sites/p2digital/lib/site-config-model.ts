@@ -1,41 +1,53 @@
+/**
+ * SITE CONFIG TEMPLATE (Documentation Only)
+ *
+ * This file is a template and documentation model for site configuration.
+ *
+ * - DO NOT use this file directly for your live site configuration.
+ * - To configure a real site, COPY this file as `site-config.ts` into the root of your siteid folder (e.g. `/multi-sites/sites/your-siteid/site-config.ts`).
+ * - Fill in all fields with information specific to your website/project.
+ * - All values here are placeholders and should be replaced with your actual business, branding, and SEO details.
+ *
+ * This template helps ensure consistency and best practices across all site configs.
+ */
 import type { SiteConfig } from './lib/site-config-model.ts';
 
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
-        id: 'fastvistos',
-        domain: 'fastvistos.com.br',
-        name: 'Fast Vistos',
-        description: 'Fast Vistos - Your fast visa solution',
-        language: 'pt-BR',
+        business_id: 'your-business-id',
+        id: 'your-site-id',
+        domain: 'your-domain.com',
+        name: 'Your Business Name',
+        description: 'Your business description here',
+        language: 'your-language-tag',
         useFullLanguageTag: true, // true/false
-        currency: 'BRL',
-        timezone: 'America/Sao_Paulo',
+        currency: 'CURRENCY',
+        timezone: 'Your/Timezone',
         logo: '/path-to-logo.png',
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        author: 'Edgar Rezende',
+        author: 'Your Author Name', // Default author name for Open Graph
     },
 
     contact: {
-        email: 'contact@fastvistos.com.br',
-        whatsapp: '+5511999999999',
+        email: 'contact@yourdomain.com',
+        whatsapp: '+1234567890',
     },
 
     socialMedia: {
-        facebook: 'https://facebook.com/fastvistos',
-        twitter: '@fastvistos',
-        instagram: 'https://instagram.com/fastvistos',
-        youtube: 'https://youtube.com/@fastvistos',
+        facebook: 'https://facebook.com/yourpage',
+        twitter: '@yourtwitter',
+        instagram: 'https://instagram.com/yourprofile',
+        youtube: 'https://youtube.com/@yourchannel',
     },
 
     analytics: {
-        gtmId: 'GTM-59SRNCQD',
+        gtmId: 'GTM-XXXXXXX',
     },
 
     verification: {
-        googleSiteVerification: 'wPmMtzby8Xpg',
+        googleSiteVerification: 'your-google-site-verification',
     },
 
     features: {
@@ -53,14 +65,13 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos - Your fast visa solution',
-            description: 'Fast Vistos - Your fast visa solution',
-            keywords: ['fast vistos', 'visa', 'fast visa solution'],
-            ogImage: '/path-to-og-image.jpg',
-            themeColor: '#0070f3',
-            msTileColor: '#0070f3',
+            title: 'Your Site Title',
+            description: 'Your site description here.',
+            keywords: ['keyword1', 'keyword2', 'keyword3'],
+            themeColor: '#PRIMARY',
+            msTileColor: '#PRIMARY',
             msTileConfig: '/browserconfig.xml',
-            applicationName: 'Fast Vistos',
+            applicationName: 'Your App Name',
             appleMobileWebAppCapable: 'yes',
             appleMobileWebAppStatusBarStyle: 'default',
             formatDetection: 'telephone=no',
@@ -86,14 +97,14 @@ export const siteConfig: SiteConfig = {
 
     blogPageConfig: {
         seo: {
-            title: 'Fast Vistos - Your fast visa solution',
-            description: 'Fast Vistos - Your fast visa solution',
-            keywords: ['fast vistos', 'visa', 'fast visa solution'],
+            title: 'Your Site Title',
+            description: 'Your site description here.',
+            keywords: ['keyword1', 'keyword2', 'keyword3'],
             ogImage: '/path-to-og-image.jpg',
-            themeColor: '#0070f3',
-            msTileColor: '#0070f3',
+            themeColor: '#PRIMARY',
+            msTileColor: '#PRIMARY',
             msTileConfig: '/browserconfig.xml',
-            applicationName: 'Fast Vistos',
+            applicationName: 'Your App Name',
             appleMobileWebAppCapable: 'yes',
             appleMobileWebAppStatusBarStyle: 'default',
             formatDetection: 'telephone=no',
@@ -122,14 +133,14 @@ export const siteConfig: SiteConfig = {
 
     blogPostConfig: {
         seo: {
-            title: 'Fast Vistos - Your fast visa solution',
-            description: 'Fast Vistos - Your fast visa solution',
-            keywords: ['fast vistos', 'visa', 'fast visa solution'],
+            title: 'Your Site Title',
+            description: 'Your site description here.',
+            keywords: ['keyword1', 'keyword2', 'keyword3'],
             ogImage: '/path-to-og-image.jpg',
-            themeColor: '#0070f3',
-            msTileColor: '#0070f3',
+            themeColor: '#PRIMARY',
+            msTileColor: '#PRIMARY',
             msTileConfig: '/browserconfig.xml',
-            applicationName: 'Fast Vistos',
+            applicationName: 'Your App Name',
             appleMobileWebAppCapable: 'yes',
             appleMobileWebAppStatusBarStyle: 'default',
             formatDetection: 'telephone=no',

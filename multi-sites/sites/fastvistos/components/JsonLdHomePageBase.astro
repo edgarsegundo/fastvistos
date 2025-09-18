@@ -1,0 +1,93 @@
+
+---
+import JsonLdBase from './JsonLdBase.astro';
+import JsonLdReviews from './JsonLdReviews.astro';
+
+const {
+  site,
+  disableWebPage = false,
+  disableFAQ = false,
+  disableServices = false,
+  disableReviews = false,
+  faqList = [],
+  servicesList = [],
+  reviewsList = [],
+  imageUrl,
+  logoUrl,
+  ...rest
+} = Astro.props;
+
+const org = site?.organization;
+const business = site?.business;
+const homepageUrl = site?.url;
+const siteName = site?.name;
+const description = site?.description;
+const resolvedImageUrl = imageUrl ?? site?.image;
+const resolvedLogoUrl = logoUrl ?? site?.logo;
+
+// FAQ block
+type Faq = { question: string; answer: string };
+type Service = { name: string; description: string; offers?: any };
+
+const faqBlock = (faqList as Faq[]).length > 0 ? {
+  '@type': 'FAQPage',
+  'mainEntity': (faqList as Faq[]).map((faq: Faq) => ({
+    '@type': 'Question',
+    'name': faq.question,
+    'acceptedAnswer': {
+      '@type': 'Answer',
+      'text': faq.answer
+    }
+  }))
+} : null;
+
+// Services block
+const servicesBlock = (servicesList as Service[]).length > 0 ? (servicesList as Service[]).map((service: Service) => {
+  const obj: any = {
+    '@type': 'Service',
+    'name': service.name,
+    'description': service.description
+  };
+  if (service.offers) obj.offers = service.offers;
+  return obj;
+}) : null;
+
+// WebPage block
+const webPageBlock = {
+  '@type': 'WebPage',
+  'url': homepageUrl,
+  'name': siteName,
+  'description': description,
+  ...(resolvedImageUrl ? { image: resolvedImageUrl } : {}),
+  ...(resolvedLogoUrl ? { logo: resolvedLogoUrl } : {})
+};
+
+// Organization block
+const orgBlock = org ? {
+  '@type': 'Organization',
+  'name': org.name,
+  ...(org.url ? { url: org.url } : {}),
+  ...(org.logo ? { logo: org.logo } : {}),
+  ...(org.sameAs ? { sameAs: org.sameAs } : {})
+} : null;
+
+// LocalBusiness block
+const businessBlock = business ? {
+  '@type': 'LocalBusiness',
+  ...business
+} : null;
+
+const blocks = [
+  !disableWebPage && webPageBlock,
+  orgBlock,
+  businessBlock,
+  !disableFAQ && faqBlock,
+  !disableServices && servicesBlock,
+].filter(Boolean).flat();
+---
+
+<JsonLdBase siteConfig={site} customData={blocks} />
+
+{!disableReviews && reviewsList.length > 0 && (
+  <JsonLdReviews reviews={reviewsList} />
+)}
