@@ -13,40 +13,15 @@ import CallToActionSection from '../components/CallToActionSection.astro';
 import Navigation from '../components/Navigation.astro';
 import JsonLdGenerator from '../components/JsonLdGenerator.astro';
 
-export interface Props {
-  title?: string;
-  description?: string;
-  keywords?: string;
-  ogImage?: string;
-  ogType?: string;
-  noindex?: boolean;
-  canonicalUrl?: string;
-  structuredData?: any;
-  bodyClass?: string;
-  pageUrl?: string;
-}
-
 const {
-  title,
-  description,
-  ogImage,
-  noindex = false,
-  canonicalUrl,
-  structuredData,
   bodyClass = '',
-  pageUrl
+  // bodyStyle = ''
 } = Astro.props;
-
-const currentUrl = canonicalUrl || Astro.url.href;
 ---
 
 <SharedHomeLayout 
-  title={title}
-  description={description}
-  ogImage={ogImage}
-  noIndex={noindex}
-  canonical={canonicalUrl}
-  pageUrl={pageUrl || currentUrl}
+  bodyClass={`leading-normal tracking-normal text-white gradient ${bodyClass} antialiased`}
+  bodyStyle="font-family: 'Source Sans Pro', sans-serif;"
 >
   <!-- Additional head content specific to this layout -->
   <Fragment slot="head">
@@ -56,22 +31,16 @@ const currentUrl = canonicalUrl || Astro.url.href;
   </Fragment>
 
   <!-- Body content -->
-  <body
-    class={`leading-normal tracking-normal text-white gradient ${bodyClass} antialiased`}
-    style="font-family: 'Source Sans Pro', sans-serif;"
-  >
-    <Navigation />
-    <HeroSection />
-    <ServicesSection />
-    <AboutSection />
-    <PassportSection />
-    <CarouselSection />
-    <FaqSection />
-    <CallToActionSection />
-    <FooterSection />
-    <Whatsapp />  
-  </body>
-
+  <Navigation />
+  <HeroSection />
+  <ServicesSection />
+  <AboutSection />
+  <PassportSection />
+  <CarouselSection />
+  <FaqSection />
+  <CallToActionSection />
+  <FooterSection />
+  <Whatsapp />
 </SharedHomeLayout>
 
 <style is:global>

@@ -31,9 +31,9 @@ const {
 const canonicalUrl = `https://${siteConfig.site.domain}`;
 
 // Build complete image URL if it's a relative path
-const fullImageUrl = seo.ogImage.startsWith('http') 
-    ? seo.ogImage 
-    : `https://${siteConfig.site.domain}${seo.ogImage}`;
+const fullImageUrl = seo.openGraph?.image.startsWith('http') 
+    ? seo.openGraph?.image 
+    : `https://${siteConfig.site.domain}${seo.openGraph?.image}`;
 ---
 
 
@@ -66,31 +66,47 @@ const fullImageUrl = seo.ogImage.startsWith('http')
     description={seo.description}
     url={canonicalUrl}
     image={fullImageUrl}
-    siteName={siteConfig.name}
-    type={seo.openGraph.type}
-    locale={seo.openGraph.locale.replace('-', '_')}
-    author={seo.openGraph.author}
-    publishedTime={seo.openGraph.publishedTime}
-    modifiedTime={seo.openGraph.modifiedTime}
-    section={seo.openGraph.section}
-    tags={seo.openGraph.tags}
+    imageWidth={seo.openGraph?.imageWidth}
+    imageHeight={seo.openGraph?.imageHeight}
+    imageType={seo.openGraph?.imageType}
+    imageAlt={seo.openGraph?.imageAlt}
+    siteName={siteConfig?.name}
+    type={seo.openGraph?.type}
+    locale={seo.openGraph?.locale.replace('-', '_')}
+    author={seo.openGraph?.author}
+    publishedTime={seo.openGraph?.publishedTime}
+    modifiedTime={seo.openGraph?.modifiedTime}
+    section={seo.openGraph?.section}
+    tags={seo.openGraph?.tags}
 />
 
 
-
+<TwitterCard 
+    title={seo.title}
+    description={seo.description}
+    image={fullImageUrl}
+    url={canonicalUrl}
+    site={siteConfig.socialMedia.twitter}
+/>
 
 
 {seo.themeColor ? (
     <meta name="theme-color" content={seo.themeColor} />
-) : siteConfig.branding.primaryColor ? (
-    <meta name="theme-color" content={siteConfig.branding.primaryColor} />
+) : siteConfig.site.primaryColor ? (
+    <meta name="theme-color" content={siteConfig.site.primaryColor} />
 ) : null}
 
 
+{seo.msTileColor ? (
+    <meta name="msapplication-TileColor" content={seo.msTileColor} />
+) : siteConfig.site.primaryColor ? (
+    <meta name="msapplication-TileColor" content={siteConfig.site.primaryColor} />
+) : null}
 
 
-
-
+{seo.msTileConfig && (
+    <meta name="msapplication-config" content={seo.msTileConfig} />
+)}
 
 
 {siteConfig.site.name && (
@@ -98,13 +114,27 @@ const fullImageUrl = seo.ogImage.startsWith('http')
 )}
 
 
+{seo.appleMobileWebAppCapable && (
+    <meta name="apple-mobile-web-app-capable" content={seo.appleMobileWebAppCapable} />
+)}
 
 
+{seo.appleMobileWebAppStatusBarStyle && (
+    <meta name="apple-mobile-web-app-status-bar-style" content={seo.appleMobileWebAppStatusBarStyle} />
+)}
 
 
+{seo.formatDetection && (
+    <meta name="format-detection" content={seo.formatDetection} />
+)}
 
 
-
-
-
-
+{seo.geoRegion && (
+    <meta name="geo.region" content={seo.geoRegion} />
+)}
+{seo.geoCountry && (
+    <meta name="geo.country" content={seo.geoCountry} />
+)}
+{seo.geoPlacename && (
+    <meta name="geo.placename" content={seo.geoPlacename} />
+)}
