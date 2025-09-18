@@ -15,13 +15,13 @@ import JsonLdGenerator from '../components/JsonLdGenerator.astro';
 
 const {
   bodyClass = '',
-  // bodyStyle = ''
+  bodyStyle = ''
 } = Astro.props;
 ---
 
 <SharedHomeLayout 
-  bodyClass={`leading-normal tracking-normal text-white gradient ${bodyClass} antialiased`}
-  bodyStyle="font-family: 'Source Sans Pro', sans-serif;"
+  bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
+  bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
 >
   <!-- Additional head content specific to this layout -->
   <Fragment slot="head">
