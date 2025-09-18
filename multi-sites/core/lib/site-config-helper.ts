@@ -4,17 +4,18 @@
  * To customize, edit the template.
 */
 
-import type { SiteConfig } from './site-config.ts';
+// this's done on purpose to get the respective siteid site-config.ts customized by the user.
+import { siteConfig as siteConfigType } from '../site-config.ts'; 
 
-// Helper functions that work with any SiteConfig
+type SiteConfig = typeof siteConfigType;
+// Helper functions for the new nested siteConfig structure
 export class SiteConfigHelper {
     /**
      * Dynamically load site config for Astro components
      * Uses SITE_ID environment variable or falls back to fastvistos
      */
-    static async loadSiteConfig(): Promise<SiteConfig> {
+    static async loadSiteConfig() {
         const siteId = import.meta.env.SITE_ID || 'fastvistos';
-
         try {
             const module = await import(`../../sites/${siteId}/site-config.ts`);
             return module.siteConfig;
@@ -26,40 +27,44 @@ export class SiteConfigHelper {
     }
 
     static getMetadata(config: SiteConfig, pageTitle?: string, pageDescription?: string) {
+        // Support both flat and nested config structures
+        const seo = (config as any).seo || (config as any).homePageConfig?.seo || (config as any).blogPageConfig?.seo || {};
+        const business = (config as any).business || config;
         return {
-            title: pageTitle ? `${pageTitle} | ${config.name}` : config.seo.title,
-            description: pageDescription || config.seo.description,
-            keywords: config.seo.keywords.join(', '),
-            ogImage: config.seo.ogImage,
-            siteName: config.name,
-            domain: config.domain,
-            language: config.language,
+            title: pageTitle ? `${pageTitle} | ${business.name ?? ''}` : seo.title,
+            description: pageDescription || seo.description,
+            keywords: Array.isArray(seo.keywords) ? seo.keywords.join(', ') : '',
+            ogImage: seo.ogImage,
+            siteName: business.name ?? '',
+            domain: business.domain ?? '',
+            language: business.language ?? '',
         };
     }
 
     static getCssVariables(config: SiteConfig): Record<string, string> {
+        const branding = config.branding || {};
         return {
-            '--primary-color': config.primaryColor,
-            '--secondary-color': config.secondaryColor,
-            ...config.customStyles.cssVars,
+            '--primary-color': branding.primaryColor,
+            '--secondary-color': branding.secondaryColor,
+            ...((config.customStyles && config.customStyles.cssVars) || {}),
         };
     }
 
     static hasFeature(config: SiteConfig, feature: keyof SiteConfig['features']): boolean {
-        return config.features[feature];
+        return !!(config.features && config.features[feature]);
     }
 
     static getContactInfo(config: SiteConfig) {
         return {
-            email: config.contactEmail,
-            phone: config.phone,
-            whatsapp: config.whatsapp,
+            email: config.contact?.email,
+            whatsapp: config.contact?.whatsapp,
             socialMedia: config.socialMedia,
         };
     }
 
     static getWhatsAppLink(config: SiteConfig, message?: string): string {
+        const whatsapp = config.contact?.whatsapp || '';
         const encodedMessage = message ? encodeURIComponent(message) : '';
-        return `https://wa.me/${config.whatsapp.replace(/\D/g, '')}${encodedMessage ? `?text=${encodedMessage}` : ''}`;
+        return `https://wa.me/${whatsapp.replace(/\D/g, '')}${encodedMessage ? `?text=${encodedMessage}` : ''}`;
     }
 }

@@ -75,7 +75,7 @@ if (testType === 'unit') {
     // Import and run integration tests with real database
     try {
         const { runIntegrationTests } = await import(
-            '../multi-sites/core/lib/blog-service-integration.test.js'
+            '../lixo2/blog-service-integration.test.js'
         );
         await runIntegrationTests();
     } catch (error) {

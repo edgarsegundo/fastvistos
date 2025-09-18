@@ -13,6 +13,7 @@ export interface Props {
     image?: string;
     imageWidth?: number | string; // Open Graph image width (optional)
     imageHeight?: number | string; // Open Graph image height (optional)
+    imageType?: string; // Open Graph image MIME type (optional)
     imageAlt?: string; // Open Graph image alt text (optional)
     siteName?: string;
     type?: 'website' | 'article' | 'book' | 'profile' | 
@@ -38,6 +39,7 @@ const {
     image,
     imageWidth,
     imageHeight,
+    imageType,
     imageAlt,
     siteName,
     type = 'website',
@@ -46,7 +48,7 @@ const {
     publishedTime,
     modifiedTime,
     section,
-    tags
+    tags,
 } = Astro.props;
 ---
 
@@ -55,10 +57,27 @@ const {
 {url && <meta property="og:url" content={url} />}
 {title && <meta property="og:title" content={title} />}
 {description && <meta property="og:description" content={description} />}
-{image && <meta property="og:image" content={image} />}
-{imageWidth && <meta property="og:image:width" content={`${imageWidth}`} />}
-{imageHeight && <meta property="og:image:height" content={`${imageHeight}`} />}
-{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+
+{Array.isArray(image) ? image.map((img, idx) => (
+    <>
+        <meta property="og:image" content={img.url || img} />
+        {img.secureUrl && <meta property="og:image:secure_url" content={img.secureUrl} />}
+        {img.type && <meta property="og:image:type" content={img.type} />}
+        {img.width && <meta property="og:image:width" content={`${img.width}`} />}
+        {img.height && <meta property="og:image:height" content={`${img.height}`} />}
+        {img.alt && <meta property="og:image:alt" content={img.alt} />}
+    </>
+)) : (
+    <>
+        {image && <meta property="og:image" content={image} />}
+        {/* {imageSecureUrl && <meta property="og:image:secure_url" content={imageSecureUrl} />} */}
+        {imageType && <meta property="og:image:type" content={imageType} />}
+        {imageWidth && <meta property="og:image:width" content={`${imageWidth}`} />}
+        {imageHeight && <meta property="og:image:height" content={`${imageHeight}`} />}
+        {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    </>
+)}
+
 {siteName && <meta property="og:site_name" content={siteName} />}
 <meta property="og:locale" content={locale} />
 

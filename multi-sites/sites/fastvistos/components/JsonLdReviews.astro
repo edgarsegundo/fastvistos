@@ -1,0 +1,27 @@
+---
+/**
+ * JsonLdReviews.astro
+ *
+ * Renders a JSON-LD block for a list of reviews (videos or text).
+ *
+ * Usage:
+ * <JsonLdReviews reviews={[{ author: '...', reviewBody: '...', ... }]} />
+ *
+ * Accepts any valid Review properties (see schema.org/Review).
+ */
+---
+
+---
+const { reviews = [] } = Astro.props;
+
+const reviewBlocks = reviews.map(review => ({
+  '@type': 'Review',
+  ...review
+}));
+
+const jsonLd = reviewBlocks.length === 1 ? reviewBlocks[0] : reviewBlocks;
+---
+
+<script type="application/ld+json">
+  {JSON.stringify(jsonLd, null, 2)}
+</script>

@@ -7,15 +7,18 @@
 
 import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import { siteConfig } from '../../site-config.ts';
-import { SiteConfigHelper } from '../../lib/site-config-helper.ts';
+// import { SiteConfigHelper } from '../../lib/site-config-helper.ts';
 import { BlogService } from '../../lib/blog-service.ts';
 import JsonLdBlogIndex from '../../components/JsonLdBlogIndex.astro';
 
 
-// Get page metadata using helper functions (auto-sync working!)
-const metadata = SiteConfigHelper.getMetadata(siteConfig, 'Blog', 'Artigos e dicas sobre vistos');
-const cssVars = SiteConfigHelper.getCssVariables(siteConfig);
-const hasBlog = SiteConfigHelper.hasFeature(siteConfig, 'blog');
+export interface Props {
+  edgar?: string;
+}
+
+const {
+  edgar = '',
+} = Astro.props;
 
 // Fetch blog data using the business-aware blog service
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
@@ -29,12 +32,10 @@ const defaultConfig = {
 
 const title = `${blogConfig?.title || defaultConfig.title} - ${siteConfig.name}`;
 const description = blogConfig?.description || defaultConfig.description;
-
 ---
 
 <SharedBlogLayout 
-    title={title}
-    description={description}
+    edgar={edgar}
 >
     
     <Fragment slot="head">
