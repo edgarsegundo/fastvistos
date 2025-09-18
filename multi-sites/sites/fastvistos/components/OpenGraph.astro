@@ -9,11 +9,13 @@
 export interface Props {
     title?: string;
     description?: string;
+    keywords?: string[];
     url?: string;
     image?: string;
     imageWidth?: number | string; // Open Graph image width (optional)
     imageHeight?: number | string; // Open Graph image height (optional)
     imageAlt?: string; // Open Graph image alt text (optional)
+    canonicalUrl?: string;
     siteName?: string;
     type?: 'website' | 'article' | 'book' | 'profile' | 
            'music.song' | 'music.album' | 'music.playlist' | 'music.radio_station' |
@@ -34,11 +36,13 @@ export interface Props {
 const { 
     title,
     description,
+    keywords,
     url,
     image,
     imageWidth,
     imageHeight,
     imageAlt,
+    canonicalUrl,
     siteName,
     type = 'website',
     locale = 'pt-BR',
@@ -46,7 +50,9 @@ const {
     publishedTime,
     modifiedTime,
     section,
-    tags
+    tags,
+
+    
 } = Astro.props;
 ---
 

@@ -12,24 +12,22 @@
  */
 import type { SiteConfig } from './lib/site-config-model.ts';
 
-// 🌐 Shared Site Config (business + branding + global stuff)
+// 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
-    business: {
-    business_id: 'your-business-id',
-    id: 'your-site-id',
-    domain: 'your-domain.com',
-    name: 'Your Business Name',
-    description: 'Your business description here',
-    language: 'your-language-tag',
-    useFullLanguageTag: true, // true/false
-    currency: 'CURRENCY',
-    timezone: 'Your/Timezone',
-    },
-
-    branding: {
+    site: {
+        business_id: 'your-business-id',
+        id: 'your-site-id',
+        domain: 'your-domain.com',
+        name: 'Your Business Name',
+        description: 'Your business description here',
+        language: 'your-language-tag',
+        useFullLanguageTag: true, // true/false
+        currency: 'CURRENCY',
+        timezone: 'Your/Timezone',
         logo: '/path-to-logo.png',
-        primaryColor: '#PRIMARY',
-        secondaryColor: '#SECONDARY',
+        primaryColor: '#0070f3',
+        secondaryColor: '#1c1c1e',
+        author: 'Your Author Name', // Default author name for Open Graph
     },
 
     contact: {
@@ -64,45 +62,122 @@ export const siteConfig: SiteConfig = {
             '--accent-color': '#ACCENT',
         },
     },
-};
 
-export const homePageConfig = {
-    seo: {
-        title: 'Your Site Title',
-        description: 'Your site description here.',
-        keywords: ['keyword1', 'keyword2', 'keyword3'],
-        ogImage: '/path-to-og-image.jpg',
-        themeColor: '#PRIMARY',
-        msTileColor: '#PRIMARY',
-        msTileConfig: '/browserconfig.xml',
-        applicationName: 'Your App Name',
-        appleMobileWebAppCapable: 'yes',
-        appleMobileWebAppStatusBarStyle: 'default',
-        formatDetection: 'telephone=no',
-        geoRegion: 'XX',
-        geoCountry: 'Country',
-        geoPlacename: 'Placename',
+    homePageConfig: {
+        seo: {
+            title: 'Your Site Title',
+            description: 'Your site description here.',
+            keywords: ['keyword1', 'keyword2', 'keyword3'],
+            ogImage: '/path-to-og-image.jpg',
+            themeColor: '#PRIMARY',
+            msTileColor: '#PRIMARY',
+            msTileConfig: '/browserconfig.xml',
+            applicationName: 'Your App Name',
+            appleMobileWebAppCapable: 'yes',
+            appleMobileWebAppStatusBarStyle: 'default',
+            formatDetection: 'telephone=no',
+            geoRegion: 'XX',
+            geoCountry: 'Country',
+            geoPlacename: 'Placename',
+            openGraph: {
+                type: 'website', // Default type for Open Graph
+                locale: 'your-language-tag', // e.g. en_US
+                author: 'your-author-name', // Default author name
+                publishedTime: '2024-01-01T00:00:00Z', // Default published time
+                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
+                section: 'your-section', // Default section
+                tags: ['tag1', 'tag2'], // Default tags
+            },
+        },
     },
-};
 
-export const blogPageConfig = {
-    seo: {
-        title: 'Your Blog Title',
-        description: 'Your blog description here.',
-        keywords: ['blog', 'keyword1', 'keyword2'],
-        ogImage: '/path-to-blog-og-image.jpg',
+    blogPageConfig: {
+        seo: {
+            title: 'Your Site Title',
+            description: 'Your site description here.',
+            keywords: ['keyword1', 'keyword2', 'keyword3'],
+            ogImage: '/path-to-og-image.jpg',
+            themeColor: '#PRIMARY',
+            msTileColor: '#PRIMARY',
+            msTileConfig: '/browserconfig.xml',
+            applicationName: 'Your App Name',
+            appleMobileWebAppCapable: 'yes',
+            appleMobileWebAppStatusBarStyle: 'default',
+            formatDetection: 'telephone=no',
+            geoRegion: 'XX',
+            geoCountry: 'Country',
+            geoPlacename: 'Placename',
+
+            openGraph: {
+                type: 'blog', // Default type for Open Graph
+                locale: 'your-language-tag', // e.g. en_US
+                author: 'your-author-name', // Default author name
+                publishedTime: '2024-01-01T00:00:00Z', // Default published time
+                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
+                section: 'your-section', // Default section
+                tags: ['tag1', 'tag2'], // Default tags
+            },
+
+        },
+        pagination: {
+            postsPerPage: 10,
+        }
     },
-    pagination: {
-        postsPerPage: 10,
+
+    blogPostConfig: {
+        seo: {
+            title: 'Your Site Title',
+            description: 'Your site description here.',
+            keywords: ['keyword1', 'keyword2', 'keyword3'],
+            ogImage: '/path-to-og-image.jpg',
+            themeColor: '#PRIMARY',
+            msTileColor: '#PRIMARY',
+            msTileConfig: '/browserconfig.xml',
+            applicationName: 'Your App Name',
+            appleMobileWebAppCapable: 'yes',
+            appleMobileWebAppStatusBarStyle: 'default',
+            formatDetection: 'telephone=no',
+            geoRegion: 'XX',
+            geoCountry: 'Country',
+            geoPlacename: 'Placename',
+
+            openGraph: {
+                type: 'blog', // Default type for Open Graph
+                locale: 'your-language-tag', // e.g. en_US
+                author: 'your-author-name', // Default author name
+                publishedTime: '2024-01-01T00:00:00Z', // Default published time
+                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
+                section: 'your-section', // Default section
+                tags: ['tag1', 'tag2'], // Default tags
+            },
+        },
+        readingTime: true, // true/false
+        showAuthor: true, // true/false
+        relatedPosts: true, // true/false
     }
 };
 
-export const blogPostConfig = {
-    seoDefaults: {
-        titleSuffix: '| Your Site',
-        ogImage: '/path-to-default-post-og-image.jpg',
-    },
-    readingTime: true, // true/false
-    showAuthor: true, // true/false
-    relatedPosts: true, // true/false
-};
+// Open Graph type options for 'openGraph.type':
+// 'website'         - General site or homepage
+// 'article'         - News, blog post, or article
+// 'book'            - Book content
+// 'profile'         - Person or profile page
+// 'music.song'      - Individual song
+// 'music.album'     - Music album
+// 'music.playlist'  - Music playlist
+// 'music.radio_station' - Radio station
+// 'video.movie'     - Movie
+// 'video.episode'   - TV episode
+// 'video.tv_show'   - TV show
+// 'video.other'     - Other video content
+// 'business.business' - Business or organization
+// 'place'           - Physical location
+// 'restaurant.menu'         - Restaurant menu
+// 'restaurant.menu_item'    - Menu item
+// 'restaurant.menu_section' - Menu section
+// 'restaurant.restaurant'   - Restaurant
+// 'product'         - Product page
+// 'product.group'   - Product group
+// 'product.item'    - Product item
+// 'game.achievement' - Game achievement
+//
