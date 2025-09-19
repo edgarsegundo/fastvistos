@@ -302,11 +302,28 @@ const jsonLdGraph = {
 };
 ---
 
+
 <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)}></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('div[updatable_div_uuid]').forEach(section_div_wrapper => {
+        // Set base border and highlight styles dynamically
+        section_div_wrapper.addEventListener('mouseenter', function() {
+            Object.assign(section_div_wrapper.style, {
+                border: '10px dashed #b3c6e0',
+                borderRadius: '10px',
+                transition: 'border 0.1s',
+            });
+        });
+        section_div_wrapper.addEventListener('mouseleave', function() {
+            // how to remove only the properties we set?
+            section_div_wrapper.style.border = '';
+            section_div_wrapper.style.borderRadius = '';
+            section_div_wrapper.style.transition = '';
+            section_div_wrapper.style.boxShadow = '';
+        });
+
         // Create wrapper div for positioning
         const wrapper = document.createElement('div');
         wrapper.className = 'uuid-edit-link-wrapper';
