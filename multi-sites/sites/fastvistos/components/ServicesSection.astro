@@ -1,270 +1,131 @@
 ---
 // Our Services Section Component
 ---
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('section[uuid]').forEach(section => {
-        // if (section.querySelector('.uuid-edit-link')) {
-        //     return;
-        // }
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = '✏️ Editar HTML';
-        btn.className = 'uuid-edit-link';
-        btn.style.position = 'absolute';
-        btn.style.top = '8px';
-        btn.style.right = '16px';
-        btn.style.zIndex = 1000;
-        btn.style.background = '#fff';
-        btn.style.padding = '2px 8px';
-        btn.style.borderRadius = '4px';
-        btn.style.fontSize = '12px';
-        btn.style.textDecoration = 'none';
-        btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
-        btn.style.border = '1px solid #ddd';
-        btn.style.cursor = 'pointer';
-        section.style.position = 'relative';
-        section.appendChild(btn);
-        btn.addEventListener('click', function (e) {
-            console.log('Edit button clicked for section:', section);
-            e.preventDefault();
-            // e.stopPropagation();
-            showModal(section);
-            return false;
-        });
-    });
-    function showModal(section) {
-        document.querySelectorAll('.uuid-modal').forEach(m => m.remove());
-        const modal = document.createElement('div');
-        modal.className = 'uuid-modal';
-        modal.style.position = 'fixed';
-        modal.style.top = 0;
-        modal.style.left = 0;
-        modal.style.width = '100vw';
-        modal.style.height = '100vh';
-        modal.style.background = 'rgba(0,0,0,0.4)';
-        modal.style.display = 'flex';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-        modal.style.zIndex = 9999;
-        const modalContent = document.createElement('div');
-        modalContent.style.background = '#fff';
-        modalContent.style.padding = '24px';
-        modalContent.style.borderRadius = '8px';
-        modalContent.style.width = '90vw';
-        modalContent.style.maxWidth = '700px';
-        modalContent.style.boxShadow = '0 4px 32px rgba(0,0,0,0.2)';
-        modalContent.style.position = 'relative';
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = '×';
-        closeBtn.style.position = 'absolute';
-        closeBtn.style.top = '8px';
-        closeBtn.style.right = '12px';
-        closeBtn.style.fontSize = '24px';
-        closeBtn.style.background = 'none';
-        closeBtn.style.border = 'none';
-        closeBtn.style.cursor = 'pointer';
-        closeBtn.onclick = () => modal.remove();
-        const label = document.createElement('div');
-        label.textContent = `Edit HTML for section uuid="${section.getAttribute('uuid')}"`;
-        label.style.marginBottom = '8px';
-        label.style.fontWeight = 'bold';
-        const textarea = document.createElement('textarea');
-        textarea.style.width = '100%';
-        textarea.style.height = '300px';
-        textarea.style.color = '#222';
-        textarea.style.background = '#fff';
-        textarea.value = section.outerHTML;
-        const updateBtn = document.createElement('button');
-        updateBtn.type = 'button';
-        updateBtn.textContent = 'Update';
-        updateBtn.style.marginTop = '12px';
-        updateBtn.style.padding = '8px 16px';
-        updateBtn.style.background = '#0070f3';
-        updateBtn.style.color = '#fff';
-        updateBtn.style.border = 'none';
-        updateBtn.style.borderRadius = '4px';
-        updateBtn.style.cursor = 'pointer';
-        updateBtn.onclick = () => {
-            modal.remove();
-            // Save scroll position
-            // const scrollY = window.scrollY;
-            const temp = document.createElement('div');
-            temp.innerHTML = textarea.value.trim();
-            const newSection = temp.querySelector('section[uuid]');
-            if (newSection) {
-                section.replaceWith(newSection);
-                // modal.remove();
-                // injectEditLink(newSection);
-                // Restore scroll position
-                // window.scrollTo({ top: scrollY });
-            } else {
-                alert('Invalid HTML: must include <section uuid=\"...\">');
-            }
-        };
-
-        // Helper to inject the edit link into a section
-            function injectEditLink(section) {
-                if (section.querySelector('.uuid-edit-link')) return;
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.textContent = '✏️ Editar HTML';
-                        btn.className = 'uuid-edit-link';
-                        btn.style.position = 'absolute';
-                        btn.style.top = '8px';
-                        btn.style.right = '16px';
-                        btn.style.zIndex = 1000;
-                        btn.style.background = '#fff';
-                        btn.style.padding = '2px 8px';
-                        btn.style.borderRadius = '4px';
-                        btn.style.fontSize = '12px';
-                        btn.style.textDecoration = 'none';
-                        btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
-                        btn.style.border = '1px solid #ddd';
-                        btn.style.cursor = 'pointer';
-                        section.style.position = 'relative';
-                        section.appendChild(btn);
-                        btn.addEventListener('click', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            showModal(section);
-                            return false;
-                        });
-            }
-        modalContent.appendChild(closeBtn);
-        modalContent.appendChild(label);
-        modalContent.appendChild(textarea);
-        modalContent.appendChild(updateBtn);
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-    }
-});
-</script>
-
-<section class="bg-white border-b py-16" id="nossos-servicos" uuid="47e35a96-9473-46f1-9afa-d804c981da83">
-    <div class="container mx-auto flex flex-wrap pt-4 pb-12">
-        <h2
-            class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800"
-            style="color: #1B375C;"
-        >
-            Nossos Serviços
-        </h2>
-        <div class="w-full mb-4">
-            <div
-                class="h-1 mx-auto bg-gradient-to-r w-64 opacity-25 my-0 py-0 rounded-t"
-                style="background-color: #0c59be;"
+<div updatable_div_uuid="47e35a96-9473-46f1-9afa-d804c981da83">
+    <section class="bg-white border-b py-16" id="nossos-servicos">
+        <div class="container mx-auto flex flex-wrap pt-4 pb-12">
+            <h2
+                class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800"
+                style="color: #1B375C;"
             >
-            </div>
-        </div>
-
-        <!-- Card Component -->
-        <div class="w-full md:w-1/3 p-6 flex flex-col">
-            <div
-                class="border-1 bg-white rounded-lg shadow-lg p-6 flex flex-col items-center"
-                style="border: 4px solid #FF8700;"
-            >
+                Nossos Serviços
+            </h2>
+            <div class="w-full mb-4">
                 <div
-                    class="w-36 h-36 bg-gray-300 rounded-full border-4 border-orange-900 overflow-hidden shadow-lg"
+                    class="h-1 mx-auto bg-gradient-to-r w-64 opacity-25 my-0 py-0 rounded-t"
+                    style="background-color: #0c59be;"
+                >
+                </div>
+            </div>
+
+            <!-- Card Component -->
+            <div class="w-full md:w-1/3 p-6 flex flex-col">
+                <div
+                    class="border-1 bg-white rounded-lg shadow-lg p-6 flex flex-col items-center"
                     style="border: 4px solid #FF8700;"
                 >
-                    <img
-                        src="assets/images/services/lasvegas.webp"
-                        class="w-full h-full object-cover"
-                    />
+                    <div
+                        class="w-36 h-36 bg-gray-300 rounded-full border-4 border-orange-900 overflow-hidden shadow-lg"
+                        style="border: 4px solid #FF8700;"
+                    >
+                        <img
+                            src="assets/images/services/lasvegas.webp"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="text-gray-600 text-xs md:text-sm">VISTO B1/B2 🇺🇸</p>
+                        <h3 class="text-3xl font-bold text-gray-800">VISTO AMERICANO</h3>
+                        <p class="text-gray-800 text-base mt-3">
+                            Se você precisa renovar seu visto americano, ou se está solicitando pela
+                            primeira vez, podemos te ajudar.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-800 text-base mt-3">
+                            <li>Antecipe sua entrevista consular</li>
+                            <li>Evite cometer erros no processo</li>
+                            <li>Deixe a burocracia conosco</li>
+                            <li>Prepare-se para a entrevista</li>
+                        </ul>
+                    </div>
+                    <button
+                        data-linkcode="%232"
+                        class="wpp_button_link mt-6 bg-gradient-to-r text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:scale-105 duration-300"
+                        style="background-color: #FF8700;"
+                    >
+                        Solicitar
+                    </button>
                 </div>
-                <div class="text-center mt-4">
-                    <p class="text-gray-600 text-xs md:text-sm">VISTO B1/B2 🇺🇸</p>
-                    <h3 class="text-3xl font-bold text-gray-800">VISTO AMERICANO</h3>
-                    <p class="text-gray-800 text-base mt-3">
-                        Se você precisa renovar seu visto americano, ou se está solicitando pela
-                        primeira vez, podemos te ajudar.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-800 text-base mt-3">
-                        <li>Antecipe sua entrevista consular</li>
-                        <li>Evite cometer erros no processo</li>
-                        <li>Deixe a burocracia conosco</li>
-                        <li>Prepare-se para a entrevista</li>
-                    </ul>
-                </div>
-                <button
-                    data-linkcode="%232"
-                    class="wpp_button_link mt-6 bg-gradient-to-r text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:scale-105 duration-300"
-                    style="background-color: #FF8700;"
-                >
-                    Solicitar
-                </button>
             </div>
-        </div>
 
-        <div class="w-full md:w-1/3 p-6 flex flex-col">
-            <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
-                <div
-                    class="w-36 h-36 bg-gray-300 rounded-full border-4 border-blue-500 overflow-hidden shadow-lg"
-                    style="border: 4px solid #FF8700;"
-                >
-                    <img
-                        src="assets/images/services/canada.jpg"
-                        class="w-full h-full object-cover"
-                    />
+            <div class="w-full md:w-1/3 p-6 flex flex-col">
+                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+                    <div
+                        class="w-36 h-36 bg-gray-300 rounded-full border-4 border-blue-500 overflow-hidden shadow-lg"
+                        style="border: 4px solid #FF8700;"
+                    >
+                        <img
+                            src="assets/images/services/canada.jpg"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="text-gray-600 text-xs md:text-sm">AUTORIZAÇÃO ETA 🇨🇦</p>
+                        <h3 class="text-3xl font-bold text-gray-800">VISTO CANADENSE</h3>
+                        <p class="text-gray-800 text-base mt-3">
+                            eTA é um sistema eletrônico de autorização de viagem que permite que os
+                            viajantes visitem o Canadá por até 6 meses.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-800 text-base mt-3">
+                            <li>Obtenha sua autorização em até 72 horas</li>
+                            <li>Permite múltiplas entradas no Canadá</li>
+                            <li>Solicite sua eTA sem sair de casa</li>
+                            <li>Sem necessidade de documentos extras</li>
+                        </ul>
+                    </div>
+                    <button
+                        data-linkcode="%232"
+                        class="wpp_button_link mt-6 bg-gradient-to-r text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:scale-105 duration-300"
+                        style="background-color: #FF8700;"
+                    >
+                        Solicitar
+                    </button>
                 </div>
-                <div class="text-center mt-4">
-                    <p class="text-gray-600 text-xs md:text-sm">AUTORIZAÇÃO ETA 🇨🇦</p>
-                    <h3 class="text-3xl font-bold text-gray-800">VISTO CANADENSE</h3>
-                    <p class="text-gray-800 text-base mt-3">
-                        eTA é um sistema eletrônico de autorização de viagem que permite que os
-                        viajantes visitem o Canadá por até 6 meses.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-800 text-base mt-3">
-                        <li>Obtenha sua autorização em até 72 horas</li>
-                        <li>Permite múltiplas entradas no Canadá</li>
-                        <li>Solicite sua eTA sem sair de casa</li>
-                        <li>Sem necessidade de documentos extras</li>
-                    </ul>
-                </div>
-                <button
-                    data-linkcode="%232"
-                    class="wpp_button_link mt-6 bg-gradient-to-r text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:scale-105 duration-300"
-                    style="background-color: #FF8700;"
-                >
-                    Solicitar
-                </button>
             </div>
-        </div>
 
-        <div class="w-full md:w-1/3 p-6 flex flex-col">
-            <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
-                <div
-                    class="w-36 h-36 bg-gray-300 rounded-full border-4 border-blue-500 overflow-hidden shadow-lg"
-                    style="border: 4px solid #FF8700;"
-                >
-                    <img
-                        src="assets/images/services/beach-g487e1f74e_800.jpg"
-                        class="w-full h-full object-cover"
-                    />
+            <div class="w-full md:w-1/3 p-6 flex flex-col">
+                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
+                    <div
+                        class="w-36 h-36 bg-gray-300 rounded-full border-4 border-blue-500 overflow-hidden shadow-lg"
+                        style="border: 4px solid #FF8700;"
+                    >
+                        <img
+                            src="assets/images/services/beach-g487e1f74e_800.jpg"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="text-gray-600 text-xs md:text-sm">MÉXICO 🇲🇽</p>
+                        <h3 class="text-3xl font-bold text-gray-800">VISTO MEXICANO</h3>
+                        <p class="text-gray-800 text-base mt-3">
+                            O México exige documentos originais e outras exigências. Com nossa
+                            assessoria, suas chances de aprovação são maiores.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-800 text-base mt-3">
+                            <li>Análise Personalizada do Perfil</li>
+                            <li>Preparação para a Entrevista</li>
+                            <li>Auxílio no Preenchimento de Formulários:</li>
+                            <li>Orientação sobre Documentação</li>
+                        </ul>
+                    </div>
+                    <button
+                        data-linkcode="%232"
+                        class="wpp_button_link mt-6 bg-gradient-to-r text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:scale-105 duration-300"
+                        style="background-color: #FF8700;"
+                    >
+                        Solicitar
+                    </button>
                 </div>
-                <div class="text-center mt-4">
-                    <p class="text-gray-600 text-xs md:text-sm">MÉXICO 🇲🇽</p>
-                    <h3 class="text-3xl font-bold text-gray-800">VISTO MEXICANO</h3>
-                    <p class="text-gray-800 text-base mt-3">
-                        O México exige documentos originais e outras exigências. Com nossa
-                        assessoria, suas chances de aprovação são maiores.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-800 text-base mt-3">
-                        <li>Análise Personalizada do Perfil</li>
-                        <li>Preparação para a Entrevista</li>
-                        <li>Auxílio no Preenchimento de Formulários:</li>
-                        <li>Orientação sobre Documentação</li>
-                    </ul>
-                </div>
-                <button
-                    data-linkcode="%232"
-                    class="wpp_button_link mt-6 bg-gradient-to-r text-white font-bold py-2 px-6 rounded-full shadow-lg transform transition hover:scale-105 duration-300"
-                    style="background-color: #FF8700;"
-                >
-                    Solicitar
-                </button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
