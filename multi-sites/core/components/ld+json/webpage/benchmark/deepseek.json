@@ -1,114 +1,112 @@
 {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://fastvistos.com.br/#organization",
-      "name": "Fast Vistos",
-      "url": "https://fastvistos.com.br/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png"
-      },
-      "description": "Assessoria especializada em vistos americanos B1/B2, eTA Canadá e vistos para o México. Serviços personalizados para acelerar seu processo de visto sem burocracia.",
-      "telephone": "+55-19-2042-2785",
-      "email": "contato@fastvistos.com.br",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Júlio Diniz, 257, Taquaral",
-        "addressLocality": "Campinas",
-        "addressRegion": "São Paulo",
-        "postalCode": "13075-420",
-        "addressCountry": "BR"
-      },
-      "openingHours": "Mo-Fr 07:00-18:00",
-      "priceRange": "$$",
-      "sameAs": [
-        "https://www.facebook.com/fastvistos",
-        "https://www.instagram.com/fastvistos"
-      ],
-      "potentialAction": {
-        "@type": "ContactPoint",
-        "contactType": "customer service",
-        "contactOption": "https://www.whatsapp.com",
-        "areaServed": "BR",
-        "availableLanguage": "Portuguese"
-      }
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://fastvistos.com.br/#website",
-      "url": "https://fastvistos.com.br/",
-      "name": "Fast Vistos - Assessoria de Vistos",
-      "description": "Obtenha seu visto americano, eTA do Canadá ou visto para o México com a Fast Vistos. Suporte especializado e sem complicação!",
-      "publisher": {
-        "@id": "https://fastvistos.com.br/#organization"
-      },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://fastvistos.com.br/?s={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      },
-      "inLanguage": "pt-BR"
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://fastvistos.com.br/#webpage",
-      "url": "https://fastvistos.com.br/",
-      "name": "Visto Americano B1/B2, eTA Canadá e México | Fast Vistos – Assessoria Especializada",
-      "isPartOf": {
-        "@id": "https://fastvistos.com.br/#website"
-      },
-      "about": {
-        "@id": "https://fastvistos.com.br/#organization"
-      },
-      "description": "Precisa de visto americano B1/B2, eTA Canadá ou visto para o México? A Fast Vistos acelera seu processo com assessoria especializada e sem burocracia.",
-      "breadcrumb": {
-        "@id": "https://fastvistos.com.br/#breadcrumb"
-      },
-      "inLanguage": "pt-BR",
-      "potentialAction": [
+    "@context": "https://schema.org",
+    "@graph": [
         {
-          "@type": "ReadAction",
-          "target": [
-            "https://fastvistos.com.br/"
-          ]
+            "@type": "Organization",
+            "@id": "https://fastvistos.com.br/#organization",
+            "name": "Fast Vistos",
+            "url": "https://fastvistos.com.br/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png"
+            },
+            "description": "Assessoria especializada em vistos americanos B1/B2, eTA Canadá e vistos para o México. Serviços personalizados para acelerar seu processo de visto sem burocracia.",
+            "telephone": "+55-19-2042-2785",
+            "email": "contato@fastvistos.com.br",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Av. Júlio Diniz, 257, Taquaral",
+                "addressLocality": "Campinas",
+                "addressRegion": "São Paulo",
+                "postalCode": "13075-420",
+                "addressCountry": "BR"
+            },
+            "openingHours": "Mo-Fr 07:00-18:00",
+            "priceRange": "$$",
+            "sameAs": [
+                "https://www.facebook.com/fastvistos",
+                "https://www.instagram.com/fastvistos"
+            ],
+            "potentialAction": {
+                "@type": "ContactPoint",
+                "contactType": "customer service",
+                "contactOption": "https://www.whatsapp.com",
+                "areaServed": "BR",
+                "availableLanguage": "Portuguese"
+            }
         },
         {
-          "@type": "ContactAction",
-          "name": "WhatsApp Chat",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://api.whatsapp.com/send?phone=551920422785&text=Olá! Gostaria de saber mais informações sobre os serviços de vistos."
-          },
-          "actionStatus": "PotentialActionStatus"
-        }
-      ],
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": "https://fastvistos.com.br/assets/images/cover/woman_cover.webp"
-      },
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://fastvistos.com.br/favicon.png"
-      },
-      "datePublished": "2022-01-01T00:00:00+00:00",
-      "dateModified": "2025-01-01T00:00:00+00:00"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://fastvistos.com.br/#breadcrumb",
-      "itemListElement": [
+            "@type": "WebSite",
+            "@id": "https://fastvistos.com.br/#website",
+            "url": "https://fastvistos.com.br/",
+            "name": "Fast Vistos - Assessoria de Vistos",
+            "description": "Obtenha seu visto americano, eTA do Canadá ou visto para o México com a Fast Vistos. Suporte especializado e sem complicação!",
+            "publisher": {
+                "@id": "https://fastvistos.com.br/#organization"
+            },
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://fastvistos.com.br/?s={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            },
+            "inLanguage": "pt-BR"
+        },
         {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://fastvistos.com.br/"
+            "@type": "WebPage",
+            "@id": "https://fastvistos.com.br/#webpage",
+            "url": "https://fastvistos.com.br/",
+            "name": "Visto Americano B1/B2, eTA Canadá e México | Fast Vistos – Assessoria Especializada",
+            "isPartOf": {
+                "@id": "https://fastvistos.com.br/#website"
+            },
+            "about": {
+                "@id": "https://fastvistos.com.br/#organization"
+            },
+            "description": "Precisa de visto americano B1/B2, eTA Canadá ou visto para o México? A Fast Vistos acelera seu processo com assessoria especializada e sem burocracia.",
+            "breadcrumb": {
+                "@id": "https://fastvistos.com.br/#breadcrumb"
+            },
+            "inLanguage": "pt-BR",
+            "potentialAction": [
+                {
+                    "@type": "ReadAction",
+                    "target": ["https://fastvistos.com.br/"]
+                },
+                {
+                    "@type": "ContactAction",
+                    "name": "WhatsApp Chat",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://api.whatsapp.com/send?phone=551920422785&text=Olá! Gostaria de saber mais informações sobre os serviços de vistos."
+                    },
+                    "actionStatus": "PotentialActionStatus"
+                }
+            ],
+            "primaryImageOfPage": {
+                "@type": "ImageObject",
+                "url": "https://fastvistos.com.br/assets/images/cover/woman_cover.webp"
+            },
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://fastvistos.com.br/favicon.png"
+            },
+            "datePublished": "2022-01-01T00:00:00+00:00",
+            "dateModified": "2025-01-01T00:00:00+00:00"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://fastvistos.com.br/#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://fastvistos.com.br/"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

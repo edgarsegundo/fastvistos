@@ -1,101 +1,99 @@
 {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      "@id": "https://neilpatel.com/br/",
-      "url": "https://neilpatel.com/br/",
-      "name": "Agência de SEO e Marketing Digital - Neil Patel",
-      "isPartOf": {
-        "@id": "https://neilpatel.com/br/#website"
-      },
-      "about": {
-        "@id": "https://neilpatel.com/br/#organization"
-      },
-      "primaryImageOfPage": {
-        "@id": "https://neilpatel.com/br/#primaryimage"
-      },
-      "image": {
-        "@id": "https://neilpatel.com/br/#primaryimage"
-      },
-      "thumbnailUrl": "https://neilpatel.com/wp-content/themes/neilpatel/images/homepage-v2/npdigital-agency.png",
-      "datePublished": "2016-04-11T17:06:36+00:00",
-      "dateModified": "2025-01-07T14:27:52+00:00",
-      "description": "Transforme sua presença digital com a Agência de SEO do Neil Patel. Aproveite nossa consultoria de SEO, Mídia e marketing digital!",
-      "breadcrumb": {
-        "@id": "https://neilpatel.com/br/#breadcrumb"
-      },
-      "inLanguage": "pt-BR",
-      "potentialAction": [
+    "@context": "https://schema.org",
+    "@graph": [
         {
-          "@type": "ReadAction",
-          "target": [
-            "https://neilpatel.com/br/"
-          ]
-        }
-      ]
-    },
-    {
-      "@type": "ImageObject",
-      "inLanguage": "pt-BR",
-      "@id": "https://neilpatel.com/br/#primaryimage",
-      "url": "https://neilpatel.com/wp-content/themes/neilpatel/images/homepage-v2/npdigital-agency.png",
-      "contentUrl": "https://neilpatel.com/wp-content/themes/neilpatel/images/homepage-v2/npdigital-agency.png"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://neilpatel.com/br/#breadcrumb",
-      "itemListElement": [
+            "@type": "WebPage",
+            "@id": "https://neilpatel.com/br/",
+            "url": "https://neilpatel.com/br/",
+            "name": "Agência de SEO e Marketing Digital - Neil Patel",
+            "isPartOf": {
+                "@id": "https://neilpatel.com/br/#website"
+            },
+            "about": {
+                "@id": "https://neilpatel.com/br/#organization"
+            },
+            "primaryImageOfPage": {
+                "@id": "https://neilpatel.com/br/#primaryimage"
+            },
+            "image": {
+                "@id": "https://neilpatel.com/br/#primaryimage"
+            },
+            "thumbnailUrl": "https://neilpatel.com/wp-content/themes/neilpatel/images/homepage-v2/npdigital-agency.png",
+            "datePublished": "2016-04-11T17:06:36+00:00",
+            "dateModified": "2025-01-07T14:27:52+00:00",
+            "description": "Transforme sua presença digital com a Agência de SEO do Neil Patel. Aproveite nossa consultoria de SEO, Mídia e marketing digital!",
+            "breadcrumb": {
+                "@id": "https://neilpatel.com/br/#breadcrumb"
+            },
+            "inLanguage": "pt-BR",
+            "potentialAction": [
+                {
+                    "@type": "ReadAction",
+                    "target": ["https://neilpatel.com/br/"]
+                }
+            ]
+        },
         {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home"
-        }
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://neilpatel.com/br/#website",
-      "url": "https://neilpatel.com/br/",
-      "name": "Neil Patel",
-      "description": "",
-      "publisher": {
-        "@id": "https://neilpatel.com/br/#organization"
-      },
-      "potentialAction": [
+            "@type": "ImageObject",
+            "inLanguage": "pt-BR",
+            "@id": "https://neilpatel.com/br/#primaryimage",
+            "url": "https://neilpatel.com/wp-content/themes/neilpatel/images/homepage-v2/npdigital-agency.png",
+            "contentUrl": "https://neilpatel.com/wp-content/themes/neilpatel/images/homepage-v2/npdigital-agency.png"
+        },
         {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://neilpatel.com/br/?s={search_term_string}"
-          },
-          "query-input": {
-            "@type": "PropertyValueSpecification",
-            "valueRequired": true,
-            "valueName": "search_term_string"
-          }
+            "@type": "BreadcrumbList",
+            "@id": "https://neilpatel.com/br/#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home"
+                }
+            ]
+        },
+        {
+            "@type": "WebSite",
+            "@id": "https://neilpatel.com/br/#website",
+            "url": "https://neilpatel.com/br/",
+            "name": "Neil Patel",
+            "description": "",
+            "publisher": {
+                "@id": "https://neilpatel.com/br/#organization"
+            },
+            "potentialAction": [
+                {
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://neilpatel.com/br/?s={search_term_string}"
+                    },
+                    "query-input": {
+                        "@type": "PropertyValueSpecification",
+                        "valueRequired": true,
+                        "valueName": "search_term_string"
+                    }
+                }
+            ],
+            "inLanguage": "pt-BR"
+        },
+        {
+            "@type": "Organization",
+            "@id": "https://neilpatel.com/br/#organization",
+            "name": "Neil Patel",
+            "url": "https://neilpatel.com/br/",
+            "logo": {
+                "@type": "ImageObject",
+                "inLanguage": "pt-BR",
+                "@id": "https://neilpatel.com/br/#/schema/logo/image/",
+                "url": "https://neilpatel.com/wp-content/uploads/2022/07/neilpatel.png",
+                "contentUrl": "https://neilpatel.com/wp-content/uploads/2022/07/neilpatel.png",
+                "width": 570,
+                "height": 63,
+                "caption": "Neil Patel"
+            },
+            "image": {
+                "@id": "https://neilpatel.com/br/#/schema/logo/image/"
+            }
         }
-      ],
-      "inLanguage": "pt-BR"
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://neilpatel.com/br/#organization",
-      "name": "Neil Patel",
-      "url": "https://neilpatel.com/br/",
-      "logo": {
-        "@type": "ImageObject",
-        "inLanguage": "pt-BR",
-        "@id": "https://neilpatel.com/br/#/schema/logo/image/",
-        "url": "https://neilpatel.com/wp-content/uploads/2022/07/neilpatel.png",
-        "contentUrl": "https://neilpatel.com/wp-content/uploads/2022/07/neilpatel.png",
-        "width": 570,
-        "height": 63,
-        "caption": "Neil Patel"
-      },
-      "image": {
-        "@id": "https://neilpatel.com/br/#/schema/logo/image/"
-      }
-    }
-  ]
+    ]
 }
