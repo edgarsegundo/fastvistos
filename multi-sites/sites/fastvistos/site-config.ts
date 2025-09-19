@@ -20,11 +20,20 @@ export const siteConfig: SiteConfig = {
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
         dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
-    },
-
-    contact: {
-        email: 'contact@fastvistos.com.br',
-        whatsapp: '+5511999999999',
+        address: {
+            streetAddress: 'Av. Paulista, 1000',
+            addressLocality: 'São Paulo',
+            addressRegion: 'SP',
+            postalCode: '01310-100',
+            addressCountry: 'BR',
+        },
+        contactPoint: {
+            telephone: '+5511999999999',
+            contactType: 'Customer Service',
+            areaServed: 'BR',
+            availableLanguage: ['Portuguese', 'English'],
+            email: 'support@fastvistos.com.br'
+        },
     },
 
     socialMedia: {
