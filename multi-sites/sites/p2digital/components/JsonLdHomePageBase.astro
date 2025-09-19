@@ -1,4 +1,3 @@
-
 ---
 import JsonLdBase from './JsonLdBase.astro';
 import JsonLdReviews from './JsonLdReviews.astro';
@@ -9,6 +8,7 @@ const {
   disableFAQ = false,
   disableServices = false,
   disableReviews = false,
+  disableLocalBusiness = false,
   faqList = [],
   servicesList = [],
   reviewsList = [],
@@ -42,15 +42,18 @@ const faqBlock = (faqList as Faq[]).length > 0 ? {
 } : null;
 
 // Services block
-const servicesBlock = (servicesList as Service[]).length > 0 ? (servicesList as Service[]).map((service: Service) => {
-  const obj: any = {
-    '@type': 'Service',
-    'name': service.name,
-    'description': service.description
-  };
-  if (service.offers) obj.offers = service.offers;
-  return obj;
-}) : null;
+const servicesBlock = Array.isArray(servicesList) && servicesList.length > 0
+  ? servicesList.map((service: any) =>
+      service.schema
+        ? service.schema
+        : {
+            '@type': 'Service',
+            'name': service.name,
+            'description': service.description,
+            ...(service.offers ? { offers: service.offers } : {})
+          }
+    )
+  : null;
 
 // WebPage block
 const webPageBlock = {
@@ -80,7 +83,7 @@ const businessBlock = business ? {
 const blocks = [
   !disableWebPage && webPageBlock,
   orgBlock,
-  businessBlock,
+  !disableLocalBusiness && businessBlock,
   !disableFAQ && faqBlock,
   !disableServices && servicesBlock,
 ].filter(Boolean).flat();

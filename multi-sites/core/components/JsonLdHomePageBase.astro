@@ -8,6 +8,7 @@ const {
   disableFAQ = false,
   disableServices = false,
   disableReviews = false,
+  disableLocalBusiness = false,
   faqList = [],
   servicesList = [],
   reviewsList = [],
@@ -82,7 +83,7 @@ const businessBlock = business ? {
 const blocks = [
   !disableWebPage && webPageBlock,
   orgBlock,
-  businessBlock,
+  !disableLocalBusiness && businessBlock,
   !disableFAQ && faqBlock,
   !disableServices && servicesBlock,
 ].filter(Boolean).flat();

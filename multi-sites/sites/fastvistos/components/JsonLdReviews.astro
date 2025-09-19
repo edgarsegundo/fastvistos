@@ -9,15 +9,50 @@
  *
  * Accepts any valid Review properties (see schema.org/Review).
  */
----
+import { reviewVideos } from '../../sites/fastvistos/config/reviewVideosConfig.js';
 
----
-const { reviews = [] } = Astro.props;
+const { reviews = [], includeVideos = true } = Astro.props;
 
-const reviewBlocks = reviews.map(review => ({
-  '@type': 'Review',
-  ...review
-}));
+const reviewBlocks = [
+  ...reviews.map((review: any) => ({
+    '@type': 'Review',
+    ...review
+  })),
+  ...(includeVideos && Array.isArray(reviewVideos)
+    ? reviewVideos.map(video => ({
+        '@type': 'Review',
+        reviewBody: video.title,
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: 5,
+          bestRating: 5,
+          worstRating: 1
+        },
+        itemReviewed: {
+          '@type': 'Service',
+          name: 'Fast Vistos'
+        },
+        author: {
+          '@type': 'Person',
+          name: 'Cliente Fast Vistos'
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'YouTube'
+        },
+        datePublished: undefined, // Optionally add if you have
+        video: {
+          '@type': 'VideoObject',
+          name: video.title,
+          description: video.title,
+          thumbnailUrl: video.thumbnail,
+          uploadDate: undefined, // Optionally add if you have
+          contentUrl: video.url,
+          embedUrl: `https://www.youtube.com/embed/${video.videoId}`
+        }
+      }))
+    : [])
+];
 
 const jsonLd = reviewBlocks.length === 1 ? reviewBlocks[0] : reviewBlocks;
 ---
