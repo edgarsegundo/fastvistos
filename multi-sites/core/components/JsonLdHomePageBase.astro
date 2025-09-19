@@ -159,58 +159,97 @@ const servicesBlock = !disableServices && Array.isArray(servicesList) && service
   : null;
 
 
-// Reviews block (Google-compliant, com VideoObject se aplicável)
+
+// VideoObjects independentes para reviews em vídeo
+const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+  ? reviewsList
+      .filter((review) => review.videoId && review.thumbnail && review.url)
+      .map((review, idx) => ({
+        '@type': 'VideoObject',
+        '@id': `${homepageUrl}#review-video-${idx+1}`,
+        name: review.title || '',
+        description: review.reviewBody || review.title || '',
+        thumbnailUrl: review.thumbnail,
+        contentUrl: review.url,
+        embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
+        ...(review.uploadDate ? { uploadDate: review.uploadDate } : {}),
+      }))
+  : [];
+
+// Reviews (usando associatedMedia para vídeo, e reviewBody real)
 const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
-  ? reviewsList.map((review) => {
-      if (review.videoId && review.thumbnail && review.url) {
-        return {
-          '@type': 'Review',
-          reviewBody: review.title || '',
-          itemReviewed: {
-            '@type': 'Service',
-            name: siteName,
-          },
-          author: {
-            '@type': 'Person',
-            name: review.author || `Cliente ${siteName}`,
-          },
-          reviewRating: {
-            '@type': 'Rating',
-            ratingValue: 5,
-            bestRating: 5,
-            worstRating: 1,
-          },
-          video: {
-            '@type': 'VideoObject',
-            name: review.title || '',
-            description: review.title || '',
-            thumbnailUrl: review.thumbnail,
-            contentUrl: review.url,
-            embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
-          },
-        };
-      }
-      // Review textual
-      return {
+  ? reviewsList.map((review, idx) => {
+      const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
+      const base = {
         '@type': 'Review',
-        ...review,
-        itemReviewed: {
-          '@type': 'Service',
-          name: siteName,
+        reviewBody,
+        author: {
+          '@type': 'Person',
+          name: review.author || `Cliente ${siteName}`,
+        },
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: review.ratingValue || 5,
+          bestRating: 5,
+          worstRating: 1,
         },
       };
+      if (review.videoId && review.thumbnail && review.url) {
+        return {
+          ...base,
+          associatedMedia: {
+            '@id': `${homepageUrl}#review-video-${idx+1}`
+          }
+        };
+      }
+      return base;
     })
-  : null;
+  : [];
+
+
+// AggregateRating calculation
+let aggregateRating = null;
+if (reviewsBlock.length > 0) {
+  const ratings = reviewsBlock.map(r => (r.reviewRating && r.reviewRating.ratingValue) ? Number(r.reviewRating.ratingValue) : 5);
+  const reviewCount = ratings.length;
+  const ratingValue = reviewCount > 0 ? (ratings.reduce((a, b) => a + b, 0) / reviewCount) : 5;
+  aggregateRating = {
+    '@type': 'AggregateRating',
+    ratingValue: Number(ratingValue.toFixed(1)),
+    reviewCount
+  };
+}
+
+// LocalBusiness principal com reviews agrupados e aggregateRating
+const localBusinessBlock = !disableOrganization && {
+  '@type': 'LocalBusiness',
+  '@id': orgId,
+  name: siteName,
+  url: homepageUrl,
+  logo: {
+    '@type': 'ImageObject',
+    'inLanguage': inLanguage,
+    '@id': logoId,
+    'url': resolvedLogoUrl,
+    'contentUrl': resolvedLogoUrl,
+    ...(org.logoWidth ? { 'width': org.logoWidth } : {}),
+    ...(org.logoHeight ? { 'height': org.logoHeight } : {}),
+    ...(org.name ? { 'caption': org.name } : {})
+  },
+  image: { '@id': logoId },
+  ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
+  ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+};
 
 const blocks = [
   webPageBlock,
   imageObjectBlock,
   breadcrumbBlock,
   webSiteBlock,
-  orgBlock,
+  localBusinessBlock,
   faqBlock,
   servicesBlock,
-  reviewsBlock
+  ...videoObjects
 ].filter(Boolean).flat();
 
 const jsonLdGraph = {
