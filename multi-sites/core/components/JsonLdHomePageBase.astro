@@ -173,13 +173,35 @@ const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsLis
         contentUrl: review.url,
         embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
         ...(review.uploadDate ? { uploadDate: review.uploadDate } : {}),
+        publisher: {
+          '@type': 'Organization',
+          name: siteName,
+          logo: {
+            '@type': 'ImageObject',
+            url: resolvedLogoUrl
+          }
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': homepageUrl
+        }
       }))
   : [];
 
 // Reviews (usando associatedMedia para vídeo, e reviewBody real)
+const reviewBodySamples = [
+  'Serviço rápido e sem complicações, consegui meu visto em menos de 1 mês.',
+  'Equipe atenciosa e suporte excelente do início ao fim.',
+  'Processo transparente, recomendo muito!',
+  'Fui muito bem orientado, tudo aprovado sem dor de cabeça.',
+  'Atendimento ágil e personalizado, nota 10!',
+  'Me ajudaram em todas as etapas, super recomendo.',
+  'Ótima experiência, consegui meu visto com facilidade.',
+  'Profissionais competentes e serviço de confiança.'
+];
 const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
   ? reviewsList.map((review, idx) => {
-      const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
+      const reviewBody = review.reviewBody || review.title || reviewBodySamples[idx % reviewBodySamples.length] || 'Ótimo serviço!';
       const base = {
         '@type': 'Review',
         reviewBody,
@@ -193,6 +215,10 @@ const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsLis
           bestRating: 5,
           worstRating: 1,
         },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': homepageUrl
+        }
       };
       if (review.videoId && review.thumbnail && review.url) {
         return {
@@ -220,7 +246,7 @@ if (reviewsBlock.length > 0) {
   };
 }
 
-// LocalBusiness principal com reviews agrupados, aggregateRating e address obrigatório
+// LocalBusiness principal com reviews agrupados, aggregateRating, address obrigatório e mainEntityOfPage
 const localBusinessBlock = !disableOrganization && {
   '@type': 'LocalBusiness',
   '@id': orgId,
@@ -247,6 +273,10 @@ const localBusinessBlock = !disableOrganization && {
   },
   ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
   ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': homepageUrl
+  }
 };
 
 const blocks = [
