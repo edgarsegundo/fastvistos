@@ -12,10 +12,14 @@ export const siteConfig: SiteConfig = {
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
-        logo: '/path-to-logo.png',
+        logo: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
         author: 'Edgar Rezende',
+        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site    
+        datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
+        dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format        
     },
 
     contact: {
