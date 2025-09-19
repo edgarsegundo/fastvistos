@@ -2,7 +2,143 @@
 // Our Services Section Component
 ---
 
-<section class="bg-white border-b py-16" id="nossos-servicos">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('section[uuid]').forEach(section => {
+        if (section.querySelector('.uuid-edit-link')) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = '✏️ Editar HTML';
+        btn.className = 'uuid-edit-link';
+        btn.style.position = 'absolute';
+        btn.style.top = '8px';
+        btn.style.right = '16px';
+        btn.style.zIndex = 1000;
+        btn.style.background = '#fff';
+        btn.style.padding = '2px 8px';
+        btn.style.borderRadius = '4px';
+        btn.style.fontSize = '12px';
+        btn.style.textDecoration = 'none';
+        btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
+        btn.style.border = '1px solid #ddd';
+        btn.style.cursor = 'pointer';
+        section.style.position = 'relative';
+        section.appendChild(btn);
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            showModal(section);
+            return false;
+        });
+    });
+    function showModal(section) {
+        document.querySelectorAll('.uuid-modal').forEach(m => m.remove());
+        const modal = document.createElement('div');
+        modal.className = 'uuid-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = 0;
+        modal.style.left = 0;
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.4)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = 9999;
+        const modalContent = document.createElement('div');
+        modalContent.style.background = '#fff';
+        modalContent.style.padding = '24px';
+        modalContent.style.borderRadius = '8px';
+        modalContent.style.width = '90vw';
+        modalContent.style.maxWidth = '700px';
+        modalContent.style.boxShadow = '0 4px 32px rgba(0,0,0,0.2)';
+        modalContent.style.position = 'relative';
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '×';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '8px';
+        closeBtn.style.right = '12px';
+        closeBtn.style.fontSize = '24px';
+        closeBtn.style.background = 'none';
+        closeBtn.style.border = 'none';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.onclick = () => modal.remove();
+        const label = document.createElement('div');
+        label.textContent = `Edit HTML for section uuid="${section.getAttribute('uuid')}"`;
+        label.style.marginBottom = '8px';
+        label.style.fontWeight = 'bold';
+        const textarea = document.createElement('textarea');
+        textarea.style.width = '100%';
+        textarea.style.height = '300px';
+        textarea.style.color = '#222';
+        textarea.style.background = '#fff';
+        textarea.value = section.outerHTML;
+        const updateBtn = document.createElement('button');
+        updateBtn.type = 'button';
+        updateBtn.textContent = 'Update';
+        updateBtn.style.marginTop = '12px';
+        updateBtn.style.padding = '8px 16px';
+        updateBtn.style.background = '#0070f3';
+        updateBtn.style.color = '#fff';
+        updateBtn.style.border = 'none';
+        updateBtn.style.borderRadius = '4px';
+        updateBtn.style.cursor = 'pointer';
+                updateBtn.onclick = () => {
+                    // Save scroll position
+                    const scrollY = window.scrollY;
+                    const temp = document.createElement('div');
+                    temp.innerHTML = textarea.value.trim();
+                    const newSection = temp.querySelector('section[uuid]');
+                    if (newSection) {
+                        section.replaceWith(newSection);
+                        modal.remove();
+                        injectEditLink(newSection);
+                        // Restore scroll position
+                        window.scrollTo({ top: scrollY });
+                    } else {
+                        alert('Invalid HTML: must include <section uuid=\"...\">');
+                    }
+                };
+
+        // Helper to inject the edit link into a section
+            function injectEditLink(section) {
+                if (section.querySelector('.uuid-edit-link')) return;
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.textContent = '✏️ Editar HTML';
+                        btn.className = 'uuid-edit-link';
+                        btn.style.position = 'absolute';
+                        btn.style.top = '8px';
+                        btn.style.right = '16px';
+                        btn.style.zIndex = 1000;
+                        btn.style.background = '#fff';
+                        btn.style.padding = '2px 8px';
+                        btn.style.borderRadius = '4px';
+                        btn.style.fontSize = '12px';
+                        btn.style.textDecoration = 'none';
+                        btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
+                        btn.style.border = '1px solid #ddd';
+                        btn.style.cursor = 'pointer';
+                        section.style.position = 'relative';
+                        section.appendChild(btn);
+                        btn.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            showModal(section);
+                            return false;
+                        });
+            }
+        modalContent.appendChild(closeBtn);
+        modalContent.appendChild(label);
+        modalContent.appendChild(textarea);
+        modalContent.appendChild(updateBtn);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+    }
+});
+</script>
+
+<section class="bg-white border-b py-16" id="nossos-servicos" uuid="47e35a96-9473-46f1-9afa-d804c981da83">
     <div class="container mx-auto flex flex-wrap pt-4 pb-12">
         <h2
             class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800"
