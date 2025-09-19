@@ -23,7 +23,7 @@ const {
   ...rest
 } = Astro.props;
 
-const homepageUrl = site?.url;
+const homepageUrl = site?.domain;
 const siteName = site?.name;
 const description = site?.description;
 const resolvedImageUrl = imageUrl ?? site?.image;
