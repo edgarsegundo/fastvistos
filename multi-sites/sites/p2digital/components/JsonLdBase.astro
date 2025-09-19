@@ -21,6 +21,9 @@ export interface Props {
 }
 const { siteConfig, disable = {}, breadcrumbList = [], customData } = Astro.props;
 
+// This base component is now a fallback for simple Organization, WebSite, or BreadcrumbList schemas.
+// For homepage, use JsonLdHomePageBase.astro for full @graph output.
+
 const schemas = [];
 
 if (!disable.organization) {
@@ -53,5 +56,5 @@ if (!disable.breadcrumb && breadcrumbList.length > 0) {
   });
 }
 const jsonLd = customData ? customData : (schemas.length === 1 ? schemas[0] : schemas);
----
+
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
