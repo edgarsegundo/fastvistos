@@ -391,11 +391,25 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.remove();
           }
         });
+        // Modal title using updatable_div_name
+        const modalTitle = document.createElement('div');
+        modalTitle.textContent = section_div_wrapper.getAttribute('updatable_div_name') || 'Editar HTML';
+        Object.assign(modalTitle.style, {
+          marginBottom: '8px',
+          fontWeight: 'bold',
+          fontSize: '1.3em',
+          textAlign: 'center',
+          color: '#000',
+        });
+
         const label = document.createElement('div');
-        label.textContent = `Edit HTML for section_div_wrapper uuid="${section_div_wrapper.getAttribute('uuid')}"`;
+        label.textContent = `Edição de HTML`;
         Object.assign(label.style, {
           marginBottom: '8px',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          fontSize: '0.95em',
+          color: '#666',
+          textAlign: 'center'
         });
         const textarea = document.createElement('textarea');
         Object.assign(textarea.style, {
@@ -422,10 +436,11 @@ document.addEventListener('DOMContentLoaded', function () {
             section_div_wrapper.innerHTML = textarea.value.trim();
         };
 
-        modalContent.appendChild(closeBtn);
-        modalContent.appendChild(label);
-        modalContent.appendChild(textarea);
-        modalContent.appendChild(updateBtn);
+  modalContent.appendChild(closeBtn);
+  modalContent.appendChild(modalTitle);
+  modalContent.appendChild(label);
+  modalContent.appendChild(textarea);
+  modalContent.appendChild(updateBtn);
         modal.appendChild(modalContent);
         document.body.appendChild(modal);
     }
