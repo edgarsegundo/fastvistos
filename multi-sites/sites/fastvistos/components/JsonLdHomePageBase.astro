@@ -87,9 +87,14 @@ const blocks = [
   !disableFAQ && faqBlock,
   !disableServices && servicesBlock,
 ].filter(Boolean).flat();
+
+const jsonLdGraph = {
+  '@context': 'https://schema.org',
+  '@graph': blocks
+};
 ---
 
-<JsonLdBase siteConfig={site} customData={blocks} />
+<JsonLdBase siteConfig={site} customData={jsonLdGraph} />
 
 {!disableReviews && (
   <JsonLdReviews reviews={reviewsList} />
