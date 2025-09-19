@@ -14,6 +14,7 @@ import Navigation from '../components/Navigation.astro';
 import { siteConfig } from '../site-config.ts';
 import { faqData } from '../config/faqConfig.js';
 import { servicesData } from '../config/servicesConfig.js';
+import { reviewVideos } from '../config/reviewVideosConfig.js';
 import JsonLdHomePageBase from '../../../core/components/JsonLdHomePageBase.astro';
 
 const {
@@ -32,6 +33,7 @@ const {
       site={siteConfig.site}
       faqList={faqData}
       servicesList={servicesData}
+      reviewsList={reviewVideos}
       disableReviews={false}
     />
   </Fragment>
