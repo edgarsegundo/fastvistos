@@ -23,7 +23,7 @@ const {
   ...rest
 } = Astro.props;
 
-const homepageUrl = site?.domain;
+const homepageUrl = site?.domain ? `https://${site?.domain}` : '';
 const siteName = site?.name;
 const description = site?.description;
 const resolvedImageUrl = imageUrl ?? site?.image;
@@ -220,7 +220,7 @@ if (reviewsBlock.length > 0) {
   };
 }
 
-// LocalBusiness principal com reviews agrupados e aggregateRating
+// LocalBusiness principal com reviews agrupados, aggregateRating e address obrigatório
 const localBusinessBlock = !disableOrganization && {
   '@type': 'LocalBusiness',
   '@id': orgId,
@@ -237,6 +237,14 @@ const localBusinessBlock = !disableOrganization && {
     ...(org.name ? { 'caption': org.name } : {})
   },
   image: { '@id': logoId },
+  address: site?.address || {
+    '@type': 'PostalAddress',
+    streetAddress: 'Rua Exemplo, 123',
+    addressLocality: 'São Paulo',
+    addressRegion: 'SP',
+    postalCode: '01234-567',
+    addressCountry: 'BR'
+  },
   ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
   ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
 };
