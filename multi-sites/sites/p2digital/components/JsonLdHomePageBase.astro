@@ -158,6 +158,50 @@ const servicesBlock = !disableServices && Array.isArray(servicesList) && service
     )
   : null;
 
+
+// Reviews block (Google-compliant, com VideoObject se aplicável)
+const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+  ? reviewsList.map((review) => {
+      if (review.videoId && review.thumbnail && review.url) {
+        return {
+          '@type': 'Review',
+          reviewBody: review.title || '',
+          itemReviewed: {
+            '@type': 'Service',
+            name: siteName,
+          },
+          author: {
+            '@type': 'Person',
+            name: review.author || `Cliente ${siteName}`,
+          },
+          reviewRating: {
+            '@type': 'Rating',
+            ratingValue: 5,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          video: {
+            '@type': 'VideoObject',
+            name: review.title || '',
+            description: review.title || '',
+            thumbnailUrl: review.thumbnail,
+            contentUrl: review.url,
+            embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
+          },
+        };
+      }
+      // Review textual
+      return {
+        '@type': 'Review',
+        ...review,
+        itemReviewed: {
+          '@type': 'Service',
+          name: siteName,
+        },
+      };
+    })
+  : null;
+
 const blocks = [
   webPageBlock,
   imageObjectBlock,
@@ -165,7 +209,8 @@ const blocks = [
   webSiteBlock,
   orgBlock,
   faqBlock,
-  servicesBlock
+  servicesBlock,
+  reviewsBlock
 ].filter(Boolean).flat();
 
 const jsonLdGraph = {
@@ -175,6 +220,3 @@ const jsonLdGraph = {
 ---
 
 <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)}></script>
-{!disableReviews && (
-  <JsonLdReviews reviews={reviewsList} />
-)}
