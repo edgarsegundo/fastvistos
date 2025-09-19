@@ -26,7 +26,7 @@ const {
 const homepageUrl = site?.domain ? `https://${site?.domain}` : '';
 const siteName = site?.name;
 const description = site?.description;
-const resolvedImageUrl = imageUrl ?? site?.image;
+const resolvedImageUrl = site?.image;
 const resolvedLogoUrl = logoUrl ?? site?.logo;
 const org = site?.organization ?? {
   name: siteName,
