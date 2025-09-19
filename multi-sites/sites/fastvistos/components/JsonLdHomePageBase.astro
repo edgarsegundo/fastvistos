@@ -9,9 +9,6 @@ const {
   breadcrumbList = [],
   imageUrl,
   logoUrl,
-  datePublished,
-  dateModified,
-  inLanguage = 'pt-BR',
   disableFAQ = false,
   disableServices = false,
   disableReviews = false,
@@ -49,12 +46,17 @@ const webPageBlock = !disableWebPage && {
   'about': { '@id': orgId },
   'primaryImageOfPage': { '@id': imageId },
   'image': { '@id': imageId },
-  ...(resolvedImageUrl ? { 'thumbnailUrl': resolvedImageUrl } : {}),
-  ...(datePublished ? { 'datePublished': datePublished } : {}),
-  ...(dateModified ? { 'dateModified': dateModified } : {}),
+    ...(site?.thumbnailUrl
+        ? { 'thumbnailUrl': site.thumbnailUrl }
+        : resolvedImageUrl
+        ? { 'thumbnailUrl': resolvedImageUrl }
+        : {}),
+
+  ...(site.datePublished ? { 'datePublished': site.datePublished } : {}),
+  ...(site.dateModified ? { 'dateModified': site.dateModified } : {}),
   ...(description ? { 'description': description } : {}),
   'breadcrumb': { '@id': breadcrumbId },
-  'inLanguage': inLanguage,
+  'inLanguage': site.language || 'pt-BR',
   'potentialAction': [
     {
       '@type': 'ReadAction',

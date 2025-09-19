@@ -29,10 +29,9 @@ export const siteConfig: SiteConfig = {
         secondaryColor: '#1c1c1e',
         author: 'Your Author Name', // Default author name for Open Graph
         thumbnailUrl: '/path-to-thumbnail.jpg', // Important for search and social previews
-        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site    
+        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
-        dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format        
-
+        dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
     },
 
     contact: {
@@ -95,7 +94,7 @@ export const siteConfig: SiteConfig = {
                 imageWidth: 1200,
                 imageHeight: 630,
                 imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text'
+                imageAlt: 'Your Image Alt Text',
             },
         },
     },
@@ -128,12 +127,12 @@ export const siteConfig: SiteConfig = {
                 imageWidth: 1200,
                 imageHeight: 630,
                 imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text'
+                imageAlt: 'Your Image Alt Text',
             },
         },
         pagination: {
             postsPerPage: 10,
-        }
+        },
     },
 
     blogPostConfig: {
@@ -164,13 +163,13 @@ export const siteConfig: SiteConfig = {
                 imageWidth: 1200,
                 imageHeight: 630,
                 imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text'
+                imageAlt: 'Your Image Alt Text',
             },
         },
         readingTime: true, // true/false
         showAuthor: true, // true/false
         relatedPosts: true, // true/false
-    }
+    },
 };
 
 // Open Graph type options for 'openGraph.type':
