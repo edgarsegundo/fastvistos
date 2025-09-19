@@ -307,12 +307,23 @@ const jsonLdGraph = {
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('div[updatable_div_uuid]').forEach(section_div_wrapper => {
+    const borderColors = [
+      '#0070f3', // blue
+      '#00b894', // green
+      '#ff9800', // orange
+      '#a259f7', // purple
+      '#e17055', // red
+      '#00bcd4', // cyan
+      '#fbc531', // yellow
+      '#6c5ce7'  // deep purple
+    ];
+
+    document.querySelectorAll('div[updatable_div_uuid]').forEach((section_div_wrapper, idx) => {
         // Set base border and highlight styles dynamically
         section_div_wrapper.addEventListener('mouseenter', function() {
+            const baseColor = borderColors[idx % borderColors.length];
             Object.assign(section_div_wrapper.style, {
-                border: '10px dashed #b3c6e0',
-                borderRadius: '10px',
+                border: `10px solid ${baseColor}`,
                 transition: 'border 0.1s',
             });
         });
