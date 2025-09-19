@@ -161,35 +161,7 @@ const servicesBlock = !disableServices && Array.isArray(servicesList) && service
 
 
 
-// VideoObjects independentes para reviews em vídeo
-const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
-  ? reviewsList
-      .filter((review) => review.videoId && review.thumbnail && review.url)
-      .map((review, idx) => ({
-        '@type': 'VideoObject',
-        '@id': `${homepageUrl}#review-video-${idx+1}`,
-        name: review.title || '',
-        description: review.reviewBody || review.title || '',
-        thumbnailUrl: review.thumbnail,
-        contentUrl: review.url,
-        embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
-        ...(review.uploadDate ? { uploadDate: review.uploadDate } : {}),
-        publisher: {
-          '@type': 'Organization',
-          name: siteName,
-          logo: {
-            '@type': 'ImageObject',
-            url: resolvedLogoUrl
-          }
-        },
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': homepageUrl
-        }
-      }))
-  : [];
-
-// Reviews (usando associatedMedia para vídeo, e reviewBody real)
+// Review body samples (move above to avoid ReferenceError)
 const reviewBodySamples = [
   'Consegui meu visto americano muito rápido, atendimento excelente e sem burocracia.',
   'Equipe super atenciosa, tiraram todas as minhas dúvidas e o processo foi simples.',
@@ -200,6 +172,41 @@ const reviewBodySamples = [
   'Ótima experiência, consegui meu visto sem complicação.',
   'Muito satisfeito, empresa séria e eficiente.'
 ];
+
+// VideoObjects independentes para reviews em vídeo
+const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+  ? reviewsList
+      .filter((review) => review.videoId && review.thumbnail && review.url)
+      .map((review, idx) => {
+        // Ensure uploadDate is in ISO 8601 with timezone (e.g., 2023-05-02T00:00:00-03:00)
+        let uploadDate = review.uploadDate;
+        if (uploadDate && !uploadDate.includes('T')) {
+          uploadDate = `${uploadDate}T00:00:00-03:00`;
+        }
+        return {
+          '@type': 'VideoObject',
+          '@id': `${homepageUrl}#review-video-${idx+1}`,
+          name: review.title || '',
+          description: review.reviewBody || reviewBodySamples[idx % reviewBodySamples.length] || review.title || '',
+          thumbnailUrl: review.thumbnail,
+          contentUrl: review.url,
+          embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
+          ...(uploadDate ? { uploadDate } : {}),
+          publisher: {
+            '@type': 'Organization',
+            name: siteName,
+            logo: {
+              '@type': 'ImageObject',
+              url: resolvedLogoUrl
+            }
+          },
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': homepageUrl
+          }
+        };
+      })
+  : [];
 const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
   ? reviewsList.map((review, idx) => {
       const reviewBody = review.reviewBody || review.title || reviewBodySamples[idx % reviewBodySamples.length] || 'Ótimo serviço!';
