@@ -15,6 +15,7 @@ const {
   disableOrganization = false,
   disableImageObject = false,
   disableWebPage = false,
+  disableWebSiteSearchAction = true,
   ...rest
 } = Astro.props;
 
@@ -92,20 +93,24 @@ const webSiteBlock = !disableWebSite && {
   'name': siteName,
   'description': description ?? '',
   'publisher': { '@id': orgId },
-  'potentialAction': [
-    {
-      '@type': 'SearchAction',
-      'target': {
-        '@type': 'EntryPoint',
-        'urlTemplate': `${homepageUrl}?s={search_term_string}`
-      },
-      'query-input': {
-        '@type': 'PropertyValueSpecification',
-        'valueRequired': true,
-        'valueName': 'search_term_string'
+  ...(!disableWebSiteSearchAction
+    ? {
+        'potentialAction': [
+          {
+            '@type': 'SearchAction',
+            'target': {
+              '@type': 'EntryPoint',
+              'urlTemplate': `${homepageUrl}?s={search_term_string}`
+            },
+            'query-input': {
+              '@type': 'PropertyValueSpecification',
+              'valueRequired': true,
+              'valueName': 'search_term_string'
+            }
+          }
+        ]
       }
-    }
-  ],
+    : {}),
   'inLanguage': site.language
 };
 
