@@ -5,7 +5,9 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('section[uuid]').forEach(section => {
-        if (section.querySelector('.uuid-edit-link')) return;
+        // if (section.querySelector('.uuid-edit-link')) {
+        //     return;
+        // }
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.textContent = '✏️ Editar HTML';
@@ -25,8 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
         section.style.position = 'relative';
         section.appendChild(btn);
         btn.addEventListener('click', function (e) {
+            console.log('Edit button clicked for section:', section);
             e.preventDefault();
-            e.stopPropagation();
+            // e.stopPropagation();
             showModal(section);
             return false;
         });
@@ -83,22 +86,23 @@ document.addEventListener('DOMContentLoaded', function () {
         updateBtn.style.border = 'none';
         updateBtn.style.borderRadius = '4px';
         updateBtn.style.cursor = 'pointer';
-                updateBtn.onclick = () => {
-                    // Save scroll position
-                    const scrollY = window.scrollY;
-                    const temp = document.createElement('div');
-                    temp.innerHTML = textarea.value.trim();
-                    const newSection = temp.querySelector('section[uuid]');
-                    if (newSection) {
-                        section.replaceWith(newSection);
-                        modal.remove();
-                        injectEditLink(newSection);
-                        // Restore scroll position
-                        window.scrollTo({ top: scrollY });
-                    } else {
-                        alert('Invalid HTML: must include <section uuid=\"...\">');
-                    }
-                };
+        updateBtn.onclick = () => {
+            modal.remove();
+            // Save scroll position
+            // const scrollY = window.scrollY;
+            const temp = document.createElement('div');
+            temp.innerHTML = textarea.value.trim();
+            const newSection = temp.querySelector('section[uuid]');
+            if (newSection) {
+                section.replaceWith(newSection);
+                // modal.remove();
+                // injectEditLink(newSection);
+                // Restore scroll position
+                // window.scrollTo({ top: scrollY });
+            } else {
+                alert('Invalid HTML: must include <section uuid=\"...\">');
+            }
+        };
 
         // Helper to inject the edit link into a section
             function injectEditLink(section) {
