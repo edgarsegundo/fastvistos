@@ -153,7 +153,8 @@ const servicesBlock = !disableServices && Array.isArray(servicesList) && service
             '@type': 'Service',
             'name': service.name,
             'description': service.description,
-            ...(service.offers ? { offers: service.offers } : {})
+            ...(service.offers ? { offers: service.offers } : {}),
+            provider: { '@id': orgId }
           }
     )
   : null;
@@ -190,14 +191,14 @@ const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsLis
 
 // Reviews (usando associatedMedia para vídeo, e reviewBody real)
 const reviewBodySamples = [
-  'Serviço rápido e sem complicações, consegui meu visto em menos de 1 mês.',
-  'Equipe atenciosa e suporte excelente do início ao fim.',
-  'Processo transparente, recomendo muito!',
-  'Fui muito bem orientado, tudo aprovado sem dor de cabeça.',
-  'Atendimento ágil e personalizado, nota 10!',
-  'Me ajudaram em todas as etapas, super recomendo.',
-  'Ótima experiência, consegui meu visto com facilidade.',
-  'Profissionais competentes e serviço de confiança.'
+  'Consegui meu visto americano muito rápido, atendimento excelente e sem burocracia.',
+  'Equipe super atenciosa, tiraram todas as minhas dúvidas e o processo foi simples.',
+  'Fui muito bem orientado, meu visto saiu antes do prazo, recomendo demais!',
+  'Atendimento ágil, transparente e sem enrolação. Voltarei a usar!',
+  'Me ajudaram em cada etapa, nota máxima para o suporte.',
+  'Serviço confiável, profissionais experientes e resultado garantido.',
+  'Ótima experiência, consegui meu visto sem complicação.',
+  'Muito satisfeito, empresa séria e eficiente.'
 ];
 const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
   ? reviewsList.map((review, idx) => {
@@ -270,6 +271,14 @@ const localBusinessBlock = !disableOrganization && {
     addressRegion: 'SP',
     postalCode: '01234-567',
     addressCountry: 'BR'
+  },
+  telephone: site?.telephone || '+55 11 99999-9999',
+  contactPoint: site?.contactPoint || {
+    '@type': 'ContactPoint',
+    telephone: '+55 11 99999-9999',
+    contactType: 'customer service',
+    areaServed: 'BR',
+    availableLanguage: ['Portuguese', 'English']
   },
   ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
   ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
