@@ -289,6 +289,7 @@ const localBusinessBlock = !disableOrganization && {
   },
   ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
   ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+  priceRange: site?.priceRange || '$$',
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': homepageUrl
