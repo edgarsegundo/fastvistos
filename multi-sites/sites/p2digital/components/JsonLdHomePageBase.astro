@@ -310,28 +310,32 @@ document.addEventListener('DOMContentLoaded', function () {
         // Create wrapper div for positioning
         const wrapper = document.createElement('div');
         wrapper.className = 'uuid-edit-link-wrapper';
-        wrapper.style.position = 'relative';
-        wrapper.style.height = '0';
-        wrapper.style.display = 'flex';
-        wrapper.style.justifyContent = 'flex-end';
+        Object.assign(wrapper.style, {
+          position: 'relative',
+          height: '0',
+          display: 'flex',
+          justifyContent: 'flex-end'
+        });
 
         // Create the button
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.textContent = '✏️ Editar HTML';
         btn.className = 'uuid-edit-link';
-        btn.style.position = 'absolute';
-        btn.style.top = '0';
-        btn.style.right = '16px';
-        btn.style.zIndex = 1000;
-        btn.style.background = '#fff';
-        btn.style.padding = '2px 8px';
-        btn.style.borderRadius = '4px';
-        btn.style.fontSize = '12px';
-        btn.style.textDecoration = 'none';
-        btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
-        btn.style.border = '1px solid #ddd';
-        btn.style.cursor = 'pointer';
+        Object.assign(btn.style, {
+          position: 'absolute',
+          top: '0',
+          right: '16px',
+          zIndex: 1000,
+          background: '#fff',
+          padding: '2px 8px',
+          borderRadius: '4px',
+          fontSize: '12px',
+          textDecoration: 'none',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+          border: '1px solid #ddd',
+          cursor: 'pointer'
+        });
 
         btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -346,106 +350,71 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.uuid-modal').forEach(m => m.remove());
         const modal = document.createElement('div');
         modal.className = 'uuid-modal';
-        modal.style.position = 'fixed';
-        modal.style.top = 0;
-        modal.style.left = 0;
-        modal.style.width = '100vw';
-        modal.style.height = '100vh';
-        modal.style.background = 'rgba(0,0,0,0.4)';
-        modal.style.display = 'flex';
-        modal.style.alignItems = 'center';
-        modal.style.justifyContent = 'center';
-        modal.style.zIndex = 9999;
+        Object.assign(modal.style, {
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0,0,0,0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999
+        });
         const modalContent = document.createElement('div');
-        modalContent.style.background = '#fff';
-        modalContent.style.padding = '24px';
-        modalContent.style.borderRadius = '8px';
-        modalContent.style.width = '90vw';
-        modalContent.style.maxWidth = '700px';
-        modalContent.style.boxShadow = '0 4px 32px rgba(0,0,0,0.2)';
-        modalContent.style.position = 'relative';
+        Object.assign(modalContent.style, {
+          background: '#fff',
+          padding: '24px',
+          borderRadius: '8px',
+          width: '90vw',
+          maxWidth: '700px',
+          boxShadow: '0 4px 32px rgba(0,0,0,0.2)',
+          position: 'relative'
+        });
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '×';
-        closeBtn.style.position = 'absolute';
-        closeBtn.style.top = '8px';
-        closeBtn.style.right = '12px';
-        closeBtn.style.fontSize = '24px';
-        closeBtn.style.background = 'none';
-        closeBtn.style.border = 'none';
-        closeBtn.style.cursor = 'pointer';
+        Object.assign(closeBtn.style, {
+          position: 'absolute',
+          top: '8px',
+          right: '12px',
+          fontSize: '24px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer'
+        });
         closeBtn.onclick = () => modal.remove();
         const label = document.createElement('div');
         label.textContent = `Edit HTML for section_div_wrapper uuid="${section_div_wrapper.getAttribute('uuid')}"`;
-        label.style.marginBottom = '8px';
-        label.style.fontWeight = 'bold';
+        Object.assign(label.style, {
+          marginBottom: '8px',
+          fontWeight: 'bold'
+        });
         const textarea = document.createElement('textarea');
-        textarea.style.width = '100%';
-        textarea.style.height = '300px';
-        textarea.style.color = '#222';
-        textarea.style.background = '#fff';
+        Object.assign(textarea.style, {
+          width: '100%',
+          height: '300px',
+          color: '#222',
+          background: '#fff'
+        });
         textarea.value = section_div_wrapper.innerHTML;
         const updateBtn = document.createElement('button');
         updateBtn.type = 'button';
         updateBtn.textContent = 'Update';
-        updateBtn.style.marginTop = '12px';
-        updateBtn.style.padding = '8px 16px';
-        updateBtn.style.background = '#0070f3';
-        updateBtn.style.color = '#fff';
-        updateBtn.style.border = 'none';
-        updateBtn.style.borderRadius = '4px';
-        updateBtn.style.cursor = 'pointer';
+        Object.assign(updateBtn.style, {
+          marginTop: '12px',
+          padding: '8px 16px',
+          background: '#0070f3',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        });
         updateBtn.onclick = () => {
             modal.remove();
-            // Save scroll position
-            // const scrollY = window.scrollY;
-            // const temp = document.createElement('div');
-            // temp.innerHTML = textarea.value.trim();
-            // const newSection = temp.querySelector('section[uuid]');
-
-
             section_div_wrapper.innerHTML = textarea.value.trim();
-
-            if (newSection) {
-
-                // console.log('Updated HTML for section: ' + section.outerHTML);
-                // section.replaceWith(newSection);
-                // modal.remove();
-                // injectEditLink(newSection);
-                // Restore scroll position
-                // window.scrollTo({ top: scrollY });
-            } else {
-                alert('Invalid HTML: must include <section uuid=\"...\">');
-            }
         };
 
-        // Helper to inject the edit link into a section
-            function injectEditLink(section) {
-                if (section.querySelector('.uuid-edit-link')) return;
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.textContent = '✏️ Editar HTML';
-                        btn.className = 'uuid-edit-link';
-                        btn.style.position = 'absolute';
-                        btn.style.top = '8px';
-                        btn.style.right = '16px';
-                        btn.style.zIndex = 1000;
-                        btn.style.background = '#fff';
-                        btn.style.padding = '2px 8px';
-                        btn.style.borderRadius = '4px';
-                        btn.style.fontSize = '12px';
-                        btn.style.textDecoration = 'none';
-                        btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
-                        btn.style.border = '1px solid #ddd';
-                        btn.style.cursor = 'pointer';
-                        section.style.position = 'relative';
-                        section.appendChild(btn);
-                        btn.addEventListener('click', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            showModal(section);
-                            return false;
-                        });
-            }
         modalContent.appendChild(closeBtn);
         modalContent.appendChild(label);
         modalContent.appendChild(textarea);
