@@ -1,124 +1,124 @@
 {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      "@id": "https://fastvistos.com.br/#webpage",
-      "url": "https://fastvistos.com.br/",
-      "name": "Realize Seu Sonho de Viajar! | Fast Vistos",
-      "headline": "Realize Seu Sonho de Viajar!",
-      "description": "Obtenha seu visto americano, canadense ou mexicano com a Fast Vistos. Atendimento especializado, suporte completo e processo descomplicado. Converse com um especialista agora mesmo!",
-      "isPartOf": { "@id": "https://fastvistos.com.br/#website" },
-      "about": { "@id": "https://fastvistos.com.br/#organization" },
-      "primaryImageOfPage": { "@id": "https://fastvistos.com.br/#primaryimage" },
-      "image": { "@id": "https://fastvistos.com.br/#primaryimage" },
-      "breadcrumb": { "@id": "https://fastvistos.com.br/#breadcrumb" },
-      "inLanguage": "pt-BR",
-      "potentialAction": [
+    "@context": "https://schema.org",
+    "@graph": [
         {
-          "@type": "ReadAction",
-          "target": [ "https://fastvistos.com.br/" ]
+            "@type": "WebPage",
+            "@id": "https://fastvistos.com.br/#webpage",
+            "url": "https://fastvistos.com.br/",
+            "name": "Realize Seu Sonho de Viajar! | Fast Vistos",
+            "headline": "Realize Seu Sonho de Viajar!",
+            "description": "Obtenha seu visto americano, canadense ou mexicano com a Fast Vistos. Atendimento especializado, suporte completo e processo descomplicado. Converse com um especialista agora mesmo!",
+            "isPartOf": { "@id": "https://fastvistos.com.br/#website" },
+            "about": { "@id": "https://fastvistos.com.br/#organization" },
+            "primaryImageOfPage": { "@id": "https://fastvistos.com.br/#primaryimage" },
+            "image": { "@id": "https://fastvistos.com.br/#primaryimage" },
+            "breadcrumb": { "@id": "https://fastvistos.com.br/#breadcrumb" },
+            "inLanguage": "pt-BR",
+            "potentialAction": [
+                {
+                    "@type": "ReadAction",
+                    "target": ["https://fastvistos.com.br/"]
+                },
+                {
+                    "@type": "MessageAction",
+                    "name": "Fale suas dúvidas agora no WhatsApp!",
+                    "target": [
+                        "https://wa.me/5519992042785",
+                        "https://api.whatsapp.com/send?phone=5519992042785"
+                    ],
+                    "recipient": {
+                        "@type": "ContactPoint",
+                        "contactType": "customer support",
+                        "telephone": "+55-19-99204-2785"
+                    },
+                    "description": "Clique para conversar com um especialista via WhatsApp"
+                }
+            ]
         },
         {
-          "@type": "MessageAction",
-          "name": "Fale suas dúvidas agora no WhatsApp!",
-          "target": [
-            "https://wa.me/5519992042785",
-            "https://api.whatsapp.com/send?phone=5519992042785"
-          ],
-          "recipient": {
-            "@type": "ContactPoint",
-            "contactType": "customer support",
-            "telephone": "+55-19-99204-2785"
-          },
-          "description": "Clique para conversar com um especialista via WhatsApp"
-        }
-      ]
-    },
-    {
-      "@type": "ImageObject",
-      "@id": "https://fastvistos.com.br/#primaryimage",
-      "url": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
-      "contentUrl": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
-      "inLanguage": "pt-BR",
-      "caption": "Logo Fast Vistos"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://fastvistos.com.br/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://fastvistos.com.br/"
-        }
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://fastvistos.com.br/#website",
-      "url": "https://fastvistos.com.br/",
-      "name": "Fast Vistos",
-      "description": "Assessoria especializada em vistos americanos, canadenses e mexicanos. Atendimento personalizado e suporte completo para sua viagem.",
-      "publisher": { "@id": "https://fastvistos.com.br/#organization" },
-      "inLanguage": "pt-BR",
-      "potentialAction": [
-        {
-          "@type": "SearchAction",
-          "target": {
-            "@type": "EntryPoint",
-            "urlTemplate": "https://fastvistos.com.br/?s={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        }
-      ]
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://fastvistos.com.br/#organization",
-      "name": "Fast Vistos",
-      "url": "https://fastvistos.com.br/",
-      "description": "A Fast Vistos oferece assessoria completa para obtenção de vistos americanos, canadenses e mexicanos. Atendimento personalizado, suporte especializado e processo descomplicado para sua viagem.",
-      "logo": {
-        "@type": "ImageObject",
-        "@id": "https://fastvistos.com.br/#logo",
-        "url": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
-        "contentUrl": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
-        "width": 224,
-        "height": 56,
-        "caption": "Fast Vistos"
-      },
-      "image": { "@id": "https://fastvistos.com.br/#logo" },
-      "telephone": "+55-19-2042-2785",
-      "email": "contato@fastvistos.com.br",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Júlio Diniz, 257, Taquaral",
-        "addressLocality": "Campinas",
-        "addressRegion": "SP",
-        "postalCode": "13075-420",
-        "addressCountry": "BR"
-      },
-      "contactPoint": [
-        {
-          "@type": "ContactPoint",
-          "contactType": "customer support",
-          "telephone": "+55-19-2042-2785",
-          "email": "contato@fastvistos.com.br",
-          "availableLanguage": [ "Portuguese", "English" ]
+            "@type": "ImageObject",
+            "@id": "https://fastvistos.com.br/#primaryimage",
+            "url": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
+            "contentUrl": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
+            "inLanguage": "pt-BR",
+            "caption": "Logo Fast Vistos"
         },
         {
-          "@type": "ContactPoint",
-          "contactType": "WhatsApp",
-          "telephone": "+55-19-99204-2785",
-          "url": "https://wa.me/5519992042785"
+            "@type": "BreadcrumbList",
+            "@id": "https://fastvistos.com.br/#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://fastvistos.com.br/"
+                }
+            ]
+        },
+        {
+            "@type": "WebSite",
+            "@id": "https://fastvistos.com.br/#website",
+            "url": "https://fastvistos.com.br/",
+            "name": "Fast Vistos",
+            "description": "Assessoria especializada em vistos americanos, canadenses e mexicanos. Atendimento personalizado e suporte completo para sua viagem.",
+            "publisher": { "@id": "https://fastvistos.com.br/#organization" },
+            "inLanguage": "pt-BR",
+            "potentialAction": [
+                {
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://fastvistos.com.br/?s={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                }
+            ]
+        },
+        {
+            "@type": "Organization",
+            "@id": "https://fastvistos.com.br/#organization",
+            "name": "Fast Vistos",
+            "url": "https://fastvistos.com.br/",
+            "description": "A Fast Vistos oferece assessoria completa para obtenção de vistos americanos, canadenses e mexicanos. Atendimento personalizado, suporte especializado e processo descomplicado para sua viagem.",
+            "logo": {
+                "@type": "ImageObject",
+                "@id": "https://fastvistos.com.br/#logo",
+                "url": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
+                "contentUrl": "https://fastvistos.com.br/assets/images/logo/logo-desktop.png",
+                "width": 224,
+                "height": 56,
+                "caption": "Fast Vistos"
+            },
+            "image": { "@id": "https://fastvistos.com.br/#logo" },
+            "telephone": "+55-19-2042-2785",
+            "email": "contato@fastvistos.com.br",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Av. Júlio Diniz, 257, Taquaral",
+                "addressLocality": "Campinas",
+                "addressRegion": "SP",
+                "postalCode": "13075-420",
+                "addressCountry": "BR"
+            },
+            "contactPoint": [
+                {
+                    "@type": "ContactPoint",
+                    "contactType": "customer support",
+                    "telephone": "+55-19-2042-2785",
+                    "email": "contato@fastvistos.com.br",
+                    "availableLanguage": ["Portuguese", "English"]
+                },
+                {
+                    "@type": "ContactPoint",
+                    "contactType": "WhatsApp",
+                    "telephone": "+55-19-99204-2785",
+                    "url": "https://wa.me/5519992042785"
+                }
+            ],
+            "sameAs": [
+                "https://www.facebook.com/fastvistos",
+                "https://www.instagram.com/fastvistos"
+            ]
         }
-      ],
-      "sameAs": [
-        "https://www.facebook.com/fastvistos",
-        "https://www.instagram.com/fastvistos"
-      ]
-    }
-  ]
+    ]
 }

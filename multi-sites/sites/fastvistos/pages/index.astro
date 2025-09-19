@@ -11,7 +11,11 @@ import FooterSection from '../components/FooterSection.astro';
 import Whatsapp from '../components/Whatsapp.astro';
 import CallToActionSection from '../components/CallToActionSection.astro';
 import Navigation from '../components/Navigation.astro';
-import JsonLdGenerator from '../components/JsonLdGenerator.astro';
+import { siteConfig } from '../site-config.ts';
+import { faqData } from '../config/faqConfig.js';
+import { servicesData } from '../config/servicesConfig.js';
+import { reviewVideos } from '../config/reviewVideosConfig.js';
+import JsonLdHomePageBase from '../../../core/components/JsonLdHomePageBase.astro';
 
 const {
   bodyClass = '',
@@ -25,8 +29,12 @@ const {
 >
   <!-- Additional head content specific to this layout -->
   <Fragment slot="head">
-    <JsonLdGenerator
-        pageType="blog-post"
+    <JsonLdHomePageBase
+      site={siteConfig.site}
+      faqList={faqData}
+      servicesList={servicesData}
+      reviewsList={reviewVideos}
+      disableReviews={false}
     />
   </Fragment>
 
