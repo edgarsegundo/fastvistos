@@ -1,37 +1,140 @@
 ---
-import JsonLdBase from './JsonLdBase.astro';
 import JsonLdReviews from './JsonLdReviews.astro';
 
 const {
   site,
-  disableWebPage = false,
-  disableFAQ = false,
-  disableServices = false,
-  disableReviews = false,
-  disableLocalBusiness = false,
   faqList = [],
   servicesList = [],
   reviewsList = [],
+  breadcrumbList = [],
   imageUrl,
   logoUrl,
+  datePublished,
+  dateModified,
+  inLanguage = 'pt-BR',
+  disableFAQ = false,
+  disableServices = false,
+  disableReviews = false,
+  disableBreadcrumb = false,
+  disableWebSite = false,
+  disableOrganization = false,
+  disableImageObject = false,
+  disableWebPage = false,
   ...rest
 } = Astro.props;
 
-const org = site?.organization;
-const business = site?.business;
 const homepageUrl = site?.url;
 const siteName = site?.name;
 const description = site?.description;
 const resolvedImageUrl = imageUrl ?? site?.image;
 const resolvedLogoUrl = logoUrl ?? site?.logo;
+const org = site?.organization ?? {
+  name: siteName,
+  url: homepageUrl,
+  logo: resolvedLogoUrl
+};
+const websiteId = `${homepageUrl}#website`;
+const orgId = `${homepageUrl}#organization`;
+const imageId = `${homepageUrl}#primaryimage`;
+const breadcrumbId = `${homepageUrl}#breadcrumb`;
+const logoId = `${homepageUrl}#/schema/logo/image/`;
+
+// WebPage block
+const webPageBlock = !disableWebPage && {
+  '@type': 'WebPage',
+  '@id': homepageUrl,
+  'url': homepageUrl,
+  'name': siteName,
+  'isPartOf': { '@id': websiteId },
+  'about': { '@id': orgId },
+  'primaryImageOfPage': { '@id': imageId },
+  'image': { '@id': imageId },
+  ...(resolvedImageUrl ? { 'thumbnailUrl': resolvedImageUrl } : {}),
+  ...(datePublished ? { 'datePublished': datePublished } : {}),
+  ...(dateModified ? { 'dateModified': dateModified } : {}),
+  ...(description ? { 'description': description } : {}),
+  'breadcrumb': { '@id': breadcrumbId },
+  'inLanguage': inLanguage,
+  'potentialAction': [
+    {
+      '@type': 'ReadAction',
+      'target': [homepageUrl]
+    }
+  ]
+};
+
+// ImageObject (primary image)
+const imageObjectBlock = !disableImageObject && resolvedImageUrl && {
+  '@type': 'ImageObject',
+  'inLanguage': inLanguage,
+  '@id': imageId,
+  'url': resolvedImageUrl,
+  'contentUrl': resolvedImageUrl
+};
+
+// BreadcrumbList
+const breadcrumbBlock = !disableBreadcrumb && {
+  '@type': 'BreadcrumbList',
+  '@id': breadcrumbId,
+  'itemListElement': breadcrumbList.length > 0
+    ? breadcrumbList
+    : [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home'
+        }
+      ]
+};
+
+// WebSite
+const webSiteBlock = !disableWebSite && {
+  '@type': 'WebSite',
+  '@id': websiteId,
+  'url': homepageUrl,
+  'name': siteName,
+  'description': description ?? '',
+  'publisher': { '@id': orgId },
+  'potentialAction': [
+    {
+      '@type': 'SearchAction',
+      'target': {
+        '@type': 'EntryPoint',
+        'urlTemplate': `${homepageUrl}?s={search_term_string}`
+      },
+      'query-input': {
+        '@type': 'PropertyValueSpecification',
+        'valueRequired': true,
+        'valueName': 'search_term_string'
+      }
+    }
+  ],
+  'inLanguage': inLanguage
+};
+
+// Organization (with logo as ImageObject)
+const orgBlock = !disableOrganization && {
+  '@type': 'Organization',
+  '@id': orgId,
+  'name': org.name,
+  'url': org.url,
+  'logo': {
+    '@type': 'ImageObject',
+    'inLanguage': inLanguage,
+    '@id': logoId,
+    'url': org.logo,
+    'contentUrl': org.logo,
+    ...(org.logoWidth ? { 'width': org.logoWidth } : {}),
+    ...(org.logoHeight ? { 'height': org.logoHeight } : {}),
+    ...(org.name ? { 'caption': org.name } : {})
+  },
+  'image': { '@id': logoId }
+};
 
 // FAQ block
-type Faq = { question: string; answer: string };
-type Service = { name: string; description: string; offers?: any };
-
-const faqBlock = (faqList as Faq[]).length > 0 ? {
+const faqBlock = !disableFAQ && Array.isArray(faqList) && faqList.length > 0 ? {
   '@type': 'FAQPage',
-  'mainEntity': (faqList as Faq[]).map((faq: Faq) => ({
+  'mainEntity': faqList.map((faq) => ({
     '@type': 'Question',
     'name': faq.question,
     'acceptedAnswer': {
@@ -42,8 +145,8 @@ const faqBlock = (faqList as Faq[]).length > 0 ? {
 } : null;
 
 // Services block
-const servicesBlock = Array.isArray(servicesList) && servicesList.length > 0
-  ? servicesList.map((service: any) =>
+const servicesBlock = !disableServices && Array.isArray(servicesList) && servicesList.length > 0
+  ? servicesList.map((service) =>
       service.schema
         ? service.schema
         : {
@@ -55,37 +158,14 @@ const servicesBlock = Array.isArray(servicesList) && servicesList.length > 0
     )
   : null;
 
-// WebPage block
-const webPageBlock = {
-  '@type': 'WebPage',
-  'url': homepageUrl,
-  'name': siteName,
-  'description': description,
-  ...(resolvedImageUrl ? { image: resolvedImageUrl } : {}),
-  ...(resolvedLogoUrl ? { logo: resolvedLogoUrl } : {})
-};
-
-// Organization block
-const orgBlock = org ? {
-  '@type': 'Organization',
-  'name': org.name,
-  ...(org.url ? { url: org.url } : {}),
-  ...(org.logo ? { logo: org.logo } : {}),
-  ...(org.sameAs ? { sameAs: org.sameAs } : {})
-} : null;
-
-// LocalBusiness block
-const businessBlock = business ? {
-  '@type': 'LocalBusiness',
-  ...business
-} : null;
-
 const blocks = [
-  !disableWebPage && webPageBlock,
+  webPageBlock,
+  imageObjectBlock,
+  breadcrumbBlock,
+  webSiteBlock,
   orgBlock,
-  !disableLocalBusiness && businessBlock,
-  !disableFAQ && faqBlock,
-  !disableServices && servicesBlock,
+  faqBlock,
+  servicesBlock
 ].filter(Boolean).flat();
 
 const jsonLdGraph = {
@@ -94,8 +174,7 @@ const jsonLdGraph = {
 };
 ---
 
-<JsonLdBase siteConfig={site} customData={jsonLdGraph} />
-
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)}></script>
 {!disableReviews && (
   <JsonLdReviews reviews={reviewsList} />
 )}
