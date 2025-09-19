@@ -161,20 +161,6 @@ const servicesBlock = !disableServices && Array.isArray(servicesList) && service
     )
   : null;
 
-
-
-// Review body samples (move above to avoid ReferenceError)
-const reviewBodySamples = [
-  'Consegui meu visto americano muito rápido, atendimento excelente e sem burocracia.',
-  'Equipe super atenciosa, tiraram todas as minhas dúvidas e o processo foi simples.',
-  'Fui muito bem orientado, meu visto saiu antes do prazo, recomendo demais!',
-  'Atendimento ágil, transparente e sem enrolação. Voltarei a usar!',
-  'Me ajudaram em cada etapa, nota máxima para o suporte.',
-  'Serviço confiável, profissionais experientes e resultado garantido.',
-  'Ótima experiência, consegui meu visto sem complicação.',
-  'Muito satisfeito, empresa séria e eficiente.'
-];
-
 // VideoObjects independentes para reviews em vídeo
 const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
   ? reviewsList
@@ -189,7 +175,7 @@ const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsLis
           '@type': 'VideoObject',
           '@id': `${homepageUrl}#review-video-${idx+1}`,
           name: review.title || '',
-          description: review.reviewBody || reviewBodySamples[idx % reviewBodySamples.length] || review.title || '',
+          description: review.reviewBody || review.title || '',
           thumbnailUrl: review.thumbnail,
           contentUrl: review.url,
           embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
@@ -211,7 +197,7 @@ const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsLis
   : [];
 const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
   ? reviewsList.map((review, idx) => {
-      const reviewBody = review.reviewBody || review.title || reviewBodySamples[idx % reviewBodySamples.length] || 'Ótimo serviço!';
+      const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
       const base = {
         '@type': 'Review',
         reviewBody,

@@ -16,7 +16,7 @@ const reviewBlocks = reviews.map((review: any) => {
   if (review.videoId && review.thumbnail && review.url) {
     return {
       '@type': 'Review',
-      reviewBody: review.title || '',
+      reviewBody: review.reviewBody || review.title || '',
       itemReviewed: {
         '@type': 'Service',
         name: 'Fast Vistos',
