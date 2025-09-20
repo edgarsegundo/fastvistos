@@ -34,7 +34,7 @@
     "preview:fastvistos": "SITE_ID=fastvistos astro preview --config multi-sites.config.mjs",
     "dev:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro dev --config multi-sites.config.mjs",
     "dev:watch:p2digital": "node dev-with-sync.js p2digital",
-    "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build --config multi-sites.config.mjs",
+    "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build --config multi-sites.config.mjs && node postbuild-updatable.js p2digital",
     "preview:p2digital": "SITE_ID=p2digital astro preview --config multi-sites.config.mjs"
   },
   "dependencies": {
