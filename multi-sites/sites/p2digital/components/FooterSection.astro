@@ -1,0 +1,139 @@
+---
+// Footer Section Component
+---
+
+<footer class="bg-white">
+    <div class="container mx-auto px-8">
+        <div class="w-full flex flex-col md:flex-row py-6">
+            <div class="flex-1 mb-6 text-black flex justify-center lg:justify-start">
+                <a
+                    class="text-pink-600 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+                    href="https://fastvistos.com.br"
+                >
+                    <img src="assets/images/logo/logo-footer.png" alt="FastVistos" class="w-32" />
+                </a>
+            </div>
+            <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">FORMAS DE PAGAMENTO</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img src="assets/images/payments/visa.png" alt="visa" width="40" />
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img
+                            src="assets/images/payments/mastercard.png"
+                            alt="mastercard"
+                            width="40"
+                        />
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img
+                            src="assets/images/payments/mercadopago.png"
+                            alt="mercadopago"
+                            width="40"
+                        />
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img src="assets/images/payments/paypal.png" alt="paypal" width="45" />
+                    </li>
+                </ul>
+            </div>
+            <!-- <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">Social</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a href="#"
+                            class="no-underline hover:underline text-gray-800 hover:text-pink-500">Facebook</a>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a href="#"
+                            class="no-underline hover:underline text-gray-800 hover:text-pink-500">Linkedin</a>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a href="#"
+                            class="no-underline hover:underline text-gray-800 hover:text-pink-500">Twitter</a>
+                    </li>
+                </ul>
+            </div> -->
+            <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">Endereço</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <span class="no-underline text-gray-800">Av. Júlio Diniz, 257</span>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <span class="no-underline text-gray-800">Taquaral, Campinas - SP</span>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a
+                            href="#"
+                            data-linkcode="%231"
+                            class="wpp_button_link no-underline hover:underline text-gray-800 hover:text-pink-500"
+                            >📞 &nbsp;(19) 2042-2785</a
+                        >
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <span class="no-underline text-gray-800"
+                            >✉️ &nbsp;contato@fastvistos.com.br</span
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">Legal</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a
+                            onclick="openTermsPopup();"
+                            class="cursor-pointer no-underline hover:underline text-gray-800 hover:text-pink-500"
+                            >Termos</a
+                        >
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a
+                            onclick="openPrivacyPolicyPopup();"
+                            class="cursor-pointer no-underline hover:underline text-gray-800 hover:text-pink-500"
+                            >Privacidade</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Copyright Section -->
+        <div class="w-full border-t border-gray-300 pt-6 mt-6">
+            <div class="flex flex-col md:flex-row justify-between text-sm text-gray-600">
+                <p class="mb-2 md:mb-0">
+                    * Este site é propriedade de uma empresa privada sediada em Campinas e não tem
+                    relação com a Embaixada dos Estados Unidos.
+                </p>
+                <p class="text-right">
+                    <small
+                        >CNPJ 45.043.027/0001-08 - fastvistos © 2025 - Todos os direitos reservados</small
+                    >
+                </p>
+            </div>
+        </div>
+    </div>
+    <br />
+</footer>
+
+<script>
+    // Make functions globally accessible
+    (globalThis as any).openTermsPopup = function () {
+        window.open(
+            'terms.html',
+            'Termos de Uso',
+            'width=800,height=1024,resizable=yes,scrollbars=yes'
+        );
+        return false;
+    };
+
+    (globalThis as any).openPrivacyPolicyPopup = function () {
+        window.open(
+            'privacy_policy.html',
+            'Política de Privacidade',
+            'width=800,height=1024,resizable=yes,scrollbars=yes'
+        );
+        return false;
+    };
+</script>
