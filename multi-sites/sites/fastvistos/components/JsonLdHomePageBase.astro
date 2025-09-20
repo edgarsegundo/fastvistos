@@ -2,30 +2,30 @@
 import JsonLdReviews from './JsonLdReviews.astro';
 
 const {
-  site,
-  faqList = [],
-  servicesList = [],
-  reviewsList = [],
-  breadcrumbList = [],
-  disableFAQ = false,
-  disableServices = false,
-  disableReviews = false,
-  disableBreadcrumb = false,
-  disableWebSite = false,
-  disableOrganization = false,
-  disableImageObject = false,
-  disableWebPage = false,
-  disableWebSiteSearchAction = true,
-  ...rest
+    site,
+    faqList = [],
+    servicesList = [],
+    reviewsList = [],
+    breadcrumbList = [],
+    disableFAQ = false,
+    disableServices = false,
+    disableReviews = false,
+    disableBreadcrumb = false,
+    disableWebSite = false,
+    disableOrganization = false,
+    disableImageObject = false,
+    disableWebPage = false,
+    disableWebSiteSearchAction = true,
+    ...rest
 } = Astro.props;
 
 const homepageUrl = site?.domain ? `https://${site?.domain}` : '';
 const siteName = site?.name;
 const description = site?.description;
 const org = site?.organization ?? {
-  name: siteName,
-  url: homepageUrl,
-  logo: site?.logo
+    name: siteName,
+    url: homepageUrl,
+    logo: site?.logo,
 };
 const websiteId = `${homepageUrl}#website`;
 const orgId = `${homepageUrl}#organization`;
@@ -35,272 +35,282 @@ const logoId = `${homepageUrl}#/schema/logo/image/`;
 
 // WebPage block
 const webPageBlock = !disableWebPage && {
-  '@type': 'WebPage',
-  '@id': homepageUrl,
-  'url': homepageUrl,
-  'name': siteName,
-  'isPartOf': { '@id': websiteId },
-  'about': { '@id': orgId },
-  'primaryImageOfPage': { '@id': imageId },
-  'image': { '@id': imageId },
-  ...(site?.thumbnailUrl
-    ? { 'thumbnailUrl': site.thumbnailUrl }
-    : site?.image
-    ? { 'thumbnailUrl': site.image }
-    : {}),
-  ...(site.datePublished ? { 'datePublished': site.datePublished } : {}),
-  ...(site.dateModified ? { 'dateModified': site.dateModified } : {}),
-  ...(description ? { 'description': description } : {}),
-  'breadcrumb': { '@id': breadcrumbId },
-  'inLanguage': site.language || 'pt-BR',
-  'potentialAction': [
-    {
-      '@type': 'ReadAction',
-      'target': [homepageUrl]
-    }
-  ]
+    '@type': 'WebPage',
+    '@id': homepageUrl,
+    url: homepageUrl,
+    name: siteName,
+    isPartOf: { '@id': websiteId },
+    about: { '@id': orgId },
+    primaryImageOfPage: { '@id': imageId },
+    image: { '@id': imageId },
+    ...(site?.thumbnailUrl
+        ? { thumbnailUrl: site.thumbnailUrl }
+        : site?.image
+          ? { thumbnailUrl: site.image }
+          : {}),
+    ...(site.datePublished ? { datePublished: site.datePublished } : {}),
+    ...(site.dateModified ? { dateModified: site.dateModified } : {}),
+    ...(description ? { description: description } : {}),
+    breadcrumb: { '@id': breadcrumbId },
+    inLanguage: site.language || 'pt-BR',
+    potentialAction: [
+        {
+            '@type': 'ReadAction',
+            target: [homepageUrl],
+        },
+    ],
 };
 
 // ImageObject (primary image)
-const imageObjectBlock = !disableImageObject && site?.image && {
-  '@type': 'ImageObject',
-  'inLanguage': site.language,
-  '@id': imageId,
-  'url': site.image,
-  'contentUrl': site.image
-};
+const imageObjectBlock = !disableImageObject &&
+    site?.image && {
+        '@type': 'ImageObject',
+        inLanguage: site.language,
+        '@id': imageId,
+        url: site.image,
+        contentUrl: site.image,
+    };
 
 // BreadcrumbList
 const breadcrumbBlock = !disableBreadcrumb && {
-  '@type': 'BreadcrumbList',
-  '@id': breadcrumbId,
-  'itemListElement': breadcrumbList.length > 0
-    ? breadcrumbList
-    : [
-        {
-          '@type': 'ListItem',
-          'position': 1,
-          'name': 'Home'
-        }
-      ]
+    '@type': 'BreadcrumbList',
+    '@id': breadcrumbId,
+    itemListElement:
+        breadcrumbList.length > 0
+            ? breadcrumbList
+            : [
+                  {
+                      '@type': 'ListItem',
+                      position: 1,
+                      name: 'Home',
+                  },
+              ],
 };
 
 // WebSite
 const webSiteBlock = !disableWebSite && {
-  '@type': 'WebSite',
-  '@id': websiteId,
-  'url': homepageUrl,
-  'name': siteName,
-  'description': description ?? '',
-  'publisher': { '@id': orgId },
-  ...(!disableWebSiteSearchAction
-    ? {
-        'potentialAction': [
-          {
-            '@type': 'SearchAction',
-            'target': {
-              '@type': 'EntryPoint',
-              'urlTemplate': `${homepageUrl}?s={search_term_string}`
-            },
-            'query-input': {
-              '@type': 'PropertyValueSpecification',
-              'valueRequired': true,
-              'valueName': 'search_term_string'
-            }
+    '@type': 'WebSite',
+    '@id': websiteId,
+    url: homepageUrl,
+    name: siteName,
+    description: description ?? '',
+    publisher: { '@id': orgId },
+    ...(!disableWebSiteSearchAction
+        ? {
+              potentialAction: [
+                  {
+                      '@type': 'SearchAction',
+                      target: {
+                          '@type': 'EntryPoint',
+                          urlTemplate: `${homepageUrl}?s={search_term_string}`,
+                      },
+                      'query-input': {
+                          '@type': 'PropertyValueSpecification',
+                          valueRequired: true,
+                          valueName: 'search_term_string',
+                      },
+                  },
+              ],
           }
-        ]
-      }
-    : {}),
-  'inLanguage': site.language
+        : {}),
+    inLanguage: site.language,
 };
 
 // Organization (with logo as ImageObject)
 const orgBlock = !disableOrganization && {
-  '@type': 'Organization',
-  '@id': orgId,
-  'name': org.name,
-  'url': org.url,
-  'logo': {
-    '@type': 'ImageObject',
-    'inLanguage': site.language,
-    '@id': logoId,
-    'url': org.logo,
-    'contentUrl': org.logo,
-    ...(org.logoWidth ? { 'width': org.logoWidth } : {}),
-    ...(org.logoHeight ? { 'height': org.logoHeight } : {}),
-    ...(org.name ? { 'caption': org.name } : {})
-  },
-  'image': { '@id': logoId }
+    '@type': 'Organization',
+    '@id': orgId,
+    name: org.name,
+    url: org.url,
+    logo: {
+        '@type': 'ImageObject',
+        inLanguage: site.language,
+        '@id': logoId,
+        url: org.logo,
+        contentUrl: org.logo,
+        ...(org.logoWidth ? { width: org.logoWidth } : {}),
+        ...(org.logoHeight ? { height: org.logoHeight } : {}),
+        ...(org.name ? { caption: org.name } : {}),
+    },
+    image: { '@id': logoId },
 };
 
 // FAQ block
-const faqBlock = !disableFAQ && Array.isArray(faqList) && faqList.length > 0 ? {
-  '@type': 'FAQPage',
-  'mainEntity': faqList.map((faq) => ({
-    '@type': 'Question',
-    'name': faq.question,
-    'acceptedAnswer': {
-      '@type': 'Answer',
-      'text': faq.answer
-    }
-  }))
-} : null;
+const faqBlock =
+    !disableFAQ && Array.isArray(faqList) && faqList.length > 0
+        ? {
+              '@type': 'FAQPage',
+              mainEntity: faqList.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: faq.answer,
+                  },
+              })),
+          }
+        : null;
 
 // Services block
-const servicesBlock = !disableServices && Array.isArray(servicesList) && servicesList.length > 0
-  ? servicesList.map((service) =>
-      service.schema
-        ? service.schema
-        : {
-            '@type': 'Service',
-            'name': service.name,
-            'description': service.description,
-            ...(service.offers ? { offers: service.offers } : {}),
-            provider: { '@id': orgId }
-          }
-    )
-  : null;
+const servicesBlock =
+    !disableServices && Array.isArray(servicesList) && servicesList.length > 0
+        ? servicesList.map((service) =>
+              service.schema
+                  ? service.schema
+                  : {
+                        '@type': 'Service',
+                        name: service.name,
+                        description: service.description,
+                        ...(service.offers ? { offers: service.offers } : {}),
+                        provider: { '@id': orgId },
+                    }
+          )
+        : null;
 
 // VideoObjects independentes para reviews em vídeo
-const videoObjects = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
-  ? reviewsList
-      .filter((review) => review.videoId && review.thumbnail && review.url)
-      .map((review, idx) => {
-        // Ensure uploadDate is in ISO 8601 with timezone (e.g., 2023-05-02T00:00:00-03:00)
-        let uploadDate = review.uploadDate;
-        if (uploadDate && !uploadDate.includes('T')) {
-          uploadDate = `${uploadDate}T00:00:00-03:00`;
-        }
-        return {
-          '@type': 'VideoObject',
-          '@id': `${homepageUrl}#review-video-${idx+1}`,
-          name: review.title || '',
-          description: review.reviewBody || review.title || '',
-          thumbnailUrl: review.thumbnail,
-          contentUrl: review.url,
-          embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
-          ...(uploadDate ? { uploadDate } : {}),
-          publisher: {
-            '@type': 'Organization',
-            name: siteName,
-            logo: {
-              '@type': 'ImageObject',
-              url: site?.logo
-            }
-          },
-          mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': homepageUrl
-          }
-        };
-      })
-  : [];
-const reviewsBlock = !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
-  ? reviewsList.map((review, idx) => {
-      const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
-      const base = {
-        '@type': 'Review',
-        reviewBody,
-        author: {
-          '@type': 'Person',
-          name: review.author || `Cliente ${siteName}`,
-        },
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: review.ratingValue || 5,
-          bestRating: 5,
-          worstRating: 1,
-        },
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': homepageUrl
-        }
-      };
-      if (review.videoId && review.thumbnail && review.url) {
-        return {
-          ...base,
-          associatedMedia: {
-            '@id': `${homepageUrl}#review-video-${idx+1}`
-          }
-        };
-      }
-      return base;
-    })
-  : [];
-
+const videoObjects =
+    !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+        ? reviewsList
+              .filter((review) => review.videoId && review.thumbnail && review.url)
+              .map((review, idx) => {
+                  // Ensure uploadDate is in ISO 8601 with timezone (e.g., 2023-05-02T00:00:00-03:00)
+                  let uploadDate = review.uploadDate;
+                  if (uploadDate && !uploadDate.includes('T')) {
+                      uploadDate = `${uploadDate}T00:00:00-03:00`;
+                  }
+                  return {
+                      '@type': 'VideoObject',
+                      '@id': `${homepageUrl}#review-video-${idx + 1}`,
+                      name: review.title || '',
+                      description: review.reviewBody || review.title || '',
+                      thumbnailUrl: review.thumbnail,
+                      contentUrl: review.url,
+                      embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
+                      ...(uploadDate ? { uploadDate } : {}),
+                      publisher: {
+                          '@type': 'Organization',
+                          name: siteName,
+                          logo: {
+                              '@type': 'ImageObject',
+                              url: site?.logo,
+                          },
+                      },
+                      mainEntityOfPage: {
+                          '@type': 'WebPage',
+                          '@id': homepageUrl,
+                      },
+                  };
+              })
+        : [];
+const reviewsBlock =
+    !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+        ? reviewsList.map((review, idx) => {
+              const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
+              const base = {
+                  '@type': 'Review',
+                  reviewBody,
+                  author: {
+                      '@type': 'Person',
+                      name: review.author || `Cliente ${siteName}`,
+                  },
+                  reviewRating: {
+                      '@type': 'Rating',
+                      ratingValue: review.ratingValue || 5,
+                      bestRating: 5,
+                      worstRating: 1,
+                  },
+                  mainEntityOfPage: {
+                      '@type': 'WebPage',
+                      '@id': homepageUrl,
+                  },
+              };
+              if (review.videoId && review.thumbnail && review.url) {
+                  return {
+                      ...base,
+                      associatedMedia: {
+                          '@id': `${homepageUrl}#review-video-${idx + 1}`,
+                      },
+                  };
+              }
+              return base;
+          })
+        : [];
 
 // AggregateRating calculation
 let aggregateRating = null;
 if (reviewsBlock.length > 0) {
-  const ratings = reviewsBlock.map(r => (r.reviewRating && r.reviewRating.ratingValue) ? Number(r.reviewRating.ratingValue) : 5);
-  const reviewCount = ratings.length;
-  const ratingValue = reviewCount > 0 ? (ratings.reduce((a, b) => a + b, 0) / reviewCount) : 5;
-  aggregateRating = {
-    '@type': 'AggregateRating',
-    ratingValue: Number(ratingValue.toFixed(1)),
-    reviewCount
-  };
+    const ratings = reviewsBlock.map((r) =>
+        r.reviewRating && r.reviewRating.ratingValue ? Number(r.reviewRating.ratingValue) : 5
+    );
+    const reviewCount = ratings.length;
+    const ratingValue = reviewCount > 0 ? ratings.reduce((a, b) => a + b, 0) / reviewCount : 5;
+    aggregateRating = {
+        '@type': 'AggregateRating',
+        ratingValue: Number(ratingValue.toFixed(1)),
+        reviewCount,
+    };
 }
 
 // LocalBusiness principal com reviews agrupados, aggregateRating, address obrigatório e mainEntityOfPage
 const localBusinessBlock = !disableOrganization && {
-  '@type': 'LocalBusiness',
-  '@id': orgId,
-  name: siteName,
-  url: homepageUrl,
-  logo: {
-    '@type': 'ImageObject',
-    'inLanguage': site.language,
-    '@id': logoId,
-    'url': site?.logo,
-    'contentUrl': site?.logo,
-    ...(org.logoWidth ? { 'width': org.logoWidth } : {}),
-    ...(org.logoHeight ? { 'height': org.logoHeight } : {}),
-    ...(org.name ? { 'caption': org.name } : {})
-  },
-  image: { '@id': logoId },
-  address: site?.address || {
-    '@type': 'PostalAddress',
-    streetAddress: 'Rua Exemplo, 123',
-    addressLocality: 'São Paulo',
-    addressRegion: 'SP',
-    postalCode: '01234-567',
-    addressCountry: 'BR'
-  },
-  telephone: site?.contactPoint?.telephone || '+55 11 99999-9999',
-  contactPoint: site?.contactPoint || {
-    '@type': 'ContactPoint',
+    '@type': 'LocalBusiness',
+    '@id': orgId,
+    name: siteName,
+    url: homepageUrl,
+    logo: {
+        '@type': 'ImageObject',
+        inLanguage: site.language,
+        '@id': logoId,
+        url: site?.logo,
+        contentUrl: site?.logo,
+        ...(org.logoWidth ? { width: org.logoWidth } : {}),
+        ...(org.logoHeight ? { height: org.logoHeight } : {}),
+        ...(org.name ? { caption: org.name } : {}),
+    },
+    image: { '@id': logoId },
+    address: site?.address || {
+        '@type': 'PostalAddress',
+        streetAddress: 'Rua Exemplo, 123',
+        addressLocality: 'São Paulo',
+        addressRegion: 'SP',
+        postalCode: '01234-567',
+        addressCountry: 'BR',
+    },
     telephone: site?.contactPoint?.telephone || '+55 11 99999-9999',
-    contactType: 'customer service',
-    areaServed: 'BR',
-    availableLanguage: ['Portuguese', 'English']
-  },
-  ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
-  ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
-  priceRange: site?.priceRange || '$$',
-  mainEntityOfPage: {
-    '@type': 'WebPage',
-    '@id': homepageUrl
-  }
+    contactPoint: site?.contactPoint || {
+        '@type': 'ContactPoint',
+        telephone: site?.contactPoint?.telephone || '+55 11 99999-9999',
+        contactType: 'customer service',
+        areaServed: 'BR',
+        availableLanguage: ['Portuguese', 'English'],
+    },
+    ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
+    ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+    priceRange: site?.priceRange || '$$',
+    mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': homepageUrl,
+    },
 };
 
 const blocks = [
-  webPageBlock,
-  imageObjectBlock,
-  breadcrumbBlock,
-  webSiteBlock,
-  orgBlock,
-  localBusinessBlock,
-  faqBlock,
-  servicesBlock,
-  ...videoObjects
-].filter(Boolean).flat();
+    webPageBlock,
+    imageObjectBlock,
+    breadcrumbBlock,
+    webSiteBlock,
+    orgBlock,
+    localBusinessBlock,
+    faqBlock,
+    servicesBlock,
+    ...videoObjects,
+]
+    .filter(Boolean)
+    .flat();
 
 const jsonLdGraph = {
-  '@context': 'https://schema.org',
-  '@graph': blocks
+    '@context': 'https://schema.org',
+    '@graph': blocks,
 };
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)}></script>
-
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)} />
