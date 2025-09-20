@@ -141,9 +141,9 @@ function deployToServer(siteId) {
     console.log('');
 
     try {
-        // Step 1: Ensure remote directory exists with proper permissions
+        // Step 1: Ensure remote directory exists with proper permissions (recursive chown)
         console.log('📁 Setting up remote directory...');
-        const setupCommand = `ssh ${user}@${host} "sudo mkdir -p ${remotePath} && sudo chown ${user}:${user} ${remotePath}"`;
+        const setupCommand = `ssh ${user}@${host} "sudo mkdir -p ${remotePath} && sudo chown -R ${user}:${user} ${remotePath}"`;
         console.log(`Running: ${setupCommand}`);
         execSync(setupCommand, { stdio: 'inherit' });
         console.log('✅ Remote directory setup completed');
