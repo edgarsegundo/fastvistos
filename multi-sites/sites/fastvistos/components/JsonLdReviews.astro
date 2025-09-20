@@ -12,43 +12,43 @@
 const { reviews = [] } = Astro.props;
 
 const reviewBlocks = reviews.map((review: any) => {
-  // If it's a video review (has videoId, thumbnail, url), map to Google-compliant Review+VideoObject
-  if (review.videoId && review.thumbnail && review.url) {
+    // If it's a video review (has videoId, thumbnail, url), map to Google-compliant Review+VideoObject
+    if (review.videoId && review.thumbnail && review.url) {
+        return {
+            '@type': 'Review',
+            reviewBody: review.reviewBody || review.title || '',
+            itemReviewed: {
+                '@type': 'Service',
+                name: 'Fast Vistos',
+            },
+            author: {
+                '@type': 'Person',
+                name: 'Cliente Fast Vistos',
+            },
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: 5,
+                bestRating: 5,
+                worstRating: 1,
+            },
+            video: {
+                '@type': 'VideoObject',
+                name: review.title || '',
+                description: review.title || '',
+                thumbnailUrl: review.thumbnail,
+                contentUrl: review.url,
+                embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
+            },
+        };
+    }
+    // Otherwise, treat as a normal Review
     return {
-      '@type': 'Review',
-      reviewBody: review.reviewBody || review.title || '',
-      itemReviewed: {
-        '@type': 'Service',
-        name: 'Fast Vistos',
-      },
-      author: {
-        '@type': 'Person',
-        name: 'Cliente Fast Vistos',
-      },
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: 5,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      video: {
-        '@type': 'VideoObject',
-        name: review.title || '',
-        description: review.title || '',
-        thumbnailUrl: review.thumbnail,
-        contentUrl: review.url,
-        embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
-      },
+        '@type': 'Review',
+        ...review,
     };
-  }
-  // Otherwise, treat as a normal Review
-  return {
-    '@type': 'Review',
-    ...review
-  };
 });
 
 const jsonLd = reviewBlocks.length === 1 ? reviewBlocks[0] : reviewBlocks;
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)}></script>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
