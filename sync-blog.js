@@ -101,7 +101,10 @@ async function syncBlogToSite(siteId) {
             } catch {}
         }
     } catch (err) {
-        console.error(`❌ Error copying updatable-editor.js to multi-sites/sites/${siteId}/lib/:`, err);
+        console.error(
+            `❌ Error copying updatable-editor.js to multi-sites/sites/${siteId}/lib/:`,
+            err
+        );
     }
 
     console.log(`📄 Syncing blog to ${siteId}...`);
