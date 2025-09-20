@@ -252,11 +252,20 @@ async function createSite() {
         console.log(`   Domain: ${domain}`);
         console.log(`   Name: ${siteName}`);
 
-        const confirm = await question('\nProceed with site creation? (y/N): ');
-        if (confirm.toLowerCase() !== 'y' && confirm.toLowerCase() !== 'yes') {
-            console.log('🚫 Site creation cancelled.');
-            rl.close();
-            return;
+
+        // Robust confirmation prompt: only accept y/n, repeat if invalid
+        let confirm = '';
+        while (true) {
+            confirm = await question('\nProceed with site creation? (y/N): ');
+            if (/^y$/i.test(confirm)) {
+                break;
+            } else if (/^n$/i.test(confirm) || confirm.trim() === '') {
+                console.log('🚫 Site creation cancelled.');
+                rl.close();
+                return;
+            } else {
+                console.log('⚠️  Please enter y or n.');
+            }
         }
 
         console.log('\n🔨 Creating site structure...');

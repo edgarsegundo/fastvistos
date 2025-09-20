@@ -1,0 +1,57 @@
+---
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import JsonLdGenerator from '../components/JsonLdGenerator.astro';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  canonicalUrl?: string;
+  structuredData?: any;
+  bodyClass?: string;
+  pageUrl?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage,
+  noindex = false,
+  canonicalUrl,
+  bodyClass = '',
+  pageUrl
+} = Astro.props;
+
+const currentUrl = canonicalUrl || Astro.url.href;
+---
+
+<SharedHomeLayout 
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  noIndex={noindex}
+  canonical={canonicalUrl}
+  pageUrl={pageUrl || currentUrl}
+>
+  <!-- Additional head content specific to this layout -->
+  <Fragment slot="head">
+    <JsonLdGenerator
+        pageType="homepage"
+    />
+  </Fragment>
+
+  <!-- Body content -->
+  <body
+    class={`leading-normal tracking-normal text-white ${bodyClass} antialiased`}
+    style="font-family: 'Source Sans Pro', sans-serif;"
+  >
+  </body>
+
+</SharedHomeLayout>
+
+<style is:global>
+  /* Custom global styles for the homepage can go here */
+</style>
