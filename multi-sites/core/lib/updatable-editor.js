@@ -1,6 +1,6 @@
 // updatable-editor.js
 // This script enables in-place editing of divs with [updatable_div_uuid] using a modal UI.
-// Usage: Inject this script into your HTML (e.g., via <script src="/updatable-editor.js"></script>)
+// Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
