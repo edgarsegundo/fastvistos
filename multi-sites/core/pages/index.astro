@@ -1,57 +1,36 @@
 ---
+// FastVistos main homepage
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
-import JsonLdGenerator from '../components/JsonLdGenerator.astro';
-
-export interface Props {
-  title?: string;
-  description?: string;
-  keywords?: string;
-  ogImage?: string;
-  ogType?: string;
-  noindex?: boolean;
-  canonicalUrl?: string;
-  structuredData?: any;
-  bodyClass?: string;
-  pageUrl?: string;
-}
+import { siteConfig } from '../site-config.ts';
+import { faqData } from '../config/faqConfig.js';
+import { servicesData } from '../config/servicesConfig.js';
+import { reviewVideos } from '../config/reviewVideosConfig.js';
+import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 const {
-  title,
-  description,
-  ogImage,
-  noindex = false,
-  canonicalUrl,
   bodyClass = '',
-  pageUrl
+  bodyStyle = ''
 } = Astro.props;
-
-const currentUrl = canonicalUrl || Astro.url.href;
 ---
 
 <SharedHomeLayout 
-  title={title}
-  description={description}
-  ogImage={ogImage}
-  noIndex={noindex}
-  canonical={canonicalUrl}
-  pageUrl={pageUrl || currentUrl}
+  bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
+  bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
 >
   <!-- Additional head content specific to this layout -->
   <Fragment slot="head">
-    <JsonLdGenerator
-        pageType="homepage"
+    <JsonLdHomePageBase
+      site={siteConfig.site}
+      faqList={faqData}
+      servicesList={servicesData}
+      reviewsList={reviewVideos}
+      disableReviews={false}
     />
   </Fragment>
 
   <!-- Body content -->
-  <body
-    class={`leading-normal tracking-normal text-white ${bodyClass} antialiased`}
-    style="font-family: 'Source Sans Pro', sans-serif;"
-  >
-  </body>
-
+  
 </SharedHomeLayout>
 
 <style is:global>
-  /* Custom global styles for the homepage can go here */
 </style>

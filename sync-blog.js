@@ -83,6 +83,27 @@ async function ensureDir(dirPath) {
 }
 
 async function syncBlogToSite(siteId) {
+    // Copy updatable-editor.js to each site's lib folder
+    try {
+        const coreEditorPath = join(__dirname, 'multi-sites/core/lib/updatable-editor.js');
+        const siteLibDir = join(__dirname, `multi-sites/sites/${siteId}/lib`);
+        const siteEditorPath = join(siteLibDir, 'updatable-editor.js');
+        await ensureDir(siteLibDir);
+        // Always copy first
+        await fs.copyFile(coreEditorPath, siteEditorPath);
+        console.log(`📝 Copied updatable-editor.js to multi-sites/sites/${siteId}/lib/`);
+        // Only truncate if running a build or preview command (after copy)
+        const lifecycle = process.env.npm_lifecycle_event || '';
+        if (lifecycle.startsWith('build:') || lifecycle.startsWith('preview:')) {
+            try {
+                await fs.writeFile(siteEditorPath, '');
+                console.log(`🧹 Truncated ${siteEditorPath}`);
+            } catch {}
+        }
+    } catch (err) {
+        console.error(`❌ Error copying updatable-editor.js to multi-sites/sites/${siteId}/lib/:`, err);
+    }
+
     console.log(`📄 Syncing blog to ${siteId}...`);
 
     const siteDir = join(__dirname, `multi-sites/sites/${siteId}`);
