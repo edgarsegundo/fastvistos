@@ -92,9 +92,9 @@ async function syncBlogToSite(siteId) {
         // Always copy first
         await fs.copyFile(coreEditorPath, siteEditorPath);
         console.log(`📝 Copied updatable-editor.js to multi-sites/sites/${siteId}/lib/`);
-        // Only truncate if running a build command (after copy)
+        // Only truncate if running a build or preview command (after copy)
         const lifecycle = process.env.npm_lifecycle_event || '';
-    if (lifecycle.startsWith('build:') || lifecycle.startsWith('preview:')) {
+        if (lifecycle.startsWith('build:') || lifecycle.startsWith('preview:')) {
             try {
                 await fs.writeFile(siteEditorPath, '');
                 console.log(`🧹 Truncated ${siteEditorPath}`);
@@ -103,28 +103,7 @@ async function syncBlogToSite(siteId) {
     } catch (err) {
         console.error(`❌ Error copying updatable-editor.js to multi-sites/sites/${siteId}/lib/:`, err);
     }
-    // // --- Create index_updatable.html in multi-sites/sites/[siteid]/pages/ ---
-    // try {
-    //     const siteIndexAstro = join(__dirname, `multi-sites/sites/${siteId}/pages/index.astro`);
-    //     const sitePagesDir = join(__dirname, `multi-sites/sites/${siteId}/pages`);
-    //     const updatableEditorScript = '<script src="/updatable-editor.js"></script>';
-    //     let indexContent = await fs.readFile(siteIndexAstro, 'utf-8');
 
-    //     // Remove Astro frontmatter (--- ... ---)
-    //     indexContent = indexContent.replace(/^---[\s\S]*?---/, '').trim();
-
-    //     // Inject script before </body>
-    //     if (indexContent.includes('</body>')) {
-    //         indexContent = indexContent.replace('</body>', `${updatableEditorScript}\n</body>`);
-    //     } else {
-    //         indexContent += `\n${updatableEditorScript}`;
-    //     }
-
-    //     await fs.writeFile(join(sitePagesDir, 'index_updatable.html'), indexContent);
-    //     console.log(`📝 Created index_updatable.html in multi-sites/sites/${siteId}/pages/`);
-    // } catch (err) {
-    //     console.error(`❌ Error creating index_updatable.html for ${siteId}:`, err);
-    // }
     console.log(`📄 Syncing blog to ${siteId}...`);
 
     const siteDir = join(__dirname, `multi-sites/sites/${siteId}`);
