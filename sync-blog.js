@@ -118,17 +118,6 @@ async function syncBlogToSite(siteId) {
     const indexTemplate = await fs.readFile(join(CORE_BLOG_DIR, 'index.astro'), 'utf-8');
     const postTemplate = await fs.readFile(join(CORE_BLOG_DIR, '[...slug].astro'), 'utf-8');
 
-    // // Copy updatable-editor.js to public-sites/[siteid]/
-    // const coreEditorPath = join(__dirname, 'multi-sites/core/public/updatable-editor.js');
-    // const sitePublicDir = join(__dirname, `public-sites/${siteId}`);
-    // try {
-    //     await ensureDir(sitePublicDir);
-    //     await fs.copyFile(coreEditorPath, join(sitePublicDir, 'updatable-editor.js'));
-    //     console.log(`📝 Copied updatable-editor.js to ${siteId}`);
-    // } catch (err) {
-    //     console.error(`❌ Error copying updatable-editor.js to ${siteId}:`, err);
-    // }
-
     // Read core layouts
     const sharedBlogLayout = await fs.readFile(
         join(CORE_LAYOUTS_DIR, 'SharedBlogLayout.astro'),
