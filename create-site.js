@@ -140,7 +140,7 @@ async function addNpmScripts(siteId) {
         const scriptsToAdd = {
             [`dev:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev --config multi-sites.config.mjs`,
             [`dev:watch:${siteId}`]: `node dev-with-sync.js ${siteId}`,
-            [`build:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build --config multi-sites.config.mjs`,
+            [`build:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build --config multi-sites.config.mjs && node postbuild-updatable.js ${siteId}`,
             [`preview:${siteId}`]: `SITE_ID=${siteId} astro preview --config multi-sites.config.mjs`,
         };
 

@@ -12,7 +12,6 @@ import HeadBasics from '../components/HeadBasics.astro';
 import SEOMeta from '../components/SEOMeta.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
-// import JsonLdGenerator from '../components/JsonLdGenerator.astro';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
@@ -54,3 +53,5 @@ const htmlLang = siteConfig.site.useFullLanguageTag ? siteConfig.site.language :
     <!-- Body content -->
     <slot />
 </body>
+
+<script src="../lib/updatable-editor.js"></script>
