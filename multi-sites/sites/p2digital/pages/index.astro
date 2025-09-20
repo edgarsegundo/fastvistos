@@ -1,6 +1,15 @@
 ---
 // FastVistos main homepage
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+import AboutSection from '../components/AboutSection.astro';
+import PassportSection from '../components/PassportSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import FooterSection from '../components/FooterSection.astro';
+// import Whatsapp from '../components/Whatsapp.astro';
+import CallToActionSection from '../components/CallToActionSection.astro';
+import Navigation from '../components/Navigation.astro';
 import { siteConfig } from '../site-config.ts';
 import { faqData } from '../config/faqConfig.js';
 import { servicesData } from '../config/servicesConfig.js';
@@ -11,7 +20,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
 >
     <!-- Additional head content specific to this layout -->
@@ -26,9 +35,27 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <!-- Body content -->
-    <main>
-        <h1 class="text-black">Welcome to {siteConfig.site.name}</h1>
-    </main>
+    <Navigation />
+    <HeroSection />
+    <ServicesSection />
+    <AboutSection />
+    <PassportSection />
+    <FaqSection />
+    <CallToActionSection />
+    <FooterSection />
+    {/* <Whatsapp /> */}
 </SharedHomeLayout>
 
-<style is:global></style>
+<style is:global>
+    .home-layout p,
+    .home-layout h3,
+    .home-layout ul,
+    .home-layout a,
+    .home-layout span {
+        color: #1b375c !important;
+    }
+
+    .home-main {
+        min-height: 100vh;
+    }
+</style>
