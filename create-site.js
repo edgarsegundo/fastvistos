@@ -252,7 +252,6 @@ async function createSite() {
         console.log(`   Domain: ${domain}`);
         console.log(`   Name: ${siteName}`);
 
-
         // Robust confirmation prompt: only accept y/n, repeat if invalid
         let confirm = '';
         while (true) {

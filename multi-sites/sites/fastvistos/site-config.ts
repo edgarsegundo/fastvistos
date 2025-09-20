@@ -32,7 +32,7 @@ export const siteConfig: SiteConfig = {
             contactType: 'Customer Service',
             areaServed: 'BR',
             availableLanguage: ['Portuguese', 'English'],
-            email: 'support@fastvistos.com.br'
+            email: 'support@fastvistos.com.br',
         },
     },
 
