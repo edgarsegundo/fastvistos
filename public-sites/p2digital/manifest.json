@@ -1,0 +1,19 @@
+{
+    "name": "p2digital - Agência de Marketing Digital",
+    "short_name": "p2digital",
+    "description": "Agência de Marketing Digital especializada em criação de sites.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0077b6",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "16x16 32x32",
+            "type": "image/x-icon"
+        }
+    ],
+    "categories": ["criação de sites", "marketing digital", "seo"],
+    "lang": "pt-BR"
+}
