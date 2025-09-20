@@ -27,7 +27,7 @@ async function main() {
     await fs.copyFile(coreEditorPath, distEditor);
     // Read and inject script into index_updatable.html
     let html = await fs.readFile(distIndex, 'utf-8');
-    const injectScript = '<script src="/updatable-editor.js"></script>';
+    const injectScript = '<script src="./updatable-editor.js"></script>';
     if (html.includes('</body>')) {
       html = html.replace('</body>', `${injectScript}\n</body>`);
     } else {
