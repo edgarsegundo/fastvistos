@@ -208,3 +208,5 @@ chatwoot.sqlite3-wal
 !src/lib/
 !multi-sites/core/lib
 !lib/
+
+multi-sites/sites/*/lib/updatable-editor.js

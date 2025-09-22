@@ -7,30 +7,28 @@ import { servicesData } from '../config/servicesConfig.js';
 import { reviewVideos } from '../config/reviewVideosConfig.js';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
-const {
-  bodyClass = '',
-  bodyStyle = ''
-} = Astro.props;
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
-<SharedHomeLayout 
-  bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
-  bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+<SharedHomeLayout
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
+    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
 >
-  <!-- Additional head content specific to this layout -->
-  <Fragment slot="head">
-    <JsonLdHomePageBase
-      site={siteConfig.site}
-      faqList={faqData}
-      servicesList={servicesData}
-      reviewsList={reviewVideos}
-      disableReviews={false}
-    />
-  </Fragment>
+    <!-- Additional head content specific to this layout -->
+    <Fragment slot="head">
+        <JsonLdHomePageBase
+            site={siteConfig.site}
+            faqList={faqData}
+            servicesList={servicesData}
+            reviewsList={reviewVideos}
+            disableReviews={false}
+        />
+    </Fragment>
 
-  <!-- Body content -->
-  
+    <!-- Body content -->
+    <main>
+        <h1 class="text-black">Welcome to {siteConfig.site.name}</h1>
+    </main>
 </SharedHomeLayout>
 
-<style is:global>
-</style>
+<style is:global></style>
