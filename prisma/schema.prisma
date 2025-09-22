@@ -22,6 +22,7 @@ model BlogConfig {
   theme_image  String?     @db.VarChar(100)
   business     business    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
   blog_topic   BlogTopic[]
+  web_page     web_page[]
 
   @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
   @@map("blog_config")
@@ -319,6 +320,9 @@ model business {
   status_3                       status_3[]
   status_4                       status_4[]
   status_5                       status_5[]
+  web_page                       web_page[]
+  web_page_section               web_page_section[]
+  web_page_section_version       web_page_section_version[]
 
   @@index([display_name], map: "business_display_name_aafdbe16")
   @@index([name], map: "business_name_ad433fb7")
@@ -1165,4 +1169,57 @@ model vt_visitor {
   created_at DateTime? @db.DateTime(6)
 
   @@index([created_at], map: "vt_visitor_created_at_2d20c06c")
+}
+
+model web_page {
+  created          DateTime           @db.DateTime(6)
+  modified         DateTime           @db.DateTime(6)
+  is_removed       Boolean
+  id               String             @id @db.Char(32)
+  relative_path    String             @unique(map: "relative_path") @db.VarChar(255)
+  config           Json
+  blog_config_id   String             @db.Char(32)
+  business_id      String             @db.Char(32)
+  blog_config      BlogConfig         @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_blog_config_id_c294397c_fk_blog_config_id")
+  business         business           @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_business_id_641c22ef_fk_business_id")
+  web_page_section web_page_section[]
+
+  @@index([blog_config_id], map: "web_page_blog_config_id_c294397c_fk_blog_config_id")
+  @@index([business_id], map: "web_page_business_id_641c22ef_fk_business_id")
+}
+
+model web_page_section {
+  created                                                                                 DateTime                   @db.DateTime(6)
+  modified                                                                                DateTime                   @db.DateTime(6)
+  is_removed                                                                              Boolean
+  id                                                                                      String                     @id @db.Char(32)
+  title                                                                                   String                     @db.VarChar(255)
+  updatable_uuid                                                                          String?                    @db.Char(32)
+  business_id                                                                             String                     @db.Char(32)
+  web_page_id                                                                             String                     @db.Char(32)
+  active_version_id                                                                       String?                    @db.Char(32)
+  web_page_section_version_web_page_section_active_version_idToweb_page_section_version   web_page_section_version?  @relation("web_page_section_active_version_idToweb_page_section_version", fields: [active_version_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_section_active_version_id_69d764d7_fk_web_page_")
+  business                                                                                business                   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_section_business_id_629dc2f6_fk_business_id")
+  web_page                                                                                web_page                   @relation(fields: [web_page_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_section_web_page_id_fb156d2a_fk_web_page_id")
+  web_page_section_version_web_page_section_version_web_page_section_idToweb_page_section web_page_section_version[] @relation("web_page_section_version_web_page_section_idToweb_page_section")
+
+  @@index([active_version_id], map: "web_page_section_active_version_id_69d764d7_fk_web_page_")
+  @@index([business_id], map: "web_page_section_business_id_629dc2f6_fk_business_id")
+  @@index([web_page_id], map: "web_page_section_web_page_id_fb156d2a_fk_web_page_id")
+}
+
+model web_page_section_version {
+  created                                                                         DateTime           @db.DateTime(6)
+  modified                                                                        DateTime           @db.DateTime(6)
+  is_removed                                                                      Boolean
+  id                                                                              String             @id @db.Char(32)
+  file_path                                                                       String             @db.VarChar(500)
+  business_id                                                                     String             @db.Char(32)
+  web_page_section_id                                                             String             @db.Char(32)
+  web_page_section_web_page_section_active_version_idToweb_page_section_version   web_page_section[] @relation("web_page_section_active_version_idToweb_page_section_version")
+  web_page_section_web_page_section_version_web_page_section_idToweb_page_section web_page_section   @relation("web_page_section_version_web_page_section_idToweb_page_section", fields: [web_page_section_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_section_ver_web_page_section_id_9a2fdc11_fk_web_page_")
+  business                                                                        business           @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_section_version_business_id_4b5f8a81_fk_business_id")
+
+  @@index([web_page_section_id], map: "web_page_section_ver_web_page_section_id_9a2fdc11_fk_web_page_")
+  @@index([business_id], map: "web_page_section_version_business_id_4b5f8a81_fk_business_id")
 }
