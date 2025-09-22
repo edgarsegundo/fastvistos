@@ -34,7 +34,7 @@ npm install
 ```bash
 npm install -g pm2
 pm2 -v
-pm2 start app/server.js --name fastapp
+pm2 start app/server.js --name msitesapp
 pm2 list
 pm2 save    : This makes sure PM2 remembers your apps
 ```
@@ -51,8 +51,8 @@ sudo env PATH=$PATH:/home/youruser/.nvm/versions/node/v22.0.0/bin pm2 startup sy
 ## Useful commands
 
 ```bash
-pm2 restart fastapp
-pm2 stop fastapp
-pm2 delete fastapp
-pm2 logs fastapp
+pm2 restart msitesapp
+pm2 stop msitesapp
+pm2 delete msitesapp
+pm2 logs msitesapp
 ```
