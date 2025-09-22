@@ -3,12 +3,10 @@
     "type": "module",
     "version": "0.0.1",
     "scripts": {
-
         "app-dev": "node --trace-warnings ./app/server.js",
         "app-start": "node ./app/server.js",
         "app-debug": "node --inspect=0.0.0.0:9229 --trace-warnings ./app/server.js",
         "app-debug-brk": "node --inspect-brk=0.0.0.0:9229 --trace-warnings ./app/server.js",
-
         "dev": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
