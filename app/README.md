@@ -2,11 +2,15 @@
 
 ## Install nvm
 
+```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+```
 
 ## Create nvmrc file
 
+```bash
 echo "22.0.0" > .nvmrc
+```
 
 ## If you want to make it automatic every time you cd into the folder, you can add this to your ~/.bashrc or ~/.zshrc
 
@@ -21,7 +25,9 @@ cd() {
 
 ## Install packages
 
+```bash
 npm install
+```
 
 ## Install pm2 and start app
 
