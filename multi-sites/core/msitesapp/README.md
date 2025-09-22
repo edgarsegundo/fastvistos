@@ -34,7 +34,8 @@ npm install
 ```bash
 npm install -g pm2
 pm2 -v
-pm2 start app/server.js --name msitesapp
+
+pm2 start ./multi-sites/core/msitesapp/server.js --name msitesapp
 pm2 list
 pm2 save    : This makes sure PM2 remembers your apps
 ```
