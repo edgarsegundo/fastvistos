@@ -1,6 +1,22 @@
+
 import { prisma } from './prisma.js';
+import { siteConfig } from '../site-config.ts';
 
 export class WebPageService {
+    // Cache the business_id from site config
+    private static _businessId: string | null = null;
+    // Get the business_id from site config (cached)
+    private static getBusinessId(): string {
+        if (this._businessId === null) {
+            if (!siteConfig?.site?.business_id) {
+                throw new Error(
+                    'business_id not found in site configuration. Please ensure site-config.ts has a valid site.business_id.'
+                );
+            }
+            this._businessId = siteConfig.site.business_id;
+        }
+        return this._businessId!;
+    }
     /**
      * Create a WebPageSection and a new WebPageSectionVersion atomically.
      * - If the WebPageSection (by webpage, title, updatable_uuid) exists, use it; otherwise, create it.
@@ -11,7 +27,8 @@ export class WebPageService {
      * @param {string} businessId
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }) {
+    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid }: { webpageRelativePath: string, title: string, updatableUuid: string }) {
+        const businessId = this.getBusinessId();
         return await prisma.$transaction(async (tx) => {
             // 1. Find the web_page by relative_path and business_id
             const webPage = await tx.web_page.findUnique({
