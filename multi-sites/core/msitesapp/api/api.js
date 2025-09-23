@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 });
 
 
-app.get('/msitesapp/api/ping', (req, res) => {
+app.get('ping', (req, res) => {
     res.json({
         message: 'pong',
         timestamp: new Date().toISOString(),
