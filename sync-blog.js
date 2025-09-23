@@ -274,9 +274,14 @@ async function syncBlogToSite(siteId) {
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
 
+
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
     await fs.writeFile(join(siteLibDir, 'site-config-model.ts'), siteConfigContent);
+
+    // Copy webpage-service.ts to site lib directory
+    const webpageServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'webpage-service.ts'), 'utf-8');
+    await fs.writeFile(join(siteLibDir, 'webpage-service.ts'), webpageServiceContent);
 
     // Localize site-config-helper.ts for this specific site
     const localizedSiteConfigHelper = siteConfigHelperContent
