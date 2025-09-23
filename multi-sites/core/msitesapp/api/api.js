@@ -1,4 +1,4 @@
-import { WebPageService } from '../../lib/webpage-service.js';
+import { WebPageService } from '../../dist/lib/webpage-service.js';
 import express from 'express';
 import bodyParser from 'body-parser';
 

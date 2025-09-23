@@ -14,7 +14,7 @@ export class WebPageService {
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
     static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }: { webpageRelativePath: string, title: string, updatableUuid: string, businessId: string }) {
-        return await prisma.$transaction(async (tx) => {
+    return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             const webPage = await tx.web_page.findUnique({
                 where: {
