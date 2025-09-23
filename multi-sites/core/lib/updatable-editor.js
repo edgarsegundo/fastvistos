@@ -1,5 +1,5 @@
 // updatable-editor.js
-// This script enables in-place editing of divs with [updatable_div_uuid] using a modal UI.
+// This script enables in-place editing of divs with [updatable-section-uuid] using a modal UI.
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
@@ -15,7 +15,7 @@
             '#6c5ce7', // deep purple
         ];
 
-        document.querySelectorAll('div[updatable_div_uuid]').forEach((section_div_wrapper, idx) => {
+        document.querySelectorAll('div[updatable-section-uuid]').forEach((section_div_wrapper, idx) => {
             // Set base border and highlight styles dynamically
             section_div_wrapper.addEventListener('mouseenter', function () {
                 const baseColor = borderColors[idx % borderColors.length];
@@ -116,10 +116,10 @@
                     modal.remove();
                 }
             });
-            // Modal title using updatable_div_name
+            // Modal title using updatable-section-title
             const modalTitle = document.createElement('div');
             modalTitle.textContent =
-                section_div_wrapper.getAttribute('updatable_div_name') || 'Editar HTML';
+                section_div_wrapper.getAttribute('updatable-section-title') || 'Editar HTML';
             Object.assign(modalTitle.style, {
                 marginBottom: '8px',
                 fontWeight: 'bold',
@@ -157,10 +157,60 @@
                 borderRadius: '4px',
                 cursor: 'pointer',
             });
-            updateBtn.onclick = () => {
-                modal.remove();
-                section_div_wrapper.innerHTML = textarea.value.trim();
+
+            // Clonar button (htmx POST)
+            const cloneBtn = document.createElement('button');
+            cloneBtn.type = 'button';
+            cloneBtn.textContent = 'Clonar';
+            Object.assign(cloneBtn.style, {
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#00b894',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+            });
+            cloneBtn.onclick = () => {
+                // Prepare data for htmx POST
+                const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
+                const title = section_div_wrapper.getAttribute('updatable-section-title');
+                const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
+                if (!uuid || !title || !filePath) {
+                    alert('Faltam atributos para clonar.');
+                    return;
+                }
+                // Create a hidden form for htmx
+                const form = document.createElement('form');
+                form.style.display = 'none';
+                form.setAttribute('hx-post', 'https://p2digital.com.br/msitesapp/api/webpage-section');
+                form.setAttribute('hx-trigger', 'submit');
+                form.setAttribute('hx-target', 'body');
+                form.setAttribute('hx-swap', 'none');
+                // Add fields
+                const uuidInput = document.createElement('input');
+                uuidInput.type = 'hidden';
+                uuidInput.name = 'updatableUuid';
+                uuidInput.value = uuid;
+                form.appendChild(uuidInput);
+                const titleInput = document.createElement('input');
+                titleInput.type = 'hidden';
+                titleInput.name = 'title';
+                titleInput.value = title;
+                form.appendChild(titleInput);
+                const filePathInput = document.createElement('input');
+                filePathInput.type = 'hidden';
+                filePathInput.name = 'webpageRelativePath';
+                filePathInput.value = filePath;
+                form.appendChild(filePathInput);
+                document.body.appendChild(form);
+                form.submit();
+                setTimeout(() => form.remove(), 1000);
             };
+
+            modalContent.appendChild(updateBtn);
+            modalContent.appendChild(cloneBtn);
 
             modalContent.appendChild(closeBtn);
             modalContent.appendChild(modalTitle);
