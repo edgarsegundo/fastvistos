@@ -20,9 +20,9 @@ process.on('uncaughtException', (error) => {
 // Mount webhook endpoint
 app.use('/', api);
 
-// Start Express server
-const server = app.listen(PORT, () => {
-    console.log(`fastvistos api server running on port ${PORT}`);
+// Start Express server on IPv4 localhost
+const server = app.listen(PORT, '127.0.0.1', () => {
+    console.log(`fastvistos api server running on 127.0.0.1:${PORT}`);
 });
 
 // Aumenta timeout para 3 minutos (180000 ms)
