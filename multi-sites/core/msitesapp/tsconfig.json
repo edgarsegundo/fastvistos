@@ -13,6 +13,6 @@
   "include": [
     "api/**/*.ts",
     "server.ts",
-    "../lib/**/*.ts"
+    "../lib/**/webpage-service.ts"
   ]
 }
