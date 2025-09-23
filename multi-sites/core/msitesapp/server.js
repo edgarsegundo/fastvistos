@@ -21,7 +21,8 @@ process.on('uncaughtException', (error) => {
 app.use('/', api);
 
 // Start Express server on IPv4 localhost
-const server = app.listen(PORT, '0.0.0.0', () => {
+// const server = app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '::', () => {
     console.log(`msitesapp api server running on 0.0.0.0:${PORT} (IPv4 + IPv6 if system supports)`);
 });
 
