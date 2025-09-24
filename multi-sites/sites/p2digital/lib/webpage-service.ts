@@ -5,7 +5,7 @@ interface CreateSectionAndVersionParams {
     title: string;
     updatableUuid: string;
     businessId: string;
-    html: string;
+    htmlContent: string;
 }
 import { prisma } from './prisma.js';
 import crypto from 'crypto';
@@ -18,22 +18,22 @@ export class WebPageService {
      * @param {string} title
      * @param {string} updatableUuid
      * @param {string} businessId
-     * @param {string} html
+     * @param {string} htmlContent
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, html }: CreateSectionAndVersionParams) {
+    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, htmlContent }: CreateSectionAndVersionParams) {
 
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
         }
 
-        // Debug log for html param
-        console.log('[DEBUG] Received html param:', html, '| typeof:', typeof html);
+        // Debug log for htmlContent param
+        console.log('[DEBUG] Received htmlContent param:', htmlContent, '| typeof:', typeof htmlContent);
 
-        // Validate html
-        if (typeof html !== 'string' || !html) {
-            console.error('[DEBUG] html param is missing or not a string:', html);
+        // Validate htmlContent
+        if (typeof htmlContent !== 'string' || !htmlContent) {
+            console.error('[DEBUG] htmlContent param is missing or not a string:', htmlContent);
             throw new Error('HTML content is required and must be a string');
         }
 
@@ -148,7 +148,7 @@ export class WebPageService {
             const baseDir = `/var/www/${siteId}/webpage_sections`;
             const outFile = path.join(baseDir, filePath);
             try {
-                fs.writeFileSync(outFile, html, 'utf8');
+                fs.writeFileSync(outFile, htmlContent, 'utf8');
                 console.log(`[DEBUG] HTML written to ${outFile}`);
             } catch (err) {
                 console.error('[DEBUG] Error writing HTML file:', err);
