@@ -1,8 +1,11 @@
+import fs from 'fs';
+import path from 'path';
 interface CreateSectionAndVersionParams {
     webpageRelativePath: string;
     title: string;
     updatableUuid: string;
     businessId: string;
+    html: string;
 }
 import { prisma } from './prisma.js';
 import crypto from 'crypto';
@@ -17,7 +20,7 @@ export class WebPageService {
      * @param {string} businessIdweb_page_section.create()
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }: CreateSectionAndVersionParams) {
+    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, html }: CreateSectionAndVersionParams) {
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
@@ -27,7 +30,7 @@ export class WebPageService {
         businessId = businessId.replace(/-/g, '');
         updatableUuid = updatableUuid.replace(/-/g, '');
 
-        return await prisma.$transaction(async (tx: any) => {
+    return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             let webPage;
             try {
@@ -122,6 +125,26 @@ export class WebPageService {
             } catch (err) {
                 console.error('[DEBUG] Error creating webPageSectionVersion:', err);
                 throw err;
+            }
+
+            // create file with the name in the `file_path` on disk putting it at `/var/www/siteid/webpage_sections/`,
+            // create the folder if it doesn't exist. Put the html content inside the just created file and save. 
+            // If this operation fails, rollback the transaction and log the error.
+
+            // Write HTML to file on disk
+            // You may want to replace 'siteid' with a real value or param
+            const siteId = 'p2digital';
+            const baseDir = `/var/www/${siteId}/webpage_sections`;
+            const outFile = path.join(baseDir, filePath);
+            try {
+                if (!fs.existsSync(baseDir)) {
+                    fs.mkdirSync(baseDir, { recursive: true });
+                }
+                fs.writeFileSync(outFile, html, 'utf8');
+                console.log(`[DEBUG] HTML written to ${outFile}`);
+            } catch (err) {
+                console.error('[DEBUG] Error writing HTML file:', err);
+                throw new Error('Failed to write HTML file, transaction will be rolled back.');
             }
             return {
                 webPageSectionId,

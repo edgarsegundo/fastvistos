@@ -138,6 +138,7 @@
                 textAlign: 'center',
             });
             const textarea = document.createElement('textarea');
+            textarea.id = 'uuid-html-editor';
             Object.assign(textarea.style, {
                 width: '100%',
                 height: '300px',
@@ -178,6 +179,7 @@
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
                 const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
+                const htmlContent = document.getElementById('uuid-html-editor').value;
                 if (!uuid || !title || !filePath || !businessId) {
                     alert('Faltam atributos para clonar.');
                     // [CRITICAL][P0][DEV] Needs monitoring, logging, and notification
@@ -194,7 +196,8 @@
                         updatableUuid: uuid,
                         title: title,
                         webpageRelativePath: filePath,
-                        businessId: "5810c2b6-125c-402a-9cff-53fcc9d61bf5"
+                        businessId: businessId,
+                        html: htmlContent
                     }),
                 })
                 .then(response => response.json())
