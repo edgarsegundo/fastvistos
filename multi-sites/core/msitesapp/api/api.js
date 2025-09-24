@@ -47,5 +47,24 @@ app.post('/webpage-section', async (req, res) => {
     }
 });
 
+// POST endpoint to publish a WebPageSection and Version (for htmx or API)
+app.post('/publish-section', async (req, res) => {
+    try {
+        const { webpageRelativePath, updatableUuid, businessId } = req.body;
+        if (!webpageRelativePath || !updatableUuid || !businessId) {
+            return res.status(400).json({ error: 'Missing required fields.' });
+        }
+        const result = await WebPageService.publishSection({ webpageRelativePath, 
+                                                             updatableUuid, 
+                                                             businessId });
+        res.json(result);
+    } catch (error) {
+        console.error('Error in /publish-section:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
+
+
 
 export default app;

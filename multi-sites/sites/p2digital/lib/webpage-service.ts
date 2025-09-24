@@ -7,6 +7,13 @@ interface CreateSectionAndVersionParams {
     businessId: string;
     htmlContent: string;
 }
+
+export interface PublishSectionParams {
+    webpageRelativePath: string;
+    updatableUuid: string;
+    businessId: string;
+}
+
 import { prisma } from './prisma.js';
 import crypto from 'crypto';
 export class WebPageService {
@@ -41,7 +48,7 @@ export class WebPageService {
         businessId = businessId.replace(/-/g, '');
         updatableUuid = updatableUuid.replace(/-/g, '');
 
-    return await prisma.$transaction(async (tx: any) => {
+        return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             let webPage;
             try {
@@ -161,4 +168,68 @@ export class WebPageService {
             };
         });
     }
+
+    static async publishSection({ webpageRelativePath, updatableUuid, businessId }: PublishSectionParams) {
+
+        if (!prisma) {
+            console.error('[DEBUG] prisma is undefined or null!');
+            throw new Error('Prisma client is not initialized');
+        }
+
+        // Remove dashes for DB lookup
+        const businessIdClean = businessId.replace(/-/g, '');
+        const updatableUuidClean = updatableUuid.replace(/-/g, '');
+
+        // 1. Find the web_page by relative_path and business_id
+        const webPage = await prisma.web_page.findUnique({
+            where: {
+                relative_path: webpageRelativePath,
+                business_id: businessIdClean,
+                is_removed: false,
+            },
+        });
+        if (!webPage) {
+            throw new Error('web_page not found for given relative_path and business_id');
+        }
+
+        // 2. Find the web_page_section by updatableUuid and web_page_id
+        const webPageSection = await prisma.web_page_section.findFirst({
+            where: {
+                web_page_id: webPage.id,
+                updatable_uuid: updatableUuidClean,
+                business_id: businessIdClean,
+                is_removed: false,
+            },
+        });
+        if (!webPageSection) {
+            throw new Error('web_page_section not found for given updatableUuid and web_page_id');
+        }
+
+        // 3. Get the active_version_id
+        const activeVersionId = webPageSection.active_version_id;
+        if (!activeVersionId) {
+            throw new Error('No active_version_id set for this web_page_section');
+        }
+
+        // 4. Get the web_page_section_version by id
+        const sectionVersion = await prisma.web_page_section_version.findUnique({
+            where: {
+                id: activeVersionId,
+            },
+        });
+        if (!sectionVersion) {
+            throw new Error('web_page_section_version not found for active_version_id');
+        }
+
+        console.log('[DEBUG] Publishing sectionVersion:', sectionVersion);
+
+        // 5. Return the file_path
+        return {
+            filePath: sectionVersion.file_path,
+            activeVersionId,
+        };
+    }
+
+
+    
 }
