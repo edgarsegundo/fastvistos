@@ -17,7 +17,6 @@ export class WebPageService {
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
     static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }: CreateSectionAndVersionParams) {
-        console.log('[DEBUG] prisma:', prisma);
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
         }
