@@ -17,13 +17,20 @@ export class WebPageService {
      * @param {string} webpageRelativePath - e.g. 'p2digital/pages/index.astro'
      * @param {string} title
      * @param {string} updatableUuid
-     * @param {string} businessIdweb_page_section.create()
+     * @param {string} businessId
+     * @param {string} html
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
     static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, html }: CreateSectionAndVersionParams) {
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
+        }
+
+        // Validate html
+        if (typeof html !== 'string' || !html) {
+            console.error('[DEBUG] html param is missing or not a string:', html);
+            throw new Error('HTML content is required and must be a string');
         }
 
         // if those have dashes, strip them for the query
