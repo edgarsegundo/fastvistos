@@ -22,7 +22,9 @@ export class WebPageService {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
         }
-    return await prisma.$transaction(async (tx: any) => {
+        // if the businessId has dashes, strip them for the query
+        businessId = businessId.replace(/-/g, '');
+        return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             let webPage;
             try {
