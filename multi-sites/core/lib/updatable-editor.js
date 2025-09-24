@@ -177,10 +177,11 @@
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                if (!uuid || !title || !filePath) {
+                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
+                if (!uuid || !title || !filePath || !businessId) {
                     alert('Faltam atributos para clonar.');
                     // [CRITICAL][P0][DEV] Needs monitoring, logging, and notification
-                    console.error('Missing attributes for cloning:', { uuid, title, filePath });
+                    console.error('Missing attributes for cloning:', { uuid, title, filePath, businessId });
                     return;
                 }
                 // Use fetch to POST without reloading the page
