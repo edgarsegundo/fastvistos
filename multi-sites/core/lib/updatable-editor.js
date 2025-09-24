@@ -174,7 +174,6 @@
             });
             cloneBtn.onclick = () => {
                 // Prepare data for htmx POST
-                debugger;
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
@@ -194,6 +193,7 @@
                         updatableUuid: uuid,
                         title: title,
                         webpageRelativePath: filePath,
+                        businessId: "5810c2b6-125c-402a-9cff-53fcc9d61bf5"
                     }),
                 })
                 .then(response => response.json())
