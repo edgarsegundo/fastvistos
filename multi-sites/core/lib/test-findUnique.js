@@ -8,10 +8,10 @@ async function testFindUnique() {
         webpageRelativePath: "p2digital/pages/index.astro",
         title: "Sobre a Empresa",
         updatableUuid: "92af51f0-7349-4561-9214-dd7dfca60ff0",
-        businessId: "5810c2b6-125c-402a-9cff-53fcc9d61bf5"
+        businessId: "5810c2b6125c402a9cff53fcc9d61bf5"
     };
     try {
-        const result = await prisma.webPage.findUnique({
+        const result = await prisma.web_page.findUnique({
             where: {
                 relative_path: params.webpageRelativePath,
                 business_id: params.businessId,
