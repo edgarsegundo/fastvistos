@@ -210,8 +210,52 @@
                 });
             };
 
+            // Publish button
+            const publishBtn = document.createElement('button');
+            publishBtn.type = 'button';
+            publishBtn.textContent = 'Publicar';
+            Object.assign(publishBtn.style, {
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#ff9800',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+            });
+            publishBtn.onclick = () => {
+                const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
+                const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
+                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
+                if (!uuid || !filePath || !businessId) {
+                    alert('Faltam atributos para publish.');
+                    console.error('Missing attributes for publishing:', { uuid, filePath, businessId });
+                    return;
+                }
+                fetch('https://p2digital.com.br/msitesapp/api/publish-section', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        updatableUuid: uuid,
+                        webpageRelativePath: filePath,
+                        businessId: businessId
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Publish response:', data);
+                })
+                .catch(error => {
+                    console.error('Publish error:', error);
+                });
+            };
+
             modalContent.appendChild(updateBtn);
             modalContent.appendChild(cloneBtn);
+            modalContent.appendChild(publishBtn);
 
             modalContent.appendChild(closeBtn);
             modalContent.appendChild(modalTitle);
