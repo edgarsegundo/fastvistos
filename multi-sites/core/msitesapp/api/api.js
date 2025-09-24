@@ -28,7 +28,7 @@ app.get('/ping', (req, res) => {
 
 
 // POST endpoint to create a WebPageSection and Version (for htmx or API)
-app.post('/msitesapp/api/webpage-section', async (req, res) => {
+app.post('/webpage-section', async (req, res) => {
     try {
         const { webpageRelativePath, title, updatableUuid } = req.body;
         if (!webpageRelativePath || !title || !updatableUuid) {
@@ -38,7 +38,7 @@ app.post('/msitesapp/api/webpage-section', async (req, res) => {
         // If htmx, you can return HTML here, but JSON is fine for most cases
         res.json(result);
     } catch (error) {
-        console.error('Error in /api/webpage-section:', error);
+        console.error('Error in /webpage-section:', error);
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
