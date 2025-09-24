@@ -19,13 +19,9 @@ export class WebPageService {
     static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }: CreateSectionAndVersionParams) {
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
+            throw new Error('Prisma client is not initialized');
         }
-    return await prisma.$transaction(async (tx: any) => {
-            console.log('[DEBUG] tx:', tx);
-            console.log('[DEBUG] tx.web_page:', tx.web_page);
-            if (!tx.web_page) {
-                console.error('[DEBUG] tx.web_page is undefined! Available keys:', Object.keys(tx));
-            }
+        return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             let webPage;
             try {
@@ -39,6 +35,7 @@ export class WebPageService {
                 console.log('[DEBUG] webPage:', webPage);
             } catch (err) {
                 console.error('[DEBUG] Error calling tx.web_page.findUnique:', err);
+                throw err;
             }
             if (!webPage) {
                 console.error('[DEBUG] webPage not found for', { webpageRelativePath, businessId });
@@ -47,7 +44,6 @@ export class WebPageService {
             // 2. Find or create the WebPageSection
             let webPageSection;
             try {
-                console.log('[DEBUG] tx.web_page_section:', tx.web_page_section);
                 webPageSection = await tx.web_page_section.findFirst({
                     where: {
                         web_page_id: webPage.id,
@@ -59,6 +55,7 @@ export class WebPageService {
                 console.log('[DEBUG] webPageSection:', webPageSection);
             } catch (err) {
                 console.error('[DEBUG] Error calling tx.web_page_section.findFirst:', err);
+                throw err;
             }
             if (!webPageSection) {
                 try {
@@ -76,13 +73,13 @@ export class WebPageService {
                     console.log('[DEBUG] Created webPageSection:', webPageSection);
                 } catch (err) {
                     console.error('[DEBUG] Error creating webPageSection:', err);
+                    throw err;
                 }
             }
             const webPageSectionId = webPageSection.id;
             // 3. Count existing versions for this section
             let versionCount = 0;
             try {
-                console.log('[DEBUG] tx.web_page_section_version:', tx.web_page_section_version);
                 versionCount = await tx.web_page_section_version.count({
                     where: {
                         web_page_section_id: webPageSectionId,
@@ -91,6 +88,7 @@ export class WebPageService {
                 console.log('[DEBUG] versionCount:', versionCount);
             } catch (err) {
                 console.error('[DEBUG] Error counting webPageSectionVersion:', err);
+                throw err;
             }
             const filePath = `${updatableUuid}_${versionCount + 1}`;
             // 4. Create the new version
@@ -109,6 +107,7 @@ export class WebPageService {
                 console.log('[DEBUG] Created webPageSectionVersion:', webPageSectionVersion);
             } catch (err) {
                 console.error('[DEBUG] Error creating webPageSectionVersion:', err);
+                throw err;
             }
             return {
                 webPageSectionId,

@@ -7,73 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model BlogConfig {
-  created      DateTime    @db.DateTime(6)
-  modified     DateTime    @db.DateTime(6)
-  is_removed   Boolean
-  id           String      @id @default(uuid()) @db.Char(32)
-  title        String      @db.VarChar(255)
-  slug         String?     @unique(map: "slug") @db.VarChar(255)
-  config       Json
-  business_id  String      @db.Char(32)
-  author_image String?     @db.VarChar(100)
-  author_name  String?     @db.VarChar(255)
-  description  String?     @db.VarChar(500)
-  theme_image  String?     @db.VarChar(100)
-  business     business    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
-  blog_topic   BlogTopic[]
-  web_page     web_page[]
-
-  @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
-  @@map("blog_config")
-}
-
-model BlogTopic {
-  created        DateTime      @db.DateTime(6)
-  modified       DateTime      @db.DateTime(6)
-  is_removed     Boolean
-  id             String        @id @default(uuid()) @db.Char(32)
-  title          String        @db.VarChar(255)
-  slug           String?       @unique(map: "slug") @db.VarChar(255)
-  image          String?       @db.VarChar(100)
-  order          Int           @db.UnsignedInt
-  blog_config_id String        @db.Char(32)
-  business_id    String        @db.Char(32)
-  metatitle      String?       @db.LongText
-  blog_article   BlogArticle[]
-  blog_config    BlogConfig    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
-  business       business      @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
-
-  @@index([blog_config_id], map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
-  @@index([business_id], map: "blog_topic_business_id_787b32b6_fk_business_id")
-  @@index([order], map: "blog_topic_order_72ad0658")
-  @@map("blog_topic")
-}
-
-model BlogArticle {
-  created       DateTime  @db.DateTime(6)
-  modified      DateTime  @db.DateTime(6)
-  is_removed    Boolean
-  id            String    @id @default(uuid()) @db.Char(32)
-  title         String    @db.LongText
-  content_raw   String?   @db.LongText
-  content_html  String?   @db.LongText
-  content_md    String?   @db.LongText
-  type          String    @db.VarChar(50)
-  slug          String?   @unique(map: "slug") @db.VarChar(255)
-  published     DateTime  @db.DateTime(6)
-  image         String?   @db.VarChar(100)
-  business_id   String    @db.Char(32)
-  blog_topic_id String    @db.Char(32)
-  metatitle     String?   @db.LongText
-  blog_topic    BlogTopic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
-  business      business  @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
-
-  @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
-  @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
-  @@map("blog_article")
-}
-
 model actionable_group {
   created                       DateTime                        @db.DateTime(6)
   modified                      DateTime                        @db.DateTime(6)
@@ -236,6 +169,49 @@ model binary_option {
   access_option   String @db.VarChar(100)
 }
 
+model blog_article {
+  created       DateTime   @db.DateTime(6)
+  modified      DateTime   @db.DateTime(6)
+  is_removed    Boolean
+  id            String     @id @db.Char(32)
+  title         String     @db.LongText
+  content_raw   String?    @db.LongText
+  content_html  String?    @db.LongText
+  content_md    String?    @db.LongText
+  type          String     @db.VarChar(50)
+  slug          String?    @unique(map: "slug") @db.VarChar(255)
+  published     DateTime   @db.DateTime(6)
+  image         String?    @db.VarChar(100)
+  business_id   String     @db.Char(32)
+  blog_topic_id String     @db.Char(32)
+  metatitle     String?    @db.LongText
+  blog_topic    blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  business      business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+
+  @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
+}
+
+model blog_config {
+  created      DateTime     @db.DateTime(6)
+  modified     DateTime     @db.DateTime(6)
+  is_removed   Boolean
+  id           String       @id @db.Char(32)
+  title        String       @db.VarChar(255)
+  slug         String?      @unique(map: "slug") @db.VarChar(255)
+  config       Json
+  business_id  String       @db.Char(32)
+  author_image String?      @db.VarChar(100)
+  author_name  String?      @db.VarChar(255)
+  description  String?      @db.VarChar(500)
+  theme_image  String?      @db.VarChar(100)
+  business     business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  blog_topic   blog_topic[]
+  web_page     web_page[]
+
+  @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
+}
+
 model blog_owner {
   id         String      @id @db.Char(32)
   name       String      @db.VarChar(255)
@@ -267,6 +243,28 @@ model blog_post {
   @@index([order], map: "blog_post_order_19cd170e")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model blog_topic {
+  created        DateTime       @db.DateTime(6)
+  modified       DateTime       @db.DateTime(6)
+  is_removed     Boolean
+  id             String         @id @db.Char(32)
+  title          String         @db.VarChar(255)
+  slug           String?        @unique(map: "slug") @db.VarChar(255)
+  image          String?        @db.VarChar(100)
+  order          Int            @db.UnsignedInt
+  blog_config_id String         @db.Char(32)
+  business_id    String         @db.Char(32)
+  metatitle      String?        @db.LongText
+  blog_article   blog_article[]
+  blog_config    blog_config    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
+  business       business       @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
+
+  @@index([blog_config_id], map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
+  @@index([business_id], map: "blog_topic_business_id_787b32b6_fk_business_id")
+  @@index([order], map: "blog_topic_order_72ad0658")
+}
+
 model business {
   created                        DateTime                         @db.DateTime(6)
   modified                       DateTime                         @db.DateTime(6)
@@ -287,9 +285,9 @@ model business {
   appointment_status_2           appointment_status_2[]
   appointment_status_3           appointment_status_3[]
   appointment_status_4           appointment_status_4[]
-  blog_article                   BlogArticle[]
-  blog_config                    BlogConfig[]
-  blog_topic                     BlogTopic[]
+  blog_article                   blog_article[]
+  blog_config                    blog_config[]
+  blog_topic                     blog_topic[]
   catalog_item                   catalog_item[]
   chatbot                        chatbot[]
   customer                       customer[]
@@ -1180,7 +1178,7 @@ model web_page {
   config           Json
   blog_config_id   String             @db.Char(32)
   business_id      String             @db.Char(32)
-  blog_config      BlogConfig         @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_blog_config_id_c294397c_fk_blog_config_id")
+  blog_config      blog_config        @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_blog_config_id_c294397c_fk_blog_config_id")
   business         business           @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_business_id_641c22ef_fk_business_id")
   web_page_section web_page_section[]
 
