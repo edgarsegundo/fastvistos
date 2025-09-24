@@ -197,7 +197,7 @@
                         title: title,
                         webpageRelativePath: filePath,
                         businessId: businessId,
-                        html: "test"
+                        htmlContent: htmlContent
                     }),
                 })
                 .then(response => response.json())
