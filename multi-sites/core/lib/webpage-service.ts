@@ -148,7 +148,7 @@ export class WebPageService {
             const baseDir = `/var/www/${siteId}/webpage_sections`;
             const outFile = path.join(baseDir, filePath);
             try {
-                fs.writeFileSync(outFile, html, 'utf8');
+                fs.writeFileSync(outFile, htmlContent, 'utf8');
                 console.log(`[DEBUG] HTML written to ${outFile}`);
             } catch (err) {
                 console.error('[DEBUG] Error writing HTML file:', err);
