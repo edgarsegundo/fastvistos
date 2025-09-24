@@ -5,6 +5,7 @@ interface CreateSectionAndVersionParams {
     businessId: string;
 }
 import { prisma } from './prisma.js';
+import crypto from 'crypto';
 export class WebPageService {
     /**
      * Create a WebPageSection and a new WebPageSectionVersion atomically.
@@ -21,7 +22,7 @@ export class WebPageService {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
         }
-        return await prisma.$transaction(async (tx: any) => {
+    return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             let webPage;
             try {
@@ -59,8 +60,12 @@ export class WebPageService {
             }
             if (!webPageSection) {
                 try {
+                    if (!businessId) {
+                        throw new Error('businessId is undefined when creating web_page_section');
+                    }
                     webPageSection = await tx.web_page_section.create({
                         data: {
+                            id: crypto.randomUUID(),
                             title,
                             updatable_uuid: updatableUuid,
                             business_id: businessId,
@@ -94,8 +99,12 @@ export class WebPageService {
             // 4. Create the new version
             let webPageSectionVersion;
             try {
+                if (!businessId) {
+                    throw new Error('businessId is undefined when creating web_page_section_version');
+                }
                 webPageSectionVersion = await tx.web_page_section_version.create({
                     data: {
+                        id: crypto.randomUUID(),
                         file_path: filePath,
                         business_id: businessId,
                         web_page_section_id: webPageSectionId,
