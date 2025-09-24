@@ -14,7 +14,7 @@ export class WebPageService {
      * @param {string} webpageRelativePath - e.g. 'p2digital/pages/index.astro'
      * @param {string} title
      * @param {string} updatableUuid
-     * @param {string} businessId
+     * @param {string} businessIdweb_page_section.create()
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
     static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }: CreateSectionAndVersionParams) {
@@ -22,8 +22,11 @@ export class WebPageService {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
         }
-        // if the businessId has dashes, strip them for the query
+
+        // if those have dashes, strip them for the query
         businessId = businessId.replace(/-/g, '');
+        updatableUuid = updatableUuid.replace(/-/g, '');
+
         return await prisma.$transaction(async (tx: any) => {
             // 1. Find the web_page by relative_path and business_id
             let webPage;
@@ -67,7 +70,7 @@ export class WebPageService {
                     }
                     webPageSection = await tx.web_page_section.create({
                         data: {
-                            id: crypto.randomUUID(),
+                            id: crypto.randomUUID().replace(/-/g, ''),
                             title,
                             updatable_uuid: updatableUuid,
                             business_id: businessId,
@@ -106,7 +109,7 @@ export class WebPageService {
                 }
                 webPageSectionVersion = await tx.web_page_section_version.create({
                     data: {
-                        id: crypto.randomUUID(),
+                        id: crypto.randomUUID().replace(/-/g, ''),
                         file_path: filePath,
                         business_id: businessId,
                         web_page_section_id: webPageSectionId,
