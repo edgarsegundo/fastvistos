@@ -137,9 +137,6 @@ export class WebPageService {
             const baseDir = `/var/www/${siteId}/webpage_sections`;
             const outFile = path.join(baseDir, filePath);
             try {
-                if (!fs.existsSync(baseDir)) {
-                    fs.mkdirSync(baseDir, { recursive: true });
-                }
                 fs.writeFileSync(outFile, html, 'utf8');
                 console.log(`[DEBUG] HTML written to ${outFile}`);
             } catch (err) {
