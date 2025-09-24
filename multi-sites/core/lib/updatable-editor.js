@@ -174,39 +174,36 @@
             });
             cloneBtn.onclick = () => {
                 // Prepare data for htmx POST
+                debugger;
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
                 if (!uuid || !title || !filePath) {
                     alert('Faltam atributos para clonar.');
+                    // [CRITICAL][P0][DEV] Needs monitoring, logging, and notification
+                    console.error('Missing attributes for cloning:', { uuid, title, filePath });
                     return;
                 }
-                // Create a hidden form for htmx
-                const form = document.createElement('form');
-                form.style.display = 'none';
-                form.setAttribute('hx-post', 'https://p2digital.com.br/msitesapp/api/webpage-section');
-                form.setAttribute('hx-trigger', 'submit');
-                form.setAttribute('hx-target', 'body');
-                form.setAttribute('hx-swap', 'none');
-                // Add fields
-                const uuidInput = document.createElement('input');
-                uuidInput.type = 'hidden';
-                uuidInput.name = 'updatableUuid';
-                uuidInput.value = uuid;
-                form.appendChild(uuidInput);
-                const titleInput = document.createElement('input');
-                titleInput.type = 'hidden';
-                titleInput.name = 'title';
-                titleInput.value = title;
-                form.appendChild(titleInput);
-                const filePathInput = document.createElement('input');
-                filePathInput.type = 'hidden';
-                filePathInput.name = 'webpageRelativePath';
-                filePathInput.value = filePath;
-                form.appendChild(filePathInput);
-                document.body.appendChild(form);
-                form.submit();
-                setTimeout(() => form.remove(), 1000);
+                // Use fetch to POST without reloading the page
+                fetch('https://p2digital.com.br/msitesapp/api/webpage-section', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        updatableUuid: uuid,
+                        title: title,
+                        webpageRelativePath: filePath,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Optionally handle response
+                    console.log('Clonar response:', data);
+                })
+                .catch(error => {
+                    console.error('Clonar error:', error);
+                });
             };
 
             modalContent.appendChild(updateBtn);
