@@ -1,3 +1,9 @@
+interface CreateSectionAndVersionParams {
+    webpageRelativePath: string;
+    title: string;
+    updatableUuid: string;
+    businessId: string;
+}
 import { prisma } from './prisma.js';
 export class WebPageService {
     /**
@@ -10,12 +16,12 @@ export class WebPageService {
      * @param {string} businessId
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }) {
+    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId }: CreateSectionAndVersionParams) {
         console.log('[DEBUG] prisma:', prisma);
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
         }
-        return await prisma.$transaction(async (tx) => {
+    return await prisma.$transaction(async (tx: any) => {
             console.log('[DEBUG] tx:', tx);
             console.log('[DEBUG] tx.web_page:', tx.web_page);
             if (!tx.web_page) {
