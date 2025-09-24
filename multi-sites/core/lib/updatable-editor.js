@@ -180,10 +180,10 @@
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
                 const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
                 const htmlContent = document.getElementById('uuid-html-editor').value;
-                if (!uuid || !title || !filePath || !businessId) {
+                if (!uuid || !title || !filePath || !businessId || !htmlContent) {
                     alert('Faltam atributos para clonar.');
                     // [CRITICAL][P0][DEV] Needs monitoring, logging, and notification
-                    console.error('Missing attributes for cloning:', { uuid, title, filePath, businessId });
+                    console.error('Missing attributes for cloning:', { uuid, title, filePath, businessId, htmlContent });
                     return;
                 }
                 // Use fetch to POST without reloading the page
