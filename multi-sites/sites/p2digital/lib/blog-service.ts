@@ -27,7 +27,7 @@ export class BlogService {
     static async getBlogConfig() {
         try {
             const businessId = this.getBusinessId();
-            return await prisma.blogConfig.findFirst({
+            return await prisma.blog_config.findFirst({
                 where: {
                     business_id: businessId,
                     is_removed: false,
@@ -44,7 +44,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blogArticle.findMany({
+            return await prisma.blog_article.findMany({
                 where: {
                     business_id: businessId,
                     is_removed: false,
@@ -70,7 +70,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blogArticle.findUnique({
+            return await prisma.blog_article.findUnique({
                 where: {
                     slug: slug,
                     business_id: businessId,
@@ -93,7 +93,7 @@ export class BlogService {
     static async getTopics() {
         try {
             const businessId = this.getBusinessId();
-            return await prisma.blogTopic.findMany({
+            return await prisma.blog_topic.findMany({
                 where: {
                     business_id: businessId,
                     is_removed: false,
@@ -113,7 +113,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blogArticle.findMany({
+            return await prisma.blog_article.findMany({
                 where: {
                     business_id: businessId,
                     blog_topic: {
@@ -144,7 +144,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blogArticle.findMany({
+            return await prisma.blog_article.findMany({
                 where: {
                     business_id: businessId,
                     is_removed: false,
@@ -171,7 +171,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blogTopic.findMany({
+            return await prisma.blog_topic.findMany({
                 where: {
                     business_id: businessId,
                     is_removed: false,
@@ -214,7 +214,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blogArticle.findMany({
+            return await prisma.blog_article.findMany({
                 where: {
                     business_id: businessId,
                     is_removed: false,
