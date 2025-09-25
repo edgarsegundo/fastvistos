@@ -138,7 +138,7 @@ app.post('/publish-section', async (req, res) => {
                 console.warn('[WARN] Build stderr:', buildOutput.stderr.slice(0, 1000));
             }
             // Next step: run deploy-site-vps.sh with sudo (requires passwordless sudo setup)
-            const deployScriptPath = '/Users/edgar/Repos/fastvistos/deploy-site-vps.sh';
+            const deployScriptPath = '/home/edgar/Repos/fastvistos/deploy-site-vps.sh';
             const deploySiteId = 'p2digital';
             const deployCmd = `sudo ${deployScriptPath} ${deploySiteId}`;
             await new Promise((resolve, reject) => {
