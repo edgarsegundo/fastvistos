@@ -223,6 +223,7 @@ export class WebPageService {
 
         console.log('[DEBUG] Publishing sectionVersion:', sectionVersion);
 
+
         // 5. Return the file_path
         return {
             filePath: sectionVersion.file_path,
