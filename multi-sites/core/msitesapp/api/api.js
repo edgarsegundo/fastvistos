@@ -137,6 +137,24 @@ app.post('/publish-section', async (req, res) => {
             if (buildOutput.stderr) {
                 console.warn('[WARN] Build stderr:', buildOutput.stderr.slice(0, 1000));
             }
+            // Next step: run deploy-site-vps.sh with sudo (requires passwordless sudo setup)
+            const deployScriptPath = '/Users/edgar/Repos/fastvistos/deploy-site-vps.sh';
+            const deploySiteId = 'p2digital';
+            const deployCmd = `sudo ${deployScriptPath} ${deploySiteId}`;
+            await new Promise((resolve, reject) => {
+                exec(deployCmd, {
+                    cwd: process.cwd(),
+                    env: process.env
+                }, (error, stdout, stderr) => {
+                    console.log('[DEBUG] Deploy stdout (full):', stdout);
+                    console.warn('[DEBUG] Deploy stderr (full):', stderr);
+                    if (error) {
+                        console.error('[ERROR] Deploy failed:', error);
+                        return reject({ error: error.message, stdout, stderr });
+                    }
+                    resolve({ stdout, stderr });
+                });
+            });
         } catch (buildErr) {
             console.error('[ERROR] Build process failed:', buildErr);
             // Optionally, you can return build error in the response
