@@ -228,9 +228,10 @@
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
                 const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
-                if (!uuid || !filePath || !businessId) {
+                const htmlContent = document.getElementById('uuid-html-editor').value;
+                if (!uuid || !filePath || !businessId || !htmlContent) {
                     alert('Faltam atributos para publish.');
-                    console.error('Missing attributes for publishing:', { uuid, filePath, businessId });
+                    console.error('Missing attributes for publishing:', { uuid, filePath, businessId, htmlContent });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/publish-section', {
@@ -241,7 +242,8 @@
                     body: JSON.stringify({
                         updatableUuid: uuid,
                         webpageRelativePath: filePath,
-                        businessId: businessId
+                        businessId: businessId,
+                        htmlContent: htmlContent
                     }),
                 })
                 .then(response => response.json())
