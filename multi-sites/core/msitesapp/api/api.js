@@ -59,7 +59,7 @@ app.post('/publish-section', async (req, res) => {
                                                              businessId });
 
         // make a copy of the webpageRelativePath with the same name but adding .original and removing the extension
-        const originalPath = webpageRelativePath.replace(/(\.[^/.]+)$/, '.original$1');
+        const originalPath = webpageRelativePath.replace(/(\.[^/.]+)$/, '.original');
         const fs = await import('fs').then(mod => mod.promises);
         await fs.copyFile(webpageRelativePath, originalPath);
         console.log(`Created backup of original file at: ${originalPath}`);
