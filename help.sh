@@ -4,6 +4,7 @@ while true; do
   echo "==== Main Menu ===="
   echo "1) Publish msitesapp"
   echo "2) Run test-findUnique.js"
+  echo "3) Git commit and push"
   echo "q) Quit"
   read -p "Choose an option: " opt
 
@@ -20,6 +21,11 @@ while true; do
     2)
       echo "Running tests..."
       node ./multi-sites/core/lib/test-findUnique.js
+      ;;
+    3)
+      git add .
+      git commit -m "Auto-commit"
+      git push
       ;;
     q)
       echo "Goodbye!"
