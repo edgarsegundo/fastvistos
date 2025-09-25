@@ -77,9 +77,10 @@ app.post('/publish-section', async (req, res) => {
         // <div updatable-section-uuid="...">...</div> with htmlContent,
         // keeping the rest of the file unchanged.
         let fileData = await fs.readFile(webpageRelativePath, 'utf-8');
+        // Robust regex: match <div ... updatable-section-uuid="..." ...>...</div> with any attribute order/whitespace
         const uuidRegex = new RegExp(
-            `(<div updatable-section-uuid=["']${updatableUuid}["']>)([\s\S]*?)(<\/div>)`,
-            's'
+            `<div[^>]*\\bupdatable-section-uuid=["']${updatableUuid}["'][^>]*>([\\s\\S]*?)<\\/div>`,
+            'i'
         );
         const beforeMatch = fileData.match(uuidRegex);
         if (beforeMatch) {
@@ -90,7 +91,10 @@ app.post('/publish-section', async (req, res) => {
         }
         fileData = fileData.replace(
             uuidRegex,
-            `$1${htmlContent}$3`
+            (match, innerContent) => {
+                // Replace only the inner content, keep the original <div ...> and </div>
+                return match.replace(innerContent, htmlContent);
+            }
         );
         const afterMatch = fileData.match(uuidRegex);
         if (afterMatch) {
