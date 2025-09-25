@@ -50,21 +50,35 @@ app.post('/webpage-section', async (req, res) => {
 // POST endpoint to publish a WebPageSection and Version (for htmx or API)
 app.post('/publish-section', async (req, res) => {
     try {
-        const { webpageRelativePath, updatableUuid, businessId } = req.body;
-        if (!webpageRelativePath || !updatableUuid || !businessId) {
+        const { webpageRelativePath, updatableUuid, businessId, htmlContent } = req.body;
+        if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
         const result = await WebPageService.publishSection({ webpageRelativePath, 
                                                              updatableUuid, 
                                                              businessId });
 
-        // make a copy of the webpageRelativePath with the same name but adding .original and removing the extension
+        // Create a backup file with .original added before
+        // the extension, keeping the rest of the name unchanged.
         const originalPath = webpageRelativePath.replace(/(\.[^/.]+)$/, '.original');
         const fs = await import('fs').then(mod => mod.promises);
+
         await fs.copyFile(webpageRelativePath, originalPath);
         console.log(`Created backup of original file at: ${originalPath}`);
-        
-        
+
+        // Replace only the content inside the matching
+        // <div updatable-section-uuid="...">...</div> with htmlContent,
+        // keeping the rest of the file unchanged.
+        let fileData = await fs.readFile(webpageRelativePath, 'utf-8');
+        const uuidRegex = new RegExp(
+            `(<div updatable-section-uuid=["']${updatableUuid}["']>)([\s\S]*?)(<\/div>)`,
+            's'
+        );
+        fileData = fileData.replace(
+            uuidRegex,
+            `$1${htmlContent}$3`
+        );
+        await fs.writeFile(webpageRelativePath, fileData, 'utf-8');
 
         res.json(result);
     } catch (error) {
@@ -72,8 +86,5 @@ app.post('/publish-section', async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
-
-
-
 
 export default app;
