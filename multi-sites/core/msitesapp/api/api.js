@@ -60,11 +60,18 @@ app.post('/publish-section', async (req, res) => {
 
         // Create a backup file with .original added before
         // the extension, keeping the rest of the name unchanged.
+
         const originalPath = webpageRelativePath.replace(/(\.[^/.]+)$/, '.original');
         const fs = await import('fs').then(mod => mod.promises);
 
-        await fs.copyFile(webpageRelativePath, originalPath);
-        console.log(`Created backup of original file at: ${originalPath}`);
+        // Only copy if backup does not already exist
+        try {
+            await fs.access(originalPath);
+            console.log(`Backup already exists: ${originalPath}`);
+        } catch {
+            await fs.copyFile(webpageRelativePath, originalPath);
+            console.log(`Created backup of original file at: ${originalPath}`);
+        }
 
         // Replace only the content inside the matching
         // <div updatable-section-uuid="...">...</div> with htmlContent,
