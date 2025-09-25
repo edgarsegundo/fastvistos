@@ -111,7 +111,33 @@ app.post('/publish-section', async (req, res) => {
             throw err;
         }
 
-        res.json(result);
+        // Now run `npm run build:p2digital` to regenerate the site
+        const { exec } = await import('child_process');
+        function runBuild() {
+            return new Promise((resolve, reject) => {
+                exec('npm run build:p2digital', { cwd: process.cwd() }, (error, stdout, stderr) => {
+                    if (error) {
+                        console.error('[ERROR] Build failed:', error);
+                        return reject({ error: error.message, stdout, stderr });
+                    }
+                    resolve({ stdout, stderr });
+                });
+            });
+        }
+        let buildOutput = null;
+        try {
+            buildOutput = await runBuild();
+            console.log('[DEBUG] Build output:', buildOutput.stdout.slice(0, 1000));
+            if (buildOutput.stderr) {
+                console.warn('[WARN] Build stderr:', buildOutput.stderr.slice(0, 1000));
+            }
+        } catch (buildErr) {
+            console.error('[ERROR] Build process failed:', buildErr);
+            // Optionally, you can return build error in the response
+            return res.status(500).json({ ...result, buildError: buildErr });
+        }
+
+        res.json({ ...result, buildOutput });
     } catch (error) {
         console.error('Error in /publish-section:', error);
         res.status(500).json({ error: 'Internal server error.' });
