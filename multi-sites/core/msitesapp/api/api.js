@@ -81,11 +81,31 @@ app.post('/publish-section', async (req, res) => {
             `(<div updatable-section-uuid=["']${updatableUuid}["']>)([\s\S]*?)(<\/div>)`,
             's'
         );
+        const beforeMatch = fileData.match(uuidRegex);
+        if (beforeMatch) {
+            console.log('[DEBUG] Found matching section for replacement.');
+            console.log('[DEBUG] Before replacement snippet:', beforeMatch[0].slice(0, 200));
+        } else {
+            console.warn('[WARN] No matching section found for updatableUuid:', updatableUuid);
+        }
         fileData = fileData.replace(
             uuidRegex,
             `$1${htmlContent}$3`
         );
-        await fs.writeFile(webpageRelativePath, fileData, 'utf-8');
+        const afterMatch = fileData.match(uuidRegex);
+        if (afterMatch) {
+            console.log('[DEBUG] After replacement snippet:', afterMatch[0].slice(0, 200));
+        }
+
+        // Debug log before writing file
+        console.log(`[DEBUG] Writing updated content to: ${webpageRelativePath}`);
+        try {
+            await fs.writeFile(webpageRelativePath, fileData, 'utf-8');
+            console.log(`[DEBUG] Successfully wrote to: ${webpageRelativePath}`);
+        } catch (err) {
+            console.error(`[ERROR] Failed to write to: ${webpageRelativePath}`);
+            throw err;
+        }
 
         res.json(result);
     } catch (error) {
