@@ -36,14 +36,47 @@ validate_site_id() {
 
 deploy_on_vps() {
     local site_id=$1
-    local site_dist_path="/var/www/${site_id}"
+    local remote_path="/var/www/${site_id}"
+    local site_dist_path="./dist/${site_id}/"
     echo -e "${BLUE}🚀 Deploying site on VPS: $site_id${NC}"
-    echo -e "${BLUE}📁 Path: $site_dist_path${NC}"
+    echo -e "${BLUE}📁 Local path: $site_dist_path${NC}"
+    echo -e "${BLUE}📁 Deploy path: $remote_path${NC}"
     echo ""
-    # Example: Touch a file to indicate deployment (replace with real logic)
-    touch "$site_dist_path/.deployed-$(date +%Y%m%d%H%M%S)"
-    echo -e "${GREEN}✅ Deployment marker created in $site_dist_path${NC}"
-    # Add your real deployment steps here (e.g., restart services, clear cache, etc.)
+
+    # Step 1: Setup deployment directory (only if it does not exist)
+    if [[ ! -d "$remote_path" ]]; then
+        echo -e "${YELLOW}📁 Setting up deployment directory...${NC}"
+        if sudo mkdir -p "$remote_path" && sudo chown "$USER:$USER" "$remote_path"; then
+            echo -e "${GREEN}✅ Deployment directory setup completed${NC}"
+        else
+            echo -e "${RED}❌ Deployment directory setup failed${NC}"
+            exit 1
+        fi
+    fi
+
+    # Step 2: Sync files locally
+    echo ""
+    echo -e "${YELLOW}📤 Syncing files...${NC}"
+    if sudo rsync -avz --delete "$site_dist_path" "$remote_path"; then
+        echo -e "${GREEN}✅ Files synced successfully${NC}"
+    else
+        echo -e "${RED}❌ Rsync failed${NC}"
+        exit 1
+    fi
+
+    # Step 3: Fix ownership for web server
+    echo ""
+    echo -e "${YELLOW}🔧 Fixing file ownership for web server...${NC}"
+    if sudo chown -R www-data:www-data "$remote_path"; then
+        echo -e "${GREEN}✅ File ownership updated${NC}"
+    else
+        echo -e "${RED}❌ File ownership update failed${NC}"
+        exit 1
+    fi
+
+    echo ""
+    echo -e "${GREEN}🎉 Deployment completed successfully!${NC}"
+    echo -e "${BLUE}🌐 Site should be available at: https://${site_id}.com${NC}"
 }
 
 main() {
