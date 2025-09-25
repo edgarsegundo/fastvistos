@@ -85,7 +85,7 @@ app.post('/publish-section', async (req, res) => {
         const beforeMatch = fileData.match(uuidRegex);
         if (beforeMatch) {
             console.log('[DEBUG] Found matching section for replacement.');
-            console.log('[DEBUG] Before replacement snippet:', beforeMatch[0].slice(0, 200));
+            console.log('[DEBUG] Before replacement snippet:', beforeMatch[0].slice(0, 500));
         } else {
             console.warn('[WARN] No matching section found for updatableUuid:', updatableUuid);
         }
@@ -98,7 +98,7 @@ app.post('/publish-section', async (req, res) => {
         );
         const afterMatch = fileData.match(uuidRegex);
         if (afterMatch) {
-            console.log('[DEBUG] After replacement snippet:', afterMatch[0].slice(0, 200));
+            console.log('[DEBUG] After replacement snippet:', afterMatch[0].slice(0, 500));
         }
 
         // Debug log before writing file
