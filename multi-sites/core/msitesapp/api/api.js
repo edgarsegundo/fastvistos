@@ -115,7 +115,13 @@ app.post('/publish-section', async (req, res) => {
         const { exec } = await import('child_process');
         function runBuild() {
             return new Promise((resolve, reject) => {
-                exec('npm run build:p2digital', { cwd: process.cwd() }, (error, stdout, stderr) => {
+                exec('npm run build:p2digital', {
+                    cwd: process.cwd(),
+                    env: process.env
+                }, (error, stdout, stderr) => {
+                    // Log full output for troubleshooting
+                    console.log('[DEBUG] Build stdout (full):', stdout);
+                    console.warn('[DEBUG] Build stderr (full):', stderr);
                     if (error) {
                         console.error('[ERROR] Build failed:', error);
                         return reject({ error: error.message, stdout, stderr });
