@@ -137,6 +137,14 @@ app.post('/publish-section', async (req, res) => {
             if (buildOutput.stderr) {
                 console.warn('[WARN] Build stderr:', buildOutput.stderr.slice(0, 1000));
             }
+            // To allow passwordless sudo for deploy-site-vps.sh:
+            // 1. Edit the sudoers file with visudo (for safety).
+            // 2. Add this line (all on one line):
+            //   edgar ALL=(ALL) NOPASSWD: /home/edgar/Repos/fastvistos/deploy-site-vps.sh
+            //    (replace "edgar" with your username; check with `whoami`)
+            //    (use the full script path; check with `realpath deploy-site-vps.sh`)
+            // This lets only that script run as root, no password needed.
+            // This allows only that script to be run as root without a password, improving security over a blanket NOPASSWD rule.
             // Next step: run deploy-site-vps.sh with sudo (requires passwordless sudo setup)
             const deployScriptPath = '/home/edgar/Repos/fastvistos/deploy-site-vps.sh';
             const deploySiteId = 'p2digital';
