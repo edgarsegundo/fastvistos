@@ -160,7 +160,7 @@
             return textarea;
         }
 
-        async function createVersionComboBox(updatableSectionUuid, businessId, textarea) {
+        async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper) {
             let versionCombo = null;
             if (updatableSectionUuid && businessId) {
                 try {
@@ -203,21 +203,27 @@
                             versionCombo.value = data.versions.active_version.id;
                         }
 
-
-
                         // Set textarea to active version content if available
                         if (data.versions.active_version && 
                             typeof data.versions.active_version.file_content === 'string' &&
                             data.versions.active_version.file_content.trim() !== '') {
                             textarea.value = data.versions.active_version.file_content;
                         }
-                        // versionCombo.addEventListener('change', function() {
-                        //     const selected = versionCombo.options[versionCombo.selectedIndex];
-                        //     const html = selected.getAttribute('data-html');
-                        //     if (html !== null && html !== undefined) {
-                        //         textarea.value = html;
-                        //     }
-                        // });
+
+                        versionCombo.addEventListener('change', async function(event) {
+                            // event.preventDefault();
+                            // event.stopPropagation();
+                            // event.stopImmediatePropagation();
+                            const selected = versionCombo.options[versionCombo.selectedIndex];
+                            const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
+                            const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
+                            const resp = await fetch(url);
+                            const data = await resp.json();
+                            // Expecting { list: [...], active_version: { id, file_content } }
+                            if (data && data.file_content) {
+                                textarea.value = data.file_content;
+                            }
+                        });
                     }
                 } catch (err) {
                     console.error('Failed to fetch section versions:', err);
@@ -356,7 +362,7 @@
             const textarea = createTextarea(section_div_wrapper);
             const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
             const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
-            const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea);
+            const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper);
             const updateBtn = createUpdateButton();
             const cloneBtn = createCloneButton(section_div_wrapper);
             const publishBtn = createPublishButton(section_div_wrapper);
