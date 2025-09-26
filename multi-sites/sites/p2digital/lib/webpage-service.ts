@@ -337,21 +337,33 @@ export class WebPageService {
      * @param {string} params.siteId
      */
     static async getPageSectionVersionById({ id, siteId }: { id: string, siteId: string }) {
+        // if id has :original suffix, remove it and set a flag
+        const original = id.endsWith(':original');
+        console.log('[DEBUG] getPageSectionVersionById called with:', { id, siteId, original });
+        if (original) {
+            id = id.replace(/:original$/, '');
+        }
+
+        console.log('[DEBUG] Fetching web_page_section_version with id:', id);
+
         const ver = await prisma.web_page_section_version.findUnique({
             where: { id }
-        });        
+        });
+
+        console.log('[DEBUG] Fetched version:', ver);
 
         if (ver && ver.file_path) {
-            let file_path = ver.file_path;
-
-            if (id === '0') {
-                // If id is '0', it means the original version without suffix
+            let file_path = null;
+            if (original) {
+                // If original, it means the original version without suffix
                 // So we need to replace the _number suffix with _0
-                file_path = file_path.replace(/_\d+$/, '_0');
+                file_path = ver.file_path.replace(/_\d+$/, '_0');
+            } else {
+                file_path = ver.file_path;
             }
 
             const filePath = `/var/www/${siteId}/webpage_sections/${file_path}`;
-            let file_content = '';
+            let file_content = 'Conteudo corrompido. Por favor, crie uma nova versao a partir de uma versão anterior, posterior ou a original que não esteja corrompida.';
             try {
                 file_content = fs.readFileSync(filePath, 'utf8');
                 console.log('[DEBUG] Read file_content from:', filePath);
@@ -360,7 +372,6 @@ export class WebPageService {
                 // File may not exist or be readable
                 console.error('[DEBUG] Error reading file_content from:', filePath, err);
                 // [BUG][P0][DEV] Needs monitoring, logging, and notification
-                file_content = '';
             }
             return { id: ver.id, file_content };
         } else {
