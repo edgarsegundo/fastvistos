@@ -52,8 +52,8 @@ app.post('/webpage-section', async (req, res) => {
 // POST endpoint to publish a WebPageSection and Version (for htmx or API)
 app.post('/publish-section', async (req, res) => {
     try {
-        const { webpageRelativePath, updatableUuid, businessId, htmlContent } = req.body;
-        if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent) {
+        const { webpageRelativePath, updatableUuid, businessId, htmlContent, siteId, versionId } = req.body;
+        if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent || !siteId || !versionId) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
         const result = await WebPageService.publishSection({ webpageRelativePath, 
@@ -113,6 +113,18 @@ app.post('/publish-section', async (req, res) => {
             throw err;
         }
 
+        // keep a copy of the original inner content for reference
+        // Extract the inner content again for saving
+        const match = fileData.match(uuidRegex);
+        if (match && match[1]) {
+            const originalInnerContent = match[1]; // This is the inner HTML of the div
+            // Write to a file, e.g.:
+            await fs.writeFile(`${versionId}_0:original`, originalInnerContent, 'utf-8');
+            console.log('Original inner content saved.');
+        } else {
+            console.warn('No matching section found for updatableUuid:', updatableUuid);
+        }
+
         // Now run `npm run build:p2digital` to regenerate the site
         const { exec } = await import('child_process');
         function runBuild() {
@@ -149,8 +161,7 @@ app.post('/publish-section', async (req, res) => {
             // This allows only that script to be run as root without a password, improving security over a blanket NOPASSWD rule.
             // Next step: run deploy-site-vps.sh with sudo (requires passwordless sudo setup)
             const deployScriptPath = '/home/edgar/Repos/fastvistos/deploy-site-vps.sh';
-            const deploySiteId = 'p2digital';
-            const deployCmd = `sudo ${deployScriptPath} ${deploySiteId}`;
+            const deployCmd = `sudo ${deployScriptPath} ${siteId}`;
             await new Promise((resolve, reject) => {
                 exec(deployCmd, {
                     cwd: process.cwd(),

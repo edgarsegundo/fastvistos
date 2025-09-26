@@ -190,12 +190,6 @@
                             // and then get the original version by sending :original suffix
                             defaultOpt.value = opt.value + ':original';
                             opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
-                            // // If this is the active version, use the file_content from data.versions.active_version
-                            // if (data.versions.active_version && data.versions.active_version.id === ver.id) {
-                            //     opt.setAttribute('data-html', data.versions.active_version.file_content || '');
-                            // } else {
-                            //     opt.setAttribute('data-html', ver.html_content || '');
-                            // }
                             versionCombo.appendChild(opt);
                         });
                         versionCombo.appendChild(defaultOpt);
@@ -302,7 +296,7 @@
             return cloneBtn;
         }
 
-        function createPublishButton(section_div_wrapper) {
+        function createPublishButton(section_div_wrapper, versionCombo) {
             const publishBtn = document.createElement('button');
             publishBtn.type = 'button';
             publishBtn.textContent = 'Publicar';
@@ -319,8 +313,13 @@
             publishBtn.onclick = () => {
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
+                const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
                 const htmlContent = document.getElementById('uuid-html-editor').value;
+
+                // versionCombo
+                const versionId = versionCombo.value;
+                console.log('Publishing version ID:', versionId);
+
                 if (!uuid || !filePath || !businessId || !htmlContent) {
                     alert('Faltam atributos para publish.');
                     console.error('Missing attributes for publishing:', { uuid, filePath, businessId, htmlContent });
@@ -335,7 +334,9 @@
                         updatableUuid: uuid,
                         webpageRelativePath: filePath,
                         businessId: businessId,
-                        htmlContent: htmlContent
+                        htmlContent: htmlContent,
+                        siteId: section_div_wrapper.getAttribute('updatable-section-siteid'),
+                        versionId: versionId,
                     }),
                 })
                 .then(response => response.json())
@@ -368,7 +369,7 @@
             const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper);
             const updateBtn = createUpdateButton();
             const cloneBtn = createCloneButton(section_div_wrapper);
-            const publishBtn = createPublishButton(section_div_wrapper);
+            const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
 
             modalContent.appendChild(updateBtn);
             modalContent.appendChild(cloneBtn);
