@@ -247,8 +247,10 @@ export class WebPageService {
                 is_removed: false,
             },
         });
-        if (!section) return [];
-        return await prisma.web_page_section_version.findMany({
+        if (!section) {
+            return { list: [], active_version: null };
+        }
+        const versions = await prisma.web_page_section_version.findMany({
             where: {
                 web_page_section_id: section.id,
                 is_removed: false,
@@ -257,6 +259,27 @@ export class WebPageService {
                 created: 'desc',
             },
         });
+        // Find active version and read its file content
+        let active_version = null;
+        if (section.active_version_id) {
+            const activeVer = versions.find((v: any) => v.id === section.active_version_id);
+            if (activeVer && activeVer.file_path) {
+                const siteId = 'p2digital';
+                const filePath = `/var/www/${siteId}/webpage_sections/${activeVer.file_path}`;
+                let file_content = '';
+                try {
+                    file_content = fs.readFileSync(filePath, 'utf8');
+                } catch (err) {
+                    // File may not exist or be readable
+                    file_content = '';
+                }
+                active_version = {
+                    id: activeVer.id,
+                    file_content
+                };
+            }
+        }
+        return { list: versions, active_version };
     }
-
+  
 }

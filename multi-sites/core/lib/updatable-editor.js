@@ -71,8 +71,8 @@
             section_div_wrapper.parentNode.insertBefore(wrapper, section_div_wrapper);
         });
 
-        async function showModal(section_div_wrapper) {
-            document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
+        function createModalContainer() {
+
             const modal = document.createElement('div');
             modal.className = 'uuid-modal';
             Object.assign(modal.style, {
@@ -87,6 +87,10 @@
                 justifyContent: 'center',
                 zIndex: 9999,
             });
+            return modal;
+        }
+
+        function createModalContent() {
             const modalContent = document.createElement('div');
             Object.assign(modalContent.style, {
                 background: '#fff',
@@ -97,6 +101,10 @@
                 boxShadow: '0 4px 32px rgba(0,0,0,0.2)',
                 position: 'relative',
             });
+            return modalContent;
+        }
+
+        function createCloseButton(modal) {
             const closeBtn = document.createElement('button');
             closeBtn.textContent = '×';
             Object.assign(closeBtn.style, {
@@ -110,16 +118,12 @@
                 color: '#111',
             });
             closeBtn.onclick = () => modal.remove();
-            // Close modal if user clicks outside modalContent
-            modal.addEventListener('mousedown', function (e) {
-                if (!modalContent.contains(e.target)) {
-                    modal.remove();
-                }
-            });
-            // Modal title using updatable-section-title
+            return closeBtn;
+        }
+
+        function createModalTitle(section_div_wrapper) {
             const modalTitle = document.createElement('div');
-            modalTitle.textContent =
-                section_div_wrapper.getAttribute('updatable-section-title') || 'Editar HTML';
+            modalTitle.textContent = section_div_wrapper.getAttribute('updatable-section-title') || 'Editar HTML';
             Object.assign(modalTitle.style, {
                 marginBottom: '8px',
                 fontWeight: 'bold',
@@ -127,7 +131,10 @@
                 textAlign: 'center',
                 color: '#000',
             });
+            return modalTitle;
+        }
 
+        function createLabel() {
             const label = document.createElement('div');
             label.textContent = `Edição de HTML`;
             Object.assign(label.style, {
@@ -137,6 +144,10 @@
                 color: '#666',
                 textAlign: 'center',
             });
+            return label;
+        }
+
+        function createTextarea(section_div_wrapper) {
             const textarea = document.createElement('textarea');
             textarea.id = 'uuid-html-editor';
             Object.assign(textarea.style, {
@@ -146,11 +157,10 @@
                 background: '#fff',
             });
             textarea.value = section_div_wrapper.innerHTML;
+            return textarea;
+        }
 
-            // --- Version ComboBox ---
-            const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
-            // const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-            const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
+        async function createVersionComboBox(updatableSectionUuid, businessId, textarea) {
             let versionCombo = null;
             if (updatableSectionUuid && businessId) {
                 try {
@@ -190,7 +200,10 @@
                     console.error('Failed to fetch section versions:', err);
                 }
             }
+            return versionCombo;
+        }
 
+        function createUpdateButton() {
             const updateBtn = document.createElement('button');
             updateBtn.type = 'button';
             updateBtn.textContent = 'Update';
@@ -203,8 +216,10 @@
                 borderRadius: '4px',
                 cursor: 'pointer',
             });
+            return updateBtn;
+        }
 
-            // Clonar button (htmx POST)
+        function createCloneButton(section_div_wrapper) {
             const cloneBtn = document.createElement('button');
             cloneBtn.type = 'button';
             cloneBtn.textContent = 'Clonar';
@@ -219,19 +234,16 @@
                 cursor: 'pointer',
             });
             cloneBtn.onclick = () => {
-                // Prepare data for htmx POST
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
+                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
                 const htmlContent = document.getElementById('uuid-html-editor').value;
                 if (!uuid || !title || !filePath || !businessId || !htmlContent) {
                     alert('Faltam atributos para clonar.');
-                    // [CRITICAL][P0][DEV] Needs monitoring, logging, and notification
                     console.error('Missing attributes for cloning:', { uuid, title, filePath, businessId, htmlContent });
                     return;
                 }
-                // Use fetch to POST without reloading the page
                 fetch('https://p2digital.com.br/msitesapp/api/webpage-section', {
                     method: 'POST',
                     headers: {
@@ -247,15 +259,16 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Optionally handle response
                     console.log('Clonar response:', data);
                 })
                 .catch(error => {
                     console.error('Clonar error:', error);
                 });
             };
+            return cloneBtn;
+        }
 
-            // Publish button
+        function createPublishButton(section_div_wrapper) {
             const publishBtn = document.createElement('button');
             publishBtn.type = 'button';
             publishBtn.textContent = 'Publicar';
@@ -272,7 +285,7 @@
             publishBtn.onclick = () => {
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
+                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
                 const htmlContent = document.getElementById('uuid-html-editor').value;
                 if (!uuid || !filePath || !businessId || !htmlContent) {
                     alert('Faltam atributos para publish.');
@@ -299,15 +312,36 @@
                     console.error('Publish error:', error);
                 });
             };
+            return publishBtn;
+        }
+
+        // --- Main showModal function ---
+        async function showModal(section_div_wrapper) {
+            document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
+            const modal = createModalContainer();
+            const modalContent = createModalContent();
+            const closeBtn = createCloseButton(modal);
+            modal.addEventListener('mousedown', function (e) {
+                if (!modalContent.contains(e.target)) {
+                    modal.remove();
+                }
+            });
+            const modalTitle = createModalTitle(section_div_wrapper);
+            const label = createLabel();
+            const textarea = createTextarea(section_div_wrapper);
+            const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
+            const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
+            const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea);
+            const updateBtn = createUpdateButton();
+            const cloneBtn = createCloneButton(section_div_wrapper);
+            const publishBtn = createPublishButton(section_div_wrapper);
 
             modalContent.appendChild(updateBtn);
             modalContent.appendChild(cloneBtn);
             modalContent.appendChild(publishBtn);
-
             modalContent.appendChild(closeBtn);
             modalContent.appendChild(modalTitle);
             modalContent.appendChild(label);
-            // Insert versionCombo above textarea if it exists
             if (versionCombo) {
                 modalContent.appendChild(versionCombo);
             }
