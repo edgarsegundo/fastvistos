@@ -207,7 +207,7 @@ app.get('/page-section-version', async (req, res) => {
         if (!id || typeof id !== 'string' || !siteId || typeof siteId !== 'string') {
             return res.status(400).json({ error: 'Missing or invalid id or siteId query param.' });
         }
-        const version = await WebPageService.getPageSectionVersionoById({
+        const version = await WebPageService.getPageSectionVersionById({
             id,
             siteId
         });
