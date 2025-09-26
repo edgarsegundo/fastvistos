@@ -70,6 +70,7 @@ export class WebPageService {
                 console.error('[DEBUG] webPage not found for', { webpageRelativePath, businessId });
                 throw new Error('WebPage not found for given relative_path and business_id');
             }
+
             // 2. Find or create the WebPageSection
             let webPageSection;
             try {
@@ -110,6 +111,7 @@ export class WebPageService {
                 }
             }
             const webPageSectionId = webPageSection.id;
+
             // 3. Count existing versions for this section
             let versionCount = 0;
             try {
@@ -124,6 +126,8 @@ export class WebPageService {
                 throw err;
             }
             const filePath = `${updatableUuid}_${versionCount + 1}`;
+
+
             // 4. Create the webpage_sections directory if it doesn't exist
             const { exec } = await import('child_process');
             // siteId already declared above
@@ -325,5 +329,37 @@ export class WebPageService {
         return { list: versions, active_version };
     }
 
+
+    /**
+     * Get a specific version by its ID, including reading the HTML content from disk.
+     * @param {object} params
+     * @param {string} params.id
+     * @param {string} params.siteId
+     */
+    static async getPageSectionVersionById({ id, siteId }: { id: string, siteId: string }) {
+        const ver = await prisma.web_page_section_version.findUnique({
+            where: { id }
+        });        
+        console.log('[DEBUG] web_page_section_version:', ver);
+
+        if (ver && ver.file_path) {
+            const filePath = `/var/www/${siteId}/webpage_sections/${ver.file_path}`;
+            let file_content = '';
+            try {
+                file_content = fs.readFileSync(filePath, 'utf8');
+                console.log('[DEBUG] Read file_content from:', filePath);
+            } catch (err) {
+                // File may not exist or be readable
+                console.error('[DEBUG] Error reading file_content from:', filePath, err);
+                // [BUG][P0][DEV] Needs monitoring, logging, and notification
+                file_content = '';
+            }
+            return { id: ver.id, file_content };
+        } else {
+            // [BUG][P0][DEV] Needs monitoring, logging, and notification
+            console.log('[DEBUG] ver is null or has no file_path:', ver);
+            return { id: ver.id, file_content: ''};
+        }
+    }
 
 }

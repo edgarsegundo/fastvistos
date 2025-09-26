@@ -10,4 +10,5 @@ Example:
 
 ```js
 // [RISK][P0][DEV] Needs monitoring, logging, and notification
+// [BUG][P0][DEV] Needs monitoring, logging, and notification
 ```

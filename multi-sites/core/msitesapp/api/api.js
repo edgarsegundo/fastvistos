@@ -199,4 +199,22 @@ app.get('/page-section-versions', async (req, res) => {
     }
 });
 
+
+app.get('/page-section-version', async (req, res) => {
+    try {
+        const { id, siteId } = req.query;
+        if (!id || typeof id !== 'string' || !siteId || typeof siteId !== 'string') {
+            return res.status(400).json({ error: 'Missing or invalid id or siteId query param.' });
+        }
+        const version = await WebPageService.getPageSectionVersionoById({
+            id,
+            siteId
+        });
+        res.json({ version });
+    } catch (error) {
+        console.error('Error in /page-section-version:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
 export default app;

@@ -177,15 +177,17 @@
                         versionCombo.style.fontSize = '1em';
                         versionCombo.style.borderRadius = '4px';
                         versionCombo.style.border = '1px solid #ccc';
+                        versionCombo.style.color = '#222';
+                        versionCombo.style.background = '#fff';                        
                         // Add default option
                         const defaultOpt = document.createElement('option');
                         defaultOpt.value = '';
-                        defaultOpt.textContent = 'Escolha uma versão para visualizar';
+                        defaultOpt.textContent = 'Versão Original';
                         versionCombo.appendChild(defaultOpt);
                         data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
-                            opt.value = ver.file_path || ver.id || idx;
-                            opt.textContent = ver.created ? (new Date(ver.created)).toLocaleString() : `Versão ${idx+1}`;
+                            opt.value = ver.id.toString();
+                            opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
                             // If this is the active version, use the file_content from data.versions.active_version
                             if (data.versions.active_version && data.versions.active_version.id === ver.id) {
                                 opt.setAttribute('data-html', data.versions.active_version.file_content || '');
@@ -194,6 +196,15 @@
                             }
                             versionCombo.appendChild(opt);
                         });
+
+                        if (data.versions.active_version) {
+                            console.log('[DEBUG] Active version ID:', data.versions.active_version.id);
+                            // Pre-select the active version in the combo box
+                            versionCombo.value = data.versions.active_version.id;
+                        }
+
+
+
                         // Set textarea to active version content if available
                         if (data.versions.active_version && 
                             typeof data.versions.active_version.file_content === 'string' &&
