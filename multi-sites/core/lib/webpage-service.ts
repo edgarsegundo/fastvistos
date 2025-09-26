@@ -237,12 +237,13 @@ export class WebPageService {
      * @param {string} params.updatableSectionUuid
      * @param {string} params.updatableSectionFilepath
      */
-    static async getPageSectionVersions({ updatableSectionUuid, updatableSectionFilepath }: { updatableSectionUuid: string, updatableSectionFilepath: string }) {
-        // Find the web_page_section by updatable_uuid and file_path
+    static async getPageSectionVersions({ updatableSectionUuid, businessId }: { updatableSectionUuid: string, businessId: string }) {
+        const updatableUuidClean = updatableSectionUuid.replace(/-/g, '');
+        const businessIdClean = businessId.replace(/-/g, '');
         const section = await prisma.web_page_section.findFirst({
             where: {
-                updatable_uuid: updatableSectionUuid,
-                file_path: updatableSectionFilepath,
+                updatable_uuid: updatableUuidClean,
+                business_id: businessIdClean,
                 is_removed: false,
             },
         });
