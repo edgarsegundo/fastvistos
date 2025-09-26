@@ -71,8 +71,8 @@
             section_div_wrapper.parentNode.insertBefore(wrapper, section_div_wrapper);
         });
 
+        // --- Modal UI helpers ---
         function createModalContainer() {
-
             const modal = document.createElement('div');
             modal.className = 'uuid-modal';
             Object.assign(modal.style, {
@@ -167,27 +167,24 @@
                     const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(updatableSectionUuid)}&businessId=${encodeURIComponent(businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
-                    if (Array.isArray(data.versions) && data.versions.length > 0) {
-                        versionCombo = document.createElement('select');
-                        versionCombo.style.marginBottom = '12px';
-                        versionCombo.style.display = 'block';
-                        versionCombo.style.width = '100%';
-                        versionCombo.style.padding = '6px';
-                        versionCombo.style.fontSize = '1em';
-                        versionCombo.style.borderRadius = '4px';
-                        versionCombo.style.border = '1px solid #ccc';
-                        // Add default option
-                        const defaultOpt = document.createElement('option');
-                        defaultOpt.value = '';
-                        defaultOpt.textContent = 'Escolha uma versão para visualizar';
-                        versionCombo.appendChild(defaultOpt);
-                        data.versions.forEach((ver, idx) => {
+                    // Expecting { list: [...], active_version: { id, file_content } }
+                    if (data && Array.isArray(data.list) && data.list.length > 0) {
+                        data.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.file_path || ver.id || idx;
                             opt.textContent = ver.created ? (new Date(ver.created)).toLocaleString() : `Versão ${idx+1}`;
-                            opt.setAttribute('data-html', ver.html_content || '');
+                            // If this is the active version, use the file_content from data.active_version
+                            if (data.active_version && data.active_version.id === ver.id) {
+                                opt.setAttribute('data-html', data.active_version.file_content || '');
+                            } else {
+                                opt.setAttribute('data-html', ver.html_content || '');
+                            }
                             versionCombo.appendChild(opt);
                         });
+                        // Set textarea to active version content if available
+                        if (data.active_version && typeof data.active_version.file_content === 'string') {
+                            textarea.value = data.active_version.file_content;
+                        }
                         versionCombo.addEventListener('change', function() {
                             const selected = versionCombo.options[versionCombo.selectedIndex];
                             const html = selected.getAttribute('data-html');
