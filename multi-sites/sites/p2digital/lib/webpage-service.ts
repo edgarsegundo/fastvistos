@@ -232,21 +232,33 @@ export class WebPageService {
     }
 
     /**
-     * Get all versions for a section by updatable-section-uuid and businessId.
+     * Get all versions for a section by updatable-section-uuid and updatable-section-filepath.
      * @param {object} params
      * @param {string} params.updatableSectionUuid
-     * @param {string} params.businessId
+     * @param {string} params.updatableSectionFilepath
      */
     static async getPageSectionVersions({ updatableSectionUuid, businessId }: { updatableSectionUuid: string, businessId: string }) {
+        const updatableUuidClean = updatableSectionUuid.replace(/-/g, '');
+        const businessIdClean = businessId.replace(/-/g, '');
         const section = await prisma.web_page_section.findFirst({
             where: {
-                updatable_uuid: updatableSectionUuid,
-                business_id: businessId,
+                updatable_uuid: updatableUuidClean,
+                business_id: businessIdClean,
                 is_removed: false,
             },
         });
-        if (!section) return [];
-        return await prisma.web_page_section_version.findMany({
+        if (!section) {
+            return { list: [], active_version: null };
+        }
+        const versions = await prisma.web_page_section_version.findMany({
+            where: {
+                web_page_section_id: section.id,
+                is_removed: false,
+            },
+            orderBy: {
+                created: 'desc',
+            },
+        });
 
         // Find active version and read its file content
         let active_version = null;
