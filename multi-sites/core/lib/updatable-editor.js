@@ -195,16 +195,18 @@
                             versionCombo.appendChild(opt);
                         });
                         // Set textarea to active version content if available
-                        if (data.versions.active_version && typeof data.versions.active_version.file_content === 'string') {
+                        if (data.versions.active_version && 
+                            typeof data.versions.active_version.file_content === 'string' &&
+                            data.versions.active_version.file_content.trim() !== '') {
                             textarea.value = data.versions.active_version.file_content;
                         }
-                        versionCombo.addEventListener('change', function() {
-                            const selected = versionCombo.options[versionCombo.selectedIndex];
-                            const html = selected.getAttribute('data-html');
-                            if (html !== null && html !== undefined) {
-                                textarea.value = html;
-                            }
-                        });
+                        // versionCombo.addEventListener('change', function() {
+                        //     const selected = versionCombo.options[versionCombo.selectedIndex];
+                        //     const html = selected.getAttribute('data-html');
+                        //     if (html !== null && html !== undefined) {
+                        //         textarea.value = html;
+                        //     }
+                        // });
                     }
                 } catch (err) {
                     console.error('Failed to fetch section versions:', err);
@@ -247,7 +249,8 @@
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
+                const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
+                const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
                 const htmlContent = document.getElementById('uuid-html-editor').value;
                 if (!uuid || !title || !filePath || !businessId || !htmlContent) {
                     alert('Faltam atributos para clonar.');
@@ -264,7 +267,8 @@
                         title: title,
                         webpageRelativePath: filePath,
                         businessId: businessId,
-                        htmlContent: htmlContent
+                        htmlContent: htmlContent,
+                        siteId: siteId
                     }),
                 })
                 .then(response => response.json())
