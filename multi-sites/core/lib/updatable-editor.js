@@ -183,7 +183,6 @@
                         const defaultOpt = document.createElement('option');
                         // defaultOpt.value = '0';
                         defaultOpt.textContent = 'Versão Original';
-                        versionCombo.appendChild(defaultOpt);
                         data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.id.toString();
@@ -191,14 +190,15 @@
                             // and then get the original version by sending :original suffix
                             defaultOpt.value = opt.value + ':original';
                             opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
-                            // If this is the active version, use the file_content from data.versions.active_version
-                            if (data.versions.active_version && data.versions.active_version.id === ver.id) {
-                                opt.setAttribute('data-html', data.versions.active_version.file_content || '');
-                            } else {
-                                opt.setAttribute('data-html', ver.html_content || '');
-                            }
+                            // // If this is the active version, use the file_content from data.versions.active_version
+                            // if (data.versions.active_version && data.versions.active_version.id === ver.id) {
+                            //     opt.setAttribute('data-html', data.versions.active_version.file_content || '');
+                            // } else {
+                            //     opt.setAttribute('data-html', ver.html_content || '');
+                            // }
                             versionCombo.appendChild(opt);
                         });
+                        versionCombo.appendChild(defaultOpt);
 
                         if (data.versions.active_version) {
                             console.log('[DEBUG] Active version ID:', data.versions.active_version.id);
