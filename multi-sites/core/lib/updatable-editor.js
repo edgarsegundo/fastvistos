@@ -164,7 +164,7 @@
             let versionCombo = null;
             if (updatableSectionUuid && businessId) {
                 try {
-                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(updatableSectionUuid)}&businessId=${encodeURIComponent(businessId)}`;
+                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(updatableSectionUuid)}&business-id=${encodeURIComponent(businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
                     // Expecting { list: [...], active_version: { id, file_content } }
