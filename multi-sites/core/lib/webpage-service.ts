@@ -259,7 +259,6 @@ export class WebPageService {
                 created: 'desc',
             },
         });
-
         // Find active version and read its file content
         let active_version = null;
         if (section.active_version_id) {
@@ -282,5 +281,5 @@ export class WebPageService {
         }
         return { list: versions, active_version };
     }
-
+  
 }
