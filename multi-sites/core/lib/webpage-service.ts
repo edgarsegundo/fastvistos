@@ -6,6 +6,7 @@ interface CreateSectionAndVersionParams {
     updatableUuid: string;
     businessId: string;
     htmlContent: string;
+    siteId: string;
 }
 
 export interface PublishSectionParams {
@@ -26,11 +27,12 @@ export class WebPageService {
      * @param {string} updatableUuid
      * @param {string} businessId
      * @param {string} htmlContent
+     * @param {string} siteId
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, htmlContent }: CreateSectionAndVersionParams) {
+    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId }: CreateSectionAndVersionParams) {
 
-        if (!prisma) {
+    if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
         }
@@ -122,7 +124,34 @@ export class WebPageService {
                 throw err;
             }
             const filePath = `${updatableUuid}_${versionCount + 1}`;
-            // 4. Create the new version
+            // 4. Create the webpage_sections directory if it doesn't exist
+            const { exec } = await import('child_process');
+            // siteId already declared above
+            const sectionsDir = `/var/www/${siteId}/webpage_sections`;
+            // Ensure directory exists and is owned by edgar
+            if (!fs.existsSync(sectionsDir)) {
+                try {
+                    await new Promise((resolve, reject) => {
+                        // add comment
+                        exec(`sudo mkdir -p ${sectionsDir} && sudo chown -R edgar:edgar ${sectionsDir}`, (error, stdout, stderr) => {
+                            if (error) {
+                                console.error('[ERROR] Failed to create/chown webpage_sections:', error);
+                                return reject(error);
+                            }
+                            console.log('[DEBUG] mkdir/chown stdout:', stdout);
+                            console.warn('[DEBUG] mkdir/chown stderr:', stderr);
+                            resolve(true);
+                        });
+                    });
+                } catch (err) {
+                    // Throw to roll back transaction
+                    throw new Error('Failed to create or chown webpage_sections directory: ' + err);
+                }
+            } else {
+                console.log('[DEBUG] Directory already exists, skipping mkdir/chown:', sectionsDir);
+            }
+
+            // 5. Create the new version
             let webPageSectionVersion;
             try {
                 if (!businessId) {
@@ -151,7 +180,7 @@ export class WebPageService {
 
             // Write HTML to file on disk
             // You may want to replace 'siteid' with a real value or param
-            const siteId = 'p2digital';
+            // siteId already declared above
             const baseDir = `/var/www/${siteId}/webpage_sections`;
             const outFile = path.join(baseDir, filePath);
             try {
