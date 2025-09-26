@@ -181,12 +181,15 @@
                         versionCombo.style.background = '#fff';                        
                         // Add default option
                         const defaultOpt = document.createElement('option');
-                        defaultOpt.value = '0';
+                        // defaultOpt.value = '0';
                         defaultOpt.textContent = 'Versão Original';
                         versionCombo.appendChild(defaultOpt);
                         data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.id.toString();
+                            // I need to send any version so I can get the webpage section id 
+                            // and then get the original version by sending :original suffix
+                            defaultOpt.value = opt.value + ':original';
                             opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
                             // If this is the active version, use the file_content from data.versions.active_version
                             if (data.versions.active_version && data.versions.active_version.id === ver.id) {
