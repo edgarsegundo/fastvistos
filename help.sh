@@ -24,6 +24,8 @@ while true; do
   echo "2) Run test-findUnique.js"
   echo "3) Git commit and push"
   echo "4) Enter MySQL shell (dbshell)"
+  echo "5) View msitesapp logs"
+  echo "6) Clear msitesapp logs"
   echo "q) Quit"
   read -p "Choose an option: " opt
 
@@ -55,6 +57,12 @@ while true; do
       DB_PASSWORD=$(echo $DB_PASSWORD | tr -d '"')
       DB_NAME=$(echo $DB_NAME | tr -d '"')
       docker exec -it mysql bash -c "mysql -u$DB_USER -p$DB_PASSWORD $DB_NAME"
+      ;;
+    5)
+      pm2 logs msitesapp
+      ;;
+    6)
+      pm2 flush msitesapp
       ;;
     q)
       echo "Goodbye!"

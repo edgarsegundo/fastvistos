@@ -13,6 +13,7 @@ export interface PublishSectionParams {
     webpageRelativePath: string;
     updatableUuid: string;
     businessId: string;
+    versionId: string;
 }
 
 import { prisma } from './prisma.js';
@@ -202,7 +203,7 @@ export class WebPageService {
         });
     }
 
-    static async publishSection({ webpageRelativePath, updatableUuid, businessId }: PublishSectionParams) {
+    static async publishSection({ webpageRelativePath, updatableUuid, businessId, versionId }: PublishSectionParams) {
 
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
@@ -238,10 +239,26 @@ export class WebPageService {
             throw new Error('web_page_section not found for given updatableUuid and web_page_id');
         }
 
-        // 3. Get the active_version_id
-        const activeVersionId = webPageSection.active_version_id;
-        if (!activeVersionId) {
-            throw new Error('No active_version_id set for this web_page_section');
+        let activeVersionId = null;
+        if (versionId) {
+            // set the active_version_id to the provided versionId
+            await prisma.web_page_section.update({
+                where: {
+                    id: webPageSection.id,
+                },
+                data: {
+                    active_version_id: versionId,
+                    modified: new Date(),
+                },
+            });
+            activeVersionId = versionId;
+            console.log(`[DEBUG] Set active_version_id to ${versionId} for web_page_section ${webPageSection.id}`);
+        } else {
+            // 3. Get the active_version_id
+            activeVersionId = webPageSection.active_version_id;
+            if (!activeVersionId) {
+                throw new Error('No active_version_id set for this web_page_section');
+            }
         }
 
         // 4. Get the web_page_section_version by id
