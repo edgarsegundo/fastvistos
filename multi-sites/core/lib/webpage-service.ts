@@ -339,13 +339,18 @@ export class WebPageService {
     static async getPageSectionVersionById({ id, siteId }: { id: string, siteId: string }) {
         // if id has :original suffix, remove it and set a flag
         const original = id.endsWith(':original');
+        console.log('[DEBUG] getPageSectionVersionById called with:', { id, siteId, original });
         if (original) {
             id = id.replace(/:original$/, '');
         }
 
+        console.log('[DEBUG] Fetching web_page_section_version with id:', id);
+
         const ver = await prisma.web_page_section_version.findUnique({
             where: { id }
         });
+
+        console.log('[DEBUG] Fetched version:', ver);
 
         if (ver && ver.file_path) {
             let file_path = null;
