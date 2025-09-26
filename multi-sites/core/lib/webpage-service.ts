@@ -355,6 +355,7 @@ export class WebPageService {
             try {
                 file_content = fs.readFileSync(filePath, 'utf8');
                 console.log('[DEBUG] Read file_content from:', filePath);
+                console.log('[DEBUG] file_content:', file_content.slice(0, 30) + (file_content.length > 30 ? '...' : ''));
             } catch (err) {
                 // File may not exist or be readable
                 console.error('[DEBUG] Error reading file_content from:', filePath, err);
