@@ -183,7 +183,7 @@ app.post('/publish-section', async (req, res) => {
 // Best practice: use GET for idempotent, read-only queries (like this)
 app.get('/page-section-versions', async (req, res) => {
     try {
-        const { 'updatable-section-uuid': updatableSectionUuid, businessId } = req.query;
+        const { 'updatable-section-uuid': updatableSectionUuid, 'business-id': businessId } = req.query;
         if (!updatableSectionUuid || typeof updatableSectionUuid !== 'string' ||
             !businessId || typeof businessId !== 'string') {
             return res.status(400).json({ error: 'Missing or invalid updatable-section-uuid or businessId query param.' });
@@ -202,7 +202,8 @@ app.get('/page-section-versions', async (req, res) => {
 
 app.get('/page-section-version', async (req, res) => {
     try {
-        const { id, siteId } = req.query;
+        // const { id, siteId } = req.query;
+        const { 'site-id': siteId, id } = req.query;
         if (!id || typeof id !== 'string' || !siteId || typeof siteId !== 'string') {
             return res.status(400).json({ error: 'Missing or invalid id or siteId query param.' });
         }
