@@ -340,14 +340,22 @@ export class WebPageService {
         const ver = await prisma.web_page_section_version.findUnique({
             where: { id }
         });        
-        console.log('[DEBUG] web_page_section_version:', ver);
 
         if (ver && ver.file_path) {
-            const filePath = `/var/www/${siteId}/webpage_sections/${ver.file_path}`;
+            let file_path = ver.file_path;
+
+            if (id === '0') {
+                // If id is '0', it means the original version without suffix
+                // So we need to replace the _number suffix with _0
+                file_path = file_path.replace(/_\d+$/, '_0');
+            }
+
+            const filePath = `/var/www/${siteId}/webpage_sections/${file_path}`;
             let file_content = '';
             try {
                 file_content = fs.readFileSync(filePath, 'utf8');
                 console.log('[DEBUG] Read file_content from:', filePath);
+                console.log('[DEBUG] file_content:', file_content.slice(0, 30) + (file_content.length > 30 ? '...' : ''));
             } catch (err) {
                 // File may not exist or be readable
                 console.error('[DEBUG] Error reading file_content from:', filePath, err);

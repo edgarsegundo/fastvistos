@@ -337,14 +337,19 @@ export class WebPageService {
      * @param {string} params.siteId
      */
     static async getPageSectionVersionById({ id, siteId }: { id: string, siteId: string }) {
-        const ver = await prisma.web_page_section_version.findUnique({
-            where: { id }
-        });        
+        let ver = { id: '0', file_path: '' };
+
+        const original = id === '0';
+        if (!original) {
+            ver = await prisma.web_page_section_version.findUnique({
+                where: { id }
+            });
+        }
 
         if (ver && ver.file_path) {
             let file_path = ver.file_path;
 
-            if (id === '0') {
+            if (original) {
                 // If id is '0', it means the original version without suffix
                 // So we need to replace the _number suffix with _0
                 file_path = file_path.replace(/_\d+$/, '_0');
