@@ -71,7 +71,7 @@
             section_div_wrapper.parentNode.insertBefore(wrapper, section_div_wrapper);
         });
 
-        function showModal(section_div_wrapper) {
+        async function showModal(section_div_wrapper) {
             document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
             const modal = document.createElement('div');
             modal.className = 'uuid-modal';
@@ -146,6 +146,49 @@
                 background: '#fff',
             });
             textarea.value = section_div_wrapper.innerHTML;
+
+            // --- Version ComboBox ---
+            const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
+            const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
+            let versionCombo = null;
+            if (uuid && filePath) {
+                try {
+                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(uuid)}&updatable-section-filepath=${encodeURIComponent(filePath)}`;
+                    const resp = await fetch(url);
+                    const data = await resp.json();
+                    if (Array.isArray(data.versions) && data.versions.length > 0) {
+                        versionCombo = document.createElement('select');
+                        versionCombo.style.marginBottom = '12px';
+                        versionCombo.style.display = 'block';
+                        versionCombo.style.width = '100%';
+                        versionCombo.style.padding = '6px';
+                        versionCombo.style.fontSize = '1em';
+                        versionCombo.style.borderRadius = '4px';
+                        versionCombo.style.border = '1px solid #ccc';
+                        // Add default option
+                        const defaultOpt = document.createElement('option');
+                        defaultOpt.value = '';
+                        defaultOpt.textContent = 'Escolha uma versão para visualizar';
+                        versionCombo.appendChild(defaultOpt);
+                        data.versions.forEach((ver, idx) => {
+                            const opt = document.createElement('option');
+                            opt.value = ver.file_path || ver.id || idx;
+                            opt.textContent = ver.created ? (new Date(ver.created)).toLocaleString() : `Versão ${idx+1}`;
+                            opt.setAttribute('data-html', ver.html_content || '');
+                            versionCombo.appendChild(opt);
+                        });
+                        versionCombo.addEventListener('change', function() {
+                            const selected = versionCombo.options[versionCombo.selectedIndex];
+                            const html = selected.getAttribute('data-html');
+                            if (html !== null && html !== undefined) {
+                                textarea.value = html;
+                            }
+                        });
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch section versions:', err);
+                }
+            }
             const updateBtn = document.createElement('button');
             updateBtn.type = 'button';
             updateBtn.textContent = 'Update';
@@ -262,6 +305,10 @@
             modalContent.appendChild(closeBtn);
             modalContent.appendChild(modalTitle);
             modalContent.appendChild(label);
+            // Insert versionCombo above textarea if it exists
+            if (versionCombo) {
+                modalContent.appendChild(versionCombo);
+            }
             modalContent.appendChild(textarea);
             modalContent.appendChild(updateBtn);
             modal.appendChild(modalContent);

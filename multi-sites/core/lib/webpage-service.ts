@@ -231,6 +231,31 @@ export class WebPageService {
         };
     }
 
+    /**
+     * Get all versions for a section by updatable-section-uuid and updatable-section-filepath.
+     * @param {object} params
+     * @param {string} params.updatableSectionUuid
+     * @param {string} params.updatableSectionFilepath
+     */
+    static async getPageSectionVersions({ updatableSectionUuid, updatableSectionFilepath }: { updatableSectionUuid: string, updatableSectionFilepath: string }) {
+        // Find the web_page_section by updatable_uuid and file_path
+        const section = await prisma.web_page_section.findFirst({
+            where: {
+                updatable_uuid: updatableSectionUuid,
+                file_path: updatableSectionFilepath,
+                is_removed: false,
+            },
+        });
+        if (!section) return [];
+        return await prisma.web_page_section_version.findMany({
+            where: {
+                web_page_section_id: section.id,
+                is_removed: false,
+            },
+            orderBy: {
+                created: 'desc',
+            },
+        });
+    }
 
-    
 }
