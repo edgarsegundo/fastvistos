@@ -220,8 +220,8 @@
                             const resp = await fetch(url);
                             const data = await resp.json();
                             // Expecting { list: [...], active_version: { id, file_content } }
-                            if (data && data.file_content) {
-                                textarea.value = data.file_content;
+                            if (data && data.version.file_content) {
+                                textarea.value = data.version.file_content;
                             }
                         });
                     }
