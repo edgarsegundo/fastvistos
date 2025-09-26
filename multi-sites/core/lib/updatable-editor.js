@@ -169,19 +169,6 @@
                     const data = await resp.json();
                     // Expecting { list: [...], active_version: { id, file_content } }
                     if (data && Array.isArray(data.list) && data.list.length > 0) {
-                        versionCombo = document.createElement('select');
-                        versionCombo.style.marginBottom = '12px';
-                        versionCombo.style.display = 'block';
-                        versionCombo.style.width = '100%';
-                        versionCombo.style.padding = '6px';
-                        versionCombo.style.fontSize = '1em';
-                        versionCombo.style.borderRadius = '4px';
-                        versionCombo.style.border = '1px solid #ccc';
-                        // Add default option
-                        const defaultOpt = document.createElement('option');
-                        defaultOpt.value = '';
-                        defaultOpt.textContent = 'Escolha uma versão para visualizar';
-                        versionCombo.appendChild(defaultOpt);
                         data.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.file_path || ver.id || idx;
