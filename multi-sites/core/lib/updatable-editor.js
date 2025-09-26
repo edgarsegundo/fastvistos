@@ -148,13 +148,13 @@
             textarea.value = section_div_wrapper.innerHTML;
 
             // --- Version ComboBox ---
-            const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
-            const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
+            // const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
+            // const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
+            const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5"; // Replace with actual businessId
             let versionCombo = null;
-            if (uuid && filePath) {
+            if (uuid && businessId) {
                 try {
-                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(uuid)}&updatable-section-filepath=${encodeURIComponent(filePath)}`;
-                    
+                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(uuid)}&businessId=${encodeURIComponent(businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
                     if (Array.isArray(data.versions) && data.versions.length > 0) {
@@ -190,6 +190,10 @@
                     console.error('Failed to fetch section versions:', err);
                 }
             }
+
+
+
+
             const updateBtn = document.createElement('button');
             updateBtn.type = 'button';
             updateBtn.textContent = 'Update';

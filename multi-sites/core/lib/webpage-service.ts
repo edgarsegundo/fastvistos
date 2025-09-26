@@ -232,17 +232,16 @@ export class WebPageService {
     }
 
     /**
-     * Get all versions for a section by updatable-section-uuid and updatable-section-filepath.
+     * Get all versions for a section by updatable-section-uuid and businessId.
      * @param {object} params
      * @param {string} params.updatableSectionUuid
-     * @param {string} params.updatableSectionFilepath
+     * @param {string} params.businessId
      */
-    static async getPageSectionVersions({ updatableSectionUuid, updatableSectionFilepath }: { updatableSectionUuid: string, updatableSectionFilepath: string }) {
-        // Find the web_page_section by updatable_uuid and file_path
+    static async getPageSectionVersions({ updatableSectionUuid, businessId }: { updatableSectionUuid: string, businessId: string }) {
         const section = await prisma.web_page_section.findFirst({
             where: {
                 updatable_uuid: updatableSectionUuid,
-                file_path: updatableSectionFilepath,
+                business_id: businessId,
                 is_removed: false,
             },
         });
