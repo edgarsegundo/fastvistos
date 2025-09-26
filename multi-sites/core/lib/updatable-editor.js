@@ -71,8 +71,8 @@
             section_div_wrapper.parentNode.insertBefore(wrapper, section_div_wrapper);
         });
 
-        // --- Modal UI helpers ---
         function createModalContainer() {
+
             const modal = document.createElement('div');
             modal.className = 'uuid-modal';
             Object.assign(modal.style, {
