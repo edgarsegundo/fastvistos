@@ -167,7 +167,8 @@
                     const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(updatableSectionUuid)}&businessId=${encodeURIComponent(businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
-                    if (Array.isArray(data.versions) && data.versions.length > 0) {
+                    // Expecting { list: [...], active_version: { id, file_content } }
+                    if (data && Array.isArray(data.versions.list) && data.versions.list.length > 0) {
                         versionCombo = document.createElement('select');
                         versionCombo.style.marginBottom = '12px';
                         versionCombo.style.display = 'block';
@@ -181,13 +182,22 @@
                         defaultOpt.value = '';
                         defaultOpt.textContent = 'Escolha uma versão para visualizar';
                         versionCombo.appendChild(defaultOpt);
-                        data.versions.forEach((ver, idx) => {
+                        data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.file_path || ver.id || idx;
                             opt.textContent = ver.created ? (new Date(ver.created)).toLocaleString() : `Versão ${idx+1}`;
-                            opt.setAttribute('data-html', ver.html_content || '');
+                            // If this is the active version, use the file_content from data.versions.active_version
+                            if (data.versions.active_version && data.versions.active_version.id === ver.id) {
+                                opt.setAttribute('data-html', data.versions.active_version.file_content || '');
+                            } else {
+                                opt.setAttribute('data-html', ver.html_content || '');
+                            }
                             versionCombo.appendChild(opt);
                         });
+                        // Set textarea to active version content if available
+                        if (data.versions.active_version && typeof data.versions.active_version.file_content === 'string') {
+                            textarea.value = data.versions.active_version.file_content;
+                        }
                         versionCombo.addEventListener('change', function() {
                             const selected = versionCombo.options[versionCombo.selectedIndex];
                             const html = selected.getAttribute('data-html');

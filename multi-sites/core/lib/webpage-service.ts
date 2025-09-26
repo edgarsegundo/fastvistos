@@ -238,8 +238,10 @@ export class WebPageService {
      * @param {string} params.updatableSectionFilepath
      */
     static async getPageSectionVersions({ updatableSectionUuid, businessId }: { updatableSectionUuid: string, businessId: string }) {
+        console.log('[DEBUG] getPageSectionVersions called with:', { updatableSectionUuid, businessId });
         const updatableUuidClean = updatableSectionUuid.replace(/-/g, '');
         const businessIdClean = businessId.replace(/-/g, '');
+        console.log('[DEBUG] Cleaned params:', { updatableUuidClean, businessIdClean });
         const section = await prisma.web_page_section.findFirst({
             where: {
                 updatable_uuid: updatableUuidClean,
@@ -247,7 +249,9 @@ export class WebPageService {
                 is_removed: false,
             },
         });
+        console.log('[DEBUG] web_page_section result:', section);
         if (!section) {
+            console.log('[DEBUG] No section found, returning empty list and null active_version');
             return { list: [], active_version: null };
         }
         const versions = await prisma.web_page_section_version.findMany({
@@ -259,28 +263,38 @@ export class WebPageService {
                 created: 'desc',
             },
         });
+        console.log('[DEBUG] web_page_section_version list:', versions);
 
         // Find active version and read its file content
         let active_version = null;
         if (section.active_version_id) {
+            console.log('[DEBUG] section.active_version_id:', section.active_version_id);
             const activeVer = versions.find((v: any) => v.id === section.active_version_id);
+            console.log('[DEBUG] activeVer found:', activeVer);
             if (activeVer && activeVer.file_path) {
                 const siteId = 'p2digital';
                 const filePath = `/var/www/${siteId}/webpage_sections/${activeVer.file_path}`;
                 let file_content = '';
                 try {
                     file_content = fs.readFileSync(filePath, 'utf8');
+                    console.log('[DEBUG] Read file_content from:', filePath);
                 } catch (err) {
                     // File may not exist or be readable
+                    console.error('[DEBUG] Error reading file_content from:', filePath, err);
                     file_content = '';
                 }
                 active_version = {
                     id: activeVer.id,
                     file_content
                 };
+                console.log('[DEBUG] active_version object:', active_version);
             }
+        } else {
+            console.log('[DEBUG] section.active_version_id is not set');
         }
+        console.log('[DEBUG] Returning from getPageSectionVersions:', { list: versions, active_version });
         return { list: versions, active_version };
     }
+
 
 }
