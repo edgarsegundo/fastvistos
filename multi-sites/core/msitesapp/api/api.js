@@ -177,18 +177,18 @@ app.post('/publish-section', async (req, res) => {
 });
 
 
-// GET endpoint to fetch all versions for a section by uuid and filepath
+// GET endpoint to fetch all versions for a section by uuid and businessId
 // Best practice: use GET for idempotent, read-only queries (like this)
 app.get('/page-section-versions', async (req, res) => {
     try {
-        const { 'updatable-section-uuid': updatableSectionUuid, 'updatable-section-filepath': updatableSectionFilepath } = req.query;
+        const { 'updatable-section-uuid': updatableSectionUuid, businessId } = req.query;
         if (!updatableSectionUuid || typeof updatableSectionUuid !== 'string' ||
-            !updatableSectionFilepath || typeof updatableSectionFilepath !== 'string') {
-            return res.status(400).json({ error: 'Missing or invalid updatable-section-uuid or updatable-section-filepath query param.' });
+            !businessId || typeof businessId !== 'string') {
+            return res.status(400).json({ error: 'Missing or invalid updatable-section-uuid or businessId query param.' });
         }
         const versions = await WebPageService.getPageSectionVersions({
             updatableSectionUuid,
-            updatableSectionFilepath
+            businessId
         });
         res.json({ versions });
     } catch (error) {
