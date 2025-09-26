@@ -344,14 +344,16 @@ export class WebPageService {
             id = id.replace(/:original$/, '');
         }
 
-        console.log('[DEBUG] Fetching web_page_section_version with id:', id);
+        // console.log('[DEBUG] Fetching web_page_section_version with id:', id);
 
         const ver = await prisma.web_page_section_version.findUnique({
             where: { id }
         });
 
-        console.log('[DEBUG] Fetched version:', ver);
-
+        // console.log('[DEBUG] Fetched version:', ver);
+        
+        let file_content = 'Conteudo corrompido. Por favor, crie uma nova versao a partir de uma versão anterior, posterior ou a original que não esteja corrompida.';
+        
         if (ver && ver.file_path) {
             let file_path = null;
             if (original) {
@@ -363,7 +365,7 @@ export class WebPageService {
             }
 
             const filePath = `/var/www/${siteId}/webpage_sections/${file_path}`;
-            let file_content = 'Conteudo corrompido. Por favor, crie uma nova versao a partir de uma versão anterior, posterior ou a original que não esteja corrompida.';
+
             try {
                 file_content = fs.readFileSync(filePath, 'utf8');
                 console.log('[DEBUG] Read file_content from:', filePath);
@@ -373,12 +375,11 @@ export class WebPageService {
                 console.error('[DEBUG] Error reading file_content from:', filePath, err);
                 // [BUG][P0][DEV] Needs monitoring, logging, and notification
             }
-            return { id: ver.id, file_content };
         } else {
             // [BUG][P0][DEV] Needs monitoring, logging, and notification
             console.log('[DEBUG] ver is null or has no file_path:', ver);
-            return { id: ver.id, file_content: ''};
         }
+        return { id: ver.id, file_content };
     }
 
 }
