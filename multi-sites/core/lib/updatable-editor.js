@@ -191,9 +191,6 @@
                 }
             }
 
-
-
-
             const updateBtn = document.createElement('button');
             updateBtn.type = 'button';
             updateBtn.textContent = 'Update';
