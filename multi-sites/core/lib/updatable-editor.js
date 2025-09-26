@@ -181,7 +181,7 @@
                         versionCombo.style.background = '#fff';                        
                         // Add default option
                         const defaultOpt = document.createElement('option');
-                        defaultOpt.value = '';
+                        defaultOpt.value = '0';
                         defaultOpt.textContent = 'Versão Original';
                         versionCombo.appendChild(defaultOpt);
                         data.versions.list.forEach((ver, idx) => {
