@@ -52,13 +52,14 @@ app.post('/webpage-section', async (req, res) => {
 // POST endpoint to publish a WebPageSection and Version (for htmx or API)
 app.post('/publish-section', async (req, res) => {
     try {
-        const { webpageRelativePath, updatableUuid, businessId, htmlContent, siteId, versionId } = req.body;
+        const { updatableUuid, webpageRelativePath, businessId, htmlContent, siteId, versionId } = req.body;
         if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent || !siteId || !versionId) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
         const result = await WebPageService.publishSection({ webpageRelativePath, 
                                                              updatableUuid, 
-                                                             businessId });
+                                                             businessId,
+                                                             siteId});
 
         // Create a backup file with .original added before
         // the extension, keeping the rest of the name unchanged.
