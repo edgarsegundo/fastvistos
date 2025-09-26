@@ -363,7 +363,7 @@ export class WebPageService {
             }
 
             const filePath = `/var/www/${siteId}/webpage_sections/${file_path}`;
-            let file_content = '';
+            let file_content = 'Conteudo corrompido. Por favor, crie uma nova versao a partir de uma versão anterior, posterior ou a original que não esteja corrompida.';
             try {
                 file_content = fs.readFileSync(filePath, 'utf8');
                 console.log('[DEBUG] Read file_content from:', filePath);
@@ -372,7 +372,6 @@ export class WebPageService {
                 // File may not exist or be readable
                 console.error('[DEBUG] Error reading file_content from:', filePath, err);
                 // [BUG][P0][DEV] Needs monitoring, logging, and notification
-                file_content = '';
             }
             return { id: ver.id, file_content };
         } else {
