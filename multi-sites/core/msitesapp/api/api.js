@@ -176,4 +176,25 @@ app.post('/publish-section', async (req, res) => {
     }
 });
 
+
+// GET endpoint to fetch all versions for a section by uuid and filepath
+// Best practice: use GET for idempotent, read-only queries (like this)
+app.get('/page-section-versions', async (req, res) => {
+    try {
+        const { 'updatable-section-uuid': updatableSectionUuid, 'updatable-section-filepath': updatableSectionFilepath } = req.query;
+        if (!updatableSectionUuid || typeof updatableSectionUuid !== 'string' ||
+            !updatableSectionFilepath || typeof updatableSectionFilepath !== 'string') {
+            return res.status(400).json({ error: 'Missing or invalid updatable-section-uuid or updatable-section-filepath query param.' });
+        }
+        const versions = await WebPageService.getPageSectionVersions({
+            updatableSectionUuid,
+            updatableSectionFilepath
+        });
+        res.json({ versions });
+    } catch (error) {
+        console.error('Error in /page-section-versions:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
 export default app;
