@@ -203,6 +203,44 @@ export class WebPageService {
         });
     }
 
+
+    /**
+     * Update the file content for the active version of a section, given updatableSectionUuid, businessId, siteId, and htmlContent.
+     * Does not update the database, only the file on disk.
+     */
+    static async updateSectionFileContent({
+        webPageSectionVersionId,
+        siteId,
+        htmlContent,
+    }: {
+        webPageSectionVersionId: string,
+        siteId: string,
+        htmlContent: string
+    }) {
+        // Clean up dashes for DB lookup
+        const webPageSectionVersionIdClean = webPageSectionVersionId.replace(/-/g, '');
+
+        const version = await prisma.web_page_section_version.findUnique({
+            where: { id: webPageSectionVersionIdClean }
+        });
+        if (!version || !version.file_path) {
+            throw new Error('Active version not found or missing file_path');
+        }
+
+        // 3. Write the new content to the file
+        const filePath = `/var/www/${siteId}/webpage_sections/${version.file_path}`;
+        try {
+            fs.writeFileSync(filePath, htmlContent, 'utf8');
+            console.log(`[DEBUG] Updated HTML written to ${filePath}`);
+        } catch (err) {
+            console.error('[DEBUG] Error writing HTML file:', err);
+            throw new Error('Failed to write HTML file.');
+        }
+
+        return { filePath, versionId: version.id };
+    }
+
+
     static async publishSection({ webpageRelativePath, updatableUuid, businessId, versionId }: PublishSectionParams) {
 
         if (!prisma) {
@@ -282,6 +320,7 @@ export class WebPageService {
             activeVersionId,
         };
     }
+
 
     /**
      * Get all versions for a section by updatable-section-uuid and updatable-section-filepath.
