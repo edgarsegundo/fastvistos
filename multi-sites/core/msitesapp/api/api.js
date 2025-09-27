@@ -49,6 +49,28 @@ app.post('/webpage-section', async (req, res) => {
     }
 });
 
+
+// POST endpoint to update a WebPageSection and Version (for htmx or API)
+app.post('/update-section-file-version', async (req, res) => {
+    try {
+        const { webPageSectionVersionId, siteId, htmlContent } = req.body;
+        if (!webPageSectionVersionId || !siteId || !htmlContent) {
+            return res.status(400).json({ error: 'Missing required fields.' });
+        }
+
+        const result = await WebPageService.updateSectionFileContent(
+            {   webPageSectionVersionId, 
+                siteId, 
+                htmlContent: '' 
+            });
+        res.json(result);
+    } catch (error) {
+        console.error('Error in /update-section-file-version:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
+
 // POST endpoint to publish a WebPageSection and Version (for htmx or API)
 app.post('/publish-section', async (req, res) => {
     try {
