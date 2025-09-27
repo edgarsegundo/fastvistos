@@ -349,16 +349,10 @@
                             lVersionCombo.appendChild(opt);
                         });
                         lVersionCombo.appendChild(defaultOpt);
+                        updateTextarea();
 
                         if (data.versions.active_version) {
                             lVersionCombo.value = data.versions.active_version.id;
-                            textarea.value = data.versions.active_version.file_content;
-                        }
-
-                        // Set textarea to active version content if available
-                        if (data.versions.active_version && 
-                            typeof data.versions.active_version.file_content === 'string' &&
-                            data.versions.active_version.file_content.trim() !== '') {
                             textarea.value = data.versions.active_version.file_content;
                         }
 
@@ -371,7 +365,7 @@
                             lVersionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
 
-                        lVersionCombo.addEventListener('change', async function(event) {
+                        async function  updateTextarea() {
                             const selected = lVersionCombo.options[lVersionCombo.selectedIndex];
                             const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
                             const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
@@ -380,6 +374,10 @@
                             if (data && data.version.file_content) {
                                 textarea.value = data.version.file_content;
                             }
+                        }
+
+                        lVersionCombo.addEventListener('change', async function(event) {
+                            await updateTextarea();
                         });
 
                         // Replace placeholder content with the new combobox
