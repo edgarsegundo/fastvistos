@@ -114,19 +114,21 @@ app.post('/publish-section', async (req, res) => {
             throw err;
         }
 
-        // keep a copy of the original inner content for reference
-        // Extract the inner content again for saving
-        const match = fileData.match(uuidRegex);
-        console.log('[DEBUG] Extracting original inner content for backup mathch:', match);
-        console.log('[DEBUG] Extracting original inner content for backup match:', JSON.stringify(match, null, 2));
-        if (match && match[1]) {
-            const originalInnerContent = match[1]; // This is the inner HTML of the div
-            // Write to a file, e.g.:
-            await fs.writeFile(`${versionId}_0:original`, originalInnerContent, 'utf-8');
-            console.log('Original inner content saved.');
-        } else {
-            console.warn('No matching section found for updatableUuid:', updatableUuid);
-        }
+        // // keep a copy of the original inner content for reference
+        // // Extract the inner content again for saving
+        // const match = fileData.match(uuidRegex);
+        // console.log('[DEBUG] Extracting original inner content for backup mathch:', match);
+        // console.log('[DEBUG] Extracting original inner content for backup match:', JSON.stringify(match, null, 2));
+        // if (match && match[1]) {
+        //     const originalInnerContent = match[1]; // This is the inner HTML of the div
+        //     // Write to a file, e.g.:
+        //     await fs.writeFile(`${versionId}_0:original`, originalInnerContent, 'utf-8');
+
+        //     // copy to /var/www/[siteId]/webpage_sections????
+        //     console.log('Original inner content saved.');
+        // } else {
+        //     console.warn('No matching section found for updatableUuid:', updatableUuid);
+        // }
 
         // Now run `npm run build:p2digital` to regenerate the site
         const { exec } = await import('child_process');

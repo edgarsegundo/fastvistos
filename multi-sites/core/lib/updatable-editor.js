@@ -211,6 +211,8 @@
                             // event.preventDefault();
                             // event.stopPropagation();
                             // event.stopImmediatePropagation();
+
+                            debugger;
                             const selected = versionCombo.options[versionCombo.selectedIndex];
                             const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
                             const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
@@ -370,6 +372,12 @@
             const updateBtn = createUpdateButton();
             const cloneBtn = createCloneButton(section_div_wrapper);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
+
+            if (versionCombo === null) {
+                // make the textarea like disabled if no versions
+                textarea.disabled = true;
+                publishBtn.disabled = true;
+            }
 
             modalContent.appendChild(updateBtn);
             modalContent.appendChild(cloneBtn);
