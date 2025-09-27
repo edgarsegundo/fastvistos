@@ -264,22 +264,7 @@
         function createPlaceholderForTheComboBox() {
             const placeholder = document.createElement('div');
             placeholder.id = 'version-combobox-placeholder';
-            Object.assign(placeholder.style, {
-                minHeight: '48px',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'linear-gradient(90deg, #f1f5f9 0%, #e0e7ef 100%)',
-                borderRadius: '8px',
-                border: '1.5px dashed #3b82f6',
-                boxShadow: '0 1.5px 8px 0 rgba(59,130,246,0.04)',
-                fontWeight: '500',
-                fontSize: '1.05em',
-                color: '#3b82f6',
-                textAlign: 'center',
-                transition: 'background 0.2s',
-            });
+            // No styles at all, just a plain div
             placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
             return placeholder;
         }
@@ -341,7 +326,7 @@
                         versionCombo = document.createElement('select');
                         versionCombo.style.margin = '0 auto 12px auto';
                         versionCombo.style.display = 'block';
-                        versionCombo.style.width = '90%';
+                        versionCombo.style.width = '100%';
                         versionCombo.style.padding = '10px 14px';
                         versionCombo.style.fontSize = '1.08em';
                         versionCombo.style.borderRadius = '7px';
@@ -412,7 +397,7 @@
             return versionCombo;
         }
 
-        function createCloneButton(section_div_wrapper, createVersionComboBoxLazy) {
+        function createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy) {
             const cloneBtn = document.createElement('button');
             cloneBtn.type = 'button';
             cloneBtn.textContent = 'Clonar';
@@ -455,8 +440,9 @@
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    toggleScreenOverlay(false);
                     await createVersionComboBoxLazy();
+                    toggleDisabledStateLazy();
+                    toggleScreenOverlay(false);
                 })
                 .catch(error => {
                     toggleScreenOverlay(false);
@@ -483,6 +469,7 @@
                 cursor: 'pointer',
             });
             publishBtn.onclick = () => {
+                toggleScreenOverlay(true, 'Publicando seção...');
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
                 const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
@@ -513,9 +500,11 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    toggleScreenOverlay(false);
                     console.log('Publish response:', data);
                 })
                 .catch(error => {
+                    toggleScreenOverlay(false);
                     console.error('Publish error:', error);
                 });
             };
@@ -569,7 +558,9 @@
             const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
             const versionCombo = await createVersionComboBoxLazy();
 
-            const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxLazy);
+            const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, false);
+
+            const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
             const previewBtn = createPreviewButton();
 
