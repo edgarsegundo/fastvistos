@@ -5,9 +5,12 @@
 (function () {
 
     // Overlay utility: disables the whole screen and shows a label and throbber
+    let overlayTimestamp = null;
+    const OVERLAY_MIN_DURATION_MS = 1000; // ms
     function toggleScreenOverlay(show, label = 'Processando...') {
         let overlay = document.getElementById('global-throbber-overlay');
         if (show) {
+            overlayTimestamp = performance.now();
             if (!overlay) {
                 overlay = document.createElement('div');
                 overlay.id = 'global-throbber-overlay';
@@ -73,7 +76,15 @@
             }
         } else {
             if (overlay) {
-                overlay.style.display = 'none';
+                const now = performance.now();
+                const elapsed = overlayTimestamp ? now - overlayTimestamp : 1000;
+                if (elapsed < OVERLAY_MIN_DURATION_MS) {
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, OVERLAY_MIN_DURATION_MS - elapsed);
+                } else {
+                    overlay.style.display = 'none';
+                }
             }
         }
     }
