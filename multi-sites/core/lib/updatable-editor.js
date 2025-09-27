@@ -3,11 +3,11 @@
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
-
     let versionCombo = null;
     // Overlay utility: disables the whole screen and shows a label and throbber
     let overlayTimestamp = null;
     const OVERLAY_MIN_DURATION_MS = 1000; // ms
+
     function toggleScreenOverlay(show, label = 'Processando...') {
         let overlay = document.getElementById('global-throbber-overlay');
         if (show) {
@@ -352,6 +352,7 @@
 
                         if (data.versions.active_version) {
                             lVersionCombo.value = data.versions.active_version.id;
+                            textarea.value = data.versions.active_version.file_content;
                         }
 
                         // Set textarea to active version content if available
@@ -569,11 +570,6 @@
 
                     const data = await resp.json();
                     toggleScreenOverlay(false);
-                    // if (resp.ok) {
-                    //     alert('Seção salva com sucesso!');
-                    // } else {
-                    //     alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido.'));
-                    // }
                 } catch (err) {
                     toggleScreenOverlay(false);
                     alert('Erro ao salvar. Veja o console para detalhes.');
