@@ -72,7 +72,8 @@ deploy_on_vps() {
     # Step 3: Fix ownership for web server
     echo ""
     echo -e "${YELLOW}🔧 Fixing file ownership for web server...${NC}"
-    if sudo chown -R www-data:www-data "$remote_path"; then
+    # if sudo chown -R www-data:www-data "$remote_path"; then
+    if sudo chown -R edagr:edgar "$remote_path"; then
         echo -e "${GREEN}✅ File ownership updated${NC}"
     else
         echo -e "${RED}❌ File ownership update failed${NC}"
