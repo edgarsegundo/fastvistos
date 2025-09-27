@@ -565,13 +565,14 @@
                             htmlContent
                         })
                     });
+
                     const data = await resp.json();
                     toggleScreenOverlay(false);
-                    if (resp.ok) {
-                        alert('Seção salva com sucesso!');
-                    } else {
-                        alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido.'));
-                    }
+                    // if (resp.ok) {
+                    //     alert('Seção salva com sucesso!');
+                    // } else {
+                    //     alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido.'));
+                    // }
                 } catch (err) {
                     toggleScreenOverlay(false);
                     alert('Erro ao salvar. Veja o console para detalhes.');

@@ -58,12 +58,13 @@ app.post('/update-section-file-version', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
 
-        const result = await WebPageService.updateSectionFileContent(
-            {   webPageSectionVersionId, 
-                siteId, 
-                htmlContent: '' 
-            });
-        res.json(result);
+        // const result = await WebPageService.updateSectionFileContent(
+        //     {   webPageSectionVersionId, 
+        //         siteId, 
+        //         htmlContent: '' 
+        //     });
+        // res.json(result);
+        res.json({ message: 'Update endpoint is currently disabled.' });
     } catch (error) {
         console.error('Error in /update-section-file-version:', error);
         res.status(500).json({ error: 'Internal server error.' });
