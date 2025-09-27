@@ -117,6 +117,8 @@ app.post('/publish-section', async (req, res) => {
         // keep a copy of the original inner content for reference
         // Extract the inner content again for saving
         const match = fileData.match(uuidRegex);
+        console.log('[DEBUG] Extracting original inner content for backup mathch:', match);
+        console.log('[DEBUG] Extracting original inner content for backup match:', JSON.stringify(match, null, 2));
         if (match && match[1]) {
             const originalInnerContent = match[1]; // This is the inner HTML of the div
             // Write to a file, e.g.:
