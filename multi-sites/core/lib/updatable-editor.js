@@ -556,7 +556,7 @@
                 }
                 toggleScreenOverlay(true, 'Salvando...');
                 try {
-                    const resp = await fetch('/msitesapp/api/update-section-file-version', {
+                    const resp = await fetch('https://p2digital.com.br/msitesapp/api/update-section-file-version', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

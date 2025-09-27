@@ -221,13 +221,12 @@ export class WebPageService {
         const webPageSectionVersionIdClean = webPageSectionVersionId.replace(/-/g, '');
 
         const version = await prisma.web_page_section_version.findUnique({
-            where: { id: webPageSectionVersionId }
+            where: { id: webPageSectionVersionIdClean }
         });
         if (!version || !version.file_path) {
-            throw new Error('Active version not found or missing file_path');
+            throw new Error('Version not found or missing file_path');
         }
 
-        // 3. Write the new content to the file
         const filePath = `/var/www/${siteId}/webpage_sections/${version.file_path}`;
         try {
             fs.writeFileSync(filePath, htmlContent, 'utf8');
