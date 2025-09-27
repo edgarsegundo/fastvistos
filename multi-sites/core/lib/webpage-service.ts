@@ -221,7 +221,7 @@ export class WebPageService {
         const webPageSectionVersionIdClean = webPageSectionVersionId.replace(/-/g, '');
 
         const version = await prisma.web_page_section_version.findUnique({
-            where: { id: webPageSectionVersionIdClean }
+            where: { id: webPageSectionVersionId }
         });
         if (!version || !version.file_path) {
             throw new Error('Active version not found or missing file_path');
