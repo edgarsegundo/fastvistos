@@ -57,7 +57,12 @@ deploy_on_vps() {
     # Step 2: Sync files locally
     echo ""
     echo -e "${YELLOW}📤 Syncing files...${NC}"
-    if sudo rsync -avz --delete "$site_dist_path" "$remote_path"; then
+    
+    # The --delete flag means:
+    # Any files or directories in the destination that are not present in the source will be removed.
+    # I'm removing this option --delete because I need to preserve the folder webpage_sections 
+    # How it was before: sudo rsync -avz --delete "$site_dist_path" "$remote_path"
+    if sudo rsync -avz "$site_dist_path" "$remote_path"; then
         echo -e "${GREEN}✅ Files synced successfully${NC}"
     else
         echo -e "${RED}❌ Rsync failed${NC}"
