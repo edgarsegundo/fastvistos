@@ -4,6 +4,7 @@
 
 (function () {
 
+    let versionCombo = null;
     // Overlay utility: disables the whole screen and shows a label and throbber
     let overlayTimestamp = null;
     const OVERLAY_MIN_DURATION_MS = 1000; // ms
@@ -307,7 +308,7 @@
 
         async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent) {
             // Only update the placeholder, never create or insert it here
-            let versionCombo = null;
+           let lVersionCombo = null;
             let placeholder = modalContent.querySelector('#version-combobox-placeholder');
             if (!placeholder) {
                 // Defensive: if not found, do nothing
@@ -323,19 +324,19 @@
                     const data = await resp.json();
                     // Expecting { list: [...], active_version: { id, file_content } }
                     if (data && Array.isArray(data.versions.list) && data.versions.list.length > 0) {
-                        versionCombo = document.createElement('select');
-                        versionCombo.style.margin = '0 auto 12px auto';
-                        versionCombo.style.display = 'block';
-                        versionCombo.style.width = '100%';
-                        versionCombo.style.padding = '10px 14px';
-                        versionCombo.style.fontSize = '1.08em';
-                        versionCombo.style.borderRadius = '7px';
-                        versionCombo.style.border = '2px solid #3b82f6';
-                        versionCombo.style.color = '#222';
-                        versionCombo.style.background = 'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
-                        versionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
-                        versionCombo.style.fontWeight = '500';
-                        versionCombo.style.transition = 'border-color 0.2s, box-shadow 0.2s';
+                        lVersionCombo = document.createElement('select');
+                        lVersionCombo.style.margin = '0 auto 12px auto';
+                        lVersionCombo.style.display = 'block';
+                        lVersionCombo.style.width = '100%';
+                        lVersionCombo.style.padding = '10px 14px';
+                        lVersionCombo.style.fontSize = '1.08em';
+                        lVersionCombo.style.borderRadius = '7px';
+                        lVersionCombo.style.border = '2px solid #3b82f6';
+                        lVersionCombo.style.color = '#222';
+                        lVersionCombo.style.background = 'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
+                        lVersionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        lVersionCombo.style.fontWeight = '500';
+                        lVersionCombo.style.transition = 'border-color 0.2s, box-shadow 0.2s';
 
                         // Add default option
                         const defaultOpt = document.createElement('option');
@@ -345,12 +346,12 @@
                             opt.value = ver.id.toString();
                             defaultOpt.value = opt.value + ':original';
                             opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
-                            versionCombo.appendChild(opt);
+                            lVersionCombo.appendChild(opt);
                         });
-                        versionCombo.appendChild(defaultOpt);
+                        lVersionCombo.appendChild(defaultOpt);
 
                         if (data.versions.active_version) {
-                            versionCombo.value = data.versions.active_version.id;
+                            lVersionCombo.value = data.versions.active_version.id;
                         }
 
                         // Set textarea to active version content if available
@@ -360,17 +361,17 @@
                             textarea.value = data.versions.active_version.file_content;
                         }
 
-                        versionCombo.addEventListener('focus', function() {
-                            versionCombo.style.borderColor = '#2563eb';
-                            versionCombo.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        lVersionCombo.addEventListener('focus', function() {
+                            lVersionCombo.style.borderColor = '#2563eb';
+                            lVersionCombo.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
-                        versionCombo.addEventListener('blur', function() {
-                            versionCombo.style.borderColor = '#3b82f6';
-                            versionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        lVersionCombo.addEventListener('blur', function() {
+                            lVersionCombo.style.borderColor = '#3b82f6';
+                            lVersionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
 
-                        versionCombo.addEventListener('change', async function(event) {
-                            const selected = versionCombo.options[versionCombo.selectedIndex];
+                        lVersionCombo.addEventListener('change', async function(event) {
+                            const selected = lVersionCombo.options[lVersionCombo.selectedIndex];
                             const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
                             const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
                             const resp = await fetch(url);
@@ -382,7 +383,7 @@
 
                         // Replace placeholder content with the new combobox
                         placeholder.innerHTML = '';
-                        placeholder.appendChild(versionCombo);
+                        placeholder.appendChild(lVersionCombo);
                     } else {
                         // No versions found, show placeholder message
                         placeholder.innerHTML = '<span style="opacity:0.7;">Nenhuma versão disponível</span>';
@@ -394,7 +395,7 @@
             } else {
                 placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
             }
-            return versionCombo;
+            return lVersionCombo;
         }
 
         function createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy) {
@@ -440,7 +441,7 @@
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    await createVersionComboBoxLazy();
+                    versionCombo = await createVersionComboBoxLazy();
                     toggleDisabledStateLazy();
                     toggleScreenOverlay(false);
                 })
@@ -528,7 +529,7 @@
             return previewBtn;
         }
 
-        function createSaveButton(section_div_wrapper, versionCombo, textarea) {
+        function createSaveButton(section_div_wrapper, textarea) {
             const saveBtn = document.createElement('button');
             saveBtn.type = 'button';
             saveBtn.textContent = 'Salvar';
@@ -610,14 +611,14 @@
 
             // Now create the combobox and update the placeholder
             const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
-            const versionCombo = await createVersionComboBoxLazy();
+            versionCombo = await createVersionComboBoxLazy();
 
 
             const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, false);
 
             const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
-            const saveBtn = createSaveButton(section_div_wrapper, versionCombo, textarea);
+            const saveBtn = createSaveButton(section_div_wrapper, textarea);
             const previewBtn = createPreviewButton();
 
             previewBtn.onclick = () => {
