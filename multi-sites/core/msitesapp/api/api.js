@@ -53,13 +53,13 @@ app.post('/webpage-section', async (req, res) => {
 app.post('/publish-section', async (req, res) => {
     try {
         const { updatableUuid, webpageRelativePath, businessId, htmlContent, siteId, versionId } = req.body;
-        if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent || !siteId || !versionId) {
+        if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent || !siteId) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
         const result = await WebPageService.publishSection({ webpageRelativePath, 
                                                              updatableUuid, 
                                                              businessId,
-                                                             siteId});
+                                                             versionId});
 
         // Create a backup file with .original added before
         // the extension, keeping the rest of the name unchanged.
