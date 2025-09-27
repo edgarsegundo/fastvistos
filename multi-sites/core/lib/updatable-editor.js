@@ -94,24 +94,26 @@
         if (disabled) {
             textarea.disabled = true;
             publishBtn.disabled = true;
-            publishBtn.style.pointerEvents = 'none';
+            // publishBtn.style.pointerEvents = 'none';
             previewBtn.style.display = 'none';
+            publishBtn.style.display = 'none';
 
             // Add Tailwind-like classes for disabled look
             textarea.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            publishBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            // publishBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
             // Remove focus ring
             textarea.style.boxShadow = 'none';
-            publishBtn.style.boxShadow = 'none';
+            // publishBtn.style.boxShadow = 'none';
         } else {
             previewBtn.style.display = 'inline-block';
+            publishBtn.style.display = 'inline-block';
             textarea.disabled = false;
-            publishBtn.disabled = false;
-            publishBtn.style.pointerEvents = 'auto';
+            // publishBtn.disabled = false;
+            // publishBtn.style.pointerEvents = 'auto';
             textarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            publishBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            // publishBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
             textarea.style.boxShadow = '';
-            publishBtn.style.boxShadow = '';
+            // publishBtn.style.boxShadow = '';
         }
     }
 
@@ -264,9 +266,32 @@
             textarea.id = 'uuid-html-editor';
             Object.assign(textarea.style, {
                 width: '100%',
-                height: '300px',
+                minHeight: '320px',
+                maxHeight: '60vh',
                 color: '#222',
-                background: '#fff',
+                background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)',
+                border: '2px solid #3b82f6', // blue-500
+                borderRadius: '12px',
+                boxShadow: '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)',
+                fontSize: '1.08em',
+                fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace',
+                padding: '18px 20px',
+                outline: 'none',
+                resize: 'vertical',
+                transition: 'border-color 0.2s, box-shadow 0.2s',
+                marginBottom: '18px',
+                letterSpacing: '0.01em',
+                lineHeight: '1.6',
+                caretColor: '#3b82f6',
+                backgroundClip: 'padding-box',
+            });
+            textarea.addEventListener('focus', function() {
+                textarea.style.borderColor = '#2563eb'; // blue-600
+                textarea.style.boxShadow = '0 0 0 3px #3b82f633, 0 4px 32px 0 rgba(59,130,246,0.10)';
+            });
+            textarea.addEventListener('blur', function() {
+                textarea.style.borderColor = '#3b82f6';
+                textarea.style.boxShadow = '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
             });
             textarea.value = section_div_wrapper.innerHTML;
             return textarea;
@@ -390,12 +415,13 @@
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    await createVersionComboBoxLazy();
                     toggleScreenOverlay(false);
-                    console.log('Clonar response:', data);
+                    await createVersionComboBoxLazy();
                 })
                 .catch(error => {
                     toggleScreenOverlay(false);
+                    // TODO: Show error in modal, refactor to use a better alert system
+                    alert('Erro ao clonar seção. Veja console para detalhes.');
                     console.error('Clonar error:', error);
                 });
             };
