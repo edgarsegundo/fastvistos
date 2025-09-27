@@ -61,7 +61,7 @@ app.post('/update-section-file-version', async (req, res) => {
         const result = await WebPageService.updateSectionFileContent(
             {   webPageSectionVersionId, 
                 siteId, 
-                htmlContent: '' 
+                htmlContent
             });
         res.json(result);
     } catch (error) {
