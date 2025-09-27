@@ -1,55 +1,3 @@
-        function createSaveButton(section_div_wrapper, versionCombo, textarea) {
-            const saveBtn = document.createElement('button');
-            saveBtn.type = 'button';
-            saveBtn.textContent = 'Salvar';
-            Object.assign(saveBtn.style, {
-                marginTop: '12px',
-                marginLeft: '8px',
-                padding: '8px 16px',
-                background: '#2563eb',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-            });
-            saveBtn.onclick = async () => {
-                if (!versionCombo || !versionCombo.value) {
-                    alert('Selecione uma versão para salvar.');
-                    return;
-                }
-                const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
-                const htmlContent = textarea.value;
-                const webPageSectionVersionId = versionCombo.value;
-                if (!siteId || !htmlContent || !webPageSectionVersionId) {
-                    alert('Faltam parâmetros para salvar.');
-                    return;
-                }
-                toggleScreenOverlay(true, 'Salvando...');
-                try {
-                    const resp = await fetch('/msitesapp/api/update-section-file-version', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            webPageSectionVersionId,
-                            siteId,
-                            htmlContent
-                        })
-                    });
-                    const data = await resp.json();
-                    toggleScreenOverlay(false);
-                    if (resp.ok) {
-                        alert('Seção salva com sucesso!');
-                    } else {
-                        alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido.'));
-                    }
-                } catch (err) {
-                    toggleScreenOverlay(false);
-                    alert('Erro ao salvar. Veja o console para detalhes.');
-                    console.error('Erro ao salvar seção:', err);
-                }
-            };
-            return saveBtn;
-        }
 // updatable-editor.js
 // This script enables in-place editing of divs with [updatable-section-uuid] using a modal UI.
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
@@ -578,7 +526,60 @@
                 cursor: 'pointer',
             });
             return previewBtn;
-        }        
+        }
+
+        function createSaveButton(section_div_wrapper, versionCombo, textarea) {
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.textContent = 'Salvar';
+            Object.assign(saveBtn.style, {
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#2563eb',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+            });
+            saveBtn.onclick = async () => {
+                if (!versionCombo || !versionCombo.value) {
+                    alert('Selecione uma versão para salvar.');
+                    return;
+                }
+                const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
+                const htmlContent = textarea.value;
+                const webPageSectionVersionId = versionCombo.value;
+                if (!siteId || !htmlContent || !webPageSectionVersionId) {
+                    alert('Faltam parâmetros para salvar.');
+                    return;
+                }
+                toggleScreenOverlay(true, 'Salvando...');
+                try {
+                    const resp = await fetch('/msitesapp/api/update-section-file-version', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            webPageSectionVersionId,
+                            siteId,
+                            htmlContent
+                        })
+                    });
+                    const data = await resp.json();
+                    toggleScreenOverlay(false);
+                    if (resp.ok) {
+                        alert('Seção salva com sucesso!');
+                    } else {
+                        alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido.'));
+                    }
+                } catch (err) {
+                    toggleScreenOverlay(false);
+                    alert('Erro ao salvar. Veja o console para detalhes.');
+                    console.error('Erro ao salvar seção:', err);
+                }
+            };
+            return saveBtn;
+        }
 
         // --- Main showModal function ---
         async function showModal(section_div_wrapper) {
