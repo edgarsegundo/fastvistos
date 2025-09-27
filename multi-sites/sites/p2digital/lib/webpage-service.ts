@@ -240,6 +240,8 @@ export class WebPageService {
         }
 
         let activeVersionId = null;
+
+        console.log('[DEBUG] Checking versionId:', versionId);
         if (versionId) {
             // set the active_version_id to the provided versionId
             await prisma.web_page_section.update({
