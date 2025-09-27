@@ -261,7 +261,7 @@
             return textarea;
         }
 
-        async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper) {
+        async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent) {
             let versionCombo = null;
             if (updatableSectionUuid && businessId) {
                 try {
@@ -329,10 +329,14 @@
                     console.error('Failed to fetch section versions:', err);
                 }
             }
+
+            if (versionCombo) {
+                modalContent.appendChild(versionCombo);
+            }
             return versionCombo;
         }
 
-        function createCloneButton(section_div_wrapper) {
+        function createCloneButton(section_div_wrapper, createVersionComboBoxLazy) {
             const cloneBtn = document.createElement('button');
             cloneBtn.type = 'button';
             cloneBtn.textContent = 'Clonar';
@@ -374,7 +378,8 @@
                     }),
                 })
                 .then(response => response.json())
-                .then(data => {
+                .then(async data => {
+                    await createVersionComboBoxLazy();
                     toggleScreenOverlay(false);
                     console.log('Clonar response:', data);
                 })
@@ -473,8 +478,12 @@
             const textarea = createTextarea(section_div_wrapper);
             const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
             const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
-            const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper);
-            const cloneBtn = createCloneButton(section_div_wrapper);
+            // const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper);
+
+            const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
+            const versionCombo = await createVersionComboBoxLazy();
+
+            const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxLazy);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
             const previewBtn = createPreviewButton();
 
@@ -494,9 +503,9 @@
             modalContent.appendChild(modalTitle);
             modalContent.appendChild(label);
 
-            if (versionCombo) {
-                modalContent.appendChild(versionCombo);
-            }
+            // if (versionCombo) {
+            //     modalContent.appendChild(versionCombo);
+            // }
             modalContent.appendChild(textarea);
 
             modalContent.appendChild(cloneBtn);
