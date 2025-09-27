@@ -4,6 +4,80 @@
 
 (function () {
 
+    // Overlay utility: disables the whole screen and shows a label and throbber
+    function toggleScreenOverlay(show, label = 'Processando...') {
+        let overlay = document.getElementById('global-throbber-overlay');
+        if (show) {
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'global-throbber-overlay';
+                Object.assign(overlay.style, {
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(31, 41, 55, 0.85)', // Tailwind gray-800 + opacity
+                    zIndex: 99999,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'opacity 0.2s',
+                });
+
+                // Label
+                const labelDiv = document.createElement('div');
+                labelDiv.id = 'global-throbber-label';
+                labelDiv.textContent = label;
+                Object.assign(labelDiv.style, {
+                    color: '#fff',
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    marginBottom: '2.5rem',
+                    letterSpacing: '0.05em',
+                    textShadow: '0 2px 8px #000',
+                    textAlign: 'center',
+                });
+                overlay.appendChild(labelDiv);
+
+                // Throbber (Tailwind-inspired, creative)
+                const throbber = document.createElement('div');
+                throbber.className = 'throbber-spinner';
+                Object.assign(throbber.style, {
+                    width: '4rem',
+                    height: '4rem',
+                    border: '8px solid #d1d5db', // gray-300
+                    borderTop: '8px solid #3b82f6', // blue-500
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    marginBottom: '1.5rem',
+                    boxShadow: '0 0 32px #3b82f6aa',
+                });
+                overlay.appendChild(throbber);
+
+                // Add keyframes for spin
+                if (!document.getElementById('throbber-spinner-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'throbber-spinner-style';
+                    style.textContent = `@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }`;
+                    document.head.appendChild(style);
+                }
+
+                document.body.appendChild(overlay);
+            } else {
+                // Update label if overlay already exists
+                const labelDiv = overlay.querySelector('#global-throbber-label');
+                if (labelDiv) labelDiv.textContent = label;
+                overlay.style.display = 'flex';
+            }
+        } else {
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+    }
+
     // Utility to toggle disabled state with visual feedback
     function toggleDisabledState(textarea, publishBtn, previewBtn, disabled) {
         if (disabled) {
@@ -273,6 +347,7 @@
                 cursor: 'pointer',
             });
             cloneBtn.onclick = () => {
+                toggleScreenOverlay(true, 'Clonando seção...');
                 const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
                 const title = section_div_wrapper.getAttribute('updatable-section-title');
                 const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
@@ -300,9 +375,11 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    toggleScreenOverlay(false);
                     console.log('Clonar response:', data);
                 })
                 .catch(error => {
+                    toggleScreenOverlay(false);
                     console.error('Clonar error:', error);
                 });
             };
