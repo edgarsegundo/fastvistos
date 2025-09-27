@@ -1,3 +1,55 @@
+        function createSaveButton(section_div_wrapper, versionCombo, textarea) {
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.textContent = 'Salvar';
+            Object.assign(saveBtn.style, {
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#2563eb',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+            });
+            saveBtn.onclick = async () => {
+                if (!versionCombo || !versionCombo.value) {
+                    alert('Selecione uma versão para salvar.');
+                    return;
+                }
+                const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
+                const htmlContent = textarea.value;
+                const webPageSectionVersionId = versionCombo.value;
+                if (!siteId || !htmlContent || !webPageSectionVersionId) {
+                    alert('Faltam parâmetros para salvar.');
+                    return;
+                }
+                toggleScreenOverlay(true, 'Salvando...');
+                try {
+                    const resp = await fetch('/msitesapp/api/update-section-file-version', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            webPageSectionVersionId,
+                            siteId,
+                            htmlContent
+                        })
+                    });
+                    const data = await resp.json();
+                    toggleScreenOverlay(false);
+                    if (resp.ok) {
+                        alert('Seção salva com sucesso!');
+                    } else {
+                        alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido.'));
+                    }
+                } catch (err) {
+                    toggleScreenOverlay(false);
+                    alert('Erro ao salvar. Veja o console para detalhes.');
+                    console.error('Erro ao salvar seção:', err);
+                }
+            };
+            return saveBtn;
+        }
 // updatable-editor.js
 // This script enables in-place editing of divs with [updatable-section-uuid] using a modal UI.
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
@@ -558,10 +610,12 @@
             const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
             const versionCombo = await createVersionComboBoxLazy();
 
+
             const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, false);
 
             const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
+            const saveBtn = createSaveButton(section_div_wrapper, versionCombo, textarea);
             const previewBtn = createPreviewButton();
 
             previewBtn.onclick = () => {
@@ -572,12 +626,17 @@
             if (versionCombo === null) {
                 // Visually and functionally disable textarea and publish button
                 toggleDisabledState(textarea, publishBtn, previewBtn, true);
+                saveBtn.disabled = true;
+                saveBtn.style.opacity = '0.5';
             } else {
                 toggleDisabledState(textarea, publishBtn, previewBtn, false);
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = '1';
             }
 
             modalContent.appendChild(cloneBtn);
             modalContent.appendChild(publishBtn);
+            modalContent.appendChild(saveBtn);
             modalContent.appendChild(previewBtn);
 
             modal.appendChild(modalContent);
