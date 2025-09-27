@@ -3,6 +3,33 @@
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
+
+    // Utility to toggle disabled state with visual feedback
+    function toggleDisabledState(textarea, publishBtn, previewBtn, disabled) {
+        if (disabled) {
+            textarea.disabled = true;
+            publishBtn.disabled = true;
+            publishBtn.style.pointerEvents = 'none';
+            previewBtn.style.display = 'none';
+
+            // Add Tailwind-like classes for disabled look
+            textarea.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            publishBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            // Remove focus ring
+            textarea.style.boxShadow = 'none';
+            publishBtn.style.boxShadow = 'none';
+        } else {
+            previewBtn.style.display = 'inline-block';
+            textarea.disabled = false;
+            publishBtn.disabled = false;
+            publishBtn.style.pointerEvents = 'auto';
+            textarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            publishBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            textarea.style.boxShadow = '';
+            publishBtn.style.boxShadow = '';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const borderColors = [
             '#0070f3', // blue
@@ -231,22 +258,6 @@
             return versionCombo;
         }
 
-        function createUpdateButton() {
-            const updateBtn = document.createElement('button');
-            updateBtn.type = 'button';
-            updateBtn.textContent = 'Update';
-            Object.assign(updateBtn.style, {
-                marginTop: '12px',
-                padding: '8px 16px',
-                background: '#0070f3',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-            });
-            return updateBtn;
-        }
-
         function createCloneButton(section_div_wrapper) {
             const cloneBtn = document.createElement('button');
             cloneBtn.type = 'button';
@@ -352,6 +363,23 @@
             return publishBtn;
         }
 
+        function createPreviewButton() {
+            const previewBtn = document.createElement('button');
+            previewBtn.type = 'button';
+            previewBtn.textContent = 'Vizualizar';
+            Object.assign(previewBtn.style, {
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#0070f3',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+            });
+            return previewBtn;
+        }        
+
         // --- Main showModal function ---
         async function showModal(section_div_wrapper) {
             document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
@@ -367,29 +395,38 @@
             const label = createLabel();
             const textarea = createTextarea(section_div_wrapper);
             const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
-            const businessId = "5810c2b6-125c-402a-9cff-53fcc9d61bf5";
+            const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
             const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper);
-            const updateBtn = createUpdateButton();
             const cloneBtn = createCloneButton(section_div_wrapper);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
+            const previewBtn = createPreviewButton();
+
+            previewBtn.onclick = () => {
+                modal.remove();
+                section_div_wrapper.innerHTML = textarea.value.trim();
+            };
 
             if (versionCombo === null) {
-                // make the textarea like disabled if no versions
-                textarea.disabled = true;
-                publishBtn.disabled = true;
+                // Visually and functionally disable textarea and publish button
+                toggleDisabledState(textarea, publishBtn, previewBtn, true);
+            } else {
+                toggleDisabledState(textarea, publishBtn, previewBtn, false);
             }
-
-            modalContent.appendChild(updateBtn);
-            modalContent.appendChild(cloneBtn);
-            modalContent.appendChild(publishBtn);
+            
             modalContent.appendChild(closeBtn);
             modalContent.appendChild(modalTitle);
             modalContent.appendChild(label);
+
             if (versionCombo) {
                 modalContent.appendChild(versionCombo);
             }
             modalContent.appendChild(textarea);
-            modalContent.appendChild(updateBtn);
+
+            modalContent.appendChild(cloneBtn);
+            modalContent.appendChild(publishBtn);
+            modalContent.appendChild(previewBtn);
+
+
             modal.appendChild(modalContent);
             document.body.appendChild(modal);
         }
