@@ -261,6 +261,29 @@
             return label;
         }
 
+        function createPlaceholderForTheComboBox() {
+            const placeholder = document.createElement('div');
+            placeholder.id = 'version-combobox-placeholder';
+            Object.assign(placeholder.style, {
+                minHeight: '48px',
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(90deg, #f1f5f9 0%, #e0e7ef 100%)',
+                borderRadius: '8px',
+                border: '1.5px dashed #3b82f6',
+                boxShadow: '0 1.5px 8px 0 rgba(59,130,246,0.04)',
+                fontWeight: '500',
+                fontSize: '1.05em',
+                color: '#3b82f6',
+                textAlign: 'center',
+                transition: 'background 0.2s',
+            });
+            placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
+            return placeholder;
+        }
+
         function createTextarea(section_div_wrapper) {
             const textarea = document.createElement('textarea');
             textarea.id = 'uuid-html-editor';
@@ -298,7 +321,16 @@
         }
 
         async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent) {
+            // Only update the placeholder, never create or insert it here
             let versionCombo = null;
+            let placeholder = modalContent.querySelector('#version-combobox-placeholder');
+            if (!placeholder) {
+                // Defensive: if not found, do nothing
+                return null;
+            }
+            // Clear previous content
+            placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
+
             if (updatableSectionUuid && businessId) {
                 try {
                     const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(updatableSectionUuid)}&business-id=${encodeURIComponent(businessId)}`;
@@ -307,24 +339,25 @@
                     // Expecting { list: [...], active_version: { id, file_content } }
                     if (data && Array.isArray(data.versions.list) && data.versions.list.length > 0) {
                         versionCombo = document.createElement('select');
-                        versionCombo.style.marginBottom = '12px';
+                        versionCombo.style.margin = '0 auto 12px auto';
                         versionCombo.style.display = 'block';
-                        versionCombo.style.width = '100%';
-                        versionCombo.style.padding = '6px';
-                        versionCombo.style.fontSize = '1em';
-                        versionCombo.style.borderRadius = '4px';
-                        versionCombo.style.border = '1px solid #ccc';
+                        versionCombo.style.width = '90%';
+                        versionCombo.style.padding = '10px 14px';
+                        versionCombo.style.fontSize = '1.08em';
+                        versionCombo.style.borderRadius = '7px';
+                        versionCombo.style.border = '2px solid #3b82f6';
                         versionCombo.style.color = '#222';
-                        versionCombo.style.background = '#fff';                        
+                        versionCombo.style.background = 'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
+                        versionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        versionCombo.style.fontWeight = '500';
+                        versionCombo.style.transition = 'border-color 0.2s, box-shadow 0.2s';
+
                         // Add default option
                         const defaultOpt = document.createElement('option');
-                        // defaultOpt.value = '0';
                         defaultOpt.textContent = 'Versão Original';
                         data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.id.toString();
-                            // I need to send any version so I can get the webpage section id 
-                            // and then get the original version by sending :original suffix
                             defaultOpt.value = opt.value + ':original';
                             opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
                             versionCombo.appendChild(opt);
@@ -332,8 +365,6 @@
                         versionCombo.appendChild(defaultOpt);
 
                         if (data.versions.active_version) {
-                            console.log('[DEBUG] Active version ID:', data.versions.active_version.id);
-                            // Pre-select the active version in the combo box
                             versionCombo.value = data.versions.active_version.id;
                         }
 
@@ -344,30 +375,39 @@
                             textarea.value = data.versions.active_version.file_content;
                         }
 
-                        versionCombo.addEventListener('change', async function(event) {
-                            // event.preventDefault();
-                            // event.stopPropagation();
-                            // event.stopImmediatePropagation();
+                        versionCombo.addEventListener('focus', function() {
+                            versionCombo.style.borderColor = '#2563eb';
+                            versionCombo.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        });
+                        versionCombo.addEventListener('blur', function() {
+                            versionCombo.style.borderColor = '#3b82f6';
+                            versionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        });
 
-                            debugger;
+                        versionCombo.addEventListener('change', async function(event) {
                             const selected = versionCombo.options[versionCombo.selectedIndex];
                             const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
                             const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
                             const resp = await fetch(url);
                             const data = await resp.json();
-                            // Expecting { list: [...], active_version: { id, file_content } }
                             if (data && data.version.file_content) {
                                 textarea.value = data.version.file_content;
                             }
                         });
+
+                        // Replace placeholder content with the new combobox
+                        placeholder.innerHTML = '';
+                        placeholder.appendChild(versionCombo);
+                    } else {
+                        // No versions found, show placeholder message
+                        placeholder.innerHTML = '<span style="opacity:0.7;">Nenhuma versão disponível</span>';
                     }
                 } catch (err) {
+                    placeholder.innerHTML = '<span style="color:#e17055;">Erro ao buscar versões</span>';
                     console.error('Failed to fetch section versions:', err);
                 }
-            }
-
-            if (versionCombo) {
-                modalContent.appendChild(versionCombo);
+            } else {
+                placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
             }
             return versionCombo;
         }
@@ -515,8 +555,17 @@
             const textarea = createTextarea(section_div_wrapper);
             const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
             const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
-            // const versionCombo = await createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper);
 
+            // Always create and insert the placeholder for the combobox ONCE here
+            const comboBoxPlaceholder = createPlaceholderForTheComboBox();
+            // Insert before textarea for best UX
+            modalContent.appendChild(closeBtn);
+            modalContent.appendChild(modalTitle);
+            modalContent.appendChild(label);
+            modalContent.appendChild(comboBoxPlaceholder);
+            modalContent.appendChild(textarea);
+
+            // Now create the combobox and update the placeholder
             const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
             const versionCombo = await createVersionComboBoxLazy();
 
@@ -535,20 +584,10 @@
             } else {
                 toggleDisabledState(textarea, publishBtn, previewBtn, false);
             }
-            
-            modalContent.appendChild(closeBtn);
-            modalContent.appendChild(modalTitle);
-            modalContent.appendChild(label);
-
-            // if (versionCombo) {
-            //     modalContent.appendChild(versionCombo);
-            // }
-            modalContent.appendChild(textarea);
 
             modalContent.appendChild(cloneBtn);
             modalContent.appendChild(publishBtn);
             modalContent.appendChild(previewBtn);
-
 
             modal.appendChild(modalContent);
             document.body.appendChild(modal);
