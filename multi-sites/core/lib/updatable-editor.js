@@ -4,9 +4,11 @@
 
 (function () {
     let versionCombo = null;
+    let isVersionSaved = true;
     // Overlay utility: disables the whole screen and shows a label and throbber
     let overlayTimestamp = null;
     const OVERLAY_MIN_DURATION_MS = 1000; // ms
+    const SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY = 'selectedVersionComboValue';
 
     function toggleScreenOverlay(show, label = 'Processando...') {
         let overlay = document.getElementById('global-throbber-overlay');
@@ -91,8 +93,12 @@
     }
 
     // Utility to toggle disabled state with visual feedback
-    function toggleDisabledState(textarea, publishBtn, previewBtn, disabled) {
-        if (disabled) {
+    function toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, disabled) {
+        if (!isVersionSaved) {
+            publishBtn.disabled = true;
+            previewBtn.disabled = true;
+            cloneBtn.disabled = true;
+        } else if (disabled) {
             textarea.disabled = true;
             publishBtn.disabled = true;
             // publishBtn.style.pointerEvents = 'none';
@@ -109,6 +115,9 @@
             previewBtn.style.display = 'inline-block';
             publishBtn.style.display = 'inline-block';
             textarea.disabled = false;
+            cloneBtn.disabled = false;
+            previewBtn.disabled = false;
+            publishBtn.disabled = false;
             // publishBtn.disabled = false;
             // publishBtn.style.pointerEvents = 'auto';
             textarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
@@ -302,11 +311,12 @@
                 textarea.style.borderColor = '#3b82f6';
                 textarea.style.boxShadow = '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
             });
+
             textarea.value = section_div_wrapper.innerHTML;
             return textarea;
         }
 
-        async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent) {
+        async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent, isNewlyCreated = false) {
             // Only update the placeholder, never create or insert it here
            let lVersionCombo = null;
             let placeholder = modalContent.querySelector('#version-combobox-placeholder');
@@ -345,16 +355,32 @@
                             const opt = document.createElement('option');
                             opt.value = ver.id.toString();
                             defaultOpt.value = opt.value + ':original';
-                            opt.textContent = `Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
+
+                            let statusText = '';
+                            if (data.versions.active_version.id === ver.id) {
+                                statusText = ` (Publicada) `;
+                            }
+
+                            opt.textContent = `${statusText}Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
                             lVersionCombo.appendChild(opt);
                         });
                         lVersionCombo.appendChild(defaultOpt);
-                        updateTextarea();
 
-                        if (data.versions.active_version) {
-                            lVersionCombo.value = data.versions.active_version.id;
-                            textarea.value = data.versions.active_version.file_content;
+                        if (isNewlyCreated) {
+                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, lVersionCombo.value);
+                        } else {
+                            const savedValue = localStorage.getItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY);
+                            if (savedValue && lVersionCombo.querySelector(`option[value="${savedValue}"]`)) {
+                                lVersionCombo.value = savedValue;
+                            }
                         }
+
+                        await updateTextarea();
+
+                        // if (data.versions.active_version) {
+                        //     lVersionCombo.value = data.versions.active_version.id;
+                        //     textarea.value = data.versions.active_version.file_content;
+                        // }
 
                         lVersionCombo.addEventListener('focus', function() {
                             lVersionCombo.style.borderColor = '#2563eb';
@@ -377,8 +403,10 @@
                         }
 
                         lVersionCombo.addEventListener('change', async function(event) {
+                            // Persist the selected value
+                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, lVersionCombo.value);
                             await updateTextarea();
-                        });
+                        });                        
 
                         // Replace placeholder content with the new combobox
                         placeholder.innerHTML = '';
@@ -441,6 +469,7 @@
                 .then(response => response.json())
                 .then(async data => {
                     versionCombo = await createVersionComboBoxLazy();
+                    isVersionSaved = false;
                     toggleDisabledStateLazy();
                     toggleScreenOverlay(false);
                 })
@@ -454,7 +483,7 @@
             return cloneBtn;
         }
 
-        function createPublishButton(section_div_wrapper, versionCombo) {
+        function createPublishButton(section_div_wrapper, versionCombo, createVersionComboBoxLazy) {
             const publishBtn = document.createElement('button');
             publishBtn.type = 'button';
             publishBtn.textContent = 'Publicar';
@@ -499,9 +528,9 @@
                     }),
                 })
                 .then(response => response.json())
-                .then(data => {
+                .then(async data => {
+                    versionCombo = await createVersionComboBoxLazy();
                     toggleScreenOverlay(false);
-                    console.log('Publish response:', data);
                 })
                 .catch(error => {
                     toggleScreenOverlay(false);
@@ -528,7 +557,7 @@
             return previewBtn;
         }
 
-        function createSaveButton(section_div_wrapper, textarea) {
+        function createSaveButton(section_div_wrapper, textarea, toggleDisabledStateLazy) {
             const saveBtn = document.createElement('button');
             saveBtn.type = 'button';
             saveBtn.textContent = 'Salvar';
@@ -566,7 +595,9 @@
                         })
                     });
 
-                    const data = await resp.json();
+                    // const data = await resp.json();
+                    isVersionSaved = true;
+                    toggleDisabledStateLazy();
                     toggleScreenOverlay(false);
                 } catch (err) {
                     toggleScreenOverlay(false);
@@ -605,14 +636,24 @@
 
             // Now create the combobox and update the placeholder
             const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
+            const createVersionComboBoxForNew = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent, true);
+
             versionCombo = await createVersionComboBoxLazy();
 
 
-            const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, false);
+            const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, false);
 
-            const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy);
-            const publishBtn = createPublishButton(section_div_wrapper, versionCombo);
-            const saveBtn = createSaveButton(section_div_wrapper, textarea);
+            // Detect changes
+            textarea.addEventListener('input', function(event) {
+                isVersionSaved = false;
+                toggleDisabledStateLazy();
+            });
+
+
+
+            const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxForNew, toggleDisabledStateLazy);
+            const publishBtn = createPublishButton(section_div_wrapper, versionCombo, createVersionComboBoxLazy);
+            const saveBtn = createSaveButton(section_div_wrapper, textarea, toggleDisabledStateLazy);
             const previewBtn = createPreviewButton();
 
             previewBtn.onclick = () => {
@@ -622,11 +663,11 @@
 
             if (versionCombo === null) {
                 // Visually and functionally disable textarea and publish button
-                toggleDisabledState(textarea, publishBtn, previewBtn, true);
+                toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, true);
                 saveBtn.disabled = true;
                 saveBtn.style.opacity = '0.5';
             } else {
-                toggleDisabledState(textarea, publishBtn, previewBtn, false);
+                toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, false);
                 saveBtn.disabled = false;
                 saveBtn.style.opacity = '1';
             }
