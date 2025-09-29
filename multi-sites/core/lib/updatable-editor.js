@@ -1,27 +1,8 @@
-    /**
-     * Recursively reset all properties of an object (including nested objects) to null.
-     * Used to clear all DOM references in state.dom.
-     */
-    function resetDomTree(obj) {
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                if (typeof obj[key] === 'object' && obj[key] !== null) {
-                    resetDomTree(obj[key]);
-                } else {
-                    obj[key] = null;
-                }
-            }
-        }
-    }
-
-    // Usage example:
-    // resetDomTree(state.dom);
 // updatable-editor.js
 // This script enables in-place editing of divs with [updatable-section-uuid] using a modal UI.
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
-
 
     /**
      * UI State structure for updatable-editor.js
@@ -29,23 +10,14 @@
      * state: {
      *   dom: {
      *     buttons: { closeBtn, cloneBtn, publishBtn, saveBtn, previewBtn },
-     *     textarea, versionCombo, sectionDivWrapper
+     *     state.sectionTextarea, versionCombo, sectionDivWrapper
      *   },
-     *   updatableSectionUuid, businessId, isVersionSaved, overlayTimestamp
+     *   state.updatableSectionUuid, state.businessId, isVersionSaved, overlayTimestamp
      * }
      *
      * - All DOM element references are grouped under state.dom
      * - All button references are grouped under state.dom.buttons
      * - Use state fields for modal-wide or persistent state
-     *
-     * If you need to manage a dynamic or indexed set of elements (e.g., many modals, or a list of dynamic sections),
-     * consider using a Map for that part of the state:
-     *
-     *   state.dynamicSections = new Map();
-     *   // Example usage:
-     *   state.dynamicSections.set(sectionId, { textarea, versionCombo });
-     *   // To access:
-     *   const sectionState = state.dynamicSections.get(sectionId);
      *
      * For most static UI, the object structure below is preferred for clarity and maintainability.
      */
@@ -58,14 +30,46 @@
                 saveBtn: null,
                 previewBtn: null,
             },
-            textarea: null,
+            sectionTextarea: null,
             versionCombo: null,
             sectionDivWrapper: null,
+            modalContent: null,
         },
-        updatableSectionUuid: null,
-        businessId: null,
+        sectionAttributes: {
+            title: null,
+            filePath: null,
+            siteId: null,
+            htmlContent: null,
+            updatableSectionUuid: null,
+            businessId: null,
+        },
+        populateAttributesFromDiv: function(div) {
+            this.sectionAttributes.title = div.getAttribute('updatable-section-title') || null;
+            this.sectionAttributes.filePath = div.getAttribute('updatable-section-filepath') || null;
+            this.sectionAttributes.siteId = div.getAttribute('updatable-section-siteid') || null;
+            this.sectionAttributes.htmlContent = document.getElementById('uuid-html-editor').value
+            this.sectionAttributes.updatableSectionUuid = div.getAttribute('updatable-section-uuid');
+            this.sectionAttributes.businessId = div.getAttribute('updatable-section-businessid');
+        },
+
         isVersionSaved: true,
         overlayTimestamp: null,
+
+        /**
+         * Recursively reset all properties of an object (including nested objects) to null.
+         * Used to clear all DOM references in state.dom.
+         */
+        resetDomTree: function(obj) {
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        this.resetDomTree(obj[key]);
+                    } else {
+                        obj[key] = null;
+                    }
+                }
+            }
+        }
     }
 
     // Overlay utility: disables the whole screen and shows a label and throbber
@@ -75,7 +79,7 @@
     function toggleScreenOverlay(show, label = 'Processando...') {
         let overlay = document.getElementById('global-throbber-overlay');
         if (show) {
-            overlayTimestamp = performance.now();
+            state.overlayTimestamp = performance.now();
             if (!overlay) {
                 overlay = document.createElement('div');
                 overlay.id = 'global-throbber-overlay';
@@ -142,7 +146,7 @@
         } else {
             if (overlay) {
                 const now = performance.now();
-                const elapsed = overlayTimestamp ? now - overlayTimestamp : 1000;
+                const elapsed = state.overlayTimestamp ? now - state.overlayTimestamp : 1000;
                 if (elapsed < OVERLAY_MIN_DURATION_MS) {
                     setTimeout(() => {
                         overlay.style.display = 'none';
@@ -161,39 +165,39 @@
     }
 
     // Utility to toggle disabled state with visual feedback
-    function toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, disabled) {
-        if (!isVersionSaved) {
-            toggleButton(publishBtn, true);
-            toggleButton(previewBtn, true);
-            toggleButton(cloneBtn, true);
+    function toggleDisabledState(disabled) {
+        if (!state.isVersionSaved) {
+            toggleButton(state.publishBtn, true);
+            toggleButton(state.previewBtn, true);
+            toggleButton(state.cloneBtn, true);
         } else if (disabled) {
-            textarea.disabled = true;
-            toggleButton(publishBtn, true);
+            state.sectionTextarea.disabled = true;
+            toggleButton(state.publishBtn, true);
             // publishBtn.style.pointerEvents = 'none';
-            previewBtn.style.display = 'none';
-            publishBtn.style.display = 'none';
+            state.previewBtn.style.display = 'none';
+            state.publishBtn.style.display = 'none';
 
             // Add Tailwind-like classes for disabled look
-            textarea.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            state.sectionTextarea.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
             // publishBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
             // Remove focus ring
-            textarea.style.boxShadow = 'none';
+            state.sectionTextarea.style.boxShadow = 'none';
             // publishBtn.style.boxShadow = 'none';
         } else {
-            previewBtn.style.display = 'inline-block';
-            publishBtn.style.display = 'inline-block';
-            textarea.disabled = false;
-            cloneBtn.disabled = false;
-            previewBtn.disabled = false;
-            publishBtn.disabled = false;
-            toggleButton(publishBtn, false);
-            toggleButton(previewBtn, false);
-            toggleButton(cloneBtn, false);
+            state.previewBtn.style.display = 'inline-block';
+            state.publishBtn.style.display = 'inline-block';
+            state.sectionTextarea.disabled = false;
+            state.cloneBtn.disabled = false;
+            state.previewBtn.disabled = false;
+            state.publishBtn.disabled = false;
+            toggleButton(state.publishBtn, false);
+            toggleButton(state.previewBtn, false);
+            toggleButton(state.cloneBtn, false);
             // publishBtn.disabled = false;
             // publishBtn.style.pointerEvents = 'auto';
-            textarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            state.sectionTextarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
             // publishBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            textarea.style.boxShadow = '';
+            state.sectionTextarea.style.boxShadow = '';
             // publishBtn.style.boxShadow = '';
         }
     }
@@ -210,20 +214,20 @@
             '#6c5ce7', // deep purple
         ];
 
-        document.querySelectorAll('div[updatable-section-uuid]').forEach((section_div_wrapper, idx) => {
+        document.querySelectorAll('div[updatable-section-uuid]').forEach((div, idx) => {
             // Set base border and highlight styles dynamically
-            section_div_wrapper.addEventListener('mouseenter', function () {
+            div.addEventListener('mouseenter', function () {
                 const baseColor = borderColors[idx % borderColors.length];
-                Object.assign(section_div_wrapper.style, {
+                Object.assign(div.style, {
                     border: `10px solid ${baseColor}`,
                     transition: 'border 0.1s',
                 });
             });
-            section_div_wrapper.addEventListener('mouseleave', function () {
-                section_div_wrapper.style.border = '';
-                section_div_wrapper.style.borderRadius = '';
-                section_div_wrapper.style.transition = '';
-                section_div_wrapper.style.boxShadow = '';
+            div.addEventListener('mouseleave', function () {
+                div.style.border = '';
+                div.style.borderRadius = '';
+                div.style.transition = '';
+                div.style.boxShadow = '';
             });
 
             // Create wrapper div for positioning
@@ -258,12 +262,12 @@
 
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
-                showModal(section_div_wrapper);
+                showModal(div);
                 return false;
             });
 
             wrapper.appendChild(btn);
-            section_div_wrapper.parentNode.insertBefore(wrapper, section_div_wrapper);
+            div.parentNode.insertBefore(wrapper, div);
         });
 
         // --- Modal UI helpers ---
@@ -286,8 +290,8 @@
         }
 
         function createModalContent() {
-            const modalContent = document.createElement('div');
-            Object.assign(modalContent.style, {
+            const div = document.createElement('div');
+            Object.assign(div.style, {
                 background: '#fff',
                 padding: '24px',
                 borderRadius: '8px',
@@ -296,13 +300,13 @@
                 boxShadow: '0 4px 32px rgba(0,0,0,0.2)',
                 position: 'relative',
             });
-            return modalContent;
+            return div;
         }
 
         function createCloseButton(modal) {
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = '×';
-            Object.assign(closeBtn.style, {
+            const button = document.createElement('button');
+            button.textContent = '×';
+            Object.assign(button.style, {
                 position: 'absolute',
                 top: '8px',
                 right: '12px',
@@ -312,21 +316,21 @@
                 cursor: 'pointer',
                 color: '#111',
             });
-            closeBtn.onclick = () => modal.remove();
-            return closeBtn;
+            button.onclick = () => modal.remove();
+            return button;
         }
 
-        function createModalTitle(section_div_wrapper) {
-            const modalTitle = document.createElement('div');
-            modalTitle.textContent = section_div_wrapper.getAttribute('updatable-section-title') || 'Editar HTML';
-            Object.assign(modalTitle.style, {
+        function createModalTitle() {
+            const div = document.createElement('div');
+            div.textContent = state.sectionAttributes.title || 'Editar HTML';
+            Object.assign(div.style, {
                 marginBottom: '8px',
                 fontWeight: 'bold',
                 fontSize: '1.3em',
                 textAlign: 'center',
                 color: '#000',
             });
-            return modalTitle;
+            return div;
         }
 
         function createLabel() {
@@ -350,10 +354,10 @@
             return placeholder;
         }
 
-        function createTextarea(section_div_wrapper) {
-            const textarea = document.createElement('textarea');
-            textarea.id = 'uuid-html-editor';
-            Object.assign(textarea.style, {
+        function createSectionTextarea() {
+            const texta = document.createElement('textarea');
+            texta.id = 'uuid-html-editor';
+            Object.assign(texta.style, {
                 width: '100%',
                 minHeight: '320px',
                 maxHeight: '60vh',
@@ -374,23 +378,23 @@
                 caretColor: '#3b82f6',
                 backgroundClip: 'padding-box',
             });
-            textarea.addEventListener('focus', function() {
-                textarea.style.borderColor = '#2563eb'; // blue-600
-                textarea.style.boxShadow = '0 0 0 3px #3b82f633, 0 4px 32px 0 rgba(59,130,246,0.10)';
+            texta.addEventListener('focus', function() {
+                texta.style.borderColor = '#2563eb'; // blue-600
+                texta.style.boxShadow = '0 0 0 3px #3b82f633, 0 4px 32px 0 rgba(59,130,246,0.10)';
             });
-            textarea.addEventListener('blur', function() {
-                textarea.style.borderColor = '#3b82f6';
-                textarea.style.boxShadow = '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
+            texta.addEventListener('blur', function() {
+                texta.style.borderColor = '#3b82f6';
+                texta.style.boxShadow = '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
             });
 
-            textarea.value = section_div_wrapper.innerHTML;
-            return textarea;
+            texta.value = state.sectionDivWrapper.innerHTML;
+            return texta;
         }
 
-        async function createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent, isNewlyCreated = false) {
+        async function createVersionComboBox(isNewlyCreated = false) {
             // Only update the placeholder, never create or insert it here
-           let lVersionCombo = null;
-            let placeholder = modalContent.querySelector('#version-combobox-placeholder');
+            let selectElement = null;
+            let placeholder = state.modalContent.querySelector('#version-combobox-placeholder');
             if (!placeholder) {
                 // Defensive: if not found, do nothing
                 return null;
@@ -398,26 +402,26 @@
             // Clear previous content
             placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
 
-            if (updatableSectionUuid && businessId) {
+            if (state.sectionAttributes.updatableSectionUuid && state.sectionAttributes.businessId) {
                 try {
-                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(updatableSectionUuid)}&business-id=${encodeURIComponent(businessId)}`;
+                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(state.sectionAttributes.updatableSectionUuid)}&business-id=${encodeURIComponent(state.sectionAttributes.businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
                     // Expecting { list: [...], active_version: { id, file_content } }
                     if (data && Array.isArray(data.versions.list) && data.versions.list.length > 0) {
-                        lVersionCombo = document.createElement('select');
-                        lVersionCombo.style.margin = '0 auto 12px auto';
-                        lVersionCombo.style.display = 'block';
-                        lVersionCombo.style.width = '100%';
-                        lVersionCombo.style.padding = '10px 14px';
-                        lVersionCombo.style.fontSize = '1.08em';
-                        lVersionCombo.style.borderRadius = '7px';
-                        lVersionCombo.style.border = '2px solid #3b82f6';
-                        lVersionCombo.style.color = '#222';
-                        lVersionCombo.style.background = 'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
-                        lVersionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
-                        lVersionCombo.style.fontWeight = '500';
-                        lVersionCombo.style.transition = 'border-color 0.2s, box-shadow 0.2s';
+                        selectElement = document.createElement('select');
+                        selectElement.style.margin = '0 auto 12px auto';
+                        selectElement.style.display = 'block';
+                        selectElement.style.width = '100%';
+                        selectElement.style.padding = '10px 14px';
+                        selectElement.style.fontSize = '1.08em';
+                        selectElement.style.borderRadius = '7px';
+                        selectElement.style.border = '2px solid #3b82f6';
+                        selectElement.style.color = '#222';
+                        selectElement.style.background = 'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
+                        selectElement.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        selectElement.style.fontWeight = '500';
+                        selectElement.style.transition = 'border-color 0.2s, box-shadow 0.2s';
 
                         // Add default option
                         const defaultOpt = document.createElement('option');
@@ -433,55 +437,55 @@
                             }
 
                             opt.textContent = `${statusText}Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
-                            lVersionCombo.appendChild(opt);
+                            selectElement.appendChild(opt);
                         });
-                        lVersionCombo.appendChild(defaultOpt);
+                        selectElement.appendChild(defaultOpt);
 
                         if (isNewlyCreated) {
-                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, lVersionCombo.value);
+                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, selectElement.value);
                         } else {
                             const savedValue = localStorage.getItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY);
-                            if (savedValue && lVersionCombo.querySelector(`option[value="${savedValue}"]`)) {
-                                lVersionCombo.value = savedValue;
+                            if (savedValue && selectElement.querySelector(`option[value="${savedValue}"]`)) {
+                                selectElement.value = savedValue;
                             }
                         }
 
                         await updateTextarea();
 
                         // if (data.versions.active_version) {
-                        //     lVersionCombo.value = data.versions.active_version.id;
-                        //     textarea.value = data.versions.active_version.file_content;
+                        //     selectElement.value = data.versions.active_version.id;
+                        //     state.sectionTextarea.value = data.versions.active_version.file_content;
                         // }
 
-                        lVersionCombo.addEventListener('focus', function() {
-                            lVersionCombo.style.borderColor = '#2563eb';
-                            lVersionCombo.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        selectElement.addEventListener('focus', function() {
+                            selectElement.style.borderColor = '#2563eb';
+                            selectElement.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
-                        lVersionCombo.addEventListener('blur', function() {
-                            lVersionCombo.style.borderColor = '#3b82f6';
-                            lVersionCombo.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                        selectElement.addEventListener('blur', function() {
+                            selectElement.style.borderColor = '#3b82f6';
+                            selectElement.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
 
                         async function  updateTextarea() {
-                            const selected = lVersionCombo.options[lVersionCombo.selectedIndex];
-                            const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
+                            const selected = selectElement.options[selectElement.selectedIndex];
+                            const siteId = state.sectionDivWrapper.getAttribute('updatable-section-siteid');
                             const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
                             const resp = await fetch(url);
                             const data = await resp.json();
                             if (data && data.version.file_content) {
-                                textarea.value = data.version.file_content;
+                                state.sectionTextarea.value = data.version.file_content;
                             }
                         }
 
-                        lVersionCombo.addEventListener('change', async function(event) {
+                        selectElement.addEventListener('change', async function(event) {
                             // Persist the selected value
-                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, lVersionCombo.value);
+                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, selectElement.value);
                             await updateTextarea();
                         });                        
 
                         // Replace placeholder content with the new combobox
                         placeholder.innerHTML = '';
-                        placeholder.appendChild(lVersionCombo);
+                        placeholder.appendChild(selectElement);
                     } else {
                         // No versions found, show placeholder message
                         placeholder.innerHTML = '<span style="opacity:0.7;">Nenhuma versão disponível</span>';
@@ -493,14 +497,14 @@
             } else {
                 placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
             }
-            return lVersionCombo;
+            return selectElement;
         }
 
-        function createCloneButton(section_div_wrapper, createVersionComboBoxLazy, toggleDisabledStateLazy) {
-            const cloneBtn = document.createElement('button');
-            cloneBtn.type = 'button';
-            cloneBtn.textContent = 'Clonar';
-            Object.assign(cloneBtn.style, {
+        function createCloneButton() {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Clonar';
+            Object.assign(button.style, {
                 marginTop: '12px',
                 marginLeft: '8px',
                 padding: '8px 16px',
@@ -510,17 +514,19 @@
                 borderRadius: '4px',
                 cursor: 'pointer',
             });
-            cloneBtn.onclick = () => {
+            button.onclick = () => {
                 toggleScreenOverlay(true, 'Clonando seção...');
-                const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
-                const title = section_div_wrapper.getAttribute('updatable-section-title');
-                const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
-                const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
-                const htmlContent = document.getElementById('uuid-html-editor').value;
-                if (!uuid || !title || !filePath || !businessId || !htmlContent) {
+                if (!state.sectionAttributes.updatableSectionUuid || 
+                    !state.sectionAttributes.title || 
+                    !state.sectionAttributes.filePath || 
+                    !state.sectionAttributes.businessId || 
+                    !state.sectionAttributes.htmlContent) {
                     alert('Faltam atributos para clonar.');
-                    console.error('Missing attributes for cloning:', { uuid, title, filePath, businessId, htmlContent });
+                    console.error('Missing attributes for cloning:', { uuid: state.sectionAttributes.updatableSectionUuid, 
+                        title: state.sectionAttributes.title, 
+                        filePath: state.sectionAttributes.filePath, 
+                        businessId: state.sectionAttributes.businessId, 
+                        htmlContent: state.sectionAttributes.htmlContent });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/webpage-section', {
@@ -529,19 +535,19 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        updatableUuid: uuid,
-                        title: title,
-                        webpageRelativePath: filePath,
-                        businessId: businessId,
-                        htmlContent: htmlContent,
-                        siteId: siteId
+                        updatableUuid: state.sectionAttributes.updatableSectionUuid,
+                        title: state.sectionAttributes.title,
+                        webpageRelativePath: state.sectionAttributes.filePath,
+                        businessId: state.sectionAttributes.businessId,
+                        htmlContent: state.sectionAttributes.htmlContent,
+                        siteId: state.sectionAttributes.siteId
                     }),
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    versionCombo = await createVersionComboBoxLazy();
-                    isVersionSaved = false;
-                    toggleDisabledStateLazy();
+                    state.versionCombo = await createVersionComboBox();
+                    state.isVersionSaved = false;
+                    toggleDisabledState();
                     toggleScreenOverlay(false);
                 })
                 .catch(error => {
@@ -551,14 +557,14 @@
                     console.error('Clonar error:', error);
                 });
             };
-            return cloneBtn;
+            return button;
         }
 
-        function createPublishButton(section_div_wrapper, versionCombo, createVersionComboBoxLazy) {
-            const publishBtn = document.createElement('button');
-            publishBtn.type = 'button';
-            publishBtn.textContent = 'Publicar';
-            Object.assign(publishBtn.style, {
+        function createPublishButton() {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Publicar';
+            Object.assign(button.style, {
                 marginTop: '12px',
                 marginLeft: '8px',
                 padding: '8px 16px',
@@ -568,20 +574,21 @@
                 borderRadius: '4px',
                 cursor: 'pointer',
             });
-            publishBtn.onclick = () => {
+            button.onclick = () => {
                 toggleScreenOverlay(true, 'Publicando seção...');
-                const uuid = section_div_wrapper.getAttribute('updatable-section-uuid');
-                const filePath = section_div_wrapper.getAttribute('updatable-section-filepath');
-                const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
-                const htmlContent = document.getElementById('uuid-html-editor').value;
 
                 // versionCombo
-                const versionId = versionCombo.value;
-                console.log('Publishing version ID:', versionId);
+                const versionId = state.versionCombo.value;
 
-                if (!uuid || !filePath || !businessId || !htmlContent) {
-                    alert('Faltam atributos para publish.');
-                    console.error('Missing attributes for publishing:', { uuid, filePath, businessId, htmlContent });
+                if (!state.sectionAttributes.updatableSectionUuid || 
+                    !state.sectionAttributes.filePath || 
+                    !state.sectionAttributes.businessId || 
+                    !state.sectionAttributes.htmlContent) {
+                    alert('Faltam atributos para publicar.');
+                    console.error('Missing attributes for publishing:', { updatableSectionUuid: state.sectionAttributes.updatableSectionUuid, 
+                        filePath: state.sectionAttributes.filePath, 
+                        businessId: state.sectionAttributes.businessId, 
+                        htmlContent: state.sectionAttributes.htmlContent });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/publish-section', {
@@ -590,17 +597,17 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        updatableUuid: uuid,
-                        webpageRelativePath: filePath,
-                        businessId: businessId,
-                        htmlContent: htmlContent,
-                        siteId: section_div_wrapper.getAttribute('updatable-section-siteid'),
+                        updatableUuid: state.sectionAttributes.updatableSectionUuid,
+                        webpageRelativePath: state.sectionAttributes.filePath,
+                        businessId: state.sectionAttributes.businessId,
+                        htmlContent: state.sectionAttributes.htmlContent,
+                        siteId: state.sectionAttributes.siteId,
                         versionId: versionId,
                     }),
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    versionCombo = await createVersionComboBoxLazy();
+                    state.versionCombo = await createVersionComboBox();
                     toggleScreenOverlay(false);
                 })
                 .catch(error => {
@@ -608,14 +615,14 @@
                     console.error('Publish error:', error);
                 });
             };
-            return publishBtn;
+            return button;
         }
 
         function createPreviewButton() {
-            const previewBtn = document.createElement('button');
-            previewBtn.type = 'button';
-            previewBtn.textContent = 'Vizualizar';
-            Object.assign(previewBtn.style, {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Vizualizar';
+            Object.assign(button.style, {
                 marginTop: '12px',
                 marginLeft: '8px',
                 padding: '8px 16px',
@@ -625,14 +632,14 @@
                 borderRadius: '4px',
                 cursor: 'pointer',
             });
-            return previewBtn;
+            return button;
         }
 
-        function createSaveButton(section_div_wrapper, textarea, toggleDisabledStateLazy) {
-            const saveBtn = document.createElement('button');
-            saveBtn.type = 'button';
-            saveBtn.textContent = 'Salvar';
-            Object.assign(saveBtn.style, {
+        function createSaveButton() {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Salvar';
+            Object.assign(button.style, {
                 marginTop: '12px',
                 marginLeft: '8px',
                 padding: '8px 16px',
@@ -642,15 +649,12 @@
                 borderRadius: '4px',
                 cursor: 'pointer',
             });
-            saveBtn.onclick = async () => {
-                if (!versionCombo || !versionCombo.value) {
+            button.onclick = async () => {
+                if (!state.versionCombo || !state.versionCombo.value) {
                     alert('Selecione uma versão para salvar.');
                     return;
                 }
-                const siteId = section_div_wrapper.getAttribute('updatable-section-siteid');
-                const htmlContent = textarea.value;
-                const webPageSectionVersionId = versionCombo.value;
-                if (!siteId || !htmlContent || !webPageSectionVersionId) {
+                if (!state.sectionAttributes.siteId || !state.sectionAttributes.htmlContent || !state.versionCombo.value) {
                     alert('Faltam parâmetros para salvar.');
                     return;
                 }
@@ -660,15 +664,15 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            webPageSectionVersionId,
-                            siteId,
-                            htmlContent
+                            webPageSectionVersionId: state.versionCombo.value,
+                            siteId: state.sectionAttributes.siteId,
+                            htmlContent: state.sectionAttributes.htmlContent
                         })
                     });
 
                     // const data = await resp.json();
-                    isVersionSaved = true;
-                    toggleDisabledStateLazy();
+                    state.isVersionSaved = true;
+                    toggleDisabledState(false);
                     toggleScreenOverlay(false);
                 } catch (err) {
                     toggleScreenOverlay(false);
@@ -676,77 +680,73 @@
                     console.error('Erro ao salvar seção:', err);
                 }
             };
-            return saveBtn;
+            return button;
         }
 
         // --- Main showModal function ---
-        async function showModal(section_div_wrapper) {
+        async function showModal(sectionDivWrapper) {
+            state.resetDomTree(state.dom);
+            state.sectionDivWrapper = sectionDivWrapper;
+            state.populateAttributesFromDiv(sectionDivWrapper);
+
             document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
             const modal = createModalContainer();
-            const modalContent = createModalContent();
+            state.modalContent = createModalContent();
 
-            const closeBtn = createCloseButton(modal);
+            state.buttons.closeBtn = createCloseButton(modal);
             modal.addEventListener('mousedown', function (e) {
-                if (!modalContent.contains(e.target)) {
+                if (!state.modalContent.contains(e.target)) {
                     modal.remove();
                 }
             });
-            const modalTitle = createModalTitle(section_div_wrapper);
+            const modalTitle = createModalTitle();
             const label = createLabel();
-            const textarea = createTextarea(section_div_wrapper);
-            const updatableSectionUuid = section_div_wrapper.getAttribute('updatable-section-uuid');
-            const businessId = section_div_wrapper.getAttribute('updatable-section-businessid');
+            state.sectionTextarea = createSectionTextarea();
 
             // Always create and insert the placeholder for the combobox ONCE here
             const comboBoxPlaceholder = createPlaceholderForTheComboBox();
-            // Insert before textarea for best UX
-            modalContent.appendChild(closeBtn);
-            modalContent.appendChild(modalTitle);
-            modalContent.appendChild(label);
-            modalContent.appendChild(comboBoxPlaceholder);
-            modalContent.appendChild(textarea);
+            // Insert before state.sectionTextarea for best UX
+            state.modalContent.appendChild(state.buttons.closeBtn);
+            state.modalContent.appendChild(modalTitle);
+            state.modalContent.appendChild(label);
+            state.modalContent.appendChild(comboBoxPlaceholder);
+            state.modalContent.appendChild(state.sectionTextarea);
 
-            // Now create the combobox and update the placeholder
-            const createVersionComboBoxLazy = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent);
-            const createVersionComboBoxForNew = () => createVersionComboBox(updatableSectionUuid, businessId, textarea, section_div_wrapper, modalContent, true);
-
-            versionCombo = await createVersionComboBoxLazy();
-
-            const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, false);
+            state.versionCombo = await createVersionComboBox();
 
             // Detect changes
-            textarea.addEventListener('input', function(event) {
-                isVersionSaved = false;
-                toggleDisabledStateLazy();
+            state.sectionTextarea.addEventListener('input', function(event) {
+                state.isVersionSaved = false;
+                toggleDisabledState(false);
             });
 
-            const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxForNew, toggleDisabledStateLazy);
-            const publishBtn = createPublishButton(section_div_wrapper, versionCombo, createVersionComboBoxLazy);
-            const saveBtn = createSaveButton(section_div_wrapper, textarea, toggleDisabledStateLazy);
-            const previewBtn = createPreviewButton();
+            state.buttons.cloneBtn = createCloneButton();
+            state.buttons.publishBtn = createPublishButton();
+            state.buttons.saveBtn = createSaveButton();
+            state.buttons.previewBtn = createPreviewButton();
 
-            previewBtn.onclick = () => {
+            state.buttons.previewBtn.onclick = () => {
                 modal.remove();
-                section_div_wrapper.innerHTML = textarea.value.trim();
+                state.sectionDivWrapper.innerHTML = state.sectionTextarea.value.trim();
             };
 
-            if (versionCombo === null) {
-                // Visually and functionally disable textarea and publish button
-                toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, true);
-                saveBtn.disabled = true;
-                saveBtn.style.opacity = '0.5';
+            if (state.versionCombo === null) {
+                // Visually and functionally disable state.sectionTextarea and publish button
+                toggleDisabledState(true);
+                state.buttons.saveBtn.disabled = true;
+                state.buttons.saveBtn.style.opacity = '0.5';
             } else {
-                toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, false);
-                saveBtn.disabled = false;
-                saveBtn.style.opacity = '1';
+                toggleDisabledState(false);
+                state.buttons.saveBtn.disabled = false;
+                state.buttons.saveBtn.style.opacity = '1';
             }
 
-            modalContent.appendChild(cloneBtn);
-            modalContent.appendChild(publishBtn);
-            modalContent.appendChild(saveBtn);
-            modalContent.appendChild(previewBtn);
+            state.modalContent.appendChild(state.buttons.cloneBtn);
+            state.modalContent.appendChild(state.buttons.publishBtn);
+            state.modalContent.appendChild(state.buttons.saveBtn);
+            state.modalContent.appendChild(state.buttons.previewBtn);
 
-            modal.appendChild(modalContent);
+            modal.appendChild(state.modalContent);
             document.body.appendChild(modal);
         }
     });
