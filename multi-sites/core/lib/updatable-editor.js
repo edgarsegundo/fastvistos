@@ -3,10 +3,27 @@
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
-    let versionCombo = null;
-    let isVersionSaved = true;
+
+    const state = {
+        refs: {
+            buttons: {
+                closeBtn: null,
+                cloneBtn: null,
+                publishBtn: null,
+                saveBtn: null,
+                previewBtn: null,
+            },
+            textarea: null,
+            versionCombo: null,
+            sectionDivWrapper: null,
+        },
+        updatableSectionUuid: null,
+        businessId: null,
+        isVersionSaved: true,
+        overlayTimestamp: null,
+    }
+
     // Overlay utility: disables the whole screen and shows a label and throbber
-    let overlayTimestamp = null;
     const OVERLAY_MIN_DURATION_MS = 1000; // ms
     const SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY = 'selectedVersionComboValue';
 
@@ -622,6 +639,7 @@
             document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
             const modal = createModalContainer();
             const modalContent = createModalContent();
+
             const closeBtn = createCloseButton(modal);
             modal.addEventListener('mousedown', function (e) {
                 if (!modalContent.contains(e.target)) {
