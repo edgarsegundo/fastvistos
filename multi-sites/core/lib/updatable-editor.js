@@ -330,7 +330,27 @@
                 cursor: 'pointer',
                 color: '#111',
             });
-            button.onclick = () => modal.remove();
+            button.onclick = async () => {
+                if (typeof Swal !== 'undefined') {
+                    const result = await Swal.fire({
+                        title: 'Tem certeza?',
+                        text: 'Você perderá as alterações não salvas. Deseja continuar?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sim, fechar',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                    });
+                    if (result.isConfirmed) {
+                        modal.remove();
+                    }
+                } else {
+                    // Fallback if SweetAlert2 is not loaded
+                    if (confirm('Você perderá as alterações não salvas. Deseja continuar?')) {
+                        modal.remove();
+                    }
+                }
+            };
             return button;
         }
 
