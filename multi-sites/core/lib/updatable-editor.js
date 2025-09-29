@@ -92,15 +92,21 @@
         }
     }
 
+    function toggleButton(element, toggle) {
+        element.style.opacity = toggle ? '0.5' : '1';
+        element.style.pointerEvents = toggle ? 'none' : 'auto';
+        element.disabled = toggle ? true : false;
+    }
+
     // Utility to toggle disabled state with visual feedback
     function toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, disabled) {
         if (!isVersionSaved) {
-            publishBtn.disabled = true;
-            previewBtn.disabled = true;
-            cloneBtn.disabled = true;
+            toggleButton(publishBtn, true);
+            toggleButton(previewBtn, true);
+            toggleButton(cloneBtn, true);
         } else if (disabled) {
             textarea.disabled = true;
-            publishBtn.disabled = true;
+            toggleButton(publishBtn, true);
             // publishBtn.style.pointerEvents = 'none';
             previewBtn.style.display = 'none';
             publishBtn.style.display = 'none';
@@ -118,6 +124,9 @@
             cloneBtn.disabled = false;
             previewBtn.disabled = false;
             publishBtn.disabled = false;
+            toggleButton(publishBtn, false);
+            toggleButton(previewBtn, false);
+            toggleButton(cloneBtn, false);
             // publishBtn.disabled = false;
             // publishBtn.style.pointerEvents = 'auto';
             textarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
@@ -640,7 +649,6 @@
 
             versionCombo = await createVersionComboBoxLazy();
 
-
             const toggleDisabledStateLazy = () => toggleDisabledState(textarea, publishBtn, previewBtn, cloneBtn, false);
 
             // Detect changes
@@ -648,8 +656,6 @@
                 isVersionSaved = false;
                 toggleDisabledStateLazy();
             });
-
-
 
             const cloneBtn = createCloneButton(section_div_wrapper, createVersionComboBoxForNew, toggleDisabledStateLazy);
             const publishBtn = createPublishButton(section_div_wrapper, versionCombo, createVersionComboBoxLazy);
