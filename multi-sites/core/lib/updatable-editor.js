@@ -39,7 +39,6 @@
             title: null,
             filePath: null,
             siteId: null,
-            htmlContent: null,
             updatableSectionUuid: null,
             businessId: null,
         },
@@ -47,9 +46,12 @@
             this.sectionAttributes.title = div.getAttribute('updatable-section-title') || null;
             this.sectionAttributes.filePath = div.getAttribute('updatable-section-filepath') || null;
             this.sectionAttributes.siteId = div.getAttribute('updatable-section-siteid') || null;
-            this.sectionAttributes.htmlContent = document.getElementById('uuid-html-editor').value
-            this.sectionAttributes.updatableSectionUuid = div.getAttribute('updatable-section-uuid');
-            this.sectionAttributes.businessId = div.getAttribute('updatable-section-businessid');
+            this.sectionAttributes.updatableSectionUuid = div.getAttribute('updatable-section-uuid') || null;
+            this.sectionAttributes.businessId = div.getAttribute('updatable-section-businessid') || null;
+        },
+
+        getHtmlContent: function() {
+            return this.dom.sectionTextarea.value || null;
         },
 
         isVersionSaved: true,
@@ -65,11 +67,14 @@
                     if (typeof obj[key] === 'object' && obj[key] !== null) {
                         this.resetDomTree(obj[key]);
                     } else {
+                        if (obj[key] instanceof Element && typeof obj[key].remove === 'function') {
+                            obj[key].remove();
+                        }
                         obj[key] = null;
                     }
                 }
             }
-        }
+        }        
     }
 
     // Overlay utility: disables the whole screen and shows a label and throbber
@@ -159,46 +164,30 @@
     }
 
     function toggleButton(element, toggle) {
-        element.style.opacity = toggle ? '0.5' : '1';
-        element.style.pointerEvents = toggle ? 'none' : 'auto';
-        element.disabled = toggle ? true : false;
+        element.style.opacity = toggle ? '1' : '0.2';
+        element.style.pointerEvents = toggle ? 'auto' : 'none';
+        element.disabled = !toggle;
+        if (toggle) {
+            element.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+        } else {
+            element.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+        }
+    }
+
+    function toggleUIElements(toggleClone = false, togglePublish = false, toggleSave = false, togglePreview = false, toggleTextarea = false) {
+        toggleButton(state.dom.buttons.cloneBtn, toggleClone);
+        toggleButton(state.dom.buttons.publishBtn, togglePublish);
+        toggleButton(state.dom.buttons.saveBtn, toggleSave);
+        toggleButton(state.dom.buttons.previewBtn, togglePreview);
+        toggleButton(state.dom.sectionTextarea, toggleTextarea);
     }
 
     // Utility to toggle disabled state with visual feedback
-    function toggleDisabledState(disabled) {
-        if (!state.isVersionSaved) {
-            toggleButton(state.publishBtn, true);
-            toggleButton(state.previewBtn, true);
-            toggleButton(state.cloneBtn, true);
-        } else if (disabled) {
-            state.sectionTextarea.disabled = true;
-            toggleButton(state.publishBtn, true);
-            // publishBtn.style.pointerEvents = 'none';
-            state.previewBtn.style.display = 'none';
-            state.publishBtn.style.display = 'none';
-
-            // Add Tailwind-like classes for disabled look
-            state.sectionTextarea.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            // publishBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            // Remove focus ring
-            state.sectionTextarea.style.boxShadow = 'none';
-            // publishBtn.style.boxShadow = 'none';
+    function toggleUIState() {
+        if (state.isVersionSaved) {
+            toggleUIElements(true, true, false, true, true);
         } else {
-            state.previewBtn.style.display = 'inline-block';
-            state.publishBtn.style.display = 'inline-block';
-            state.sectionTextarea.disabled = false;
-            state.cloneBtn.disabled = false;
-            state.previewBtn.disabled = false;
-            state.publishBtn.disabled = false;
-            toggleButton(state.publishBtn, false);
-            toggleButton(state.previewBtn, false);
-            toggleButton(state.cloneBtn, false);
-            // publishBtn.disabled = false;
-            // publishBtn.style.pointerEvents = 'auto';
-            state.sectionTextarea.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            // publishBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-            state.sectionTextarea.style.boxShadow = '';
-            // publishBtn.style.boxShadow = '';
+            toggleUIElements(false, false, true, false, true);
         }
     }
 
@@ -272,9 +261,9 @@
 
         // --- Modal UI helpers ---
         function createModalContainer() {
-            const modal = document.createElement('div');
-            modal.className = 'uuid-modal';
-            Object.assign(modal.style, {
+            const div = document.createElement('div');
+            div.className = 'uuid-modal';
+            Object.assign(div.style, {
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -286,7 +275,7 @@
                 justifyContent: 'center',
                 zIndex: 9999,
             });
-            return modal;
+            return div;
         }
 
         function createModalContent() {
@@ -387,14 +376,14 @@
                 texta.style.boxShadow = '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
             });
 
-            texta.value = state.sectionDivWrapper.innerHTML;
+            texta.value = state.dom.sectionDivWrapper.innerHTML;
             return texta;
         }
 
         async function createVersionComboBox(isNewlyCreated = false) {
             // Only update the placeholder, never create or insert it here
             let selectElement = null;
-            let placeholder = state.modalContent.querySelector('#version-combobox-placeholder');
+            let placeholder = state.dom.modalContent.querySelector('#version-combobox-placeholder');
             if (!placeholder) {
                 // Defensive: if not found, do nothing
                 return null;
@@ -432,7 +421,7 @@
                             defaultOpt.value = opt.value + ':original';
 
                             let statusText = '';
-                            if (data.versions.active_version.id === ver.id) {
+                            if (data.versions.active_version && data.versions.active_version.id === ver.id) {
                                 statusText = ` (Publicada) `;
                             }
 
@@ -452,11 +441,6 @@
 
                         await updateTextarea();
 
-                        // if (data.versions.active_version) {
-                        //     selectElement.value = data.versions.active_version.id;
-                        //     state.sectionTextarea.value = data.versions.active_version.file_content;
-                        // }
-
                         selectElement.addEventListener('focus', function() {
                             selectElement.style.borderColor = '#2563eb';
                             selectElement.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
@@ -468,12 +452,11 @@
 
                         async function  updateTextarea() {
                             const selected = selectElement.options[selectElement.selectedIndex];
-                            const siteId = state.sectionDivWrapper.getAttribute('updatable-section-siteid');
-                            const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(siteId)}&id=${encodeURIComponent(selected.value)}`;
+                            const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(state.sectionAttributes.siteId)}&id=${encodeURIComponent(selected.value)}`;
                             const resp = await fetch(url);
                             const data = await resp.json();
                             if (data && data.version.file_content) {
-                                state.sectionTextarea.value = data.version.file_content;
+                                state.dom.sectionTextarea.value = data.version.file_content;
                             }
                         }
 
@@ -520,13 +503,13 @@
                     !state.sectionAttributes.title || 
                     !state.sectionAttributes.filePath || 
                     !state.sectionAttributes.businessId || 
-                    !state.sectionAttributes.htmlContent) {
+                    !state.getHtmlContent()) {
                     alert('Faltam atributos para clonar.');
                     console.error('Missing attributes for cloning:', { uuid: state.sectionAttributes.updatableSectionUuid, 
                         title: state.sectionAttributes.title, 
                         filePath: state.sectionAttributes.filePath, 
                         businessId: state.sectionAttributes.businessId, 
-                        htmlContent: state.sectionAttributes.htmlContent });
+                        htmlContent: state.getHtmlContent() });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/webpage-section', {
@@ -539,15 +522,15 @@
                         title: state.sectionAttributes.title,
                         webpageRelativePath: state.sectionAttributes.filePath,
                         businessId: state.sectionAttributes.businessId,
-                        htmlContent: state.sectionAttributes.htmlContent,
+                        htmlContent: state.getHtmlContent(),
                         siteId: state.sectionAttributes.siteId
                     }),
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    state.versionCombo = await createVersionComboBox();
+                    state.dom.versionCombo = await createVersionComboBox();
                     state.isVersionSaved = false;
-                    toggleDisabledState();
+                    toggleUIState();
                     toggleScreenOverlay(false);
                 })
                 .catch(error => {
@@ -556,6 +539,54 @@
                     alert('Erro ao clonar seção. Veja console para detalhes.');
                     console.error('Clonar error:', error);
                 });
+            };
+            return button;
+        }
+
+        function createSaveButton() {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Salvar';
+            Object.assign(button.style, {
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#2563eb',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+            });
+            button.onclick = async () => {
+                if (!state.dom.versionCombo || !state.dom.versionCombo.value) {
+                    alert('Selecione uma versão para salvar.');
+                    return;
+                }
+                if (!state.sectionAttributes.siteId || !state.getHtmlContent() || !state.dom.versionCombo.value) {
+                    alert('Faltam parâmetros para salvar.');
+                    return;
+                }
+                toggleScreenOverlay(true, 'Salvando...');
+                try {
+                    const resp = await fetch('https://p2digital.com.br/msitesapp/api/update-section-file-version', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            webPageSectionVersionId: state.dom.versionCombo.value,
+                            siteId: state.sectionAttributes.siteId,
+                            htmlContent: state.getHtmlContent()
+                        })
+                    });
+
+                    // const data = await resp.json();
+                    state.isVersionSaved = true;
+                    toggleUIState(false);
+                    toggleScreenOverlay(false);
+                } catch (err) {
+                    toggleScreenOverlay(false);
+                    alert('Erro ao salvar. Veja o console para detalhes.');
+                    console.error('Erro ao salvar seção:', err);
+                }
             };
             return button;
         }
@@ -578,17 +609,17 @@
                 toggleScreenOverlay(true, 'Publicando seção...');
 
                 // versionCombo
-                const versionId = state.versionCombo.value;
+                const versionId = state.dom.versionCombo.value;
 
                 if (!state.sectionAttributes.updatableSectionUuid || 
                     !state.sectionAttributes.filePath || 
                     !state.sectionAttributes.businessId || 
-                    !state.sectionAttributes.htmlContent) {
+                    !state.getHtmlContent()) {
                     alert('Faltam atributos para publicar.');
                     console.error('Missing attributes for publishing:', { updatableSectionUuid: state.sectionAttributes.updatableSectionUuid, 
                         filePath: state.sectionAttributes.filePath, 
                         businessId: state.sectionAttributes.businessId, 
-                        htmlContent: state.sectionAttributes.htmlContent });
+                        htmlContent: state.getHtmlContent() });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/publish-section', {
@@ -600,14 +631,14 @@
                         updatableUuid: state.sectionAttributes.updatableSectionUuid,
                         webpageRelativePath: state.sectionAttributes.filePath,
                         businessId: state.sectionAttributes.businessId,
-                        htmlContent: state.sectionAttributes.htmlContent,
+                        htmlContent: state.getHtmlContent(),
                         siteId: state.sectionAttributes.siteId,
                         versionId: versionId,
                     }),
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    state.versionCombo = await createVersionComboBox();
+                    state.dom.versionCombo = await createVersionComboBox();
                     toggleScreenOverlay(false);
                 })
                 .catch(error => {
@@ -635,118 +666,68 @@
             return button;
         }
 
-        function createSaveButton() {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.textContent = 'Salvar';
-            Object.assign(button.style, {
-                marginTop: '12px',
-                marginLeft: '8px',
-                padding: '8px 16px',
-                background: '#2563eb',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-            });
-            button.onclick = async () => {
-                if (!state.versionCombo || !state.versionCombo.value) {
-                    alert('Selecione uma versão para salvar.');
-                    return;
-                }
-                if (!state.sectionAttributes.siteId || !state.sectionAttributes.htmlContent || !state.versionCombo.value) {
-                    alert('Faltam parâmetros para salvar.');
-                    return;
-                }
-                toggleScreenOverlay(true, 'Salvando...');
-                try {
-                    const resp = await fetch('https://p2digital.com.br/msitesapp/api/update-section-file-version', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            webPageSectionVersionId: state.versionCombo.value,
-                            siteId: state.sectionAttributes.siteId,
-                            htmlContent: state.sectionAttributes.htmlContent
-                        })
-                    });
-
-                    // const data = await resp.json();
-                    state.isVersionSaved = true;
-                    toggleDisabledState(false);
-                    toggleScreenOverlay(false);
-                } catch (err) {
-                    toggleScreenOverlay(false);
-                    alert('Erro ao salvar. Veja o console para detalhes.');
-                    console.error('Erro ao salvar seção:', err);
-                }
-            };
-            return button;
-        }
-
         // --- Main showModal function ---
         async function showModal(sectionDivWrapper) {
             state.resetDomTree(state.dom);
-            state.sectionDivWrapper = sectionDivWrapper;
+            state.dom.sectionDivWrapper = sectionDivWrapper;
             state.populateAttributesFromDiv(sectionDivWrapper);
 
+            // Always remove existing modals first
             document.querySelectorAll('.uuid-modal').forEach((m) => m.remove());
-            const modal = createModalContainer();
-            state.modalContent = createModalContent();
 
-            state.buttons.closeBtn = createCloseButton(modal);
+            const modal = createModalContainer();
+            state.dom.modalContent = createModalContent();
+
+            state.dom.buttons.closeBtn = createCloseButton(modal);
             modal.addEventListener('mousedown', function (e) {
-                if (!state.modalContent.contains(e.target)) {
+                if (!state.dom.modalContent.contains(e.target)) {
                     modal.remove();
                 }
             });
             const modalTitle = createModalTitle();
             const label = createLabel();
-            state.sectionTextarea = createSectionTextarea();
+
+            state.dom.sectionTextarea = createSectionTextarea(sectionDivWrapper);
 
             // Always create and insert the placeholder for the combobox ONCE here
             const comboBoxPlaceholder = createPlaceholderForTheComboBox();
-            // Insert before state.sectionTextarea for best UX
-            state.modalContent.appendChild(state.buttons.closeBtn);
-            state.modalContent.appendChild(modalTitle);
-            state.modalContent.appendChild(label);
-            state.modalContent.appendChild(comboBoxPlaceholder);
-            state.modalContent.appendChild(state.sectionTextarea);
+            // Insert before sectionTextarea for best UX
+            state.dom.modalContent.appendChild(state.dom.buttons.closeBtn);
+            state.dom.modalContent.appendChild(modalTitle);
+            state.dom.modalContent.appendChild(label);
+            state.dom.modalContent.appendChild(comboBoxPlaceholder);
+            state.dom.modalContent.appendChild(state.dom.sectionTextarea);
 
-            state.versionCombo = await createVersionComboBox();
+            state.dom.versionCombo = await createVersionComboBox();
 
             // Detect changes
-            state.sectionTextarea.addEventListener('input', function(event) {
+            state.dom.sectionTextarea.addEventListener('input', function(event) {
                 state.isVersionSaved = false;
-                toggleDisabledState(false);
+                toggleUIState(false);
             });
 
-            state.buttons.cloneBtn = createCloneButton();
-            state.buttons.publishBtn = createPublishButton();
-            state.buttons.saveBtn = createSaveButton();
-            state.buttons.previewBtn = createPreviewButton();
+            state.dom.buttons.cloneBtn = createCloneButton();
+            state.dom.buttons.saveBtn = createSaveButton();
+            state.dom.buttons.publishBtn = createPublishButton();
+            state.dom.buttons.previewBtn = createPreviewButton();
 
-            state.buttons.previewBtn.onclick = () => {
+            state.dom.buttons.previewBtn.onclick = () => {
                 modal.remove();
-                state.sectionDivWrapper.innerHTML = state.sectionTextarea.value.trim();
+                state.dom.sectionDivWrapper.innerHTML = state.dom.sectionTextarea.value.trim();
             };
 
-            if (state.versionCombo === null) {
-                // Visually and functionally disable state.sectionTextarea and publish button
-                toggleDisabledState(true);
-                state.buttons.saveBtn.disabled = true;
-                state.buttons.saveBtn.style.opacity = '0.5';
+            if (state.dom.versionCombo === null) {
+                toggleUIElements(true);
             } else {
-                toggleDisabledState(false);
-                state.buttons.saveBtn.disabled = false;
-                state.buttons.saveBtn.style.opacity = '1';
+                toggleUIState();
             }
 
-            state.modalContent.appendChild(state.buttons.cloneBtn);
-            state.modalContent.appendChild(state.buttons.publishBtn);
-            state.modalContent.appendChild(state.buttons.saveBtn);
-            state.modalContent.appendChild(state.buttons.previewBtn);
+            state.dom.modalContent.appendChild(state.dom.buttons.cloneBtn);
+            state.dom.modalContent.appendChild(state.dom.buttons.publishBtn);
+            state.dom.modalContent.appendChild(state.dom.buttons.saveBtn);
+            state.dom.modalContent.appendChild(state.dom.buttons.previewBtn);
 
-            modal.appendChild(state.modalContent);
+            modal.appendChild(state.dom.modalContent);
             document.body.appendChild(modal);
         }
     });
