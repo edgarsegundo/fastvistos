@@ -1,11 +1,56 @@
+    /**
+     * Recursively reset all properties of an object (including nested objects) to null.
+     * Used to clear all DOM references in state.dom.
+     */
+    function resetDomTree(obj) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    resetDomTree(obj[key]);
+                } else {
+                    obj[key] = null;
+                }
+            }
+        }
+    }
+
+    // Usage example:
+    // resetDomTree(state.dom);
 // updatable-editor.js
 // This script enables in-place editing of divs with [updatable-section-uuid] using a modal UI.
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
 
+
+    /**
+     * UI State structure for updatable-editor.js
+     *
+     * state: {
+     *   dom: {
+     *     buttons: { closeBtn, cloneBtn, publishBtn, saveBtn, previewBtn },
+     *     textarea, versionCombo, sectionDivWrapper
+     *   },
+     *   updatableSectionUuid, businessId, isVersionSaved, overlayTimestamp
+     * }
+     *
+     * - All DOM element references are grouped under state.dom
+     * - All button references are grouped under state.dom.buttons
+     * - Use state fields for modal-wide or persistent state
+     *
+     * If you need to manage a dynamic or indexed set of elements (e.g., many modals, or a list of dynamic sections),
+     * consider using a Map for that part of the state:
+     *
+     *   state.dynamicSections = new Map();
+     *   // Example usage:
+     *   state.dynamicSections.set(sectionId, { textarea, versionCombo });
+     *   // To access:
+     *   const sectionState = state.dynamicSections.get(sectionId);
+     *
+     * For most static UI, the object structure below is preferred for clarity and maintainability.
+     */
     const state = {
-        refs: {
+        dom: {
             buttons: {
                 closeBtn: null,
                 cloneBtn: null,
