@@ -81,22 +81,6 @@
     const OVERLAY_MIN_DURATION_MS = 1000; // ms
     const SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY = 'selectedVersionComboValue';
 
-    // Utility to dynamically load an external script
-    function loadScript(src) {
-        return new Promise((resolve, reject) => {
-            if (document.querySelector(`script[src="${src}"]`)) {
-                // Script already loaded
-                resolve();
-                return;
-            }
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
-    }
-
     function toggleScreenOverlay(show, label = 'Processando...') {
         let overlay = document.getElementById('global-throbber-overlay');
         if (show) {
@@ -219,15 +203,6 @@
             '#6c5ce7', // deep purple
         ];
 
-        loadScript('https://cdn.jsdelivr.net/npm/sweetalert2@11')
-            .then(() => {
-                console.log('SweetAlert2 loaded');
-            })
-            .catch(() => {
-                alert('Failed to load SweetAlert2');
-                console.error('Failed to load SweetAlert2');
-            });
-
         document.querySelectorAll('div[updatable-section-uuid]').forEach((div, idx) => {
             // Set base border and highlight styles dynamically
             div.addEventListener('mouseenter', function () {
@@ -330,25 +305,14 @@
                 cursor: 'pointer',
                 color: '#111',
             });
-            button.onclick = async () => {
-                if (typeof Swal !== 'undefined') {
-                    const result = await Swal.fire({
-                        title: 'Tem certeza?',
-                        text: 'Você perderá as alterações não salvas. Deseja continuar?',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Sim, fechar',
-                        cancelButtonText: 'Cancelar',
-                        reverseButtons: true
-                    });
-                    if (result.isConfirmed) {
-                        modal.remove();
-                    }
-                } else {
-                    // Fallback if SweetAlert2 is not loaded
+            button.onclick = () => {
+                if (!state.isVersionSaved) {
                     if (confirm('Você perderá as alterações não salvas. Deseja continuar?')) {
                         modal.remove();
+                        state.isVersionSaved = true;
                     }
+                } else {
+                    modal.remove(); // Optionally close immediately if no unsaved changes
                 }
             };
             return button;
@@ -573,7 +537,7 @@
                 })
                 .then(response => response.json())
                 .then(async data => {
-                    state.dom.versionCombo = await createVersionComboBox();
+                    state.dom.versionCombo = await createVersionComboBox(true);
                     state.isVersionSaved = false;
                     toggleUIState();
                     toggleScreenOverlay(false);
