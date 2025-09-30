@@ -460,6 +460,7 @@ export class WebPageService {
             console.error('[DEBUG] Error removing page section version:', err);
             return { success: false, message: 'Failed to remove section version.' };
         }
+        return { success: true, message: 'Section version removed successfully.' };
     }
-    
+
 }
