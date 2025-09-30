@@ -7,6 +7,7 @@ interface CreateSectionAndVersionParams {
     businessId: string;
     htmlContent: string;
     siteId: string;
+    isFirstClone?: boolean;
 }
 
 export interface PublishSectionParams {
@@ -29,9 +30,10 @@ export class WebPageService {
      * @param {string} businessId
      * @param {string} htmlContent
      * @param {string} siteId
+     * @param {boolean} isFirstClone
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId }: CreateSectionAndVersionParams) {
+    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId, isFirstClone }: CreateSectionAndVersionParams) {
 
     if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
@@ -127,7 +129,7 @@ export class WebPageService {
                 throw err;
             }
             const filePath = `${updatableUuid}_${versionCount + 1}`;
-
+            const filePathOriginal = `${updatableUuid}_0`;
 
             // 4. Create the webpage_sections directory if it doesn't exist
             const { exec } = await import('child_process');
@@ -188,8 +190,15 @@ export class WebPageService {
             // siteId already declared above
             const baseDir = `/var/www/${siteId}/webpage_sections`;
             const outFile = path.join(baseDir, filePath);
+            const outFileOriginal = path.join(baseDir, filePathOriginal);
             try {
                 fs.writeFileSync(outFile, htmlContent, 'utf8');
+
+                // If isFirstClone is true, also write the original file
+                if (isFirstClone) {
+                    fs.writeFileSync(outFileOriginal, htmlContent, 'utf8');
+                    console.log(`[DEBUG] Original HTML written to ${outFileOriginal}`);
+                }
                 console.log(`[DEBUG] HTML written to ${outFile}`);
             } catch (err) {
                 console.error('[DEBUG] Error writing HTML file:', err);
