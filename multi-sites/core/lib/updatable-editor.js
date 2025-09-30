@@ -164,7 +164,7 @@
         }
     }
 
-    function toggleButton(element, toggle) {
+    function toggleElement(element, toggle) {
         element.style.opacity = toggle ? '1' : '0.2';
         element.style.pointerEvents = toggle ? 'auto' : 'none';
         element.disabled = !toggle;
@@ -175,21 +175,22 @@
         }
     }
 
-    function toggleUIElements(toggleClone = false, togglePublish = false, toggleSave = false, toggleDelete = false, togglePreview = false, toggleTextarea = false) {
-        toggleButton(state.dom.buttons.cloneBtn, toggleClone);
-        toggleButton(state.dom.buttons.publishBtn, togglePublish);
-        toggleButton(state.dom.buttons.saveBtn, toggleSave);
-        toggleButton(state.dom.buttons.deleteBtn, toggleDelete);
-        toggleButton(state.dom.buttons.previewBtn, togglePreview);
-        toggleButton(state.dom.sectionTextarea, toggleTextarea);
+    function toggleUIElements(toggleClone = false, togglePublish = false, toggleSave = false, toggleDelete = false, togglePreview = false, toggleTextarea = false, toggleCombo = false) {
+        toggleElement(state.dom.buttons.cloneBtn, toggleClone);
+        toggleElement(state.dom.buttons.publishBtn, togglePublish);
+        toggleElement(state.dom.buttons.saveBtn, toggleSave);
+        toggleElement(state.dom.buttons.deleteBtn, toggleDelete);
+        toggleElement(state.dom.buttons.previewBtn, togglePreview);
+        toggleElement(state.dom.sectionTextarea, toggleTextarea);
+        toggleElement(state.dom.versionCombo, toggleCombo);
     }
 
     // Utility to toggle disabled state with visual feedback
     function toggleUIState() {
         if (state.isVersionSaved) {
-            toggleUIElements(true, true, false, true, true, true);
+            toggleUIElements(true, true, false, true, true, true, true);
         } else {
-            toggleUIElements(false, false, true, true, false, true);
+            toggleUIElements(false, false, true, true, false, true, false);
         }
     }
 
@@ -320,18 +321,19 @@
             return button;
         }
 
-        function createDeleteButton() {
+        function createDeleteButton(modal) {
             const button = document.createElement('button');
-            button.textContent = '🗑️ Remover';
+            button.type = 'button';
+            button.textContent = 'Remover';
             Object.assign(button.style, {
-                position: 'absolute',
-                bottom: '8px',
-                right: '12px',
-                fontSize: '14px',
-                background: 'none',
+                marginTop: '12px',
+                marginLeft: '8px',
+                padding: '8px 16px',
+                background: '#d9534f',
+                color: '#fff',
                 border: 'none',
+                borderRadius: '4px',
                 cursor: 'pointer',
-                color: '#d9534f',
             });
 
             async function deleteSelectedVersion(id) {
@@ -339,17 +341,19 @@
                 const resp = await fetch(url, { method: 'DELETE' });
                 const data = await resp.json();
                 return data;
-                // if (data && data.version.file_content) {
-                //     state.dom.sectionTextarea.value = data.version.file_content;
-                // }
             }
 
             button.onclick = async () => {
                 if (confirm('Tem certeza que deseja remover esta versão?')) {
+                    toggleScreenOverlay(true, 'Removendo versão...');
                     const result = await deleteSelectedVersion(state.dom.versionCombo.value);
                     if (result.success) {
-                        modal.remove();
+                        state.isVersionSaved = true;
+                        await createVersionComboBox();
+                        toggleUIState();
+                        toggleScreenOverlay(false);
                     } else {
+                        toggleScreenOverlay(false);
                         alert('Erro ao remover a versão: ' + result.message);
                     }
                 }
@@ -757,7 +761,7 @@
 
             state.dom.buttons.cloneBtn = createCloneButton();
             state.dom.buttons.saveBtn = createSaveButton();
-            state.dom.buttons.deleteBtn = createDeleteButton();
+            state.dom.buttons.deleteBtn = createDeleteButton(modal);
             state.dom.buttons.publishBtn = createPublishButton();
             state.dom.buttons.previewBtn = createPreviewButton();
 
