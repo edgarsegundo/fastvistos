@@ -28,6 +28,7 @@
                 cloneBtn: null,
                 publishBtn: null,
                 saveBtn: null,
+                deleteBtn: null,
                 previewBtn: null,
             },
             sectionTextarea: null,
@@ -174,10 +175,11 @@
         }
     }
 
-    function toggleUIElements(toggleClone = false, togglePublish = false, toggleSave = false, togglePreview = false, toggleTextarea = false) {
+    function toggleUIElements(toggleClone = false, togglePublish = false, toggleSave = false, toggleDelete = false, togglePreview = false, toggleTextarea = false) {
         toggleButton(state.dom.buttons.cloneBtn, toggleClone);
         toggleButton(state.dom.buttons.publishBtn, togglePublish);
         toggleButton(state.dom.buttons.saveBtn, toggleSave);
+        toggleButton(state.dom.buttons.deleteBtn, toggleDelete);
         toggleButton(state.dom.buttons.previewBtn, togglePreview);
         toggleButton(state.dom.sectionTextarea, toggleTextarea);
     }
@@ -185,9 +187,9 @@
     // Utility to toggle disabled state with visual feedback
     function toggleUIState() {
         if (state.isVersionSaved) {
-            toggleUIElements(true, true, false, true, true);
+            toggleUIElements(true, true, false, true, true, true);
         } else {
-            toggleUIElements(false, false, true, false, true);
+            toggleUIElements(false, false, true, true, false, true);
         }
     }
 
@@ -313,6 +315,32 @@
                     }
                 } else {
                     modal.remove(); // Optionally close immediately if no unsaved changes
+                }
+            };
+            return button;
+        }
+
+        function createDeleteButton() {
+            const button = document.createElement('button');
+            button.textContent = '🗑️ Remover';
+            Object.assign(button.style, {
+                position: 'absolute',
+                bottom: '8px',
+                right: '12px',
+                fontSize: '14px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#d9534f',
+            });
+            button.onclick = async () => {
+                if (confirm('Tem certeza que deseja remover esta versão?')) {
+                    const result = await WebPageService.removePageSectionVersionById({ id: state.versionCombo.value });
+                    if (result.success) {
+                        modal.remove();
+                    } else {
+                        alert('Erro ao remover a versão: ' + result.message);
+                    }
                 }
             };
             return button;
@@ -717,6 +745,7 @@
 
             state.dom.buttons.cloneBtn = createCloneButton();
             state.dom.buttons.saveBtn = createSaveButton();
+            state.dom.buttons.deleteBtn = createDeleteButton();
             state.dom.buttons.publishBtn = createPublishButton();
             state.dom.buttons.previewBtn = createPreviewButton();
 
