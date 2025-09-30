@@ -260,13 +260,13 @@ app.delete('/page-section-version', async (req, res) => {
     try {
         const { id } = req.query;
         if (!id || typeof id !== 'string') {
-            return res.status(400).json({ error: 'Missing or invalid id query param.' });
+            return res.status(400).json({ success: false, error: 'Missing or invalid id query param.' });
         }
         const result = await WebPageService.removePageSectionVersionById({ id });
         res.json(result);
     } catch (error) {
         console.error('Error in /page-section-version:', error);
-        res.status(500).json({ error: 'Internal server error.' });
+        res.status(500).json({ success: false, error: 'Internal server error.' });
     }
 });
 

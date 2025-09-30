@@ -439,4 +439,28 @@ export class WebPageService {
         return { id: ver.id, file_content };
     }
 
+
+    /**
+     * Remove a Web Page Section Version by id (soft delete).
+     * @param {string} id
+     * @param {string} siteId
+     * @returns {Promise<{ success: boolean, message: string }>}
+     */
+    static async removePageSectionVersionById({ id }: { id: string }) {
+        if (!id) {
+            throw new Error('id is required');
+        }
+        try {
+            // Soft delete the section
+            await prisma.web_page_section_version.update({
+                where: { id },
+                data: { is_removed: true, modified: new Date() },
+            });
+        } catch (err) {
+            console.error('[DEBUG] Error removing page section version:', err);
+            return { success: false, message: 'Failed to remove section version.' };
+        }
+        return { success: true, message: 'Section version removed successfully.' };
+    }
+
 }

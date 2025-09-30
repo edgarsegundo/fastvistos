@@ -333,9 +333,20 @@
                 cursor: 'pointer',
                 color: '#d9534f',
             });
+
+            async function deleteSelectedVersion(id) {
+                const url = `https://p2digital.com.br/msitesapp/api/page-section-version?id=${encodeURIComponent(id)}`;
+                const resp = await fetch(url, { method: 'DELETE' });
+                const data = await resp.json();
+                return data;
+                // if (data && data.version.file_content) {
+                //     state.dom.sectionTextarea.value = data.version.file_content;
+                // }
+            }
+
             button.onclick = async () => {
                 if (confirm('Tem certeza que deseja remover esta versão?')) {
-                    const result = await WebPageService.removePageSectionVersionById({ id: state.versionCombo.value });
+                    const result = await deleteSelectedVersion(state.dom.versionCombo.value);
                     if (result.success) {
                         modal.remove();
                     } else {
@@ -343,6 +354,7 @@
                     }
                 }
             };
+
             return button;
         }
 
@@ -761,8 +773,9 @@
             }
 
             state.dom.modalContent.appendChild(state.dom.buttons.cloneBtn);
-            state.dom.modalContent.appendChild(state.dom.buttons.publishBtn);
             state.dom.modalContent.appendChild(state.dom.buttons.saveBtn);
+            state.dom.modalContent.appendChild(state.dom.buttons.deleteBtn);
+            state.dom.modalContent.appendChild(state.dom.buttons.publishBtn);
             state.dom.modalContent.appendChild(state.dom.buttons.previewBtn);
 
             modal.appendChild(state.dom.modalContent);
