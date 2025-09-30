@@ -187,9 +187,18 @@
         toggleElement(state.dom.versionCombo, toggleCombo);
     }
 
+    function isOriginalVersionSelected() {
+        if (!state.dom.versionCombo) return false;
+        const selIdx = state.dom.versionCombo.selectedIndex;
+        const options = state.dom.versionCombo.options;
+        return options[selIdx].getAttribute('data-original-version') === 'true';
+    }
+
     // Utility to toggle disabled state with visual feedback
     function toggleUIState() {
-        if (state.isVersionSaved) {
+        if (isOriginalVersionSelected() || !state.dom.versionCombo) {
+            toggleUIElements(true, false, false, false, true, false, true);
+        } else if (state.isVersionSaved) {
             toggleUIElements(true, true, false, true, true, true, true);
         } else {
             toggleUIElements(false, false, true, true, false, true, false);
@@ -490,6 +499,7 @@
                         const defaultOpt = document.createElement('option');
                         defaultOpt.textContent = 'Versão Original';
                         defaultOpt.setAttribute('data-undeleteable-version', 'true');
+                        defaultOpt.setAttribute('data-original-version', 'true');
                         data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.id.toString();
@@ -539,7 +549,8 @@
                             // Persist the selected value
                             localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, selectElement.value);
                             await updateTextarea();
-                        });                        
+                            toggleUIState();
+                        });
 
                         // Replace placeholder content with the new combobox
                         placeholder.innerHTML = '';
@@ -599,7 +610,7 @@
                         businessId: state.sectionAttributes.businessId,
                         htmlContent: state.getHtmlContent(),
                         siteId: state.sectionAttributes.siteId,
-                        isFirstClone: !state.dom.versionCombo || state.dom.versionCombo.list.length === 0,
+                        isFirstClone: !state.dom.versionCombo,
                     }),
                 })
                 .then(response => response.json())

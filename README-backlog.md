@@ -2,7 +2,7 @@
 
 ## To Do
 
-- implementar a versão original
+- por enquanto não vou pemitir publicar o original e se a pessoa quiser voltar para o original terá que clonar o original e publicar
 
 
 
