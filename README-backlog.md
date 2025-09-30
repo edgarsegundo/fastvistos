@@ -2,9 +2,7 @@
 
 ## To Do
 
-- Não permitir remover a versão publicada e nem a versão original
 - implementar a versão original
-- Só está removendo um pela primeira vez depois de clicar em editar, não remove em sequencia
 
 
 

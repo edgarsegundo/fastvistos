@@ -165,13 +165,15 @@
     }
 
     function toggleElement(element, toggle) {
-        element.style.opacity = toggle ? '1' : '0.2';
-        element.style.pointerEvents = toggle ? 'auto' : 'none';
-        element.disabled = !toggle;
-        if (toggle) {
-            element.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
-        } else {
-            element.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+        if (element) {
+            element.style.opacity = toggle ? '1' : '0.2';
+            element.style.pointerEvents = toggle ? 'auto' : 'none';
+            element.disabled = !toggle;
+            if (toggle) {
+                element.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            } else {
+                element.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+            }
         }
     }
 
@@ -344,12 +346,31 @@
             }
 
             button.onclick = async () => {
+                const selectedOpt = state.dom.versionCombo.options[state.dom.versionCombo.selectedIndex];
+                if (selectedOpt.getAttribute('data-undeleteable-version') === 'true') {
+                    alert('Você não pode remover a versão publicada!');
+                    return;
+                }
+
                 if (confirm('Tem certeza que deseja remover esta versão?')) {
                     toggleScreenOverlay(true, 'Removendo versão...');
                     const result = await deleteSelectedVersion(state.dom.versionCombo.value);
                     if (result.success) {
                         state.isVersionSaved = true;
-                        await createVersionComboBox();
+                        // Refresh combobox in DOM and state
+                        const placeholder = state.dom.modalContent.querySelector('#version-combobox-placeholder');
+                        if (placeholder) {
+                            // Remove old combobox if present
+                            if (state.dom.versionCombo && state.dom.versionCombo.parentNode === placeholder) {
+                                placeholder.removeChild(state.dom.versionCombo);
+                            }
+                            // Create and insert new combobox
+                            const newCombo = await createVersionComboBox();
+                            if (newCombo) {
+                                placeholder.appendChild(newCombo);
+                            }
+                            state.dom.versionCombo = newCombo;
+                        }
                         toggleUIState();
                         toggleScreenOverlay(false);
                     } else {
@@ -468,14 +489,15 @@
                         // Add default option
                         const defaultOpt = document.createElement('option');
                         defaultOpt.textContent = 'Versão Original';
+                        defaultOpt.setAttribute('data-undeleteable-version', 'true');
                         data.versions.list.forEach((ver, idx) => {
                             const opt = document.createElement('option');
                             opt.value = ver.id.toString();
                             defaultOpt.value = opt.value + ':original';
-
                             let statusText = '';
                             if (data.versions.active_version && data.versions.active_version.id === ver.id) {
                                 statusText = ` (Publicada) `;
+                                 opt.setAttribute('data-undeleteable-version', 'true');
                             }
 
                             opt.textContent = `${statusText}Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
@@ -576,7 +598,8 @@
                         webpageRelativePath: state.sectionAttributes.filePath,
                         businessId: state.sectionAttributes.businessId,
                         htmlContent: state.getHtmlContent(),
-                        siteId: state.sectionAttributes.siteId
+                        siteId: state.sectionAttributes.siteId,
+                        isFirstClone: !state.dom.versionCombo || state.dom.versionCombo.list.length === 0,
                     }),
                 })
                 .then(response => response.json())

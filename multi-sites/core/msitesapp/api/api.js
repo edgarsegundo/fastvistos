@@ -30,7 +30,7 @@ app.get('/ping', (req, res) => {
 // POST endpoint to create a WebPageSection and Version (for htmx or API)
 app.post('/webpage-section', async (req, res) => {
     try {
-        const { webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId } = req.body;
+        const { webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId, isFirstClone = false } = req.body;
         if (!webpageRelativePath || !title || !updatableUuid || !businessId || !htmlContent || !siteId) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
@@ -39,7 +39,8 @@ app.post('/webpage-section', async (req, res) => {
                                                                       updatableUuid, 
                                                                       businessId, 
                                                                       htmlContent,
-                                                                      siteId 
+                                                                      siteId,
+                                                                      isFirstClone
                                                                     });
         // If htmx, you can return HTML here, but JSON is fine for most cases
         res.json(result);
