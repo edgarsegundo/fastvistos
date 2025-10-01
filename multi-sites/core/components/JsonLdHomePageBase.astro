@@ -4,10 +4,11 @@ import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
-
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
 
 const {
     site,
+    homePageConfig,
     faqList = [],
     servicesList = [],
     reviewsList = [],
@@ -24,7 +25,8 @@ const {
     ...rest
 } = Astro.props;
 
-const homepageUrl = site?.domain ? `https://${site?.domain}` : '';
+const homepageUrl = normalizeAssetsUrlBase(site?.domain);
+
 const siteName = site?.name;
 const description = site?.description;
 const org = site?.organization ?? {
@@ -36,7 +38,7 @@ const websiteId = `${homepageUrl}#website`;
 const orgId = `${homepageUrl}#organization`;
 const imageId = `${homepageUrl}#primaryimage`;
 const breadcrumbId = `${homepageUrl}#breadcrumb`;
-const logoId = `${homepageUrl}#/schema/logo/image/`;
+const logoId = `${homepageUrl}#logo`;
 
 // WebPage block
 const webPageBlock = getWebPageBlock({
@@ -56,6 +58,11 @@ const imageObjectBlock = getImageObjectBlock({
     disableImageObject,
     site,
     imageId,
+    image: homePageConfig.ogImage || site?.image,
+    imageUrl: homePageConfig.ogImage || site?.image,
+    width: homePageConfig.ogImageWidth || site?.imageWidth || 1200,
+    height: homePageConfig.ogImageHeight || site?.imageHeight || 675,
+    caption: homePageConfig.ogImageAlt || site?.name,
 });
 
 // BreadcrumbList

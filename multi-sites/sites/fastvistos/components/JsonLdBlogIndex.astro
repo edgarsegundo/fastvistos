@@ -14,6 +14,7 @@ import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
 import { BlogService } from '../lib/blog-service.ts';
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
 
 const {
     site,
@@ -34,9 +35,7 @@ const {
 } = Astro.props;
 
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const homepageUrl = site.domain.startsWith('http')
-    ? site.domain
-    : `https://${site.domain}`;
+const homepageUrl = normalizeAssetsUrlBase(site.domain);
 const orgId = `${homepageUrl}#organization`;
 const websiteId = `${homepageUrl}#website`;
 const imageId = `${homepageUrl}/blog#primaryimage`;
@@ -50,9 +49,7 @@ const org = site?.organization ?? {
 };
 const logoId = `${homepageUrl}#logo`;
 
-const assets_url_base = site.assets_url_base.startsWith('http')
-    ? site.assets_url_base
-    : `https://${site.assets_url_base}`;
+const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);    
 
 const itemLists = topicsWithArticles.map((topic: any) => ({
     '@type': 'ItemList',
