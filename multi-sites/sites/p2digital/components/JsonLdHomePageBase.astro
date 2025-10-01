@@ -1,5 +1,5 @@
 ---
-import JsonLdReviews from './JsonLdReviews.astro';
+import { getWebSiteBlock } from '../components/JsonLdWebSiteBlock.astro';
 
 const {
     site,
@@ -88,33 +88,16 @@ const breadcrumbBlock = !disableBreadcrumb && {
 };
 
 // WebSite
-const webSiteBlock = !disableWebSite && {
-    '@type': 'WebSite',
-    '@id': websiteId,
-    url: homepageUrl,
-    name: siteName,
-    description: description ?? '',
-    publisher: { '@id': orgId },
-    ...(!disableWebSiteSearchAction
-        ? {
-              potentialAction: [
-                  {
-                      '@type': 'SearchAction',
-                      target: {
-                          '@type': 'EntryPoint',
-                          urlTemplate: `${homepageUrl}?s={search_term_string}`,
-                      },
-                      'query-input': {
-                          '@type': 'PropertyValueSpecification',
-                          valueRequired: true,
-                          valueName: 'search_term_string',
-                      },
-                  },
-              ],
-          }
-        : {}),
-    inLanguage: site.language,
-};
+const webSiteBlock = !disableWebSite && getWebSiteBlock({
+    disableWebSite,
+    disableWebSiteSearchAction,
+    websiteId,
+    homepageUrl,
+    siteName,
+    description,
+    orgId,
+    site,
+});
 
 // Organization (with logo as ImageObject)
 const orgBlock = !disableOrganization && {
@@ -202,6 +185,7 @@ const videoObjects =
                   };
               })
         : [];
+
 const reviewsBlock =
     !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
         ? reviewsList.map((review, idx) => {

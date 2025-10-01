@@ -8,6 +8,15 @@ export function getWebSiteBlock({
     description,
     orgId,
     site,
+}: {
+    disableWebSite: boolean,
+    disableWebSiteSearchAction: boolean,
+    websiteId: string,
+    homepageUrl: string,
+    siteName: string,
+    description?: string,
+    orgId: string,
+    site: { language: string }
 }) {
     if (disableWebSite) return null;
     return {
