@@ -36,34 +36,6 @@ export const siteConfig: SiteConfig = {
         },
     },
 
-    socialMedia: {
-        facebook: 'https://facebook.com/fastvistos',
-        twitter: '@fastvistos',
-        instagram: 'https://instagram.com/fastvistos',
-        youtube: 'https://youtube.com/@fastvistos',
-    },
-
-    analytics: {
-        gtmId: 'GTM-59SRNCQD',
-    },
-
-    verification: {
-        googleSiteVerification: 'wPmMtzby8Xpg',
-    },
-
-    features: {
-        blog: true, // true/false
-        booking: false, // true/false
-        payments: false, // true/false
-        multilingual: false, // true/false
-    },
-
-    customStyles: {
-        cssVars: {
-            '--accent-color': '#ACCENT',
-        },
-    },
-
     homePageConfig: {
         seo: {
             title: 'Fast Vistos - Your fast visa solution',
@@ -168,29 +140,61 @@ export const siteConfig: SiteConfig = {
         showAuthor: true, // true/false
         relatedPosts: true, // true/false
     },
+
+    socialMedia: {
+        facebook: 'https://facebook.com/fastvistos',
+        twitter: '@fastvistos',
+        instagram: 'https://instagram.com/fastvistos',
+        youtube: 'https://youtube.com/@fastvistos',
+    },
+
+    analytics: {
+        gtmId: 'GTM-59SRNCQD',
+    },
+
+    verification: {
+        googleSiteVerification: 'wPmMtzby8Xpg',
+    },
+
+    features: {
+        blog: true, // true/false
+        booking: false, // true/false
+        payments: false, // true/false
+        multilingual: false, // true/false
+    },
+
+    customStyles: {
+        cssVars: {
+            '--accent-color': '#ACCENT',
+        },
+    },
 };
 
-// Open Graph type options for 'openGraph.type':
-// 'website'         - General site or homepage
-// 'article'         - News, blog post, or article
-// 'book'            - Book content
-// 'profile'         - Person or profile page
-// 'music.song'      - Individual song
-// 'music.album'     - Music album
-// 'music.playlist'  - Music playlist
-// 'music.radio_station' - Radio station
-// 'video.movie'     - Movie
-// 'video.episode'   - TV episode
-// 'video.tv_show'   - TV show
-// 'video.other'     - Other video content
-// 'business.business' - Business or organization
-// 'place'           - Physical location
-// 'restaurant.menu'         - Restaurant menu
-// 'restaurant.menu_item'    - Menu item
-// 'restaurant.menu_section' - Menu section
-// 'restaurant.restaurant'   - Restaurant
-// 'product'         - Product page
-// 'product.group'   - Product group
-// 'product.item'    - Product item
-// 'game.achievement' - Game achievement
-//
+/*
+Open Graph type options for 'openGraph.type':
+==============================================
+'website'                   - General site or homepage
+'article'                   - News, blog post, or article
+'book'                      - Book content
+'profile'                   - Person or profile page
+'music.song'                - Individual song
+'music.album'               - Music album
+'music.playlist'            - Music playlist
+'music.radio_station'       - Radio station
+'video.movie'               - Movie
+'video.episode'             - TV episode
+'video.tv_show'             - TV show
+'video.other'               - Other video content
+'business.business'         - Business or organization
+'place'                     - Physical location
+'restaurant.menu'           - Restaurant menu
+'restaurant.menu_item'      - Menu item
+'restaurant.menu_section'   - Menu section
+'restaurant.restaurant'     - Restaurant
+'product'                   - Product page
+'product.group'             - Product group
+'product.item'              - Product item
+'game.achievement'          - Game achievement
+*/
+
+
