@@ -173,13 +173,18 @@ ssh edgar@72.60.57.150
 
 ### **📝 Blog Content Generation**
 
+Generate blog post/articles
+Script to create/generate blog post/articles
+
 ```bash
 node generate-blog-content.js fastvistos     # Generate blog content for specific site
 node generate-blog-advanced.js all           # Generate for all sites with HTML conversion
 npm run generate-blog                         # Alternative command for content generation
 ```
 
-### **�️ Blog Image Downloads**
+### **� Blog Image Downloads**
+
+Generate/create Images/assets
 
 ```bash
 npm run download-images                       # Download images for all sites

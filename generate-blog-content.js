@@ -114,7 +114,7 @@ async function generateBlogArticles(siteId) {
 
         // Get published articles for this business_id with their topics
         const now = new Date();
-        const articles = await prisma.blogArticle.findMany({
+        const articles = await prisma.blog_article.findMany({
             where: {
                 business_id: siteConfig.business_id,
                 is_removed: false,
