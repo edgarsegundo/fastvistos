@@ -1,0 +1,31 @@
+---
+export function getImageObjectBlock({
+    disableImageObject,
+    site,
+    imageId,
+    imageUrl,
+    caption,
+    width,
+    height,
+}: {
+    disableImageObject: boolean,
+    site: any,
+    imageId: string,
+    imageUrl?: string,
+    caption?: string,
+    width?: number,
+    height?: number,
+}) {
+    if (disableImageObject || (!imageUrl && !site?.image)) return null;
+    return {
+        '@type': 'ImageObject',
+        inLanguage: site.language,
+        '@id': imageId,
+        url: imageUrl || site?.image,
+        contentUrl: imageUrl,
+        ...(caption ? { caption } : {}),
+        ...(width ? { width } : {}),
+        ...(height ? { height } : {}),
+    };
+}
+---

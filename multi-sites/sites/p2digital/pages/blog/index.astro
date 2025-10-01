@@ -14,32 +14,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
 // Fetch blog data using the business-aware blog service
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const blogConfig = await BlogService.getBlogConfig();
+const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 
-console.log('**** 🛑🛑 Blog Config:', blogConfig);
-
-
-// [ASTRO] **** 🛑🛑 Blog Config: {
-//   created: 2025-09-08T14:51:17.962Z,
-//   modified: 2025-09-12T22:43:20.984Z,
-//   is_removed: false,
-//   id: '78e961eb953a4c70b6f9349a209b05f8',
-//   title: 'Blog - Fast Vistos',
-//   slug: 'blog-fast-vistos',
-//   config: {},
-//   business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
-//   author_image: 'images/foto_whats_7iuOqR6.jpg',
-//   author_name: 'Edgar Rezende',
-//   description: 'Descubra a forma mais rápida e segura de conquistar seu visto com a **Fast Vistos**! Nossa equipe especializada transforma burocracia em agilidade, cuidando de cada detalhe para que você viaje sem preocupações. Simples, eficiente e confiável. Acesse **fastvistos.com.br** e embarque no seu próximo destino com tranquilidade!',
-//   theme_image: 'images/wildlife-9764923_1280_IRofZ5w.jpg'
-// }
-
-// Use blog config from database or fallback to default
-const defaultConfig = {
-    title: 'Blog - FastVistos | Dicas sobre Vistos Americanos',
-    description:
-        'Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados.',
-};
+console.log('🛑 blogConfigFromDb?.theme_image:', blogConfigFromDb?.theme_image);
 ---
 
 <SharedBlogLayout>
@@ -47,7 +24,8 @@ const defaultConfig = {
     <Fragment slot="head">
         <JsonLdBlogIndex 
             site={siteConfig.site}
-            blogPageConfig={blogConfig}
+            description={blogConfigFromDb?.description || ''}
+            imageUrl={blogConfigFromDb?.theme_image || ''}
         />
     </Fragment>
 
@@ -57,12 +35,12 @@ const defaultConfig = {
             <div class="">
                 
                 <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">
-                    {blogConfig?.title || defaultConfig.title}
+                    {blogConfigFromDb?.title || ''}
                 </h1>
 
                 
                 <p class="mt-4 text-lg text-gray-300">
-                    {blogConfig?.description || defaultConfig.description}
+                    {blogConfigFromDb?.description || ''}
                 </p>
 
                 

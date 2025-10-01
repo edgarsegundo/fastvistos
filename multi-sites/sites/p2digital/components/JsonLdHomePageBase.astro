@@ -3,6 +3,8 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
+
 
 const {
     site,
@@ -50,20 +52,18 @@ const webPageBlock = getWebPageBlock({
 });
 
 // ImageObject (primary image)
-const imageObjectBlock = !disableImageObject &&
-    site?.image && {
-        '@type': 'ImageObject',
-        inLanguage: site.language,
-        '@id': imageId,
-        url: site.image,
-        contentUrl: site.image,
-    };
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject,
+    site,
+    imageId,
+});
 
 // BreadcrumbList
 const breadcrumbBlock = getBreadcrumbBlock({
     disableBreadcrumb,
     breadcrumbId,
     breadcrumbList,
+    homepageUrl,
 });
 
 // WebSite
