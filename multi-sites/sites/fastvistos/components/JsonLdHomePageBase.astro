@@ -1,6 +1,4 @@
 ---
-import JsonLdReviews from './JsonLdReviews.astro';
-
 const {
     site,
     faqList = [],
@@ -202,6 +200,7 @@ const videoObjects =
                   };
               })
         : [];
+
 const reviewsBlock =
     !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
         ? reviewsList.map((review, idx) => {
