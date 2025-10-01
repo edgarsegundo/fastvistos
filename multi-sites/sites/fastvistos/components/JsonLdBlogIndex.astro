@@ -35,7 +35,12 @@ const orgId = `${homepageUrl}/#organization`;
 const websiteId = `${homepageUrl}/#website`;
 const imageId = `${homepageUrl}#primaryimage`;
 const breadcrumbId = `${homepageUrl}#breadcrumb`;
-const description = blogPageConfig?.seo?.description || site.description || '';
+
+// const description = blogPageConfig?.seo?.description || site.description || '';
+const description = blogPageConfig.seo;
+
+// console.log('**** 🛑🛑🛑 Blog Page SEO Description:', description);
+
 const siteName = site?.name;
 
 const org = site?.organization ?? {

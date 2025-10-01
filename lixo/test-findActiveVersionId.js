@@ -1,4 +1,4 @@
-import { prisma } from './prisma.js';
+import { prisma } from '../multi-sites/core/lib/prisma.js';
 
 async function testFindActiveVersionId() {
     const updatableUuid = "92af51f0-7349-4561-9214-dd7dfca60ff0";

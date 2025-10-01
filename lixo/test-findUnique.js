@@ -1,4 +1,4 @@
-import { prisma } from './prisma.js';
+import { prisma } from '../multi-sites/core/lib/prisma.js';
 
 // DEBUG: Print all model keys on the Prisma client
 console.log('[DEBUG] Prisma client model keys:', Object.keys(prisma));
