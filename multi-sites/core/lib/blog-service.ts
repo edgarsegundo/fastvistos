@@ -67,7 +67,7 @@ export class BlogService {
     }
 
     // Get article by slug
-    static async getArticleBySlug(slug: string) {
+    static async getArticleBySlugFromDb(slug: string) {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
