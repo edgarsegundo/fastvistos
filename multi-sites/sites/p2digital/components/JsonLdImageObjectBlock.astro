@@ -1,4 +1,6 @@
 ---
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+
 export function getImageObjectBlock({
     disableImageObject,
     site,
@@ -20,11 +22,7 @@ export function getImageObjectBlock({
 }) {
     if (disableImageObject || (!imageUrl && !site?.image && !image)) return null;
 
-    let assets_url_base = site.assets_url_base.replace(/\/$/, '');
-    assets_url_base = assets_url_base.startsWith('http')
-        ? assets_url_base
-        : `https://${assets_url_base}`;
-
+    const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);
     const url = image ? `${assets_url_base}/${image.replace(/^.*\//, '')}` : imageUrl ? imageUrl : site?.image;
 
     return {
