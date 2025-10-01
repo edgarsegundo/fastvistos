@@ -9,7 +9,6 @@ import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import { siteConfig } from '../../site-config.ts';
 import { BlogService } from '../../lib/blog-service.ts';
 import JsonLdBlogIndex from '../../components/JsonLdBlogIndex.astro';
-import { undefined } from 'astro:schema';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
@@ -27,8 +26,8 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
             image={blogConfigFromDb?.image}
             imageUrl={blogConfigFromDb?.seo_image_url || null}
             imageCaption={blogConfigFromDb?.seo_image_caption || siteConfig.site.title}
-            imageHeight={blogConfigFromDb?.seo_image_height || 1280}
-            imageWidth={blogConfigFromDb?.seo_image_width || 720}
+            imageHeight={blogConfigFromDb?.seo_image_height || 675}
+            imageWidth={blogConfigFromDb?.seo_image_width || 1200}
         />
     </Fragment>
 

@@ -283,6 +283,10 @@ async function syncBlogToSite(siteId) {
     const webpageServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'webpage-service.ts'), 'utf-8');
     await fs.writeFile(join(siteLibDir, 'webpage-service.ts'), webpageServiceContent);
 
+    // Copy utils.ts to site lib directory
+    const utilsContent = await fs.readFile(join(CORE_LIB_DIR, 'utils.ts'), 'utf-8');
+    await fs.writeFile(join(siteLibDir, 'utils.ts'), utilsContent);
+
     // Localize site-config-helper.ts for this specific site
     const localizedSiteConfigHelper = siteConfigHelperContent
         .replace(
