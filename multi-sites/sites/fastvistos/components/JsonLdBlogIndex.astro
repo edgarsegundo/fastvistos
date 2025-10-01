@@ -12,18 +12,20 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
-// import { siteConfig } from '../site-config.ts';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
 import { BlogService } from '../lib/blog-service.ts';
 
 const {
     site,
-    blogPageConfig,
+    description,
+    imageUrl,
     breadcrumbList = [],
     disableBreadcrumb = false,
     disableWebSite = false,
     disableOrganization = false,
     disableWebPage = false,
     disableWebSiteSearchAction = true,
+    disableImageObject = false,
     ...rest
 } = Astro.props;
 
@@ -35,12 +37,6 @@ const orgId = `${homepageUrl}/#organization`;
 const websiteId = `${homepageUrl}/#website`;
 const imageId = `${homepageUrl}#primaryimage`;
 const breadcrumbId = `${homepageUrl}#breadcrumb`;
-
-// const description = blogPageConfig?.seo?.description || site.description || '';
-const description = blogPageConfig.seo;
-
-// console.log('**** 🛑🛑🛑 Blog Page SEO Description:', description);
-
 const siteName = site?.name;
 
 const org = site?.organization ?? {
@@ -59,6 +55,8 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
         item: {
             '@type': 'BlogPosting',
             '@id': `${homepageUrl}/blog/${article.slug}`,
+            "author": { '@type': 'Organization', 'name': `${org.name}` },
+            "publisher": { '@id': `${org.url}/#organization` },
             headline: article.title,
             url: `${homepageUrl}/blog/${article.slug}`,
             image: article.image
@@ -67,7 +65,7 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
             datePublished: article.published,
             dateModified: article.updated || article.published,
             inLanguage: 'pt-BR',
-            description: article.description || '',
+            description: article.seo_description || '',
         },
     })),
 }));
@@ -92,6 +90,14 @@ const breadcrumbBlock = getBreadcrumbBlock({
     disableBreadcrumb,
     breadcrumbId,
     breadcrumbList,
+    homepageUrl,
+});
+
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject,
+    site,
+    imageId,
+    imageUrl,
 });
 
 // WebSite
@@ -115,11 +121,9 @@ const orgBlock = getOrganizationBlock({
     site,
 });
 
-
-
 const blocks = [
     webPageBlock,
-    // imageObjectBlock,
+    imageObjectBlock,
     breadcrumbBlock,
     webSiteBlock,
     orgBlock,
@@ -132,43 +136,6 @@ const jsonLdGraph = {
     '@context': 'https://schema.org',
     '@graph': blocks,
 };
-
-// const jsonLd = {
-//     '@context': 'https://schema.org',
-//     '@graph': [
-//         {
-//             '@type': ['WebPage', 'CollectionPage'],
-//             '@id': pageId,
-//             url: `${domain}/blog/`,
-//             name: `Blog - ${siteConfig.site.name}`,
-//             isPartOf: { '@id': websiteId },
-//             description: siteConfig.blogPageConfig.seo.description || '',
-//             inLanguage: 'pt-BR',
-//             publisher: { '@id': orgId },
-//             hasPart: itemLists,
-//         },
-//         {
-//             '@type': 'WebSite',
-//             '@id': websiteId,
-//             url: domain + '/',
-//             name: siteConfig.site.name,
-//             description: siteConfig.site.description || '',
-//             publisher: { '@id': orgId },
-//             inLanguage: 'pt-BR',
-//         },
-//         {
-//             '@type': 'Organization',
-//             '@id': orgId,
-//             name: siteConfig.site.name,
-//             url: domain + '/',
-//             logo: {
-//                 '@type': 'ImageObject',
-//                 url: siteConfig.site.logo,
-//             },
-//         },
-//     ],
-// };
-
 ---
 
 <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)} />

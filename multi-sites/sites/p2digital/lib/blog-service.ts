@@ -23,8 +23,9 @@ export class BlogService {
         }
         return this._businessId!;
     }
+
     // Get blog configuration (for dynamic title and other settings)
-    static async getBlogConfig() {
+    static async getBlogConfigFromDb() {
         try {
             const businessId = this.getBusinessId();
             return await prisma.blog_config.findFirst({
