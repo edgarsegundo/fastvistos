@@ -1,0 +1,50 @@
+---
+export function getWebSiteBlock({
+    disableWebSite,
+    disableWebSiteSearchAction,
+    websiteId,
+    homepageUrl,
+    siteName,
+    description,
+    orgId,
+    site,
+}: {
+    disableWebSite: boolean,
+    disableWebSiteSearchAction: boolean,
+    websiteId: string,
+    homepageUrl: string,
+    siteName: string,
+    description?: string,
+    orgId: string,
+    site: { language: string }
+}) {
+    if (disableWebSite) return null;
+    return {
+        '@type': 'WebSite',
+        '@id': websiteId,
+        url: homepageUrl,
+        name: siteName,
+        description: description ?? '',
+        publisher: { '@id': orgId },
+        ...(!disableWebSiteSearchAction
+            ? {
+                  potentialAction: [
+                      {
+                          '@type': 'SearchAction',
+                          target: {
+                              '@type': 'EntryPoint',
+                              urlTemplate: `${homepageUrl}?s={search_term_string}`,
+                          },
+                          'query-input': {
+                              '@type': 'PropertyValueSpecification',
+                              valueRequired: true,
+                              valueName: 'search_term_string',
+                          },
+                      },
+                  ],
+              }
+            : {}),
+        inLanguage: site.language,
+    };
+}
+---

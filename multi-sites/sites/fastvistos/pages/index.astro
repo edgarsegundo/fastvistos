@@ -28,6 +28,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <Fragment slot="head">
         <JsonLdHomePageBase
             site={siteConfig.site}
+            homePageConfig={siteConfig.homePageConfig}
             faqList={faqData}
             servicesList={servicesData}
             reviewsList={reviewVideos}

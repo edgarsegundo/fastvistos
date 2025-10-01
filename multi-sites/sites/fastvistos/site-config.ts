@@ -18,6 +18,7 @@ export const siteConfig: SiteConfig = {
         author: 'Edgar Rezende',
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
+        assets_url_base: 'https://your-domain.com/assets/', // Base URL for images used in blog posts and other content
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
         dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
         address: {
@@ -34,33 +35,11 @@ export const siteConfig: SiteConfig = {
             availableLanguage: ['Portuguese', 'English'],
             email: 'support@fastvistos.com.br',
         },
-    },
-
-    socialMedia: {
-        facebook: 'https://facebook.com/fastvistos',
-        twitter: '@fastvistos',
-        instagram: 'https://instagram.com/fastvistos',
-        youtube: 'https://youtube.com/@fastvistos',
-    },
-
-    analytics: {
-        gtmId: 'GTM-59SRNCQD',
-    },
-
-    verification: {
-        googleSiteVerification: 'wPmMtzby8Xpg',
-    },
-
-    features: {
-        blog: true, // true/false
-        booking: false, // true/false
-        payments: false, // true/false
-        multilingual: false, // true/false
-    },
-
-    customStyles: {
-        cssVars: {
-            '--accent-color': '#ACCENT',
+        socialMedia: {
+            facebook: 'https://facebook.com/yourpage',
+            twitter: '@yourtwitter',
+            instagram: 'https://instagram.com/yourprofile',
+            youtube: 'https://youtube.com/@yourchannel',
         },
     },
 
@@ -70,6 +49,10 @@ export const siteConfig: SiteConfig = {
             description: 'Fast Vistos - Your fast visa solution',
             keywords: ['fast vistos', 'visa', 'fast visa solution'],
             ogImage: '/path-to-og-image.jpg',
+            ogImageWidth: 1200,
+            ogImageHeight: 630,
+            ogImageType: 'image/jpeg',
+            ogImageAlt: 'Your Image Alt Text',
             themeColor: '#0070f3',
             msTileColor: '#0070f3',
             msTileConfig: '/browserconfig.xml',
@@ -168,29 +151,61 @@ export const siteConfig: SiteConfig = {
         showAuthor: true, // true/false
         relatedPosts: true, // true/false
     },
+
+    socialMedia: {
+        facebook: 'https://facebook.com/fastvistos',
+        twitter: '@fastvistos',
+        instagram: 'https://instagram.com/fastvistos',
+        youtube: 'https://youtube.com/@fastvistos',
+    },
+
+    analytics: {
+        gtmId: 'GTM-59SRNCQD',
+    },
+
+    verification: {
+        googleSiteVerification: 'wPmMtzby8Xpg',
+    },
+
+    features: {
+        blog: true, // true/false
+        booking: false, // true/false
+        payments: false, // true/false
+        multilingual: false, // true/false
+    },
+
+    customStyles: {
+        cssVars: {
+            '--accent-color': '#ACCENT',
+        },
+    },
 };
 
-// Open Graph type options for 'openGraph.type':
-// 'website'         - General site or homepage
-// 'article'         - News, blog post, or article
-// 'book'            - Book content
-// 'profile'         - Person or profile page
-// 'music.song'      - Individual song
-// 'music.album'     - Music album
-// 'music.playlist'  - Music playlist
-// 'music.radio_station' - Radio station
-// 'video.movie'     - Movie
-// 'video.episode'   - TV episode
-// 'video.tv_show'   - TV show
-// 'video.other'     - Other video content
-// 'business.business' - Business or organization
-// 'place'           - Physical location
-// 'restaurant.menu'         - Restaurant menu
-// 'restaurant.menu_item'    - Menu item
-// 'restaurant.menu_section' - Menu section
-// 'restaurant.restaurant'   - Restaurant
-// 'product'         - Product page
-// 'product.group'   - Product group
-// 'product.item'    - Product item
-// 'game.achievement' - Game achievement
-//
+/*
+Open Graph type options for 'openGraph.type':
+==============================================
+'website'                   - General site or homepage
+'article'                   - News, blog post, or article
+'book'                      - Book content
+'profile'                   - Person or profile page
+'music.song'                - Individual song
+'music.album'               - Music album
+'music.playlist'            - Music playlist
+'music.radio_station'       - Radio station
+'video.movie'               - Movie
+'video.episode'             - TV episode
+'video.tv_show'             - TV show
+'video.other'               - Other video content
+'business.business'         - Business or organization
+'place'                     - Physical location
+'restaurant.menu'           - Restaurant menu
+'restaurant.menu_item'      - Menu item
+'restaurant.menu_section'   - Menu section
+'restaurant.restaurant'     - Restaurant
+'product'                   - Product page
+'product.group'             - Product group
+'product.item'              - Product item
+'game.achievement'          - Game achievement
+*/
+
+

@@ -8,16 +8,48 @@
  *
  * This component is generic and will be copied to each site's components/ folder.
  */
-import { siteConfig } from '../site-config.ts';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
 import { BlogService } from '../lib/blog-service.ts';
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+
+const {
+    site,
+    description,
+    image,
+    imageUrl,
+    imageCaption,
+    imageHeight,
+    imageWidth,
+    breadcrumbList = [],
+    disableBreadcrumb = false,
+    disableWebSite = false,
+    disableOrganization = false,
+    disableWebPage = false,
+    disableWebSiteSearchAction = true,
+    disableImageObject = false,
+    ...rest
+} = Astro.props;
 
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const domain = siteConfig.site.domain.startsWith('http')
-    ? siteConfig.site.domain
-    : `https://${siteConfig.site.domain}`;
-const orgId = `${domain}/#organization`;
-const websiteId = `${domain}/#website`;
-const pageId = `${domain}/blog/#webpage`;
+const homepageUrl = normalizeAssetsUrlBase(site.domain);
+const orgId = `${homepageUrl}#organization`;
+const websiteId = `${homepageUrl}#website`;
+const imageId = `${homepageUrl}/blog#primaryimage`;
+const breadcrumbId = `${homepageUrl}/blog#breadcrumb`;
+const siteName = site?.name;
+
+const org = site?.organization ?? {
+    name: siteName,
+    url: homepageUrl,
+    logo: site?.logo,
+};
+const logoId = `${homepageUrl}#logo`;
+
+const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);    
 
 const itemLists = topicsWithArticles.map((topic: any) => ({
     '@type': 'ItemList',
@@ -27,55 +59,104 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
         position: idx + 1,
         item: {
             '@type': 'BlogPosting',
-            '@id': `${domain}/blog/${article.slug}`,
+            '@id': `${homepageUrl}/blog/${article.slug}`,
+            "author": { '@type': 'Organization', 'name': `${org.name}` },
+            "publisher": { '@id': `${org.url}#organization` },
             headline: article.title,
-            url: `${domain}/blog/${article.slug}`,
-            image: article.image
-                ? `${domain}/assets/images/blog/${article.image.replace(/^.*\//, '')}`
+            url: `${homepageUrl}/blog/${article.slug}`,
+            image: article.image || article.seo_image_url
+                ? {
+                    '@type': 'ImageObject',
+                    url: article.image
+                        ? `${assets_url_base}/${article.image.replace(/^.*\//, '')}`
+                        : article.seo_image_url ? article.seo_image_url : undefined,
+                    width: article.seo_image_width || 1200,   // example width
+                    height: article.seo_image_height || 675,    // example height
+                    caption: article.seo_image_caption || article.title // optional but can help SEO/accessibility
+                  }
                 : undefined,
             datePublished: article.published,
             dateModified: article.updated || article.published,
             inLanguage: 'pt-BR',
-            description: article.description || '',
+            description: article.seo_description || '',
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `${homepageUrl}/blog/${article.slug}`
+            }
         },
     })),
 }));
 
-const jsonLd = {
+// WebPage block
+const webPageBlock = getWebPageBlock({
+    disableWebPage,
+    homepageUrl,
+    siteName,
+    websiteId,
+    orgId,
+    imageId,
+    breadcrumbId,
+    site,
+    description,
+    hasPartList: itemLists,
+    disableHasPart: false,
+});
+
+// BreadcrumbList
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb,
+    breadcrumbId,
+    breadcrumbList,
+    homepageUrl,
+});
+
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject,
+    site,
+    imageId,
+    image,
+    imageUrl,
+    caption: imageCaption,
+    width: imageWidth,
+    height: imageHeight,
+});
+
+// WebSite
+const webSiteBlock = !disableWebSite && getWebSiteBlock({
+    disableWebSite,
+    disableWebSiteSearchAction,
+    websiteId,
+    homepageUrl,
+    siteName,
+    description,
+    orgId,
+    site,
+});
+
+// Organization (with logo as ImageObject)
+const orgBlock = getOrganizationBlock({
+    disableOrganization,
+    orgId,
+    org,
+    logoId,
+    site,
+});
+
+const blocks = [
+    webPageBlock,
+    imageObjectBlock,
+    breadcrumbBlock,
+    webSiteBlock,
+    orgBlock,
+    // localBusinessBlock,
+]
+    .filter(Boolean)
+    .flat();
+
+const jsonLdGraph = {
     '@context': 'https://schema.org',
-    '@graph': [
-        {
-            '@type': ['WebPage', 'CollectionPage'],
-            '@id': pageId,
-            url: `${domain}/blog/`,
-            name: `Blog - ${siteConfig.site.name}`,
-            isPartOf: { '@id': websiteId },
-            description: siteConfig.blogPageConfig.seo.description || '',
-            inLanguage: 'pt-BR',
-            publisher: { '@id': orgId },
-            hasPart: itemLists,
-        },
-        {
-            '@type': 'WebSite',
-            '@id': websiteId,
-            url: domain + '/',
-            name: siteConfig.site.name,
-            description: siteConfig.site.description || '',
-            publisher: { '@id': orgId },
-            inLanguage: 'pt-BR',
-        },
-        {
-            '@type': 'Organization',
-            '@id': orgId,
-            name: siteConfig.site.name,
-            url: domain + '/',
-            logo: {
-                '@type': 'ImageObject',
-                url: siteConfig.site.logo,
-            },
-        },
-    ],
+    '@graph': blocks,
 };
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)} />

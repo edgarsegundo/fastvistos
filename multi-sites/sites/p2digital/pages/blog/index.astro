@@ -7,35 +7,28 @@
 
 import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import { siteConfig } from '../../site-config.ts';
-// import { SiteConfigHelper } from '../../lib/site-config-helper.ts';
 import { BlogService } from '../../lib/blog-service.ts';
 import JsonLdBlogIndex from '../../components/JsonLdBlogIndex.astro';
 
-export interface Props {
-    edgar?: string;
-}
-
-const { edgar = '' } = Astro.props;
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
 // Fetch blog data using the business-aware blog service
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const blogConfig = await BlogService.getBlogConfig();
-
-// Use blog config from database or fallback to default
-const defaultConfig = {
-    title: 'Blog - FastVistos | Dicas sobre Vistos Americanos',
-    description:
-        'Artigos e dicas sobre como obter vistos americanos, eTA canadense e vistos mexicanos. Guias completos e atualizados.',
-};
-
-const title = `${blogConfig?.title || defaultConfig.title} - ${siteConfig.name}`;
-const description = blogConfig?.description || defaultConfig.description;
+const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 ---
 
-<SharedBlogLayout edgar={edgar}>
+<SharedBlogLayout>
     
     <Fragment slot="head">
-        <JsonLdBlogIndex />
+        <JsonLdBlogIndex 
+            site={siteConfig.site}
+            description={blogConfigFromDb?.description || ''}
+            image={blogConfigFromDb?.image}
+            imageUrl={blogConfigFromDb?.seo_image_url || null}
+            imageCaption={blogConfigFromDb?.seo_image_caption || siteConfig.site.title}
+            imageHeight={blogConfigFromDb?.seo_image_height || 675}
+            imageWidth={blogConfigFromDb?.seo_image_width || 1200}
+        />
     </Fragment>
 
     
@@ -44,12 +37,12 @@ const description = blogConfig?.description || defaultConfig.description;
             <div class="">
                 
                 <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">
-                    {blogConfig?.title || defaultConfig.title}
+                    {blogConfigFromDb?.title || ''}
                 </h1>
 
                 
                 <p class="mt-4 text-lg text-gray-300">
-                    {blogConfig?.description || defaultConfig.description}
+                    {blogConfigFromDb?.description || ''}
                 </p>
 
                 
