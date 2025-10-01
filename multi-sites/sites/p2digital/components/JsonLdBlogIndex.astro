@@ -8,16 +8,34 @@
  *
  * This component is generic and will be copied to each site's components/ folder.
  */
-import { siteConfig } from '../site-config.ts';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+// import { siteConfig } from '../site-config.ts';
 import { BlogService } from '../lib/blog-service.ts';
 
+const {
+    site,
+    blogPageConfig,
+    breadcrumbList = [],
+    disableBreadcrumb = false,
+    disableWebSite = false,
+    disableOrganization = false,
+    disableWebPage = false,
+    disableWebSiteSearchAction = true,
+    ...rest
+} = Astro.props;
+
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const domain = siteConfig.site.domain.startsWith('http')
-    ? siteConfig.site.domain
-    : `https://${siteConfig.site.domain}`;
-const orgId = `${domain}/#organization`;
-const websiteId = `${domain}/#website`;
-const pageId = `${domain}/blog/#webpage`;
+const homepageUrl = site.domain.startsWith('http')
+    ? site.domain
+    : `https://${site.domain}`;
+const orgId = `${homepageUrl}/#organization`;
+const websiteId = `${homepageUrl}/#website`;
+const imageId = `${homepageUrl}#primaryimage`;
+const breadcrumbId = `${homepageUrl}#breadcrumb`;
+const description = blogPageConfig?.seo?.description || site.description || '';
+const siteName = site?.name;
 
 const itemLists = topicsWithArticles.map((topic: any) => ({
     '@type': 'ItemList',
@@ -27,11 +45,11 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
         position: idx + 1,
         item: {
             '@type': 'BlogPosting',
-            '@id': `${domain}/blog/${article.slug}`,
+            '@id': `${homepageUrl}/blog/${article.slug}`,
             headline: article.title,
-            url: `${domain}/blog/${article.slug}`,
+            url: `${homepageUrl}/blog/${article.slug}`,
             image: article.image
-                ? `${domain}/assets/images/blog/${article.image.replace(/^.*\//, '')}`
+                ? `${homepageUrl}/assets/images/blog/${article.image.replace(/^.*\//, '')}`
                 : undefined,
             datePublished: article.published,
             dateModified: article.updated || article.published,
@@ -41,41 +59,71 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
     })),
 }));
 
-const jsonLd = {
+// WebPage block
+const webPageBlock = getWebPageBlock({
+    disableWebPage,
+    homepageUrl,
+    siteName,
+    websiteId,
+    orgId,
+    imageId,
+    breadcrumbId,
+    site,
+    description,
+});
+
+const blocks = [
+    webPageBlock,
+    // imageObjectBlock,
+    // breadcrumbBlock,
+    // webSiteBlock,
+    // orgBlock,
+    // localBusinessBlock,
+]
+    .filter(Boolean)
+    .flat();
+
+const jsonLdGraph = {
     '@context': 'https://schema.org',
-    '@graph': [
-        {
-            '@type': ['WebPage', 'CollectionPage'],
-            '@id': pageId,
-            url: `${domain}/blog/`,
-            name: `Blog - ${siteConfig.site.name}`,
-            isPartOf: { '@id': websiteId },
-            description: siteConfig.blogPageConfig.seo.description || '',
-            inLanguage: 'pt-BR',
-            publisher: { '@id': orgId },
-            hasPart: itemLists,
-        },
-        {
-            '@type': 'WebSite',
-            '@id': websiteId,
-            url: domain + '/',
-            name: siteConfig.site.name,
-            description: siteConfig.site.description || '',
-            publisher: { '@id': orgId },
-            inLanguage: 'pt-BR',
-        },
-        {
-            '@type': 'Organization',
-            '@id': orgId,
-            name: siteConfig.site.name,
-            url: domain + '/',
-            logo: {
-                '@type': 'ImageObject',
-                url: siteConfig.site.logo,
-            },
-        },
-    ],
+    '@graph': blocks,
 };
+
+// const jsonLd = {
+//     '@context': 'https://schema.org',
+//     '@graph': [
+//         {
+//             '@type': ['WebPage', 'CollectionPage'],
+//             '@id': pageId,
+//             url: `${domain}/blog/`,
+//             name: `Blog - ${siteConfig.site.name}`,
+//             isPartOf: { '@id': websiteId },
+//             description: siteConfig.blogPageConfig.seo.description || '',
+//             inLanguage: 'pt-BR',
+//             publisher: { '@id': orgId },
+//             hasPart: itemLists,
+//         },
+//         {
+//             '@type': 'WebSite',
+//             '@id': websiteId,
+//             url: domain + '/',
+//             name: siteConfig.site.name,
+//             description: siteConfig.site.description || '',
+//             publisher: { '@id': orgId },
+//             inLanguage: 'pt-BR',
+//         },
+//         {
+//             '@type': 'Organization',
+//             '@id': orgId,
+//             name: siteConfig.site.name,
+//             url: domain + '/',
+//             logo: {
+//                 '@type': 'ImageObject',
+//                 url: siteConfig.site.logo,
+//             },
+//         },
+//     ],
+// };
+
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)} />
