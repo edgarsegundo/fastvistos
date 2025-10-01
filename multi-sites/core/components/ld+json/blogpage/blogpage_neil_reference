@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <style>
+            img:is([sizes="auto" i], [sizes^="auto," i]) {
+                contain-intrinsic-size: 3000px 1500px;
+            }
+        </style>
+        <link rel="alternate" href="https://neilpatel.com/blog/" hreflang="x-default" />
+        <link rel="alternate" href="https://neilpatel.com/blog/" hreflang="en" />
+        <link rel="alternate" href="https://neilpatel.com/br/blog/" hreflang="pt-br" />
+        <link rel="alternate" href="https://neilpatel.com/de/blog/" hreflang="de" />
+        <link rel="alternate" href="https://neilpatel.com/es/blog/" hreflang="es" />
+        <link rel="alternate" href="https://neilpatel.com/it/blog/" hreflang="it" />
+        <link rel="alternate" href="https://neilpatel.com/fr/blog/" hreflang="fr" />
+        <link rel="shortcut icon" href="https://neilpatel.com/favicon.ico" type="image/x-icon" />
+
+        <!-- This site is optimized with the Yoast SEO plugin v25.1 - https://yoast.com/wordpress/plugins/seo/ -->
+        <title>Blog: Confira os Melhores Artigos e Tudo Sobre Como Criar Um Blog!</title>
+        <meta
+            name="description"
+            content="Blog do Neil Patel: Você quer aprender a como crescer sua empresa utilizando blogs e estratégias de marketing digital? Quer conseguir mais tráfego para o seu site? Gostaria de aprender como criar um Blog? Vou te mostrar todos os segredos para você conseguir isso. Confira!"
+        />
+        <link rel="canonical" href="https://neilpatel.com/br/blog/" />
+        <link rel="next" href="https://neilpatel.com/br/blog/page/2/" />
+        <meta property="og:locale" content="pt_BR" />
+        <meta property="og:locale:alternate" content="" />
+        <meta property="og:locale:alternate" content="de_DE" />
+        <meta property="og:locale:alternate" content="es_ES" />
+        <meta property="og:locale:alternate" content="it_IT" />
+        <meta property="og:locale:alternate" content="fr_FR" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Blog: Confira os Melhores Artigos e Tudo Sobre Como Criar Um Blog!" />
+        <meta
+            property="og:description"
+            content="Blog do Neil Patel: Você quer aprender a como crescer sua empresa utilizando blogs e estratégias de marketing digital? Quer conseguir mais tráfego para o seu site? Gostaria de aprender como criar um Blog? Vou te mostrar todos os segredos para você conseguir isso. Confira!"
+        />
+        <meta property="og:url" content="https://neilpatel.com/br/blog/" />
+        <meta property="og:site_name" content="Neil Patel" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <script type="application/ld+json" class="yoast-schema-graph">
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": ["WebPage", "CollectionPage"],
+                        "@id": "https://neilpatel.com/br/blog/",
+                        "url": "https://neilpatel.com/br/blog/",
+                        "name": "Blog: Confira os Melhores Artigos e Tudo Sobre Como Criar Um Blog!",
+                        "isPartOf": { "@id": "https://neilpatel.com/br/#website" },
+                        "datePublished": "2016-04-11T17:05:59+00:00",
+                        "dateModified": "2025-08-14T16:41:51+00:00",
+                        "description": "Blog do Neil Patel: Você quer aprender a como crescer sua empresa utilizando blogs e estratégias de marketing digital? Quer conseguir mais tráfego para o seu site? Gostaria de aprender como criar um Blog? Vou te mostrar todos os segredos para você conseguir isso. Confira!",
+                        "inLanguage": "pt-BR"
+                    },
+                    {
+                        "@type": "WebSite",
+                        "@id": "https://neilpatel.com/br/#website",
+                        "url": "https://neilpatel.com/br/",
+                        "name": "Neil Patel",
+                        "description": "",
+                        "publisher": { "@id": "https://neilpatel.com/br/#organization" },
+                        "potentialAction": [
+                            {
+                                "@type": "SearchAction",
+                                "target": { "@type": "EntryPoint", "urlTemplate": "https://neilpatel.com/br/?s={search_term_string}" },
+                                "query-input": { "@type": "PropertyValueSpecification", "valueRequired": true, "valueName": "search_term_string" }
+                            }
+                        ],
+                        "inLanguage": "pt-BR"
+                    },
+                    {
+                        "@type": "Organization",
+                        "@id": "https://neilpatel.com/br/#organization",
+                        "name": "Neil Patel",
+                        "url": "https://neilpatel.com/br/",
+                        "logo": {
+                            "@type": "ImageObject",
+                            "inLanguage": "pt-BR",
+                            "@id": "https://neilpatel.com/br/#/schema/logo/image/",
+                            "url": "https://neilpatel.com/wp-content/uploads/2022/07/neilpatel.png",
+                            "contentUrl": "https://neilpatel.com/wp-content/uploads/2022/07/neilpatel.png",
+                            "width": 570,
+                            "height": 63,
+                            "caption": "Neil Patel"
+                        },
+                        "image": { "@id": "https://neilpatel.com/br/#/schema/logo/image/" }
+                    }
+                ]
+            }
+        </script>
+        <!-- / Yoast SEO plugin. -->
+
+        <link rel="dns-prefetch" href="//cdn.mida.so" />
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
+
+        <!-- template: page_blog-br -->
+
+        <link rel="preload" id="wp-block-library-css" href="https://neilpatel.com/wp-includes/css/dist/block-library/style.min.css?ver=6.8.2" as="style" media="all" onload="this.onload=null;this.rel='stylesheet'" />
+        <link
+            rel="preload"
+            id="npd-hubspot-email-resubscription-css"
+            href="https://neilpatel.com/wp-content/plugins/npd-hubspot-email-resubscription//css/resubscription-popup.css?ver=2025.06.02.1"
+            as="style"
+            media="all"
+            onload="this.onload=null;this.rel='stylesheet'"
+        />
+        <link rel="preload" id="neilpatel-main-css" href="https://neilpatel.com/wp-content/themes/neilpatel/css/style-main.css?ver=2.0.2025.9.26.2" as="style" media="all" onload="this.onload=null;this.rel='stylesheet'" />
+        <link rel="preload" id="neilpatel-blog-css" href="https://neilpatel.com/wp-content/themes/neilpatel/css/style-blog.css?ver=2.0.2025.9.26.2" as="style" media="all" onload="this.onload=null;this.rel='stylesheet'" />
+        <link rel="stylesheet" id="neilpatel-print-css" href="https://neilpatel.com/wp-content/themes/neilpatel/css/style-print.css?ver=2.0.2025.9.26.2" type="text/css" media="print" />
+        <link
+            rel="preload"
+            id="uacf7-frontend-style-css"
+            href="https://neilpatel.com/wp-content/plugins/ultimate-addons-for-contact-form-7/assets/css/uacf7-frontend.css?ver=6.8.2"
+            as="style"
+            media="all"
+            onload="this.onload=null;this.rel='stylesheet'"
+        />
+        <link
+            rel="preload"
+            id="uacf7-form-style-css"
+            href="https://neilpatel.com/wp-content/plugins/ultimate-addons-for-contact-form-7/assets/css/form-style.css?ver=6.8.2"
+            as="style"
+            media="all"
+            onload="this.onload=null;this.rel='stylesheet'"
+        />
+
+        <script id="np-vars">
+            var lang_geo = "br";
+            var cf_state = "São Paulo";
+            var cf_timezone = "America/Sao_Paulo";
+            var lang = "br";
+            var base_path = "https://neilpatel.com/br";
+            var template_path = "https://neilpatel.com/wp-content/themes/neilpatel";
+            var template_version = "2.0.2025.9.26.2";
+            var admin_path = "https://neilpatel.com/wp-admin/";
+            var privacy_policy_url = "https://neilpatel.com/br/privacidade/";
+            var terms_of_service_url = "https://neilpatel.com/br/termos/";
+            var consulting_url = "https://neilpatelbrasil.com.br/consultoria-br/?utm_campaign=consultoria&utm_source=blog&utm_medium=popup&utm_content=popup-mobile-blog-pag-0";
+            var quiz_url = "https://neilpatelbrasil.com.br/quiz-2/?utm_campaign=quiz&utm_source=blog&utm_medium=pop-up-saida";
+            var ai_traffic_analyzer_url = "https://neilpatel.com/ai-traffic-analyzer-popup/";
+            var seo_analyzer_url = "https://neilpatel.com/br/seo-analyzer/analise/";
+            var seo_analyzer_popup_url = "https://neilpatel.com/seo-analyzer-popup/";
+            var exit_popup_quiz_cookie_id = "v3z9n";
+        </script>
+
+
+    </head>
+</html>

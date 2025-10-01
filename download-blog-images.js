@@ -119,7 +119,7 @@ async function downloadBlogImages(siteId) {
 
         // Get published articles for this specific site using business_id
         const now = new Date();
-        const articles = await prisma.blogArticle.findMany({
+        const articles = await prisma.blog_article.findMany({
             where: {
                 business_id: siteConfig.business_id,
                 is_removed: false,
@@ -135,7 +135,7 @@ async function downloadBlogImages(siteId) {
         });
 
         // Get blog topics for this specific site using business_id
-        const topics = await prisma.blogTopic.findMany({
+        const topics = await prisma.blog_topic.findMany({
             where: {
                 business_id: siteConfig.business_id,
                 is_removed: false,
