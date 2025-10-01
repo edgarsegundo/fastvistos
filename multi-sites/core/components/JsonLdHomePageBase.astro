@@ -1,5 +1,7 @@
 ---
-import { getWebSiteBlock } from '../components/JsonLdWebSiteBlock.astro';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 
 const {
     site,
@@ -34,32 +36,17 @@ const breadcrumbId = `${homepageUrl}#breadcrumb`;
 const logoId = `${homepageUrl}#/schema/logo/image/`;
 
 // WebPage block
-const webPageBlock = !disableWebPage && {
-    '@type': 'WebPage',
-    '@id': homepageUrl,
-    url: homepageUrl,
-    name: siteName,
-    isPartOf: { '@id': websiteId },
-    about: { '@id': orgId },
-    primaryImageOfPage: { '@id': imageId },
-    image: { '@id': imageId },
-    ...(site?.thumbnailUrl
-        ? { thumbnailUrl: site.thumbnailUrl }
-        : site?.image
-          ? { thumbnailUrl: site.image }
-          : {}),
-    ...(site.datePublished ? { datePublished: site.datePublished } : {}),
-    ...(site.dateModified ? { dateModified: site.dateModified } : {}),
-    ...(description ? { description: description } : {}),
-    breadcrumb: { '@id': breadcrumbId },
-    inLanguage: site.language || 'pt-BR',
-    potentialAction: [
-        {
-            '@type': 'ReadAction',
-            target: [homepageUrl],
-        },
-    ],
-};
+const webPageBlock = getWebPageBlock({
+    disableWebPage,
+    homepageUrl,
+    siteName,
+    websiteId,
+    orgId,
+    imageId,
+    breadcrumbId,
+    site,
+    description,
+});
 
 // ImageObject (primary image)
 const imageObjectBlock = !disableImageObject &&
@@ -100,23 +87,13 @@ const webSiteBlock = !disableWebSite && getWebSiteBlock({
 });
 
 // Organization (with logo as ImageObject)
-const orgBlock = !disableOrganization && {
-    '@type': 'Organization',
-    '@id': orgId,
-    name: org.name,
-    url: org.url,
-    logo: {
-        '@type': 'ImageObject',
-        inLanguage: site.language,
-        '@id': logoId,
-        url: org.logo,
-        contentUrl: org.logo,
-        ...(org.logoWidth ? { width: org.logoWidth } : {}),
-        ...(org.logoHeight ? { height: org.logoHeight } : {}),
-        ...(org.name ? { caption: org.name } : {}),
-    },
-    image: { '@id': logoId },
-};
+const orgBlock = getOrganizationBlock({
+    disableOrganization,
+    orgId,
+    org,
+    logoId,
+    site,
+});
 
 // FAQ block
 const faqBlock =
