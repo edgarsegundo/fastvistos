@@ -53,23 +53,13 @@ const webPageBlock = getWebPageBlock({
     description,
 });
 
-
-            homePageConfig.ogImage
-            homePageConfig.ogImageWidth
-            homePageConfig.ogImageHeight
-            homePageConfig.ogImageType
-            homePageConfig.ogImageAlt
-
-
-
-
 // ImageObject (primary image)
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject,
     site,
     imageId,
     image: homePageConfig.ogImage || site?.image,
-    imageUrl: '',
+    imageUrl: homePageConfig.ogImage || site?.image,
     width: homePageConfig.ogImageWidth || site?.imageWidth || 1200,
     height: homePageConfig.ogImageHeight || site?.imageHeight || 675,
     caption: homePageConfig.ogImageAlt || site?.name,
