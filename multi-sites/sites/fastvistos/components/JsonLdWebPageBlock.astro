@@ -9,6 +9,8 @@ export function getWebPageBlock({
     breadcrumbId,
     site,
     description,
+    hasPartList = [],
+    disableHasPart = true,
 }: {
     disableWebPage: boolean,
     homepageUrl: string,
@@ -19,6 +21,8 @@ export function getWebPageBlock({
     breadcrumbId: string,
     site: any,
     description?: string,
+    hasPartList?: any[],
+    disableHasPart?: boolean,    
 }) {
     if (disableWebPage) return null;
     return {
@@ -46,6 +50,10 @@ export function getWebPageBlock({
                 target: [homepageUrl],
             },
         ],
+        // Only add hasPart if not disabled and hasPartList is a non-empty array
+        ...(!disableHasPart && Array.isArray(hasPartList) && hasPartList.length > 0
+            ? { hasPart: hasPartList }
+            : {}),        
     };
 }
 ---

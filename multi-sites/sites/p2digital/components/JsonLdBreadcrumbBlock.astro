@@ -1,0 +1,27 @@
+---
+export function getBreadcrumbBlock({
+    disableBreadcrumb,
+    breadcrumbId,
+    breadcrumbList,
+}: {
+    disableBreadcrumb: boolean,
+    breadcrumbId: string,
+    breadcrumbList?: any[],
+}) {
+    if (disableBreadcrumb) return null;
+    return {
+        '@type': 'BreadcrumbList',
+        '@id': breadcrumbId,
+        itemListElement:
+            Array.isArray(breadcrumbList) && breadcrumbList.length > 0
+                ? breadcrumbList
+                : [
+                      {
+                          '@type': 'ListItem',
+                          position: 1,
+                          name: 'Home',
+                      },
+                  ],
+    };
+}
+---
