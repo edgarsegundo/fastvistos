@@ -170,44 +170,53 @@ model binary_option {
 }
 
 model blog_article {
-  created       DateTime   @db.DateTime(6)
-  modified      DateTime   @db.DateTime(6)
-  is_removed    Boolean
-  id            String     @id @db.Char(32)
-  title         String     @db.LongText
-  content_raw   String?    @db.LongText
-  content_html  String?    @db.LongText
-  content_md    String?    @db.LongText
-  type          String     @db.VarChar(50)
-  slug          String?    @unique(map: "slug") @db.VarChar(255)
-  published     DateTime   @db.DateTime(6)
-  image         String?    @db.VarChar(100)
-  business_id   String     @db.Char(32)
-  blog_topic_id String     @db.Char(32)
-  metatitle     String?    @db.LongText
-  blog_topic    blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
-  business      business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+  created           DateTime   @db.DateTime(6)
+  modified          DateTime   @db.DateTime(6)
+  is_removed        Boolean
+  id                String     @id @db.Char(32)
+  title             String     @db.LongText
+  content_raw       String?    @db.LongText
+  content_html      String?    @db.LongText
+  content_md        String?    @db.LongText
+  type              String     @db.VarChar(50)
+  slug              String?    @unique(map: "slug") @db.VarChar(255)
+  published         DateTime   @db.DateTime(6)
+  image             String?    @db.VarChar(100)
+  business_id       String     @db.Char(32)
+  blog_topic_id     String     @db.Char(32)
+  metatitle         String?    @db.LongText
+  seo_description   String?    @db.LongText
+  seo_image_caption String?    @db.VarChar(255)
+  seo_image_height  Int?       @db.UnsignedInt
+  seo_image_url     String?    @db.VarChar(200)
+  seo_image_width   Int?       @db.UnsignedInt
+  blog_topic        blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  business          business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
 
   @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
 }
 
 model blog_config {
-  created      DateTime     @db.DateTime(6)
-  modified     DateTime     @db.DateTime(6)
-  is_removed   Boolean
-  id           String       @id @db.Char(32)
-  title        String       @db.VarChar(255)
-  slug         String?      @unique(map: "slug") @db.VarChar(255)
-  config       Json
-  business_id  String       @db.Char(32)
-  author_image String?      @db.VarChar(100)
-  author_name  String?      @db.VarChar(255)
-  description  String?      @db.VarChar(500)
-  theme_image  String?      @db.VarChar(100)
-  business     business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
-  blog_topic   blog_topic[]
-  web_page     web_page[]
+  created           DateTime     @db.DateTime(6)
+  modified          DateTime     @db.DateTime(6)
+  is_removed        Boolean
+  id                String       @id @db.Char(32)
+  title             String       @db.VarChar(255)
+  slug              String?      @unique(map: "slug") @db.VarChar(255)
+  config            Json
+  business_id       String       @db.Char(32)
+  author_image      String?      @db.VarChar(100)
+  author_name       String?      @db.VarChar(255)
+  description       String?      @db.VarChar(500)
+  image             String?      @db.VarChar(100)
+  seo_image_caption String?      @db.VarChar(255)
+  seo_image_height  Int?         @db.UnsignedInt
+  seo_image_url     String?      @db.VarChar(200)
+  seo_image_width   Int?         @db.UnsignedInt
+  business          business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  blog_topic        blog_topic[]
+  web_page          web_page[]
 
   @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
 }
@@ -245,20 +254,24 @@ model blog_post {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model blog_topic {
-  created        DateTime       @db.DateTime(6)
-  modified       DateTime       @db.DateTime(6)
-  is_removed     Boolean
-  id             String         @id @db.Char(32)
-  title          String         @db.VarChar(255)
-  slug           String?        @unique(map: "slug") @db.VarChar(255)
-  image          String?        @db.VarChar(100)
-  order          Int            @db.UnsignedInt
-  blog_config_id String         @db.Char(32)
-  business_id    String         @db.Char(32)
-  metatitle      String?        @db.LongText
-  blog_article   blog_article[]
-  blog_config    blog_config    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
-  business       business       @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
+  created           DateTime       @db.DateTime(6)
+  modified          DateTime       @db.DateTime(6)
+  is_removed        Boolean
+  id                String         @id @db.Char(32)
+  title             String         @db.VarChar(255)
+  slug              String?        @unique(map: "slug") @db.VarChar(255)
+  image             String?        @db.VarChar(100)
+  order             Int            @db.UnsignedInt
+  blog_config_id    String         @db.Char(32)
+  business_id       String         @db.Char(32)
+  metatitle         String?        @db.LongText
+  seo_image_caption String?        @db.VarChar(255)
+  seo_image_height  Int?           @db.UnsignedInt
+  seo_image_url     String?        @db.VarChar(200)
+  seo_image_width   Int?           @db.UnsignedInt
+  blog_article      blog_article[]
+  blog_config       blog_config    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
+  business          business       @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
 
   @@index([blog_config_id], map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
   @@index([business_id], map: "blog_topic_business_id_787b32b6_fk_business_id")

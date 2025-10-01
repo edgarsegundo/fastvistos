@@ -1,0 +1,40 @@
+---
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+
+export function getImageObjectBlock({
+    disableImageObject,
+    site,
+    imageId,
+    image,
+    imageUrl,
+    caption,
+    width,
+    height,
+}: {
+    disableImageObject: boolean,
+    site: any,
+    imageId: string,
+    image?: string,
+    imageUrl?: string,
+    caption?: string,
+    width?: number,
+    height?: number,
+}) {
+    if (disableImageObject || (!imageUrl && !site?.image && !image)) return null;
+
+    const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);
+    const url = image ? `${assets_url_base}/${image.replace(/^.*\//, '')}` : imageUrl ? imageUrl : site?.image;
+
+    return {
+        '@type': 'ImageObject',
+        inLanguage: site.language,
+        '@id': imageId,
+        url: url,
+        contentUrl: url,
+        ...(caption ? { caption } : {}),
+        ...(width ? { width } : {}),
+        ...(height ? { height } : {}),
+    };
+}
+---
+

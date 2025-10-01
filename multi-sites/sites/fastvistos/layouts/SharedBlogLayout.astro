@@ -11,57 +11,13 @@ import HeadBasics from '../components/HeadBasics.astro';
 import SEOMeta from '../components/SEOMeta.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
-import { SiteConfigHelper } from '../lib/site-config-helper.ts';
+import { siteConfig } from '../site-config.ts';
 
 export interface Props {
     edgar?: string;
 }
 
 const { edgar } = Astro.props;
-
-// export interface Props {
-//   title: string;
-//   description: string;
-//   bodyClass?: string;
-//   siteName?: string;
-//   siteUrl?: string;
-//   type?: 'website' | 'article' | 'book' | 'profile' |
-//          'music.song' | 'music.album' | 'music.playlist' | 'music.radio_station' |
-//          'video.movie' | 'video.episode' | 'video.tv_show' | 'video.other' |
-//          'business.business' | 'place' | 'restaurant.menu' | 'restaurant.menu_item' |
-//          'restaurant.menu_section' | 'restaurant.restaurant' |
-//          'product' | 'product.group' | 'product.item' |
-//          'game.achievement' | 'fitness.course';          // Content type (website, article, product, etc.)
-
-//   // OpenGraph article-specific properties
-//   author?: string;        // Author name for articles
-//   publishedTime?: string; // ISO date string (e.g., "2024-01-15T10:00:00Z")
-//   modifiedTime?: string;  // ISO date string for last modification
-//   section?: string;       // Article section/category
-//   tags?: string[];        // Array of tags
-//   ogImage?: string;       // Custom OpenGraph image
-//   enhancedIndexing?: boolean;  // Opt-in for rich snippets and prominent search results
-// }
-
-// const {
-//   title,
-//   description,
-//   bodyClass = '',
-//   siteName = 'FastVistos',
-//   siteUrl = 'https://fastvistos.com',
-//   type = 'article',
-//   author,
-//   publishedTime,
-//   modifiedTime,
-//   section = 'Vistos',
-//   tags = [],
-//   enhancedIndexing = false
-// } = Astro.props;
-
-// Load site configuration dynamically
-// const siteConfig = await SiteConfigHelper.loadSiteConfig();
-
-import { siteConfig } from '../site-config.ts';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.site.useFullLanguageTag
@@ -76,7 +32,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         <HeadBasics generator={Astro.generator} />
 
         
-        
+        <AnalyticsHead siteConfig={siteConfig} />
 
         
         <SEOMeta
