@@ -3,6 +3,7 @@ export function getImageObjectBlock({
     disableImageObject,
     site,
     imageId,
+    image,
     imageUrl,
     caption,
     width,
@@ -11,21 +12,31 @@ export function getImageObjectBlock({
     disableImageObject: boolean,
     site: any,
     imageId: string,
+    image?: string,
     imageUrl?: string,
     caption?: string,
     width?: number,
     height?: number,
 }) {
-    if (disableImageObject || (!imageUrl && !site?.image)) return null;
+    if (disableImageObject || (!imageUrl && !site?.image && !image)) return null;
+
+    let assets_url_base = site.assets_url_base.replace(/\/$/, '');
+    assets_url_base = assets_url_base.startsWith('http')
+        ? assets_url_base
+        : `https://${assets_url_base}`;
+
+    const url = image ? `${assets_url_base}/${image.replace(/^.*\//, '')}` : imageUrl ? imageUrl : site?.image;
+
     return {
         '@type': 'ImageObject',
         inLanguage: site.language,
         '@id': imageId,
-        url: imageUrl || site?.image,
-        contentUrl: imageUrl,
+        url: url,
+        contentUrl: url,
         ...(caption ? { caption } : {}),
         ...(width ? { width } : {}),
         ...(height ? { height } : {}),
     };
 }
 ---
+

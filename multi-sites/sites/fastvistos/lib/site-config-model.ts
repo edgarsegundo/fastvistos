@@ -15,35 +15,44 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: 'your-business-id',
-        id: 'your-site-id',
-        domain: 'your-domain.com',
-        name: 'Your Business Name',
-        description: 'Your business description here',
-        language: 'your-language-tag',
-        useFullLanguageTag: true, // true/false
-        currency: 'CURRENCY',
-        timezone: 'Your/Timezone',
-        logo: '/path-to-logo.png',
-        primaryColor: '#0070f3',
-        secondaryColor: '#1c1c1e',
-        author: 'Your Author Name', // Default author name for Open Graph
-        thumbnailUrl: '/path-to-thumbnail.jpg', // Important for search and social previews
-        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
-        datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
-        dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
-    },
-
-    contact: {
-        email: 'contact@yourdomain.com',
-        whatsapp: '+1234567890',
-    },
-
-    socialMedia: {
-        facebook: 'https://facebook.com/yourpage',
-        twitter: '@yourtwitter',
-        instagram: 'https://instagram.com/yourprofile',
-        youtube: 'https://youtube.com/@yourchannel',
+        business_id: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        id: 'example-site',
+        domain: 'example.com',
+        name: 'Example Site',
+        description: 'Example Site - Your solution',
+        language: 'pt-BR',
+        useFullLanguageTag: true,
+        currency: 'BRL',
+        timezone: 'America/Sao_Paulo',
+        logo: 'https://example.com/assets/images/logo/logo-footer.png',
+        primaryColor: '#123456',
+        secondaryColor: '#654321',
+        author: 'John Doe',
+        thumbnailUrl: 'https://example.com/assets/images/logo/logo-footer.png',
+        image: 'https://example.com/assets/images/logo/logo-footer.png',
+        assets_url_base: 'https://example.com/assets/',
+        datePublished: '2024-01-01T00:00:00Z',
+        dateModified: '2024-01-01T00:00:00Z',
+        address: {
+            streetAddress: 'Rua Exemplo, 123',
+            addressLocality: 'Cidade',
+            addressRegion: 'UF',
+            postalCode: '00000-000',
+            addressCountry: 'BR',
+        },
+        contactPoint: {
+            telephone: '+5500000000000',
+            contactType: 'Customer Service',
+            areaServed: 'BR',
+            availableLanguage: ['Portuguese', 'English'],
+            email: 'contact@example.com',
+        },
+        socialMedia: {
+            facebook: 'https://facebook.com/example',
+            twitter: '@example',
+            instagram: 'https://instagram.com/example',
+            youtube: 'https://youtube.com/@example',
+        },
     },
 
     analytics: {

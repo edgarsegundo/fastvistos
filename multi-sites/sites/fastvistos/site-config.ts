@@ -18,6 +18,7 @@ export const siteConfig: SiteConfig = {
         author: 'Edgar Rezende',
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
+        assets_url_base: 'https://your-domain.com/assets/', // Base URL for images used in blog posts and other content
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
         dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
         address: {
@@ -33,6 +34,12 @@ export const siteConfig: SiteConfig = {
             areaServed: 'BR',
             availableLanguage: ['Portuguese', 'English'],
             email: 'support@fastvistos.com.br',
+        },
+        socialMedia: {
+            facebook: 'https://facebook.com/yourpage',
+            twitter: '@yourtwitter',
+            instagram: 'https://instagram.com/yourprofile',
+            youtube: 'https://youtube.com/@yourchannel',
         },
     },
 
