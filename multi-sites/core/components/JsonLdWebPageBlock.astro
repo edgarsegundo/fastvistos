@@ -1,0 +1,51 @@
+---
+export function getWebPageBlock({
+    disableWebPage,
+    homepageUrl,
+    siteName,
+    websiteId,
+    orgId,
+    imageId,
+    breadcrumbId,
+    site,
+    description,
+}: {
+    disableWebPage: boolean,
+    homepageUrl: string,
+    siteName: string,
+    websiteId: string,
+    orgId: string,
+    imageId: string,
+    breadcrumbId: string,
+    site: any,
+    description?: string,
+}) {
+    if (disableWebPage) return null;
+    return {
+        '@type': 'WebPage',
+        '@id': homepageUrl,
+        url: homepageUrl,
+        name: siteName,
+        isPartOf: { '@id': websiteId },
+        about: { '@id': orgId },
+        primaryImageOfPage: { '@id': imageId },
+        image: { '@id': imageId },
+        ...(site?.thumbnailUrl
+            ? { thumbnailUrl: site.thumbnailUrl }
+            : site?.image
+              ? { thumbnailUrl: site.image }
+              : {}),
+        ...(site.datePublished ? { datePublished: site.datePublished } : {}),
+        ...(site.dateModified ? { dateModified: site.dateModified } : {}),
+        ...(description ? { description: description } : {}),
+        breadcrumb: { '@id': breadcrumbId },
+        inLanguage: site.language || 'pt-BR',
+        potentialAction: [
+            {
+                '@type': 'ReadAction',
+                target: [homepageUrl],
+            },
+        ],
+    };
+}
+---
