@@ -170,23 +170,24 @@ model binary_option {
 }
 
 model blog_article {
-  created       DateTime   @db.DateTime(6)
-  modified      DateTime   @db.DateTime(6)
-  is_removed    Boolean
-  id            String     @id @db.Char(32)
-  title         String     @db.LongText
-  content_raw   String?    @db.LongText
-  content_html  String?    @db.LongText
-  content_md    String?    @db.LongText
-  type          String     @db.VarChar(50)
-  slug          String?    @unique(map: "slug") @db.VarChar(255)
-  published     DateTime   @db.DateTime(6)
-  image         String?    @db.VarChar(100)
-  business_id   String     @db.Char(32)
-  blog_topic_id String     @db.Char(32)
-  metatitle     String?    @db.LongText
-  blog_topic    blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
-  business      business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+  created         DateTime   @db.DateTime(6)
+  modified        DateTime   @db.DateTime(6)
+  is_removed      Boolean
+  id              String     @id @db.Char(32)
+  title           String     @db.LongText
+  content_raw     String?    @db.LongText
+  content_html    String?    @db.LongText
+  content_md      String?    @db.LongText
+  type            String     @db.VarChar(50)
+  slug            String?    @unique(map: "slug") @db.VarChar(255)
+  published       DateTime   @db.DateTime(6)
+  image           String?    @db.VarChar(100)
+  business_id     String     @db.Char(32)
+  blog_topic_id   String     @db.Char(32)
+  metatitle       String?    @db.LongText
+  seo_description String?    @db.LongText
+  blog_topic      blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  business        business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
 
   @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
