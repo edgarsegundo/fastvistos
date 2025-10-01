@@ -11,6 +11,7 @@
 import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 // import { siteConfig } from '../site-config.ts';
 import { BlogService } from '../lib/blog-service.ts';
 
@@ -36,6 +37,13 @@ const imageId = `${homepageUrl}#primaryimage`;
 const breadcrumbId = `${homepageUrl}#breadcrumb`;
 const description = blogPageConfig?.seo?.description || site.description || '';
 const siteName = site?.name;
+
+const org = site?.organization ?? {
+    name: siteName,
+    url: homepageUrl,
+    logo: site?.logo,
+};
+const logoId = `${homepageUrl}#/schema/logo/image/`;
 
 const itemLists = topicsWithArticles.map((topic: any) => ({
     '@type': 'ItemList',
@@ -70,14 +78,46 @@ const webPageBlock = getWebPageBlock({
     breadcrumbId,
     site,
     description,
+    hasPartList: itemLists,
+    disableHasPart: false,
 });
+
+// BreadcrumbList
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb,
+    breadcrumbId,
+    breadcrumbList,
+});
+
+// WebSite
+const webSiteBlock = !disableWebSite && getWebSiteBlock({
+    disableWebSite,
+    disableWebSiteSearchAction,
+    websiteId,
+    homepageUrl,
+    siteName,
+    description,
+    orgId,
+    site,
+});
+
+// Organization (with logo as ImageObject)
+const orgBlock = getOrganizationBlock({
+    disableOrganization,
+    orgId,
+    org,
+    logoId,
+    site,
+});
+
+
 
 const blocks = [
     webPageBlock,
     // imageObjectBlock,
-    // breadcrumbBlock,
-    // webSiteBlock,
-    // orgBlock,
+    breadcrumbBlock,
+    webSiteBlock,
+    orgBlock,
     // localBusinessBlock,
 ]
     .filter(Boolean)

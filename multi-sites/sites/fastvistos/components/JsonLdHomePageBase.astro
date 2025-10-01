@@ -2,6 +2,7 @@
 import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 
 const {
     site,
@@ -59,20 +60,11 @@ const imageObjectBlock = !disableImageObject &&
     };
 
 // BreadcrumbList
-const breadcrumbBlock = !disableBreadcrumb && {
-    '@type': 'BreadcrumbList',
-    '@id': breadcrumbId,
-    itemListElement:
-        breadcrumbList.length > 0
-            ? breadcrumbList
-            : [
-                  {
-                      '@type': 'ListItem',
-                      position: 1,
-                      name: 'Home',
-                  },
-              ],
-};
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb,
+    breadcrumbId,
+    breadcrumbList,
+});
 
 // WebSite
 const webSiteBlock = !disableWebSite && getWebSiteBlock({
