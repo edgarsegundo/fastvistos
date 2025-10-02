@@ -1,7 +1,7 @@
 ---
 export function getWebPageBlock({
     disableWebPage,
-    homepageUrl,
+    pageUrl,
     siteName,
     websiteId,
     orgId,
@@ -13,7 +13,7 @@ export function getWebPageBlock({
     disableHasPart = true,
 }: {
     disableWebPage: boolean,
-    homepageUrl: string,
+    pageUrl: string,
     siteName: string,
     websiteId: string,
     orgId: string,
@@ -27,8 +27,8 @@ export function getWebPageBlock({
     if (disableWebPage) return null;
     return {
         '@type': 'WebPage',
-        '@id': homepageUrl,
-        url: homepageUrl,
+        '@id': pageUrl,
+        url: pageUrl,
         name: siteName,
         isPartOf: { '@id': websiteId },
         about: { '@id': orgId },
@@ -47,7 +47,7 @@ export function getWebPageBlock({
         potentialAction: [
             {
                 '@type': 'ReadAction',
-                target: [homepageUrl],
+                target: [pageUrl],
             },
         ],
         // Only add hasPart if not disabled and hasPartList is a non-empty array

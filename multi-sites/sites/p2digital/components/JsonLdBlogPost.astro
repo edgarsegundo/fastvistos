@@ -3,30 +3,20 @@
  * JsonLdBlogPost.astro
  * Gera JSON-LD para um BlogPosting (artigo/post), extensível com mentions, interactionStatistic, comment, etc.
  */
-
-
-        //  '@type': 'BlogPosting', // Article?
-        // '@id': article.id,  // "https://neilpatel.com/br/blog/reddit-seo-como-usar-o-forum-e-ganhar-autoridade/#article",
-        // isPartOf: { "@id": "https://neilpatel.com/br/blog/reddit-seo-como-usar-o-forum-e-ganhar-autoridade/" },
-        // author: { '@id': article.author.id },
-        // headline: article.title,
-        // description: article.description,
-        // datePublished: article.datePublished,
-        // dateModified: article.dateModified || article.datePublished,
-        // mainEntityOfPage: { '@id': article.url },
-        // wordCount: 1907,
-        // publisher: { '@id': article.publisher.id },
-        // image: {},
-        // thumbnailUrl: "https://neilpatel.com/wp-content/uploads/2025/09/image-63.png",
-        // keywords: ["Reddit SEO"],
-        // articleSection: ["SEO"],
-        // inLanguage: article.inLanguage,
-
-
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { slugify } from '../lib/utils.ts';
 
 const {
     site,
-    article,
+    blogConfigFromDb,
+    articleFromDb,
+    pubDate,
+    updatedDate,
     mentions = [],
     interactionStatistic = [],
     comment = [],
@@ -34,38 +24,77 @@ const {
     customData,
 } = Astro.props;
 
+const homepageUrl = normalizeAssetsUrlBase(site.domain);
+const postpageUrl = `${homepageUrl}/blog/${articleFromDb.slug}`;
+const author_name = slugify(articleFromDb.author_name || 
+      blogConfigFromDb.author_name || 
+      site.author || site.name);
+
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject: false,
+    site,
+    imageId: null, // passing null to signal getImageObjectBlock to use url as @id
+    image: blogConfigFromDb.image,
+    imageUrl: blogConfigFromDb.seo_image_url,
+    caption: blogConfigFromDb.seo_image_caption,
+    width: blogConfigFromDb.seo_image_width,
+    height: blogConfigFromDb.seo_image_height,
+});
+
+// WebPage block
+const webPageBlock = getWebPageBlock({
+    disableWebPage: false,
+    pageUrl: postpageUrl,
+    siteName: blogConfigFromDb.title || site.name,
+    websiteId: `${homepageUrl}#website`,
+    orgId: `${homepageUrl}#organization`,
+    imageId: `${postpageUrl}#image`,
+    breadcrumbId: `${postpageUrl}#breadcrumb`,
+    site: site,
+    description: articleFromDb.seo_description,
+});
+
+// https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
-        '@type': 'BlogPosting', // Article?
-        '@id': article.id,  // "https://neilpatel.com/br/blog/reddit-seo-como-usar-o-forum-e-ganhar-autoridade/#article",
-        isPartOf: { "@id": "https://neilpatel.com/br/blog/reddit-seo-como-usar-o-forum-e-ganhar-autoridade/" },
-        author: { '@id': article.author.id },
-        headline: article.title,
-        description: article.description,
-        datePublished: article.datePublished,
-        dateModified: article.dateModified || article.datePublished,
-        mainEntityOfPage: { '@id': article.url },
+        '@type': 'BlogPosting', // or Article?
+        '@id': `${postpageUrl}#article`,
+        isPartOf: { '@id': `${postpageUrl}` },
+        author: { '@id': `${homepageUrl}/schema/person/${author_name}` },
+        headline: articleFromDb.title,
+        description: articleFromDb.seo_description,
+        datePublished: pubDate,
+        dateModified: updatedDate,
+        mainEntityOfPage: { '@id': `${postpageUrl}` },
         wordCount: 1907,
-        publisher: { '@id': article.publisher.id },
-        image: {},
-        thumbnailUrl: "https://neilpatel.com/wp-content/uploads/2025/09/image-63.png",
-        keywords: ["Reddit SEO"],
-        articleSection: ["SEO"],
-        inLanguage: article.inLanguage,
+        publisher: { '@id': `${homepageUrl}#organization` },
+        image: imageObjectBlock ? imageObjectBlock : {},
+        thumbnailUrl: imageObjectBlock?.url,
+        keywords: {
+            // ...other properties
+            ...(articleFromDb.seo_keywords
+                ? { keywords: [articleFromDb.seo_keywords] }
+                : {}),
+        },
+        articleSection: [`${articleFromDb.blog_topic.title}`],
+        inLanguage: 'pt-BR',
     },
     {
-        '@type': 'Person',
-        '@id': article.author.id,
-        name: article.author.name,
-        url: article.author.url,
-        sameAs: article.author.sameAs,
-    },
-    {
-        '@type': 'Organization',
-        '@id': article.publisher.id,
-        name: article.publisher.name,
-        logo: article.publisher.logo,
-    },
+        ...webPageBlock,
+    }
+    // {
+    //     '@type': 'Person',
+    //     '@id': articleFromDb.author.id,
+    //     name: articleFromDb.author.name,
+    //     url: articleFromDb.author.url,
+    //     sameAs: articleFromDb.author.sameAs,
+    // },
+    // {
+    //     '@type': 'Organization',
+    //     '@id': articleFromDb.publisher.id,
+    //     name: articleFromDb.publisher.name,
+    //     logo: articleFromDb.publisher.logo,
+    // },
 ];
 const advancedGraph = [
     ...(mentions.length ? [{ mentions: mentions }] : []),
