@@ -9,7 +9,7 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
-import { slugify } from '../lib/utils.ts';
+import { slugify, parseKeywords } from '../lib/utils.ts';
 
 const {
     site,
@@ -18,7 +18,6 @@ const {
     pubDate,
     updatedDate,
     wordCount,
-    breadcrumbList = [],
     mentions = [],
     interactionStatistic = [],
     comment = [],
@@ -32,21 +31,31 @@ const author_name = slugify(articleFromDb.author_name ||
       blogConfigFromDb.author_name || 
       site.author || site.name);
 
+const breadcrumbList = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: 'Home',
+    item: homepageUrl,
+  },
+  {
+    '@type': 'ListItem',
+    position: 2,
+    name: 'Blog',
+    item: `${homepageUrl}/blog`,
+  },
+  {
+    '@type': 'ListItem',
+    position: 3,
+    name: articleFromDb.title,
+    item: postpageUrl,
+  },
+];
+
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
     site,
-    imageId: null, // passing null to signal getImageObjectBlock to use url as @id
-    image: blogConfigFromDb.image,
-    imageUrl: blogConfigFromDb.seo_image_url,
-    caption: blogConfigFromDb.seo_image_caption,
-    width: blogConfigFromDb.seo_image_width,
-    height: blogConfigFromDb.seo_image_height,
-});
-
-const primaryImageObjectBlock = getImageObjectBlock({
-    disableImageObject: false,
-    site,
-    imageId: `${postpageUrl}#primaryimage`, // passing null to signal getImageObjectBlock to use url as @id
+    imageId: `${postpageUrl}#image`,
     image: blogConfigFromDb.image,
     imageUrl: blogConfigFromDb.seo_image_url,
     caption: blogConfigFromDb.seo_image_caption,
@@ -58,7 +67,7 @@ const primaryImageObjectBlock = getImageObjectBlock({
 const webPageBlock = getWebPageBlock({
     disableWebPage: false,
     pageUrl: postpageUrl,
-    siteName: blogConfigFromDb.title || site.name,
+    siteName: articleFromDb.title || site.name,
     websiteId: `${homepageUrl}#website`,
     orgId: `${homepageUrl}#organization`,
     imageId: `${postpageUrl}#image`,
@@ -66,7 +75,6 @@ const webPageBlock = getWebPageBlock({
     site: site,
     description: articleFromDb.seo_description,
 });
-
 
 const breadcrumbId = `${postpageUrl}#breadcrumb`;
 
@@ -124,23 +132,15 @@ const baseGraph = [
         mainEntityOfPage: { '@id': `${postpageUrl}` },
         wordCount: wordCount,
         publisher: { '@id': `${homepageUrl}#organization` },
-        image: imageObjectBlock ? imageObjectBlock : {},
-        primaryImageOfPage: { '@id': imageObjectBlock ? imageObjectBlock.url : undefined },
+        image: { '@id': `${postpageUrl}#image` },
+        primaryImageOfPage: { '@id': `${postpageUrl}#image` },
         thumbnailUrl: imageObjectBlock?.url,
-        keywords: {
-            // ...other properties
-            ...(articleFromDb.seo_keywords
-                ? { keywords: [articleFromDb.seo_keywords] }
-                : {}),
-        },
+        keywords: parseKeywords(articleFromDb.seo_keywords),
         articleSection: [`${articleFromDb.blog_topic.title}`],
         inLanguage: 'pt-BR',
     },
     {
         ...webPageBlock,
-    },
-    {
-        primaryImageOfPage: primaryImageObjectBlock ? { ...primaryImageObjectBlock } : {},
     },
     {
         ...breadcrumbBlock,
@@ -151,6 +151,8 @@ const baseGraph = [
     {
         ...orgBlock,
     },
+
+    imageObjectBlock,
 ];
 const advancedGraph = [
     ...(mentions.length ? [{ mentions: mentions }] : []),
