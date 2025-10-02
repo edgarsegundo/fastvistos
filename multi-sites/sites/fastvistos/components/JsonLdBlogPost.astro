@@ -31,10 +31,42 @@ const author_name = slugify(articleFromDb.author_name ||
       blogConfigFromDb.author_name || 
       site.author || site.name);
 
+const breadcrumbList = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: 'Home',
+    item: homepageUrl,
+  },
+  {
+    '@type': 'ListItem',
+    position: 2,
+    name: 'Blog',
+    item: `${homepageUrl}/blog`,
+  },
+  {
+    '@type': 'ListItem',
+    position: 3,
+    name: articleFromDb.title,
+    item: postpageUrl,
+  },
+];
+
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
     site,
     imageId: null, // passing null to signal getImageObjectBlock to use url as @id
+    image: blogConfigFromDb.image,
+    imageUrl: blogConfigFromDb.seo_image_url,
+    caption: blogConfigFromDb.seo_image_caption,
+    width: blogConfigFromDb.seo_image_width,
+    height: blogConfigFromDb.seo_image_height,
+});
+
+const primaryImageObjectBlock = getImageObjectBlock({
+    disableImageObject: false,
+    site,
+    imageId: `${postpageUrl}#primaryimage`, // passing null to signal getImageObjectBlock to use url as @id
     image: blogConfigFromDb.image,
     imageUrl: blogConfigFromDb.seo_image_url,
     caption: blogConfigFromDb.seo_image_caption,
@@ -55,6 +87,48 @@ const webPageBlock = getWebPageBlock({
     description: articleFromDb.seo_description,
 });
 
+const breadcrumbId = `${postpageUrl}#breadcrumb`;
+
+// BreadcrumbList
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb: false,
+    breadcrumbId,
+    breadcrumbList,
+    homepageUrl,
+});
+
+
+const websiteId = `${homepageUrl}#website`;
+const orgId = `${homepageUrl}#organization`;
+
+// WebSite
+const webSiteBlock = getWebSiteBlock({
+    disableWebSite: false,
+    disableWebSiteSearchAction: true,
+    websiteId,
+    homepageUrl,
+    siteName: site?.name,
+    description: site?.description,
+    orgId,
+    site,
+});
+
+
+const org = site?.organization ?? {
+    name: site?.name,
+    url: homepageUrl,
+    logo: site?.logo,
+};
+
+// Organization (with logo as ImageObject)
+const orgBlock = getOrganizationBlock({
+    disableOrganization: false,
+    orgId,
+    org,
+    logoId: `${homepageUrl}#logo`,
+    site,
+});
+
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
@@ -70,6 +144,7 @@ const baseGraph = [
         wordCount: wordCount,
         publisher: { '@id': `${homepageUrl}#organization` },
         image: imageObjectBlock ? imageObjectBlock : {},
+        primaryImageOfPage: { '@id': imageObjectBlock ? imageObjectBlock.url : undefined },
         thumbnailUrl: imageObjectBlock?.url,
         keywords: {
             // ...other properties
@@ -82,20 +157,19 @@ const baseGraph = [
     },
     {
         ...webPageBlock,
-    }
-    // {
-    //     '@type': 'Person',
-    //     '@id': articleFromDb.author.id,
-    //     name: articleFromDb.author.name,
-    //     url: articleFromDb.author.url,
-    //     sameAs: articleFromDb.author.sameAs,
-    // },
-    // {
-    //     '@type': 'Organization',
-    //     '@id': articleFromDb.publisher.id,
-    //     name: articleFromDb.publisher.name,
-    //     logo: articleFromDb.publisher.logo,
-    // },
+    },
+    {
+        primaryImageOfPage: primaryImageObjectBlock ? { ...primaryImageObjectBlock } : {},
+    },
+    {
+        ...breadcrumbBlock,
+    },
+    {
+        ...webSiteBlock,
+    },
+    {
+        ...orgBlock,
+    },
 ];
 const advancedGraph = [
     ...(mentions.length ? [{ mentions: mentions }] : []),

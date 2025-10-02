@@ -9,6 +9,6 @@ topicSlug: "title2"
 image: "/assets/images/blog/"
 type: "internal"
 published: true
-wordCount: 0
+wordCount: "0"
 ---
 
