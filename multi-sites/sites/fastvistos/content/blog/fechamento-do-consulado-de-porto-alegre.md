@@ -2,13 +2,14 @@
 title: "Fechamento do Consulado de Porto Alegre"
 description: "FXMNTDKNSLDDPRTLGR"
 pubDate: "2025-09-10"
-updatedDate: "2025-09-10"
+updatedDate: "2025-10-01"
 slug: "fechamento-do-consulado-de-porto-alegre"
 topic: "Últimas Notícias"
 topicSlug: "ultimas-noticias"
 image: "/assets/images/blog/wildlife-9764923_1280.jpg"
 type: "internal"
 published: true
+wordCount: 241
 ---
 
 # The Rise of Electric Vehicles: A New Era in Transportation
