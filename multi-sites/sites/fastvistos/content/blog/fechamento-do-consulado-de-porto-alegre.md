@@ -1,8 +1,8 @@
 ---
 title: "Fechamento do Consulado de Porto Alegre"
 description: "FXMNTDKNSLDDPRTLGR"
-pubDate: "2025-09-10"
-updatedDate: "2025-10-01"
+pubDate: "2025-09-10T09:41:07.590Z"
+updatedDate: "2025-10-01T13:08:08.851Z"
 slug: "fechamento-do-consulado-de-porto-alegre"
 topic: "Últimas Notícias"
 topicSlug: "ultimas-noticias"

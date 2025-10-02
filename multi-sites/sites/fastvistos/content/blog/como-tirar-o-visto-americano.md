@@ -1,8 +1,8 @@
 ---
 title: "Como Tirar o Visto Americano"
 description: "KMTRRVSTMRKN"
-pubDate: "2025-09-09"
-updatedDate: "2025-10-02"
+pubDate: "2025-09-09T21:35:22.136Z"
+updatedDate: "2025-10-02T18:27:49.389Z"
 slug: "como-tirar-o-visto-americano"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
