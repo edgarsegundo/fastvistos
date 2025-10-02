@@ -119,7 +119,7 @@ topicSlug: "${article.blog_topic.slug}"
 image: "/assets/images/blog/${article.image ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
 published: true
-wordCount: ${wordCount}
+wordCount: "${wordCount}"
 ---
 
 `;

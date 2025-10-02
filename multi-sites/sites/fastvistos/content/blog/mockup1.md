@@ -9,6 +9,6 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/"
 type: "internal"
 published: true
-wordCount: 0
+wordCount: "0"
 ---
 
