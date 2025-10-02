@@ -11,6 +11,8 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import SidebarAbove from '../../components/SidebarAbove.astro';
 import SidebarBelow from '../../components/SidebarBelow.astro';
 import { siteConfig } from '../../site-config.ts';
+import { BlogService } from '../../lib/blog-service.ts';
+import JsonLdBlogPost from '../../components/JsonLdBlogPost.astro';
 import '../../styles/markdown-blog.css';
 
 // Generate static paths from the markdown files in content/blog/
@@ -31,9 +33,24 @@ const { Content, headings } = await entry.render();
 
 const title = `${entry.data.title} - ${siteConfig.name} Blog`;
 const description = entry.data.description || entry.data.title;
+
+const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
+const articleFromDb =  await BlogService.getArticleBySlugFromDb(entry.slug);
+// console.log('🛑...🛑...🛑 articleFromDb', articleFromDb);
 ---
 
-<SharedBlogLayout title={title} description={description}>
+<SharedBlogLayout>
+    <!-- Additional head content specific to this layout -->
+    <Fragment slot="head">
+        <JsonLdBlogPost 
+            site={siteConfig.site}
+            blogConfigFromDb={blogConfigFromDb}
+            articleFromDb={articleFromDb}
+            pubDate={entry.data.pubDate}
+            updatedDate={entry.data.updatedDate}
+        />
+    </Fragment>
+
     <div class="blog-layout-container">
         <!-- Main Article Content -->
         <article class="blog-article">
