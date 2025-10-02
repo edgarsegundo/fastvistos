@@ -9,7 +9,7 @@ topicSlug: "title1"
 image: "/assets/images/blog/foto_whats.jpg"
 type: "public"
 published: true
-wordCount: 487
+wordCount: "487"
 ---
 
 **Quer se destacar na multidão dos resultados de pesquisa do Google?**
