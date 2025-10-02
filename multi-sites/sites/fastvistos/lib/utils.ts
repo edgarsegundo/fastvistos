@@ -22,3 +22,11 @@ export function parseKeywords(keywords: string | undefined | null): string[] {
     const trimmed = keywords.trim();
     return trimmed ? [trimmed] : [];
 }
+
+export function toThumbnailUrl(url: string): string {
+    if (!url) return url;
+    // Find last dot for extension
+    const lastDot = url.lastIndexOf('.');
+    if (lastDot === -1) return url + '_thumb';
+    return url.slice(0, lastDot) + '_thumb' + url.slice(lastDot);
+}
