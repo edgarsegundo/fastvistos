@@ -12,6 +12,7 @@ const blogCollection = defineCollection({
         image: z.string().default(''),
         type: z.string(),
         published: z.boolean(),
+        wordCount: z.string(),
     }),
 });
 

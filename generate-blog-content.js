@@ -126,11 +126,13 @@ async function generateBlogArticles(siteId) {
 
         console.log('🔍 Fetching articles from database...');
 
+        const businessIdCleaned = siteConfig.business_id.replace(/-/g, '');
+
         // Get published articles for this business_id with their topics
         const now = new Date();
         const articles = await prisma.blog_article.findMany({
             where: {
-                business_id: siteConfig.business_id,
+                business_id: businessIdCleaned,
                 is_removed: false,
                 published: {
                     lte: now,
