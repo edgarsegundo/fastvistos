@@ -2,13 +2,14 @@
 title: "O Consulado Agora Está Olhando para as Redes Sociais"
 description: "KNSLDGRSTLNDPRSRDSSSS"
 pubDate: "2025-09-09"
-updatedDate: "2025-09-11"
+updatedDate: "2025-10-01"
 slug: "o-consulado-agora-esta-olhando-para-as-redes-socia"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/"
 type: "internal"
 published: true
+wordCount: 242
 ---
 
 # The Rise of Electric Vehicles: A New Era in Transportation 4

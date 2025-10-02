@@ -5,6 +5,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { PrismaClient } from '@prisma/client';
 
+
+
+import { remark } from 'remark';
+import remarkParse from 'remark-parse';
+import { visit } from 'unist-util-visit';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -75,6 +81,16 @@ function generateMarkdownContent(article) {
     const publishedDate = new Date(article.published).toISOString().split('T')[0];
     const modifiedDate = new Date(article.modified).toISOString().split('T')[0];
 
+    // Add the markdown content
+    const content = article.content_md || article.content_html || '';
+
+    // Count words using remark
+    const tree = remark().use(remarkParse).parse(content);
+    let wordCount = 0;
+    visit(tree, 'text', (node) => {
+        wordCount += node.value.split(/\s+/).filter(Boolean).length;
+    });
+
     // Create frontmatter
     const frontmatter = `---
 title: "${article.title.replace(/"/g, '\\"')}"
@@ -87,12 +103,10 @@ topicSlug: "${article.blog_topic.slug}"
 image: "/assets/images/blog/${article.image ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
 published: true
+wordCount: ${wordCount}
 ---
 
 `;
-
-    // Add the markdown content
-    const content = article.content_md || article.content_html || '';
 
     return frontmatter + content;
 }

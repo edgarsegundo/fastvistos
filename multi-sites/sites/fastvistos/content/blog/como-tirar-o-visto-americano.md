@@ -2,13 +2,14 @@
 title: "Como Tirar o Visto Americano"
 description: "KMTRRVSTMRKN"
 pubDate: "2025-09-09"
-updatedDate: "2025-09-11"
+updatedDate: "2025-10-02"
 slug: "como-tirar-o-visto-americano"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/"
+image: "/assets/images/blog/nurturing-swan-9767495_1280_4XrwrRK.jpg"
 type: "internal"
 published: true
+wordCount: 242
 ---
 
 # The Rise of Electric Vehicles: A New Era in Transportation 3
