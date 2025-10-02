@@ -94,8 +94,10 @@ function sanitizeFilename(filename) {
 
 // Function to generate frontmatter and content
 function generateMarkdownContent(article) {
-    const publishedDate = new Date(article.published).toISOString().split('T')[0];
-    const modifiedDate = new Date(article.modified).toISOString().split('T')[0];
+    // const publishedDate = new Date(article.published).toISOString().split('T')[0];
+    // const modifiedDate = new Date(article.modified).toISOString().split('T')[0];
+    const publishedDate = new Date(article.published).toISOString(); // e.g., "2025-09-09T00:00:00.000Z"
+    const modifiedDate = new Date(article.modified).toISOString();
 
     // Add the markdown content
     const content = article.content_md || article.content_html || '';
