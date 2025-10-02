@@ -9,10 +9,10 @@ export function getWebPageBlock({
     breadcrumbId,
     site,
     description,
-    hasPartList = [],
-    disableHasPart = true,
     pubDate,
     updatedDate,
+    hasPartList = [],
+    disableHasPart = true,
 }: {
     disableWebPage: boolean,
     pageUrl: string,
@@ -23,10 +23,10 @@ export function getWebPageBlock({
     breadcrumbId: string,
     site: any,
     description?: string,
+    pubDate?: string | null,
+    updatedDate?: string | null,
     hasPartList?: any[],
     disableHasPart?: boolean,
-    pubDate: string,
-    updatedDate: string,
 }) {
     if (disableWebPage) return null;
     return {
@@ -43,8 +43,8 @@ export function getWebPageBlock({
             : site?.image
               ? { thumbnailUrl: site.image }
               : {}),
-        ...(site.datePublished ? { datePublished: site.datePublished } : {}),
-        ...(site.dateModified ? { dateModified: site.dateModified } : {}),
+        ...(pubDate ? { datePublished: pubDate } : (site.datePublished ? { datePublished: site.datePublished } : {})),
+        ...(updatedDate ? { dateModified: updatedDate } : (site.dateModified ? { dateModified: site.dateModified } : {})),
         ...(description ? { description: description } : {}),
         breadcrumb: { '@id': breadcrumbId },
         inLanguage: site.language || 'pt-BR',

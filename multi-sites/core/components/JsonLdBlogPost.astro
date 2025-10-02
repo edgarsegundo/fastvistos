@@ -75,6 +75,8 @@ const webPageBlock = getWebPageBlock({
     breadcrumbId: `${postpageUrl}#breadcrumb`,
     site: site,
     description: articleFromDb.seo_description,
+    pubDate,
+    updatedDate,
 });
 
 const breadcrumbId = `${postpageUrl}#breadcrumb`;
@@ -86,7 +88,6 @@ const breadcrumbBlock = getBreadcrumbBlock({
     breadcrumbList,
     homepageUrl,
 });
-
 
 const websiteId = `${homepageUrl}#website`;
 const orgId = `${homepageUrl}#organization`;
