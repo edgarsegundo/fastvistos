@@ -124,7 +124,11 @@ const baseGraph = [
         '@type': 'BlogPosting', // or Article?
         '@id': `${postpageUrl}#article`,
         isPartOf: { '@id': `${postpageUrl}` },
-        author: { '@id': `${homepageUrl}/schema/person/${author_name}` },
+        author: {
+            '@id': `${homepageUrl}/schema/person/${author_name}`,
+            url: `${homepageUrl}/schema/person/${author_name}`,
+            name: articleFromDb.author_name || blogConfigFromDb.author_name || site.author || site.name,
+        },
         headline: articleFromDb.title,
         description: articleFromDb.seo_description,
         datePublished: pubDate,

@@ -1,8 +1,8 @@
 ---
 title: "Nova Taxa a partir de Outubro"
 description: "NVTXPRTRDTBR"
-pubDate: "2025-09-09"
-updatedDate: "2025-10-01"
+pubDate: "2025-09-09T21:33:52.256Z"
+updatedDate: "2025-10-01T16:55:58.988Z"
 slug: "nova-taxa-a-partir-de-outubro"
 topic: "Últimas Notícias"
 topicSlug: "ultimas-noticias"
