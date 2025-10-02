@@ -9,7 +9,7 @@ topicSlug: "ultimas-noticias"
 image: "/assets/images/blog/"
 type: "internal"
 published: true
-wordCount: 242
+wordCount: "242"
 ---
 
 # The Rise of Electric Vehicles: A New Era in Transportation 5

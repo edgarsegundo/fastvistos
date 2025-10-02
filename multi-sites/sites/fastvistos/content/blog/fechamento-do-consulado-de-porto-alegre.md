@@ -9,7 +9,7 @@ topicSlug: "ultimas-noticias"
 image: "/assets/images/blog/wildlife-9764923_1280.jpg"
 type: "internal"
 published: true
-wordCount: 241
+wordCount: "241"
 ---
 
 # The Rise of Electric Vehicles: A New Era in Transportation

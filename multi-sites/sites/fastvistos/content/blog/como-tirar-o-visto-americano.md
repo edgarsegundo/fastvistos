@@ -9,7 +9,7 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/nurturing-swan-9767495_1280_4XrwrRK.jpg"
 type: "internal"
 published: true
-wordCount: 242
+wordCount: "242"
 ---
 
 # The Rise of Electric Vehicles: A New Era in Transportation 3
