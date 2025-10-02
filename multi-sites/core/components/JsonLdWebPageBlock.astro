@@ -11,6 +11,8 @@ export function getWebPageBlock({
     description,
     hasPartList = [],
     disableHasPart = true,
+    pubDate,
+    updatedDate,
 }: {
     disableWebPage: boolean,
     pageUrl: string,
@@ -22,7 +24,9 @@ export function getWebPageBlock({
     site: any,
     description?: string,
     hasPartList?: any[],
-    disableHasPart?: boolean,    
+    disableHasPart?: boolean,
+    pubDate: string,
+    updatedDate: string,
 }) {
     if (disableWebPage) return null;
     return {

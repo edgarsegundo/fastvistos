@@ -9,7 +9,8 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
-import { slugify, parseKeywords } from '../lib/utils.ts';
+import { slugify, parseKeywords, toThumbnailUrl } from '../lib/utils.ts';
+
 
 const {
     site,
@@ -102,7 +103,6 @@ const webSiteBlock = getWebSiteBlock({
     site,
 });
 
-
 const org = site?.organization ?? {
     name: site?.name,
     url: homepageUrl,
@@ -138,7 +138,7 @@ const baseGraph = [
         publisher: { '@id': `${homepageUrl}#organization` },
         image: { '@id': `${postpageUrl}#image` },
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },
-        thumbnailUrl: imageObjectBlock?.url,
+        ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
         keywords: parseKeywords(articleFromDb.seo_keywords),
         articleSection: [`${articleFromDb.blog_topic.title}`],
         inLanguage: 'pt-BR',
