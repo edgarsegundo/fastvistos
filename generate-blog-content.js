@@ -67,6 +67,22 @@ function ensureContentDirectory(siteId) {
     return contentBlogDir;
 }
 
+// Function to ensure content config exists for a site
+function ensureContentConfig(siteId) {
+    const srcConfigPath = path.join(__dirname, 'multi-sites', 'core', 'lib', 'content-config-template.ts');
+    const destConfigDir = path.join(__dirname, 'multi-sites', 'sites', siteId, 'content');
+    const destConfigPath = path.join(destConfigDir, 'config.ts');
+
+    // Ensure destination directory exists
+    if (!fs.existsSync(destConfigDir)) {
+        fs.mkdirSync(destConfigDir, { recursive: true });
+    }
+
+    // Copy and rename the config file
+    fs.copyFileSync(srcConfigPath, destConfigPath);
+    console.log(`📄 Copied content-config-template.ts to ${destConfigPath}`);
+}
+
 // Function to sanitize filename
 function sanitizeFilename(filename) {
     return filename
@@ -123,6 +139,9 @@ async function generateBlogArticles(siteId) {
 
         // Ensure content directory exists
         const contentBlogDir = ensureContentDirectory(siteId);
+
+        // Ensure content config exists
+        ensureContentConfig(siteId);
 
         console.log('🔍 Fetching articles from database...');
 
