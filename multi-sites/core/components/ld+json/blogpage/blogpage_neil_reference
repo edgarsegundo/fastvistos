@@ -51,11 +51,11 @@
                         "@type": ["WebPage", "CollectionPage"],
                         "@id": "https://neilpatel.com/br/blog/",
                         "url": "https://neilpatel.com/br/blog/",
-                        "name": "Blog: Confira os Melhores Artigos e Tudo Sobre Como Criar Um Blog!",
+                        "name": "Blog: Confira os Melhores...",
                         "isPartOf": { "@id": "https://neilpatel.com/br/#website" },
                         "datePublished": "2016-04-11T17:05:59+00:00",
                         "dateModified": "2025-08-14T16:41:51+00:00",
-                        "description": "Blog do Neil Patel: Você quer aprender a como crescer sua empresa utilizando blogs e estratégias de marketing digital? Quer conseguir mais tráfego para o seu site? Gostaria de aprender como criar um Blog? Vou te mostrar todos os segredos para você conseguir isso. Confira!",
+                        "description": "Blog do Neil Patel...",
                         "inLanguage": "pt-BR"
                     },
                     {

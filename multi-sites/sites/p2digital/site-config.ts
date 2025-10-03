@@ -2,7 +2,7 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: 'fake-business-id-123',
+        business_id: '5810c2b6125c402a9cff53fcc9d61bf5',
         id: 'fake-site-id',
         domain: 'fakesite.com',
         name: 'Fake Site Name',

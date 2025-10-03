@@ -1,7 +1,7 @@
 ---
 export function getWebPageBlock({
     disableWebPage,
-    homepageUrl,
+    pageUrl,
     siteName,
     websiteId,
     orgId,
@@ -9,11 +9,13 @@ export function getWebPageBlock({
     breadcrumbId,
     site,
     description,
+    pubDate,
+    updatedDate,
     hasPartList = [],
     disableHasPart = true,
 }: {
     disableWebPage: boolean,
-    homepageUrl: string,
+    pageUrl: string,
     siteName: string,
     websiteId: string,
     orgId: string,
@@ -21,14 +23,16 @@ export function getWebPageBlock({
     breadcrumbId: string,
     site: any,
     description?: string,
+    pubDate?: string | null,
+    updatedDate?: string | null,
     hasPartList?: any[],
-    disableHasPart?: boolean,    
+    disableHasPart?: boolean,
 }) {
     if (disableWebPage) return null;
     return {
         '@type': 'WebPage',
-        '@id': homepageUrl,
-        url: homepageUrl,
+        '@id': pageUrl,
+        url: pageUrl,
         name: siteName,
         isPartOf: { '@id': websiteId },
         about: { '@id': orgId },
@@ -39,15 +43,15 @@ export function getWebPageBlock({
             : site?.image
               ? { thumbnailUrl: site.image }
               : {}),
-        ...(site.datePublished ? { datePublished: site.datePublished } : {}),
-        ...(site.dateModified ? { dateModified: site.dateModified } : {}),
+        ...(pubDate ? { datePublished: pubDate } : (site.datePublished ? { datePublished: site.datePublished } : {})),
+        ...(updatedDate ? { dateModified: updatedDate } : (site.dateModified ? { dateModified: site.dateModified } : {})),
         ...(description ? { description: description } : {}),
         breadcrumb: { '@id': breadcrumbId },
         inLanguage: site.language || 'pt-BR',
         potentialAction: [
             {
                 '@type': 'ReadAction',
-                target: [homepageUrl],
+                target: [pageUrl],
             },
         ],
         // Only add hasPart if not disabled and hasPartList is a non-empty array
