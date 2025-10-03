@@ -26,9 +26,7 @@ const config = {
 
 // Validate required environment variables
 function validateConfig() {
-    const required = [
-        'API_BASE_URL',
-    ];
+    const required = ['API_BASE_URL'];
 
     const missing = required.filter((key) => !process.env[key]);
 

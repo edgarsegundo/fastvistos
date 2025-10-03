@@ -6,7 +6,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-
 // Add request logging for debugging
 app.use((req, res, next) => {
     if (process.env.DEBUG_VERBOSE === 'true') {
@@ -18,7 +17,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 app.get('/ping', (req, res) => {
     res.json({
         message: 'pong',
@@ -26,22 +24,37 @@ app.get('/ping', (req, res) => {
     });
 });
 
-
 // POST endpoint to create a WebPageSection and Version (for htmx or API)
 app.post('/webpage-section', async (req, res) => {
     try {
-        const { webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId, isFirstClone = false } = req.body;
-        if (!webpageRelativePath || !title || !updatableUuid || !businessId || !htmlContent || !siteId) {
+        const {
+            webpageRelativePath,
+            title,
+            updatableUuid,
+            businessId,
+            htmlContent,
+            siteId,
+            isFirstClone = false,
+        } = req.body;
+        if (
+            !webpageRelativePath ||
+            !title ||
+            !updatableUuid ||
+            !businessId ||
+            !htmlContent ||
+            !siteId
+        ) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
-        const result = await WebPageService.createSectionAndVersion({ webpageRelativePath, 
-                                                                      title, 
-                                                                      updatableUuid, 
-                                                                      businessId, 
-                                                                      htmlContent,
-                                                                      siteId,
-                                                                      isFirstClone
-                                                                    });
+        const result = await WebPageService.createSectionAndVersion({
+            webpageRelativePath,
+            title,
+            updatableUuid,
+            businessId,
+            htmlContent,
+            siteId,
+            isFirstClone,
+        });
         // If htmx, you can return HTML here, but JSON is fine for most cases
         res.json(result);
     } catch (error) {
@@ -49,7 +62,6 @@ app.post('/webpage-section', async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
-
 
 // POST endpoint to update a WebPageSection and Version (for htmx or API)
 app.post('/update-section-file-version', async (req, res) => {
@@ -59,11 +71,11 @@ app.post('/update-section-file-version', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
 
-        const result = await WebPageService.updateSectionFileContent(
-            {   webPageSectionVersionId, 
-                siteId, 
-                htmlContent
-            });
+        const result = await WebPageService.updateSectionFileContent({
+            webPageSectionVersionId,
+            siteId,
+            htmlContent,
+        });
         res.json(result);
     } catch (error) {
         console.error('Error in /update-section-file-version:', error);
@@ -71,24 +83,26 @@ app.post('/update-section-file-version', async (req, res) => {
     }
 });
 
-
 // POST endpoint to publish a WebPageSection and Version (for htmx or API)
 app.post('/publish-section', async (req, res) => {
     try {
-        const { updatableUuid, webpageRelativePath, businessId, htmlContent, siteId, versionId } = req.body;
+        const { updatableUuid, webpageRelativePath, businessId, htmlContent, siteId, versionId } =
+            req.body;
         if (!webpageRelativePath || !updatableUuid || !businessId || !htmlContent || !siteId) {
             return res.status(400).json({ error: 'Missing required fields.' });
         }
-        const result = await WebPageService.publishSection({ webpageRelativePath, 
-                                                             updatableUuid, 
-                                                             businessId,
-                                                             versionId});
+        const result = await WebPageService.publishSection({
+            webpageRelativePath,
+            updatableUuid,
+            businessId,
+            versionId,
+        });
 
         // Create a backup file with .original added before
         // the extension, keeping the rest of the name unchanged.
 
         const originalPath = webpageRelativePath.replace(/(\.[^/.]+)$/, '.original');
-        const fs = await import('fs').then(mod => mod.promises);
+        const fs = await import('fs').then((mod) => mod.promises);
 
         // Only copy if backup does not already exist
         try {
@@ -115,13 +129,10 @@ app.post('/publish-section', async (req, res) => {
         } else {
             console.warn('[WARN] No matching section found for updatableUuid:', updatableUuid);
         }
-        fileData = fileData.replace(
-            uuidRegex,
-            (match, innerContent) => {
-                // Replace only the inner content, keep the original <div ...> and </div>
-                return match.replace(innerContent, htmlContent);
-            }
-        );
+        fileData = fileData.replace(uuidRegex, (match, innerContent) => {
+            // Replace only the inner content, keep the original <div ...> and </div>
+            return match.replace(innerContent, htmlContent);
+        });
         const afterMatch = fileData.match(uuidRegex);
         if (afterMatch) {
             console.log('[DEBUG] After replacement snippet:', afterMatch[0].slice(0, 500));
@@ -157,19 +168,23 @@ app.post('/publish-section', async (req, res) => {
         const { exec } = await import('child_process');
         function runBuild() {
             return new Promise((resolve, reject) => {
-                exec('npm run build:p2digital', {
-                    cwd: process.cwd(),
-                    env: process.env
-                }, (error, stdout, stderr) => {
-                    // Log full output for troubleshooting
-                    console.log('[DEBUG] Build stdout (full):', stdout);
-                    console.warn('[DEBUG] Build stderr (full):', stderr);
-                    if (error) {
-                        console.error('[ERROR] Build failed:', error);
-                        return reject({ error: error.message, stdout, stderr });
+                exec(
+                    'npm run build:p2digital',
+                    {
+                        cwd: process.cwd(),
+                        env: process.env,
+                    },
+                    (error, stdout, stderr) => {
+                        // Log full output for troubleshooting
+                        console.log('[DEBUG] Build stdout (full):', stdout);
+                        console.warn('[DEBUG] Build stderr (full):', stderr);
+                        if (error) {
+                            console.error('[ERROR] Build failed:', error);
+                            return reject({ error: error.message, stdout, stderr });
+                        }
+                        resolve({ stdout, stderr });
                     }
-                    resolve({ stdout, stderr });
-                });
+                );
             });
         }
         let buildOutput = null;
@@ -191,18 +206,22 @@ app.post('/publish-section', async (req, res) => {
             const deployScriptPath = '/home/edgar/Repos/fastvistos/deploy-site-vps.sh';
             const deployCmd = `sudo ${deployScriptPath} ${siteId}`;
             await new Promise((resolve, reject) => {
-                exec(deployCmd, {
-                    cwd: process.cwd(),
-                    env: process.env
-                }, (error, stdout, stderr) => {
-                    console.log('[DEBUG] Deploy stdout (full):', stdout);
-                    console.warn('[DEBUG] Deploy stderr (full):', stderr);
-                    if (error) {
-                        console.error('[ERROR] Deploy failed:', error);
-                        return reject({ error: error.message, stdout, stderr });
+                exec(
+                    deployCmd,
+                    {
+                        cwd: process.cwd(),
+                        env: process.env,
+                    },
+                    (error, stdout, stderr) => {
+                        console.log('[DEBUG] Deploy stdout (full):', stdout);
+                        console.warn('[DEBUG] Deploy stderr (full):', stderr);
+                        if (error) {
+                            console.error('[ERROR] Deploy failed:', error);
+                            return reject({ error: error.message, stdout, stderr });
+                        }
+                        resolve({ stdout, stderr });
                     }
-                    resolve({ stdout, stderr });
-                });
+                );
             });
         } catch (buildErr) {
             console.error('[ERROR] Build process failed:', buildErr);
@@ -217,19 +236,27 @@ app.post('/publish-section', async (req, res) => {
     }
 });
 
-
 // GET endpoint to fetch all versions for a section by uuid and businessId
 // Best practice: use GET for idempotent, read-only queries (like this)
 app.get('/page-section-versions', async (req, res) => {
     try {
-        const { 'updatable-section-uuid': updatableSectionUuid, 'business-id': businessId } = req.query;
-        if (!updatableSectionUuid || typeof updatableSectionUuid !== 'string' ||
-            !businessId || typeof businessId !== 'string') {
-            return res.status(400).json({ error: 'Missing or invalid updatable-section-uuid or businessId query param.' });
+        const { 'updatable-section-uuid': updatableSectionUuid, 'business-id': businessId } =
+            req.query;
+        if (
+            !updatableSectionUuid ||
+            typeof updatableSectionUuid !== 'string' ||
+            !businessId ||
+            typeof businessId !== 'string'
+        ) {
+            return res
+                .status(400)
+                .json({
+                    error: 'Missing or invalid updatable-section-uuid or businessId query param.',
+                });
         }
         const versions = await WebPageService.getPageSectionVersions({
             updatableSectionUuid,
-            businessId
+            businessId,
         });
         res.json({ versions });
     } catch (error) {
@@ -237,7 +264,6 @@ app.get('/page-section-versions', async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
-
 
 app.get('/page-section-version', async (req, res) => {
     try {
@@ -248,7 +274,7 @@ app.get('/page-section-version', async (req, res) => {
         }
         const version = await WebPageService.getPageSectionVersionById({
             id,
-            siteId
+            siteId,
         });
         res.json({ version });
     } catch (error) {
@@ -261,7 +287,9 @@ app.delete('/page-section-version', async (req, res) => {
     try {
         const { id } = req.query;
         if (!id || typeof id !== 'string') {
-            return res.status(400).json({ success: false, error: 'Missing or invalid id query param.' });
+            return res
+                .status(400)
+                .json({ success: false, error: 'Missing or invalid id query param.' });
         }
         const result = await WebPageService.removePageSectionVersionById({ id });
         res.json(result);

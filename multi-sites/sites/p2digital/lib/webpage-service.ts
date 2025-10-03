@@ -33,15 +33,27 @@ export class WebPageService {
      * @param {boolean} isFirstClone
      * @returns {Promise<{ webPageSectionId: string, webPageSectionVersionId: string, filePath: string }>} ids and filePath
      */
-    static async createSectionAndVersion({ webpageRelativePath, title, updatableUuid, businessId, htmlContent, siteId, isFirstClone }: CreateSectionAndVersionParams) {
-
-    if (!prisma) {
+    static async createSectionAndVersion({
+        webpageRelativePath,
+        title,
+        updatableUuid,
+        businessId,
+        htmlContent,
+        siteId,
+        isFirstClone,
+    }: CreateSectionAndVersionParams) {
+        if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
         }
 
         // Debug log for htmlContent param
-        console.log('[DEBUG] Received htmlContent param:', htmlContent, '| typeof:', typeof htmlContent);
+        console.log(
+            '[DEBUG] Received htmlContent param:',
+            htmlContent,
+            '| typeof:',
+            typeof htmlContent
+        );
 
         // Validate htmlContent
         if (typeof htmlContent !== 'string' || !htmlContent) {
@@ -140,15 +152,21 @@ export class WebPageService {
                 try {
                     await new Promise((resolve, reject) => {
                         // add comment
-                        exec(`sudo mkdir -p ${sectionsDir} && sudo chown -R edgar:edgar ${sectionsDir}`, (error, stdout, stderr) => {
-                            if (error) {
-                                console.error('[ERROR] Failed to create/chown webpage_sections:', error);
-                                return reject(error);
+                        exec(
+                            `sudo mkdir -p ${sectionsDir} && sudo chown -R edgar:edgar ${sectionsDir}`,
+                            (error, stdout, stderr) => {
+                                if (error) {
+                                    console.error(
+                                        '[ERROR] Failed to create/chown webpage_sections:',
+                                        error
+                                    );
+                                    return reject(error);
+                                }
+                                console.log('[DEBUG] mkdir/chown stdout:', stdout);
+                                console.warn('[DEBUG] mkdir/chown stderr:', stderr);
+                                resolve(true);
                             }
-                            console.log('[DEBUG] mkdir/chown stdout:', stdout);
-                            console.warn('[DEBUG] mkdir/chown stderr:', stderr);
-                            resolve(true);
-                        });
+                        );
                     });
                 } catch (err) {
                     // Throw to roll back transaction
@@ -162,7 +180,9 @@ export class WebPageService {
             let webPageSectionVersion;
             try {
                 if (!businessId) {
-                    throw new Error('businessId is undefined when creating web_page_section_version');
+                    throw new Error(
+                        'businessId is undefined when creating web_page_section_version'
+                    );
                 }
                 webPageSectionVersion = await tx.web_page_section_version.create({
                     data: {
@@ -182,7 +202,7 @@ export class WebPageService {
             }
 
             // create file with the name in the `file_path` on disk putting it at `/var/www/siteid/webpage_sections/`,
-            // create the folder if it doesn't exist. Put the html content inside the just created file and save. 
+            // create the folder if it doesn't exist. Put the html content inside the just created file and save.
             // If this operation fails, rollback the transaction and log the error.
 
             // Write HTML to file on disk
@@ -212,7 +232,6 @@ export class WebPageService {
         });
     }
 
-
     /**
      * Update the file content for the active version of a section, given updatableSectionUuid, businessId, siteId, and htmlContent.
      * Does not update the database, only the file on disk.
@@ -222,15 +241,15 @@ export class WebPageService {
         siteId,
         htmlContent,
     }: {
-        webPageSectionVersionId: string,
-        siteId: string,
-        htmlContent: string
+        webPageSectionVersionId: string;
+        siteId: string;
+        htmlContent: string;
     }) {
         // Clean up dashes for DB lookup
         const webPageSectionVersionIdClean = webPageSectionVersionId.replace(/-/g, '');
 
         const version = await prisma.web_page_section_version.findUnique({
-            where: { id: webPageSectionVersionIdClean }
+            where: { id: webPageSectionVersionIdClean },
         });
         if (!version || !version.file_path) {
             throw new Error('Version not found or missing file_path');
@@ -248,9 +267,12 @@ export class WebPageService {
         return { filePath, versionId: version.id };
     }
 
-
-    static async publishSection({ webpageRelativePath, updatableUuid, businessId, versionId }: PublishSectionParams) {
-
+    static async publishSection({
+        webpageRelativePath,
+        updatableUuid,
+        businessId,
+        versionId,
+    }: PublishSectionParams) {
         if (!prisma) {
             console.error('[DEBUG] prisma is undefined or null!');
             throw new Error('Prisma client is not initialized');
@@ -300,7 +322,9 @@ export class WebPageService {
                 },
             });
             activeVersionId = versionId;
-            console.log(`[DEBUG] Set active_version_id to ${versionId} for web_page_section ${webPageSection.id}`);
+            console.log(
+                `[DEBUG] Set active_version_id to ${versionId} for web_page_section ${webPageSection.id}`
+            );
         } else {
             // 3. Get the active_version_id
             activeVersionId = webPageSection.active_version_id;
@@ -321,7 +345,6 @@ export class WebPageService {
 
         console.log('[DEBUG] Publishing sectionVersion:', sectionVersion);
 
-
         // 5. Return the file_path
         return {
             filePath: sectionVersion.file_path,
@@ -329,15 +352,23 @@ export class WebPageService {
         };
     }
 
-
     /**
      * Get all versions for a section by updatable-section-uuid and updatable-section-filepath.
      * @param {object} params
      * @param {string} params.updatableSectionUuid
      * @param {string} params.updatableSectionFilepath
      */
-    static async getPageSectionVersions({ updatableSectionUuid, businessId }: { updatableSectionUuid: string, businessId: string }) {
-        console.log('[DEBUG] getPageSectionVersions called with:', { updatableSectionUuid, businessId });
+    static async getPageSectionVersions({
+        updatableSectionUuid,
+        businessId,
+    }: {
+        updatableSectionUuid: string;
+        businessId: string;
+    }) {
+        console.log('[DEBUG] getPageSectionVersions called with:', {
+            updatableSectionUuid,
+            businessId,
+        });
         const updatableUuidClean = updatableSectionUuid.replace(/-/g, '');
         const businessIdClean = businessId.replace(/-/g, '');
         console.log('[DEBUG] Cleaned params:', { updatableUuidClean, businessIdClean });
@@ -384,17 +415,19 @@ export class WebPageService {
                 }
                 active_version = {
                     id: activeVer.id,
-                    file_content
+                    file_content,
                 };
                 console.log('[DEBUG] active_version object:', active_version);
             }
         } else {
             console.log('[DEBUG] section.active_version_id is not set');
         }
-        console.log('[DEBUG] Returning from getPageSectionVersions:', { list: versions, active_version });
+        console.log('[DEBUG] Returning from getPageSectionVersions:', {
+            list: versions,
+            active_version,
+        });
         return { list: versions, active_version };
     }
-
 
     /**
      * Get a specific version by its ID, including reading the HTML content from disk.
@@ -402,7 +435,7 @@ export class WebPageService {
      * @param {string} params.id
      * @param {string} params.siteId
      */
-    static async getPageSectionVersionById({ id, siteId }: { id: string, siteId: string }) {
+    static async getPageSectionVersionById({ id, siteId }: { id: string; siteId: string }) {
         // if id has :original suffix, remove it and set a flag
         const original = id.endsWith(':original');
         console.log('[DEBUG] getPageSectionVersionById called with:', { id, siteId, original });
@@ -413,13 +446,14 @@ export class WebPageService {
         // console.log('[DEBUG] Fetching web_page_section_version with id:', id);
 
         const ver = await prisma.web_page_section_version.findUnique({
-            where: { id }
+            where: { id },
         });
 
         // console.log('[DEBUG] Fetched version:', ver);
-        
-        let file_content = 'Conteudo corrompido. Por favor, crie uma nova versao a partir de uma versão anterior, posterior ou a original que não esteja corrompida.';
-        
+
+        let file_content =
+            'Conteudo corrompido. Por favor, crie uma nova versao a partir de uma versão anterior, posterior ou a original que não esteja corrompida.';
+
         if (ver && ver.file_path) {
             let file_path = null;
             if (original) {
@@ -435,7 +469,10 @@ export class WebPageService {
             try {
                 file_content = fs.readFileSync(filePath, 'utf8');
                 console.log('[DEBUG] Read file_content from:', filePath);
-                console.log('[DEBUG] file_content:', file_content.slice(0, 30) + (file_content.length > 30 ? '...' : ''));
+                console.log(
+                    '[DEBUG] file_content:',
+                    file_content.slice(0, 30) + (file_content.length > 30 ? '...' : '')
+                );
             } catch (err) {
                 // File may not exist or be readable
                 console.error('[DEBUG] Error reading file_content from:', filePath, err);
@@ -447,7 +484,6 @@ export class WebPageService {
         }
         return { id: ver.id, file_content };
     }
-
 
     /**
      * Remove a Web Page Section Version by id (soft delete).
@@ -471,5 +507,4 @@ export class WebPageService {
         }
         return { success: true, message: 'Section version removed successfully.' };
     }
-
 }
