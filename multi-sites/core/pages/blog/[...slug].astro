@@ -36,7 +36,6 @@ const { Content, headings } = await entry.render();
 
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const articleFromDb =  await BlogService.getArticleBySlugFromDb(entry.slug);
-console.log('🛑...🛑...🛑 entry', entry);
 ---
 
 <SharedBlogLayout>
