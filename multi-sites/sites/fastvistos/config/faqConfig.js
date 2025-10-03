@@ -32,6 +32,14 @@ export const faqData = [
         question: 'Posso aplicar para visto mesmo com negativa anterior?',
         answer: 'Sim! Analisamos cada caso individualmente e desenvolvemos estratégias específicas para superar negativas anteriores.',
     },
+
+    {
+        question: 'question test 1?',
+        answer: 'answer test 1',
+    },
+
+
+
 ];
 
 export function formatAnswerForDisplay(answer) {

@@ -335,6 +335,7 @@ model business {
   status_4                       status_4[]
   status_5                       status_5[]
   web_page                       web_page[]
+  web_page_faq                   web_page_faq[]
   web_page_section               web_page_section[]
   web_page_section_version       web_page_section_version[]
 
@@ -1196,6 +1197,7 @@ model web_page {
   business_id      String             @db.Char(32)
   blog_config      blog_config        @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_blog_config_id_c294397c_fk_blog_config_id")
   business         business           @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_business_id_641c22ef_fk_business_id")
+  web_page_faq     web_page_faq[]
   web_page_section web_page_section[]
 
   @@index([blog_config_id], map: "web_page_blog_config_id_c294397c_fk_blog_config_id")
@@ -1236,4 +1238,30 @@ model web_page_section_version {
 
   @@index([web_page_section_id], map: "web_page_section_ver_web_page_section_id_9a2fdc11_fk_web_page_")
   @@index([business_id], map: "web_page_section_version_business_id_4b5f8a81_fk_business_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model web_page_faq {
+  created            DateTime @db.DateTime(6)
+  modified           DateTime @db.DateTime(6)
+  is_removed         Boolean
+  id                 String   @id @db.Char(32)
+  helpful_count      Int      @db.UnsignedInt
+  reference_url      String?  @db.VarChar(200)
+  question           String   @db.VarChar(500)
+  metatitle_question String?  @db.LongText
+  answer             String   @db.LongText
+  metatitle_answer   String?  @db.LongText
+  order              Int      @db.UnsignedInt
+  is_visible         Boolean
+  published          Boolean
+  business_id        String   @db.Char(32)
+  web_page_id        String   @db.Char(32)
+  tags               String?  @db.VarChar(255)
+  business           business @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_faq_business_id_76b0c453_fk_business_id")
+  web_page           web_page @relation(fields: [web_page_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "web_page_faq_web_page_id_1a4a0eb3_fk_web_page_id")
+
+  @@unique([web_page_id, question], map: "unique_faq_per_page")
+  @@index([business_id], map: "web_page_faq_business_id_76b0c453_fk_business_id")
+  @@index([order], map: "web_page_faq_order_b0f6d8a7")
 }
