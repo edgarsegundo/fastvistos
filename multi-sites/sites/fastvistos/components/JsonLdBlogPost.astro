@@ -1,35 +1,25 @@
 ---
 /**
  * JsonLdBlogPost.astro
- * Unificado: não depende mais de JsonLdArticleBase.astro. Inclui mentions, interactionStatistic, comment, etc.
- */
-
-/**
- * JsonLdBlogPost.astro
  * Gera JSON-LD para um BlogPosting (artigo/post), extensível com mentions, interactionStatistic, comment, etc.
  */
-export interface Props {
-    article: {
-        id: string;
-        title: string;
-        description: string;
-        url: string;
-        datePublished: string;
-        dateModified?: string;
-        image?: string;
-        author: { id: string; name: string; url?: string; sameAs?: string[] };
-        publisher: { id: string; name: string; logo?: string };
-        section?: string[];
-        inLanguage?: string;
-    };
-    mentions?: any[];
-    interactionStatistic?: any[];
-    comment?: any[];
-    extraGraph?: any[];
-    customData?: any;
-}
+import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { getPersonBlock } from './JsonLdPersonBlock.astro';
+import { slugify, parseKeywords, toThumbnailUrl } from '../lib/utils.ts';
+
+
 const {
-    article,
+    site,
+    blogConfigFromDb,
+    articleFromDb,
+    pubDate,
+    updatedDate,
+    wordCount,
     mentions = [],
     interactionStatistic = [],
     comment = [],
@@ -37,33 +27,148 @@ const {
     customData,
 } = Astro.props;
 
+const homepageUrl = normalizeAssetsUrlBase(site.domain);
+const postpageUrl = `${homepageUrl}/blog/${articleFromDb.slug}`;
+const author_name = slugify(articleFromDb.author_name || 
+      blogConfigFromDb.author_name || 
+      site.author || site.name);
+
+const breadcrumbList = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: 'Home',
+    item: homepageUrl,
+  },
+  {
+    '@type': 'ListItem',
+    position: 2,
+    name: 'Blog',
+    item: `${homepageUrl}/blog`,
+  },
+  {
+    '@type': 'ListItem',
+    position: 3,
+    name: articleFromDb.title,
+    item: postpageUrl,
+  },
+];
+
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject: false,
+    site,
+    imageId: `${postpageUrl}#image`,
+    image: blogConfigFromDb.image,
+    imageUrl: blogConfigFromDb.seo_image_url,
+    caption: blogConfigFromDb.seo_image_caption,
+    width: blogConfigFromDb.seo_image_width,
+    height: blogConfigFromDb.seo_image_height,
+});
+
+// WebPage block
+const webPageBlock = getWebPageBlock({
+    disableWebPage: false,
+    pageUrl: postpageUrl,
+    siteName: articleFromDb.title || site.name,
+    websiteId: `${homepageUrl}#website`,
+    orgId: `${homepageUrl}#organization`,
+    imageId: `${postpageUrl}#image`,
+    breadcrumbId: `${postpageUrl}#breadcrumb`,
+    site: site,
+    description: articleFromDb.seo_description,
+    pubDate,
+    updatedDate,
+});
+
+const breadcrumbId = `${postpageUrl}#breadcrumb`;
+
+// BreadcrumbList
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb: false,
+    breadcrumbId,
+    breadcrumbList,
+    homepageUrl,
+});
+
+const websiteId = `${homepageUrl}#website`;
+const orgId = `${homepageUrl}#organization`;
+
+// WebSite
+const webSiteBlock = getWebSiteBlock({
+    disableWebSite: false,
+    disableWebSiteSearchAction: true,
+    websiteId,
+    homepageUrl,
+    siteName: site?.name,
+    description: site?.description,
+    orgId,
+    site,
+});
+
+const org = site?.organization ?? {
+    name: site?.name,
+    url: homepageUrl,
+    logo: site?.logo,
+};
+
+// Organization (with logo as ImageObject)
+const orgBlock = getOrganizationBlock({
+    disableOrganization: false,
+    orgId,
+    org,
+    logoId: `${homepageUrl}#logo`,
+    site,
+});
+
+// 'https://fastvistos.com.br/schema/person/edgar-bola-segundo',
+const personBlock = getPersonBlock({
+    id: `${homepageUrl}/schema/person/${author_name}`,
+    name: `${articleFromDb.author_name || blogConfigFromDb.author_name || site.author || site.name}`,
+    url: `${homepageUrl}/schema/person/${author_name}`,
+});
+
+// https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
-        '@type': 'Person',
-        '@id': article.author.id,
-        name: article.author.name,
-        url: article.author.url,
-        sameAs: article.author.sameAs,
+        '@type': 'BlogPosting', // or Article?
+        '@id': `${postpageUrl}#article`,
+        isPartOf: { '@id': `${postpageUrl}` },
+        author: {
+            '@id': `${homepageUrl}/schema/person/${author_name}`,
+            url: `${homepageUrl}/schema/person/${author_name}`,
+            name: articleFromDb.author_name || blogConfigFromDb.author_name || site.author || site.name,
+        },
+        headline: articleFromDb.title,
+        description: articleFromDb.seo_description,
+        datePublished: pubDate,
+        dateModified: updatedDate,
+        mainEntityOfPage: { '@id': `${postpageUrl}` },
+        wordCount: wordCount,
+        publisher: { '@id': `${homepageUrl}#organization` },
+        image: { '@id': `${postpageUrl}#image` },
+        primaryImageOfPage: { '@id': `${postpageUrl}#image` },
+        ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
+        keywords: parseKeywords(articleFromDb.seo_keywords),
+        articleSection: [`${articleFromDb.blog_topic.title}`],
+        inLanguage: 'pt-BR',
     },
     {
-        '@type': 'Organization',
-        '@id': article.publisher.id,
-        name: article.publisher.name,
-        logo: article.publisher.logo,
+        ...webPageBlock,
     },
     {
-        '@type': 'BlogPosting',
-        '@id': article.id,
-        headline: article.title,
-        description: article.description,
-        author: { '@id': article.author.id },
-        publisher: { '@id': article.publisher.id },
-        datePublished: article.datePublished,
-        dateModified: article.dateModified || article.datePublished,
-        image: article.image,
-        articleSection: article.section,
-        inLanguage: article.inLanguage,
-        mainEntityOfPage: { '@id': article.url },
+        ...imageObjectBlock,
+    },
+    {
+        ...breadcrumbBlock,
+    },
+    {
+        ...webSiteBlock,
+    },
+    {
+        ...orgBlock,
+    },
+    {
+        ...personBlock,
     },
 ];
 const advancedGraph = [

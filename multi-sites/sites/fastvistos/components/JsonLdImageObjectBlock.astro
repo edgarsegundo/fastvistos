@@ -13,7 +13,7 @@ export function getImageObjectBlock({
 }: {
     disableImageObject: boolean,
     site: any,
-    imageId: string,
+    imageId?: string | null,
     image?: string,
     imageUrl?: string,
     caption?: string,
@@ -28,7 +28,7 @@ export function getImageObjectBlock({
     return {
         '@type': 'ImageObject',
         inLanguage: site.language,
-        '@id': imageId,
+        '@id': imageId ?? url, // Use imageId if not null/undefined, else use url
         url: url,
         contentUrl: url,
         ...(caption ? { caption } : {}),

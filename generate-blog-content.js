@@ -5,6 +5,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { PrismaClient } from '@prisma/client';
 
+
+
+import { remark } from 'remark';
+import remarkParse from 'remark-parse';
+import { visit } from 'unist-util-visit';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -61,6 +67,22 @@ function ensureContentDirectory(siteId) {
     return contentBlogDir;
 }
 
+// Function to ensure content config exists for a site
+function ensureContentConfig(siteId) {
+    const srcConfigPath = path.join(__dirname, 'multi-sites', 'core', 'lib', 'content-config-template.ts');
+    const destConfigDir = path.join(__dirname, 'multi-sites', 'sites', siteId, 'content');
+    const destConfigPath = path.join(destConfigDir, 'config.ts');
+
+    // Ensure destination directory exists
+    if (!fs.existsSync(destConfigDir)) {
+        fs.mkdirSync(destConfigDir, { recursive: true });
+    }
+
+    // Copy and rename the config file
+    fs.copyFileSync(srcConfigPath, destConfigPath);
+    console.log(`📄 Copied content-config-template.ts to ${destConfigPath}`);
+}
+
 // Function to sanitize filename
 function sanitizeFilename(filename) {
     return filename
@@ -72,8 +94,20 @@ function sanitizeFilename(filename) {
 
 // Function to generate frontmatter and content
 function generateMarkdownContent(article) {
-    const publishedDate = new Date(article.published).toISOString().split('T')[0];
-    const modifiedDate = new Date(article.modified).toISOString().split('T')[0];
+    // const publishedDate = new Date(article.published).toISOString().split('T')[0];
+    // const modifiedDate = new Date(article.modified).toISOString().split('T')[0];
+    const publishedDate = new Date(article.published).toISOString(); // e.g., "2025-09-09T00:00:00.000Z"
+    const modifiedDate = new Date(article.modified).toISOString();
+
+    // Add the markdown content
+    const content = article.content_md || article.content_html || '';
+
+    // Count words using remark
+    const tree = remark().use(remarkParse).parse(content);
+    let wordCount = 0;
+    visit(tree, 'text', (node) => {
+        wordCount += node.value.split(/\s+/).filter(Boolean).length;
+    });
 
     // Create frontmatter
     const frontmatter = `---
@@ -87,12 +121,10 @@ topicSlug: "${article.blog_topic.slug}"
 image: "/assets/images/blog/${article.image ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
 published: true
+wordCount: "${wordCount}"
 ---
 
 `;
-
-    // Add the markdown content
-    const content = article.content_md || article.content_html || '';
 
     return frontmatter + content;
 }
@@ -110,13 +142,18 @@ async function generateBlogArticles(siteId) {
         // Ensure content directory exists
         const contentBlogDir = ensureContentDirectory(siteId);
 
+        // Ensure content config exists
+        ensureContentConfig(siteId);
+
         console.log('🔍 Fetching articles from database...');
+
+        const businessIdCleaned = siteConfig.business_id.replace(/-/g, '');
 
         // Get published articles for this business_id with their topics
         const now = new Date();
         const articles = await prisma.blog_article.findMany({
             where: {
-                business_id: siteConfig.business_id,
+                business_id: businessIdCleaned,
                 is_removed: false,
                 published: {
                     lte: now,
