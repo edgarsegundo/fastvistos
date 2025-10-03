@@ -1,3 +1,13 @@
+/**
+ * Estimate reading time in minutes from word count.
+ * @param wordCount Number of words in the article
+ * @param wordsPerMinute Average reading speed (default 220)
+ * @returns Number of minutes (minimum 1)
+ */
+export function estimateReadingTime(wordCount: number, wordsPerMinute: number = 220): number {
+    if (!wordCount || wordCount < 0) return 0;
+    return Math.max(1, Math.round(wordCount / wordsPerMinute));
+}
 export function normalizeAssetsUrlBase(assetsUrlBase: string): string {
     let base = assetsUrlBase.replace(/\/$/, '');
     return base.startsWith('http') ? base : `https://${base}`;
