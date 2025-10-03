@@ -14,13 +14,21 @@ export class WebpageFaqService {
         });
         if (!webPage) return [];
         // Find all web_page_faq records linked to this web_page
-        const faqList = await prisma.web_page_faq.findMany({
-            where: { web_page_id: webPage.id },
-            select: {
-                question: true,
-                answer: true,
-            },
-        });
+            const faqList = await prisma.web_page_faq.findMany({
+                where: {
+                    web_page_id: webPage.id,
+                    is_removed: false,
+                    published: true,
+                    is_visible: true,
+                },
+                select: {
+                    question: true,
+                    answer: true,
+                },
+                orderBy: {
+                    order: 'asc',
+                },
+            });
         return faqList;
     }
 }
