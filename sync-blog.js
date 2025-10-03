@@ -40,6 +40,24 @@ const CORE_STYLES_DIR = join(__dirname, 'multi-sites/core/styles');
 
 async function copyFile(src, dest) {
     try {
+        // Handle .template.astro files
+        if (src.endsWith('.template.astro')) {
+            // Remove .template from filename for destination
+            const destTemplate = dest.replace('.template.astro', '.astro');
+            // Only copy if destination does not exist
+            try {
+                await fs.access(destTemplate);
+                // File exists, skip copying
+                return;
+            } catch {
+                // File does not exist, copy and rename
+                const content = await fs.readFile(src, 'utf-8');
+                const stripped = stripAstroComments(content);
+                await fs.writeFile(destTemplate, stripped);
+                return;
+            }
+        }
+        // Regular .astro file
         if (src.endsWith('.astro')) {
             const content = await fs.readFile(src, 'utf-8');
             const stripped = stripAstroComments(content);
