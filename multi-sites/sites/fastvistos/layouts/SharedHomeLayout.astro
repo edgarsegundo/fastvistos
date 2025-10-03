@@ -23,8 +23,12 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <!doctype html>
 <html lang={htmlLang}>
     <head>
+        
         <HeadBasics generator={Astro.generator} />
+
+        
         <AnalyticsHead siteConfig={siteConfig} />
+
         
         <SEOMeta
             siteConfig={siteConfig}
@@ -32,6 +36,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
             noIndex={false}
             enhancedIndexing={false}
         />
+
         
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,6 +51,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
     <body class={bodyClass} style={bodyStyle}>
         
         <AnalyticsBody siteConfig={siteConfig} />
+
         
         <slot />
     </body>
