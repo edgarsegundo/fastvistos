@@ -79,3 +79,15 @@
     </div>
     <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navToggle = document.getElementById('nav-toggle');
+        const navContent = document.getElementById('nav-content');
+        if (navToggle && navContent) {
+            navToggle.addEventListener('click', function () {
+                navContent.classList.toggle('hidden');
+            });
+        }
+    });
+</script>
