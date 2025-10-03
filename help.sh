@@ -33,6 +33,7 @@ while true; do
     1)
       echo "Publishing msitesapp..."
       git pull
+      npm install
       npm run build:msitesapp
       pm2 restart msitesapp
       pm2 save
