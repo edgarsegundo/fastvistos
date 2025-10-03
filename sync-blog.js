@@ -63,15 +63,23 @@ async function injectUpdatableSectionMetadata(content, src, siteId) {
     if (match) {
         // Generate dynamic values
         const uuid = uuidv4();
-        const filename = src.split('/').pop().replace('.template.astro', '');
+        // Robust filename extraction
+        let filename = src.split('/').pop();
+        if (filename.endsWith('.template.astro')) {
+            filename = filename.replace('.template.astro', '');
+        } else if (filename.endsWith('.astro')) {
+            filename = filename.replace('.astro', '');
+        }
         const sectionTitle = filename.replace(/([A-Z])/g, ' $1').trim();
+        // Use provided siteId directly
         const filePath = `multi-sites/sites/${siteId}/components/${filename}.astro`;
         // Read business_id from site-config.ts
         const configPath = `multi-sites/sites/${siteId}/site-config.ts`;
         let businessId = '';
         try {
             const configContent = await fs.readFile(configPath, 'utf-8');
-            const businessIdMatch = configContent.match(/business_id:\s*['\"`]([^'\"`]+)['\"`]/);
+            // Support both business_id: and businessId:
+            const businessIdMatch = configContent.match(/business[_I]id\s*[:=]\s*['\"`]([^'\"`]+)['\"`]/i);
             businessId = businessIdMatch ? businessIdMatch[1] : '';
         } catch {}
         // Replace <div ...> with injected attributes
@@ -105,7 +113,7 @@ async function copyFile(src, dest, siteId) {
     }
 }
 
-async function copyDirectory(src, dest) {
+async function copyDirectory(src, dest, siteId) {
     try {
         await ensureDir(dest);
         const entries = await fs.readdir(src, { withFileTypes: true });
@@ -115,10 +123,10 @@ async function copyDirectory(src, dest) {
             const destPath = join(dest, entry.name);
 
             if (entry.isDirectory()) {
-                await copyDirectory(srcPath, destPath);
+                await copyDirectory(srcPath, destPath, siteId);
             } else if (entry.isFile() && entry.name.endsWith('.astro')) {
                 // Only copy .astro files from components
-                await copyFile(srcPath, destPath);
+                await copyFile(srcPath, destPath, siteId);
                 console.log(`📄 Copied component: ${entry.name}`);
             }
         }
@@ -316,7 +324,7 @@ async function syncBlogToSite(siteId) {
     // This approach automatically copies ALL .astro files from core/components,
     // so we never need to update this script when adding new components
     console.log(`📦 Copying all components to ${siteId}...`);
-    await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir);
+    await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir, siteId);
 
     // Overwrite SEOMeta with localized version (special case for site-specific config)
     await fs.writeFile(
