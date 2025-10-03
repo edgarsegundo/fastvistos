@@ -68,11 +68,6 @@ console.log('🛑...🛑...🛑 entry', entry);
                             })
                         }
                     </time>
-
-                    <span class="article-reading-time">
-                        {estimateReadingTime(entry.data.wordCount)} min leitura
-                    </span>
-
                     {entry.data.topic && <span class="article-topic">{entry.data.topic}</span>}
                 </div>
 
@@ -83,6 +78,9 @@ console.log('🛑...🛑...🛑 entry', entry);
                         </div>
                     )
                 }
+                <span class="article-reading-time">
+                    Leitura: ≈{estimateReadingTime(Number(entry.data.wordCount))} min
+                </span>
             </header>
 
             
@@ -131,7 +129,7 @@ console.log('🛑...🛑...🛑 entry', entry);
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 3rem 0;
+        margin: .5rem 0 1.5rem;
     }
 
     /* Responsive Design */
