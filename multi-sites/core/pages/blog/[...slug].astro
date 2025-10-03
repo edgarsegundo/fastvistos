@@ -75,7 +75,9 @@ console.log('🛑...🛑...🛑 entry', entry);
 
                 {
                     entry.data.image && entry.data.image !== '/assets/images/blog/' && (
-                        <img src={entry.data.image} alt={entry.data.title} class="article-image" />
+                        <div class="article-image-wrapper">
+                            <img src={entry.data.image} alt={entry.data.title} class="article-image" />
+                        </div>
                     )
                 }
             </header>
@@ -121,6 +123,14 @@ console.log('🛑...🛑...🛑 entry', entry);
         gap: 1.5rem;
     }
 
+    .article-image-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 3rem 0;
+    }
+
     /* Responsive Design */
     @media (max-width: 1024px) {
         .blog-layout-container {
@@ -134,6 +144,9 @@ console.log('🛑...🛑...🛑 entry', entry);
         .blog-layout-container {
             padding: 1rem;
             gap: 1.5rem;
+        }
+        .article-image-wrapper {
+            margin: 2rem 0;
         }
     }
 </style>
