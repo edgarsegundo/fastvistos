@@ -39,7 +39,6 @@ const CORE_LAYOUTS_DIR = join(__dirname, 'multi-sites/core/layouts');
 const CORE_COMPONENTS_DIR = join(__dirname, 'multi-sites/core/components');
 const CORE_STYLES_DIR = join(__dirname, 'multi-sites/core/styles');
 
-
 async function handleTemplateAstroFile(src, dest, siteId) {
     const destTemplate = dest.replace('.template.astro', '.astro');
     // Only copy if destination does not exist
@@ -79,7 +78,9 @@ async function injectUpdatableSectionMetadata(content, src, siteId) {
         try {
             const configContent = await fs.readFile(configPath, 'utf-8');
             // Support both business_id: and businessId:
-            const businessIdMatch = configContent.match(/business[_I]id\s*[:=]\s*['\"`]([^'\"`]+)['\"`]/i);
+            const businessIdMatch = configContent.match(
+                /business[_I]id\s*[:=]\s*['\"`]([^'\"`]+)['\"`]/i
+            );
             businessId = businessIdMatch ? businessIdMatch[1] : '';
         } catch {}
         // Replace <div ...> with injected attributes
@@ -335,13 +336,15 @@ async function syncBlogToSite(siteId) {
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
 
-
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
     await fs.writeFile(join(siteLibDir, 'site-config-model.ts'), siteConfigContent);
 
     // Copy webpage-service.ts to site lib directory
-    const webpageServiceContent = await fs.readFile(join(CORE_LIB_DIR, 'webpage-service.ts'), 'utf-8');
+    const webpageServiceContent = await fs.readFile(
+        join(CORE_LIB_DIR, 'webpage-service.ts'),
+        'utf-8'
+    );
     await fs.writeFile(join(siteLibDir, 'webpage-service.ts'), webpageServiceContent);
 
     // Copy utils.ts to site lib directory

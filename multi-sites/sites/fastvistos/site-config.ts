@@ -207,5 +207,3 @@ Open Graph type options for 'openGraph.type':
 'product.item'              - Product item
 'game.achievement'          - Game achievement
 */
-
-

@@ -3,9 +3,9 @@
 ## To Do
 
 - Implementar in person:
-"description": "Ele é o co-fundador...",
-"sameAs": ["https://neilpatel.com", "https://www.facebook.com/neilkpatel", "https://www.instagram.com/neilpatel/", "https://www.linkedin.com/in/neilkpatel", "https://x.com/https://twitter.com/neilpatel"],
-"url": "https://neilpatel.com/br/blog/author/neil-patel/"
+  "description": "Ele é o co-fundador...",
+  "sameAs": ["https://neilpatel.com", "https://www.facebook.com/neilkpatel", "https://www.instagram.com/neilpatel/", "https://www.linkedin.com/in/neilkpatel", "https://x.com/https://twitter.com/neilpatel"],
+  "url": "https://neilpatel.com/br/blog/author/neil-patel/"
 
 - por enquanto não vou pemitir publicar o original e se a pessoa quiser voltar para o original terá que clonar o original e publicar
 

@@ -5,8 +5,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { PrismaClient } from '@prisma/client';
 
-
-
 import { remark } from 'remark';
 import remarkParse from 'remark-parse';
 import { visit } from 'unist-util-visit';
@@ -69,7 +67,13 @@ function ensureContentDirectory(siteId) {
 
 // Function to ensure content config exists for a site
 function ensureContentConfig(siteId) {
-    const srcConfigPath = path.join(__dirname, 'multi-sites', 'core', 'lib', 'content-config-template.ts');
+    const srcConfigPath = path.join(
+        __dirname,
+        'multi-sites',
+        'core',
+        'lib',
+        'content-config-template.ts'
+    );
     const destConfigDir = path.join(__dirname, 'multi-sites', 'sites', siteId, 'content');
     const destConfigPath = path.join(destConfigDir, 'config.ts');
 

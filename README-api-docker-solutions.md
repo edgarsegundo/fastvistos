@@ -75,7 +75,7 @@ const rateLimit = require('express-rate-limit');
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    max: 100, // limit each IP to 100 requests per windowMs
 });
 
 app.use('/api', limiter);
@@ -99,7 +99,7 @@ Set up your Node.js with SSL and use `https://72.60.57.150:3900/` in nginx.
 **Option 1 (secret header)** + **Option 2 (obscure port)** gives you excellent security with minimal complexity:
 
 - Only nginx can make valid requests (secret header)
-- Port is not easily discoverable 
+- Port is not easily discoverable
 - Simple to implement and maintain
 
 **Would you like me to help you implement the secret header approach?** It's the most effective for your scenario.
@@ -128,21 +128,17 @@ This completely bypasses network issues:
 Modify your Node.js app:
 javascriptconst path = '/tmp/myapp.sock';
 app.listen(path, () => {
-    console.log(`Server listening on ${path}`);
+console.log(`Server listening on ${path}`);
 });
 Update docker-compose.yml:
 yamlservices:
-  nginx:
-    image: nginx
-    volumes:
-      - /tmp:/tmp  # Mount socket directory
-    ports:
-      - "80:80" 
-      - "443:443"
+nginx:
+image: nginx
+volumes: - /tmp:/tmp # Mount socket directory
+ports: - "80:80" - "443:443"
 Update nginx config:
 nginxlocation /msitesapp/api/ {
-    proxy_pass http://unix:/tmp/myapp.sock;
-    # ... rest of config
+proxy_pass http://unix:/tmp/myapp.sock; # ... rest of config
 }
 
 ### Solution 3: Use a reverse SSH tunnel

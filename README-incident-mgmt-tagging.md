@@ -2,9 +2,9 @@
 
 Adopt a format like `[CATEGORY][PRIORITY][TEAM]`.
 
-* Categories: `OBS`, `BUG`, `RISK`, `CRITICAL`, `TECHDEBT`.
-* Priority: `P0` (highest) → `P3` (lowest).
-* Team: `DEV`, `OPS`, etc.
+- Categories: `OBS`, `BUG`, `RISK`, `CRITICAL`, `TECHDEBT`.
+- Priority: `P0` (highest) → `P3` (lowest).
+- Team: `DEV`, `OPS`, etc.
 
 Example:
 

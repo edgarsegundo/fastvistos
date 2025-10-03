@@ -3,7 +3,6 @@
 // Usage: Inject this script into your HTML (e.g., via <script src="/path/to/updatable-editor.js"></script>)
 
 (function () {
-
     /**
      * UI State structure for updatable-editor.js
      *
@@ -43,15 +42,18 @@
             updatableSectionUuid: null,
             businessId: null,
         },
-        populateAttributesFromDiv: function(div) {
+        populateAttributesFromDiv: function (div) {
             this.sectionAttributes.title = div.getAttribute('updatable-section-title') || null;
-            this.sectionAttributes.filePath = div.getAttribute('updatable-section-filepath') || null;
+            this.sectionAttributes.filePath =
+                div.getAttribute('updatable-section-filepath') || null;
             this.sectionAttributes.siteId = div.getAttribute('updatable-section-siteid') || null;
-            this.sectionAttributes.updatableSectionUuid = div.getAttribute('updatable-section-uuid') || null;
-            this.sectionAttributes.businessId = div.getAttribute('updatable-section-businessid') || null;
+            this.sectionAttributes.updatableSectionUuid =
+                div.getAttribute('updatable-section-uuid') || null;
+            this.sectionAttributes.businessId =
+                div.getAttribute('updatable-section-businessid') || null;
         },
 
-        getHtmlContent: function() {
+        getHtmlContent: function () {
             return this.dom.sectionTextarea.value || null;
         },
 
@@ -62,7 +64,7 @@
          * Recursively reset all properties of an object (including nested objects) to null.
          * Used to clear all DOM references in state.dom.
          */
-        resetDomTree: function(obj) {
+        resetDomTree: function (obj) {
             for (const key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     if (typeof obj[key] === 'object' && obj[key] !== null) {
@@ -75,8 +77,8 @@
                     }
                 }
             }
-        }        
-    }
+        },
+    };
 
     // Overlay utility: disables the whole screen and shows a label and throbber
     const OVERLAY_MIN_DURATION_MS = 1000; // ms
@@ -170,14 +172,32 @@
             element.style.pointerEvents = toggle ? 'auto' : 'none';
             element.disabled = !toggle;
             if (toggle) {
-                element.classList.remove('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+                element.classList.remove(
+                    'bg-gray-200',
+                    'text-gray-500',
+                    'cursor-not-allowed',
+                    'opacity-60'
+                );
             } else {
-                element.classList.add('bg-gray-200', 'text-gray-500', 'cursor-not-allowed', 'opacity-60');
+                element.classList.add(
+                    'bg-gray-200',
+                    'text-gray-500',
+                    'cursor-not-allowed',
+                    'opacity-60'
+                );
             }
         }
     }
 
-    function toggleUIElements(toggleClone = false, togglePublish = false, toggleSave = false, toggleDelete = false, togglePreview = false, toggleTextarea = false, toggleCombo = false) {
+    function toggleUIElements(
+        toggleClone = false,
+        togglePublish = false,
+        toggleSave = false,
+        toggleDelete = false,
+        togglePreview = false,
+        toggleTextarea = false,
+        toggleCombo = false
+    ) {
         toggleElement(state.dom.buttons.cloneBtn, toggleClone);
         toggleElement(state.dom.buttons.publishBtn, togglePublish);
         toggleElement(state.dom.buttons.saveBtn, toggleSave);
@@ -355,7 +375,8 @@
             }
 
             button.onclick = async () => {
-                const selectedOpt = state.dom.versionCombo.options[state.dom.versionCombo.selectedIndex];
+                const selectedOpt =
+                    state.dom.versionCombo.options[state.dom.versionCombo.selectedIndex];
                 if (selectedOpt.getAttribute('data-undeleteable-version') === 'true') {
                     alert('Você não pode remover a versão publicada!');
                     return;
@@ -367,10 +388,15 @@
                     if (result.success) {
                         state.isVersionSaved = true;
                         // Refresh combobox in DOM and state
-                        const placeholder = state.dom.modalContent.querySelector('#version-combobox-placeholder');
+                        const placeholder = state.dom.modalContent.querySelector(
+                            '#version-combobox-placeholder'
+                        );
                         if (placeholder) {
                             // Remove old combobox if present
-                            if (state.dom.versionCombo && state.dom.versionCombo.parentNode === placeholder) {
+                            if (
+                                state.dom.versionCombo &&
+                                state.dom.versionCombo.parentNode === placeholder
+                            ) {
                                 placeholder.removeChild(state.dom.versionCombo);
                             }
                             // Create and insert new combobox
@@ -422,7 +448,8 @@
             const placeholder = document.createElement('div');
             placeholder.id = 'version-combobox-placeholder';
             // No styles at all, just a plain div
-            placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
+            placeholder.innerHTML =
+                '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
             return placeholder;
         }
 
@@ -450,13 +477,14 @@
                 caretColor: '#3b82f6',
                 backgroundClip: 'padding-box',
             });
-            texta.addEventListener('focus', function() {
+            texta.addEventListener('focus', function () {
                 texta.style.borderColor = '#2563eb'; // blue-600
                 texta.style.boxShadow = '0 0 0 3px #3b82f633, 0 4px 32px 0 rgba(59,130,246,0.10)';
             });
-            texta.addEventListener('blur', function() {
+            texta.addEventListener('blur', function () {
                 texta.style.borderColor = '#3b82f6';
-                texta.style.boxShadow = '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
+                texta.style.boxShadow =
+                    '0 4px 32px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.08)';
             });
 
             texta.value = state.dom.sectionDivWrapper.innerHTML;
@@ -472,15 +500,23 @@
                 return null;
             }
             // Clear previous content
-            placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
+            placeholder.innerHTML =
+                '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
 
-            if (state.sectionAttributes.updatableSectionUuid && state.sectionAttributes.businessId) {
+            if (
+                state.sectionAttributes.updatableSectionUuid &&
+                state.sectionAttributes.businessId
+            ) {
                 try {
                     const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(state.sectionAttributes.updatableSectionUuid)}&business-id=${encodeURIComponent(state.sectionAttributes.businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
                     // Expecting { list: [...], active_version: { id, file_content } }
-                    if (data && Array.isArray(data.versions.list) && data.versions.list.length > 0) {
+                    if (
+                        data &&
+                        Array.isArray(data.versions.list) &&
+                        data.versions.list.length > 0
+                    ) {
                         selectElement = document.createElement('select');
                         selectElement.style.margin = '0 auto 12px auto';
                         selectElement.style.display = 'block';
@@ -490,7 +526,8 @@
                         selectElement.style.borderRadius = '7px';
                         selectElement.style.border = '2px solid #3b82f6';
                         selectElement.style.color = '#222';
-                        selectElement.style.background = 'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
+                        selectElement.style.background =
+                            'linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%)';
                         selectElement.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         selectElement.style.fontWeight = '500';
                         selectElement.style.transition = 'border-color 0.2s, box-shadow 0.2s';
@@ -505,37 +542,51 @@
                             opt.value = ver.id.toString();
                             defaultOpt.value = opt.value + ':original';
                             let statusText = '';
-                            if (data.versions.active_version && data.versions.active_version.id === ver.id) {
+                            if (
+                                data.versions.active_version &&
+                                data.versions.active_version.id === ver.id
+                            ) {
                                 statusText = ` (Publicada) `;
-                                 opt.setAttribute('data-undeleteable-version', 'true');
+                                opt.setAttribute('data-undeleteable-version', 'true');
                             }
 
-                            opt.textContent = `${statusText}Versão de ` + (ver.created ? (new Date(ver.created)).toLocaleString() : '');
+                            opt.textContent =
+                                `${statusText}Versão de ` +
+                                (ver.created ? new Date(ver.created).toLocaleString() : '');
                             selectElement.appendChild(opt);
                         });
                         selectElement.appendChild(defaultOpt);
 
                         if (isNewlyCreated) {
-                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, selectElement.value);
+                            localStorage.setItem(
+                                SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY,
+                                selectElement.value
+                            );
                         } else {
-                            const savedValue = localStorage.getItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY);
-                            if (savedValue && selectElement.querySelector(`option[value="${savedValue}"]`)) {
+                            const savedValue = localStorage.getItem(
+                                SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY
+                            );
+                            if (
+                                savedValue &&
+                                selectElement.querySelector(`option[value="${savedValue}"]`)
+                            ) {
                                 selectElement.value = savedValue;
                             }
                         }
 
                         await updateTextarea();
 
-                        selectElement.addEventListener('focus', function() {
+                        selectElement.addEventListener('focus', function () {
                             selectElement.style.borderColor = '#2563eb';
-                            selectElement.style.boxShadow = '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
+                            selectElement.style.boxShadow =
+                                '0 0 0 2.5px #3b82f633, 0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
-                        selectElement.addEventListener('blur', function() {
+                        selectElement.addEventListener('blur', function () {
                             selectElement.style.borderColor = '#3b82f6';
                             selectElement.style.boxShadow = '0 1.5px 8px 0 rgba(59,130,246,0.04)';
                         });
 
-                        async function  updateTextarea() {
+                        async function updateTextarea() {
                             const selected = selectElement.options[selectElement.selectedIndex];
                             const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(state.sectionAttributes.siteId)}&id=${encodeURIComponent(selected.value)}`;
                             const resp = await fetch(url);
@@ -545,9 +596,12 @@
                             }
                         }
 
-                        selectElement.addEventListener('change', async function(event) {
+                        selectElement.addEventListener('change', async function (event) {
                             // Persist the selected value
-                            localStorage.setItem(SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY, selectElement.value);
+                            localStorage.setItem(
+                                SELECTED_VERSION_COMBO_LOCAL_STORAGE_KEY,
+                                selectElement.value
+                            );
                             await updateTextarea();
                             toggleUIState();
                         });
@@ -557,14 +611,17 @@
                         placeholder.appendChild(selectElement);
                     } else {
                         // No versions found, show placeholder message
-                        placeholder.innerHTML = '<span style="opacity:0.7;">Nenhuma versão disponível</span>';
+                        placeholder.innerHTML =
+                            '<span style="opacity:0.7;">Nenhuma versão disponível</span>';
                     }
                 } catch (err) {
-                    placeholder.innerHTML = '<span style="color:#e17055;">Erro ao buscar versões</span>';
+                    placeholder.innerHTML =
+                        '<span style="color:#e17055;">Erro ao buscar versões</span>';
                     console.error('Failed to fetch section versions:', err);
                 }
             } else {
-                placeholder.innerHTML = '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
+                placeholder.innerHTML =
+                    '<span style="opacity:0.7;">Selecione uma versão para editar</span>';
             }
             return selectElement;
         }
@@ -585,17 +642,21 @@
             });
             button.onclick = () => {
                 toggleScreenOverlay(true, 'Clonando seção...');
-                if (!state.sectionAttributes.updatableSectionUuid || 
-                    !state.sectionAttributes.title || 
-                    !state.sectionAttributes.filePath || 
-                    !state.sectionAttributes.businessId || 
-                    !state.getHtmlContent()) {
+                if (
+                    !state.sectionAttributes.updatableSectionUuid ||
+                    !state.sectionAttributes.title ||
+                    !state.sectionAttributes.filePath ||
+                    !state.sectionAttributes.businessId ||
+                    !state.getHtmlContent()
+                ) {
                     alert('Faltam atributos para clonar.');
-                    console.error('Missing attributes for cloning:', { uuid: state.sectionAttributes.updatableSectionUuid, 
-                        title: state.sectionAttributes.title, 
-                        filePath: state.sectionAttributes.filePath, 
-                        businessId: state.sectionAttributes.businessId, 
-                        htmlContent: state.getHtmlContent() });
+                    console.error('Missing attributes for cloning:', {
+                        uuid: state.sectionAttributes.updatableSectionUuid,
+                        title: state.sectionAttributes.title,
+                        filePath: state.sectionAttributes.filePath,
+                        businessId: state.sectionAttributes.businessId,
+                        htmlContent: state.getHtmlContent(),
+                    });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/webpage-section', {
@@ -613,19 +674,19 @@
                         isFirstClone: !state.dom.versionCombo,
                     }),
                 })
-                .then(response => response.json())
-                .then(async data => {
-                    state.dom.versionCombo = await createVersionComboBox(true);
-                    state.isVersionSaved = false;
-                    toggleUIState();
-                    toggleScreenOverlay(false);
-                })
-                .catch(error => {
-                    toggleScreenOverlay(false);
-                    // TODO: Show error in modal, refactor to use a better alert system
-                    alert('Erro ao clonar seção. Veja console para detalhes.');
-                    console.error('Clonar error:', error);
-                });
+                    .then((response) => response.json())
+                    .then(async (data) => {
+                        state.dom.versionCombo = await createVersionComboBox(true);
+                        state.isVersionSaved = false;
+                        toggleUIState();
+                        toggleScreenOverlay(false);
+                    })
+                    .catch((error) => {
+                        toggleScreenOverlay(false);
+                        // TODO: Show error in modal, refactor to use a better alert system
+                        alert('Erro ao clonar seção. Veja console para detalhes.');
+                        console.error('Clonar error:', error);
+                    });
             };
             return button;
         }
@@ -649,21 +710,28 @@
                     alert('Selecione uma versão para salvar.');
                     return;
                 }
-                if (!state.sectionAttributes.siteId || !state.getHtmlContent() || !state.dom.versionCombo.value) {
+                if (
+                    !state.sectionAttributes.siteId ||
+                    !state.getHtmlContent() ||
+                    !state.dom.versionCombo.value
+                ) {
                     alert('Faltam parâmetros para salvar.');
                     return;
                 }
                 toggleScreenOverlay(true, 'Salvando...');
                 try {
-                    const resp = await fetch('https://p2digital.com.br/msitesapp/api/update-section-file-version', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            webPageSectionVersionId: state.dom.versionCombo.value,
-                            siteId: state.sectionAttributes.siteId,
-                            htmlContent: state.getHtmlContent()
-                        })
-                    });
+                    const resp = await fetch(
+                        'https://p2digital.com.br/msitesapp/api/update-section-file-version',
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                webPageSectionVersionId: state.dom.versionCombo.value,
+                                siteId: state.sectionAttributes.siteId,
+                                htmlContent: state.getHtmlContent(),
+                            }),
+                        }
+                    );
 
                     // const data = await resp.json();
                     state.isVersionSaved = true;
@@ -698,15 +766,19 @@
                 // versionCombo
                 const versionId = state.dom.versionCombo.value;
 
-                if (!state.sectionAttributes.updatableSectionUuid || 
-                    !state.sectionAttributes.filePath || 
-                    !state.sectionAttributes.businessId || 
-                    !state.getHtmlContent()) {
+                if (
+                    !state.sectionAttributes.updatableSectionUuid ||
+                    !state.sectionAttributes.filePath ||
+                    !state.sectionAttributes.businessId ||
+                    !state.getHtmlContent()
+                ) {
                     alert('Faltam atributos para publicar.');
-                    console.error('Missing attributes for publishing:', { updatableSectionUuid: state.sectionAttributes.updatableSectionUuid, 
-                        filePath: state.sectionAttributes.filePath, 
-                        businessId: state.sectionAttributes.businessId, 
-                        htmlContent: state.getHtmlContent() });
+                    console.error('Missing attributes for publishing:', {
+                        updatableSectionUuid: state.sectionAttributes.updatableSectionUuid,
+                        filePath: state.sectionAttributes.filePath,
+                        businessId: state.sectionAttributes.businessId,
+                        htmlContent: state.getHtmlContent(),
+                    });
                     return;
                 }
                 fetch('https://p2digital.com.br/msitesapp/api/publish-section', {
@@ -723,15 +795,15 @@
                         versionId: versionId,
                     }),
                 })
-                .then(response => response.json())
-                .then(async data => {
-                    state.dom.versionCombo = await createVersionComboBox();
-                    toggleScreenOverlay(false);
-                })
-                .catch(error => {
-                    toggleScreenOverlay(false);
-                    console.error('Publish error:', error);
-                });
+                    .then((response) => response.json())
+                    .then(async (data) => {
+                        state.dom.versionCombo = await createVersionComboBox();
+                        toggleScreenOverlay(false);
+                    })
+                    .catch((error) => {
+                        toggleScreenOverlay(false);
+                        console.error('Publish error:', error);
+                    });
             };
             return button;
         }
@@ -788,7 +860,7 @@
             state.dom.versionCombo = await createVersionComboBox();
 
             // Detect changes
-            state.dom.sectionTextarea.addEventListener('input', function(event) {
+            state.dom.sectionTextarea.addEventListener('input', function (event) {
                 state.isVersionSaved = false;
                 toggleUIState(false);
             });
@@ -820,4 +892,4 @@
             document.body.appendChild(modal);
         }
     });
-})({once: true});
+})({ once: true });
