@@ -1,0 +1,18 @@
+---
+export function getPersonBlock({
+    id,
+    name,
+    url,
+}: {
+    id: string,
+    name: string,
+    url?: string,
+}) {
+    return {
+        '@type': 'Person',
+        '@id': id,
+        name: name,
+        ...(url ? { url } : {}),
+    };
+}
+---

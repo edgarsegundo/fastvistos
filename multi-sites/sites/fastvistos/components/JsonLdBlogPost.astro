@@ -9,6 +9,7 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { getPersonBlock } from './JsonLdPersonBlock.astro';
 import { slugify, parseKeywords, toThumbnailUrl } from '../lib/utils.ts';
 
 
@@ -119,6 +120,13 @@ const orgBlock = getOrganizationBlock({
     site,
 });
 
+// 'https://fastvistos.com.br/schema/person/edgar-bola-segundo',
+const personBlock = getPersonBlock({
+    id: `${homepageUrl}/schema/person/${author_name}`,
+    name: `${articleFromDb.author_name || blogConfigFromDb.author_name || site.author || site.name}`,
+    url: `${homepageUrl}/schema/person/${author_name}`,
+});
+
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
@@ -148,6 +156,9 @@ const baseGraph = [
         ...webPageBlock,
     },
     {
+        ...imageObjectBlock,
+    },
+    {
         ...breadcrumbBlock,
     },
     {
@@ -156,8 +167,9 @@ const baseGraph = [
     {
         ...orgBlock,
     },
-
-    imageObjectBlock,
+    {
+        ...personBlock,
+    },
 ];
 const advancedGraph = [
     ...(mentions.length ? [{ mentions: mentions }] : []),

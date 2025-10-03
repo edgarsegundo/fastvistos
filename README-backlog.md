@@ -2,9 +2,10 @@
 
 ## To Do
 
-- Decidingo o que fazer com primaryImageOfPage vs image. O chatgpt está me ajudando c/ [isso](https://chatgpt.com/c/68de9a77-e528-8326-b96b-b718ee00b11c)
-
-- Estou pensando em criar person schema objects para todos authors? Criar uma consulta que acha todos os authors entre os artigos divulgados?
+- Implementar in person:
+"description": "Ele é o co-fundador...",
+"sameAs": ["https://neilpatel.com", "https://www.facebook.com/neilkpatel", "https://www.instagram.com/neilpatel/", "https://www.linkedin.com/in/neilkpatel", "https://x.com/https://twitter.com/neilpatel"],
+"url": "https://neilpatel.com/br/blog/author/neil-patel/"
 
 - por enquanto não vou pemitir publicar o original e se a pessoa quiser voltar para o original terá que clonar o original e publicar
 
