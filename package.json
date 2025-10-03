@@ -61,7 +61,8 @@
         "remark-parse": "^11.0.0",
         "remark-smartypants": "^3.0.2",
         "tailwindcss": "^4.1.13",
-        "unist-util-visit": "^5.0.0"
+        "unist-util-visit": "^5.0.0",
+        "uuid": "^13.0.0"
     },
     "devDependencies": {
         "autoprefixer": "^10.4.21",
