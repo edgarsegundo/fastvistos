@@ -154,6 +154,15 @@ async function syncBlogToSite(siteId) {
         // Always copy first
         await fs.copyFile(coreEditorPath, siteEditorPath);
         console.log(`📝 Copied updatable-editor.js to multi-sites/sites/${siteId}/lib/`);
+        // Copy webpage-faq.ts to each site's lib folder
+        const coreFaqPath = join(__dirname, 'multi-sites/core/lib/webpage-faq.ts');
+        const siteFaqPath = join(siteLibDir, 'webpage-faq.ts');
+        try {
+            await fs.copyFile(coreFaqPath, siteFaqPath);
+            console.log(`📄 Copied webpage-faq.ts to multi-sites/sites/${siteId}/lib/`);
+        } catch (faqErr) {
+            console.error(`❌ Error copying webpage-faq.ts to multi-sites/sites/${siteId}/lib/:`, faqErr);
+        }
         // Only truncate if running a build or preview command (after copy)
         const lifecycle = process.env.npm_lifecycle_event || '';
         if (lifecycle.startsWith('build:') || lifecycle.startsWith('preview:')) {
