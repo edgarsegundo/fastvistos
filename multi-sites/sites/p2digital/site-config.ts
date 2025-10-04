@@ -20,16 +20,31 @@ export const siteConfig: SiteConfig = {
         image: 'https://fakesite.com/assets/images/logo/logo-footer.png',
         datePublished: '2025-01-01T00:00:00Z',
         dateModified: '2025-01-02T00:00:00Z',
-    },
-    contact: {
-        email: 'contact@fakesite.com',
-        whatsapp: '+1234567890',
-    },
-    socialMedia: {
-        facebook: 'https://facebook.com/fakepage',
-        twitter: '@faketwitter',
-        instagram: 'https://instagram.com/fakeprofile',
-        youtube: 'https://youtube.com/@fakechannel',
+        priceRange: '$$', // e.g. $, $$, $$$, $$$$
+        openingHours: [
+            'Mo-Fr 09:00-18:00',
+            'Sa 09:00-13:00',
+        ],
+        address: {
+            streetAddress: 'Rua Exemplo, 123',
+            addressLocality: 'Cidade',
+            addressRegion: 'UF',
+            postalCode: '00000-000',
+            addressCountry: 'BR',
+        },
+        contactPoint: {
+            telephone: '+5500000000000',
+            contactType: 'Customer Service',
+            areaServed: 'BR',
+            availableLanguage: ['Portuguese', 'English'],
+            email: 'contact@example.com',
+        },
+        socialMedia: {
+            facebook: 'https://facebook.com/example',
+            twitter: '@example',
+            instagram: 'https://instagram.com/example',
+            youtube: 'https://youtube.com/@example',
+        },
     },
     analytics: {
         gtmId: 'GTM-FAKE123',

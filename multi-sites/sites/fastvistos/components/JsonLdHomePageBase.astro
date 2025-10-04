@@ -214,7 +214,7 @@ if (reviewsBlock.length > 0) {
 // LocalBusiness principal com reviews agrupados, aggregateRating, address obrigatório e mainEntityOfPage
 const localBusinessBlock = !disableOrganization && {
     '@type': 'LocalBusiness',
-    '@id': orgId,
+    '@id': `${homepageUrl}#localbusiness`,
     name: siteName,
     url: homepageUrl,
     logo: {
@@ -228,29 +228,44 @@ const localBusinessBlock = !disableOrganization && {
         ...(org.name ? { caption: org.name } : {}),
     },
     image: { '@id': logoId },
-    address: site?.address || {
+    address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Rua Exemplo, 123',
-        addressLocality: 'São Paulo',
-        addressRegion: 'SP',
-        postalCode: '01234-567',
-        addressCountry: 'BR',
+        streetAddress: site.address?.streetAddress,
+        addressLocality: site.address?.addressLocality,
+        addressRegion: site.address?.addressRegion,
+        postalCode: site.address?.postalCode,
+        addressCountry: site.address?.addressCountry,
     },
-    telephone: site?.contactPoint?.telephone || '+55 11 99999-9999',
-    contactPoint: site?.contactPoint || {
+    telephone: site?.contactPoint?.telephone,
+    contactPoint: {
         '@type': 'ContactPoint',
-        telephone: site?.contactPoint?.telephone || '+55 11 99999-9999',
+        telephone: site?.contactPoint?.telephone,
         contactType: 'customer service',
         areaServed: 'BR',
         availableLanguage: ['Portuguese', 'English'],
     },
-    ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
-    ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+    // geo: site.geo || {
+        //   '@type': 'GeoCoordinates',
+        //   latitude: -23.55052,
+        //   longitude: -46.633308,
+        // },
+        // hasMap:
+        //   site.geo &&
+        //   `https://www.google.com/maps/?q=${site.geo.latitude},${site.geo.longitude}`,
+        // sameAs:
+        //   site.sameAs || [
+        //     'https://www.facebook.com/suaempresa',
+        //     'https://www.instagram.com/suaempresa',
+        //     'https://www.linkedin.com/company/suaempresa',
+        //   ],    
     priceRange: site?.priceRange || '$$',
+    openingHours: site.openingHours, // e.g. ['Mo-Fr 09:00-18:00', 'Sa 09:00-13:00']
     mainEntityOfPage: {
         '@type': 'WebPage',
         '@id': homepageUrl,
     },
+    ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
+    ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
 };
 
 const blocks = [
