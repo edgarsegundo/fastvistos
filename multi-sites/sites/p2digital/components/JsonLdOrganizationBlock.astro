@@ -6,17 +6,17 @@ export function getOrganizationBlock({
     logoId,
     site,
 }: {
-    disableOrganization: boolean,
-    orgId: string,
+    disableOrganization: boolean;
+    orgId: string;
     org: {
-        name: string,
-        url: string,
-        logo: string,
-        logoWidth?: number,
-        logoHeight?: number,
-    },
-    logoId: string,
-    site: { language: string }
+        name: string;
+        url: string;
+        logo: string;
+        logoWidth?: number;
+        logoHeight?: number;
+    };
+    logoId: string;
+    site: { language: string };
 }) {
     if (disableOrganization) return null;
     return {

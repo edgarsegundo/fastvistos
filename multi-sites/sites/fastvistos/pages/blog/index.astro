@@ -20,7 +20,7 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 <SharedBlogLayout>
     
     <Fragment slot="head">
-        <JsonLdBlogIndex 
+        <JsonLdBlogIndex
             site={siteConfig.site}
             description={blogConfigFromDb?.description || ''}
             image={blogConfigFromDb?.image}

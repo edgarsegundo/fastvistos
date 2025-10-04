@@ -10,15 +10,15 @@ export function getWebPageBlock({
     site,
     description,
 }: {
-    disableWebPage: boolean,
-    homepageUrl: string,
-    siteName: string,
-    websiteId: string,
-    orgId: string,
-    imageId: string,
-    breadcrumbId: string,
-    site: any,
-    description?: string,
+    disableWebPage: boolean;
+    homepageUrl: string;
+    siteName: string;
+    websiteId: string;
+    orgId: string;
+    imageId: string;
+    breadcrumbId: string;
+    site: any;
+    description?: string;
 }) {
     if (disableWebPage) return null;
     return {

@@ -74,16 +74,18 @@ const breadcrumbBlock = getBreadcrumbBlock({
 });
 
 // WebSite
-const webSiteBlock = !disableWebSite && getWebSiteBlock({
-    disableWebSite,
-    disableWebSiteSearchAction,
-    websiteId,
-    homepageUrl,
-    siteName,
-    description,
-    orgId,
-    site,
-});
+const webSiteBlock =
+    !disableWebSite &&
+    getWebSiteBlock({
+        disableWebSite,
+        disableWebSiteSearchAction,
+        websiteId,
+        homepageUrl,
+        siteName,
+        description,
+        orgId,
+        site,
+    });
 
 // Organization (with logo as ImageObject)
 const orgBlock = getOrganizationBlock({
@@ -245,19 +247,19 @@ const localBusinessBlock = !disableOrganization && {
         availableLanguage: ['Portuguese', 'English'],
     },
     // geo: site.geo || {
-        //   '@type': 'GeoCoordinates',
-        //   latitude: -23.55052,
-        //   longitude: -46.633308,
-        // },
-        // hasMap:
-        //   site.geo &&
-        //   `https://www.google.com/maps/?q=${site.geo.latitude},${site.geo.longitude}`,
-        // sameAs:
-        //   site.sameAs || [
-        //     'https://www.facebook.com/suaempresa',
-        //     'https://www.instagram.com/suaempresa',
-        //     'https://www.linkedin.com/company/suaempresa',
-        //   ],    
+    //   '@type': 'GeoCoordinates',
+    //   latitude: -23.55052,
+    //   longitude: -46.633308,
+    // },
+    // hasMap:
+    //   site.geo &&
+    //   `https://www.google.com/maps/?q=${site.geo.latitude},${site.geo.longitude}`,
+    // sameAs:
+    //   site.sameAs || [
+    //     'https://www.facebook.com/suaempresa',
+    //     'https://www.instagram.com/suaempresa',
+    //     'https://www.linkedin.com/company/suaempresa',
+    //   ],
     priceRange: site?.priceRange || '$$',
     openingHours: site.openingHours, // e.g. ['Mo-Fr 09:00-18:00', 'Sa 09:00-13:00']
     mainEntityOfPage: {

@@ -16,7 +16,9 @@ type Faq = {
 
 let faqData: Faq[] = [];
 try {
-    faqData = await WebpageFaqService.getPageFaqList('multi-sites/sites/fastvistos/components/FaqSection.astro');
+    faqData = await WebpageFaqService.getPageFaqList(
+        'multi-sites/sites/fastvistos/components/FaqSection.astro'
+    );
 } catch (err) {
     faqData = [];
 }
