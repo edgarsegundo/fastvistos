@@ -1,13 +1,5 @@
 ---
-export function getPersonBlock({
-    id,
-    name,
-    url,
-}: {
-    id: string,
-    name: string,
-    url?: string,
-}) {
+export function getPersonBlock({ id, name, url }: { id: string; name: string; url?: string }) {
     return {
         '@type': 'Person',
         '@id': id,

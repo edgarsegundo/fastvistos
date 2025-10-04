@@ -19,7 +19,7 @@ export const siteConfig: SiteConfig = {
         author: 'Daniela Otaviano',
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
-        assets_url_base: 'https://your-domain.com/assets/', // Base URL for images used in blog posts and other content
+        assets_url_base: 'https://fastvistos.com.br/assets/', // Base URL for images used in blog posts and other content
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
         dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
         priceRange: '$$', // e.g. $, $$, $$$, $$$$
@@ -27,6 +27,15 @@ export const siteConfig: SiteConfig = {
             'Mo-Fr 09:00-18:00',
             'Sa 09:00-13:00',
         ],
+        sameAs: [  // Social media profiles
+            'https://www.facebook.com/fastvistos/',
+            'https://x.com/FVistos32701',
+            'https://www.youtube.com/@FastVistos/shorts',
+        ],
+        geo: {
+            latitude: -22.8807734, // Latitude for the business location
+            longitude: -47.0596895, // Longitude for the business location
+        },
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',
@@ -36,6 +45,7 @@ export const siteConfig: SiteConfig = {
         },
         contactPoint: {
             telephone: '+551920422785',
+            telephoneFormatted: '+55 (19) 2042-2785',
             contactType: 'Customer Service',
             areaServed: 'BR',
             availableLanguage: ['Portuguese', 'English'],

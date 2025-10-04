@@ -27,10 +27,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         <AnalyticsHead siteConfig={siteConfig} />
 
         <!-- Essential head elements (charset, viewport, etc.) -->
-        <HeadBasics 
-            title={siteConfig.homePageConfig.seo.title}
-            generator={Astro.generator}
-        />
+        <HeadBasics title={siteConfig.homePageConfig.seo.title} generator={Astro.generator} />
 
         <!-- SEO Meta Tags from site-config -->
         <SEOMeta
@@ -57,6 +54,5 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 
         <!-- Body content -->
         <slot />
-    </body>
-    <script src="../lib/updatable-editor.js"></script>
+    </body><script src="../lib/updatable-editor.js"></script>
 </html>

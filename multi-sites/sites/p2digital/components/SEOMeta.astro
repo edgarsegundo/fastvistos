@@ -28,14 +28,12 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     : `https://${siteConfig.site.domain}${seo.openGraph?.image}`;
 ---
 
-
 <meta name="title" content={seo.title} />
 <meta name="description" content={seo.description} />
 <meta name="keywords" content={seo.keywords.join(', ')} />
 <meta name="author" content={siteConfig.site.author} />
 
 <link rel="canonical" href={siteConfig.site.canonical} />
-
 
 <link rel="alternate" hreflang="x-default" href={siteConfig.site.canonical} />
 
@@ -59,9 +57,7 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     )
 }
 
-
 <meta name="language" content={siteConfig.site.language} />
-
 
 <OpenGraph
     title={seo.title}
@@ -82,7 +78,6 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     tags={seo.openGraph?.tags}
 />
 
-
 <TwitterCard
     title={seo.title}
     description={seo.description}
@@ -90,7 +85,6 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     url={siteConfig.site.canonical}
     site={siteConfig.socialMedia.twitter}
 />
-
 
 {
     seo.themeColor ? (
@@ -100,7 +94,6 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     ) : null
 }
 
-
 {
     seo.msTileColor ? (
         <meta name="msapplication-TileColor" content={seo.msTileColor} />
@@ -109,19 +102,15 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     ) : null
 }
 
-
 {seo.msTileConfig && <meta name="msapplication-config" content={seo.msTileConfig} />}
 
-
 {siteConfig.site.name && <meta name="application-name" content={siteConfig.site.name} />}
-
 
 {
     seo.appleMobileWebAppCapable && (
         <meta name="apple-mobile-web-app-capable" content={seo.appleMobileWebAppCapable} />
     )
 }
-
 
 {
     seo.appleMobileWebAppStatusBarStyle && (
@@ -132,11 +121,8 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     )
 }
 
-
 {seo.formatDetection && <meta name="format-detection" content={seo.formatDetection} />}
-
 
 {seo.geoRegion && <meta name="geo.region" content={seo.geoRegion} />}
 {seo.geoCountry && <meta name="geo.country" content={seo.geoCountry} />}
 {seo.geoPlacename && <meta name="geo.placename" content={seo.geoPlacename} />}
-
