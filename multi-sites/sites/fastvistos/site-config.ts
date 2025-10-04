@@ -7,7 +7,7 @@ export const siteConfig: SiteConfig = {
         id: 'fastvistos',
         domain: 'fastvistos.com.br',
         name: 'Fast Vistos',
-        description: 'Fast Vistos - Your fast visa solution',
+        description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
         language: 'pt-BR',
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
@@ -15,31 +15,31 @@ export const siteConfig: SiteConfig = {
         logo: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        author: 'Edgar Rezende',
+        author: 'Daniela Otaviano',
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
         assets_url_base: 'https://your-domain.com/assets/', // Base URL for images used in blog posts and other content
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
         dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
         address: {
-            streetAddress: 'Av. Paulista, 1000',
-            addressLocality: 'São Paulo',
+            streetAddress: 'Av. Júlio Diniz, 257',
+            addressLocality: 'Taquaral, Campinas',
             addressRegion: 'SP',
-            postalCode: '01310-100',
+            postalCode: '13075-420',
             addressCountry: 'BR',
         },
         contactPoint: {
-            telephone: '+5511999999999',
+            telephone: '+551920422785',
             contactType: 'Customer Service',
             areaServed: 'BR',
             availableLanguage: ['Portuguese', 'English'],
-            email: 'support@fastvistos.com.br',
+            email: 'contato@fastvistos.com.br',
         },
         socialMedia: {
-            facebook: 'https://facebook.com/yourpage',
+            facebook: 'https://www.facebook.com/fastvistos/',
             twitter: '@yourtwitter',
-            instagram: 'https://instagram.com/yourprofile',
-            youtube: 'https://youtube.com/@yourchannel',
+            instagram: '',
+            youtube: '',
         },
     },
 
