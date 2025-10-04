@@ -24,17 +24,17 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <html lang={htmlLang}>
     <head>
         
-        <HeadBasics generator={Astro.generator} />
+        <AnalyticsHead siteConfig={siteConfig} />
 
         
-        <AnalyticsHead siteConfig={siteConfig} />
+        <HeadBasics title={siteConfig.homePageConfig.seo.title} generator={Astro.generator} />
 
         
         <SEOMeta
             siteConfig={siteConfig}
             seo={siteConfig.homePageConfig.seo}
             noIndex={false}
-            enhancedIndexing={false}
+            enhancedIndexing={true}
         />
 
         
@@ -54,6 +54,5 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 
         
         <slot />
-    </body>
-    <script src="../lib/updatable-editor.js"></script>
+    </body><script src="../lib/updatable-editor.js"></script>
 </html>

@@ -18,6 +18,7 @@ export const siteConfig: SiteConfig = {
         business_id: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         id: 'example-site',
         domain: 'example.com',
+        canonical: 'https://fastvistos.com.br/',
         name: 'Example Site',
         description: 'Example Site - Your solution',
         language: 'pt-BR',
@@ -33,6 +34,11 @@ export const siteConfig: SiteConfig = {
         assets_url_base: 'https://example.com/assets/',
         datePublished: '2024-01-01T00:00:00Z',
         dateModified: '2024-01-01T00:00:00Z',
+        priceRange: '$$', // e.g. $, $$, $$$, $$$$
+        openingHours: [
+            'Mo-Fr 09:00-18:00',
+            'Sa 09:00-13:00',
+        ],
         address: {
             streetAddress: 'Rua Exemplo, 123',
             addressLocality: 'Cidade',

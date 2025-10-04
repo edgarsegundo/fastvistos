@@ -24,23 +24,19 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        
-        <HeadBasics generator={Astro.generator} />
-
-        
         <AnalyticsHead siteConfig={siteConfig} />
 
-        
+        <HeadBasics generator={Astro.generator} />
+
         <SEOMeta
             siteConfig={siteConfig}
             ogImage={'test1'}
             seo={siteConfig.blogPageConfig.seo}
             noIndex={true}
-            enhancedIndexing={false}
+            enhancedIndexing={true}
             which={'blog_abc'}
         />
 
-        
         <link rel="preconnect" href="https://fastvistos.com.br" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,17 +51,12 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         class={`bg-gray-50 leading-normal tracking-normal text-white`}
         style="font-family: 'Source Sans Pro', sans-serif;"
     >
-        
         <AnalyticsBody siteConfig={siteConfig} />
 
-        
         <BlogPageHeader />
 
-        
         <slot />
 
-        
         <BlogPageFooter />
     </body>
-    </body><script src="../lib/updatable-editor.js"></script>
-</html>
+</html><script src="../lib/updatable-editor.js"></script>
