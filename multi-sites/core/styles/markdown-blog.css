@@ -323,7 +323,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 3rem 0;
     padding-left: 1rem;
     padding-right: 1rem;
 }
@@ -333,7 +332,7 @@
     max-height: 500px;
     object-fit: cover;
     border-radius: 1.25rem;
-    margin: 3rem 0;
+    margin: 0 0;
     box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.1),
         0 10px 10px -5px rgba(0, 0, 0, 0.04);

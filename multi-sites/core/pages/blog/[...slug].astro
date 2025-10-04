@@ -94,7 +94,9 @@ const articleFromDb =  await BlogService.getArticleBySlugFromDb(entry.slug);
             <SidebarAbove />
 
             <!-- Table of Contents -->
-            <TableOfContents headings={headings} />
+            <div class="toc-responsive">
+                <TableOfContents headings={headings} />
+            </div>
 
             <!-- Customização Abaixo do TOC -->
             <SidebarBelow />
@@ -138,6 +140,9 @@ const articleFromDb =  await BlogService.getArticleBySlugFromDb(entry.slug);
             gap: 2rem;
             padding: 1.5rem;
         }
+        .toc-responsive {
+            display: none;
+        }
     }
 
     @media (max-width: 768px) {
@@ -147,6 +152,9 @@ const articleFromDb =  await BlogService.getArticleBySlugFromDb(entry.slug);
         }
         .article-image-wrapper {
             margin: 2rem 0;
+        }
+        .toc-responsive {
+            display: none;
         }
     }
 </style>
