@@ -2,6 +2,9 @@
 
 ## To Do
 
+
+- falta colocar o localBusiness
+
 - Implementar in person:
   "description": "Ele é o co-fundador...",
   "sameAs": ["https://neilpatel.com", "https://www.facebook.com/neilkpatel", "https://www.instagram.com/neilpatel/", "https://www.linkedin.com/in/neilkpatel", "https://x.com/https://twitter.com/neilpatel"],
