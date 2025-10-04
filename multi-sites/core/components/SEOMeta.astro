@@ -40,7 +40,7 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
 <link rel="alternate" hreflang="x-default" href={siteConfig.site.canonical} />
 
 {
-    siteConfig.verification?.googleSiteVerification && (
+    siteConfig.verification?.googleSiteVerification && siteConfig.verification.googleSiteVerification.trim() !== '' && (
         <meta
             name="google-site-verification"
             content={siteConfig.verification.googleSiteVerification}
