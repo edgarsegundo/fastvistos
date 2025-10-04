@@ -22,9 +22,6 @@ import TwitterCard from './TwitterCard.astro';
 
 const { siteConfig, seo, noIndex = false, enhancedIndexing = false } = Astro.props;
 
-// Use page-specific values or fallback to site config
-const canonicalUrl = `https://${siteConfig.site.domain}`;
-
 // Build complete image URL if it's a relative path
 const fullImageUrl = seo.openGraph?.image.startsWith('http')
     ? seo.openGraph?.image
@@ -37,10 +34,10 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
 <meta name="keywords" content={seo.keywords.join(', ')} />
 <meta name="author" content={siteConfig.site.author} />
 
-<link rel="canonical" href={canonicalUrl} />
+<link rel="canonical" href={siteConfig.site.canonical} />
 
 
-<link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+<link rel="alternate" hreflang="x-default" href={siteConfig.site.canonical} />
 
 {
     siteConfig.verification?.googleSiteVerification && (
@@ -69,7 +66,7 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
 <OpenGraph
     title={seo.title}
     description={seo.description}
-    url={canonicalUrl}
+    url={siteConfig.site.canonical}
     image={fullImageUrl}
     imageWidth={seo.openGraph?.imageWidth}
     imageHeight={seo.openGraph?.imageHeight}
@@ -90,7 +87,7 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     title={seo.title}
     description={seo.description}
     image={fullImageUrl}
-    url={canonicalUrl}
+    url={siteConfig.site.canonical}
     site={siteConfig.socialMedia.twitter}
 />
 

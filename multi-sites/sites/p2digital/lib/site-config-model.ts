@@ -18,6 +18,7 @@ export const siteConfig: SiteConfig = {
         business_id: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         id: 'example-site',
         domain: 'example.com',
+        canonical: 'https://fastvistos.com.br/',
         name: 'Example Site',
         description: 'Example Site - Your solution',
         language: 'pt-BR',

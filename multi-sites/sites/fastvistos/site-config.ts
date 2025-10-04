@@ -6,6 +6,7 @@ export const siteConfig: SiteConfig = {
         business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
         id: 'fastvistos',
         domain: 'fastvistos.com.br',
+        canonical: 'https://fastvistos.com.br/',
         name: 'Fast Vistos',
         description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
         language: 'pt-BR',
@@ -45,14 +46,22 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos - Your fast visa solution',
-            description: 'Fast Vistos - Your fast visa solution',
-            keywords: ['fast vistos', 'visa', 'fast visa solution'],
-            ogImage: '/path-to-og-image.jpg',
+            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
+            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
+            keywords: [
+                'fast vistos',
+                'assessoria de vistos',
+                'visto americano',
+                'visto canadense',
+                'visto mexicano',
+                'passaporte brasileiro',
+                'documentos de viagem'
+            ],
+            ogImage: '/images/og-fast-vistos.jpg',
             ogImageWidth: 1200,
             ogImageHeight: 630,
             ogImageType: 'image/jpeg',
-            ogImageAlt: 'Your Image Alt Text',
+            ogImageAlt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
             themeColor: '#0070f3',
             msTileColor: '#0070f3',
             msTileConfig: '/browserconfig.xml',
@@ -60,22 +69,27 @@ export const siteConfig: SiteConfig = {
             appleMobileWebAppCapable: 'yes',
             appleMobileWebAppStatusBarStyle: 'default',
             formatDetection: 'telephone=no',
-            geoRegion: 'XX',
-            geoCountry: 'Country',
-            geoPlacename: 'Placename',
+            geoRegion: 'BR-SP',
+            geoCountry: 'BR',
+            geoPlacename: 'São Paulo',
             openGraph: {
-                type: 'website', // Default type for Open Graph
-                locale: 'your-language-tag', // e.g. en_US
-                author: 'your-author-name', // Default author name
-                publishedTime: '2024-01-01T00:00:00Z', // Default published time
-                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
-                section: 'your-section', // Default section
-                tags: ['tag1', 'tag2'], // Default tags
-                image: '/path-to-og-image.jpg',
+                type: 'website',
+                locale: 'pt_BR',
+                author: 'Fast Vistos',
+                publishedTime: '2024-01-01T00:00:00Z',
+                modifiedTime: '2025-10-01T00:00:00Z',
+                section: 'Serviços de Vistos e Documentos',
+                tags: [
+                    'vistos internacionais',
+                    'visto americano',
+                    'visto canadense',
+                    'passaporte brasileiro'
+                ],
+                image: '/images/og-fast-vistos.jpg',
                 imageWidth: 1200,
                 imageHeight: 630,
                 imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text',
+                imageAlt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
             },
         },
     },
