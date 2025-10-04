@@ -5,6 +5,7 @@ export const siteConfig: SiteConfig = {
         business_id: '5810c2b6125c402a9cff53fcc9d61bf5',
         id: 'fake-site-id',
         domain: 'fakesite.com',
+        canonical: 'https://p2digital.com.br/',
         name: 'Fake Site Name',
         description: 'This is a fake business description for the template.',
         language: 'en-US',

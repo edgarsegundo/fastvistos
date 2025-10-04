@@ -23,18 +23,21 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        <!-- Essential head elements (charset, viewport, etc.) -->
-        <HeadBasics generator={Astro.generator} />
-
         <!-- Analytics Scripts -->
         <AnalyticsHead siteConfig={siteConfig} />
+
+        <!-- Essential head elements (charset, viewport, etc.) -->
+        <HeadBasics 
+            title={siteConfig.homePageConfig.seo.title}
+            generator={Astro.generator}
+        />
 
         <!-- SEO Meta Tags from site-config -->
         <SEOMeta
             siteConfig={siteConfig}
             seo={siteConfig.homePageConfig.seo}
             noIndex={false}
-            enhancedIndexing={false}
+            enhancedIndexing={true}
         />
 
         <!-- Fonts & Styles -->

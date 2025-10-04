@@ -24,17 +24,20 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <html lang={htmlLang}>
     <head>
         
-        <HeadBasics generator={Astro.generator} />
+        <AnalyticsHead siteConfig={siteConfig} />
 
         
-        <AnalyticsHead siteConfig={siteConfig} />
+        <HeadBasics 
+            title={siteConfig.homePageConfig.seo.title}
+            generator={Astro.generator}
+        />
 
         
         <SEOMeta
             siteConfig={siteConfig}
             seo={siteConfig.homePageConfig.seo}
             noIndex={false}
-            enhancedIndexing={false}
+            enhancedIndexing={true}
         />
 
         
