@@ -5,10 +5,10 @@ export function getBreadcrumbBlock({
     breadcrumbList,
     homepageUrl,
 }: {
-    disableBreadcrumb: boolean,
-    breadcrumbId: string,
-    breadcrumbList?: any[],
-    homepageUrl: string,
+    disableBreadcrumb: boolean;
+    breadcrumbId: string;
+    breadcrumbList?: any[];
+    homepageUrl: string;
 }) {
     if (disableBreadcrumb) return null;
     return {

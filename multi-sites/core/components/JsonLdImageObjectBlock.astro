@@ -11,19 +11,23 @@ export function getImageObjectBlock({
     width,
     height,
 }: {
-    disableImageObject: boolean,
-    site: any,
-    imageId?: string | null,
-    image?: string,
-    imageUrl?: string,
-    caption?: string,
-    width?: number,
-    height?: number,
+    disableImageObject: boolean;
+    site: any;
+    imageId?: string | null;
+    image?: string;
+    imageUrl?: string;
+    caption?: string;
+    width?: number;
+    height?: number;
 }) {
     if (disableImageObject || (!imageUrl && !site?.image && !image)) return null;
 
     const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);
-    const url = image ? `${assets_url_base}/${image.replace(/^.*\//, '')}` : imageUrl ? imageUrl : site?.image;
+    const url = image
+        ? `${assets_url_base}/${image.replace(/^.*\//, '')}`
+        : imageUrl
+          ? imageUrl
+          : site?.image;
 
     return {
         '@type': 'ImageObject',
@@ -37,4 +41,3 @@ export function getImageObjectBlock({
     };
 }
 ---
-

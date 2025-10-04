@@ -23,21 +23,17 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        
-        <HeadBasics generator={Astro.generator} />
-
-        
         <AnalyticsHead siteConfig={siteConfig} />
 
-        
+        <HeadBasics title={siteConfig.homePageConfig.seo.title} generator={Astro.generator} />
+
         <SEOMeta
             siteConfig={siteConfig}
             seo={siteConfig.homePageConfig.seo}
             noIndex={false}
-            enhancedIndexing={false}
+            enhancedIndexing={true}
         />
 
-        
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -49,11 +45,8 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         <slot name="head" />
     </head>
     <body class={bodyClass} style={bodyStyle}>
-        
         <AnalyticsBody siteConfig={siteConfig} />
 
-        
         <slot />
-    </body>
-    <script src="../lib/updatable-editor.js"></script>
+    </body><script src="../lib/updatable-editor.js"></script>
 </html>

@@ -25,10 +25,10 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 <html lang={htmlLang}>
     <head>
         
-        <HeadBasics generator={Astro.generator} />
+        <AnalyticsHead siteConfig={siteConfig} />
 
         
-        <AnalyticsHead siteConfig={siteConfig} />
+        <HeadBasics generator={Astro.generator} />
 
         
         <SEOMeta
@@ -36,7 +36,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
             ogImage={'test1'}
             seo={siteConfig.blogPageConfig.seo}
             noIndex={true}
-            enhancedIndexing={false}
+            enhancedIndexing={true}
             which={'blog_abc'}
         />
 
@@ -67,5 +67,4 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         
         <BlogPageFooter />
     </body>
-    </body><script src="../lib/updatable-editor.js"></script>
-</html>
+</html><script src="../lib/updatable-editor.js"></script>
