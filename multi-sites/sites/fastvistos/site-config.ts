@@ -193,7 +193,7 @@ export const siteConfig: SiteConfig = {
     },
 
     verification: {
-        googleSiteVerification: 'wPmMtzby8Xpg',
+        googleSiteVerification: '',
     },
 
     features: {
