@@ -22,6 +22,11 @@ export const siteConfig: SiteConfig = {
         assets_url_base: 'https://your-domain.com/assets/', // Base URL for images used in blog posts and other content
         datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
         dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
+        priceRange: '$$', // e.g. $, $$, $$$, $$$$
+        openingHours: [
+            'Mo-Fr 09:00-18:00',
+            'Sa 09:00-13:00',
+        ],
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',
