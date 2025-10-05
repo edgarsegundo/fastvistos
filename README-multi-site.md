@@ -46,10 +46,16 @@ Deploy your built sites to the production server using the deployment scripts:
 node deploy-site.js [siteid]
 ```
 
+🚨 **DO NOT RUN `deploy-site.js` UNTIL YOU HAVE BUILT YOUR SITE!** 🚨  
+> **Why?**  
+> - `deploy-site.js` ONLY deploys the contents of your `./dist/<siteid>/` folder.
+> - If you haven't built, that folder will be missing, outdated, or just plain wrong!
+
 #### **Bash Nginx Configuration Script**
 
 ```bash
 # It creates the certificate, the respective volume at docker-compose.yml and the [siteid].conf file at sites/
+# This plugin is in the reverse-proxy-config/ repo
 ./create-astro-site-conf.sh
 ```
 
