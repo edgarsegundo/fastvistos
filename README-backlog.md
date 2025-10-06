@@ -3,6 +3,8 @@
 ## To Do
 
 
+- criar posts and redirecionar 301 para todos os posts que agora não existem mais
+
 - falta colocar o localBusiness
 
 - Implementar in person:
