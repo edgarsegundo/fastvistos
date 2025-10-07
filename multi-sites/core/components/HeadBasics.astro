@@ -5,15 +5,64 @@
  * To customize, edit the template.
  */
 
+ // SEO Meta component that integrates with site-config
+import OpenGraph from './OpenGraph.astro';
+import TwitterCard from './TwitterCard.astro';
+import { siteConfig } from '../site-config.ts';
+import { ensureTrailingSlash, getImageType } from '../lib/utils.ts';
+
+
 export interface Props {
-    title?: string; // Optional title override
-    faviconPath?: string; // Custom favicon path
     generator?: string; // Generator meta content
+
+    noIndex?: boolean; // Whether to add noindex meta tag
+    enhancedIndexing?: boolean; // Whether to add enhanced indexing meta tag
+
+    canonical?: string; // Canonical URL for SEO
+    faviconPath?: string; // Custom favicon path
+    seo: any; // SEO configuration object
+
+    title?: string; // Optional title override
+    description: string; // Meta description
+    authorName?: string; // Author name for SEO
+    image?: string; // Image URL for SEO
+    imageUrl?: string; // Image URL for SEO
+    imageCaption?: string; // Image caption for SEO
+    imageWidth?: number; // Image width for SEO
+    imageHeight?: number; // Image height for SEO
+
+    pubDate?: string; // Publication date for articles
+    updatedDate?: string; // Updated date for articles
 }
 
-const { title, faviconPath = '/favicon.svg', generator } = Astro.props;
+const { 
+    generator,
+    noIndex,
+    enhancedIndexing,
 
-console.log('🛑🛑.  🛑 -> title: ', title);
+    canonical,
+    faviconPath,
+    seo,
+    
+    title, 
+    description, 
+    authorName,
+    image,
+    imageUrl,
+    imageCaption,
+    imageWidth,
+    imageHeight,
+
+    pubDate,
+    updatedDate,
+} = Astro.props;
+
+const assets_url_base = ensureTrailingSlash(siteConfig.assets_url_base);
+let imageUrlValidated = image
+    ? `${assets_url_base}${image.replace(/^.*\//, '')}`
+    : imageUrl;
+
+const imagetype = getImageType(imageUrlValidated ?? '');
 ---
 
 <!-- Character encoding - MUST be first for proper detection -->
@@ -27,33 +76,11 @@ console.log('🛑🛑.  🛑 -> title: ', title);
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!--
-    Registers the PWA manifest, enabling installability and control over app appearance on devices.
-    Required for Add to Home Screen and PWA features.
+    Search engines usually discover your sitemap.xml from the robots.txt file,
+    that’s the preferred and most reliable way. No need to include this link,
+    leaving it commented out for reference.
 -->
-<link rel="manifest" href="/manifest.json" />
-
-<!--
-    Registers the service worker for offline support, caching, and advanced PWA features.
-    Place as early as possible in the <head> or at the end of <body>.
--->
-<script type="module">
-    'serviceWorker' in navigator &&
-        window.addEventListener('load', () => {
-            navigator.serviceWorker
-                .register('/sw.js')
-                .then((e) => {
-                    console.log('SW registered: ', e);
-                })
-                .catch((e) => {
-                    console.log('SW registration failed: ', e);
-                });
-        });
-</script>
-
-<!--
-    Provides a reference to your XML sitemap for search engines to discover all site URLs.
--->
-<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+<!-- <link rel="sitemap" type="application/xml" href="/sitemap.xml" /> -->
 
 <!-- Generator meta tag -->
 {generator && <meta name="generator" content={generator} />}
@@ -65,22 +92,87 @@ console.log('🛑🛑.  🛑 -> title: ', title);
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preload" href="/assets/logo.webp" as="image" type="image/webp" />
 
-<!--
-Preconnects for Google Fonts (fonts.googleapis.com and fonts.gstatic.com) → safe to include if fonts are used.
-Google Fonts CSS link → include only if you’re actually using the font. 
--->
-<!-- <link
-    rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    as="style"
-    onload="this.onload=null;this.rel='stylesheet'"
-/>
-<noscript>
-    <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    />
-</noscript> -->
-
 <!-- Optional title if provided (for simple pages) -->
 {title && <title>{title}</title>}
+
+<!-- Basic SEO -->
+<meta name="description" content={description} />
+<meta name="author" content={authorName} />
+
+<link rel="canonical" href={canonical} />
+
+{
+    siteConfig.verification?.googleSiteVerification && siteConfig.verification.googleSiteVerification.trim() !== '' && (
+        <meta
+            name="google-site-verification"
+            content={siteConfig.verification.googleSiteVerification}
+        />
+    )
+}
+
+{noIndex && <meta name="robots" content="noindex, nofollow" />}
+<!-- Enhanced indexing: Enables rich snippets, large image previews, and extended text snippets in search results -->
+{
+    enhancedIndexing && !noIndex && (
+        <meta
+            name="robots"
+            content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
+    )
+}
+
+<!-- Open Graph
+The <OpenGraph> component generates Open Graph metadata, a standardized set
+of tags that tell social networks (Facebook, LinkedIn, Twitter) how to display
+your page when shared. It includes title, description, URL, main image, site
+name, content type, locale, author, publication time, and tags. This controls
+how your content appears on social platforms: without it, shared links may show
+generic or poorly formatted previews, reducing click-through and engagement.
+Primary use: enhance social sharing, making links visually appealing, informative,
+and brand-consistent whenever someone posts your page on social media.
+-->
+<OpenGraph
+    title={title}
+    description={description}
+    url={imageUrlValidated}
+    image={imageUrlValidated}
+    imageWidth={imageWidth}
+    imageHeight={imageHeight}
+    imageType={imagetype}
+    imageAlt={imageCaption}
+    siteName={siteConfig?.site.siteName}
+    type={seo.openGraph?.type}
+    locale={siteConfig.site.locale.replace('-', '_')}
+    author={authorName}
+
+    publishedTime={pubDate}
+    modifiedTime={updatedDate}
+
+    section={seo.openGraph?.section}
+    tags={seo.openGraph?.tags}
+/>
+
+<!-- Twitter Card -->
+<TwitterCard
+    title={seo.title}
+    description={seo.description}
+    image={imageUrlValidated}
+    url={siteConfig.site.canonical}
+    site={siteConfig.socialMedia.twitter}
+/>
+
+<!--
+    theme-color meta tag:
+    Sets the browser UI color (address bar, tab, etc) on supported browsers and devices.
+    Use for branding and to create a more immersive, app-like experience.
+    - Parametrize via siteConfig.seo.themeColor for per-site branding.
+    - Falls back to siteConfig.primaryColor if not set.
+    - Example: <meta name="theme-color" content="#FF6B35" />
+-->
+{
+    seo.themeColor ? (
+        <meta name="theme-color" content={seo.themeColor} />
+    ) : siteConfig.site.primaryColor ? (
+        <meta name="theme-color" content={siteConfig.site.primaryColor} />
+    ) : null
+}

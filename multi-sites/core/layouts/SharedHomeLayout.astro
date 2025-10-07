@@ -9,15 +9,33 @@
 import '../styles/global.css';
 import { siteConfig } from '../site-config.ts';
 import HeadBasics from '../components/HeadBasics.astro';
-import SEOMeta from '../components/SEOMeta.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
-const { bodyClass = '', bodyStyle = '' } = Astro.props;
 const htmlLang = siteConfig.site.useFullLanguageTag
     ? siteConfig.site.language
     : siteConfig.site.language.split('-')[0];
+
+const {
+    bodyClass = '', 
+    bodyStyle = '',
+
+    canonicalConf,
+    faviconPathFromConf,
+    seoFromConf,
+    titleFomConf,
+    descriptionFromConf,
+    authorNameFromConf,
+    imageFromConf,
+    imageUrlFromConf,
+    imageCaptionFromConf,
+    imageWidthFromConf,
+    imageHeightFromConf,
+
+    pubDate,
+    updatedDate,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -27,14 +45,26 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         <AnalyticsHead siteConfig={siteConfig} />
 
         <!-- Essential head elements (charset, viewport, etc.) -->
-        <HeadBasics title={siteConfig.homePageConfig.seo.title} generator={Astro.generator} />
-
-        <!-- SEO Meta Tags from site-config -->
-        <SEOMeta
-            siteConfig={siteConfig}
-            seo={siteConfig.homePageConfig.seo}
+        <HeadBasics
+            generator={Astro.generator}
             noIndex={false}
-            enhancedIndexing={true}
+            enhancedIndexing={false}
+
+            canonical={canonicalConf}
+            faviconPath={faviconPathFromConf}
+            seo={seoFromConf}
+
+            title={titleFomConf}
+            description={descriptionFromConf}
+            authorName={authorNameFromConf}
+            image={imageFromConf}
+            imageUrl={imageUrlFromConf}
+            imageCaption={imageCaptionFromConf}
+            imageWidth={imageWidthFromConf}
+            imageHeight={imageHeightFromConf}
+
+            pubDate={pubDate}
+            updatedDate={updatedDate}
         />
 
         <!-- Fonts & Styles -->
