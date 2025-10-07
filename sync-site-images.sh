@@ -10,7 +10,7 @@ if [ -z "$SITEID" ]; then
 fi
 
 # Customize these variables for your environment
-SRC="/var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}/"
+SRC="/var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}__*"
 DEST_USER="edgar"
 DEST_HOST="72.60.57.150"
 DEST_PATH="/var/www/${SITEID}/assets/images/blog/"
