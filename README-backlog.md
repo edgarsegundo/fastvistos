@@ -2,15 +2,33 @@
 
 ## To Do
 
-
 - criar posts and redirecionar 301 para todos os posts que agora não existem mais
 
-- falta colocar o localBusiness
+- Review publishing steps
+ ./helper.sh (option 1)
+ npx prisma db pull
+ npx prisma generate
+ node generate-blog-content.js fastvistos
+ npm run download-images:fastvistos
+ npm run build:fastvistos
+ node deploy-site.js fastvistos
 
-- Implementar in person:
-  "description": "Ele é o co-fundador...",
-  "sameAs": ["https://neilpatel.com", "https://www.facebook.com/neilkpatel", "https://www.instagram.com/neilpatel/", "https://www.linkedin.com/in/neilkpatel", "https://x.com/https://twitter.com/neilpatel"],
-  "url": "https://neilpatel.com/br/blog/author/neil-patel/"
+- Descobrir porque a foto não está divulgando
+
+- Gerar
+                  "thumbnailUrl": "https://fastvistos.com.br/assets/images/blog/visa-3109800_1280_thumb.jpg",
+
+- Colocar no webpage: "thumbnailUrl": "https://neilpatel.com/wp-content/
+
+https://fastvistos.com.br/assets/images/blog/visa-3109800_1280.jpg
+
+- update to the right logo url in the siteconfig :  url: siteConfig.site?.logo?.url,
+
+
+- create these ids  like logoId and others in one place  to be shared
+
+- maybe I want change to the convention buut necessary: "@id": "https://neilpatel.com/br/#/schema/logo/image/",
+
 
 - por enquanto não vou pemitir publicar o original e se a pessoa quiser voltar para o original terá que clonar o original e publicar
 
