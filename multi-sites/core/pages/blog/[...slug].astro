@@ -39,7 +39,7 @@ const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
 <SharedBlogLayout
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
-    seoFromConf={siteConfig.postPageConfig.seo}
+    seoFromConf={siteConfig.blogPostConfig.seo}
 
     titleFromDb={articleFromDb?.title}
     descriptionFromDb={articleFromDb?.seo_description}
