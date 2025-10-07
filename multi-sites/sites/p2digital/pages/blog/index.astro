@@ -17,11 +17,25 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 ---
 
-<SharedBlogLayout>
+<SharedBlogLayout
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.blogPageConfig.seo}
+
+    titleFromDb={blogConfigFromDb?.title}
+    descriptionFromDb={blogConfigFromDb?.seo_description}
+    authorNameFromDb={blogConfigFromDb?.author_name}
+    imageFromDb={blogConfigFromDb?.image}
+    imageUrlFromDb={blogConfigFromDb?.seo_image_url}
+    imageCaptionFromDb={blogConfigFromDb?.seo_image_caption}
+    imageWidthFromDb={blogConfigFromDb?.seo_image_width}
+    imageHeightFromDb={blogConfigFromDb?.seo_image_height}
+>
+    
     <Fragment slot="head">
         <JsonLdBlogIndex
-            site={siteConfig.site}
-            description={blogConfigFromDb?.description || ''}
+            title={blogConfigFromDb?.title}
+            description={blogConfigFromDb?.description}
             image={blogConfigFromDb?.image}
             imageUrl={blogConfigFromDb?.seo_image_url || null}
             imageCaption={blogConfigFromDb?.seo_image_caption || siteConfig.site.title}
@@ -30,17 +44,21 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
         />
     </Fragment>
 
+    
     <section class="bg-black py-20 px-4 lg:px-8">
         <div class="mx-auto" style="max-width: 1220px;">
             <div class="">
+                
                 <h1 class="text-2xl md:text-4xl font-bold text-white leading-tight">
                     {blogConfigFromDb?.title || ''}
                 </h1>
 
+                
                 <p class="mt-4 text-lg text-gray-300">
                     {blogConfigFromDb?.description || ''}
                 </p>
 
+                
                 <div class="mb-2 mt-6">
                     <nav class="text-sm">
                         <ol
@@ -63,6 +81,7 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
         </div>
     </section>
 
+    
     <main class="container mx-auto py-10 px-4">
         <style>
             /* Hide scrollbar but keep functionality */

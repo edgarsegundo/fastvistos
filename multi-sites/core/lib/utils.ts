@@ -42,6 +42,8 @@ export function getImageType(imageUrl: string): string {
 }
 
 export function ensureTrailingSlash(url: string): string {
+    if (!url || typeof url !== 'string') return '';
+
     // Remove all trailing slashes
     let base = url.replace(/\/+$/, '');
 
