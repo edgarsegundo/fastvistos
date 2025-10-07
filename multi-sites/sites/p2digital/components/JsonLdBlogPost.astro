@@ -9,11 +9,12 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getPersonBlock } from './JsonLdPersonBlock.astro';
-import { slugify, toThumbnailUrl } from '../lib/utils.ts';
+import { slugify, toThumbnailUrl, getValidatedImageUrl } from '../lib/utils.ts';
 import { siteConfig } from '../site-config.ts';
 
 const {
     articleConfigFromDb,
+    blogConfigFromDb,
     pubDate,
     updatedDate,
     wordCount,
@@ -26,8 +27,36 @@ const {
 
 const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
 const postpageUrl = `${canonicalValidated}blog/${articleConfigFromDb.slug}/`;
-const authorName = articleConfigFromDb.author_name || articleConfigFromDb.author_name || siteConfig.site?.authorName || siteConfig.site?.siteName;
-const authorNameSlug = slugify(authorName);
+
+let authorName, 
+    authorNameSlug, 
+    authorDescription = null, 
+    authorImageUrl = null,
+    authorUrl = null;
+
+/* This is simple solution for the author, if the user specifies the author
+in the article, we use that, if not, we check if the blog has a default
+author which has description, but in the future, a model should be created
+so we can assign an author to each article with description.
+*/
+if (articleConfigFromDb.author_name) {
+    authorName = articleConfigFromDb.author_name;
+    authorNameSlug = slugify(authorName);
+} else if (blogConfigFromDb?.author_name) {
+    authorName = blogConfigFromDb.author_name;
+    authorNameSlug = slugify(authorName);
+    authorDescription = blogConfigFromDb.author_description;
+    authorImageUrl = getValidatedImageUrl({
+        image: blogConfigFromDb.author_image,
+        imageUrl: null,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    });
+    authorUrl = blogConfigFromDb.author_url || null;
+} else {
+    authorName = siteConfig.site?.authorName || siteConfig.site?.siteName;
+    authorNameSlug = slugify(authorName);
+    authorDescription = articleConfigFromDb.seo_description;
+}
 
 const breadcrumbList = [
     {
@@ -123,9 +152,12 @@ const orgBlock = {
 
 // 'https://fastvistos.com.br/schema/person/edgar-bola-segundo',
 const personBlock = getPersonBlock({
-    id: `${canonicalValidated}schema/person/${authorNameSlug}`,
+    id: `${canonicalValidated}#/schema/person/${authorNameSlug}`,
     name: authorName,
-    url: `${canonicalValidated}schema/person/${authorNameSlug}`,
+    url: authorUrl,
+    description: authorDescription,
+    imageUrl: authorImageUrl,
+    imageId: `${canonicalValidated}#/schema/person/image/${authorNameSlug}`,
 });
 
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
