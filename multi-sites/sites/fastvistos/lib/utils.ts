@@ -20,7 +20,7 @@ export function getValidatedImageUrl({
     assetsUrlBase,
 }: {
     image?: string | null;
-    imageUrl?: string;
+    imageUrl?: string | null;
     assetsUrlBase: string;
 }): string {
     const base = ensureTrailingSlash(assetsUrlBase);

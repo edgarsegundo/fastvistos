@@ -2,7 +2,7 @@
 title: "Precisa solicitar visto para o México? Saiba como!"
 description: "PRSZSLSTRVSTPRMXKSBKM"
 pubDate: "2025-09-30T23:10:51.000Z"
-updatedDate: "2025-10-07T12:47:53.068Z"
+updatedDate: "2025-10-07T13:52:27.382Z"
 slug: "como-tirar-o-visto-mexicano"
 topic: "Dicas Sobre o Visto Mexicano"
 topicSlug: "dicas-sobre-o-visto-mexicano"
