@@ -33,16 +33,30 @@ const { entry } = Astro.props;
 // Render the markdown content
 const { Content, headings } = await entry.render();
 
-const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
 ---
 
-<SharedBlogLayout>
+<SharedBlogLayout
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.blogPostConfig.seo}
+
+    titleFromDb={articleFromDb?.title}
+    descriptionFromDb={articleFromDb?.seo_description}
+    authorNameFromDb={articleFromDb?.author_name}
+    imageFromDb={articleFromDb?.image}
+    imageUrlFromDb={articleFromDb?.seo_image_url}
+    imageCaptionFromDb={articleFromDb?.seo_image_caption}
+    imageWidthFromDb={articleFromDb?.seo_image_width}
+    imageHeightFromDb={articleFromDb?.seo_image_height}
+
+    pubDate={articleFromDb?.pubDate}
+    updatedDate={articleFromDb?.updatedDate}
+>
+    
     <Fragment slot="head">
         <JsonLdBlogPost
-            site={siteConfig.site}
-            blogConfigFromDb={blogConfigFromDb}
-            articleFromDb={articleFromDb}
+            articleConfigFromDb={articleFromDb}
             pubDate={entry.data.pubDate}
             updatedDate={entry.data.updatedDate}
             wordCount={entry.data.wordCount}
@@ -50,6 +64,7 @@ const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
     </Fragment>
 
     <div class="blog-layout-container">
+        
         <article class="blog-article">
             <header class="article-header">
                 <h1 class="article-title">{entry.data.title}</h1>
@@ -83,18 +98,23 @@ const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
                 </span>
             </header>
 
+            
             <div class="blog-content">
                 <Content />
             </div>
         </article>
 
+        
         <aside class="sidebar-container">
+            
             <SidebarAbove />
 
+            
             <div class="toc-responsive">
                 <TableOfContents headings={headings} />
             </div>
 
+            
             <SidebarBelow />
         </aside>
     </div>
