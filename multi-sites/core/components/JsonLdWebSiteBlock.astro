@@ -1,28 +1,28 @@
 ---
+import { siteConfig } from '../../site-config.ts';
+
 export function getWebSiteBlock({
     disableWebSite,
     disableWebSiteSearchAction,
     websiteId,
-    homepageUrl,
+    canonical,
     siteName,
     description,
     orgId,
-    site,
 }: {
     disableWebSite: boolean;
     disableWebSiteSearchAction: boolean;
     websiteId: string;
-    homepageUrl: string;
+    canonical: string;
     siteName: string;
     description?: string;
     orgId: string;
-    site: { language: string };
 }) {
     if (disableWebSite) return null;
     return {
         '@type': 'WebSite',
         '@id': websiteId,
-        url: homepageUrl,
+        url: canonical,
         name: siteName,
         description: description ?? '',
         publisher: { '@id': orgId },
@@ -33,7 +33,7 @@ export function getWebSiteBlock({
                           '@type': 'SearchAction',
                           target: {
                               '@type': 'EntryPoint',
-                              urlTemplate: `${homepageUrl}?s={search_term_string}`,
+                              urlTemplate: `${canonical}?s={search_term_string}`,
                           },
                           'query-input': {
                               '@type': 'PropertyValueSpecification',
@@ -44,7 +44,7 @@ export function getWebSiteBlock({
                   ],
               }
             : {}),
-        inLanguage: site.language,
+        inLanguage: siteConfig.site?.locale || 'pt_BR',
     };
 }
 ---

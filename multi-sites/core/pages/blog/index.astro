@@ -17,12 +17,25 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 ---
 
-<SharedBlogLayout>
+<SharedBlogLayout
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.postPageConfig.seo}
+
+    titleFromDb={blogConfigFromDb?.title}
+    descriptionFromDb={blogConfigFromDb?.seo_description}
+    authorNameFromDb={blogConfigFromDb?.author_name}
+    imageFromDb={blogConfigFromDb?.image}
+    imageUrlFromDb={blogConfigFromDb?.seo_image_url}
+    imageCaptionFromDb={blogConfigFromDb?.seo_image_caption}
+    imageWidthFromDb={blogConfigFromDb?.seo_image_width}
+    imageHeightFromDb={blogConfigFromDb?.seo_image_height}
+>
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <JsonLdBlogIndex
-            site={siteConfig.site}
-            description={blogConfigFromDb?.description || ''}
+            title={blogConfigFromDb?.title}
+            description={blogConfigFromDb?.description}
             image={blogConfigFromDb?.image}
             imageUrl={blogConfigFromDb?.seo_image_url || null}
             imageCaption={blogConfigFromDb?.seo_image_caption || siteConfig.site.title}

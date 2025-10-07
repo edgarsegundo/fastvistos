@@ -8,7 +8,6 @@
 // Shared Blog Layout - Used across all sites
 import '../styles/global.css';
 import HeadBasics from '../components/HeadBasics.astro';
-import SEOMeta from '../components/SEOMeta.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
 import BlogPageHeader from '../components/BlogPageHeader.astro';
@@ -19,6 +18,20 @@ import { siteConfig } from '../site-config.ts';
 const htmlLang = siteConfig.site.useFullLanguageTag
     ? siteConfig.site.language
     : siteConfig.site.language.split('-')[0];
+
+const { 
+    canonicalConf,
+    faviconPathFromConf,
+    seoFromConf,
+    titleFromDb,
+    descriptionFromDb,
+    authorNameFromDb,
+    imageFromDb,
+    imageUrlFromDb,
+    imageCaptionFromDb,
+    imageWidthFromDb,
+    imageHeightFromDb,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -28,16 +41,23 @@ const htmlLang = siteConfig.site.useFullLanguageTag
         <AnalyticsHead siteConfig={siteConfig} />
 
         <!-- Essential head elements (charset, viewport, etc.) -->
-        <HeadBasics generator={Astro.generator} />
+        <HeadBasics
+            generator={Astro.generator}
+            noIndex={false}
+            enhancedIndexing={false}
 
-        <!-- SEO Meta Tags (includes Open Graph and Twitter Card) -->
-        <SEOMeta
-            siteConfig={siteConfig}
-            ogImage={'test1'}
-            seo={siteConfig.blogPageConfig.seo}
-            noIndex={true}
-            enhancedIndexing={true}
-            which={'blog_abc'}
+            canonical={canonicalConf}
+            faviconPath={faviconPathFromConf}
+            seo={seoFromConf}
+
+            title={titleFromDb}
+            description={descriptionFromDb}
+            authorName={authorNameFromDb}
+            image={imageFromDb}
+            imageUrl={imageUrlFromDb}
+            imageCaption={imageCaptionFromDb}
+            imageWidth={imageWidthFromDb}
+            imageHeight={imageHeightFromDb}
         />
 
         <!-- Fonts & Styles -->

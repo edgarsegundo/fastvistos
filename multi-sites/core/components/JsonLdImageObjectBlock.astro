@@ -1,9 +1,9 @@
 ---
-import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+import { ensureTrailingSlash } from '../lib/utils.ts';
+import { siteConfig } from '../../site-config.ts';
 
 export function getImageObjectBlock({
     disableImageObject,
-    site,
     imageId,
     image,
     imageUrl,
@@ -12,26 +12,24 @@ export function getImageObjectBlock({
     height,
 }: {
     disableImageObject: boolean;
-    site: any;
     imageId?: string | null;
-    image?: string;
+    image?: string | null;
     imageUrl?: string;
     caption?: string;
     width?: number;
     height?: number;
 }) {
-    if (disableImageObject || (!imageUrl && !site?.image && !image)) return null;
+    if (disableImageObject || (!imageUrl && !siteConfig.site?.image && !image)) return null;
 
-    const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);
+    const assets_url_base = ensureTrailingSlash(siteConfig.assets_url_base);
     const url = image
-        ? `${assets_url_base}/${image.replace(/^.*\//, '')}`
+        ? `${assets_url_base}${image.replace(/^.*\//, '')}`
         : imageUrl
           ? imageUrl
-          : site?.image;
-
+          : siteConfig.site?.image;
     return {
         '@type': 'ImageObject',
-        inLanguage: site.language,
+        inLanguage: siteConfig.site?.locate || 'br_BR',
         '@id': imageId ?? url, // Use imageId if not null/undefined, else use url
         url: url,
         contentUrl: url,

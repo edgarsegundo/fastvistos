@@ -8,9 +8,20 @@ export function estimateReadingTime(wordCount: number, wordsPerMinute: number = 
     if (!wordCount || wordCount < 0) return 0;
     return Math.max(1, Math.round(wordCount / wordsPerMinute));
 }
-export function normalizeAssetsUrlBase(assetsUrlBase: string): string {
-    let base = assetsUrlBase.replace(/\/$/, '');
-    return base.startsWith('http') ? base : `https://${base}`;
+// export function normalizeAssetsUrlBase(assetsUrlBase: string): string {
+//     let base = assetsUrlBase.replace(/\/$/, '');
+//     return base.startsWith('http') ? base : `https://${base}`;
+// }
+
+export function ensureTrailingSlash(url: string): string {
+    // Remove all trailing slashes
+    let base = url.replace(/\/+$/, '');
+
+    // Ensure it starts with http/https
+    base = base.startsWith('http') ? base : `https://${base}`;
+    
+    // Add exactly one trailing slash
+    return `${base}/`;
 }
 
 export function slugify(str: string): string {

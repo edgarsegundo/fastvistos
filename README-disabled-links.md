@@ -1,6 +1,9 @@
 https://fastvistos.com.br/blog/ultimas-noticias/nova-taxa-visto-eua.html
 https://fastvistos.com.br/blog/ultimas-noticias/volta-entrevistas-presenciais-vistos-eua-setembro-2025.html
+
 https://fastvistos.com.br/blog/visto-mexicano/precisa-solicitar-visto-para-o-mexico-saiba-como.html
+
+
 https://fastvistos.com.br/blog/blog.html
 https://fastvistos.com.br/blog/visto-americano/perguntas-comuns-entrevista-visto-americano.html
 https://fastvistos.com.br/blog/visto-americano/visto-americano-estudantil-publicacoes-a-evitar.html

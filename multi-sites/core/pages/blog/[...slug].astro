@@ -33,17 +33,27 @@ const { entry } = Astro.props;
 // Render the markdown content
 const { Content, headings } = await entry.render();
 
-const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
 ---
 
-<SharedBlogLayout>
+<SharedBlogLayout
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.postPageConfig.seo}
+
+    titleFromDb={articleFromDb?.title}
+    descriptionFromDb={articleFromDb?.seo_description}
+    authorNameFromDb={articleFromDb?.author_name}
+    imageFromDb={articleFromDb?.image}
+    imageUrlFromDb={articleFromDb?.seo_image_url}
+    imageCaptionFromDb={articleFromDb?.seo_image_caption}
+    imageWidthFromDb={articleFromDb?.seo_image_width}
+    imageHeightFromDb={articleFromDb?.seo_image_height}
+>
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <JsonLdBlogPost
-            site={siteConfig.site}
-            blogConfigFromDb={blogConfigFromDb}
-            articleFromDb={articleFromDb}
+            articleConfigFromDb={articleFromDb}
             pubDate={entry.data.pubDate}
             updatedDate={entry.data.updatedDate}
             wordCount={entry.data.wordCount}
