@@ -1,5 +1,5 @@
 ---
-import { ensureTrailingSlash } from '../lib/utils.ts';
+import { getValidatedImageUrl } from '../lib/utils.ts';
 import { siteConfig } from '../site-config.ts';
 
 export function getImageObjectBlock({
@@ -21,18 +21,18 @@ export function getImageObjectBlock({
 }) {
     if (disableImageObject || (!imageUrl && !siteConfig.site?.image && !image)) return null;
 
-    const assets_url_base = ensureTrailingSlash(siteConfig.assets_url_base);
-    const url = image
-        ? `${assets_url_base}${image.replace(/^.*\//, '')}`
-        : imageUrl
-          ? imageUrl
-          : siteConfig.site?.image;
+    const imageUrlValidated = getValidatedImageUrl({
+        image,
+        imageUrl,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    });
+
     return {
         '@type': 'ImageObject',
         inLanguage: siteConfig.site?.locate || 'br_BR',
         '@id': imageId ?? url, // Use imageId if not null/undefined, else use url
-        url: url,
-        contentUrl: url,
+        url: imageUrlValidated,
+        contentUrl: imageUrlValidated,
         ...(caption ? { caption } : {}),
         ...(width ? { width } : {}),
         ...(height ? { height } : {}),

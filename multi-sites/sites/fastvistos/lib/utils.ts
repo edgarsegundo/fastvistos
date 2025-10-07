@@ -14,6 +14,23 @@ export function estimateReadingTime(wordCount: number, wordsPerMinute: number = 
 //     return base.startsWith('http') ? base : `https://${base}`;
 // }
 
+export function getValidatedImageUrl({
+    image,
+    imageUrl,
+    assetsUrlBase,
+}: {
+    image?: string | null;
+    imageUrl?: string;
+    assetsUrlBase: string;
+}): string {
+    const base = ensureTrailingSlash(assetsUrlBase);
+    if (image && typeof image === 'string') {
+        // Remove any folder path from image and concatenate with base
+        return `${base}${image.replace(/^.*\//, '')}`;
+    }
+    return imageUrl ?? '';
+}
+
 export function getImageType(imageUrl: string): string {
     if (!imageUrl) return '';
     const ext = imageUrl.split('.').pop()?.toLowerCase();

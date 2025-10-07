@@ -9,7 +9,7 @@
 import OpenGraph from './OpenGraph.astro';
 import TwitterCard from './TwitterCard.astro';
 import { siteConfig } from '../site-config.ts';
-import { ensureTrailingSlash, getImageType } from '../lib/utils.ts';
+import { getImageType, getValidatedImageUrl } from '../lib/utils.ts';
 
 
 export interface Props {
@@ -57,12 +57,12 @@ const {
     updatedDate,
 } = Astro.props;
 
-const assets_url_base = ensureTrailingSlash(siteConfig.assets_url_base);
-let imageUrlValidated = image
-    ? `${assets_url_base}${image.replace(/^.*\//, '')}`
-    : imageUrl;
-
-const imagetype = getImageType(imageUrlValidated ?? '');
+const imageUrlValidated = getValidatedImageUrl({
+    image,
+    imageUrl,
+    assetsUrlBase: siteConfig.site.assetsUrlBase
+});
+const imageType = getImageType(imageUrlValidated ?? '');
 ---
 
 
@@ -121,11 +121,11 @@ const imagetype = getImageType(imageUrlValidated ?? '');
 <OpenGraph
     title={title}
     description={description}
-    url={imageUrlValidated}
+    url={canonical}
     image={imageUrlValidated}
     imageWidth={imageWidth}
     imageHeight={imageHeight}
-    imageType={imagetype}
+    imageType={imageType}
     imageAlt={imageCaption}
     siteName={siteConfig?.site.siteName}
     type={seo.openGraph?.type}
