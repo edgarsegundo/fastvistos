@@ -17,7 +17,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <JsonLdHomePageBase
-            site={siteConfig.site}
             faqList={faqData}
             servicesList={servicesData}
             reviewsList={reviewVideos}

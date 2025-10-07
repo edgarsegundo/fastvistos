@@ -3,19 +3,17 @@
  * JsonLdBlogPost.astro
  * Gera JSON-LD para um BlogPosting (artigo/post), extensível com mentions, interactionStatistic, comment, etc.
  */
-import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+import { ensureTrailingSlash } from '../lib/utils.ts';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
 import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
-import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getPersonBlock } from './JsonLdPersonBlock.astro';
-import { slugify, parseKeywords, toThumbnailUrl } from '../lib/utils.ts';
+import { slugify, toThumbnailUrl } from '../lib/utils.ts';
+import { siteConfig } from '../../site-config.ts';
 
 const {
-    site,
-    blogConfigFromDb,
-    articleFromDb,
+    articleConfigFromDb,
     pubDate,
     updatedDate,
     wordCount,
@@ -26,55 +24,55 @@ const {
     customData,
 } = Astro.props;
 
-const homepageUrl = normalizeAssetsUrlBase(site.domain);
-const postpageUrl = `${homepageUrl}/blog/${articleFromDb.slug}`;
-const author_name = slugify(
-    articleFromDb.author_name || blogConfigFromDb.author_name || site.author || site.name
-);
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const postpageUrl = `${canonicalValidated}blog/${articleConfigFromDb.slug}/`;
+const authorName = articleConfigFromDb.author_name || articleConfigFromDb.author_name || siteConfig.site?.authorName || siteConfig.site?.siteName;
+const authorNameSlug = slugify(authorName);
 
 const breadcrumbList = [
     {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: homepageUrl,
+        item: canonicalValidated,
     },
     {
         '@type': 'ListItem',
         position: 2,
         name: 'Blog',
-        item: `${homepageUrl}/blog`,
+        item: `${canonicalValidated}blog/`,
     },
     {
         '@type': 'ListItem',
         position: 3,
-        name: articleFromDb.title,
+        name: articleConfigFromDb.title,
         item: postpageUrl,
     },
 ];
 
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
-    site,
     imageId: `${postpageUrl}#image`,
-    image: blogConfigFromDb.image,
-    imageUrl: blogConfigFromDb.seo_image_url,
-    caption: blogConfigFromDb.seo_image_caption,
-    width: blogConfigFromDb.seo_image_width,
-    height: blogConfigFromDb.seo_image_height,
+    image: articleConfigFromDb.image,
+    imageUrl: articleConfigFromDb.seo_image_url,
+    caption: articleConfigFromDb.seo_image_caption,
+    width: articleConfigFromDb.seo_image_width,
+    height: articleConfigFromDb.seo_image_height,
 });
+
+const websiteId = `${canonicalValidated}#website`;
+const orgId = `${canonicalValidated}#organization`;
 
 // WebPage block
 const webPageBlock = getWebPageBlock({
     disableWebPage: false,
     pageUrl: postpageUrl,
-    siteName: articleFromDb.title || site.name,
-    websiteId: `${homepageUrl}#website`,
-    orgId: `${homepageUrl}#organization`,
+    siteName: articleConfigFromDb.title || siteConfig.site?.siteName,
+    websiteId,
+    orgId,
     imageId: `${postpageUrl}#image`,
     breadcrumbId: `${postpageUrl}#breadcrumb`,
-    site: site,
-    description: articleFromDb.seo_description,
+    description: articleConfigFromDb.seo_description,
     pubDate,
     updatedDate,
 });
@@ -86,44 +84,49 @@ const breadcrumbBlock = getBreadcrumbBlock({
     disableBreadcrumb: false,
     breadcrumbId,
     breadcrumbList,
-    homepageUrl,
+    canonical: canonicalValidated,
 });
-
-const websiteId = `${homepageUrl}#website`;
-const orgId = `${homepageUrl}#organization`;
 
 // WebSite
 const webSiteBlock = getWebSiteBlock({
     disableWebSite: false,
     disableWebSiteSearchAction: true,
     websiteId,
-    homepageUrl,
-    siteName: site?.name,
-    description: site?.description,
+    canonical: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
+    description: siteConfig.homePageConfig.seo.description,
     orgId,
-    site,
 });
 
-const org = site?.organization ?? {
-    name: site?.name,
-    url: homepageUrl,
-    logo: site?.logo,
+const logoId = `${canonicalValidated}#logo`;
+
+// --- Unified Organization + LocalBusiness block
+const orgBlock = {
+  '@type': 'Organization',
+  '@id': orgId,
+  name: siteConfig.site?.siteName,
+  url: canonicalValidated,
+  inLanguage: siteConfig.site.locale || 'pt_BR',
+  description: siteConfig.homePageConfig.seo.description,
+  logo: {
+    '@type': 'ImageObject',
+    inLanguage: siteConfig.site.locale || 'pt_BR',
+    '@id': logoId,
+    url: siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.site?.logo?.url,
+    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+  },
+  image: { '@id': logoId },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
 };
-
-// Organization (with logo as ImageObject)
-const orgBlock = getOrganizationBlock({
-    disableOrganization: false,
-    orgId,
-    org,
-    logoId: `${homepageUrl}#logo`,
-    site,
-});
 
 // 'https://fastvistos.com.br/schema/person/edgar-bola-segundo',
 const personBlock = getPersonBlock({
-    id: `${homepageUrl}/schema/person/${author_name}`,
-    name: `${articleFromDb.author_name || blogConfigFromDb.author_name || site.author || site.name}`,
-    url: `${homepageUrl}/schema/person/${author_name}`,
+    id: `${canonicalValidated}schema/person/${authorNameSlug}`,
+    name: authorName,
+    url: `${canonicalValidated}schema/person/${authorNameSlug}`,
 });
 
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
@@ -133,27 +136,22 @@ const baseGraph = [
         '@id': `${postpageUrl}#article`,
         isPartOf: { '@id': `${postpageUrl}` },
         author: {
-            '@id': `${homepageUrl}/schema/person/${author_name}`,
-            url: `${homepageUrl}/schema/person/${author_name}`,
-            name:
-                articleFromDb.author_name ||
-                blogConfigFromDb.author_name ||
-                site.author ||
-                site.name,
+            '@id': `${canonicalValidated}/schema/person/${authorNameSlug}`,
+            url: `${canonicalValidated}/schema/person/${authorNameSlug}`,
+            name: authorName,
         },
-        headline: articleFromDb.title,
-        description: articleFromDb.seo_description,
+        headline: articleConfigFromDb.title,
+        description: articleConfigFromDb.seo_description,
         datePublished: pubDate,
         dateModified: updatedDate,
         mainEntityOfPage: { '@id': `${postpageUrl}` },
         wordCount: wordCount,
-        publisher: { '@id': `${homepageUrl}#organization` },
+        publisher: { '@id': `${canonicalValidated}#organization` },
         image: { '@id': `${postpageUrl}#image` },
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },
         ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
-        keywords: parseKeywords(articleFromDb.seo_keywords),
-        articleSection: [`${articleFromDb.blog_topic.title}`],
-        inLanguage: 'pt-BR',
+        articleSection: [`${articleConfigFromDb.blog_topic.title}`],
+        inLanguage: siteConfig.site?.locale || 'pt_BR',
     },
     {
         ...webPageBlock,
