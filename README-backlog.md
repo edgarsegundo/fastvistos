@@ -2,17 +2,6 @@
 
 ## To Do
 
-- criar posts and redirecionar 301 para todos os posts que agora não existem mais
-
-- Review publishing steps
- ./helper.sh (option 1)
- npx prisma db pull
- npx prisma generate
- node generate-blog-content.js fastvistos
- npm run download-images:fastvistos
- npm run build:fastvistos
- node deploy-site.js fastvistos
-
 - Descobrir porque a foto não está divulgando
 
 - Gerar
@@ -28,6 +17,17 @@ https://fastvistos.com.br/assets/images/blog/visa-3109800_1280.jpg
 - create these ids  like logoId and others in one place  to be shared
 
 - maybe I want change to the convention buut necessary: "@id": "https://neilpatel.com/br/#/schema/logo/image/",
+
+
+
+- Review publishing steps
+ ./helper.sh (option 1)
+ npx prisma db pull
+ npx prisma generate
+ node generate-blog-content.js fastvistos
+ npm run download-images:fastvistos
+ npm run build:fastvistos
+ node deploy-site.js fastvistos
 
 
 - por enquanto não vou pemitir publicar o original e se a pessoa quiser voltar para o original terá que clonar o original e publicar
