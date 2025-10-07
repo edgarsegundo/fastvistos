@@ -119,7 +119,6 @@ const orgBlock = {
     ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
   },
   image: { '@id': logoId },
-  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
 };
 
 // 'https://fastvistos.com.br/schema/person/edgar-bola-segundo',
@@ -136,8 +135,8 @@ const baseGraph = [
         '@id': `${postpageUrl}#article`,
         isPartOf: { '@id': `${postpageUrl}` },
         author: {
-            '@id': `${canonicalValidated}/schema/person/${authorNameSlug}`,
-            url: `${canonicalValidated}/schema/person/${authorNameSlug}`,
+            '@id': `${canonicalValidated}schema/person/${authorNameSlug}`,
+            url: `${canonicalValidated}schema/person/${authorNameSlug}`,
             name: authorName,
         },
         headline: articleConfigFromDb.title,
@@ -145,7 +144,7 @@ const baseGraph = [
         datePublished: pubDate,
         dateModified: updatedDate,
         mainEntityOfPage: { '@id': `${postpageUrl}` },
-        wordCount: wordCount,
+        wordCount: parseInt(wordCount),
         publisher: { '@id': `${canonicalValidated}#organization` },
         image: { '@id': `${postpageUrl}#image` },
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },

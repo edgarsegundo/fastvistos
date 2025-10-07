@@ -29,8 +29,8 @@ export function getImageObjectBlock({
 
     return {
         '@type': 'ImageObject',
-        inLanguage: siteConfig.site?.locate || 'br_BR',
-        '@id': imageId ?? url, // Use imageId if not null/undefined, else use url
+        inLanguage: siteConfig.site?.locale || 'pt_BR',
+        '@id': imageId,
         url: imageUrlValidated,
         contentUrl: imageUrlValidated,
         ...(caption ? { caption } : {}),
