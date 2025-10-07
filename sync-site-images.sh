@@ -16,6 +16,6 @@ DEST_HOST="72.60.57.150"
 DEST_PATH="/var/www/${SITEID}/assets/images/blog/"
 
 # Rsync command
-rsync -avz --progress "$SRC" "${DEST_USER}@${DEST_HOST}:${DEST_PATH}" || { echo "❌ Rsync failed!"; exit 1; }
+rsync -avz --progress $SRC "${DEST_USER}@${DEST_HOST}:${DEST_PATH}" || { echo "❌ Rsync failed!"; exit 1; }
 
 echo "✅ Images for site '$SITEID' synced successfully!"
