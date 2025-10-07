@@ -44,7 +44,7 @@ export const siteConfig: SiteConfig = {
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
 
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
-        assets_url_base: 'https://fastvistos.com.br/assets/', // Base URL for images used in blog posts and other content
+        assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
         priceRange: '$$', // e.g. $, $$, $$$, $$$$
         openingHours: [
             'Mo-Fr 09:00-18:00',
