@@ -10,15 +10,17 @@ export const siteConfig: SiteConfig = {
         faviconPath: '/favicon.ico',
         domain: 'fastvistos.com.br',
         canonical: 'https://fastvistos.com.br/',
-        author_name: 'Daniela Otaviano',
-
-
+        authorName: 'Daniela Otaviano',
+        primaryImage: {
+            url: '/images/og-fast-vistos.jpg',
+            width: 1200,
+            height: 630,
+            type: 'image/jpeg',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+        },
         useFullLanguageTag: true, // true/false
-
-
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
-
         logo: {
             url: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
             alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
@@ -27,12 +29,10 @@ export const siteConfig: SiteConfig = {
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        author: 'Daniela Otaviano',
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+
         image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
         assets_url_base: 'https://fastvistos.com.br/assets/', // Base URL for images used in blog posts and other content
-        // datePublished: '2024-01-01T00:00:00Z', // ISO 8601 format
-        // dateModified: '2024-01-01T00:00:00Z', // ISO 8601 format
         priceRange: '$$', // e.g. $, $$, $$$, $$$$
         openingHours: [
             'Mo-Fr 09:00-18:00',
@@ -99,13 +99,6 @@ export const siteConfig: SiteConfig = {
                     'visto canadense',
                     'passaporte brasileiro'
                 ],
-                image: {
-                    url: '/images/og-fast-vistos.jpg',
-                    width: 1200,
-                    height: 630,
-                    type: 'image/jpeg',
-                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
-                }
             }
         },
         pagination: {
@@ -126,13 +119,6 @@ export const siteConfig: SiteConfig = {
                     'visto canadense',
                     'passaporte brasileiro'
                 ],
-                image: {
-                    url: '/images/og-fast-vistos.jpg',
-                    width: 1200,
-                    height: 630,
-                    type: 'image/jpeg',
-                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
-                }
             }
         },
         readingTime: true, // true/false
