@@ -3,12 +3,12 @@ export function getBreadcrumbBlock({
     disableBreadcrumb,
     breadcrumbId,
     breadcrumbList,
-    homepageUrl,
+    canonical,
 }: {
     disableBreadcrumb: boolean;
     breadcrumbId: string;
     breadcrumbList?: any[];
-    homepageUrl: string;
+    canonical: string;
 }) {
     if (disableBreadcrumb) return null;
     return {
@@ -22,7 +22,7 @@ export function getBreadcrumbBlock({
                           '@type': 'ListItem',
                           position: 1,
                           name: 'Home',
-                          item: homepageUrl,
+                          item: canonical,
                       },
                   ],
     };
