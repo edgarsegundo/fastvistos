@@ -11,13 +11,25 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.homePageConfig.seo}
+
+    titleFromConf={siteConfig.homePageConfig.seo.title}
+    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
+    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
+    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <JsonLdHomePageBase
-            site={siteConfig.site}
             faqList={faqData}
             servicesList={servicesData}
             reviewsList={reviewVideos}

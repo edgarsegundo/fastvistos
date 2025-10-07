@@ -15,53 +15,142 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        id: 'example-site',
-        domain: 'example.com',
+        business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
+        id: 'fastvistos',
+        siteName: 'Fast Vistos',
+        locale: 'pt_BR',
+        faviconPath: '/favicon.ico',
+        domain: 'fastvistos.com.br',
         canonical: 'https://fastvistos.com.br/',
-        name: 'Example Site',
-        description: 'Example Site - Your solution',
-        language: 'pt-BR',
-        useFullLanguageTag: true,
+        authorName: 'Daniela Otaviano',
+        primaryImage: {
+            url: '/images/og-fast-vistos.jpg',
+            width: 1200,
+            height: 630,
+            type: 'image/jpeg',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+        },
+        useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
-        logo: 'https://example.com/assets/images/logo/logo-footer.png',
-        primaryColor: '#123456',
-        secondaryColor: '#654321',
-        author: 'John Doe',
-        thumbnailUrl: 'https://example.com/assets/images/logo/logo-footer.png',
-        image: 'https://example.com/assets/images/logo/logo-footer.png',
-        assets_url_base: 'https://example.com/assets/',
-        datePublished: '2024-01-01T00:00:00Z',
-        dateModified: '2024-01-01T00:00:00Z',
+        logo: {
+            url: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
+            width: 512,
+            height: 512,
+        },
+        primaryColor: '#0070f3',
+        secondaryColor: '#1c1c1e',
+        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+
+        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
+        assets_url_base: 'https://fastvistos.com.br/assets/', // Base URL for images used in blog posts and other content
+        priceRange: '$$', // e.g. $, $$, $$$, $$$$
+        openingHours: [
+            'Mo-Fr 09:00-18:00',
+            'Sa 09:00-13:00',
+        ],
+        sameAs: [  // Social media profiles
+            'https://www.facebook.com/fastvistos/',
+            'https://x.com/FVistos32701',
+            'https://www.youtube.com/@FastVistos/shorts',
+        ],
+        geo: {
+            latitude: -22.8807734, // Latitude for the business location
+            longitude: -47.0596895, // Longitude for the business location
+        },
         address: {
-            streetAddress: 'Rua Exemplo, 123',
-            addressLocality: 'Cidade',
-            addressRegion: 'UF',
-            postalCode: '00000-000',
+            streetAddress: 'Av. Júlio Diniz, 257',
+            addressLocality: 'Taquaral, Campinas',
+            addressRegion: 'SP',
+            postalCode: '13075-420',
             addressCountry: 'BR',
         },
         contactPoint: {
-            telephone: '+5500000000000',
+            telephone: '+551920422785',
+            telephoneFormatted: '+55 (19) 2042-2785',
             contactType: 'Customer Service',
             areaServed: 'BR',
             availableLanguage: ['Portuguese', 'English'],
-            email: 'contact@example.com',
+            email: 'contato@fastvistos.com.br',
         },
         socialMedia: {
-            facebook: 'https://facebook.com/example',
-            twitter: '@example',
-            instagram: 'https://instagram.com/example',
-            youtube: 'https://youtube.com/@example',
+            facebook: 'https://www.facebook.com/fastvistos/',
+            twitter: '@yourtwitter',
+            instagram: '',
+            youtube: '',
         },
+    },
+
+    homePageConfig: {
+        seo: {
+            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
+            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
+            themeColor: '#0070f3',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: '/images/og-fast-vistos.jpg',
+                    width: 1200,
+                    height: 630,
+                    type: 'image/jpeg',
+                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+                }
+            }
+        },
+    },
+
+    blogPageConfig: {
+        seo: {
+            themeColor: '#0070f3',
+            openGraph: {
+                type: 'blog',
+                tags: [
+                    'vistos internacionais',
+                    'visto americano',
+                    'visto canadense',
+                    'passaporte brasileiro'
+                ],
+            }
+        },
+        pagination: {
+            postsPerPage: 10,
+        },
+    },
+
+    blogPostConfig: {
+        seo: {
+            themeColor: '#0070f3',
+            openGraph: {
+                type: 'article',
+                author: 'Fast Vistos',
+                section: 'Serviços de Vistos e Documentos',
+                tags: [
+                    'vistos internacionais',
+                    'visto americano',
+                    'visto canadense',
+                    'passaporte brasileiro'
+                ],
+            }
+        },
+        readingTime: true, // true/false
+        showAuthor: true, // true/false
+        relatedPosts: true, // true/false
+    },
+
+    socialMedia: {
+        facebook: 'https://facebook.com/fastvistos',
+        twitter: '@fastvistos',
+        instagram: 'https://instagram.com/fastvistos',
+        youtube: 'https://youtube.com/@fastvistos',
     },
 
     analytics: {
-        gtmId: 'GTM-XXXXXXX',
+        gtmId: 'GTM-59SRNCQD',
     },
 
     verification: {
-        googleSiteVerification: 'your-google-site-verification',
+        googleSiteVerification: '',
     },
 
     features: {
@@ -75,115 +164,6 @@ export const siteConfig: SiteConfig = {
         cssVars: {
             '--accent-color': '#ACCENT',
         },
-    },
-
-    homePageConfig: {
-        seo: {
-            title: 'Your Site Title',
-            description: 'Your site description here.',
-            keywords: ['keyword1', 'keyword2', 'keyword3'],
-            ogImage: '/path-to-og-image.jpg',
-            ogImageWidth: 1200,
-            ogImageHeight: 630,
-            ogImageType: 'image/jpeg',
-            ogImageAlt: 'Your Image Alt Text',
-            themeColor: '#PRIMARY',
-            msTileColor: '#PRIMARY',
-            msTileConfig: '/browserconfig.xml',
-            applicationName: 'Your App Name',
-            appleMobileWebAppCapable: 'yes',
-            appleMobileWebAppStatusBarStyle: 'default',
-            formatDetection: 'telephone=no',
-            geoRegion: 'XX',
-            geoCountry: 'Country',
-            geoPlacename: 'Placename',
-            openGraph: {
-                type: 'website', // Default type for Open Graph
-                locale: 'your-language-tag', // e.g. en_US
-                author: 'your-author-name', // Default author name
-                publishedTime: '2024-01-01T00:00:00Z', // Default published time
-                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
-                section: 'your-section', // Default section
-                tags: ['tag1', 'tag2'], // Default tags
-                image: '/path-to-og-image.jpg',
-                imageWidth: 1200,
-                imageHeight: 630,
-                imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text',
-            },
-        },
-    },
-
-    blogPageConfig: {
-        seo: {
-            title: 'Your Site Title',
-            description: 'Your site description here.',
-            keywords: ['keyword1', 'keyword2', 'keyword3'],
-            ogImage: '/path-to-og-image.jpg',
-            themeColor: '#PRIMARY',
-            msTileColor: '#PRIMARY',
-            msTileConfig: '/browserconfig.xml',
-            applicationName: 'Your App Name',
-            appleMobileWebAppCapable: 'yes',
-            appleMobileWebAppStatusBarStyle: 'default',
-            formatDetection: 'telephone=no',
-            geoRegion: 'XX',
-            geoCountry: 'Country',
-            geoPlacename: 'Placename',
-            openGraph: {
-                type: 'blog', // Default type for Open Graph
-                locale: 'your-language-tag', // e.g. en_US
-                author: 'your-author-name', // Default author name
-                publishedTime: '2024-01-01T00:00:00Z', // Default published time
-                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
-                section: 'your-section', // Default section
-                tags: ['tag1', 'tag2'], // Default tags
-                image: '/path-to-og-image.jpg',
-                imageWidth: 1200,
-                imageHeight: 630,
-                imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text',
-            },
-        },
-        pagination: {
-            postsPerPage: 10,
-        },
-    },
-
-    blogPostConfig: {
-        seo: {
-            title: 'Your Site Title',
-            description: 'Your site description here.',
-            keywords: ['keyword1', 'keyword2', 'keyword3'],
-            ogImage: '/path-to-og-image.jpg',
-            themeColor: '#PRIMARY',
-            msTileColor: '#PRIMARY',
-            msTileConfig: '/browserconfig.xml',
-            applicationName: 'Your App Name',
-            appleMobileWebAppCapable: 'yes',
-            appleMobileWebAppStatusBarStyle: 'default',
-            formatDetection: 'telephone=no',
-            geoRegion: 'XX',
-            geoCountry: 'Country',
-            geoPlacename: 'Placename',
-            openGraph: {
-                type: 'article', // Default type for Open Graph
-                locale: 'your-language-tag', // e.g. en_US
-                author: 'your-author-name', // Default author name
-                publishedTime: '2024-01-01T00:00:00Z', // Default published time
-                modifiedTime: '2024-01-01T00:00:00Z', // Default modified time
-                section: 'your-section', // Default section
-                tags: ['tag1', 'tag2'], // Default tags
-                image: '/path-to-og-image.jpg',
-                imageWidth: 1200,
-                imageHeight: 630,
-                imageType: 'image/jpeg',
-                imageAlt: 'Your Image Alt Text',
-            },
-        },
-        readingTime: true, // true/false
-        showAuthor: true, // true/false
-        relatedPosts: true, // true/false
     },
 };
 

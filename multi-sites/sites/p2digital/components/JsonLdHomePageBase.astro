@@ -1,14 +1,12 @@
 ---
 import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
-import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
-import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+import { ensureTrailingSlash } from '../lib/utils.ts';
+import { siteConfig } from '../site-config.ts';
 
 const {
-    site,
-    homePageConfig,
     faqList = [],
     servicesList = [],
     reviewsList = [],
@@ -18,51 +16,42 @@ const {
     disableReviews = false,
     disableBreadcrumb = false,
     disableWebSite = false,
-    disableOrganization = false,
     disableImageObject = false,
     disableWebPage = false,
     disableWebSiteSearchAction = true,
+    disableOrganization = false,
+    disableLocalBusiness = false,
     ...rest
 } = Astro.props;
 
-const homepageUrl = normalizeAssetsUrlBase(site?.domain);
-
-const siteName = site?.name;
-const description = site?.description;
-const org = site?.organization ?? {
-    name: siteName,
-    url: homepageUrl,
-    logo: site?.logo,
-};
-const websiteId = `${homepageUrl}#website`;
-const orgId = `${homepageUrl}#organization`;
-const imageId = `${homepageUrl}#primaryimage`;
-const breadcrumbId = `${homepageUrl}#breadcrumb`;
-const logoId = `${homepageUrl}#logo`;
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const websiteId = `${canonicalValidated}#website`;
+const orgId = `${canonicalValidated}#organization`;
+const imageId = `${canonicalValidated}#primaryimage`;
+const breadcrumbId = `${canonicalValidated}#breadcrumb`;
+const logoId = `${canonicalValidated}#logo`;
 
 // WebPage block
 const webPageBlock = getWebPageBlock({
-    disableWebPage,
-    pageUrl: homepageUrl,
-    siteName,
+    disableWebPage: false,
+    pageUrl: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
     websiteId,
     orgId,
     imageId,
     breadcrumbId,
-    site,
-    description,
+    description: siteConfig.homePageConfig.seo.description,
 });
 
 // ImageObject (primary image)
 const imageObjectBlock = getImageObjectBlock({
-    disableImageObject,
-    site,
+    disableImageObject: false,
     imageId,
-    image: homePageConfig.ogImage || site?.image,
-    imageUrl: homePageConfig.ogImage || site?.image,
-    width: homePageConfig.ogImageWidth || site?.imageWidth || 1200,
-    height: homePageConfig.ogImageHeight || site?.imageHeight || 675,
-    caption: homePageConfig.ogImageAlt || site?.name,
+    image: null,
+    imageUrl: siteConfig.site.primaryImage?.url,
+    width: siteConfig.site.primaryImage?.width,
+    height: siteConfig.site.primaryImage?.height,
+    caption: siteConfig.site.primaryImage?.alt,
 });
 
 // BreadcrumbList
@@ -70,35 +59,23 @@ const breadcrumbBlock = getBreadcrumbBlock({
     disableBreadcrumb,
     breadcrumbId,
     breadcrumbList,
-    homepageUrl,
+    canonical: canonicalValidated,
 });
 
 // WebSite
-const webSiteBlock =
-    !disableWebSite &&
-    getWebSiteBlock({
-        disableWebSite,
-        disableWebSiteSearchAction,
-        websiteId,
-        homepageUrl,
-        siteName,
-        description,
-        orgId,
-        site,
-    });
-
-// Organization (with logo as ImageObject)
-const orgBlock = getOrganizationBlock({
-    disableOrganization,
+const webSiteBlock = getWebSiteBlock({
+    disableWebSite: false,
+    disableWebSiteSearchAction: true,
+    websiteId,
+    canonical: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
+    description: siteConfig.homePageConfig.seo.description,
     orgId,
-    org,
-    logoId,
-    site,
 });
 
 // FAQ block
 const faqBlock =
-    !disableFAQ && Array.isArray(faqList) && faqList.length > 0
+!disableFAQ && Array.isArray(faqList) && faqList.length > 0
         ? {
               '@type': 'FAQPage',
               mainEntity: faqList.map((faq) => ({
@@ -141,7 +118,7 @@ const videoObjects =
                   }
                   return {
                       '@type': 'VideoObject',
-                      '@id': `${homepageUrl}#review-video-${idx + 1}`,
+                      '@id': `${canonicalValidated}#review-video-${idx + 1}`,
                       name: review.title || '',
                       description: review.reviewBody || review.title || '',
                       thumbnailUrl: review.thumbnail,
@@ -150,15 +127,17 @@ const videoObjects =
                       ...(uploadDate ? { uploadDate } : {}),
                       publisher: {
                           '@type': 'Organization',
-                          name: siteName,
+                          name: siteConfig.site?.siteName,
                           logo: {
                               '@type': 'ImageObject',
-                              url: site?.logo,
+                              url: siteConfig.site?.logo?.url,
+                              width: siteConfig.site?.logo?.width,
+                              height: siteConfig.site?.logo?.height
                           },
                       },
                       mainEntityOfPage: {
                           '@type': 'WebPage',
-                          '@id': homepageUrl,
+                          '@id': canonicalValidated,
                       },
                   };
               })
@@ -173,7 +152,7 @@ const reviewsBlock =
                   reviewBody,
                   author: {
                       '@type': 'Person',
-                      name: review.author || `Cliente ${siteName}`,
+                      name: review.author,
                   },
                   reviewRating: {
                       '@type': 'Rating',
@@ -183,14 +162,14 @@ const reviewsBlock =
                   },
                   mainEntityOfPage: {
                       '@type': 'WebPage',
-                      '@id': homepageUrl,
+                      '@id': canonicalValidated,
                   },
               };
               if (review.videoId && review.thumbnail && review.url) {
                   return {
                       ...base,
                       associatedMedia: {
-                          '@id': `${homepageUrl}#review-video-${idx + 1}`,
+                          '@id': `${canonicalValidated}#review-${idx + 1}`,
                       },
                   };
               }
@@ -213,61 +192,58 @@ if (reviewsBlock.length > 0) {
     };
 }
 
-// LocalBusiness principal com reviews agrupados, aggregateRating, address obrigatório e mainEntityOfPage
-const localBusinessBlock = !disableOrganization && {
-    '@type': 'LocalBusiness',
-    '@id': `${homepageUrl}#localbusiness`,
-    name: siteName,
-    url: homepageUrl,
-    logo: {
-        '@type': 'ImageObject',
-        inLanguage: site.language,
-        '@id': logoId,
-        url: site?.logo,
-        contentUrl: site?.logo,
-        ...(org.logoWidth ? { width: org.logoWidth } : {}),
-        ...(org.logoHeight ? { height: org.logoHeight } : {}),
-        ...(org.name ? { caption: org.name } : {}),
-    },
-    image: { '@id': logoId },
-    address: {
-        '@type': 'PostalAddress',
-        streetAddress: site.address?.streetAddress,
-        addressLocality: site.address?.addressLocality,
-        addressRegion: site.address?.addressRegion,
-        postalCode: site.address?.postalCode,
-        addressCountry: site.address?.addressCountry,
-    },
-    telephone: site?.contactPoint?.telephone,
-    contactPoint: {
-        '@type': 'ContactPoint',
-        telephone: site?.contactPoint?.telephone,
-        contactType: 'customer service',
-        areaServed: 'BR',
-        availableLanguage: ['Portuguese', 'English'],
-    },
-    // geo: site.geo || {
-    //   '@type': 'GeoCoordinates',
-    //   latitude: -23.55052,
-    //   longitude: -46.633308,
-    // },
-    // hasMap:
-    //   site.geo &&
-    //   `https://www.google.com/maps/?q=${site.geo.latitude},${site.geo.longitude}`,
-    // sameAs:
-    //   site.sameAs || [
-    //     'https://www.facebook.com/suaempresa',
-    //     'https://www.instagram.com/suaempresa',
-    //     'https://www.linkedin.com/company/suaempresa',
-    //   ],
-    priceRange: site?.priceRange || '$$',
-    openingHours: site.openingHours, // e.g. ['Mo-Fr 09:00-18:00', 'Sa 09:00-13:00']
-    mainEntityOfPage: {
-        '@type': 'WebPage',
-        '@id': homepageUrl,
-    },
-    ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
-    ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+// --- Unified Organization + LocalBusiness block
+const orgBlock = !disableOrganization && {
+  '@type': disableLocalBusiness ? 'Organization' : ['Organization', 'LocalBusiness'],
+  '@id': orgId,
+  name: siteConfig.site?.siteName,
+  url: canonicalValidated,
+  inLanguage: siteConfig.site.locale || 'pt_BR',
+  description: siteConfig.homePageConfig.seo.description,
+  logo: {
+    '@type': 'ImageObject',
+    inLanguage: siteConfig.site.locale || 'pt_BR',
+    '@id': logoId,
+    url: siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.site?.logo?.url,
+    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+  },
+  image: { '@id': logoId },
+  ...(disableLocalBusiness
+    ? {}
+    : {
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: siteConfig.site?.address?.streetAddress,
+          addressLocality: siteConfig.site?.address?.addressLocality,
+          addressRegion: siteConfig.site?.address?.addressRegion,
+          postalCode: siteConfig.site?.address?.postalCode,
+          addressCountry: siteConfig.site?.address?.addressCountry,
+        },
+        telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+          contactType: 'customer service',
+          areaServed: 'BR',
+          availableLanguage: ['Portuguese', 'English'],
+        },
+        priceRange: siteConfig.site?.priceRange || '$$',
+        openingHours: siteConfig.site?.openingHours,
+        sameAs: siteConfig.site?.sameAs,
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: siteConfig.site?.geo?.latitude,
+            longitude: siteConfig.site?.geo?.longitude,
+        },
+        hasMap: `https://www.google.com/maps/?q=${siteConfig.site?.geo?.latitude},${siteConfig.site?.geo?.longitude}`,
+
+        ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
+        ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+      }),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
 };
 
 const blocks = [
@@ -276,7 +252,6 @@ const blocks = [
     breadcrumbBlock,
     webSiteBlock,
     orgBlock,
-    localBusinessBlock,
     faqBlock,
     servicesBlock,
     ...videoObjects,
