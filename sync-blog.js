@@ -204,7 +204,7 @@ async function syncBlogToSite(siteId) {
     );
 
     // Read SEOMeta component for localization (special case)
-    const seoMetaComponent = await fs.readFile(join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'), 'utf-8');
+    // const seoMetaComponent = await fs.readFile(join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'), 'utf-8');
 
     // Read core styles
     const markdownBlogCSS = await fs.readFile(join(CORE_STYLES_DIR, 'markdown-blog.css'), 'utf-8');
@@ -291,16 +291,16 @@ async function syncBlogToSite(siteId) {
         )
         .replace(/import '\.\.\/styles\/global\.css';/g, `import '../styles/global.css';`);
 
-    // Localize SEO components
-    const localizedSeoMetaComponent = seoMetaComponent
-        .replace(
-            /import OpenGraph from '\.\/OpenGraph\.astro';/,
-            `import OpenGraph from './OpenGraph.astro';`
-        )
-        .replace(
-            /import TwitterCard from '\.\/TwitterCard\.astro';/,
-            `import TwitterCard from './TwitterCard.astro';`
-        );
+    // // Localize SEO components
+    // const localizedSeoMetaComponent = seoMetaComponent
+    //     .replace(
+    //         /import OpenGraph from '\.\/OpenGraph\.astro';/,
+    //         `import OpenGraph from './OpenGraph.astro';`
+    //     )
+    //     .replace(
+    //         /import TwitterCard from '\.\/TwitterCard\.astro';/,
+    //         `import TwitterCard from './TwitterCard.astro';`
+    //     );
 
     // Ensure directories exist
     await ensureDir(siteBlogDir);
@@ -336,11 +336,11 @@ async function syncBlogToSite(siteId) {
     console.log(`📦 Copying all components to ${siteId}...`);
     await copyDirectory(CORE_COMPONENTS_DIR, siteComponentsDir, siteId);
 
-    // Overwrite SEOMeta with localized version (special case for site-specific config)
-    await fs.writeFile(
-        join(siteComponentsDir, 'SEOMeta.astro'),
-        stripAstroComments(localizedSeoMetaComponent)
-    );
+    // // Overwrite SEOMeta with localized version (special case for site-specific config)
+    // await fs.writeFile(
+    //     join(siteComponentsDir, 'SEOMeta.astro'),
+    //     stripAstroComments(localizedSeoMetaComponent)
+    // );
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);

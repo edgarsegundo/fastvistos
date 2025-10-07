@@ -9,20 +9,7 @@
 import OpenGraph from './OpenGraph.astro';
 import TwitterCard from './TwitterCard.astro';
 import { siteConfig } from '../site-config.ts';
-
-
-// const { 
-//     titleFromDb,
-//     descriptionFromDb,
-//     authorNameFromDb,
-//     imageFromDb,
-//     imageUrlFromDb,
-//     imageCaptionFromDb,
-//     imageWidthFromDb,
-//     imageHeightFromDb,
-//     faviconPathFromConf,
-//     seoFromConf,
-// } = Astro.props;
+import { ensureTrailingSlash, getImageType } from '../lib/utils.ts';
 
 
 export interface Props {
@@ -43,25 +30,39 @@ export interface Props {
     imageCaption?: string; // Image caption for SEO
     imageWidth?: number; // Image width for SEO
     imageHeight?: number; // Image height for SEO
+
+    pubDate?: string; // Publication date for articles
+    updatedDate?: string; // Updated date for articles
 }
 
 const { 
+    generator,
+    noIndex,
+    enhancedIndexing,
+
+    canonical,
+    faviconPath,
+    seo,
+    
     title, 
     description, 
-    faviconPath = '/favicon.svg', 
-    author_name,
-    canonical,
-    generator,
-    seo,
-    noIndex = false,
-    enhancedIndexing = false
+    authorName,
+    image,
+    imageUrl,
+    imageCaption,
+    imageWidth,
+    imageHeight,
+
+    pubDate,
+    updatedDate,
 } = Astro.props;
 
-// Build complete image URL if it's a relative path
-const fullImageUrl = seo.openGraph?.image.startsWith('http')
-    ? seo.openGraph?.image
-    : `https://${siteConfig.site.domain}${seo.openGraph?.image}`;
+const assets_url_base = ensureTrailingSlash(siteConfig.assets_url_base);
+let imageUrlValidated = image
+    ? `${assets_url_base}${image.replace(/^.*\//, '')}`
+    : imageUrl;
 
+const imagetype = getImageType(imageUrlValidated ?? '');
 ---
 
 <!-- Character encoding - MUST be first for proper detection -->
@@ -96,7 +97,7 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
 
 <!-- Basic SEO -->
 <meta name="description" content={description} />
-<meta name="author" content={author_name} />
+<meta name="author" content={authorName} />
 
 <link rel="canonical" href={canonical} />
 
@@ -120,7 +121,6 @@ const fullImageUrl = seo.openGraph?.image.startsWith('http')
     )
 }
 
-
 <!-- Open Graph
 The <OpenGraph> component generates Open Graph metadata, a standardized set
 of tags that tell social networks (Facebook, LinkedIn, Twitter) how to display
@@ -132,20 +132,22 @@ Primary use: enhance social sharing, making links visually appealing, informativ
 and brand-consistent whenever someone posts your page on social media.
 -->
 <OpenGraph
-    title={seo.title}
-    description={seo.description}
-    url={siteConfig.site.canonical}
-    image={fullImageUrl}
-    imageWidth={seo.openGraph?.imageWidth}
-    imageHeight={seo.openGraph?.imageHeight}
-    imageType={seo.openGraph?.imageType}
-    imageAlt={seo.openGraph?.imageAlt}
-    siteName={siteConfig?.name}
+    title={title}
+    description={description}
+    url={imageUrlValidated}
+    image={imageUrlValidated}
+    imageWidth={imageWidth}
+    imageHeight={imageHeight}
+    imageType={imagetype}
+    imageAlt={imageCaption}
+    siteName={siteConfig?.site.siteName}
     type={seo.openGraph?.type}
-    locale={seo.openGraph?.locale.replace('-', '_')}
-    author={seo.openGraph?.author}
-    publishedTime={seo.openGraph?.publishedTime}
-    modifiedTime={seo.openGraph?.modifiedTime}
+    locale={siteConfig.site.locale.replace('-', '_')}
+    author={authorName}
+
+    publishedTime={pubDate}
+    modifiedTime={updatedDate}
+
     section={seo.openGraph?.section}
     tags={seo.openGraph?.tags}
 />
@@ -154,7 +156,7 @@ and brand-consistent whenever someone posts your page on social media.
 <TwitterCard
     title={seo.title}
     description={seo.description}
-    image={fullImageUrl}
+    image={imageUrlValidated}
     url={siteConfig.site.canonical}
     site={siteConfig.socialMedia.twitter}
 />

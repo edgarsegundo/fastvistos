@@ -111,7 +111,6 @@ export const siteConfig: SiteConfig = {
             themeColor: '#0070f3',
             openGraph: {
                 type: 'article',
-                author: 'Fast Vistos',
                 section: 'Serviços de Vistos e Documentos',
                 tags: [
                     'vistos internacionais',

@@ -9,15 +9,15 @@
  * This component is generic and will be copied to each site's components/ folder.
  */
 import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
-import { getOrganizationBlock } from './JsonLdOrganizationBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
 import { BlogService } from '../lib/blog-service.ts';
-import { normalizeAssetsUrlBase } from '../lib/utils.ts';
+import { ensureTrailingSlash } from '../lib/utils.ts';
+import { siteConfig } from '../site-config.ts';
 
 const {
-    site,
+    title,
     description,
     image,
     imageUrl,
@@ -35,21 +35,27 @@ const {
 } = Astro.props;
 
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-const homepageUrl = normalizeAssetsUrlBase(site.domain);
-const orgId = `${homepageUrl}#organization`;
-const websiteId = `${homepageUrl}#website`;
-const imageId = `${homepageUrl}/blog#primaryimage`;
-const breadcrumbId = `${homepageUrl}/blog#breadcrumb`;
-const siteName = site?.name;
 
-const org = site?.organization ?? {
-    name: siteName,
-    url: homepageUrl,
-    logo: site?.logo,
+
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const blogpageUrl = `${canonicalValidated}blog/`;
+
+const websiteId = `${canonicalValidated}#website`;
+const orgId = `${canonicalValidated}#organization`;
+const breadcrumbId = `${blogpageUrl}#breadcrumb`;
+const logoId = `${canonicalValidated}#logo`;
+
+const orgEntity = {
+  '@type': 'Organization',
+  '@id': `${canonicalValidated}#organization`,
+  name: siteConfig.site.siteName,
+  logo: {
+    '@type': 'ImageObject',
+    url: siteConfig?.logo?.url,
+    width: siteConfig?.logo?.width,
+    height: siteConfig?.logo?.height,
+  }
 };
-const logoId = `${homepageUrl}#logo`;
-
-const assets_url_base = normalizeAssetsUrlBase(site.assets_url_base);
 
 const itemLists = topicsWithArticles.map((topic: any) => ({
     '@type': 'ItemList',
@@ -59,47 +65,41 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
         position: idx + 1,
         item: {
             '@type': 'BlogPosting',
-            '@id': `${homepageUrl}/blog/${article.slug}`,
-            author: { '@type': 'Organization', name: `${org.name}` },
-            publisher: { '@id': `${org.url}#organization` },
+            '@id': `${blogpageUrl}${article.slug}`,
+            url: `${blogpageUrl}${article.slug}`,
             headline: article.title,
-            url: `${homepageUrl}/blog/${article.slug}`,
-            image:
-                article.image || article.seo_image_url
-                    ? {
-                          '@type': 'ImageObject',
-                          url: article.image
-                              ? `${assets_url_base}/${article.image.replace(/^.*\//, '')}`
-                              : article.seo_image_url
-                                ? article.seo_image_url
-                                : undefined,
-                          width: article.seo_image_width || 1200, // example width
-                          height: article.seo_image_height || 675, // example height
-                          caption: article.seo_image_caption || article.title, // optional but can help SEO/accessibility
-                      }
-                    : undefined,
+            description: article.seo_description || '',
             datePublished: article.published,
             dateModified: article.updated || article.published,
-            inLanguage: 'pt-BR',
-            description: article.seo_description || '',
+            author: orgEntity,                    // can also be Person if needed
+            publisher: orgEntity,
+            inLanguage: siteConfig.site?.locale || 'pt_BR',
             mainEntityOfPage: {
                 '@type': 'WebPage',
-                '@id': `${homepageUrl}/blog/${article.slug}`,
+                '@id': `${blogpageUrl}${article.slug}`,
             },
+            image: getImageObjectBlock({
+                    disableImageObject: false,
+                    imageId: `${blogpageUrl}${article.slug}#image`,
+                    image: article.image,
+                    imageUrl: article.seo_image_url,
+                    caption: article.seo_image_caption,
+                    width: article.seo_image_width,
+                    height: article.seo_image_height,
+                }),
         },
     })),
 }));
 
 // WebPage block
 const webPageBlock = getWebPageBlock({
-    disableWebPage,
-    pageUrl: homepageUrl,
-    siteName,
+    disableWebPage: false,
+    pageUrl: blogpageUrl,
+    siteName: title || siteConfig.site?.siteName,
     websiteId,
     orgId,
-    imageId,
-    breadcrumbId,
-    site,
+    imageId: `${blogpageUrl}#image`,
+    breadcrumbId: `${blogpageUrl}#breadcrumb`,
     description,
     hasPartList: itemLists,
     disableHasPart: false,
@@ -110,13 +110,12 @@ const breadcrumbBlock = getBreadcrumbBlock({
     disableBreadcrumb,
     breadcrumbId,
     breadcrumbList,
-    homepageUrl,
+    canonical: blogpageUrl,
 });
 
 const imageObjectBlock = getImageObjectBlock({
-    disableImageObject,
-    site,
-    imageId,
+    disableImageObject: false,
+    imageId: `${blogpageUrl}#image`,
     image,
     imageUrl,
     caption: imageCaption,
@@ -125,27 +124,37 @@ const imageObjectBlock = getImageObjectBlock({
 });
 
 // WebSite
-const webSiteBlock =
-    !disableWebSite &&
-    getWebSiteBlock({
-        disableWebSite,
-        disableWebSiteSearchAction,
-        websiteId,
-        homepageUrl,
-        siteName,
-        description,
-        orgId,
-        site,
-    });
-
-// Organization (with logo as ImageObject)
-const orgBlock = getOrganizationBlock({
-    disableOrganization,
+const webSiteBlock = getWebSiteBlock({
+    disableWebSite: false,
+    disableWebSiteSearchAction: true,
+    websiteId,
+    canonical: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
+    description: siteConfig.homePageConfig.seo.description,
     orgId,
-    org,
-    logoId,
-    site,
 });
+
+// --- Unified Organization + LocalBusiness block
+const orgBlock = {
+  '@type': 'Organization',
+  '@id': orgId,
+  name: siteConfig.site?.siteName,
+  url: canonicalValidated,
+  inLanguage: siteConfig.site.locale || 'pt_BR',
+  description: siteConfig.homePageConfig.seo.description,
+  logo: {
+    '@type': 'ImageObject',
+    inLanguage: siteConfig.site.locale || 'pt_BR',
+    '@id': logoId,
+    url: siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.site?.logo?.url,
+    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+  },
+  image: { '@id': logoId },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
+};
 
 const blocks = [
     webPageBlock,
@@ -153,7 +162,6 @@ const blocks = [
     breadcrumbBlock,
     webSiteBlock,
     orgBlock,
-    // localBusinessBlock,
 ]
     .filter(Boolean)
     .flat();

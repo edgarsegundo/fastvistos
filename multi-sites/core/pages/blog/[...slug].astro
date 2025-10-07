@@ -49,6 +49,9 @@ const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
     imageCaptionFromDb={articleFromDb?.seo_image_caption}
     imageWidthFromDb={articleFromDb?.seo_image_width}
     imageHeightFromDb={articleFromDb?.seo_image_height}
+
+    pubDate={articleFromDb?.pubDate}
+    updatedDate={articleFromDb?.updatedDate}
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
