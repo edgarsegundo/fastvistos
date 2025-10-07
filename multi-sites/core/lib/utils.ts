@@ -8,10 +8,38 @@ export function estimateReadingTime(wordCount: number, wordsPerMinute: number = 
     if (!wordCount || wordCount < 0) return 0;
     return Math.max(1, Math.round(wordCount / wordsPerMinute));
 }
+
 // export function normalizeAssetsUrlBase(assetsUrlBase: string): string {
 //     let base = assetsUrlBase.replace(/\/$/, '');
 //     return base.startsWith('http') ? base : `https://${base}`;
 // }
+
+export function getImageType(imageUrl: string): string {
+    if (!imageUrl) return '';
+    const ext = imageUrl.split('.').pop()?.toLowerCase();
+    switch (ext) {
+        case 'png':
+            return 'image/png';
+        case 'jpg':
+        case 'jpeg':
+            return 'image/jpeg';
+        case 'webp':
+            return 'image/webp';
+        case 'gif':
+            return 'image/gif';
+        case 'svg':
+            return 'image/svg+xml';
+        case 'bmp':
+            return 'image/bmp';
+        case 'ico':
+            return 'image/x-icon';
+        case 'tiff':
+        case 'tif':
+            return 'image/tiff';
+        default:
+            return 'image/jpeg'; // Fallback
+    }
+}
 
 export function ensureTrailingSlash(url: string): string {
     // Remove all trailing slashes
