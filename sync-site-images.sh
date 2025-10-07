@@ -23,7 +23,10 @@ sudo usermod -aG systemd-journal edgar
 # Rsync command
 # sudo rsync -avz --progress $SRC ${DEST_USER}@${DEST_HOST}:${DEST_PATH} || { echo "❌ Rsync failed!"; exit 1; }
 
-sudo bash -c 'rsync -avz --progress /var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/fastvistos__* edgar@72.60.57.150:/var/www/fastvistos/assets/images/blog/'
+# sudo bash -c 'rsync -avz --progress /var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/fastvistos__* edgar@72.60.57.150:/var/www/fastvistos/assets/images/blog/'
+
+sudo bash -c "rsync -avz --progress /var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}__* ${DEST_USER}@${DEST_HOST}:/var/www/${SITEID}/assets/images/blog/"
+
 
 
 echo "✅ Images for site '$SITEID' synced successfully!"
