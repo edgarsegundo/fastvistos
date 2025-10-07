@@ -21,5 +21,5 @@ DEST_PATH="/var/www/${SITEID}/assets/images/blog/"
 sudo usermod -aG systemd-journal edgar
 
 # Rsync command
-rsync -avz --progress $SRC "${DEST_USER}@${DEST_HOST}:${DEST_PATH}" || { echo "❌ Rsync failed!"; exit 1; }
+sudo rsync -avz --progress $SRC "${DEST_USER}@${DEST_HOST}:${DEST_PATH}" || { echo "❌ Rsync failed!"; exit 1; }
 echo "✅ Images for site '$SITEID' synced successfully!"
