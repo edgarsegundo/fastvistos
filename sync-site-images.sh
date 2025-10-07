@@ -19,6 +19,6 @@ DEST_PATH="/var/www/${SITEID}/assets/images/blog/"
 sudo chown ${DEST_USER}:${DEST_USER} ${DEST_PATH} && sudo chmod 755 ${DEST_PATH}
 
 # Rsync command
-rsync -avz --progress "$SRC" "${DEST_USER}@${DEST_HOST}:${DEST_PATH}" || { echo "❌ Rsync failed!"; exit 1; }
+rsync -avz --progress $SRC "${DEST_USER}@${DEST_HOST}:${DEST_PATH}" || { echo "❌ Rsync failed!"; exit 1; }
 
 echo "✅ Images for site '$SITEID' synced successfully!"
