@@ -5,6 +5,7 @@ https://fastvistos.com.br/blog/visto-mexicano/precisa-solicitar-visto-para-o-mex
 
 
 https://fastvistos.com.br/blog/blog.html
+
 https://fastvistos.com.br/blog/visto-americano/perguntas-comuns-entrevista-visto-americano.html
 https://fastvistos.com.br/blog/visto-americano/visto-americano-estudantil-publicacoes-a-evitar.html
 https://fastvistos.com.br/blog/visto-americano/meu-visto-foi-negado-devo-tentar-novamente.html

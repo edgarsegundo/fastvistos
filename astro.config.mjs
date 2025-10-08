@@ -10,6 +10,8 @@ const DEFAULT_CHANGEFREQ = 'yearly';
 const BLOG_PRIORITY = 0.7;
 const STANDARD_PRIORITY = 1.0;
 
+console.log('..🛑 Astro site URL:', SITE_URL);
+
 // https://astro.build/config
 export default defineConfig({
     site: SITE_URL,

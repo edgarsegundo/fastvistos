@@ -2,6 +2,18 @@
 
 ## To Do
 
+
+- run node generate-blog-content.js fastvistos when running npm run build:fastvistos to avoid errors
+
+- colocar author e foto no final de cada artigo
+
+- home/blog breadscrum da pagina https://fastvistos.com.br/blog/ está undefine quando clica
+
+- comment Teste Grátis
+
+- Ler todos não funcionando na homepage
+
+
 - update to the right logo url in the siteconfig :  url: siteConfig.site?.logo?.url,
 
 
