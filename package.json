@@ -34,14 +34,14 @@
         "test:blog:unit": "node test-blog-service.js --unit",
         "test:blog:verbose": "node test-blog-service.js --unit --verbose",
         "test:blog:integration": "node test-blog-service.js --integration",
-        "dev:fastvistos": "node sync-blog.js fastvistos && SITE_ID=fastvistos astro dev --config multi-sites.config.mjs",
+        "dev:fastvistos": "node sync-blog.js fastvistos && SITE_ID=fastvistos astro dev",
         "dev:watch:fastvistos": "node dev-with-sync.js fastvistos",
-        "build:fastvistos": "node sync-blog.js fastvistos && SITE_ID=fastvistos astro build --config multi-sites.config.mjs && node postbuild-updatable.js fastvistos",
-        "preview:fastvistos": "SITE_ID=fastvistos astro preview --config multi-sites.config.mjs",
-        "dev:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro dev --config multi-sites.config.mjs",
+        "build:fastvistos": "node sync-blog.js fastvistos && SITE_ID=fastvistos astro build && node postbuild-updatable.js fastvistos",
+        "preview:fastvistos": "SITE_ID=fastvistos astro preview",
+        "dev:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro dev",
         "dev:watch:p2digital": "node dev-with-sync.js p2digital",
-        "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build --config multi-sites.config.mjs && node postbuild-updatable.js p2digital",
-        "preview:p2digital": "SITE_ID=p2digital astro preview --config multi-sites.config.mjs"
+        "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build && node postbuild-updatable.js p2digital",
+        "preview:p2digital": "SITE_ID=p2digital astro preview"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.3.4",
