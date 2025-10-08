@@ -79,11 +79,16 @@ const breadcrumbList = [
     },
 ];
 
+const imageId = `${postpageUrl}#image`;
+
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
-    imageId: `${postpageUrl}#image`,
-    image: articleConfigFromDb.image,
-    imageUrl: articleConfigFromDb.seo_image_url,
+    imageId,
+    imageUrlValidated: getValidatedImageUrl({
+        image: articleConfigFromDb.image,
+        imageUrl: articleConfigFromDb.seo_image_url,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
     caption: articleConfigFromDb.seo_image_caption,
     width: articleConfigFromDb.seo_image_width,
     height: articleConfigFromDb.seo_image_height,
@@ -104,6 +109,12 @@ const webPageBlock = getWebPageBlock({
     description: articleConfigFromDb.seo_description,
     pubDate,
     updatedDate,
+    imageUrlValidated: getValidatedImageUrl({
+            image: articleConfigFromDb.image,
+            imageUrl: articleConfigFromDb.seo_image_url,
+            assetsUrlBase: siteConfig.site.assetsUrlBase
+        }),
+
 });
 
 const breadcrumbId = `${postpageUrl}#breadcrumb`;
@@ -180,7 +191,10 @@ const baseGraph = [
         publisher: { '@id': `${canonicalValidated}#organization` },
         image: { '@id': `${postpageUrl}#image` },
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },
-        ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
+        ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
+        // in the future I might have to use the toThumbnailUrl because I want to start creating smaller images
+        // this is why I will keep this comment for reference and remind myself to test it later
+        // ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
         inLanguage: siteConfig.site?.locale || 'pt_BR',
     },
@@ -203,6 +217,7 @@ const baseGraph = [
         ...personBlock,
     },
 ];
+
 const advancedGraph = [
     ...(mentions.length ? [{ mentions: mentions }] : []),
     ...(interactionStatistic.length ? [{ interactionStatistic: interactionStatistic }] : []),

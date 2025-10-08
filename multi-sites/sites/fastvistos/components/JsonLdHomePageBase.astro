@@ -3,7 +3,7 @@ import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
 import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
-import { ensureTrailingSlash } from '../lib/utils.ts';
+import { ensureTrailingSlash, getValidatedImageUrl } from '../lib/utils.ts';
 import { siteConfig } from '../site-config.ts';
 
 const {
@@ -41,14 +41,24 @@ const webPageBlock = getWebPageBlock({
     imageId,
     breadcrumbId,
     description: siteConfig.homePageConfig.seo.description,
+    pubDate: null,
+    updatedDate: null,
+    imageUrlValidated: getValidatedImageUrl({
+        image: null,
+        imageUrl: siteConfig.site.primaryImage?.url,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
 });
 
 // ImageObject (primary image)
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
     imageId,
-    image: null,
-    imageUrl: siteConfig.site.primaryImage?.url,
+    imageUrlValidated: getValidatedImageUrl({
+        image: null,
+        imageUrl: siteConfig.site.primaryImage?.url,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
     width: siteConfig.site.primaryImage?.width,
     height: siteConfig.site.primaryImage?.height,
     caption: siteConfig.site.primaryImage?.alt,

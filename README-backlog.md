@@ -2,15 +2,6 @@
 
 ## To Do
 
-- Descobrir porque a foto não está divulgando
-
-- Gerar
-                  "thumbnailUrl": "https://fastvistos.com.br/assets/images/blog/visa-3109800_1280_thumb.jpg",
-
-- Colocar no webpage: "thumbnailUrl": "https://neilpatel.com/wp-content/
-
-https://fastvistos.com.br/assets/images/blog/visa-3109800_1280.jpg
-
 - update to the right logo url in the siteconfig :  url: siteConfig.site?.logo?.url,
 
 

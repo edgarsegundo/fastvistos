@@ -22,16 +22,16 @@ export const siteConfig: SiteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
+            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
             alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
             width: 512,
             height: 512,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png', // Important for search and social previews
 
-        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
+        // image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
 
         assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
         
