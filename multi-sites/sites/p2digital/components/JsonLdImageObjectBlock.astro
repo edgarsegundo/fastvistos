@@ -1,31 +1,22 @@
 ---
-import { getValidatedImageUrl } from '../lib/utils.ts';
 import { siteConfig } from '../site-config.ts';
 
 export function getImageObjectBlock({
     disableImageObject,
     imageId,
-    image,
-    imageUrl,
+    imageUrlValidated,
     caption,
     width,
     height,
 }: {
     disableImageObject: boolean;
     imageId?: string | null;
-    image?: string | null;
-    imageUrl?: string;
+    imageUrlValidated?: string | null;
     caption?: string;
     width?: number;
     height?: number;
 }) {
-    if (disableImageObject || (!imageUrl && !siteConfig.site?.image && !image)) return null;
-
-    const imageUrlValidated = getValidatedImageUrl({
-        image,
-        imageUrl,
-        assetsUrlBase: siteConfig.site.assetsUrlBase
-    });
+    if (disableImageObject || !imageUrlValidated) return null;
 
     return {
         '@type': 'ImageObject',

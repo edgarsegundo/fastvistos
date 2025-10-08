@@ -12,6 +12,7 @@ export function getWebPageBlock({
     description,
     pubDate,
     updatedDate,
+    imageUrlValidated,
     hasPartList = [],
     disableHasPart = true,
 }: {
@@ -25,6 +26,7 @@ export function getWebPageBlock({
     description?: string;
     pubDate?: string | null;
     updatedDate?: string | null;
+    imageUrlValidated?: string | null;
     hasPartList?: any[];
     disableHasPart?: boolean;
 }) {
@@ -38,11 +40,9 @@ export function getWebPageBlock({
         about: { '@id': orgId },
         primaryImageOfPage: { '@id': imageId },
         image: { '@id': imageId },
-        // ...(site?.thumbnailUrl
-        //     ? { thumbnailUrl: site.thumbnailUrl }
-        //     : site?.image
-        //       ? { thumbnailUrl: site.image }
-        //       : {}),
+        ...(imageUrlValidated
+            ? { thumbnailUrl: imageUrlValidated }
+            : {}),
         ...(pubDate ? { datePublished: pubDate } : {}),
         ...(updatedDate ? { dateModified: updatedDate } : {}),
         description: description,

@@ -13,7 +13,7 @@ import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
 import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
 import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
 import { BlogService } from '../lib/blog-service.ts';
-import { ensureTrailingSlash } from '../lib/utils.ts';
+import { ensureTrailingSlash, getValidatedImageUrl } from '../lib/utils.ts';
 import { siteConfig } from '../site-config.ts';
 
 const {
@@ -81,8 +81,10 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
             image: getImageObjectBlock({
                     disableImageObject: false,
                     imageId: `${blogpageUrl}${article.slug}#image`,
-                    image: article.image,
-                    imageUrl: article.seo_image_url,
+                    imageUrlValidated: getValidatedImageUrl({image: article.image,
+                                                            imageUrl: article.seo_image_url,
+                                                assetsUrlBase: siteConfig.site.assetsUrlBase
+                    }),
                     caption: article.seo_image_caption,
                     width: article.seo_image_width,
                     height: article.seo_image_height,
@@ -101,6 +103,12 @@ const webPageBlock = getWebPageBlock({
     imageId: `${blogpageUrl}#image`,
     breadcrumbId: `${blogpageUrl}#breadcrumb`,
     description,
+    pubDate: null,
+    updatedDate: null,
+    imageUrlValidated: getValidatedImageUrl({image: image, 
+                                            imageUrl: imageUrl, 
+                                            assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
     hasPartList: itemLists,
     disableHasPart: false,
 });
@@ -115,9 +123,11 @@ const breadcrumbBlock = getBreadcrumbBlock({
 
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
-    imageId: `${blogpageUrl}#image`,
-    image,
-    imageUrl,
+    imageId: `${blogpageUrl}#image`, 
+    imageUrlValidated: getValidatedImageUrl({image: image, 
+                                            imageUrl: imageUrl, 
+                                            assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
     caption: imageCaption,
     width: imageWidth,
     height: imageHeight,
