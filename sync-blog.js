@@ -163,6 +163,17 @@ async function syncBlogToSite(siteId) {
         } catch (faqErr) {
             console.error(`❌ Error copying webpage-faq.ts to multi-sites/sites/${siteId}/lib/:`, faqErr);
         }
+
+        // Copy faq-json.ts to each site's lib folder
+        const coreFaqJsonPath = join(__dirname, 'multi-sites/core/lib/faq-json.ts');
+        const siteFaqJsonPath = join(siteLibDir, 'faq-json.ts');
+        try {
+            await fs.copyFile(coreFaqJsonPath, siteFaqJsonPath);
+            console.log(`📄 Copied faq-json.ts to multi-sites/sites/${siteId}/lib/`);
+        } catch (faqJsonErr) {
+            console.error(`❌ Error copying faq-json.ts to multi-sites/sites/${siteId}/lib/:`, faqJsonErr);
+        }
+
         // Only truncate if running a build or preview command (after copy)
         const lifecycle = process.env.npm_lifecycle_event || '';
         if (lifecycle.startsWith('build:') || lifecycle.startsWith('preview:')) {
