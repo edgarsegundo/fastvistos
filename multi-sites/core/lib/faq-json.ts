@@ -1,13 +1,13 @@
 // FAQ Section Component with inline data
-import { WebpageFaqService } from '../lib/webpage-faq';
+import { WebpageFaqService } from './webpage-faq';
 
 // Define the FAQ type for better type safety
-type Faq = {
+export type Faq = {
     question: string;
     answer: string;
 };
 
-export async function getFaqData(siteId: string): Promise<Faq[]> {
+export async function getFaqJson(siteId: string): Promise<Faq[]> {
     let faqData: Faq[] = [];
     try {
         faqData = await WebpageFaqService.getPageFaqList(
