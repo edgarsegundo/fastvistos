@@ -36,7 +36,7 @@ initialSync.on('close', (code) => {
     if (code === 0) {
         console.log(`🌟 Starting Astro dev server for ${siteId}...`);
 
-        const astroProcess = spawn('npx', ['astro', 'dev', '--config', 'multi-sites.config.mjs'], {
+        const astroProcess = spawn('npx', ['astro', 'dev'], {
             stdio: ['inherit', 'pipe', 'inherit'],
             env: { ...process.env, SITE_ID: siteId, FORCE_COLOR: '1' },
         });
