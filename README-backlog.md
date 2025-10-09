@@ -1,5 +1,18 @@
 # Backog
 
+
+- Review publishing steps
+
+ ./helper.sh (option 1)
+ npx prisma db pull
+ npx prisma generate
+
+ node generate-blog-content.js fastvistos
+ npm run download-images:fastvistos
+ npm run build:fastvistos
+ node deploy-site.js fastvistos
+
+
 ## To Do
 
 
