@@ -19,49 +19,23 @@ import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
-
-
-<!-- 
-<SharedBlogLayout
-    canonicalConf={siteConfig.site.canonical}
-    faviconPathFromConf={siteConfig.site.faviconPath}
-    seoFromConf={siteConfig.blogPageConfig.seo}
-
-    titleFromDb={blogConfigFromDb?.title}
-    descriptionFromDb={blogConfigFromDb?.seo_description}
-    authorNameFromDb={blogConfigFromDb?.author_name}
-    imageFromDb={blogConfigFromDb?.image}
-    imageUrlFromDb={blogConfigFromDb?.seo_image_url}
-    imageCaptionFromDb={blogConfigFromDb?.seo_image_caption}
-    imageWidthFromDb={blogConfigFromDb?.seo_image_width}
-    imageHeightFromDb={blogConfigFromDb?.seo_image_height}
->
-    
-    <Fragment slot="head">
-        <JsonLdBlogIndex
-            title={blogConfigFromDb?.title}
-            description={blogConfigFromDb?.description}
-            image={blogConfigFromDb?.image}
-            imageUrl={blogConfigFromDb?.seo_image_url || null}
-            imageCaption={blogConfigFromDb?.seo_image_caption || siteConfig.site.title}
-            imageHeight={blogConfigFromDb?.seo_image_height || 675}
-            imageWidth={blogConfigFromDb?.seo_image_width || 1200}
-        />
-    </Fragment> -->
-
-
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
 
-    titleFromConf={siteConfig.homePageConfig.seo?.title},
-    descriptionFromConf={siteConfig.homePageConfig.seo?.description},
-    authorNameFromConf={siteConfig.site?.authorName},
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.homePageConfig.seo}
+
+    titleFromConf={siteConfig.homePageConfig.seo?.title}
+    descriptionFromConf={siteConfig.homePageConfig.seo?.description}
+    authorNameFromConf={siteConfig.site?.authorName}
+    relativePath="/"
+    siteId={siteConfig.site?.id}
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <JsonLdHomePageBase
-            site={siteConfig.site}
             faqList={faqData}
             servicesList={servicesData}
             reviewsList={reviewVideos}
