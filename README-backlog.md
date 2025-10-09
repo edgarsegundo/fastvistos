@@ -1,8 +1,6 @@
 # Backog
 
 
-- Review publishing steps
-
  ./helper.sh (option 1)
  npx prisma db pull
  npx prisma generate
@@ -27,7 +25,7 @@
 - Ler todos não funcionando na homepage
 
 
-- update to the right logo url in the siteconfig :  url: siteConfig.site?.logo?.url,
+
 
 
 - create these ids  like logoId and others in one place  to be shared
