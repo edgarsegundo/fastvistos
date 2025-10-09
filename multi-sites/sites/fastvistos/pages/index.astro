@@ -56,7 +56,10 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <AboutSection />
     <PassportSection />
     <CarouselSection />
-    <FaqSection relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro" />
+    <FaqSection 
+        relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro" 
+        siteId={siteConfig.site.id}
+    />
     <GoogleMapsSection />
     <CallToActionSection />
     <FooterSection />

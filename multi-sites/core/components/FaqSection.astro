@@ -6,20 +6,23 @@
  */
 
 // FAQ Section Component with inline data
-import { WebpageFaqService } from '../lib/webpage-faq';
+import { getFaqJson } from '../lib/faq-json';
+import type { Faq } from '../lib/faq-json';
 
-// Define the FAQ type for better type safety
-type Faq = {
-    question: string;
-    answer: string;
-};
+export interface Props {
+    relativePath: string;
+    siteId: string;
+}
 
-let faqData: Faq[] = [];
+const { relativePath, siteId } = Astro.props;
+
+let faqData: Faq[];
+
 try {
-    faqData = await WebpageFaqService.getPageFaqList(
-        'multi-sites/sites/fastvistos/components/FaqSection.astro'
-    );
+    faqData = await getFaqJson(siteId); // Pass siteId dynamically
+    console.log(`🛑 Fetched ${faqData.length} FAQ items for site ${siteId}`);
 } catch (err) {
+    console.error(`🛑🛑 Failed to fetch FAQ data for site ${siteId}:`, err);
     faqData = [];
 }
 
