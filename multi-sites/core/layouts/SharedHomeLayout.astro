@@ -41,8 +41,8 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        <!-- Analytics Scripts -->
-        <AnalyticsHead siteConfig={siteConfig} />
+
+        <slot name="head-prepend" />        
 
         <!-- Essential head elements (charset, viewport, etc.) -->
         <HeadBasics
@@ -79,8 +79,7 @@ const {
         <slot name="head" />
     </head>
     <body class={bodyClass} style={bodyStyle}>
-        <!-- Analytics Body Tags -->
-        <AnalyticsBody siteConfig={siteConfig} />
+        <slot name="body-prepend" />
 
         <!-- Body content -->
         <slot />

@@ -41,8 +41,8 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        
-        <AnalyticsHead siteConfig={siteConfig} />
+
+        <slot name="head-prepend" />        
 
         
         <HeadBasics
@@ -79,8 +79,7 @@ const {
         <slot name="head" />
     </head>
     <body class={bodyClass} style={bodyStyle}>
-        
-        <AnalyticsBody siteConfig={siteConfig} />
+        <slot name="body-prepend" />
 
         
         <slot />
