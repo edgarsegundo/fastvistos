@@ -110,6 +110,7 @@ const servicesBlock =
                         '@type': 'Service',
                         name: service.name,
                         description: service.description,
+                        areaServed: 'Brazil',
                         ...(service.offers ? { offers: service.offers } : {}),
                         provider: { '@id': orgId },
                     }
@@ -205,7 +206,7 @@ if (reviewsBlock.length > 0) {
 
 // --- Unified Organization + LocalBusiness block
 const orgBlock = !disableOrganization && {
-  '@type': disableLocalBusiness ? 'Organization' : ['Organization', 'LocalBusiness'],
+  '@type': disableLocalBusiness ? 'Organization' : ['Organization', 'LocalBusiness', 'ProfessionalService'],
   '@id': orgId,
   name: siteConfig.site?.siteName,
   url: canonicalValidated,
@@ -238,7 +239,7 @@ const orgBlock = !disableOrganization && {
           '@type': 'ContactPoint',
           telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
           contactType: 'customer service',
-          areaServed: 'BR',
+          areaServed: 'Brazil',
           availableLanguage: ['Portuguese', 'English'],
         },
         priceRange: siteConfig.site?.priceRange || '$$',
