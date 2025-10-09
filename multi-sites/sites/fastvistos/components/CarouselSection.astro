@@ -511,7 +511,7 @@
             </div>
 
             <!-- Video -->
-            <div
+            <!-- <div
                 style="position: relative; width: 100%; background: white; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); overflow: hidden; padding-top: 56.25%; display: none;"
                 class="md:block"
             >
@@ -550,7 +550,7 @@
                         </svg>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- Button to show all videos on mobile -->
         <div class="text-center mt-4 md:hidden">
@@ -704,9 +704,13 @@
     const showMoreVideosButton = document.getElementById('show-more-videos');
     if (showMoreVideosButton) {
         showMoreVideosButton.addEventListener('click', function () {
+            // Target the videos that have display: none and class md:block
             document
-                .querySelectorAll('.video-item.hidden')
-                .forEach((video) => video.classList.remove('hidden'));
+                .querySelectorAll('div[style*="display: none"][class*="md:block"]')
+                .forEach((video) => {
+                    // Remove display: none style
+                    (video as HTMLElement).style.display = 'block';
+                });
             this.style.display = 'none';
         });
     }
