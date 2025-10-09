@@ -118,7 +118,7 @@ const servicesBlock =
 
 // VideoObjects independentes para reviews em vídeo
 const videoObjects =
-    !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+    !disableVideosReviews && Array.isArray(reviewsList) && reviewsList.length > 0
         ? reviewsList
               .filter((review) => review.videoId && review.thumbnail && review.url)
               .map((review, idx) => {
@@ -155,7 +155,7 @@ const videoObjects =
         : [];
 
 const reviewsBlock =
-    !disableVideosReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+    !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
         ? reviewsList.map((review, idx) => {
               const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
               const base = {
