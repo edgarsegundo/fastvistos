@@ -14,6 +14,7 @@ const {
     disableFAQ = false,
     disableServices = false,
     disableReviews = false,
+    disableVideosReviews = false,
     disableBreadcrumb = false,
     disableWebSite = false,
     disableImageObject = false,
@@ -117,7 +118,7 @@ const servicesBlock =
 
 // VideoObjects independentes para reviews em vídeo
 const videoObjects =
-    !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+    !disableVideosReviews && Array.isArray(reviewsList) && reviewsList.length > 0
         ? reviewsList
               .filter((review) => review.videoId && review.thumbnail && review.url)
               .map((review, idx) => {
