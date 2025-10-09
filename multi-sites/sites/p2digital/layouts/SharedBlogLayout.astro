@@ -40,8 +40,7 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        
-        <AnalyticsHead siteConfig={siteConfig} />
+        <slot name="head-prepend" />
 
         
         <HeadBasics
@@ -81,8 +80,7 @@ const {
         class={`bg-gray-50 leading-normal tracking-normal text-white`}
         style="font-family: 'Source Sans Pro', sans-serif;"
     >
-        
-        <AnalyticsBody siteConfig={siteConfig} />
+        <slot name="body-prepend" />
 
         
         <BlogPageHeader />
