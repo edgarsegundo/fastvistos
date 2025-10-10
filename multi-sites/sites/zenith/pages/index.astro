@@ -3,6 +3,8 @@ import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
+import HeaderSection from '../components/HeaderSection.astro';
+
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
@@ -35,21 +37,10 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <!-- Body content -->
-    <h1 class="text-3xl font-bold text-center mt-20 mb-10 text-gray-800">
-        Bem-vindo ao site da Zenith Topografia!
-    </h1>
+    <HeaderSection />
+
+
 </SharedHomeLayout>
 
 <style is:global>
-    .home-layout p,
-    .home-layout h3,
-    .home-layout ul,
-    .home-layout a,
-    .home-layout span {
-        color: #1b375c !important;
-    }
-
-    .home-main {
-        min-height: 100vh;
-    }
 </style>

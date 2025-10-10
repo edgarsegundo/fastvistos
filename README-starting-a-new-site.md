@@ -29,3 +29,59 @@ public-sites/[SITEID]/assets/images/logo/home-page-main-image-fastvistos-mulher-
 | **File size**                | Under 500 KB if possible (for fast loading)          |
 | **Alt text / accessibility** | Descriptive file name and alt text (for SEO context) |
 | **URL**                      | Absolute URL, same domain preferred                  |
+
+
+
+
+I already created the HeaderSection.astro and the HeroSection.astro, do the same by creating the respective astro files for the other remaining sections in the index_test.html file.
+
+
+
+```html
+---
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import { siteConfig } from '../site-config.ts';
+import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+
+import HeaderSection from '../components/HeaderSection.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+---
+
+
+<SharedHomeLayout
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
+    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.homePageConfig.seo}
+
+    titleFromConf={siteConfig.homePageConfig.seo.title}
+    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
+    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
+    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
+>
+    <!-- Additional head content specific to this layout -->
+    <Fragment slot="head">
+        <JsonLdHomePageBase
+            faqList={[]}
+            servicesList={[]}
+            reviewsList={[]}
+            disableReviews={false}
+        />
+    </Fragment>
+
+    <!-- Body content -->
+    <HeaderSection />
+
+
+</SharedHomeLayout>
+
+<style is:global>
+</style>
+```
