@@ -207,6 +207,8 @@ async function createSite() {
 
         // Check if site already exists
         const siteDir = join(__dirname, `multi-sites/sites/${siteId}`);
+        const publicSiteDir = join(__dirname, `public-sites/${siteId}`);
+        
         try {
             await fs.access(siteDir);
             console.error(`❌ Site '${siteId}' already exists in multi-sites/sites/`);
@@ -215,6 +217,16 @@ async function createSite() {
             return;
         } catch {
             // Site doesn't exist, continue
+        }
+        
+        try {
+            await fs.access(publicSiteDir);
+            console.error(`❌ Public site directory '${siteId}' already exists in public-sites/`);
+            console.log('🚫 Exiting without making changes.');
+            rl.close();
+            return;
+        } catch {
+            // Public site doesn't exist, continue
         }
 
         // Get domain
@@ -278,12 +290,27 @@ async function createSite() {
             DOMAIN: domain,
             SITE_NAME: siteName,
             BUSINESS_ID: businessId,
+            // Public template placeholders
+            'COMPANY-NAME': siteName,
+            'COMPANY-SHORT-NAME': siteName.length > 12 ? siteName.substring(0, 12) : siteName,
+            'COMPANY-DESCRIPTION': `${siteName} - Professional services and solutions`,
+            'COMPANY-CATEGORY-1': 'business',
+            'YOUR-DOMAIN': domain,
         };
 
         // Copy template files to new site
         const templateDir = join(__dirname, 'templates/site-template');
         await copyTemplateFiles(templateDir, siteDir, replacements);
         console.log(`📁 Created site structure from templates`);
+
+        // Copy public template files to public-sites folder
+        const publicTemplateDir = join(__dirname, 'templates/public-template');
+        
+        // Ensure public-sites directory exists
+        await ensureDir(join(__dirname, 'public-sites'));
+        
+        await copyTemplateFiles(publicTemplateDir, publicSiteDir, replacements);
+        console.log(`📁 Created public assets structure in public-sites/${siteId}`);
 
         // Create root-level Tailwind config from template
         // const tailwindTemplate = join(__dirname, 'templates/tailwind.template.config.js');
@@ -301,7 +328,8 @@ async function createSite() {
         );
         console.log(`   2. Customize styling in tailwind.${siteId}.config.js`);
         console.log(`   3. Add your content to ${siteId}/pages/`);
-        console.log(`   4. Run sync to update templates: npm run sync`);
+        console.log(`   4. Add your assets to public-sites/${siteId}/`);
+        console.log(`   5. Run sync to update templates: npm run sync`);
         console.log(`\n💡 Generated business ID: ${businessId}`);
         console.log('    (Replace this with your actual business ID from the database)');
     } catch (error) {
