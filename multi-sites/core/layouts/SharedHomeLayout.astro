@@ -11,6 +11,7 @@ import { siteConfig } from '../site-config.ts';
 import HeadBasics from '../components/HeadBasics.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.site.useFullLanguageTag
@@ -43,6 +44,9 @@ const {
     <head>
         <!-- Analytics Scripts -->
         <AnalyticsHead siteConfig={siteConfig} />
+
+        <!-- Add ThemeToggle here -->
+        <ThemeToggle />
 
         <!-- Essential head elements (charset, viewport, etc.) -->
         <HeadBasics

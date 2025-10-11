@@ -46,6 +46,9 @@ const {
         <AnalyticsHead siteConfig={siteConfig} />
 
         
+        <ThemeToggle />
+
+        
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -85,7 +88,5 @@ const {
 
         
         <slot />
-        
-        <ThemeToggle />
     </body><script src="../lib/updatable-editor.js"></script>
 </html>
