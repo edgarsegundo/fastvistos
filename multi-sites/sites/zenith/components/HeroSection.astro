@@ -20,13 +20,58 @@
                                 class="w-full h-[400px] lg:h-[500px] object-cover"
                                 loading="eager"
                             />
-                            <!-- Overlay Badge -->
-                            <div class="absolute bottom-4 left-4 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg backdrop-blur-sm">
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                    <span class="font-semibold text-sm">Equipamentos de Precisão</span>
+                            
+                            <!-- Overlay Badges Stack -->
+                            <div class="absolute top-4 left-4 space-y-3">
+                                <!-- Equipamentos de Precisão Badge -->
+                                <div class="bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg backdrop-blur-sm">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="font-semibold text-sm">Equipamentos de Precisão</span>
+                                    </div>
+                                </div>
+
+                                <!-- CREA Badge -->
+                                <div class="bg-green-500/90 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                        </svg>
+                                        <span class="font-semibold text-sm">CREA Habilitado</span>
+                                    </div>
+                                </div>
+
+                                <!-- Atendimento Badge -->
+                                <div class="bg-blue-500/90 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"/>
+                                        </svg>
+                                        <span class="font-semibold text-sm">Atendimento Especializado</span>
+                                    </div>
+                                </div>
+
+                                <!-- Projetos Badge -->
+                                <div class="bg-purple-500/90 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="font-semibold text-sm">Projetos Certificados</span>
+                                    </div>
+                                </div>
+
+                                <!-- Experiência Badge -->
+                                <div class="bg-orange-500/90 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="font-semibold text-sm">15+ Anos Experiência</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -35,42 +80,7 @@
                         <div class="absolute -z-10 top-8 left-8 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
                         <div class="absolute -z-10 bottom-8 right-8 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
                     </div>
-                    
-                    <!-- Trust Indicators -->
-                    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium text-sm">CREA Habilitado</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium text-sm">Atendimento Personalizado</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium text-sm">Projetos Certificados</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                            <span class="text-gray-700 font-medium text-sm">15+ Anos Experiência</span>
-                        </div>
-                    </div>
+
                 </div>
 
                 <!-- Content Section - Right -->
