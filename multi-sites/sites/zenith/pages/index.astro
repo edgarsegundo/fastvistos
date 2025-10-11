@@ -4,6 +4,7 @@ import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 import HeaderSection from '../components/HeaderSection.astro';
+import TestSection from '../components/TestSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -37,7 +38,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <!-- Body content -->
-    <HeaderSection />
+    <!-- <HeaderSection /> -->
+    <TestSection />
 
 
 </SharedHomeLayout>
