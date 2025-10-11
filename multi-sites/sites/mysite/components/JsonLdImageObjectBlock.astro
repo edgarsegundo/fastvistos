@@ -1,0 +1,32 @@
+---
+import { siteConfig } from '../site-config.ts';
+
+export function getImageObjectBlock({
+    disableImageObject,
+    imageId,
+    imageUrlValidated,
+    caption,
+    width,
+    height,
+}: {
+    disableImageObject: boolean;
+    imageId?: string | null;
+    imageUrlValidated?: string | null;
+    caption?: string;
+    width?: number;
+    height?: number;
+}) {
+    if (disableImageObject || !imageUrlValidated) return null;
+
+    return {
+        '@type': 'ImageObject',
+        inLanguage: siteConfig.site?.locale || 'pt_BR',
+        '@id': imageId,
+        url: imageUrlValidated,
+        contentUrl: imageUrlValidated,
+        ...(caption ? { caption } : {}),
+        ...(width ? { width } : {}),
+        ...(height ? { height } : {}),
+    };
+}
+---

@@ -25,6 +25,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    themeToggleDisable={true}
 
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}

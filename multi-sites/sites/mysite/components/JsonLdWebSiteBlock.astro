@@ -1,0 +1,50 @@
+---
+import { siteConfig } from '../site-config.ts';
+
+export function getWebSiteBlock({
+    disableWebSite,
+    disableWebSiteSearchAction,
+    websiteId,
+    canonical,
+    siteName,
+    description,
+    orgId,
+}: {
+    disableWebSite: boolean;
+    disableWebSiteSearchAction: boolean;
+    websiteId: string;
+    canonical: string;
+    siteName: string;
+    description?: string;
+    orgId: string;
+}) {
+    if (disableWebSite) return null;
+    return {
+        '@type': 'WebSite',
+        '@id': websiteId,
+        url: canonical,
+        name: siteName,
+        description: description ?? '',
+        publisher: { '@id': orgId },
+        ...(!disableWebSiteSearchAction
+            ? {
+                  potentialAction: [
+                      {
+                          '@type': 'SearchAction',
+                          target: {
+                              '@type': 'EntryPoint',
+                              urlTemplate: `${canonical}?s={search_term_string}`,
+                          },
+                          'query-input': {
+                              '@type': 'PropertyValueSpecification',
+                              valueRequired: true,
+                              valueName: 'search_term_string',
+                          },
+                      },
+                  ],
+              }
+            : {}),
+        inLanguage: siteConfig.site?.locale || 'pt_BR',
+    };
+}
+---

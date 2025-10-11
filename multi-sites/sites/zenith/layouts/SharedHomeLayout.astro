@@ -21,6 +21,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
 const {
     bodyClass = '', 
     bodyStyle = '',
+    themeToggleDisable = false, // New prop to control theme toggle visibility
 
     canonicalConf,
     faviconPathFromConf,
@@ -84,7 +85,7 @@ const {
         <AnalyticsBody siteConfig={siteConfig} />
 
         
-        <ThemeToggle />
+        {!themeToggleDisable && <ThemeToggle />}
 
         
         <slot />
