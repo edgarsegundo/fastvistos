@@ -1,0 +1,37 @@
+---
+// filepath: /Users/edgar/Repos/fastvistos/multi-sites/sites/zenith/components/TestSection.astro
+import ThemeToggle from './ThemeToggle.astro';
+---
+<div class="test-section p-8 bg-background">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-foreground">🧪 Zenith Theme Test</h2>
+        <ThemeToggle />
+    </div>
+    
+    <!-- Test basic Tailwind first -->
+    <div class="p-4 mb-4 bg-red-500 text-white rounded">
+        <p>✅ Basic Tailwind: bg-red-500 text-white (should be red bg, white text)</p>
+    </div>
+    
+    <!-- Test custom background -->
+    <div class="p-4 mb-4 bg-background text-foreground border border-border rounded">
+        <p>🎯 Custom: bg-background text-foreground (changes with theme!)</p>
+    </div>
+    
+    <!-- Test primary colors -->
+    <div class="p-4 mb-4 bg-primary text-primary-foreground rounded">
+        <p>� Primary: bg-primary text-primary-foreground (theme-aware)</p>
+    </div>
+    
+    <!-- Test muted colors -->
+    <div class="p-4 mb-4 bg-muted text-muted-foreground border border-border rounded">
+        <p>🔍 Muted: bg-muted text-muted-foreground (subtle theme colors)</p>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="p-4 bg-primary text-primary-foreground rounded">
+        <p class="font-semibold">🌓 Theme Test Instructions:</p>
+        <p>Click the theme toggle button above to switch between light and dark modes. All colors should smoothly transition!</p>
+    </div>
+
+</div>

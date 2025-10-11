@@ -1,3 +1,7 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+
 <div class="bg-background text-foreground" 
     updatable-section-uuid="02c53dbe-3fc9-49df-81b1-c7b7ab896a7b"
     updatable-section-title="Home Page Header Section"
@@ -5,8 +9,13 @@
     updatable-section-siteid="zenith"
     updatable-section-businessid="5770497882464a4ab0bda055d011113b"
 >
+    <!-- Theme Toggle - Top Right -->
+    <div class="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+    </div>
+
     <!-- Hero Section -->
-    <section class="bg-gradient-to-b from-background to-muted/20 py-20">
+    <section class="bg-gradient-to-b from-background to-muted/20 py-20 relative">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-5xl md:text-6xl font-bold mb-6 text-foreground">
