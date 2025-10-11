@@ -2,6 +2,17 @@
 
 /* Custom Base Styles */
 @layer base {
+    :root {
+        /* Custom color variables */
+        --color-border: 214.3 31.8% 91.4%;
+        --color-background: 0 0% 100%;
+        --color-foreground: 222.2 84% 4.9%;
+        --color-primary: 222.2 47.4% 11.2%;
+        --color-primary-foreground: 210 40% 98%;
+        --color-muted: 210 40% 96.1%;
+        --color-muted-foreground: 215.4 16.3% 46.9%;
+    }
+
     * {
         box-sizing: border-box;
     }
@@ -18,6 +29,13 @@
     }
 }
 
-/* Custom Components */
+/* Custom Components using the variables */
 @layer components {
+    .bg-background { background-color: hsl(var(--color-background)); }
+    .text-foreground { color: hsl(var(--color-foreground)); }
+    .bg-primary { background-color: hsl(var(--color-primary)); }
+    .text-primary-foreground { color: hsl(var(--color-primary-foreground)); }
+    .bg-muted { background-color: hsl(var(--color-muted)); }
+    .text-muted-foreground { color: hsl(var(--color-muted-foreground)); }
+    .border-border { border-color: hsl(var(--color-border)); }
 }
