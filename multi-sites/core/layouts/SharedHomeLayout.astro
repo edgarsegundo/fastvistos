@@ -42,13 +42,7 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        <!-- Analytics Scripts -->
-        <AnalyticsHead siteConfig={siteConfig} />
-
-        <!-- Add ThemeToggle here -->
-        <ThemeToggle />
-
-        <!-- Essential head elements (charset, viewport, etc.) -->
+        <!-- Essential head elements (charset, viewport, etc.) MUST be first -->
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -71,6 +65,9 @@ const {
             updatedDate={updatedDate}
         />
 
+        <!-- Analytics Scripts -->
+        <AnalyticsHead siteConfig={siteConfig} />
+
         <!-- Fonts & Styles -->
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,7 +83,11 @@ const {
         <!-- Analytics Body Tags -->
         <AnalyticsBody siteConfig={siteConfig} />
 
+        <!-- Theme Toggle -->
+        <ThemeToggle />
+
         <!-- Body content -->
         <slot />
-    </body><script src="../lib/updatable-editor.js"></script>
+    </body>
+    <script src="../lib/updatable-editor.js"></script>
 </html>
