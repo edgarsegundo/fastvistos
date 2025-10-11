@@ -138,10 +138,10 @@ async function addNpmScripts(siteId) {
 
         // Define the scripts to add
         const scriptsToAdd = {
-            [`dev:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev --config multi-sites.config.mjs`,
+            [`dev:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev`,
             [`dev:watch:${siteId}`]: `node dev-with-sync.js ${siteId}`,
-            [`build:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build --config multi-sites.config.mjs && node postbuild-updatable.js ${siteId}`,
-            [`preview:${siteId}`]: `SITE_ID=${siteId} astro preview --config multi-sites.config.mjs`,
+            [`build:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build && node postbuild-updatable.js ${siteId}`,
+            [`preview:${siteId}`]: `SITE_ID=${siteId} astro preview`,
         };
 
         let addedScripts = [];
@@ -175,14 +175,14 @@ async function addNpmScripts(siteId) {
         console.error(`❌ Error adding npm scripts for ${siteId}:`, error.message);
         console.log('💡 You can manually add these scripts to package.json:');
         console.log(
-            `   "dev:${siteId}": "node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev --config multi-sites.config.mjs"`
+            `   "dev:${siteId}": "node sync-blog.js ${siteId} && SITE_ID=${siteId} astro dev"`
         );
         console.log(`   "dev:watch:${siteId}": "node dev-with-sync.js ${siteId}"`);
         console.log(
-            `   "build:${siteId}": "node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build --config multi-sites.config.mjs"`
+            `   "build:${siteId}": "node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build && node postbuild-updatable.js ${siteId}"`
         );
         console.log(
-            `   "preview:${siteId}": "SITE_ID=${siteId} astro preview --config multi-sites.config.mjs"`
+            `   "preview:${siteId}": "SITE_ID=${siteId} astro preview"`
         );
     }
 }
@@ -286,10 +286,10 @@ async function createSite() {
         console.log(`📁 Created site structure from templates`);
 
         // Create root-level Tailwind config from template
-        const tailwindTemplate = join(__dirname, 'templates/tailwind.template.config.js');
-        const tailwindContent = await processTemplate(tailwindTemplate, replacements);
-        await fs.writeFile(join(__dirname, `tailwind.${siteId}.config.js`), tailwindContent);
-        console.log(`📝 Created: tailwind.${siteId}.config.js`);
+        // const tailwindTemplate = join(__dirname, 'templates/tailwind.template.config.js');
+        // const tailwindContent = await processTemplate(tailwindTemplate, replacements);
+        // await fs.writeFile(join(__dirname, `tailwind.${siteId}.config.js`), tailwindContent);
+        // console.log(`📝 Created: tailwind.${siteId}.config.js`);
 
         // Add npm scripts for the new site
         await addNpmScripts(siteId);

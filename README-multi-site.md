@@ -1000,17 +1000,10 @@ Each site has automatic CSS variables applied:
     import { getPublishedArticles } from '../multi-sites/core/lib/multi-blog-service.ts';
     ```
 
-2. **Update Astro config**:
-
-    ```bash
-    # Use multi-site config
-    astro dev --config multi-sites.config.mjs
-    ```
-
-3. **Set site context**:
+2. **Set site context**:
     ```bash
     # Set environment variable
-    SITE_ID=fastvistos astro dev --config multi-sites.config.mjs
+    SITE_ID=fastvistos astro dev
     ```
 
 ## 🚀 Deployment

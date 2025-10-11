@@ -5,35 +5,32 @@
  * To customize, edit the template.
  */
 
-// Shared Home Layout - Used across all sites
+// Shared Blog Layout - Used across all sites
 import '../styles/global.css';
-import { siteConfig } from '../site-config.ts';
 import HeadBasics from '../components/HeadBasics.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
+import BlogPageHeader from '../components/BlogPageHeader.astro';
+import BlogPageFooter from '../components/BlogPageFooter.astro';
+import { siteConfig } from '../site-config.ts';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.site.useFullLanguageTag
     ? siteConfig.site.language
     : siteConfig.site.language.split('-')[0];
 
-const {
-    bodyClass = '', 
-    bodyStyle = '',
-    themeToggleDisable = false, // New prop to control theme toggle visibility
-
+const { 
     canonicalConf,
     faviconPathFromConf,
     seoFromConf,
-    titleFromConf,
-    descriptionFromConf,
-    authorNameFromConf,
-    imageFromConf,
-    imageUrlFromConf,
-    imageCaptionFromConf,
-    imageWidthFromConf,
-    imageHeightFromConf,
+    titleFromDb,
+    descriptionFromDb,
+    authorNameFromDb,
+    imageFromDb,
+    imageUrlFromDb,
+    imageCaptionFromDb,
+    imageWidthFromDb,
+    imageHeightFromDb,
 
     pubDate,
     updatedDate,
@@ -43,7 +40,10 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        <!-- Essential head elements (charset, viewport, etc.) MUST be first -->
+        
+        <AnalyticsHead siteConfig={siteConfig} />
+
+        
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -53,24 +53,21 @@ const {
             faviconPath={faviconPathFromConf}
             seo={seoFromConf}
 
-            title={titleFromConf}
-            description={descriptionFromConf}
-            authorName={authorNameFromConf}
-            image={imageFromConf}
-            imageUrl={imageUrlFromConf}
-            imageCaption={imageCaptionFromConf}
-            imageWidth={imageWidthFromConf}
-            imageHeight={imageHeightFromConf}
+            title={titleFromDb}
+            description={descriptionFromDb}
+            authorName={authorNameFromDb}
+            image={imageFromDb}
+            imageUrl={imageUrlFromDb}
+            imageCaption={imageCaptionFromDb}
+            imageWidth={imageWidthFromDb}
+            imageHeight={imageHeightFromDb}
 
             pubDate={pubDate}
             updatedDate={updatedDate}
         />
 
-        <!-- Analytics Scripts -->
-        <AnalyticsHead siteConfig={siteConfig} />
-
-        <!-- Fonts & Styles -->
-        <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
+        
+        <link rel="preconnect" href="https://fastvistos.com.br" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -80,15 +77,20 @@ const {
 
         <slot name="head" />
     </head>
-    <body class={bodyClass} style={bodyStyle}>
-        <!-- Analytics Body Tags -->
+    <body
+        class={`bg-gray-50 leading-normal tracking-normal text-white`}
+        style="font-family: 'Source Sans Pro', sans-serif;"
+    >
+        
         <AnalyticsBody siteConfig={siteConfig} />
 
-        <!-- Theme Toggle (conditional) -->
-        {!themeToggleDisable && <ThemeToggle />}
+        
+        <BlogPageHeader />
 
-        <!-- Body content -->
+        
         <slot />
+
+        
+        <BlogPageFooter />
     </body>
-    <script src="../lib/updatable-editor.js"></script>
-</html>
+</html><script src="../lib/updatable-editor.js"></script>
