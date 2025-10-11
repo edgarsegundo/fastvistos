@@ -42,10 +42,10 @@
     "dev:watch:p2digital": "node dev-with-sync.js p2digital",
     "build:p2digital": "node sync-blog.js p2digital && SITE_ID=p2digital astro build && node postbuild-updatable.js p2digital",
     "preview:p2digital": "SITE_ID=p2digital astro preview",
-    "dev:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro dev --config multi-sites.config.mjs",
+    "dev:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro dev",
     "dev:watch:zenith": "node dev-with-sync.js zenith",
-    "build:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro build --config multi-sites.config.mjs && node postbuild-updatable.js zenith",
-    "preview:zenith": "SITE_ID=zenith astro preview --config multi-sites.config.mjs"
+    "build:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro build && node postbuild-updatable.js zenith",
+    "preview:zenith": "SITE_ID=zenith astro preview"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
