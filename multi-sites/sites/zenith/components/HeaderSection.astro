@@ -1,35 +1,26 @@
----
-import ThemeToggle from './ThemeToggle.astro';
----
-
-<div class="bg-background text-foreground" 
+<div class="bg-background text-foreground theme-transition" 
     updatable-section-uuid="02c53dbe-3fc9-49df-81b1-c7b7ab896a7b"
     updatable-section-title="Home Page Header Section"
     updatable-section-filepath="multi-sites/sites/zenith/components/HeaderSection.astro"
     updatable-section-siteid="zenith"
     updatable-section-businessid="5770497882464a4ab0bda055d011113b"
 >
-    <!-- Theme Toggle - Top Right -->
-    <div class="absolute top-4 right-4 z-10">
-        <ThemeToggle />
-    </div>
-
     <!-- Hero Section -->
-    <section class="bg-gradient-to-b from-background to-muted/20 py-20 relative">
+    <section class="bg-gradient-to-b from-background to-muted/20 py-20 theme-transition">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-foreground">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-foreground theme-transition">
                     Hospedagem de Sites Rápida e Confiável
                 </h1>
-                <p class="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                <p class="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto theme-transition">
                     Hospedagem profissional com 99.9% de uptime, suporte 24/7 e instalação em 1 clique. 
                     Comece seu site hoje mesmo!
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                    <button class="px-8 py-3 bg-primary text-primary-foreground rounded-md text-lg hover:opacity-90 transition-opacity">Ver Planos</button>
-                    <button class="px-8 py-3 border border-border text-foreground rounded-md text-lg hover:bg-muted transition-colors">Saber Mais</button>
+                    <button class="btn-primary px-8 py-3 rounded-md text-lg hover:opacity-90">Ver Planos</button>
+                    <button class="btn-secondary px-8 py-3 rounded-md text-lg">Saber Mais</button>
                 </div>
-                <p class="text-sm text-muted-foreground">A partir de R$ 9,99/mês • Migração Gratuita</p>
+                <p class="text-sm text-muted-foreground theme-transition">A partir de R$ 9,99/mês • Migração Gratuita</p>
             </div>
         </div>
     </section>
