@@ -39,7 +39,8 @@ async function processTemplate(templatePath, replacements) {
 
         // Replace all placeholders
         for (const [placeholder, value] of Object.entries(replacements)) {
-            const regex = new RegExp(`{{${placeholder}}}`, 'g');
+            // Fix: Use [PLACEHOLDER] format instead of {{PLACEHOLDER}}
+            const regex = new RegExp(`\\[${placeholder}\\]`, 'g');
             content = content.replace(regex, value);
         }
 
