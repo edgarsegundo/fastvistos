@@ -1,4 +1,4 @@
-const CACHE_NAME = '[SITE-ID]-v1';
+const CACHE_NAME = '[SITE_ID]-v1';
 const urlsToCache = ['/', '/blog/', '/about/', '/assets/logo.webp', '/favicon.ico'];
 
 self.addEventListener('install', (event) => {
