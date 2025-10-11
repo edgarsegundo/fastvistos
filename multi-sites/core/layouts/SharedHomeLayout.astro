@@ -11,6 +11,7 @@ import { siteConfig } from '../site-config.ts';
 import HeadBasics from '../components/HeadBasics.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.site.useFullLanguageTag
@@ -41,10 +42,7 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        <!-- Analytics Scripts -->
-        <AnalyticsHead siteConfig={siteConfig} />
-
-        <!-- Essential head elements (charset, viewport, etc.) -->
+        <!-- Essential head elements (charset, viewport, etc.) MUST be first -->
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -67,6 +65,9 @@ const {
             updatedDate={updatedDate}
         />
 
+        <!-- Analytics Scripts -->
+        <AnalyticsHead siteConfig={siteConfig} />
+
         <!-- Fonts & Styles -->
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -82,7 +83,11 @@ const {
         <!-- Analytics Body Tags -->
         <AnalyticsBody siteConfig={siteConfig} />
 
+        <!-- Theme Toggle -->
+        <ThemeToggle />
+
         <!-- Body content -->
         <slot />
-    </body><script src="../lib/updatable-editor.js"></script>
+    </body>
+    <script src="../lib/updatable-editor.js"></script>
 </html>

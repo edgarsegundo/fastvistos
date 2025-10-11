@@ -11,6 +11,7 @@ import { siteConfig } from '../site-config.ts';
 import HeadBasics from '../components/HeadBasics.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.site.useFullLanguageTag
@@ -42,9 +43,6 @@ const {
 <html lang={htmlLang}>
     <head>
         
-        <AnalyticsHead siteConfig={siteConfig} />
-
-        
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -68,6 +66,9 @@ const {
         />
 
         
+        <AnalyticsHead siteConfig={siteConfig} />
+
+        
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -83,6 +84,10 @@ const {
         <AnalyticsBody siteConfig={siteConfig} />
 
         
+        <ThemeToggle />
+
+        
         <slot />
-    </body><script src="../lib/updatable-editor.js"></script>
+    </body>
+    <script src="../lib/updatable-editor.js"></script>
 </html>
