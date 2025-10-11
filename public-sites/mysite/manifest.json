@@ -1,7 +1,7 @@
 {
-    "name": "[COMPANY-NAME]",
-    "short_name": "[COMPANY-SHORT-NAME]",
-    "description": "[COMPANY-DESCRIPTION]",
+    "name": "Mysite",
+    "short_name": "Mysite",
+    "description": "Mysite - Professional services and solutions",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -14,6 +14,6 @@
             "type": "image/x-icon"
         }
     ],
-    "categories": ["[COMPANY-CATEGORY-1]", "serviços", "negócios", "vistos"],
+    "categories": ["business", "serviços", "negócios", "vistos"],
     "lang": "pt-BR"
 }
