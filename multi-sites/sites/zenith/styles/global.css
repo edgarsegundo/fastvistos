@@ -11,25 +11,9 @@
         --color-muted: 210 40% 96.1%;
         --color-muted-foreground: 215.4 16.3% 46.9%;
         --color-border: 214.3 31.8% 91.4%;
-        
-        /* Smooth transitions for theme changes */
-        --transition-duration: 200ms;
     }
 
-    /* Auto dark theme based on system preference */
-    @media (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
-            --color-background: 222.2 84% 4.9%;
-            --color-foreground: 210 40% 98%;
-            --color-primary: 217.2 32.6% 17.5%;
-            --color-primary-foreground: 210 40% 98%;
-            --color-muted: 217.2 32.6% 17.5%;
-            --color-muted-foreground: 215 20.2% 65.1%;
-            --color-border: 217.2 32.6% 17.5%;
-        }
-    }
-
-    /* Explicit dark theme */
+    /* Dark theme */
     [data-theme="dark"] {
         --color-background: 222.2 84% 4.9%;
         --color-foreground: 210 40% 98%;
@@ -40,17 +24,6 @@
         --color-border: 217.2 32.6% 17.5%;
     }
 
-    /* Explicit light theme */
-    [data-theme="light"] {
-        --color-background: 0 0% 100%;
-        --color-foreground: 222.2 84% 4.9%;
-        --color-primary: 222.2 47.4% 11.2%;
-        --color-primary-foreground: 210 40% 98%;
-        --color-muted: 210 40% 96.1%;
-        --color-muted-foreground: 215.4 16.3% 46.9%;
-        --color-border: 214.3 31.8% 91.4%;
-    }
-
     * {
         box-sizing: border-box;
     }
@@ -58,61 +31,55 @@
     html {
         font-family: 'Source Sans Pro', sans-serif;
         scroll-behavior: smooth;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     body {
         margin: 0;
         padding: 0;
         line-height: 1.6;
-        /* Add smooth transitions for theme changes */
-        transition: background-color var(--transition-duration) ease, color var(--transition-duration) ease;
+        background-color: hsl(var(--color-background));
+        color: hsl(var(--color-foreground));
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 }
 
 /* Custom Components */
 @layer components {
-    .bg-background { 
-        background-color: hsl(var(--color-background)); 
-        transition: background-color var(--transition-duration) ease;
-    }
-    .text-foreground { 
-        color: hsl(var(--color-foreground)); 
-        transition: color var(--transition-duration) ease;
-    }
-    .bg-primary { 
-        background-color: hsl(var(--color-primary)); 
-        transition: background-color var(--transition-duration) ease;
-    }
-    .text-primary-foreground { 
-        color: hsl(var(--color-primary-foreground)); 
-        transition: color var(--transition-duration) ease;
-    }
-    .bg-muted { 
-        background-color: hsl(var(--color-muted)); 
-        transition: background-color var(--transition-duration) ease;
-    }
-    .text-muted-foreground { 
-        color: hsl(var(--color-muted-foreground)); 
-        transition: color var(--transition-duration) ease;
-    }
-    .border-border { 
-        border-color: hsl(var(--color-border)); 
-        transition: border-color var(--transition-duration) ease;
-    }
+    .bg-background { background-color: hsl(var(--color-background)); }
+    .text-foreground { color: hsl(var(--color-foreground)); }
+    .bg-primary { background-color: hsl(var(--color-primary)); }
+    .text-primary-foreground { color: hsl(var(--color-primary-foreground)); }
+    .bg-muted { background-color: hsl(var(--color-muted)); }
+    .text-muted-foreground { color: hsl(var(--color-muted-foreground)); }
+    .border-border { border-color: hsl(var(--color-border)); }
+
+    /* Additional theme classes for cards, sections, etc */
+    .bg-card { background-color: hsl(var(--color-background)); }
+    .text-card-foreground { color: hsl(var(--color-foreground)); }
+    .bg-section { background-color: hsl(var(--color-muted) / 0.3); }
+    .bg-section-alt { background-color: hsl(var(--color-background)); }
     
-    /* Theme toggle button styles */
-    .theme-toggle {
-        padding: 0.5rem;
-        border-radius: 0.375rem;
-        background-color: hsl(var(--color-muted));
-        color: hsl(var(--color-muted-foreground));
-        border: none;
-        cursor: pointer;
-        transition: all var(--transition-duration) ease;
+    /* Theme transitions */
+    .theme-transition {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
-    
-    .theme-toggle:hover {
+
+    /* Button variations */
+    .btn-primary {
         background-color: hsl(var(--color-primary));
         color: hsl(var(--color-primary-foreground));
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary {
+        background-color: transparent;
+        color: hsl(var(--color-foreground));
+        border: 1px solid hsl(var(--color-border));
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background-color: hsl(var(--color-muted));
     }
 }
