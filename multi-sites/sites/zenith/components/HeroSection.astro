@@ -1,24 +1,145 @@
-<div
+<div class="bg-background text-foreground theme-transition" 
     updatable-section-uuid="02c53dbe-3fc9-49df-81b1-c7b7ab896a7b"
     updatable-section-title="Home Page Header Section"
     updatable-section-filepath="multi-sites/sites/zenith/components/HeaderSection.astro"
     updatable-section-siteid="zenith"
     updatable-section-businessid="5770497882464a4ab0bda055d011113b"
 >
-    <header class="border-b border-border">
-        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div class="text-2xl font-bold text-primary">CloudHost</div>
-            <nav class="hidden md:flex gap-6">
-                <a href="#" class="text-foreground hover:text-primary transition-colors">Hospedagem</a>
-                <a href="#" class="text-foreground hover:text-primary transition-colors">Domínios</a>
-                <a href="#" class="text-foreground hover:text-primary transition-colors">Preços</a>
-                <a href="#" class="text-foreground hover:text-primary transition-colors">Suporte</a>
-            </nav>
-            <div class="flex gap-3">
-                <button class="px-4 py-2 text-foreground hover:text-primary transition-colors">Entrar</button>
-                <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity">Começar</button>
+    <!-- Hero Section -->
+    <section class="py-16 lg:py-20 min-h-[75vh] flex items-center" style="background: linear-gradient(to bottom, #FBF00E 0%, #FAEF19 30%, #F5E91A 70%, #E6D617 100%);">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+                <!-- Image Section - Left -->
+                <div class="relative order-2 lg:order-1">
+                    <div class="relative">
+                        <!-- Main Image Container -->
+                        <div class="relative z-10 bg-card border border-border rounded-2xl shadow-xl overflow-hidden theme-transition">
+                            <img 
+                                src="/assets/images/cover/hero-cover-image.webp" 
+                                alt="Equipe de topografia em campo com equipamentos de precisão" 
+                                class="w-full h-[400px] lg:h-[500px] object-cover"
+                                loading="eager"
+                            />
+                            <!-- Overlay Badge -->
+                            <div class="absolute bottom-4 left-4 bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg backdrop-blur-sm">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="font-semibold text-sm">Equipamentos de Precisão</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Background Decorative Elements -->
+                        <div class="absolute -z-10 top-8 left-8 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
+                        <div class="absolute -z-10 bottom-8 right-8 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+                    </div>
+                    
+                    <!-- Stats Cards Below Image -->
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 text-center shadow-lg">
+                            <div class="text-2xl font-bold text-gray-800">15+</div>
+                            <div class="text-sm text-gray-600">Anos de Experiência</div>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 text-center shadow-lg">
+                            <div class="text-2xl font-bold text-gray-800">5</div>
+                            <div class="text-sm text-gray-600">Equipes Especializadas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Section - Right -->
+                <div class="order-1 lg:order-2 space-y-8">
+                    <!-- Main Title -->
+                    <div class="space-y-4">
+                        <h1 class="text-4xl lg:text-6xl font-bold text-gray-800 leading-tight">
+                            Topografia de
+                            <span class="text-gray-900">Precisão</span>
+                            <br class="hidden lg:block">
+                            para Seus Projetos
+                        </h1>
+                        
+                        <p class="text-xl lg:text-2xl text-gray-700 leading-relaxed">
+                            Profissionais habilitados com mais de 15 anos de experiência em levantamentos topográficos, 
+                            geodésia e regularização fundiária.
+                        </p>
+                    </div>
+
+                    <!-- Key Benefits -->
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center mt-1">
+                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600">
+                                <span class="font-semibold text-gray-800">Geodésia Especializada:</span> 
+                                Responsáveis técnicos com formação continuada e certificação
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center mt-1">
+                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600">
+                                <span class="font-semibold text-gray-800">Tecnologia Avançada:</span> 
+                                Equipamentos de precisão incluindo drones para mapeamento aéreo
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 w-6 h-6 bg-gray-800/10 rounded-full flex items-center justify-center mt-1">
+                                <svg class="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600">
+                                <span class="font-semibold text-gray-800">Suporte Completo:</span> 
+                                Da medição ao registro cartorial e processos de usucapião
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Call to Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button class="bg-gray-800 text-white px-8 py-4 text-lg font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">
+                            Solicitar Orçamento
+                        </button>
+                        <button class="bg-white/90 text-gray-800 border-2 border-gray-800 px-8 py-4 text-lg font-semibold rounded-lg hover:bg-white transition-colors shadow-lg">
+                            Nossos Serviços
+                        </button>
+                    </div>
+
+                    <!-- Trust Indicators -->
+                    <div class="pt-6 border-t border-gray-800/20">
+                        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-700">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>CREA Habilitado</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Atendimento Personalizado</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Projetos Certificados</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </header>
-
+    </section>
 </div>
