@@ -147,32 +147,12 @@ export default defineConfig({
                 return page.includes(siteConfig.domain) || !page.includes('://');
             },
         }),
-        // Add Tailwind integration
-        {
-            name: 'tailwindcss-integration',
-            hooks: {
-                'astro:config:setup': ({ updateConfig }) => {
-                    console.log('🌈 Setting up Tailwind CSS integration for', CURRENT_SITE);
-                    updateConfig({
-                        vite: {
-                            plugins: [
-                                tailwindcss({
-                                    config: `./tailwind.${CURRENT_SITE}.config.js`,
-                                }),
-                            ],
-                        },
-                    });
-                },
-            },
-        },
     ],
 
     vite: {
         plugins: [
             tailwindcss({
                 config: `./tailwind.${CURRENT_SITE}.config.js`,
-                // Force Tailwind to rebuild when config changes
-                configDeps: [`./tailwind.${CURRENT_SITE}.config.js`],
             }),
         ],
         define: {
