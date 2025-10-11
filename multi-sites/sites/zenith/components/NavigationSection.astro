@@ -1,0 +1,151 @@
+---
+// NavigationSection.astro - Main navigation component
+---
+
+<div updatable-section-uuid="02c53dbe-3fc9-49df-81b1-c7b7ab896a7b"
+    updatable-section-title="Navigation Section"
+    updatable-section-filepath="multi-sites/sites/zenith/components/NavigationSection.astro"
+    updatable-section-siteid="zenith"
+    updatable-section-businessid="5770497882464a4ab0bda055d011113b"
+>
+<nav class="bg-background/95 backdrop-blur-sm border-b border-border theme-transition fixed top-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="/" class="flex items-center space-x-2 theme-transition hover:opacity-80">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="text-primary-foreground font-bold text-lg">C</span>
+                    </div>
+                    <span class="text-xl font-bold text-foreground">CloudHost</span>
+                </a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a 
+                    href="#features" 
+                    class="text-muted-foreground hover:text-primary theme-transition font-medium"
+                >
+                    Recursos
+                </a>
+                <a 
+                    href="#pricing" 
+                    class="text-muted-foreground hover:text-primary theme-transition font-medium"
+                >
+                    Preços
+                </a>
+                <a 
+                    href="#contact" 
+                    class="text-muted-foreground hover:text-primary theme-transition font-medium"
+                >
+                    Contato
+                </a>
+                <a 
+                    href="/login" 
+                    class="btn-primary px-6 py-2 rounded-md font-medium"
+                >
+                    Entrar
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button 
+                    id="mobile-menu-button"
+                    class="text-muted-foreground hover:text-primary theme-transition p-2"
+                    aria-label="Toggle mobile menu"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden pb-4">
+            <div class="flex flex-col space-y-4">
+                <a 
+                    href="#features" 
+                    class="text-muted-foreground hover:text-primary theme-transition font-medium py-2"
+                >
+                    Recursos
+                </a>
+                <a 
+                    href="#pricing" 
+                    class="text-muted-foreground hover:text-primary theme-transition font-medium py-2"
+                >
+                    Preços
+                </a>
+                <a 
+                    href="#contact" 
+                    class="text-muted-foreground hover:text-primary theme-transition font-medium py-2"
+                >
+                    Contato
+                </a>
+                <a 
+                    href="/login" 
+                    class="btn-primary px-6 py-2 rounded-md font-medium text-center mt-2"
+                >
+                    Entrar
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Add padding to body to account for fixed navbar -->
+<div class="h-16"></div>
+
+<script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when clicking on a link
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const target = event.target as HTMLElement;
+                if (target && !mobileMenuButton.contains(target) && !mobileMenu.contains(target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
+    });
+
+    // Smooth scrolling for anchor links
+    document.addEventListener('DOMContentLoaded', function() {
+        const anchorLinks = document.querySelectorAll('a[href^="#"]');
+        
+        anchorLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar height
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>
+</div>
