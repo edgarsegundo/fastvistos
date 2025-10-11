@@ -288,15 +288,14 @@ async function createSite() {
         // Prepare template replacements
         replacements = {
             SITE_ID: siteId,
-            DOMAIN: domain,
             SITE_NAME: siteName,
             BUSINESS_ID: businessId,
             // Public template placeholders
-            'COMPANY-NAME': siteName,
-            'COMPANY-SHORT-NAME': siteName.length > 12 ? siteName.substring(0, 12) : siteName,
-            'COMPANY-DESCRIPTION': `${siteName} - Professional services and solutions`,
-            'COMPANY-CATEGORY-1': 'business',
-            'YOUR-DOMAIN': domain,
+            COMPANY_NAME: siteName,
+            COMPANY_SHORT_NAME: siteName.length > 12 ? siteName.substring(0, 12) : siteName,
+            COMPANY_DESCRIPTION: `${siteName} - Professional services and solutions`,
+            COMPANY_CATEGORY_1: 'business',
+            YOUR_DOMAIN: domain,
         };
 
         // Copy template files to new site

@@ -1,7 +1,7 @@
 {
-    "name": "[COMPANY-NAME]",
-    "short_name": "[COMPANY-SHORT-NAME]",
-    "description": "[COMPANY-DESCRIPTION]",
+    "name": "[COMPANY_NAME]",
+    "short_name": "[COMPANY_SHORT_NAME]",
+    "description": "[COMPANY_DESCRIPTION]",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -14,6 +14,6 @@
             "type": "image/x-icon"
         }
     ],
-    "categories": ["[COMPANY-CATEGORY-1]", "serviços", "negócios", "vistos"],
+    "categories": ["[COMPANY_CATEGORY_1]", "serviços", "negócios", "vistos"],
     "lang": "pt-BR"
 }
