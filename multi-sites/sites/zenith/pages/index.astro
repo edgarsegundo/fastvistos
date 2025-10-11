@@ -3,6 +3,7 @@ import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
+import NavigationSection from '../components/NavigationSection.astro';
 import HeaderSection from '../components/HeaderSection.astro';
 import TestSection from '../components/TestSection.astro';
 import FeaturesSection from '../components/FeaturesSection.astro';
@@ -43,6 +44,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <!-- Body content -->
+    <NavigationSection />
     <HeaderSection />
     <FeaturesSection />
     <PricingSection />
