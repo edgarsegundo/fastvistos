@@ -4,10 +4,15 @@ import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 import NavigationSection from '../components/NavigationSection.astro';
-import HeaderSection from '../components/HeaderSection.astro';
-import TestSection from '../components/TestSection.astro';
+import HeroSection from '../components/HeroSection.astro';
 import FeaturesSection from '../components/FeaturesSection.astro';
-import PricingSection from '../components/PricingSection.astro';
+
+import GoogleMapsSection from '../components/GoogleMapsSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import AboutSection from '../components/AboutSection.astro';
+
+import Whatsapp from '../components/Whatsapp.astro';
+
 import StatsSection from '../components/StatsSection.astro';
 import CTASection from '../components/CTASection.astro';
 import FooterSection from '../components/FooterSection.astro';
@@ -19,6 +24,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+
+    themeToggleDisable={true}
 
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
@@ -45,12 +52,20 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
     <!-- Body content -->
     <NavigationSection />
-    <HeaderSection />
+    <HeroSection />
+    <AboutSection />
     <FeaturesSection />
-    <PricingSection />
     <StatsSection />
     <CTASection />
+    <GoogleMapsSection />
+    <FaqSection 
+        relativePath="multi-sites/sites/zenith/components/FaqSection.astro" 
+        siteId={siteConfig.site.id}
+    />
     <FooterSection />
+
+    <Whatsapp />
+
 
 </SharedHomeLayout>
 

@@ -45,11 +45,7 @@
     "dev:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro dev",
     "dev:watch:zenith": "node dev-with-sync.js zenith",
     "build:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro build && node postbuild-updatable.js zenith",
-    "preview:zenith": "SITE_ID=zenith astro preview",
-    "dev:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro dev",
-    "dev:watch:mysite": "node dev-with-sync.js mysite",
-    "build:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro build && node postbuild-updatable.js mysite",
-    "preview:mysite": "SITE_ID=mysite astro preview"
+    "preview:zenith": "SITE_ID=zenith astro preview"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

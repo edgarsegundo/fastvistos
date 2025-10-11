@@ -8,42 +8,45 @@
     updatable-section-siteid="zenith"
     updatable-section-businessid="5770497882464a4ab0bda055d011113b"
 >
-<nav class="bg-background/95 backdrop-blur-sm border-b border-border theme-transition fixed top-0 left-0 right-0 z-50">
+<nav class="bg-white" style="background-color: #FBF00E !important;">
     <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center justify-between h-26">
             <!-- Logo -->
             <div class="flex items-center">
-                <a href="/" class="flex items-center space-x-2 theme-transition hover:opacity-80">
-                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                        <span class="text-primary-foreground font-bold text-lg">C</span>
-                    </div>
-                    <span class="text-xl font-bold text-foreground">CloudHost</span>
-                </a>
+                <a
+                    class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+                    href="https://zenithtopografia.com.br"
+                >
+                    <img
+                        src="assets/images/logo/logo_zenith_partial.webp"
+                        class="w-32 sm:w-36 md:w-40 lg:w-48 xl:w-56 h-auto"
+                    />
+                </a>                
             </div>
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
                 <a 
                     href="#features" 
-                    class="text-muted-foreground hover:text-primary theme-transition font-medium"
+                    class="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 >
                     Recursos
                 </a>
                 <a 
                     href="#pricing" 
-                    class="text-muted-foreground hover:text-primary theme-transition font-medium"
+                    class="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 >
                     Preços
                 </a>
                 <a 
                     href="#contact" 
-                    class="text-muted-foreground hover:text-primary theme-transition font-medium"
+                    class="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 >
                     Contato
                 </a>
                 <a 
                     href="/login" 
-                    class="btn-primary px-6 py-2 rounded-md font-medium"
+                    class="bg-gray-800 text-white px-6 py-2 rounded-md font-medium hover:bg-gray-700 transition-colors"
                 >
                     Entrar
                 </a>
@@ -53,7 +56,7 @@
             <div class="md:hidden">
                 <button 
                     id="mobile-menu-button"
-                    class="text-muted-foreground hover:text-primary theme-transition p-2"
+                    class="text-gray-600 hover:text-gray-900 transition-colors p-2"
                     aria-label="Toggle mobile menu"
                 >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,25 +71,25 @@
             <div class="flex flex-col space-y-4">
                 <a 
                     href="#features" 
-                    class="text-muted-foreground hover:text-primary theme-transition font-medium py-2"
+                    class="text-gray-600 hover:text-gray-900 transition-colors font-medium py-2"
                 >
                     Recursos
                 </a>
                 <a 
                     href="#pricing" 
-                    class="text-muted-foreground hover:text-primary theme-transition font-medium py-2"
+                    class="text-gray-600 hover:text-gray-900 transition-colors font-medium py-2"
                 >
                     Preços
                 </a>
                 <a 
                     href="#contact" 
-                    class="text-muted-foreground hover:text-primary theme-transition font-medium py-2"
+                    class="text-gray-600 hover:text-gray-900 transition-colors font-medium py-2"
                 >
                     Contato
                 </a>
                 <a 
                     href="/login" 
-                    class="btn-primary px-6 py-2 rounded-md font-medium text-center mt-2"
+                    class="bg-gray-800 text-white px-6 py-2 rounded-md font-medium text-center mt-2 hover:bg-gray-700 transition-colors"
                 >
                     Entrar
                 </a>
@@ -94,9 +97,6 @@
         </div>
     </div>
 </nav>
-
-<!-- Add padding to body to account for fixed navbar -->
-<div class="h-16"></div>
 
 <script>
     // Mobile menu toggle functionality
@@ -138,9 +138,7 @@
                 const targetElement = document.getElementById(targetId);
                 
                 if (targetElement) {
-                    const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar height
-                    window.scrollTo({
-                        top: offsetTop,
+                    targetElement.scrollIntoView({
                         behavior: 'smooth'
                     });
                 }
