@@ -1,0 +1,19 @@
+{
+    "name": "[COMPANY-NAME]",
+    "short_name": "[COMPANY-SHORT-NAME]",
+    "description": "[COMPANY-DESCRIPTION]",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0077b6",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "16x16 32x32",
+            "type": "image/x-icon"
+        }
+    ],
+    "categories": ["[COMPANY-CATEGORY-1]", "serviços", "negócios", "vistos"],
+    "lang": "pt-BR"
+}
