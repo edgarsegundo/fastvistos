@@ -191,7 +191,7 @@ async function addNpmScripts(siteId) {
 async function createSite() {
     let replacements = {};
     console.log('🚀 Site Creation Wizard');
-    console.log('======================\n');
+    console.log('========================\n');
 
     try {
         // Get site ID
@@ -323,9 +323,7 @@ async function createSite() {
 
         console.log('\n✅ Site created successfully!');
         console.log('\n📋 Next steps:');
-        console.log(
-            `   1. Update business_id in ${siteId}/site-config.ts with your actual business ID`
-        );
+        console.log(`   1. Update business_id in ${siteId}/site-config.ts with your actual business ID`);
         console.log(`   2. Customize styling in tailwind.${siteId}.config.js`);
         console.log(`   3. Add your content to ${siteId}/pages/`);
         console.log(`   4. Add your assets to public-sites/${siteId}/`);
