@@ -4,7 +4,14 @@ import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 import HeaderSection from '../components/HeaderSection.astro';
-import TestSection from '../components/TestSection.astro';
+import FeaturesSection from '../components/FeaturesSection.astro';
+import PricingSection from '../components/PricingSection.astro';
+import StatsSection from '../components/StatsSection.astro';
+import CTASection from '../components/CTASection.astro';
+import FooterSection from '../components/FooterSection.astro';
+
+
+// import TestSection from '../components/TestSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -38,9 +45,18 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <!-- Body content -->
-    <HeaderSection />
-    <TestSection />
 
+    <body class="min-h-screen bg-background">
+        <HeaderSection />
+        <FeaturesSection />
+        <PricingSection />
+        <StatsSection />
+        <CTASection />
+        <FooterSection />
+    </body>
+    
+
+    <!-- <TestSection /> -->
 
 </SharedHomeLayout>
 
