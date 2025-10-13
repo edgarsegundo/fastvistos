@@ -59,19 +59,19 @@ const orgEntity = {
 
 const authorEntity = {
   '@type': 'Person',
+  '@id': `${canonicalValidated}#/schema/person/${blogConfigFromDb?.author_name?.toLowerCase().replace(/\s+/g, '-')}`,
   name: blogConfigFromDb?.author_name,
-  ...(blogConfigFromDb?.author_image ? { image: getImageObjectBlock({
-        disableImageObject: false,
-        imageId: `${blogpageUrl}#authorimage`,
-        imageUrlValidated: getValidatedImageUrl({image: blogConfigFromDb?.author_image, 
-                                                imageUrl: null, 
-                                                assetsUrlBase: siteConfig.site.assetsUrlBase
-        }),
-        caption: 'Photo of ' + blogConfigFromDb?.author_name,
-        width: 192,
-        height: 192,
-    }) } : {}),
-  url: blogpageUrl,
+  ...(blogConfigFromDb?.author_image ? {
+    image: {
+      '@type': 'ImageObject',
+      '@id': `${canonicalValidated}#/schema/person/${blogConfigFromDb?.author_name?.toLowerCase().replace(/\s+/g, '-')}-image`,
+      url: getValidatedImageUrl({
+        image: blogConfigFromDb.author_image,
+        imageUrl: null,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+      })
+    }
+  } : {}),
   ...(siteConfig.site?.socialLinks && siteConfig.site.socialLinks.length > 0 
       ? { sameAs: siteConfig.site.socialLinks } 
       : {}),

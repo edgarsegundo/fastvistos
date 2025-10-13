@@ -15,6 +15,20 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 // Fetch blog data using the business-aware blog service
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
+
+// Create correct breadcrumb structure
+const breadcrumbList = [
+  {
+    name: "Home",
+    item: siteConfig.site.canonical, // This should be "https://fastvistos.com.br/"
+    position: 1
+  },
+  {
+    name: "Blog",
+    item: `${siteConfig.site.canonical}blog/`, // This should be "https://fastvistos.com.br/blog/"
+    position: 2
+  }
+];
 ---
 
 <SharedBlogLayout
@@ -41,6 +55,7 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
             imageCaption={blogConfigFromDb?.seo_image_caption || siteConfig.site.title}
             imageHeight={blogConfigFromDb?.seo_image_height || 675}
             imageWidth={blogConfigFromDb?.seo_image_width || 1200}
+            breadcrumbList={breadcrumbList}
         />
     </Fragment>
 
