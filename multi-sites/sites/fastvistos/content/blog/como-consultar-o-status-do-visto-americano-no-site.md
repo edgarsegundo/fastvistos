@@ -2,14 +2,14 @@
 title: "Como consultar o status do visto americano no site oficial: guia 2025"
 description: "KMKNSLTRSTTSDVSTMRKNNSTFSLG"
 pubDate: "2025-10-13T18:41:42.000Z"
-updatedDate: "2025-10-13T19:07:37.962Z"
+updatedDate: "2025-10-13T19:16:04.704Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__consultar-status-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "1525"
+wordCount: "1506"
 ---
 
 # Como consultar o status do visto americano no site oficial (guia atualizado 2025)
@@ -105,6 +105,8 @@ O sistema exibirá o **status atualizado do seu visto americano**, que pode ser 
 - 🔵 **Ready:** Documento pronto para entrevista
 - 🔴 **Refused:** Visto negado
 
+Exemplo da tela mostrando que o visto foi aprovado:
+
 ![Exemplo de visto americano aprovado no site oficial CEAC.](https://fastvistos.com.br/assets/images/blog/01-visto-americano-aprovado.webp)
 
 ### 📌 Passo 6 — Anote a data da última atualização
@@ -155,10 +157,6 @@ De forma geral:
 
 ---
 
-Excelente complemento! Vamos criar uma seção mais dinâmica e visual para esse momento de alegria e ansiedade que é a retirada do passaporte.
-
----
-
 ## 🎉 Meu visto foi aprovado! E agora?
 
 Parabéns! O status **"Issued"** significa que seu visto foi aprovado e está sendo impresso e preparado. Agora é a hora de acompanhar a entrega do seu passaporte.
@@ -183,7 +181,7 @@ O processo de entrega é gerenciado pelo **CASV (Centro de Atendimento ao Solici
 
 💡 **Dica importante:** O tempo total entre a aprovação do visto e a disponibilidade do passaporte geralmente leva de **7 a 14 dias úteis**, podendo variar conforme a localidade e o volume de processos.
 
-🔗 **Acompanhe a entrega aqui:** [Link para o portal do CASV]
+🔗 **Acompanhe a entrega [aqui]([https://ais.usvisa-info.com/pt-br/niv]):**
 
 ---
 
