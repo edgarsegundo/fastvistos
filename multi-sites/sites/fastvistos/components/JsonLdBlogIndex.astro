@@ -35,7 +35,7 @@ const {
 } = Astro.props;
 
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
-
+const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 
 const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
 const blogpageUrl = `${canonicalValidated}blog/`;
@@ -57,6 +57,26 @@ const orgEntity = {
   }
 };
 
+const authorEntity = {
+  '@type': 'Person',
+  name: blogConfigFromDb?.author_name,
+  ...(blogConfigFromDb?.author_image ? { image: getImageObjectBlock({
+        disableImageObject: false,
+        imageId: `${blogpageUrl}#authorimage`,
+        imageUrlValidated: getValidatedImageUrl({image: blogConfigFromDb?.author_image, 
+                                                imageUrl: null, 
+                                                assetsUrlBase: siteConfig.site.assetsUrlBase
+        }),
+        caption: 'Photo of ' + blogConfigFromDb?.author_name,
+        width: 192,
+        height: 192,
+    }) } : {}),
+  url: blogpageUrl,
+  ...(siteConfig.site?.socialLinks && siteConfig.site.socialLinks.length > 0 
+      ? { sameAs: siteConfig.site.socialLinks } 
+      : {}),
+};
+
 const itemLists = topicsWithArticles.map((topic: any) => ({
     '@type': 'ItemList',
     name: topic.title,
@@ -71,7 +91,7 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
             description: article.seo_description || '',
             datePublished: article.published,
             dateModified: article.updated || article.published,
-            author: orgEntity,                    // can also be Person if needed
+            author: authorEntity,                    // can also be Person if needed
             publisher: orgEntity,
             inLanguage: siteConfig.site?.locale || 'pt-BR',
             mainEntityOfPage: {
@@ -96,6 +116,7 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
 // WebPage block
 const webPageBlock = getWebPageBlock({
     disableWebPage: false,
+    includeCollection: true,
     pageUrl: blogpageUrl,
     siteName: title || siteConfig.site?.siteName,
     websiteId,

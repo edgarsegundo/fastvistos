@@ -3,6 +3,7 @@ import { siteConfig } from '../site-config.ts';
 
 export function getWebPageBlock({
     disableWebPage,
+    includeCollection = false,
     pageUrl,
     siteName,
     websiteId,
@@ -17,6 +18,7 @@ export function getWebPageBlock({
     disableHasPart = true,
 }: {
     disableWebPage: boolean;
+    includeCollection?: boolean;
     pageUrl: string;
     siteName: string;
     websiteId: string;
@@ -32,7 +34,7 @@ export function getWebPageBlock({
 }) {
     if (disableWebPage) return null;
     return {
-        '@type': 'WebPage',
+        '@type': includeCollection ? ['WebPage', 'CollectionPage'] : 'WebPage',
         '@id': pageUrl,
         url: pageUrl,
         name: siteName,
