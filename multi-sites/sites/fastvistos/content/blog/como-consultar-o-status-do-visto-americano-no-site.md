@@ -2,7 +2,7 @@
 title: "Como consultar o status do visto americano no site oficial: guia 2025"
 description: "KMKNSLTRSTTSDVSTMRKNNSTFSLG"
 pubDate: "2025-10-13T18:41:42.000Z"
-updatedDate: "2025-10-13T19:16:04.704Z"
+updatedDate: "2025-10-13T20:38:44.137Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -198,5 +198,4 @@ Encontrar uma recusa pode ser desanimador, mas é importante saber que **isso n�
 **Não se desespere!** Nossa equipe de especialistas pode orientar você sobre os próximos passos. Leia nosso artigo com **casos reais de sucesso** de pessoas que conseguiram o visto mesmo após uma negativa:  
 👉 [Link para o Artigo de Casos de Sucesso]
 
-🔗 **Acesse o site oficial para consultar seu status:**  
-[https://ceac.state.gov/CEACStatTracker/Status.aspx](https://ceac.state.gov/CEACStatTracker/Status.aspx)
+🔗 **Acesse o site oficial para consultar seu status** <a href="https://example.com" target="_blank">aqui</a>

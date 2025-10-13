@@ -42,6 +42,17 @@ const authorName = articleFromDb?.author_name || blogConfigFromDb?.author_name;
 const authorImage = articleFromDb?.author_image || blogConfigFromDb?.author_image;
 const authorDescription = blogConfigFromDb?.author_description;
 
+// Get FAQ information
+const faqJson = articleFromDb?.faq_json;
+let faqData = null;
+
+if (faqJson) {
+    try {
+        faqData = typeof faqJson === 'string' ? JSON.parse(faqJson) : faqJson;
+    } catch (e) {
+        console.error('Error parsing FAQ JSON:', e);
+    }
+}
 
 const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replace(/^.*\//, '') : null;
 ---
@@ -115,6 +126,40 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
             </div>
 
             
+            {faqData && Array.isArray(faqData) && faqData.length > 0 && (
+                <div class="faq-section">
+                    <div class="faq-divider"></div>
+                    <div class="faq-card">
+                        <h2 class="faq-title">Perguntas Frequentes</h2>
+                        <div class="faq-list">
+                            {faqData.map((item, index) => (
+                                <div class="faq-item" key={index}>
+                                    <button 
+                                        class="faq-question" 
+                                        onclick={`toggleFaq(${index})`}
+                                        aria-expanded="false"
+                                        aria-controls={`faq-answer-${index}`}
+                                    >
+                                        <span class="faq-question-text">{item.question}</span>
+                                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+                                    <div 
+                                        class="faq-answer" 
+                                        id={`faq-answer-${index}`}
+                                        style="display: none;"
+                                    >
+                                        <p>{item.answer}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            
             {authorName && (
                 <div class="author-section">
                     <div class="author-divider"></div>
@@ -181,6 +226,102 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         justify-content: center;
         align-items: center;
         margin: 0.5rem 0 1.5rem;
+    }
+
+    /* FAQ Section Styles */
+    .faq-section {
+        margin-top: 4rem;
+        margin-bottom: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .faq-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+        margin-bottom: 2rem;
+    }
+
+    .faq-card {
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        padding: 2rem;
+    }
+
+    .faq-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+        text-align: center;
+    }
+
+    .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .faq-item {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+
+    .faq-item:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .faq-question {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        text-align: left;
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #374151;
+        transition: background-color 0.2s ease;
+    }
+
+    .faq-question:hover {
+        background-color: #f9fafb;
+    }
+
+    .faq-question-text {
+        flex: 1;
+        margin-right: 1rem;
+    }
+
+    .faq-chevron {
+        width: 20px;
+        height: 20px;
+        color: #6b7280;
+        transition: transform 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .faq-question[aria-expanded="true"] .faq-chevron {
+        transform: rotate(180deg);
+    }
+
+    .faq-answer {
+        padding: 0 1.25rem 1rem 1.25rem;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .faq-answer p {
+        margin: 0.75rem 0 0 0;
+        color: #4b5563;
+        line-height: 1.6;
     }
 
     /* Author Section Styles */
@@ -278,6 +419,30 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
             display: none;
         }
         
+        /* FAQ section mobile styles */
+        .faq-section {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .faq-card {
+            padding: 1.5rem;
+        }
+        
+        .faq-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-question {
+            padding: 0.875rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .faq-answer {
+            padding: 0 1rem 0.875rem 1rem;
+        }
+
         /* Author section mobile styles */
         .author-section {
             padding-left: 1rem;
@@ -305,3 +470,37 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         }
     }
 </style>
+
+<script>
+    function toggleFaq(index) {
+        const button = document.querySelector(`button[onclick="toggleFaq(${index})"]`);
+        const answer = document.getElementById(`faq-answer-${index}`);
+        
+        if (!button || !answer) return;
+        
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        
+        // Close all other FAQ items
+        document.querySelectorAll('.faq-question').forEach((btn, idx) => {
+            if (idx !== index) {
+                btn.setAttribute('aria-expanded', 'false');
+                const otherAnswer = document.getElementById(`faq-answer-${idx}`);
+                if (otherAnswer) {
+                    otherAnswer.style.display = 'none';
+                }
+            }
+        });
+        
+        // Toggle current item
+        if (isExpanded) {
+            button.setAttribute('aria-expanded', 'false');
+            answer.style.display = 'none';
+        } else {
+            button.setAttribute('aria-expanded', 'true');
+            answer.style.display = 'block';
+        }
+    }
+    
+    // Make function globally available
+    (window as any).toggleFaq = toggleFaq;
+</script>
