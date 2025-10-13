@@ -18,12 +18,12 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 ---
 
 <SharedBlogLayout
-    canonicalConf={siteConfig.site.canonical}
+    canonicalConf={`${siteConfig.site.canonical}blog/`}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.blogPageConfig.seo}
 
     titleFromDb={blogConfigFromDb?.title}
-    descriptionFromDb={blogConfigFromDb?.seo_description}
+    descriptionFromDb={blogConfigFromDb?.description}
     authorNameFromDb={blogConfigFromDb?.author_name}
     imageFromDb={blogConfigFromDb?.image}
     imageUrlFromDb={blogConfigFromDb?.seo_image_url}

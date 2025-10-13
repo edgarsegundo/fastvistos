@@ -181,6 +181,18 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
                     </div>
                 </div>
             )}
+
+            
+            <div class="disclaimer-section">
+                <div class="disclaimer-card">
+                    <div class="disclaimer-content">
+                        <p>
+                            <strong>Nota:</strong> As informações deste artigo são para fins educativos. 
+                            Sempre verifique dados atualizados em fontes oficiais antes de tomar decisões importantes.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </article>
 
         
@@ -395,6 +407,38 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         font-size: 1rem;
     }
 
+    /* Disclaimer Section Styles */
+    .disclaimer-section {
+        margin-top: 2.5rem;
+        margin-bottom: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .disclaimer-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid #6b7280;
+        padding: 1rem 1.5rem;
+    }
+
+    .disclaimer-content {
+        color: #6b7280;
+        line-height: 1.5;
+    }
+
+    .disclaimer-content p {
+        margin: 0;
+        font-size: 0.875rem;
+        font-style: italic;
+    }
+
+    .disclaimer-content strong {
+        font-weight: 600;
+        color: #4b5563;
+        font-style: normal;
+    }
+
     /* Responsive Design */
     @media (max-width: 1024px) {
         .blog-layout-container {
@@ -468,11 +512,26 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         .author-description {
             font-size: 0.875rem;
         }
+
+        /* Disclaimer section mobile styles */
+        .disclaimer-section {
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .disclaimer-card {
+            padding: 0.875rem 1.25rem;
+        }
+        
+        .disclaimer-content p {
+            font-size: 0.8125rem;
+        }
     }
 </style>
 
 <script>
-    function toggleFaq(index) {
+    function toggleFaq(index: number) {
         const button = document.querySelector(`button[onclick="toggleFaq(${index})"]`);
         const answer = document.getElementById(`faq-answer-${index}`);
         

@@ -129,7 +129,7 @@ const imageType = getImageType(imageUrlValidated ?? '');
     imageAlt={imageCaption}
     siteName={siteConfig?.site.siteName}
     type={seo.openGraph?.type}
-    locale={siteConfig.site.locale.replace('-', '_')}
+    locale={siteConfig.site.locale}
     author={authorName}
 
     publishedTime={pubDate}
