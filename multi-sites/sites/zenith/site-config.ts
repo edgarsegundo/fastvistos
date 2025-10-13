@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
         business_id: '5770497882464a4ab0bda055d011113b',
         id: 'zenith',
         siteName: 'Zenith Topografia',
-        locale: 'pt_BR',
+        locale: 'pt-BR',
         faviconPath: '/favicon.ico',
         domain: 'zenith.com.br',
         canonical: 'https://zenith.com.br/',

@@ -47,7 +47,7 @@ export function getWebPageBlock({
         ...(updatedDate ? { dateModified: updatedDate } : {}),
         description: description,
         breadcrumb: { '@id': breadcrumbId },
-        inLanguage: siteConfig.site?.localte || 'pt_BR',
+        inLanguage: siteConfig.site?.localte || 'pt-BR',
         potentialAction: [
             {
                 '@type': 'ReadAction',

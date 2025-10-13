@@ -73,7 +73,7 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
             dateModified: article.updated || article.published,
             author: orgEntity,                    // can also be Person if needed
             publisher: orgEntity,
-            inLanguage: siteConfig.site?.locale || 'pt_BR',
+            inLanguage: siteConfig.site?.locale || 'pt-BR',
             mainEntityOfPage: {
                 '@type': 'WebPage',
                 '@id': `${blogpageUrl}${article.slug}`,
@@ -150,11 +150,11 @@ const orgBlock = {
   '@id': orgId,
   name: siteConfig.site?.siteName,
   url: canonicalValidated,
-  inLanguage: siteConfig.site.locale || 'pt_BR',
+  inLanguage: siteConfig.site.locale || 'pt-BR',
   description: siteConfig.homePageConfig.seo.description,
   logo: {
     '@type': 'ImageObject',
-    inLanguage: siteConfig.site.locale || 'pt_BR',
+    inLanguage: siteConfig.site.locale || 'pt-BR',
     '@id': logoId,
     url: siteConfig.site?.logo?.url,
     contentUrl: siteConfig.site?.logo?.url,
