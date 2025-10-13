@@ -210,11 +210,11 @@ const orgBlock = !disableOrganization && {
   '@id': orgId,
   name: siteConfig.site?.siteName,
   url: canonicalValidated,
-  inLanguage: siteConfig.site.locale || 'pt_BR',
+  inLanguage: siteConfig.site.locale || 'pt-BR',
   description: siteConfig.homePageConfig.seo.description,
   logo: {
     '@type': 'ImageObject',
-    inLanguage: siteConfig.site.locale || 'pt_BR',
+    inLanguage: siteConfig.site.locale || 'pt-BR',
     '@id': logoId,
     url: siteConfig.site?.logo?.url,
     contentUrl: siteConfig.site?.logo?.url,
