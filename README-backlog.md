@@ -1,5 +1,22 @@
 # Backog
 
+- mais padding right left na imagem principal do artigo
+
+- preciso arrumar isso aqui no artigo depois que criar esse artigo: 👉 [Link para o Artigo de Casos de Sucesso]
+
+
+- Criar model artigos relacionados
+
+- como incluir isso em algum lugar para facilitar quando for criar uma imagem e um link no article?
+
+ 🔗 **Acesse o site oficial para consultar seu status** <a href="https://ceac.state.gov/CEACStatTracker/Status.aspx" target="_blank">aqui ↗</a>
+
+
+![Exemplo de visto americano aprovado no site oficial CEAC.](https://fastvistos.com.br/assets/images/blog/01-visto-americano-aprovado.webp)
+
+
+- Criar model discussion???
+
 
  ./helper.sh (option 1)
  npx prisma db pull

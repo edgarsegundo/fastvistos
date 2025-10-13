@@ -18,7 +18,7 @@ export const siteConfig: SiteConfig = {
         business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
         id: 'fastvistos',
         siteName: 'Fast Vistos',
-        locale: 'pt_BR',
+        locale: 'pt-BR',
         faviconPath: '/favicon.ico',
         domain: 'fastvistos.com.br',
         canonical: 'https://fastvistos.com.br/',
