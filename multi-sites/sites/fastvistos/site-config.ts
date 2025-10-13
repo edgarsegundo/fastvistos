@@ -92,7 +92,7 @@ export const siteConfig: SiteConfig = {
         seo: {
             themeColor: '#0070f3',
             openGraph: {
-                type: 'blog',
+                type: 'website',
                 tags: [
                     'vistos internacionais',
                     'visto americano',
