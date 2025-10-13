@@ -171,6 +171,25 @@ const personBlock = getPersonBlock({
     imageId: `${canonicalValidated}#/schema/person/image/${authorNameSlug}`,
 });
 
+const faqList = articleConfigFromDb?.faq_json;
+
+// FAQ block
+const faqBlock =
+faqList && Array.isArray(faqList) && faqList.length > 0
+        ? {
+              '@type': 'FAQPage',
+              mainEntity: faqList.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: faq.answer,
+                  },
+              })),
+          }
+        : null;
+
+
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
