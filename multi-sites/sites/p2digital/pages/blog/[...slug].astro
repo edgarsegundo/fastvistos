@@ -13,7 +13,7 @@ import SidebarBelow from '../../components/SidebarBelow.astro';
 
 import { siteConfig } from '../../site-config.ts';
 import { BlogService } from '../../lib/blog-service.ts';
-import { estimateReadingTime } from '../../lib/utils.ts';
+import { estimateReadingTime, getValidatedImageUrl } from '../../lib/utils.ts';
 import JsonLdBlogPost from '../../components/JsonLdBlogPost.astro';
 import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
@@ -36,6 +36,14 @@ const { Content, headings } = await entry.render();
 const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteConfig.site.canonical) + 'blog/' + entry.slug).toString() : undefined;
+
+// Get author information
+const authorName = articleFromDb?.author_name || blogConfigFromDb?.author_name;
+const authorImage = articleFromDb?.author_image || blogConfigFromDb?.author_image;
+const authorDescription = blogConfigFromDb?.author_description;
+
+
+const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replace(/^.*\//, '') : null;
 ---
 
 <SharedBlogLayout
@@ -105,6 +113,29 @@ const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteCo
             <div class="blog-content">
                 <Content />
             </div>
+
+            
+            {authorName && (
+                <div class="author-section">
+                    <div class="author-divider"></div>
+                    <div class="author-card">
+                        {authorImageUrl && (
+                            <div class="author-image">
+                                <img src={authorImageUrl} alt={authorName} />
+                            </div>
+                        )}
+                        <div class="author-content">
+                            <div class="author-info">
+                                <span class="author-label">Escrito por</span>
+                                <h3 class="author-name">{authorName}</h3>
+                            </div>
+                            {authorDescription && (
+                                <p class="author-description">{authorDescription}</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </article>
 
         
@@ -152,6 +183,74 @@ const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteCo
         margin: 0.5rem 0 1.5rem;
     }
 
+    /* Author Section Styles */
+    .author-section {
+        margin-top: 3rem;
+    }
+
+    .author-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+        margin-bottom: 2rem;
+    }
+
+    .author-card {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        padding: 2rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .author-image {
+        flex-shrink: 0;
+    }
+
+    .author-image img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .author-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .author-info {
+        margin-bottom: 0.75rem;
+    }
+
+    .author-label {
+        display: block;
+        font-size: 0.875rem;
+        color: #64748b;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    .author-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .author-description {
+        color: #475569;
+        line-height: 1.6;
+        margin: 0;
+        font-size: 1rem;
+    }
+
     /* Responsive Design */
     @media (max-width: 1024px) {
         .blog-layout-container {
@@ -174,6 +273,27 @@ const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteCo
         }
         .toc-responsive {
             display: none;
+        }
+        
+        /* Author section mobile styles */
+        .author-card {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .author-image img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .author-name {
+            font-size: 1.25rem;
+        }
+        
+        .author-description {
+            font-size: 0.875rem;
         }
     }
 </style>
