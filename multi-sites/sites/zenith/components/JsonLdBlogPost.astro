@@ -146,11 +146,11 @@ const orgBlock = {
   '@id': orgId,
   name: siteConfig.site?.siteName,
   url: canonicalValidated,
-  inLanguage: siteConfig.site.locale || 'pt_BR',
+  inLanguage: siteConfig.site.locale,
   description: siteConfig.homePageConfig.seo.description,
   logo: {
     '@type': 'ImageObject',
-    inLanguage: siteConfig.site.locale || 'pt_BR',
+    inLanguage: siteConfig.site.locale,
     '@id': logoId,
     url: siteConfig.site?.logo?.url,
     contentUrl: siteConfig.site?.logo?.url,
@@ -189,7 +189,6 @@ faqList && Array.isArray(faqList) && faqList.length > 0
           }
         : null;
 
-
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
@@ -197,8 +196,8 @@ const baseGraph = [
         '@id': `${postpageUrl}#article`,
         isPartOf: { '@id': `${postpageUrl}` },
         author: {
-            '@id': `${canonicalValidated}schema/person/${authorNameSlug}`,
-            url: `${canonicalValidated}schema/person/${authorNameSlug}`,
+            '@id': `${canonicalValidated}#/schema/person/${authorNameSlug}`,
+            url: `${canonicalValidated}#/schema/person/${authorNameSlug}`,
             name: authorName,
         },
         headline: articleConfigFromDb.title,
@@ -215,7 +214,7 @@ const baseGraph = [
         // this is why I will keep this comment for reference and remind myself to test it later
         // ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
-        inLanguage: siteConfig.site?.locale || 'pt_BR',
+        inLanguage: siteConfig.site?.locale,
     },
     {
         ...webPageBlock,
@@ -235,6 +234,7 @@ const baseGraph = [
     {
         ...personBlock,
     },
+    ...(faqBlock ? [faqBlock] : []),
 ];
 
 const advancedGraph = [
