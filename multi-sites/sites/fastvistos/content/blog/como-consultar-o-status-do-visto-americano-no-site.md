@@ -1,0 +1,185 @@
+---
+title: "Como consultar o status do visto americano no site oficial: guia 2025"
+description: "KMKNSLTRSTTSDVSTMRKNNSTFSLG"
+pubDate: "2025-10-13T18:41:42.000Z"
+updatedDate: "2025-10-13T18:41:55.992Z"
+slug: "como-consultar-o-status-do-visto-americano-no-site"
+topic: "Dicas Sobre o Visto Americano"
+topicSlug: "dicas-sobre-o-visto-americano"
+image: "/assets/images/blog/fastvistos__consultar-status-visto-americano.webp"
+type: "public"
+published: true
+wordCount: "1363"
+---
+
+# 🛂 Como consultar o status do visto americano no site oficial (guia atualizado 2025)
+
+## É possível acompanhar o andamento do meu visto americano?
+
+Muitas pessoas não sabem, mas o site oficial do **Consulado dos Estados Unidos** oferece uma página exclusiva para consultar o **status e o andamento do visto americano**, incluindo as categorias **B1/B2 de turismo e negócios**.
+
+Neste artigo, vamos mostrar **passo a passo**, com **imagens ilustrativas**, como fazer essa consulta diretamente no site oficial — de forma rápida, segura e gratuita.
+
+---
+
+## 🧭 Onde verificar o status do visto americano?
+
+A consulta do status do seu visto americano deve ser feita **diretamente no site oficial do Departamento de Estado dos Estados Unidos**. Essa é a única plataforma segura e reconhecida pelo governo norte-americano para acompanhar o andamento do processo.
+
+🔗 **Acesse o site oficial aqui:**  
+👉 [https://ceac.state.gov/CEACStatTracker/Status.aspx](https://ceac.state.gov/CEACStatTracker/Status.aspx)
+
+Na página, você encontrará um campo para **selecionar o tipo de visto** (geralmente "Nonimmigrant Visa" para turismo e negócios) e, em seguida, inserir o **número do seu caso ou ID da solicitação**.
+
+### Exemplo da tela de consulta
+
+*(Insira aqui a imagem real com nome otimizado e alt text: "Tela do site oficial do consulado americano para consultar o status do visto B1/B2")*
+
+Essa tela mostra exatamente onde inserir os dados solicitados. É importante preencher corretamente o número da solicitação e escolher o local onde o visto foi processado (exemplo: São Paulo, Rio de Janeiro, Recife, etc.).
+
+💡 **Dica:** tenha em mãos o número da solicitação (Application ID ou Case Number) informado após o envio do formulário **DS-160**. Sem esse código, não é possível verificar o status do processo.
+
+---
+
+## 🪪 Como consultar o status do visto americano passo a passo
+
+Depois de acessar o site oficial do Departamento de Estado dos EUA, siga o guia abaixo para consultar o status do seu visto americano corretamente.
+
+### 🧾 Passo 1 — Acesse o site oficial
+
+Entre na página de consulta do visto americano:  
+👉 [https://ceac.state.gov/CEACStatTracker/Status.aspx](https://ceac.state.gov/CEACStatTracker/Status.aspx)
+
+*(Essa é a única página oficial. Evite sites de terceiros que peçam login ou dados pessoais além dos exigidos.)*
+
+### 🌎 Passo 2 — Escolha o tipo de visto
+
+No topo da página, selecione a opção:  
+> **Nonimmigrant Visa (NIV)**
+
+Essa é a categoria usada para vistos de **turismo (B2)**, **negócios (B1)** e outros vistos temporários.  
+*(Se o seu processo for de imigração, escolha "Immigrant Visa (IV)")*
+
+---
+
+### 🔢 Passo 3 — Insira o número do caso (Case Number) ou Application ID
+
+No campo **"Application ID or Case Number"**, digite o código do seu processo.
+
+**Onde encontrar esse número?**
+
+Você tem **DUAS opções** principais de código para usar:
+
+1.  **Application ID (DS-160) - Mais Comum:**
+    *   É o número de confirmação do formulário **DS-160**.
+    *   **Onde encontrar:** No **comprovante de confirmação do DS-160** (o que você imprimiu após preencher o formulário online). Esse número geralmente começa com as letras **AA**, seguido de 8 caracteres (ex: `AA0020AKAX`).
+    *   É o código mais utilizado para essa consulta.
+
+2.  **Número do Caso (Case Number) - Alternativa:**
+    *   Se você não tiver o Application ID do DS-160 anotado, pode usar o **Número do Caso**.
+    *   **Onde encontrar:** Na sua conta do **Portal de Agendamento do CASV (Centro de Atendimento ao Solicitante de Visto)**. Ao fazer login, esse número estará visível no seu painel principal ou no comprovante de agendamento da entrevista. Ele tem o formato **SPA0012345678** (o prefixo varia de acordo com o consulado, como RIO, REC, BSB, etc.).
+
+🟨 **Exemplos:**
+*   *Application ID:* `AA0020AKAX`
+*   *Case Number:* `SPA0012345678`
+
+💡 **Dica crucial:** Independente de qual número você use, **copie e cole o código diretamente** do documento ou site, em vez de digitar. Isso evita erros com caracteres semelhantes (como o número `0` e a letra `O`).
+
+---
+
+**Resumo da verificação para o usuário:**
+
+*   **Primeiro local de busca:** Comprovante de Confirmação do Formulário DS-160.
+*   **Segunda opção (caso não tenha o primeiro):** Acesse sua conta no **Portal de Agendamento do CASV** (o mesmo site onde você agendou a entrevista). O número do caso estará no seu painel.
+
+### 📍 Passo 4 — Escolha o local da entrevista
+
+No campo **"Select a location"**, selecione o **consulado ou embaixada onde fez a entrevista** — por exemplo:  
+- São Paulo  
+- Rio de Janeiro  
+- Recife  
+- Brasília  
+
+### 🖱️ Passo 5 — Clique em "Submit"
+
+Depois de preencher as informações, clique em **Submit**.  
+O sistema exibirá o **status atualizado do seu visto americano**, que pode ser um dos seguintes:
+
+- 🟢 **Issued:** Visto aprovado e emitido
+- 🟡 **Administrative Processing:** Em processamento administrativo (aguarde)
+- 🔵 **Ready:** Documento pronto para entrevista
+- 🔴 **Refused:** Visto negado
+
+🖼️ **Exemplo de resultado "Issued" (visto aprovado)**  
+*(Tela real do site CEAC mostrando status aprovado)*
+
+```html
+<figure>
+  <img src="status-visto-americano-aprovado.jpg" 
+       alt="Exemplo de tela do site CEAC com status Issued de visto americano aprovado">
+  <figcaption>Exemplo de visto americano aprovado no site oficial CEAC.</figcaption>
+</figure>
+```
+
+### 📌 Passo 6 — Anote a data da última atualização
+
+O site mostra também a data da última atualização do seu caso, o que ajuda a acompanhar eventuais mudanças no status ao longo dos dias.
+
+💡 **Dica final:** salve o link do CEAC nos seus favoritos e consulte periodicamente — não há limite de acessos.
+
+---
+
+## 🧩 O que significa cada status do visto americano?
+
+Ao consultar o andamento do seu visto no site oficial do CEAC, você verá uma das quatro mensagens principais: **Issued**, **Administrative Processing**, **Ready** ou **Refused**.
+
+Cada uma representa uma etapa diferente do processo de análise consular.
+
+Abaixo, explicamos o significado de cada status e o que fazer em cada caso:
+
+| Status | Significado | O que fazer |
+|--------|-------------|-------------|
+| 🟢 **Issued** | O visto foi aprovado e emitido com sucesso | Nenhuma ação necessária. O passaporte será enviado em alguns dias para o endereço informado no agendamento |
+| 🟡 **Administrative Processing** | O processo está em análise administrativa. Pode envolver verificação de dados adicionais ou checagem de segurança | Aguarde. Esse status pode durar de alguns dias a várias semanas. Evite tentar reagendar ou enviar novos formulários durante esse período |
+| 🔵 **Ready** | O caso está pronto para a entrevista ou aguardando ação do solicitante (como comparecimento ao CASV ou ao consulado) | Verifique o e-mail de confirmação e compareça na data e local informados |
+| 🔴 **Refused** | O visto foi negado com base em alguma seção da lei de imigração dos EUA (geralmente 214(b) ou 221(g)) | Leia atentamente a justificativa informada no consulado. Em alguns casos, é possível solicitar um novo visto corrigindo as pendências |
+
+### 💬 Dicas importantes
+
+- 📅 **Verifique a data da última atualização:** se mudar recentemente, é sinal de progresso no processo
+- 🔐 **Evite intermediários:** o acompanhamento é gratuito e deve ser feito apenas no site oficial do CEAC
+- 📧 **Monitore seu e-mail:** todas as comunicações do consulado são enviadas para o endereço cadastrado no formulário DS-160
+
+---
+
+## 🕐 Quanto tempo demora para o visto americano ser aprovado após a entrevista?
+
+O tempo de aprovação pode variar conforme o tipo de visto, o local da entrevista e o volume de solicitações no consulado.
+
+De forma geral:
+
+| Tipo de processo | Tempo médio após a entrevista |
+|------------------|-------------------------------|
+| 🟢 **Aprovado (Issued)** | 5 a 10 dias úteis até envio do passaporte |
+| 🟡 **Administrative Processing** | Pode levar de 2 a 8 semanas, dependendo da análise |
+| 🔵 **Ready** | Aguardando comparecimento à entrevista |
+| 🔴 **Refused** | Encerrado; é possível reaplicar corrigindo pendências |
+
+💡 **Dica:** acompanhe o status semanalmente no CEAC e verifique se o e-mail do consulado não está indo para a caixa de spam.
+
+---
+
+## ✈️ Conclusão
+
+Consultar o status do seu visto americano é um processo simples e 100% gratuito, feito pelo site oficial do governo dos Estados Unidos.
+
+Seguindo este guia passo a passo, você evita golpes, interpreta corretamente o resultado e acompanha com segurança o andamento da sua solicitação.
+
+### 🛡️ E se o status for "Refused"?
+
+Encontrar uma recusa pode ser desanimador, mas é importante saber que **isso não significa o fim do seu sonho**. Muitos candidatos conseguem o visto em uma segunda tentativa após uma análise especializada do seu caso.
+
+**Não se desespere!** Nossa equipe de especialistas pode orientar você sobre os próximos passos. Leia nosso artigo com **casos reais de sucesso** de pessoas que conseguiram o visto mesmo após uma negativa:  
+👉 [Link para o Artigo de Casos de Sucesso]
+
+🔗 **Acesse o site oficial para consultar seu status:**
