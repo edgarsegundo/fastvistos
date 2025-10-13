@@ -192,6 +192,7 @@ model blog_article {
   seo_image_width   Int?       @db.UnsignedInt
   author_image      String?    @db.VarChar(100)
   author_name       String?    @db.VarChar(255)
+  faq_json          Json?
   blog_topic        blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   business          business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
 
