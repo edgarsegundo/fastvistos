@@ -21,7 +21,7 @@ DEST_PATH="/var/www/${SITEID}/assets/images/blog/"
 sudo usermod -aG systemd-journal edgar
 
 # Rsync command
-sudo bash -c "rsync -avz --progress /var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}__* ${DEST_USER}@${DEST_HOST}:/var/www/${SITEID}/assets/images/blog/"
+sudo bash -c "rsync -avz --progress /var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}__* /var/www/${SITEID}/assets/images/blog/"
 
 
 echo "✅ Images for site '$SITEID' synced successfully!"
