@@ -263,6 +263,37 @@ export class BlogService {
         }
     }
 
+    // Get article URL by UUID if it exists and is published
+    static async getArticleUrlByUuid(uuid: string): Promise<string | null> {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+            const article = await prisma.blog_article.findFirst({
+                where: {
+                    id: uuid,
+                    business_id: businessId,
+                    is_removed: false,
+                    published: {
+                        lte: now, // Published date is less than or equal to now
+                    },
+                },
+                select: {
+                    slug: true, // Only select slug to build URL
+                },
+            });
+            
+            if (article?.slug) {
+                // Return relative URL path for the article
+                return `/blog/${article.slug}`;
+            }
+            
+            return null;
+        } catch (error) {
+            console.error('Error getting article URL by UUID:', error);
+            return null;
+        }
+    }
+
     // Format date for display
     static formatDate(date: Date | string | null | undefined, locale: string = 'pt-BR'): string {
         if (!date) return 'Data não disponível';
