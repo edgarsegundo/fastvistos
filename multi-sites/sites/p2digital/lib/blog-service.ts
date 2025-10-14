@@ -237,6 +237,32 @@ export class BlogService {
         }
     }
 
+    // Check if article exists and is published by ID/UUID
+    static async isArticlePublished(uuid: string): Promise<boolean> {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+            const article = await prisma.blog_article.findFirst({
+                where: {
+                    id: uuid,
+                    business_id: businessId,
+                    is_removed: false,
+                    published: {
+                        lte: now, // Published date is less than or equal to now
+                    },
+                },
+                select: {
+                    id: true, // Only select ID to minimize data transfer
+                },
+            });
+            
+            return article !== null;
+        } catch (error) {
+            console.error('Error checking article published status:', error);
+            return false;
+        }
+    }
+
     // Format date for display
     static formatDate(date: Date | string | null | undefined, locale: string = 'pt-BR'): string {
         if (!date) return 'Data não disponível';

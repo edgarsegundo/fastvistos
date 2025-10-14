@@ -1,0 +1,55 @@
+---
+/**
+ * ParsedMarkdown Component
+ * 
+ * Renders parsed markdown content that has been processed by the content parser.
+ * This component handles the conversion of parsed markdown to HTML.
+ */
+
+interface Props {
+    content: string;
+    class?: string;
+}
+
+const { content, class: className = '' } = Astro.props;
+
+// Import markdown processor
+import { marked } from 'marked';
+
+// Configure marked options for better markdown processing
+marked.setOptions({
+    gfm: true, // GitHub Flavored Markdown
+    breaks: true, // Convert line breaks to <br>
+    sanitize: false, // We trust our content
+    smartypants: true, // Use smart quotes
+});
+
+// Convert markdown to HTML
+let htmlContent = '';
+try {
+    htmlContent = marked(content);
+} catch (error) {
+    console.error('Error rendering markdown:', error);
+    htmlContent = content; // Fallback to raw content
+}
+---
+
+<div class={`parsed-markdown-content ${className}`} set:html={htmlContent} />
+
+<style>
+    .parsed-markdown-content {
+        /* Inherit all styles from the parent blog-content */
+        font-size: inherit;
+        line-height: inherit;
+        color: inherit;
+    }
+    
+    /* Ensure proper spacing for parsed content */
+    .parsed-markdown-content > *:first-child {
+        margin-top: 0;
+    }
+    
+    .parsed-markdown-content > *:last-child {
+        margin-bottom: 0;
+    }
+</style>
