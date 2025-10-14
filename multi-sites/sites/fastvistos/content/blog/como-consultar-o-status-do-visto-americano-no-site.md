@@ -1,18 +1,18 @@
 ---
 title: "Como consultar o status do visto americano no site oficial: guia 2025"
 description: "KMKNSLTRSTTSDVSTMRKNNSTFSLG"
-pubDate: "2025-10-13T18:41:42.000Z"
-updatedDate: "2025-10-14T20:03:56.371Z"
+pubDate: "2025-10-14T21:49:40.000Z"
+updatedDate: "2025-10-14T22:00:11.804Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__consultar-status-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "1498"
+wordCount: "1485"
 ---
 
-# Como consultar o status do visto americano no site oficial (guia atualizado 2025)
+<!-- # Como consultar o status do visto americano no site oficial (guia atualizado 2025)-->
 
 ## É possível acompanhar o andamento do meu visto americano?
 
