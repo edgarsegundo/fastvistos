@@ -2,8 +2,52 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Astro Dev Server (FastVistos)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/astro",
+      "args": ["dev"],
+      "env": {
+        "SITE_ID": "fastvistos",
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/**/*.js",
+        "${workspaceFolder}/**/*.ts"
+      ]
+    },
+    {
+      "name": "Debug Content Parser Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/test-content-parser-debug.mjs",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Blog Generation",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/generate-blog-content.js",
+      "args": ["fastvistos"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
       "command": "./node_modules/.bin/astro dev",
-      "name": "Development server",
+      "name": "Development server (Terminal)",
       "request": "launch",
       "type": "node-terminal"
     }
