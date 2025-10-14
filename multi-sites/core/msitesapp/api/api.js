@@ -1,10 +1,34 @@
 import { WebPageService } from '../../dist/lib/webpage-service.js';
 import express from 'express';
 import bodyParser from 'body-parser';
+import multer from 'multer';
+import { spawn } from 'child_process';
+import { createWriteStream, createReadStream } from 'fs';
+import { promises as fs } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+import { randomBytes } from 'crypto';
 
 const app = express();
 
 app.use(bodyParser.json());
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024 // 10MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        // Accept image files only
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed'), false);
+        }
+    }
+});
 
 // Add request logging for debugging
 app.use((req, res, next) => {
@@ -296,6 +320,106 @@ app.delete('/page-section-version', async (req, res) => {
     } catch (error) {
         console.error('Error in /page-section-version:', error);
         res.status(500).json({ success: false, error: 'Internal server error.' });
+    }
+});
+
+// POST endpoint to optimize images and convert to WebP
+app.post('/api/optimize-image', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded.' });
+        }
+
+        // Validate file type
+        const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedMimeTypes.includes(req.file.mimetype)) {
+            return res.status(400).json({ 
+                error: 'Unsupported file type. Allowed types: JPEG, PNG, GIF, WebP' 
+            });
+        }
+
+        const inputBuffer = req.file.buffer;
+        const originalName = req.file.originalname;
+        const fileExtension = originalName.split('.').pop()?.toLowerCase() || 'jpg';
+        
+        // Generate unique temporary file names
+        const tempId = randomBytes(16).toString('hex');
+        const tempDir = tmpdir();
+        const inputPath = join(tempDir, `input_${tempId}.${fileExtension}`);
+        const outputPath = join(tempDir, `output_${tempId}.webp`);
+
+        try {
+            // Write input buffer to temporary file
+            await fs.writeFile(inputPath, inputBuffer);
+
+            // Run ffmpeg to optimize and convert to WebP
+            const ffmpegArgs = [
+                '-i', inputPath,
+                '-q:v', '75',  // Adjust compression quality (1-100, lower = better quality)
+                '-preset', 'picture',
+                '-y', // Overwrite output file if it exists
+                outputPath
+            ];
+
+            await new Promise((resolve, reject) => {
+                const ffmpeg = spawn('ffmpeg', ffmpegArgs);
+                
+                let stderr = '';
+                ffmpeg.stderr.on('data', (data) => {
+                    stderr += data.toString();
+                });
+
+                ffmpeg.on('close', (code) => {
+                    if (code === 0) {
+                        resolve();
+                    } else {
+                        reject(new Error(`FFmpeg process exited with code ${code}: ${stderr}`));
+                    }
+                });
+
+                ffmpeg.on('error', (error) => {
+                    reject(new Error(`FFmpeg spawn error: ${error.message}`));
+                });
+            });
+
+            // Read optimized file and send as response
+            const optimizedBuffer = await fs.readFile(outputPath);
+            
+            // Set appropriate headers
+            res.set({
+                'Content-Type': 'image/webp',
+                'Content-Length': optimizedBuffer.length,
+                'Content-Disposition': `attachment; filename="${originalName.replace(/\.[^/.]+$/, '.webp')}"`,
+                'Cache-Control': 'public, max-age=31536000' // Cache for 1 year
+            });
+
+            res.send(optimizedBuffer);
+
+            if (process.env.DEBUG_VERBOSE === 'true') {
+                console.log(`✨ Image optimized: ${originalName} -> ${originalName.replace(/\.[^/.]+$/, '.webp')}`);
+                console.log(`📊 Size: ${inputBuffer.length} bytes -> ${optimizedBuffer.length} bytes`);
+                console.log(`💾 Compression: ${((1 - optimizedBuffer.length / inputBuffer.length) * 100).toFixed(1)}% reduction`);
+            }
+
+        } catch (processingError) {
+            console.error('Error processing image:', processingError);
+            res.status(500).json({ 
+                error: 'Failed to process image.',
+                details: processingError.message 
+            });
+        } finally {
+            // Clean up temporary files
+            try {
+                await fs.unlink(inputPath).catch(() => {}); // Ignore errors if file doesn't exist
+                await fs.unlink(outputPath).catch(() => {});
+            } catch (cleanupError) {
+                console.warn('Error cleaning up temporary files:', cleanupError);
+            }
+        }
+
+    } catch (error) {
+        console.error('Error in /api/optimize-image:', error);
+        res.status(500).json({ error: 'Internal server error.' });
     }
 });
 
