@@ -149,19 +149,28 @@
     padding-left: 1.5rem;
 }
 
-/* Links - Subtle Professional Styling */
+/* Links - Clear and Accessible Styling */
 .blog-content a {
-    color: #3182ce;
+    color: #2563eb;
     text-decoration: none;
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid #3b82f6;
+    padding-bottom: 1px;
     transition: all 0.2s ease-in-out;
     font-weight: 500;
 }
 
 .blog-content a:hover {
-    color: #2c5282;
-    border-bottom-color: #3182ce;
-    background-color: rgba(49, 130, 206, 0.05);
+    color: #1d4ed8;
+    border-bottom-color: #1d4ed8;
+    border-bottom-width: 2px;
+    background-color: rgba(37, 99, 235, 0.08);
+    padding-bottom: 0px;
+}
+
+.blog-content a:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 2px;
 }
 
 /* Blockquotes - Professional Styling */
