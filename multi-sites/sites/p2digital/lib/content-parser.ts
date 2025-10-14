@@ -132,7 +132,9 @@ export class RelatedArticleParser implements TagParser {
         const uuid = match[1]?.trim(); // UUID from :uuid part
         const contentTemplate = match[2]; // Content between tags with [[ARTICLE-URL]] placeholder
         
+        // Add debugger breakpoint here
         if (context?.debug) {
+            debugger; // 🔍 BREAKPOINT: Inspect match, uuid, and contentTemplate
             console.log(`🔍 RELATED-ARTICLE parsing: "${fullMatch.substring(0, 50)}..."`);
             console.log(`  UUID: ${uuid}`);
             console.log(`  Content template: "${contentTemplate.substring(0, 50)}..."`);
@@ -151,6 +153,11 @@ export class RelatedArticleParser implements TagParser {
             const articleUrl = await BlogService.getArticleUrlByUuid(uuid);
             
             if (articleUrl) {
+                // Add debugger breakpoint for successful URL resolution
+                if (context?.debug) {
+                    debugger; // 🔍 BREAKPOINT: Inspect articleUrl and contentTemplate before replacement
+                }
+                
                 // Replace [[ARTICLE-URL]] placeholder with actual URL
                 const processedContent = contentTemplate.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
                 
@@ -364,17 +371,18 @@ export class ContentParserService {
                 const matches = Array.from(currentContent.matchAll(freshPattern));
                 result.stats.totalMatches += matches.length;
                 
-                if (opts.debug && parser.tagName === 'HIDDEN-REF') {
+                if (opts.debug && parser.tagName === 'RELATED-ARTICLE') {
+                    debugger; // 🔍 BREAKPOINT: Inspect parser, matches, and currentContent
                     console.log(`🔍 ${parser.tagName} - Found ${matches.length} matches in iteration ${iteration + 1}`);
                     if (matches.length === 0) {
                         console.log(`📄 Content length: ${currentContent.length} chars`);
                         console.log(`🎯 Pattern: ${parser.pattern.toString()}`);
-                        // Show a snippet around potential HIDDEN-REF tags
-                        const hiddenRefIndex = currentContent.indexOf('[[HIDDEN-REF');
-                        if (hiddenRefIndex >= 0) {
-                            const start = Math.max(0, hiddenRefIndex - 50);
-                            const end = Math.min(currentContent.length, hiddenRefIndex + 200);
-                            console.log(`📝 Content around HIDDEN-REF: "${currentContent.substring(start, end)}"`);
+                        // Show a snippet around potential RELATED-ARTICLE tags
+                        const relatedArticleIndex = currentContent.indexOf('[[RELATED-ARTICLE');
+                        if (relatedArticleIndex >= 0) {
+                            const start = Math.max(0, relatedArticleIndex - 50);
+                            const end = Math.min(currentContent.length, relatedArticleIndex + 200);
+                            console.log(`📝 Content around RELATED-ARTICLE: "${currentContent.substring(start, end)}"`);
                         }
                     }
                 }
@@ -387,10 +395,21 @@ export class ContentParserService {
                     
                     try {
                         // Validation
-                        if (!opts.skipValidation && parser.validate && match[1]) {
-                            if (!parser.validate(match[1])) {
+                        if (!opts.skipValidation && parser.validate) {
+                            // For RELATED-ARTICLE, validate the content template (match[2])
+                            // For other parsers, validate match[1] if it exists
+                            const contentToValidate = parser.tagName === 'RELATED-ARTICLE' 
+                                ? match[2] 
+                                : match[1];
+                                
+                            if (opts.debug && parser.tagName === 'RELATED-ARTICLE') {
+                                console.log(`🔍 RELATED-ARTICLE validation - match[1]: "${match[1]}", match[2]: "${match[2]?.substring(0, 50)}..."`);
+                                console.log(`🔍 Content to validate: "${contentToValidate?.substring(0, 50)}..."`);
+                            }
+                                
+                            if (contentToValidate && !parser.validate(contentToValidate)) {
                                 if (opts.debug) {
-                                    console.warn(`⚠️  Validation failed for ${parser.tagName}: ${match[1]}`);
+                                    console.warn(`⚠️  Validation failed for ${parser.tagName}: ${contentToValidate?.substring(0, 50)}...`);
                                 }
                                 currentContent = currentContent.replace(originalMatch, '');
                                 result.stats.removedTags++;
