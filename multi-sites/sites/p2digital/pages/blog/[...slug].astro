@@ -67,66 +67,6 @@ if (articleFromDb?.id) {
     }
 }
 
-// Demo mode: If no related articles found, create some sample ones for design preview
-if (relatedArticles.length === 0) {
-    // Create sample related articles with different topics for visual diversity
-    relatedArticles = [
-        {
-            id: 'demo-1',
-            title: 'Como Consultar o Status do Visto Americano no Site',
-            slug: 'como-consultar-o-status-do-visto-americano-no-site',
-            seo_description: 'Aprenda o passo a passo para consultar o status do seu visto americano de forma rápida e segura.',
-            published: new Date(),
-            image: 'fastvistos__consultar-status-visto-americano.webp',
-            seo_image_url: null,
-            seo_image_caption: null,
-            seo_image_width: null,
-            seo_image_height: null,
-            author_name: 'FastVistos',
-            blog_topic: {
-                title: 'Visto Americano',
-                slug: 'visto-americano'
-            }
-        },
-        {
-            id: 'demo-2', 
-            title: 'Dicas Valiosas para Aumentar suas Chances de Aprovação do Visto Americano',
-            slug: 'dicas-valiosas-para-aumentar-suas-chances-de-aprovacao-do-visto-americano',
-            seo_description: 'Descubra estratégias eficazes para aumentar significativamente suas chances de aprovação do visto americano.',
-            published: new Date(),
-            image: 'american-visa-document.jpg',
-            seo_image_url: null,
-            seo_image_caption: null,
-            seo_image_width: null,
-            seo_image_height: null,
-            author_name: 'FastVistos',
-            blog_topic: {
-                title: 'Dicas e Estratégias',
-                slug: 'dicas-estrategias'
-            }
-        },
-        {
-            id: 'demo-3',
-            title: 'Como Tirar o Visto Mexicano',
-            slug: 'como-tirar-o-visto-mexicano',
-            seo_description: 'Guia completo com tudo que você precisa saber para obter seu visto mexicano sem complicações.',
-            published: new Date(),
-            image: 'fastvistos__visa-3109800_1280_mexico.jpg',
-            seo_image_url: null,
-            seo_image_caption: null,
-            seo_image_width: null,
-            seo_image_height: null,
-            author_name: 'FastVistos',
-            blog_topic: {
-                title: 'Visto Mexicano',
-                slug: 'visto-mexicano'
-            }
-        }
-    ].filter(article => article.slug !== entry.slug);
-    
-    console.log(`✨ Demo mode: Showing ${relatedArticles.length} sample related articles for design preview`);
-}
-
 const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replace(/^.*\//, '') : null;
 ---
 
@@ -286,7 +226,10 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
                         </h2>
                         <p class="related-articles-subtitle">Continue sua leitura com estes tópicos conectados</p>
                         
-                        <div class="related-articles-grid">
+                        <div class={`related-articles-grid ${
+                            relatedArticles.length === 1 ? 'single-card' : 
+                            relatedArticles.length === 2 ? 'two-cards' : ''
+                        }`}>
                             {relatedArticles.slice(0, 4).map((article) => {
                                 const imageUrl = article.seo_image_url || (article.image ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}` : null);
                                 const fallbackImage = '/assets/images/blog/logo-bg-white-blog.png';
@@ -659,6 +602,26 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
+        justify-items: center; /* Center items when they don't fill the row */
+    }
+
+    /* Single card optimization - limit width when only one card */
+    .related-articles-grid.single-card {
+        max-width: 400px;
+        margin: 0 auto 2rem auto;
+        grid-template-columns: 1fr;
+    }
+
+    /* Two cards optimization - ensure they don't get too wide */
+    .related-articles-grid.two-cards {
+        max-width: 800px;
+        margin: 0 auto 2rem auto;
+    }
+
+    /* Individual card max-width to prevent excessive stretching */
+    .related-article-card {
+        max-width: 380px;
+        width: 100%;
     }
 
     .related-article-card {
@@ -672,6 +635,8 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         border: 1px solid #f1f5f9;
         position: relative;
         group: related-card;
+        max-width: 380px;
+        width: 100%;
     }
 
     .related-article-card:hover {
@@ -956,6 +921,17 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         .related-articles-grid {
             grid-template-columns: 1fr;
             gap: 1rem;
+        }
+
+        /* Mobile: Always single column with optimized max-width */
+        .related-articles-grid.single-card,
+        .related-articles-grid.two-cards {
+            max-width: 100%;
+            margin: 0 0 2rem 0;
+        }
+        
+        .related-article-card {
+            max-width: 100%;
         }
         
         .related-article-image {
