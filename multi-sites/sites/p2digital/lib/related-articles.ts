@@ -27,94 +27,73 @@ export class RelatedArticlesService {
      * This handles Django's symmetrical ManyToManyField properly
      */
     static async getRelatedArticlesSimple(articleId: string) {
-        // Get all relationship records where this article is involved
+        // First, get all relationship records where this article is involved
         const relationships = await prisma.blog_article_related_articles.findMany({
             where: {
                 OR: [
                     { from_blogarticle_id: articleId },
                     { to_blogarticle_id: articleId }
                 ]
-            },
-            include: {
-                blog_article_blog_article_related_articles_from_blogarticle_idToblog_article: {
-                    where: {
-                        is_removed: false,
-                        published: {
-                            not: null
-                        }
-                    },
-                    select: {
-                        id: true,
-                        title: true,
-                        slug: true,
-                        seo_description: true,
-                        published: true,
-                        image: true,
-                        seo_image_url: true,
-                        seo_image_caption: true,
-                        seo_image_width: true,
-                        seo_image_height: true,
-                        author_name: true,
-                        blog_topic: {
-                            select: {
-                                title: true,
-                                slug: true,
-                            }
-                        }
-                    }
-                },
-                blog_article_blog_article_related_articles_to_blogarticle_idToblog_article: {
-                    where: {
-                        is_removed: false,
-                        published: {
-                            not: null
-                        }
-                    },
-                    select: {
-                        id: true,
-                        title: true,
-                        slug: true,
-                        seo_description: true,
-                        published: true,
-                        image: true,
-                        seo_image_url: true,
-                        seo_image_caption: true,
-                        seo_image_width: true,
-                        seo_image_height: true,
-                        author_name: true,
-                        blog_topic: {
-                            select: {
-                                title: true,
-                                slug: true,
-                            }
-                        }
-                    }
-                }
             }
         });
 
-        // Collect related articles, excluding the original article
-        const relatedArticles = [];
+        if (relationships.length === 0) {
+            return [];
+        }
+
+        // Collect all related article IDs
+        const relatedArticleIds = new Set<string>();
         
         for (const rel of relationships) {
-            // If current article is the "from" side, get the "to" article
-            if (rel.from_blogarticle_id === articleId && rel.blog_article_blog_article_related_articles_to_blogarticle_idToblog_article) {
-                relatedArticles.push(rel.blog_article_blog_article_related_articles_to_blogarticle_idToblog_article);
-            }
-            // If current article is the "to" side, get the "from" article
-            else if (rel.to_blogarticle_id === articleId && rel.blog_article_blog_article_related_articles_from_blogarticle_idToblog_article) {
-                relatedArticles.push(rel.blog_article_blog_article_related_articles_from_blogarticle_idToblog_article);
+            if (rel.from_blogarticle_id === articleId) {
+                relatedArticleIds.add(rel.to_blogarticle_id);
+            } else if (rel.to_blogarticle_id === articleId) {
+                relatedArticleIds.add(rel.from_blogarticle_id);
             }
         }
 
-        // Remove duplicates based on article ID
-        const uniqueArticles = relatedArticles.reduce((acc, article) => {
-            if (!acc.find(existing => existing.id === article.id)) {
-                acc.push(article);
-            }
-            return acc;
-        }, [] as typeof relatedArticles);
+        // Remove the original article ID if it somehow got included
+        relatedArticleIds.delete(articleId);
 
-        return uniqueArticles;
+        if (relatedArticleIds.size === 0) {
+            return [];
+        }
+
+        // Now fetch the actual blog articles with all their data
+        const relatedArticles = await prisma.blog_article.findMany({
+            where: {
+                id: {
+                    in: Array.from(relatedArticleIds)
+                },
+                is_removed: false,
+                published: {
+                    not: null
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                seo_description: true,
+                published: true,
+                image: true,
+                seo_image_url: true,
+                seo_image_caption: true,
+                seo_image_width: true,
+                seo_image_height: true,
+                author_name: true,
+                blog_topic: {
+                    select: {
+                        title: true,
+                        slug: true,
+                    }
+                }
+            },
+            orderBy: {
+                published: 'desc'
+            }
+        });
+
+        return relatedArticles;
     }
 }

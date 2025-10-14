@@ -56,13 +56,10 @@ if (faqJson) {
 }
 
 
-console.log('🛠️🛑🛑🛑 Article ID:', articleFromDb?.id);
-
 // Get related articles
 let relatedArticles = [];
 if (articleFromDb?.id) {
     try {
-        console.log(`🔍 Fetching related articles for article ID: ${articleFromDb.id}`);
         relatedArticles = await RelatedArticlesService.getRelatedArticlesSimple(articleFromDb.id);
         console.log(`📚 Found ${relatedArticles.length} related articles`);
     } catch (e) {
