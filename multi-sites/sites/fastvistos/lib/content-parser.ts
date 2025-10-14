@@ -336,7 +336,7 @@ export class ContentParserService {
     async parseContent(content: string, options: ParseOptions = {}): Promise<ParseResult> {
         const opts = { ...this.defaultOptions, ...options };
         const parsersToUse = opts.customParsers || Array.from(this.parsers.values());
-        
+
         const result: ParseResult = {
             content,
             tagsProcessed: 0,
@@ -354,12 +354,17 @@ export class ContentParserService {
         let currentContent = content;
         let iteration = 0;
         
+
+        
+
         // Pre-processing
         for (const parser of parsersToUse) {
             if (parser.preProcess) {
                 currentContent = parser.preProcess(currentContent);
             }
         }
+
+        console.log("🛑🛑🛑 parseContent 2: ", currentContent)
         
         // Main parsing loop
         while (iteration < (opts.maxIterations || 10)) {
@@ -372,13 +377,14 @@ export class ContentParserService {
                 result.stats.totalMatches += matches.length;
                 
                 if (opts.debug && parser.tagName === 'RELATED-ARTICLE') {
-                    debugger; // 🔍 BREAKPOINT: Inspect parser, matches, and currentContent
                     console.log(`🔍 ${parser.tagName} - Found ${matches.length} matches in iteration ${iteration + 1}`);
                     if (matches.length === 0) {
                         console.log(`📄 Content length: ${currentContent.length} chars`);
                         console.log(`🎯 Pattern: ${parser.pattern.toString()}`);
+                        // console.log(currentContent);
                         // Show a snippet around potential RELATED-ARTICLE tags
                         const relatedArticleIndex = currentContent.indexOf('[[RELATED-ARTICLE');
+                        console.log(`🛑🛑🛑🛑 relatedArticleIndex: ${relatedArticleIndex}`);
                         if (relatedArticleIndex >= 0) {
                             const start = Math.max(0, relatedArticleIndex - 50);
                             const end = Math.min(currentContent.length, relatedArticleIndex + 200);

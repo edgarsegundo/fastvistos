@@ -44,11 +44,15 @@ const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteCo
 let shouldUseParsedContent = false;
 let parsedContentMarkdown = '';
 try {
+    
     // Get the raw markdown content from the entry
     const rawContent = entry.body || '';
-    
+
+    console.log("🛑🛑🛑 here (1), rawContent: ", rawContent);
+
     // Check if content has any parseable tags
     if (contentParser.hasParseableTags(rawContent)) {
+        console.log("🛑🛑🛑 here (2)");
         // Parse all custom tags with the robust parser
         const parseResult = await contentParser.parseContent(rawContent, {
             debug: process.env.NODE_ENV === 'development',
@@ -59,6 +63,8 @@ try {
                 debug: process.env.NODE_ENV === 'development'
             }
         });
+
+        // console.log("🛑🛑🛑 here (3): ", parseResult);
         
         parsedContentMarkdown = parseResult.content;
         shouldUseParsedContent = true;
