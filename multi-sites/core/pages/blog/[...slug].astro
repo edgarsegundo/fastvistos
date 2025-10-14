@@ -600,22 +600,24 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
     .related-articles-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        max-width: 800px; /* Limit to accommodate 2 cards max */
         gap: 1.5rem;
-        margin-bottom: 2rem;
+        margin: 0 auto 2rem auto;
         justify-items: center; /* Center items when they don't fill the row */
     }
 
     /* Single card optimization - limit width when only one card */
     .related-articles-grid.single-card {
-        max-width: 400px;
+        max-width: 380px;
         margin: 0 auto 2rem auto;
         grid-template-columns: 1fr;
     }
 
-    /* Two cards optimization - ensure they don't get too wide */
+    /* Two cards optimization - ensure perfect fit for 2 cards */
     .related-articles-grid.two-cards {
         max-width: 800px;
         margin: 0 auto 2rem auto;
+        grid-template-columns: 1fr 1fr;
     }
 
     /* Individual card max-width to prevent excessive stretching */
@@ -822,6 +824,7 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         
         .related-articles-grid {
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            max-width: 700px; /* Slightly smaller on tablets */
         }
     }
 
