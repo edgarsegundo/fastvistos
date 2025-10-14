@@ -15,7 +15,9 @@ import { siteConfig } from '../../site-config.ts';
 import { BlogService } from '../../lib/blog-service.ts';
 import { RelatedArticlesService } from '../../lib/related-articles.ts';
 import { estimateReadingTime, getValidatedImageUrl } from '../../lib/utils.ts';
+import { contentParser } from '../../lib/content-parser.ts';
 import JsonLdBlogPost from '../../components/JsonLdBlogPost.astro';
+import ParsedMarkdown from '../../components/ParsedMarkdown.astro';
 import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
 
@@ -38,6 +40,39 @@ const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteConfig.site.canonical) + 'blog/' + entry.slug).toString() : undefined;
 
+// Parse content for custom tags using the robust content parser
+let shouldUseParsedContent = false;
+let parsedContentMarkdown = '';
+try {
+    // Get the raw markdown content from the entry
+    const rawContent = entry.body || '';
+    
+    // Check if content has any parseable tags
+    if (contentParser.hasParseableTags(rawContent)) {
+        // Parse all custom tags with the robust parser
+        const parseResult = await contentParser.parseContent(rawContent, {
+            debug: process.env.NODE_ENV === 'development',
+            context: {
+                articleSlug: entry.slug,
+                articleId: articleFromDb?.id,
+                businessId: siteConfig?.site?.business_id,
+                debug: process.env.NODE_ENV === 'development'
+            }
+        });
+        
+        parsedContentMarkdown = parseResult.content;
+        shouldUseParsedContent = true;
+        
+        console.log(`🔍 Parsed ${parseResult.tagsProcessed} custom tags in content`);
+        if (parseResult.stats.errors > 0) {
+            console.warn(`⚠️  ${parseResult.stats.errors} parsing errors occurred`);
+        }
+    }
+} catch (error) {
+    console.error('Error parsing content:', error);
+    shouldUseParsedContent = false;
+}
+
 // Get author information
 const authorName = articleFromDb?.author_name || blogConfigFromDb?.author_name;
 const authorImage = articleFromDb?.author_image || blogConfigFromDb?.author_image;
@@ -57,7 +92,7 @@ if (faqJson) {
 
 
 // Get related articles
-let relatedArticles = [];
+let relatedArticles: any[] = [];
 if (articleFromDb?.id) {
     try {
         relatedArticles = await RelatedArticlesService.getRelatedArticlesSimple(articleFromDb.id);
@@ -135,7 +170,11 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
 
             <!-- Professional styled markdown content -->
             <div class="blog-content">
-                <Content />
+                {shouldUseParsedContent ? (
+                    <ParsedMarkdown content={parsedContentMarkdown} />
+                ) : (
+                    <Content />
+                )}
             </div>
 
             <!-- FAQ Section -->
@@ -146,7 +185,7 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
                         <h2 class="faq-title">Perguntas Frequentes</h2>
                         <div class="faq-list">
                             {faqData.map((item, index) => (
-                                <div class="faq-item" key={index}>
+                                <div class="faq-item">
                                     <button 
                                         class="faq-question" 
                                         onclick={`toggleFaq(${index})`}

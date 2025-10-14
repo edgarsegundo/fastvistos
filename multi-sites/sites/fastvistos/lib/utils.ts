@@ -101,3 +101,57 @@ export function toThumbnailUrl(url: string): string {
     if (lastDot === -1) return url + '_thumb';
     return url.slice(0, lastDot) + '_thumb' + url.slice(lastDot);
 }
+
+/**
+ * Parse content and handle HIDDEN-REF tags based on article existence and publish status
+ * @param content The HTML content to parse
+ * @param checkArticleExists Function to check if article exists and is published
+ * @returns Promise<string> The processed content
+ */
+export async function parseHiddenRefs(
+    content: string, 
+    checkArticleExists: (uuid: string) => Promise<boolean>
+): Promise<string> {
+    if (!content || typeof content !== 'string') {
+        return content;
+    }
+
+    // Regex to match [[HIDDEN-REF]]uuid[[/HIDDEN-REF]]
+    // This captures the UUID and the content between the tags
+    const hiddenRefRegex = /\[\[HIDDEN-REF\]\](.*?)\[\[\/HIDDEN-REF\]\]/gs;
+    
+    let processedContent = content;
+    const matches = Array.from(content.matchAll(hiddenRefRegex));
+
+    for (const match of matches) {
+        const fullMatch = match[0]; // Full matched string including tags
+        const uuid = match[1]; // The UUID content between the tags
+
+        if (!uuid || !uuid.trim()) {
+            // If no UUID, remove the entire tag and content
+            processedContent = processedContent.replace(fullMatch, '');
+            continue;
+        }
+
+        const trimmedUuid = uuid.trim();
+        
+        try {
+            // Check if the article exists and is published
+            const articleExists = await checkArticleExists(trimmedUuid);
+            
+            if (articleExists) {
+                // Article exists and is published - remove tags but keep content
+                processedContent = processedContent.replace(fullMatch, uuid);
+            } else {
+                // Article doesn't exist or not published - remove everything
+                processedContent = processedContent.replace(fullMatch, '');
+            }
+        } catch (error) {
+            console.error(`Error checking article existence for UUID ${trimmedUuid}:`, error);
+            // On error, remove the entire tag and content for safety
+            processedContent = processedContent.replace(fullMatch, '');
+        }
+    }
+
+    return processedContent;
+}
