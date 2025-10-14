@@ -115,85 +115,74 @@ export interface ParseResult {
 }
 
 /**
- * Hidden Reference Tag Parser
- * Supports two formats:
- * 1. [[HIDDEN-REF:uuid]]content[[/HIDDEN-REF]] - Show content if article with uuid exists and is published
- * 2. [[HIDDEN-REF]]uuid[[/HIDDEN-REF]] - Show uuid if article exists and is published (legacy format)
+ * Related Article Tag Parser
+ * Format: [[RELATED-ARTICLE:uuid]]content with [[ARTICLE-URL]] placeholder[[/RELATED-ARTICLE]]
+ * - Shows content if article with uuid exists and is published
+ * - Replaces [[ARTICLE-URL]] with the actual article URL
+ * - Removes entire tag and content if article doesn't exist or isn't published
  */
-export class HiddenRefParser implements TagParser {
-    tagName = 'HIDDEN-REF';
+export class RelatedArticleParser implements TagParser {
+    tagName = 'RELATED-ARTICLE';
     
-    // Matches both formats: [[HIDDEN-REF:uuid]]content[[/HIDDEN-REF]] or [[HIDDEN-REF]]content[[/HIDDEN-REF]]
-    pattern = /\[\[HIDDEN-REF(?::([^\]]+))?\]\]([\s\S]*?)\[\[\/HIDDEN-REF\]\]/gi;
+    // Matches: [[RELATED-ARTICLE:uuid]]content[[/RELATED-ARTICLE]]
+    pattern = /\[\[RELATED-ARTICLE:([^\]]+)\]\]([\s\S]*?)\[\[\/RELATED-ARTICLE\]\]/gi;
     
     async parse(match: RegExpMatchArray, context?: ParseContext): Promise<string> {
         const fullMatch = match[0];
-        const explicitUuid = match[1]?.trim(); // UUID from [[HIDDEN-REF:uuid]]
-        const content = match[2]?.trim(); // Content between tags
+        const uuid = match[1]?.trim(); // UUID from :uuid part
+        const contentTemplate = match[2]; // Content between tags with [[ARTICLE-URL]] placeholder
         
-        // Determine UUID and content based on format
-        let uuidToCheck: string;
-        let contentToShow: string;
-        
-        if (explicitUuid) {
-            // New format: [[HIDDEN-REF:uuid]]content[[/HIDDEN-REF]]
-            uuidToCheck = explicitUuid;
-            contentToShow = content;
-            
-            if (context?.debug) {
-                console.log(`🔍 HIDDEN-REF: New format detected - UUID: ${uuidToCheck}, Content: "${contentToShow.substring(0, 50)}..."`);
-            }
-        } else {
-            // Legacy format: [[HIDDEN-REF]]uuid[[/HIDDEN-REF]]
-            uuidToCheck = content;
-            contentToShow = content;
-            
-            if (context?.debug) {
-                console.log(`🔍 HIDDEN-REF: Legacy format detected - UUID: ${uuidToCheck}`);
-            }
+        if (context?.debug) {
+            console.log(`🔍 RELATED-ARTICLE parsing: "${fullMatch.substring(0, 50)}..."`);
+            console.log(`  UUID: ${uuid}`);
+            console.log(`  Content template: "${contentTemplate.substring(0, 50)}..."`);
         }
         
         // Validate UUID
-        if (!uuidToCheck) {
+        if (!uuid) {
             if (context?.debug) {
-                console.log(`🔍 HIDDEN-REF: Empty UUID found, removing tag`);
+                console.log(`❌ RELATED-ARTICLE: Missing UUID, removing content`);
             }
             return '';
         }
         
         try {
-            // Check if article exists and is published
-            const isPublished = await BlogService.isArticlePublished(uuidToCheck);
+            // Check if article exists and is published, and get its URL
+            const articleUrl = await BlogService.getArticleUrlByUuid(uuid);
             
-            if (isPublished) {
+            if (articleUrl) {
+                // Replace [[ARTICLE-URL]] placeholder with actual URL
+                const processedContent = contentTemplate.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
+                
                 if (context?.debug) {
-                    console.log(`✅ HIDDEN-REF: UUID ${uuidToCheck} is published, showing content: "${contentToShow.substring(0, 50)}..."`);
+                    console.log(`✅ RELATED-ARTICLE: UUID ${uuid} found, URL: ${articleUrl}`);
+                    console.log(`  Processed content: "${processedContent.substring(0, 50)}..."`);
                 }
-                return contentToShow; // Return the content (remove tags)
+                
+                return processedContent;
             } else {
                 if (context?.debug) {
-                    console.log(`❌ HIDDEN-REF: UUID ${uuidToCheck} not published or doesn't exist, removing content`);
+                    console.log(`❌ RELATED-ARTICLE: UUID ${uuid} not found or not published, removing content`);
                 }
                 return ''; // Remove entire tag and content
             }
         } catch (error) {
             if (context?.debug) {
-                console.error(`🚫 HIDDEN-REF: Error checking UUID ${uuidToCheck}:`, error);
+                console.error(`🚫 RELATED-ARTICLE: Error processing UUID ${uuid}:`, error);
             }
             return ''; // On error, remove content for safety
         }
     }
     
     validate(content: string): boolean {
-        // Allow any non-empty content since it could be either UUID or display text
-        return content.trim().length > 0;
+        // Content should contain the [[ARTICLE-URL]] placeholder
+        return content.includes('[[ARTICLE-URL]]');
     }
     
     preProcess(content: string): string {
-        // Normalize line endings and trim whitespace, handle both formats
-        return content
-            .replace(/\[\[HIDDEN-REF\]\]\s*(.*?)\s*\[\[\/HIDDEN-REF\]\]/gis, '[[HIDDEN-REF]]$1[[/HIDDEN-REF]]')
-            .replace(/\[\[HIDDEN-REF:([^:\]]+)\]\]\s*(.*?)\s*\[\[\/HIDDEN-REF\]\]/gis, '[[HIDDEN-REF:$1]]$2[[/HIDDEN-REF]]');
+        // Normalize whitespace around tags
+        return content.replace(/\[\[RELATED-ARTICLE:([^\]]+)\]\]\s*([\s\S]*?)\s*\[\[\/RELATED-ARTICLE\]\]/gi, 
+                             '[[RELATED-ARTICLE:$1]]$2[[/RELATED-ARTICLE]]');
     }
 }
 
@@ -303,7 +292,7 @@ export class ContentParserService {
     
     constructor() {
         // Register default parsers
-        this.registerParser(new HiddenRefParser());
+        this.registerParser(new RelatedArticleParser());
         // Uncomment to enable additional parsers
         // this.registerParser(new ConditionalContentParser());
         // this.registerParser(new DynamicContentParser());
@@ -370,7 +359,9 @@ export class ContentParserService {
             let hasChanges = false;
             
             for (const parser of parsersToUse) {
-                const matches = Array.from(currentContent.matchAll(parser.pattern));
+                // Create fresh regex to avoid global flag state issues
+                const freshPattern = new RegExp(parser.pattern.source, parser.pattern.flags);
+                const matches = Array.from(currentContent.matchAll(freshPattern));
                 result.stats.totalMatches += matches.length;
                 
                 if (opts.debug && parser.tagName === 'HIDDEN-REF') {
@@ -496,7 +487,10 @@ export class ContentParserService {
      */
     hasParseableTags(content: string): boolean {
         for (const parser of this.parsers.values()) {
-            const hasMatch = parser.pattern.test(content);
+            // Create a fresh regex to avoid global flag state issues
+            const freshPattern = new RegExp(parser.pattern.source, parser.pattern.flags);
+            const hasMatch = freshPattern.test(content);
+            
             if (process.env.NODE_ENV === 'development') {
                 console.log(`🔍 Checking ${parser.tagName} pattern: ${hasMatch ? 'FOUND' : 'NOT FOUND'}`);
                 if (!hasMatch && parser.tagName === 'HIDDEN-REF') {
@@ -531,9 +525,9 @@ export class ContentParserService {
      */
     testPatterns(): void {
         const testCases = [
-            'Text with [[HIDDEN-REF]]uuid123[[/HIDDEN-REF]] here',
-            'Text with [[HIDDEN-REF:uuid123]]content here[[/HIDDEN-REF]] here',
-            'Não se desespere! [[HIDDEN-REF]]Leia nosso artigo[[/HIDDEN-REF]] mais texto.'
+            'Text with [[RELATED-ARTICLE:uuid123]]Check out our article at [[ARTICLE-URL]] for more info.[[/RELATED-ARTICLE]] here',
+            '**Não se desespere!** [[RELATED-ARTICLE:d28f34fa3e1d4691855a6d5d9e76eb3e]]Leia nosso artigo com [**casos reais de sucesso**]([[ARTICLE-URL]]) de pessoas que conseguiram o visto.[[/RELATED-ARTICLE]]',
+            'Some text [[IF-FEATURE]]Show this if enabled[[CONTENT]]This is the content[[/IF-FEATURE]] more text.'
         ];
 
         for (const parser of this.parsers.values()) {
