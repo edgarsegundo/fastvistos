@@ -170,31 +170,33 @@ model binary_option {
 }
 
 model blog_article {
-  created           DateTime   @db.DateTime(6)
-  modified          DateTime   @db.DateTime(6)
-  is_removed        Boolean
-  id                String     @id @db.Char(32)
-  title             String     @db.LongText
-  content_raw       String?    @db.LongText
-  content_html      String?    @db.LongText
-  content_md        String?    @db.LongText
-  type              String     @db.VarChar(50)
-  slug              String?    @unique(map: "slug") @db.VarChar(255)
-  published         DateTime?  @db.DateTime(6)
-  image             String?    @db.VarChar(100)
-  business_id       String     @db.Char(32)
-  blog_topic_id     String     @db.Char(32)
-  metatitle         String?    @db.LongText
-  seo_description   String?    @db.LongText
-  seo_image_caption String?    @db.VarChar(255)
-  seo_image_height  Int?       @db.UnsignedInt
-  seo_image_url     String?    @db.VarChar(200)
-  seo_image_width   Int?       @db.UnsignedInt
-  author_image      String?    @db.VarChar(100)
-  author_name       String?    @db.VarChar(255)
-  faq_json          Json?
-  blog_topic        blog_topic @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
-  business          business   @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+  created                                                                                       DateTime                        @db.DateTime(6)
+  modified                                                                                      DateTime                        @db.DateTime(6)
+  is_removed                                                                                    Boolean
+  id                                                                                            String                          @id @db.Char(32)
+  title                                                                                         String                          @db.LongText
+  content_raw                                                                                   String?                         @db.LongText
+  content_html                                                                                  String?                         @db.LongText
+  content_md                                                                                    String?                         @db.LongText
+  type                                                                                          String                          @db.VarChar(50)
+  slug                                                                                          String?                         @unique(map: "slug") @db.VarChar(255)
+  published                                                                                     DateTime?                       @db.DateTime(6)
+  image                                                                                         String?                         @db.VarChar(100)
+  business_id                                                                                   String                          @db.Char(32)
+  blog_topic_id                                                                                 String                          @db.Char(32)
+  metatitle                                                                                     String?                         @db.LongText
+  seo_description                                                                               String?                         @db.LongText
+  seo_image_caption                                                                             String?                         @db.VarChar(255)
+  seo_image_height                                                                              Int?                            @db.UnsignedInt
+  seo_image_url                                                                                 String?                         @db.VarChar(200)
+  seo_image_width                                                                               Int?                            @db.UnsignedInt
+  author_image                                                                                  String?                         @db.VarChar(100)
+  author_name                                                                                   String?                         @db.VarChar(255)
+  faq_json                                                                                      Json?
+  blog_topic                                                                                    blog_topic                      @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  business                                                                                      business                        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+  blog_article_related_articles_blog_article_related_articles_from_blogarticle_idToblog_article blog_article_related_articles[] @relation("blog_article_related_articles_from_blogarticle_idToblog_article")
+  blog_article_related_articles_blog_article_related_articles_to_blogarticle_idToblog_article   blog_article_related_articles[] @relation("blog_article_related_articles_to_blogarticle_idToblog_article")
 
   @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
@@ -1266,4 +1268,15 @@ model web_page_faq {
   @@unique([web_page_id, question], map: "unique_faq_per_page")
   @@index([business_id], map: "web_page_faq_business_id_76b0c453_fk_business_id")
   @@index([order], map: "web_page_faq_order_b0f6d8a7")
+}
+
+model blog_article_related_articles {
+  id                                                                           Int          @id @default(autoincrement())
+  from_blogarticle_id                                                          String       @db.Char(32)
+  to_blogarticle_id                                                            String       @db.Char(32)
+  blog_article_blog_article_related_articles_from_blogarticle_idToblog_article blog_article @relation("blog_article_related_articles_from_blogarticle_idToblog_article", fields: [from_blogarticle_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_related_from_blogarticle_id_dc5871f6_fk_blog_arti")
+  blog_article_blog_article_related_articles_to_blogarticle_idToblog_article   blog_article @relation("blog_article_related_articles_to_blogarticle_idToblog_article", fields: [to_blogarticle_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
+
+  @@unique([from_blogarticle_id, to_blogarticle_id], map: "blog_article_related_art_from_blogarticle_id_to_b_f04f4c5d_uniq")
+  @@index([to_blogarticle_id], map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
 }
