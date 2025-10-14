@@ -22,8 +22,6 @@ import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
 
 
-// import CallToAction from '../../components/CallToAction.astro';
-
 
 // Generate static paths from the markdown files in content/blog/
 export async function getStaticPaths() {
@@ -148,9 +146,6 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
                     Leitura: ≈{estimateReadingTime(Number(entry.data.wordCount))} min
                 </span>
             </header>
-
-
-            
 
             
             <div class="blog-content" set:html={processedHtml}>
