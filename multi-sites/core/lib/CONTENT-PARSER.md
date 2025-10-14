@@ -18,14 +18,44 @@ The Content Parser System is a robust, extensible framework for processing custo
 #### 1. HiddenRefParser (`HIDDEN-REF`)
 **Purpose**: Conditionally show/hide content based on article publication status
 
-**Syntax**: `[[HIDDEN-REF]]article-uuid[[/HIDDEN-REF]]`
+**Syntax**: 
+- **New format**: `[[HIDDEN-REF:article-uuid]]content to show[[/HIDDEN-REF]]`
+- **Legacy format**: `[[HIDDEN-REF]]article-uuid[[/HIDDEN-REF]]`
 
 **Behavior**:
-- If article with UUID exists and is published → Show the UUID (remove tags)
-- If article doesn't exist or is not published → Remove everything
+- **New format**: If article with UUID exists and is published → Show the content (remove tags), otherwise remove everything
+- **Legacy format**: If article with UUID exists and is published → Show the UUID (remove tags), otherwise remove everything
 - If UUID is empty → Remove everything
 
 **Examples**:
+
+**New Format (Recommended)**:
+```markdown
+# Article with hidden references
+
+This content is always visible.
+
+[[HIDDEN-REF:abc123def456]]Leia nosso artigo sobre casos de sucesso após negativas de visto.[[/HIDDEN-REF]]
+
+More visible content here.
+
+[[HIDDEN-REF:unpublished-uuid]]This content won't show if the article isn't published.[[/HIDDEN-REF]]
+```
+
+**Result** (assuming abc123def456 is published, unpublished-uuid is not):
+```markdown
+# Article with hidden references
+
+This content is always visible.
+
+Leia nosso artigo sobre casos de sucesso após negativas de visto.
+
+More visible content here.
+
+
+```
+
+**Legacy Format**:
 ```markdown
 # Article with hidden references
 
@@ -34,11 +64,9 @@ This content is always visible.
 [[HIDDEN-REF]]abc123def456[[/HIDDEN-REF]]
 
 More visible content here.
-
-[[HIDDEN-REF]]unpublished-article-uuid[[/HIDDEN-REF]]
 ```
 
-**Result** (assuming abc123def456 is published, unpublished-article-uuid is not):
+**Result** (if abc123def456 is published):
 ```markdown
 # Article with hidden references
 
@@ -47,8 +75,6 @@ This content is always visible.
 abc123def456
 
 More visible content here.
-
-
 ```
 
 ## Usage

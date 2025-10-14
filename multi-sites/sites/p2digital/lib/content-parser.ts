@@ -116,20 +116,45 @@ export interface ParseResult {
 
 /**
  * Hidden Reference Tag Parser
- * Handles [[HIDDEN-REF]]uuid[[/HIDDEN-REF]] tags
+ * Supports two formats:
+ * 1. [[HIDDEN-REF:uuid]]content[[/HIDDEN-REF]] - Show content if article with uuid exists and is published
+ * 2. [[HIDDEN-REF]]uuid[[/HIDDEN-REF]] - Show uuid if article exists and is published (legacy format)
  */
 export class HiddenRefParser implements TagParser {
     tagName = 'HIDDEN-REF';
     
-    // Matches [[HIDDEN-REF]]content[[/HIDDEN-REF]] (case-insensitive, multiline)
-    pattern = /\[\[HIDDEN-REF\]\](.*?)\[\[\/HIDDEN-REF\]\]/gis;
+    // Matches both formats: [[HIDDEN-REF:uuid]]content[[/HIDDEN-REF]] or [[HIDDEN-REF]]content[[/HIDDEN-REF]]
+    pattern = /\[\[HIDDEN-REF(?::([^\]]+))?\]\]([\s\S]*?)\[\[\/HIDDEN-REF\]\]/gi;
     
     async parse(match: RegExpMatchArray, context?: ParseContext): Promise<string> {
         const fullMatch = match[0];
-        const uuid = match[1]?.trim();
+        const explicitUuid = match[1]?.trim(); // UUID from [[HIDDEN-REF:uuid]]
+        const content = match[2]?.trim(); // Content between tags
+        
+        // Determine UUID and content based on format
+        let uuidToCheck: string;
+        let contentToShow: string;
+        
+        if (explicitUuid) {
+            // New format: [[HIDDEN-REF:uuid]]content[[/HIDDEN-REF]]
+            uuidToCheck = explicitUuid;
+            contentToShow = content;
+            
+            if (context?.debug) {
+                console.log(`🔍 HIDDEN-REF: New format detected - UUID: ${uuidToCheck}, Content: "${contentToShow.substring(0, 50)}..."`);
+            }
+        } else {
+            // Legacy format: [[HIDDEN-REF]]uuid[[/HIDDEN-REF]]
+            uuidToCheck = content;
+            contentToShow = content;
+            
+            if (context?.debug) {
+                console.log(`🔍 HIDDEN-REF: Legacy format detected - UUID: ${uuidToCheck}`);
+            }
+        }
         
         // Validate UUID
-        if (!uuid) {
+        if (!uuidToCheck) {
             if (context?.debug) {
                 console.log(`🔍 HIDDEN-REF: Empty UUID found, removing tag`);
             }
@@ -138,36 +163,37 @@ export class HiddenRefParser implements TagParser {
         
         try {
             // Check if article exists and is published
-            const isPublished = await BlogService.isArticlePublished(uuid);
+            const isPublished = await BlogService.isArticlePublished(uuidToCheck);
             
             if (isPublished) {
                 if (context?.debug) {
-                    console.log(`✅ HIDDEN-REF: UUID ${uuid} is published, showing content`);
+                    console.log(`✅ HIDDEN-REF: UUID ${uuidToCheck} is published, showing content: "${contentToShow.substring(0, 50)}..."`);
                 }
-                return uuid; // Return the UUID content (remove tags)
+                return contentToShow; // Return the content (remove tags)
             } else {
                 if (context?.debug) {
-                    console.log(`❌ HIDDEN-REF: UUID ${uuid} not published or doesn't exist, removing content`);
+                    console.log(`❌ HIDDEN-REF: UUID ${uuidToCheck} not published or doesn't exist, removing content`);
                 }
                 return ''; // Remove entire tag and content
             }
         } catch (error) {
             if (context?.debug) {
-                console.error(`🚫 HIDDEN-REF: Error checking UUID ${uuid}:`, error);
+                console.error(`🚫 HIDDEN-REF: Error checking UUID ${uuidToCheck}:`, error);
             }
             return ''; // On error, remove content for safety
         }
     }
     
     validate(content: string): boolean {
-        // Basic UUID validation (can be enhanced)
-        return content.trim().length > 0 && content.trim().length <= 100;
+        // Allow any non-empty content since it could be either UUID or display text
+        return content.trim().length > 0;
     }
     
     preProcess(content: string): string {
-        // Normalize line endings and trim whitespace around UUIDs
-        return content.replace(/\[\[HIDDEN-REF\]\]\s*(.*?)\s*\[\[\/HIDDEN-REF\]\]/gis, 
-                            '[[HIDDEN-REF]]$1[[/HIDDEN-REF]]');
+        // Normalize line endings and trim whitespace, handle both formats
+        return content
+            .replace(/\[\[HIDDEN-REF\]\]\s*(.*?)\s*\[\[\/HIDDEN-REF\]\]/gis, '[[HIDDEN-REF]]$1[[/HIDDEN-REF]]')
+            .replace(/\[\[HIDDEN-REF:([^:\]]+)\]\]\s*(.*?)\s*\[\[\/HIDDEN-REF\]\]/gis, '[[HIDDEN-REF:$1]]$2[[/HIDDEN-REF]]');
     }
 }
 
@@ -347,6 +373,21 @@ export class ContentParserService {
                 const matches = Array.from(currentContent.matchAll(parser.pattern));
                 result.stats.totalMatches += matches.length;
                 
+                if (opts.debug && parser.tagName === 'HIDDEN-REF') {
+                    console.log(`🔍 ${parser.tagName} - Found ${matches.length} matches in iteration ${iteration + 1}`);
+                    if (matches.length === 0) {
+                        console.log(`📄 Content length: ${currentContent.length} chars`);
+                        console.log(`🎯 Pattern: ${parser.pattern.toString()}`);
+                        // Show a snippet around potential HIDDEN-REF tags
+                        const hiddenRefIndex = currentContent.indexOf('[[HIDDEN-REF');
+                        if (hiddenRefIndex >= 0) {
+                            const start = Math.max(0, hiddenRefIndex - 50);
+                            const end = Math.min(currentContent.length, hiddenRefIndex + 200);
+                            console.log(`📝 Content around HIDDEN-REF: "${currentContent.substring(start, end)}"`);
+                        }
+                    }
+                }
+                
                 if (matches.length === 0) continue;
                 
                 for (const match of matches) {
@@ -455,7 +496,16 @@ export class ContentParserService {
      */
     hasParseableTags(content: string): boolean {
         for (const parser of this.parsers.values()) {
-            if (parser.pattern.test(content)) {
+            const hasMatch = parser.pattern.test(content);
+            if (process.env.NODE_ENV === 'development') {
+                console.log(`🔍 Checking ${parser.tagName} pattern: ${hasMatch ? 'FOUND' : 'NOT FOUND'}`);
+                if (!hasMatch && parser.tagName === 'HIDDEN-REF') {
+                    // Show first 200 chars of content for debugging
+                    console.log(`📄 Content preview (first 200 chars): "${content.substring(0, 200)}..."`);
+                    console.log(`🎯 Looking for pattern: ${parser.pattern.toString()}`);
+                }
+            }
+            if (hasMatch) {
                 return true;
             }
         }
@@ -474,6 +524,30 @@ export class ContentParserService {
         }
         
         return stats;
+    }
+
+    /**
+     * Test if regex patterns are working with sample content
+     */
+    testPatterns(): void {
+        const testCases = [
+            'Text with [[HIDDEN-REF]]uuid123[[/HIDDEN-REF]] here',
+            'Text with [[HIDDEN-REF:uuid123]]content here[[/HIDDEN-REF]] here',
+            'Não se desespere! [[HIDDEN-REF]]Leia nosso artigo[[/HIDDEN-REF]] mais texto.'
+        ];
+
+        for (const parser of this.parsers.values()) {
+            console.log(`\n🧪 Testing ${parser.tagName} pattern: ${parser.pattern}`);
+            
+            testCases.forEach((testCase, index) => {
+                const matches = Array.from(testCase.matchAll(parser.pattern));
+                console.log(`  Test ${index + 1}: "${testCase}"`);
+                console.log(`  Matches: ${matches.length}`);
+                matches.forEach((match, matchIndex) => {
+                    console.log(`    Match ${matchIndex + 1}:`, match);
+                });
+            });
+        }
     }
 }
 
