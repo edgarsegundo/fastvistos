@@ -90,6 +90,30 @@ export class BlogService {
         }
     }
 
+    // Get article by ID
+    static async getArticleById(id: string) {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+            return await prisma.blog_article.findUnique({
+                where: {
+                    id: id,
+                    business_id: businessId,
+                    is_removed: false,
+                    published: {
+                        lte: now,
+                    },
+                },
+                include: {
+                    blog_topic: true,
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching article by ID:', error);
+            return null;
+        }
+    }
+
     // Get all topics
     static async getTopics() {
         try {
