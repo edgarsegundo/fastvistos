@@ -82,6 +82,8 @@ export class ContentProcessor {
             }
         }
 
+        console.log('🛑🛑🛑 processedContent:', processedContent);
+
         return processedContent;
     }
 

@@ -17,6 +17,7 @@ import { RelatedArticlesService } from '../../lib/related-articles.ts';
 import { ContentProcessor } from '../../lib/content-processor.ts';
 import { estimateReadingTime, getValidatedImageUrl } from '../../lib/utils.ts';
 import JsonLdBlogPost from '../../components/JsonLdBlogPost.astro';
+import { marked } from 'marked';
 import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
 
@@ -37,14 +38,14 @@ const { entry } = Astro.props;
 const rawContent = entry.body || '';
 const processedContent = await ContentProcessor.processContent(rawContent);
 
-// Create a new entry object with processed content
-const processedEntry = {
-    ...entry,
-    body: processedContent
-};
+// Render the original content for headings (TOC)
+const { headings } = await entry.render();
 
-// Render the processed markdown content
-const { Content, headings } = await processedEntry.render();
+// Convert processed markdown to HTML
+const processedHtml = await marked(processedContent, {
+    gfm: true,
+    breaks: true,
+});
 const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const canonical = siteConfig.site.canonical ? new URL(ensureTrailingSlash(siteConfig.site.canonical) + 'blog/' + entry.slug).toString() : undefined;
@@ -145,8 +146,7 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
             </header>
 
             
-            <div class="blog-content">
-                <Content />
+            <div class="blog-content" set:html={processedHtml}>
             </div>
 
             
