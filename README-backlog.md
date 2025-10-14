@@ -1,5 +1,7 @@
 # Backog
 
+
+- remover a dulicacoa do titulo no artigo
 - mais padding right left na imagem principal do artigo
 
 - preciso arrumar isso aqui no artigo depois que criar esse artigo: 👉 [Link para o Artigo de Casos de Sucesso]
