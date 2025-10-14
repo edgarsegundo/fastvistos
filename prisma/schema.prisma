@@ -306,6 +306,7 @@ model business {
   appointment_status_3           appointment_status_3[]
   appointment_status_4           appointment_status_4[]
   blog_article                   blog_article[]
+  blog_asset                     blog_asset[]
   blog_config                    blog_config[]
   blog_topic                     blog_topic[]
   catalog_item                   catalog_item[]
@@ -1279,4 +1280,28 @@ model blog_article_related_articles {
 
   @@unique([from_blogarticle_id, to_blogarticle_id], map: "blog_article_related_art_from_blogarticle_id_to_b_f04f4c5d_uniq")
   @@index([to_blogarticle_id], map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model blog_asset {
+  created           DateTime @db.DateTime(6)
+  modified          DateTime @db.DateTime(6)
+  is_removed        Boolean
+  id                String   @id @db.Char(32)
+  image             String?  @db.VarChar(100)
+  filename          String   @db.VarChar(255)
+  alt               String   @db.VarChar(255)
+  image_type        String   @db.VarChar(50)
+  width             Int?     @db.UnsignedInt
+  height            Int?     @db.UnsignedInt
+  crop_to_fit       Boolean
+  optimization_mode String   @db.VarChar(50)
+  convert_to_webp   Boolean
+  file_size         Int?     @db.UnsignedInt
+  width_actual      Int?     @db.UnsignedInt
+  height_actual     Int?     @db.UnsignedInt
+  business_id       String   @db.Char(32)
+  business          business @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_asset_business_id_14a919ec_fk_business_id")
+
+  @@index([business_id], map: "blog_asset_business_id_14a919ec_fk_business_id")
 }
