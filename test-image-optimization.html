@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Optimization Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area:hover {
+            border-color: #3182ce;
+            background-color: #f7fafc;
+        }
+
+        .upload-area.dragover {
+            border-color: #3182ce;
+            background-color: #ebf8ff;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .optimize-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .optimize-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+        }
+
+        .optimize-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .results {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .results.success {
+            background-color: #f0fff4;
+            border: 1px solid #9ae6b4;
+        }
+
+        .results.error {
+            background-color: #fed7d7;
+            border: 1px solid #fc8181;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .image-container {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-info {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #4a5568;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3182ce;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .compression-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Image Optimization Test</h1>
+        
+        <div class="upload-area" id="uploadArea">
+            <p>📁 Drag & drop an image here or click to select</p>
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                Choose Image
+            </button>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+        </div>
+
+        <div id="selectedFile" style="display: none;">
+            <p><strong>Selected file:</strong> <span id="fileName"></span></p>
+            <p><strong>Size:</strong> <span id="fileSize"></span></p>
+            <button class="optimize-btn" id="optimizeBtn" onclick="optimizeImage()">
+                🚀 Optimize Image
+            </button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Optimizing your image... ⚡</p>
+        </div>
+
+        <div class="results" id="results">
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+
+        // Drag and drop functionality
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+
+            selectedFile = file;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('selectedFile').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        }
+
+        async function optimizeImage() {
+            if (!selectedFile) return;
+
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const optimizeBtn = document.getElementById('optimizeBtn');
+            
+            // Show loading state
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            optimizeBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                const startTime = Date.now();
+                const response = await fetch('/api/optimize-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const endTime = Date.now();
+                const processingTime = endTime - startTime;
+
+                loading.style.display = 'none';
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+
+                // Get the optimized image as blob
+                const blob = await response.blob();
+                const optimizedUrl = URL.createObjectURL(blob);
+                
+                // Create original image URL for comparison
+                const originalUrl = URL.createObjectURL(selectedFile);
+
+                // Calculate compression stats
+                const compressionRatio = ((selectedFile.size - blob.size) / selectedFile.size * 100);
+                const savings = selectedFile.size - blob.size;
+
+                // Show results
+                results.className = 'results success';
+                results.innerHTML = `
+                    <h3>✅ Optimization Complete!</h3>
+                    
+                    <div class="stats">
+                        <div class="stat-row">
+                            <span><strong>Processing Time:</strong></span>
+                            <span>${processingTime}ms</span>
+                        </div>
+                        <div class="stat-row">
+                            <span><strong>Original Size:</strong></span>
+                            <span>${formatFileSize(selectedFile.size)}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span><strong>Optimized Size:</strong></span>
+                            <span>${formatFileSize(blob.size)}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span><strong>Compression:</strong></span>
+                            <span class="compression-badge">${compressionRatio.toFixed(1)}% reduction</span>
+                        </div>
+                        <div class="stat-row">
+                            <span><strong>Space Saved:</strong></span>
+                            <span>${formatFileSize(savings)}</span>
+                        </div>
+                    </div>
+
+                    <div class="image-preview">
+                        <div class="image-container">
+                            <h4>📁 Original (${selectedFile.type})</h4>
+                            <img src="${originalUrl}" alt="Original image">
+                            <div class="image-info">
+                                ${formatFileSize(selectedFile.size)}
+                            </div>
+                        </div>
+                        <div class="image-container">
+                            <h4>⚡ Optimized (WebP)</h4>
+                            <img src="${optimizedUrl}" alt="Optimized image">
+                            <div class="image-info">
+                                ${formatFileSize(blob.size)}
+                            </div>
+                            <p>
+                                <a href="${optimizedUrl}" download="${selectedFile.name.replace(/\.[^/.]+$/, '.webp')}" 
+                                   style="color: #3182ce; text-decoration: none; font-weight: 600;">
+                                    📥 Download Optimized Image
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                `;
+                results.style.display = 'block';
+
+            } catch (error) {
+                loading.style.display = 'none';
+                results.className = 'results error';
+                results.innerHTML = `
+                    <h3>❌ Optimization Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Troubleshooting:</strong></p>
+                    <ul>
+                        <li>Make sure the API server is running</li>
+                        <li>Check if FFmpeg is installed</li>
+                        <li>Verify the image file is valid</li>
+                        <li>Check browser console for more details</li>
+                    </ul>
+                `;
+                results.style.display = 'block';
+                console.error('Optimization error:', error);
+            } finally {
+                optimizeBtn.disabled = false;
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
