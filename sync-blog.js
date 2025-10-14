@@ -399,6 +399,15 @@ async function syncBlogToSite(siteId) {
     await fs.writeFile(join(siteLibDir, 'site-config-helper.ts'), localizedSiteConfigHelper);
     await fs.writeFile(join(siteLibDir, 'prisma.js'), prismaContent);
 
+    // Copy content-processor.ts to site lib directory
+    try {
+        const contentProcessorContent = await fs.readFile(join(CORE_LIB_DIR, 'content-processor.ts'), 'utf-8');
+        await fs.writeFile(join(siteLibDir, 'content-processor.ts'), contentProcessorContent);
+        console.log(`📄 Copied content-processor.ts to ${siteId}/lib/`);
+    } catch (contentProcessorErr) {
+        console.error(`⚠️  Warning: Could not copy content-processor.ts to ${siteId}/lib/:`, contentProcessorErr);
+    }
+
     console.log(`✅ Blog synced to ${siteId}`);
 }
 
