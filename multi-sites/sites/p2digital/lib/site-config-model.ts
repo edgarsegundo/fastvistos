@@ -62,12 +62,10 @@ export const siteConfig: SiteConfig = {
         serviceArea: {
             name: 'Campinas e região metropolitana de São Paulo',
         },
-
         aggregateRating: {
             ratingValue: '5.0',
             reviewCount: '277',
         },
-
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',

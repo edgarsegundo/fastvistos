@@ -10,6 +10,7 @@ import SharedBlogLayout from '../../layouts/SharedBlogLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import SidebarAbove from '../../components/SidebarAbove.astro';
 import SidebarBelow from '../../components/SidebarBelow.astro';
+import AffiliateAds from '../../components/AffiliateAds.astro';
 
 import { siteConfig } from '../../site-config.ts';
 import { BlogService } from '../../lib/blog-service.ts';
@@ -315,7 +316,7 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
             </div>
 
             <!-- Customização Abaixo do TOC -->
-            <SidebarBelow />
+            <AffiliateAds />
         </aside>
     </div>
 </SharedBlogLayout>
