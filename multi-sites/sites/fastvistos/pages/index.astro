@@ -5,6 +5,7 @@ import HeroSection from '../components/HeroSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import AboutSection from '../components/AboutSection.astro';
 import PassportSection from '../components/PassportSection.astro';
+import CompararAd from '../components/CompararAd.astro';
 import CarouselSection from '../components/CarouselSection.astro';
 import FaqSection from '../components/FaqSection.astro';
 import FooterSection from '../components/FooterSection.astro';
@@ -55,10 +56,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <HeroSection />
     <ServicesSection />
     <AboutSection />
+    <CompararAd />
     <PassportSection />
     <CarouselSection />
-    <FaqSection 
-        relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro" 
+    <FaqSection
+        relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro"
         siteId={siteConfig.site.id}
     />
     <GoogleMapsSection />
