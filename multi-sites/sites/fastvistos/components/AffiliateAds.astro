@@ -2,77 +2,24 @@
 // Affiliate ad for travel insurance
 ---
 
-<div class="affiliate-ad-container">
-	<div class="affiliate-ad-image-wrapper">
-		<img 
-			src="/assets/images/blog/garanta-melhor-seguro-viagem-comparar.webp" 
-			alt="Garanta o melhor seguro viagem - Comparar" 
-			class="affiliate-ad-image"
+
+<div class="flex justify-center items-center w-full my-8">
+	<div class="relative w-full max-w-[420px] rounded-2xl overflow-hidden shadow-lg bg-white">
+		<img
+			src="/assets/images/blog/garanta-melhor-seguro-viagem-comparar.webp"
+			alt="Garanta o melhor seguro viagem - Comparar"
+			class="w-full block rounded-2xl"
 			loading="lazy"
 		/>
-		<div class="affiliate-ad-button-wrapper">
-			<a 
-				href="https://www.compararsegurodeviagem.com.br/?afl=fastvistos&utm_source=afl&utm_medium=afl&utm_campaign=afl&utm_content=fastvistos" 
-				target="_blank" 
-				rel="noopener noreferrer" 
-				class="affiliate-ad-button"
+		<div class="absolute left-1/2 bottom-8 transform -translate-x-1/2 w-4/5 flex justify-center">
+			<a
+				href="https://www.compararsegurodeviagem.com.br/?afl=fastvistos&utm_source=afl&utm_medium=afl&utm_campaign=afl&utm_content=fastvistos"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="bg-gradient-to-r from-blue-900 to-blue-500 text-white font-bold text-lg py-3 px-3 rounded-full shadow transition hover:from-blue-700 hover:to-blue-900 hover:scale-105 outline-none border-none tracking-wide"
 			>
 				Comparar Seguro Viagem
 			</a>
 		</div>
 	</div>
 </div>
-
-<style>
-.affiliate-ad-container {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: 2rem 0;
-}
-.affiliate-ad-image-wrapper {
-	position: relative;
-	width: 100%;
-	max-width: 420px;
-	border-radius: 18px;
-	overflow: hidden;
-	box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-	background: #fff;
-}
-.affiliate-ad-image {
-	width: 100%;
-	display: block;
-	border-radius: 18px;
-}
-.affiliate-ad-button-wrapper {
-	position: absolute;
-	left: 50%;
-	bottom: 18px;
-	transform: translateX(-50%);
-	width: 90%;
-	display: flex;
-	justify-content: center;
-}
-.affiliate-ad-button {
-	background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%);
-	color: #fff;
-	font-weight: 700;
-	font-size: 1.1rem;
-	padding: 0.85rem 2rem;
-	border-radius: 999px;
-	box-shadow: 0 2px 12px rgba(59,130,246,0.15);
-	text-decoration: none;
-	transition: background 0.2s, transform 0.2s;
-	border: none;
-	outline: none;
-	letter-spacing: 0.02em;
-}
-.affiliate-ad-button:hover {
-	background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
-	transform: scale(1.05);
-}
-</style>
-
-// To be implemented in each site as needed.
----
