@@ -59,6 +59,13 @@ export const siteConfig: SiteConfig = {
             latitude: -22.8807734, // Latitude for the business location
             longitude: -47.0596895, // Longitude for the business location
         },
+        serviceArea: {
+            name: 'Campinas e região metropolitana de São Paulo',
+        },
+        aggregateRating: {
+            ratingValue: '5.0',
+            reviewCount: '277',
+        },
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',

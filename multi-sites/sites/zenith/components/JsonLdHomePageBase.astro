@@ -206,23 +206,28 @@ if (reviewsBlock.length > 0) {
 
 // --- Unified Organization + LocalBusiness block
 const orgBlock = !disableOrganization && {
-  '@type': disableLocalBusiness ? 'Organization' : ['Organization', 'LocalBusiness', 'ProfessionalService'],
+  '@type': disableLocalBusiness 
+    ? 'Organization' 
+    : ['Organization', 'LocalBusiness', 'ProfessionalService'],
   '@id': orgId,
   name: siteConfig.site?.siteName,
   url: canonicalValidated,
   inLanguage: siteConfig.site.locale || 'pt-BR',
   description: siteConfig.homePageConfig.seo.description,
+
   logo: {
     '@type': 'ImageObject',
-    inLanguage: siteConfig.site.locale || 'pt-BR',
     '@id': logoId,
+    inLanguage: siteConfig.site.locale || 'pt-BR',
     url: siteConfig.site?.logo?.url,
     contentUrl: siteConfig.site?.logo?.url,
     ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
     ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
     ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
   },
+
   image: { '@id': logoId },
+
   ...(disableLocalBusiness
     ? {}
     : {
@@ -234,7 +239,9 @@ const orgBlock = !disableOrganization && {
           postalCode: siteConfig.site?.address?.postalCode,
           addressCountry: siteConfig.site?.address?.addressCountry,
         },
+
         telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+
         contactPoint: {
           '@type': 'ContactPoint',
           telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
@@ -242,14 +249,29 @@ const orgBlock = !disableOrganization && {
           areaServed: 'Brazil',
           availableLanguage: ['Portuguese', 'English'],
         },
-        priceRange: siteConfig.site?.priceRange || '$$',
-        openingHours: siteConfig.site?.openingHours,
-        sameAs: siteConfig.site?.sameAs,
+
         geo: {
             '@type': 'GeoCoordinates',
             latitude: siteConfig.site?.geo?.latitude,
             longitude: siteConfig.site?.geo?.longitude,
         },
+
+        priceRange: siteConfig.site?.priceRange || '$$',
+        openingHours: siteConfig.site?.openingHours,
+
+        serviceArea: {
+          '@type': 'Place',
+          name: siteConfig.site?.serviceArea?.name || 'Campinas e região metropolitana de São Paulo',
+        },
+
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: siteConfig.site?.aggregateRating?.ratingValue,
+          reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
+        },
+
+        sameAs: siteConfig.site?.sameAs,
+
         hasMap: `https://www.google.com/maps/?q=${siteConfig.site?.geo?.latitude},${siteConfig.site?.geo?.longitude}`,
 
         ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),

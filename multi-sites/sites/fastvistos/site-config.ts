@@ -12,24 +12,24 @@ export const siteConfig: SiteConfig = {
         canonical: 'https://fastvistos.com.br/',
         authorName: 'Daniela Otaviano',
         primaryImage: {
-            url: 'https://fastvistos.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp',
-            width: 1280,
-            height: 720,
+            url: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp',
+            width: 1200,
+            height: 630,
             type: 'image/webp',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
             url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas',
             width: 530,
             height: 67,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // Important for search and social previews
+        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp', // Important for search and social previews
 
         assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
@@ -46,6 +46,13 @@ export const siteConfig: SiteConfig = {
         geo: {
             latitude: -22.8807734, // Latitude for the business location
             longitude: -47.0596895, // Longitude for the business location
+        },
+        serviceArea: {
+            name: 'Campinas e região metropolitana de São Paulo',
+        },
+        aggregateRating: {
+            ratingValue: '5.0',
+            reviewCount: '277',
         },
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
@@ -78,9 +85,9 @@ export const siteConfig: SiteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://fastvistos.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp',
-                    width: 1280,
-                    height: 720,
+                    url: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp',
+                    width: 1200,
+                    height: 630,
                     type: 'image/webp',
                     alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
                 }
