@@ -11,7 +11,6 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import SidebarAbove from '../../components/SidebarAbove.astro';
 import SidebarBelow from '../../components/SidebarBelow.astro';
 import AffiliateAds from '../../components/AffiliateAds.astro';
-
 import { siteConfig } from '../../site-config.ts';
 import { BlogService } from '../../lib/blog-service.ts';
 import { RelatedArticlesService } from '../../lib/related-articles.ts';
@@ -21,8 +20,6 @@ import JsonLdBlogPost from '../../components/JsonLdBlogPost.astro';
 import { marked } from 'marked';
 import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
-
-
 
 // Generate static paths from the markdown files in content/blog/
 export async function getStaticPaths() {
@@ -316,7 +313,7 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
             </div>
 
             <!-- Customização Abaixo do TOC -->
-            <AffiliateAds />
+            {AffiliateAds && <AffiliateAds />}
         </aside>
     </div>
 </SharedBlogLayout>
