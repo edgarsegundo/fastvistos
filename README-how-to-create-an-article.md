@@ -13,7 +13,7 @@ Ex:
 ![Exemplo de visto americano aprovado no site oficial CEAC.](https://fastvistos.com.br/assets/images/blog/01-visto-americano-aprovado.webp)
 
 
-## How to
+## How to reference a related article
 
 Ex: 
 
