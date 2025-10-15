@@ -1,6 +1,17 @@
 # Backog
 
 
+- Criar anuncio da dindin travel na lateral dos artigos 
+- Pesquisar seguro de viagem na dindin travel para entender e ver se realmente é bom recomendar para os nossos clientes e  estudar uma forma de começar a vender isso para os nossos clientes
+
+- implementar :
+
+https://fastvistos.com.br/blog/search?q={search_term_string}
+
+e ver por que está colocando o \ no final
+exx: 
+https://fastvistos.com.br/blog/search?q={search_term_string}/
+
 - remover a dulicacoa do titulo no artigo
 - mais padding right left na imagem principal do artigo
 

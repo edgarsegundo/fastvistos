@@ -72,8 +72,8 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
-            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
+            title: 'Visto Americano em Campinas | Fast Vistos — Assessoria Especializada em Vistos e Passaportes',
+            description: 'Fast Vistos — Assessoria especializada em visto americano, com sede em Campinas e atendimento em todo o Brasil. Agilidade e confiança no seu visto.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
