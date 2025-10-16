@@ -46,29 +46,14 @@ export class ContentProcessor {
             const xmlContent = match[1]; // Content between tags
 
             try {
-                // Parse the XML content
-                const xmlString = `<RelatedArticle>${xmlContent}</RelatedArticle>`;
-                const parsed = parser.parse(xmlString);
-                const articleData = parsed.RelatedArticle || parsed.relatedarticle || {};
+                // Extract id and text directly from raw XML using regex (most reliable)
+                const idMatch = /<id>([\s\S]*?)<\/id>/i.exec(xmlContent);
+                const textMatch = /<text>([\s\S]*?)<\/text>/i.exec(xmlContent);
                 
-                // Handle both string and object cases for id and text
-                let uuid = '';
-                let innerText = '';
+                const uuid = idMatch ? idMatch[1].trim() : '';
+                const innerText = textMatch ? textMatch[1].trim() : '';
                 
-                if (typeof articleData.id === 'string') {
-                    uuid = articleData.id.trim();
-                } else if (articleData.id) {
-                    uuid = String(articleData.id).trim();
-                }
-                
-                if (typeof articleData.text === 'string') {
-                    innerText = articleData.text.trim();
-                } else if (articleData.text) {
-                    // If text is an object or has nested content, stringify it
-                    innerText = String(articleData.text).trim();
-                }
-                
-                console.log('🔍 Parsed articleData:', { uuid, innerText: innerText.substring(0, 100) });
+                console.log('🔍 Parsed data:', { uuid, innerText: innerText.substring(0, 150) });
                 
                 if (!uuid) {
                     console.warn('⚠️ related article tag found without ID, removing tag');

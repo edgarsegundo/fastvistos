@@ -2,7 +2,7 @@
 title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2025"
 description: "KMKNSLTRKMPNRSTTSDVSTMRKNGKMPLT"
 pubDate: "2025-10-14T21:49:40.000Z"
-updatedDate: "2025-10-16T19:25:11.999Z"
+updatedDate: "2025-10-16T19:40:15.931Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -248,7 +248,7 @@ O processo de entrega é gerenciado pelo **CASV (Centro de Atendimento ao Solici
 <!--
 <RelatedArticle>
 <id>0684909c488e4aa6a4ed027957eb9c85</id>
-<text>Para mais detalhes sobre como acompanhar a entrega do seu passaporte, confira o guia completo <a href="https://ais.usvisa-info.com/pt-br/niv" target="_blank" rel="noopener">aqui</a>.</text>
+<text>Para mais detalhes sobre como acompanhar a entrega do seu passaporte, confira o guia completo [aqui](<<ARTICLE-URL>>).</text>
 </RelatedArticle>
 -->
 

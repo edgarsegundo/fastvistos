@@ -51,6 +51,9 @@ export class ContentProcessor {
                 const parsed = parser.parse(xmlString);
                 const articleData = parsed.RelatedArticle || parsed.relatedarticle || {};
                 
+                console.log('🔍 DEBUG - Raw xmlContent:', xmlContent.substring(0, 200));
+                console.log('🔍 DEBUG - Parsed articleData:', JSON.stringify(articleData, null, 2));
+                
                 // Handle both string and object cases for id and text
                 let uuid = '';
                 let innerText = '';
@@ -61,11 +64,19 @@ export class ContentProcessor {
                     uuid = String(articleData.id).trim();
                 }
                 
-                if (typeof articleData.text === 'string') {
-                    innerText = articleData.text.trim();
-                } else if (articleData.text) {
-                    // If text is an object or has nested content, stringify it
-                    innerText = String(articleData.text).trim();
+                // Extract text directly from raw XML using regex (most reliable)
+                const textMatch = /<text>([\s\S]*?)<\/text>/i.exec(xmlContent);
+                if (textMatch) {
+                    innerText = textMatch[1].trim();
+                    console.log('🔍 DEBUG - Extracted text via regex:', innerText.substring(0, 100));
+                } else {
+                    // Fallback to parser result
+                    if (typeof articleData.text === 'string') {
+                        innerText = articleData.text.trim();
+                    } else if (articleData.text && articleData.text['#text']) {
+                        innerText = String(articleData.text['#text']).trim();
+                    }
+                    console.log('🔍 DEBUG - Extracted text via parser:', innerText.substring(0, 100));
                 }
                 
                 console.log('🔍 Parsed articleData:', { uuid, innerText: innerText.substring(0, 100) });
@@ -108,10 +119,10 @@ export class ContentProcessor {
                 // Replace the entire RELATED-ARTICLE block with just the processed inner content
                 processedContent = processedContent.replace(fullMatch, processedInnerContent);
                 
-                console.log(`✅ Successfully processed RELATED-ARTICLE: ${uuid} -> ${articleUrl}`);
+                console.log(`✅ Successfully processed <<ARTICLE-URL>>: ${uuid} -> ${articleUrl}`);
                 
             } catch (error) {
-                console.error(`❌ Error processing RELATED-ARTICLE:`, error);
+                console.error(`❌ Error processing <<ARTICLE-URL>>:`, error);
                 // On error, remove the tag to prevent broken content
                 processedContent = processedContent.replace(fullMatch, '');
             }
