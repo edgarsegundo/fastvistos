@@ -21,14 +21,14 @@ export class ContentProcessor {
             return content;
         }
 
-        // Pattern to match <!--<RelatedArticle>...</RelatedArticle>-->
-        const relatedArticlePattern = /<!--<RelatedArticle>([\s\S]*?)<\/RelatedArticle>-->/gi;
+        // Pattern to match <!--<RelatedArticle>...</RelatedArticle>--> (with optional whitespace)
+        const relatedArticlePattern = /<!--\s*<RelatedArticle>([\s\S]*?)<\/RelatedArticle>\s*-->/gi;
         
         let processedContent = content;
-        console.log(`🛑 (2): ${content}`);
+        console.log(`🛑 (2) Searching for RelatedArticle tags...`);
         const matches = Array.from(content.matchAll(relatedArticlePattern));
 
-        console.log(`🛑 (3)`);
+        console.log(`🛑 (3) Found ${matches.length} matches`);
         
         if (matches.length === 0) {
             console.log(`🛑 (4)`);
