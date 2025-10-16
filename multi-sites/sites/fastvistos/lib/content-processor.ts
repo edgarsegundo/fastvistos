@@ -15,7 +15,6 @@ export class ContentProcessor {
      * @returns Processed content with RELATED-ARTICLE tags resolved
      */
     static async processRelatedArticleTags(content: string): Promise<string> {
-        console.log(`🛑 (0)`);
         if (!content || typeof content !== 'string') {
             console.log(`🛑 (1)`);
             return content;
@@ -25,17 +24,13 @@ export class ContentProcessor {
         const relatedArticlePattern = /<!--\s*<RelatedArticle>([\s\S]*?)<\/RelatedArticle>\s*-->/gi;
         
         let processedContent = content;
-        console.log(`🛑 (2) Searching for RelatedArticle tags...`);
         const matches = Array.from(content.matchAll(relatedArticlePattern));
 
-        console.log(`🛑 (3) Found ${matches.length} matches`);
-        
         if (matches.length === 0) {
-            console.log(`🛑 (4)`);
             return content;
         }
 
-        console.log(`🔄 Processing ${matches.length} RELATED-ARTICLE tag(s)`);
+        console.log(`🔄 Processing ${matches.length} RelatedArticle tag(s)`);
 
         // Initialize XML parser
         const parser = new XMLParser({
@@ -60,12 +55,12 @@ export class ContentProcessor {
                 const innerText = (articleData.text || '').trim();
                 
                 if (!uuid) {
-                    console.warn('⚠️ RELATED-ARTICLE tag found without ID, removing tag');
+                    console.warn('⚠️ related article tag found without ID, removing tag');
                     processedContent = processedContent.replace(fullMatch, '');
                     continue;
                 }
 
-                console.log(`🔍 Processing RELATED-ARTICLE with UUID: ${uuid}`);
+                console.log(`🔍 Processing related article with UUID: ${uuid}`);
                 
                 // Fetch the article by UUID
                 const article = await BlogService.getArticleById(uuid);
@@ -91,8 +86,8 @@ export class ContentProcessor {
                 // Build the article URL
                 const articleUrl = `/blog/${article.slug}`;
                 
-                // Replace [[ARTICLE-URL]] placeholder with actual URL
-                const processedInnerContent = innerText.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
+                // Replace <<ARTICLE-URL>> placeholder with actual URL
+                const processedInnerContent = innerText.replace(/<<ARTICLE-URL>>/g, articleUrl);
                 
                 // Replace the entire RELATED-ARTICLE block with just the processed inner content
                 processedContent = processedContent.replace(fullMatch, processedInnerContent);
@@ -273,23 +268,4 @@ export class ContentProcessor {
         return true;
     }
 
-    /**
-     * Extract all RELATED-ARTICLE UUIDs from content (for debugging)
-     * @param content - Raw content to analyze
-     * @returns Array of UUIDs found in RELATED-ARTICLE tags
-     */
-    static extractRelatedArticleUuids(content: string): string[] {
-        const relatedArticlePattern = /\[\[RELATED-ARTICLE:([^\]]+)\]\]/gi;
-        const matches = Array.from(content.matchAll(relatedArticlePattern));
-        return matches.map(match => match[1]?.trim()).filter(Boolean);
-    }
-
-    /**
-     * Check if content contains RELATED-ARTICLE tags
-     * @param content - Content to check
-     * @returns true if content contains RELATED-ARTICLE tags
-     */
-    static hasRelatedArticleTags(content: string): boolean {
-        return /\[\[RELATED-ARTICLE:/i.test(content);
-    }
 }

@@ -2,7 +2,7 @@
 title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2025"
 description: "KMKNSLTRKMPNRSTTSDVSTMRKNGKMPLT"
 pubDate: "2025-10-14T21:49:40.000Z"
-updatedDate: "2025-10-16T18:47:09.804Z"
+updatedDate: "2025-10-16T19:25:11.999Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -245,6 +245,13 @@ O processo de entrega é gerenciado pelo **CASV (Centro de Atendimento ao Solici
 
 🔗 **Acompanhe a entrega** <a href="https://ais.usvisa-info.com/pt-br/niv" target="_blank">aqui ↗</a>
 
+<!--
+<RelatedArticle>
+<id>0684909c488e4aa6a4ed027957eb9c85</id>
+<text>Para mais detalhes sobre como acompanhar a entrega do seu passaporte, confira o guia completo <a href="https://ais.usvisa-info.com/pt-br/niv" target="_blank" rel="noopener">aqui</a>.</text>
+</RelatedArticle>
+-->
+
 ### ✈️ Antes de viajar: não esqueça do seguro viagem
 
 <!--
@@ -277,7 +284,7 @@ Encontrar uma recusa pode ser desanimador, mas é importante saber que **isso n�
 
 **Não se desespere!** Nossa equipe de especialistas pode orientar você sobre os próximos passos. <!--<RelatedArticle>
 <id>d28f34fa3e1d4691855a6d5d9e76eb3e</id>
-<text>Leia nosso artigo com [**casos reais de sucesso**]([[ARTICLE-URL]]) de pessoas que conseguiram o visto mesmo após uma negativa.</text>
+<text>Leia nosso artigo com [**casos reais de sucesso**](<<ARTICLE-URL>>) de pessoas que conseguiram o visto mesmo após uma negativa.</text>
 </RelatedArticle>
 -->
 
