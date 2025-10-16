@@ -30,7 +30,7 @@ export class ContentProcessor {
             return content;
         }
 
-        console.log(`🔄 Processing ${matches.length} RELATED-ARTICLE tag(s)`);
+        console.log(`🔄 Processing ${matches.length} RelatedArticle tag(s)`);
 
         // Initialize XML parser
         const parser = new XMLParser({
@@ -46,21 +46,22 @@ export class ContentProcessor {
             const xmlContent = match[1]; // Content between tags
 
             try {
-                // Parse the XML content
-                const xmlString = `<RelatedArticle>${xmlContent}</RelatedArticle>`;
-                const parsed = parser.parse(xmlString);
-                const articleData = parsed.RelatedArticle || parsed.relatedarticle || {};
+                // Extract id and text directly from raw XML using regex (most reliable)
+                const idMatch = /<id>([\s\S]*?)<\/id>/i.exec(xmlContent);
+                const textMatch = /<text>([\s\S]*?)<\/text>/i.exec(xmlContent);
                 
-                const uuid = (articleData.id || '').trim();
-                const innerText = (articleData.text || '').trim();
+                const uuid = idMatch ? idMatch[1].trim() : '';
+                const innerText = textMatch ? textMatch[1].trim() : '';
+                
+                console.log('🔍 Parsed data:', { uuid, innerText: innerText.substring(0, 150) });
                 
                 if (!uuid) {
-                    console.warn('⚠️ RELATED-ARTICLE tag found without ID, removing tag');
+                    console.warn('⚠️ related article tag found without ID, removing tag');
                     processedContent = processedContent.replace(fullMatch, '');
                     continue;
                 }
 
-                console.log(`🔍 Processing RELATED-ARTICLE with UUID: ${uuid}`);
+                console.log(`🔍 Processing related article with UUID: ${uuid}`);
                 
                 // Fetch the article by UUID
                 const article = await BlogService.getArticleById(uuid);
@@ -86,16 +87,16 @@ export class ContentProcessor {
                 // Build the article URL
                 const articleUrl = `/blog/${article.slug}`;
                 
-                // Replace [[ARTICLE-URL]] placeholder with actual URL
-                const processedInnerContent = innerText.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
+                // Replace <<ARTICLE-URL>> placeholder with actual URL
+                const processedInnerContent = innerText.replace(/<<ARTICLE-URL>>/g, articleUrl);
                 
                 // Replace the entire RELATED-ARTICLE block with just the processed inner content
                 processedContent = processedContent.replace(fullMatch, processedInnerContent);
                 
-                console.log(`✅ Successfully processed RELATED-ARTICLE: ${uuid} -> ${articleUrl}`);
+                console.log(`✅ Successfully processed <<ARTICLE-URL>>: ${uuid} -> ${articleUrl}`);
                 
             } catch (error) {
-                console.error(`❌ Error processing RELATED-ARTICLE:`, error);
+                console.error(`❌ Error processing <<ARTICLE-URL>>:`, error);
                 // On error, remove the tag to prevent broken content
                 processedContent = processedContent.replace(fullMatch, '');
             }
