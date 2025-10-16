@@ -96,36 +96,48 @@ export class ContentProcessor {
             return { processedContent: content, howToJson: null };
         }
 
-        // Patterns for HowTo and HowToStep blocks
-        const howToPattern = /\[\[HowTo\]\](.*?)\[\[\/HowToAnwer:(.*?)\]\]/gis;
-        const howToStepPattern = /\[\[HowToStep\]\](.*?)\[\[\/HowToStepAnwer:(.*?)\]\]/gis;
+        console.log('🔍 [HowTo] Checking content for HowTo tags...');
+        
+        // Check if content has HowTo tags
+        const hasHowToTag = content.includes('[[HowTo]]');
+        const hasHowToStepTag = content.includes('[[HowToStep]]');
+        console.log('🔍 [HowTo] Has [[HowTo]]:', hasHowToTag);
+        console.log('🔍 [HowTo] Has [[HowToStep]]:', hasHowToStepTag);
 
-        let howToMatch = howToPattern.exec(content);
+        // HowTo main block: [[HowTo]]Pergunta[[HowToAnswer:Resposta]]
+        const howToMainPattern = /\[\[HowTo\]\]([\s\S]*?)\[\[HowToAnswer:([\s\S]*?)\]\]/i;
         let howToName = '';
         let howToDescription = '';
+        let howToMatch = howToMainPattern.exec(content);
         if (howToMatch) {
             howToName = (howToMatch[1] || '').trim();
             howToDescription = (howToMatch[2] || '').trim();
+            console.log('✅ [HowTo] Found main HowTo block');
+            console.log('   Name:', howToName.substring(0, 50) + '...');
+            console.log('   Description:', howToDescription.substring(0, 50) + '...');
+        } else {
+            console.log('❌ [HowTo] No main HowTo block found');
         }
 
-        // Find all HowToStep blocks
+        // HowToStep blocks: [[HowToStep]]Pergunta[[HowToStepAnswer:Resposta]]
+        // Use global regex to find all HowToStep blocks
         const steps: any[] = [];
-        let stepMatch;
-        while ((stepMatch = howToStepPattern.exec(content)) !== null) {
-            const name = (stepMatch[1] || '').trim();
-            const text = (stepMatch[2] || '').trim();
-            // Generate a URL-friendly anchor from the name
-            const anchor = name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '');
+        const howToStepPattern = /\[\[HowToStep\]\]([\s\S]*?)\[\[HowToStepAnswer:([\s\S]*?)\]\]/g;
+        let match;
+        while ((match = howToStepPattern.exec(content)) !== null) {
+            const name = (match[1] || '').trim();
+            const text = (match[2] || '').trim();
+            console.log(`✅ [HowTo] Found HowToStep #${steps.length + 1}`);
+            console.log('   Name:', name.substring(0, 50) + '...');
+            console.log('   Text:', text.substring(0, 50) + '...');
             steps.push({
                 "@type": "HowToStep",
                 name,
-                text,
-                url: `https://...#${anchor}`
+                text
             });
         }
+        
+        console.log(`🔍 [HowTo] Total steps found: ${steps.length}`);
 
         // Build HowTo JSON if any HowTo or HowToStep found
         let howToJson = null;
@@ -136,15 +148,18 @@ export class ContentProcessor {
                 description: howToDescription || "",
                 step: steps
             };
+            console.log('✅ [HowTo] Built HowTo JSON successfully');
+        } else {
+            console.log('❌ [HowTo] No HowTo data found, returning null');
         }
 
         // Remove all HowTo and HowToStep blocks from content
         let processedContent = content
-            .replace(howToPattern, '')
+            .replace(howToMainPattern, '')
             .replace(howToStepPattern, '');
 
         return { processedContent, howToJson };
-    }    
+    }
 
     /**
      * Check if an article is published
