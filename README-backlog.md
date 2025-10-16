@@ -1,9 +1,5 @@
 # Backog
 
-
-- Criar anuncio da dindin travel na lateral dos artigos 
-- Pesquisar seguro de viagem na dindin travel para entender e ver se realmente é bom recomendar para os nossos clientes e  estudar uma forma de começar a vender isso para os nossos clientes
-
 - implementar :
 
 https://fastvistos.com.br/blog/search?q={search_term_string}
@@ -11,21 +7,6 @@ https://fastvistos.com.br/blog/search?q={search_term_string}
 e ver por que está colocando o \ no final
 exx: 
 https://fastvistos.com.br/blog/search?q={search_term_string}/
-
-- remover a dulicacoa do titulo no artigo
-- mais padding right left na imagem principal do artigo
-
-- preciso arrumar isso aqui no artigo depois que criar esse artigo: 👉 [Link para o Artigo de Casos de Sucesso]
-
-
-- Criar model artigos relacionados
-
-- como incluir isso em algum lugar para facilitar quando for criar uma imagem e um link no article?
-
- 🔗 **Acesse o site oficial para consultar seu status** <a href="https://ceac.state.gov/CEACStatTracker/Status.aspx" target="_blank">aqui ↗</a>
-
-
-![Exemplo de visto americano aprovado no site oficial CEAC.](https://fastvistos.com.br/assets/images/blog/01-visto-americano-aprovado.webp)
 
 
 - Criar model discussion???
