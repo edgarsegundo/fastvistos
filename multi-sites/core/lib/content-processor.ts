@@ -9,40 +9,62 @@ import { XMLParser } from 'fast-xml-parser';
 
 export class ContentProcessor {
     /**
-     * Process content to handle RELATED-ARTICLE tags
+     * Process content to handle RELATED-ARTICLE tags (new XML format)
+     * Format: <!--<RelatedArticle><id>uuid</id><text>content with [[ARTICLE-URL]]</text></RelatedArticle>-->
      * @param content - Raw markdown content
      * @returns Processed content with RELATED-ARTICLE tags resolved
      */
     static async processContent(content: string): Promise<string> {
+        console.log(`🛑 (0)`);
         if (!content || typeof content !== 'string') {
+            console.log(`🛑 (1)`);
             return content;
         }
 
-        // Pattern to match [[RELATED-ARTICLE:uuid]]...[[/RELATED-ARTICLE]]
-        const relatedArticlePattern = /\[\[RELATED-ARTICLE:([^\]]+)\]\]([\s\S]*?)\[\[\/RELATED-ARTICLE\]\]/gi;
+        // Pattern to match <!--<RelatedArticle>...</RelatedArticle>-->
+        const relatedArticlePattern = /<!--<RelatedArticle>([\s\S]*?)<\/RelatedArticle>-->/gi;
         
         let processedContent = content;
+        console.log(`🛑 (2): ${content}`);
         const matches = Array.from(content.matchAll(relatedArticlePattern));
+
+        console.log(`🛑 (3)`);
         
         if (matches.length === 0) {
+            console.log(`🛑 (4)`);
             return content;
         }
 
         console.log(`🔄 Processing ${matches.length} RELATED-ARTICLE tag(s)`);
 
+        // Initialize XML parser
+        const parser = new XMLParser({
+            ignoreAttributes: false,
+            parseTagValue: true,
+            trimValues: true,
+            ignoreDeclaration: true
+        });
+
         // Process each match
         for (const match of matches) {
-            const fullMatch = match[0]; // Full [[RELATED-ARTICLE:uuid]]...[[/RELATED-ARTICLE]]
-            const uuid = match[1]?.trim(); // UUID from :uuid part
-            const innerContent = match[2]; // Content between tags
-            
-            if (!uuid) {
-                console.warn('⚠️ RELATED-ARTICLE tag found without UUID, removing tag');
-                processedContent = processedContent.replace(fullMatch, '');
-                continue;
-            }
+            const fullMatch = match[0]; // Full <!--<RelatedArticle>...</RelatedArticle>-->
+            const xmlContent = match[1]; // Content between tags
 
             try {
+                // Parse the XML content
+                const xmlString = `<RelatedArticle>${xmlContent}</RelatedArticle>`;
+                const parsed = parser.parse(xmlString);
+                const articleData = parsed.RelatedArticle || parsed.relatedarticle || {};
+                
+                const uuid = (articleData.id || '').trim();
+                const innerText = (articleData.text || '').trim();
+                
+                if (!uuid) {
+                    console.warn('⚠️ RELATED-ARTICLE tag found without ID, removing tag');
+                    processedContent = processedContent.replace(fullMatch, '');
+                    continue;
+                }
+
                 console.log(`🔍 Processing RELATED-ARTICLE with UUID: ${uuid}`);
                 
                 // Fetch the article by UUID
@@ -70,7 +92,7 @@ export class ContentProcessor {
                 const articleUrl = `/blog/${article.slug}`;
                 
                 // Replace [[ARTICLE-URL]] placeholder with actual URL
-                const processedInnerContent = innerContent.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
+                const processedInnerContent = innerText.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
                 
                 // Replace the entire RELATED-ARTICLE block with just the processed inner content
                 processedContent = processedContent.replace(fullMatch, processedInnerContent);
@@ -78,7 +100,7 @@ export class ContentProcessor {
                 console.log(`✅ Successfully processed RELATED-ARTICLE: ${uuid} -> ${articleUrl}`);
                 
             } catch (error) {
-                console.error(`❌ Error processing RELATED-ARTICLE with UUID ${uuid}:`, error);
+                console.error(`❌ Error processing RELATED-ARTICLE:`, error);
                 // On error, remove the tag to prevent broken content
                 processedContent = processedContent.replace(fullMatch, '');
             }

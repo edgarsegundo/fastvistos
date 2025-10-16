@@ -5,10 +5,12 @@
  */
 
 import { BlogService } from './blog-service.ts';
+import { XMLParser } from 'fast-xml-parser';
 
 export class ContentProcessor {
     /**
-     * Process content to handle RELATED-ARTICLE tags
+     * Process content to handle RELATED-ARTICLE tags (new XML format)
+     * Format: <!--<RelatedArticle><id>uuid</id><text>content with [[ARTICLE-URL]]</text></RelatedArticle>-->
      * @param content - Raw markdown content
      * @returns Processed content with RELATED-ARTICLE tags resolved
      */
@@ -17,8 +19,8 @@ export class ContentProcessor {
             return content;
         }
 
-        // Pattern to match [[RELATED-ARTICLE:uuid]]...[[/RELATED-ARTICLE]]
-        const relatedArticlePattern = /\[\[RELATED-ARTICLE:([^\]]+)\]\]([\s\S]*?)\[\[\/RELATED-ARTICLE\]\]/gi;
+        // Pattern to match <!--<RelatedArticle>...</RelatedArticle>-->
+        const relatedArticlePattern = /<!--<RelatedArticle>([\s\S]*?)<\/RelatedArticle>-->/gi;
         
         let processedContent = content;
         const matches = Array.from(content.matchAll(relatedArticlePattern));
@@ -29,19 +31,34 @@ export class ContentProcessor {
 
         console.log(`🔄 Processing ${matches.length} RELATED-ARTICLE tag(s)`);
 
+        // Initialize XML parser
+        const parser = new XMLParser({
+            ignoreAttributes: false,
+            parseTagValue: true,
+            trimValues: true,
+            ignoreDeclaration: true
+        });
+
         // Process each match
         for (const match of matches) {
-            const fullMatch = match[0]; // Full [[RELATED-ARTICLE:uuid]]...[[/RELATED-ARTICLE]]
-            const uuid = match[1]?.trim(); // UUID from :uuid part
-            const innerContent = match[2]; // Content between tags
-            
-            if (!uuid) {
-                console.warn('⚠️ RELATED-ARTICLE tag found without UUID, removing tag');
-                processedContent = processedContent.replace(fullMatch, '');
-                continue;
-            }
+            const fullMatch = match[0]; // Full <!--<RelatedArticle>...</RelatedArticle>-->
+            const xmlContent = match[1]; // Content between tags
 
             try {
+                // Parse the XML content
+                const xmlString = `<RelatedArticle>${xmlContent}</RelatedArticle>`;
+                const parsed = parser.parse(xmlString);
+                const articleData = parsed.RelatedArticle || parsed.relatedarticle || {};
+                
+                const uuid = (articleData.id || '').trim();
+                const innerText = (articleData.text || '').trim();
+                
+                if (!uuid) {
+                    console.warn('⚠️ RELATED-ARTICLE tag found without ID, removing tag');
+                    processedContent = processedContent.replace(fullMatch, '');
+                    continue;
+                }
+
                 console.log(`🔍 Processing RELATED-ARTICLE with UUID: ${uuid}`);
                 
                 // Fetch the article by UUID
@@ -69,7 +86,7 @@ export class ContentProcessor {
                 const articleUrl = `/blog/${article.slug}`;
                 
                 // Replace [[ARTICLE-URL]] placeholder with actual URL
-                const processedInnerContent = innerContent.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
+                const processedInnerContent = innerText.replace(/\[\[ARTICLE-URL\]\]/g, articleUrl);
                 
                 // Replace the entire RELATED-ARTICLE block with just the processed inner content
                 processedContent = processedContent.replace(fullMatch, processedInnerContent);
@@ -77,7 +94,7 @@ export class ContentProcessor {
                 console.log(`✅ Successfully processed RELATED-ARTICLE: ${uuid} -> ${articleUrl}`);
                 
             } catch (error) {
-                console.error(`❌ Error processing RELATED-ARTICLE with UUID ${uuid}:`, error);
+                console.error(`❌ Error processing RELATED-ARTICLE:`, error);
                 // On error, remove the tag to prevent broken content
                 processedContent = processedContent.replace(fullMatch, '');
             }
@@ -87,9 +104,21 @@ export class ContentProcessor {
     }
 
     /**
-     * Process HowTo and HowToStep tags, build HowTo JSON, and remove tags from content
-     * @param content - Raw markdown content
+     * Process HowTo and HowToStep XML-like tags, build HowTo JSON, and remove tags from content
+     * Uses fast-xml-parser for robust XML parsing
+     * @param content - Raw markdown content with <HowTo> and <HowToStep> tags
      * @returns { processedContent: string, howToJson: object|null }
+     * 
+     * Example input:
+     * <HowTo>
+     *   <name>Main question</name>
+     *   <text>Main answer</text>
+     * </HowTo>
+     * <HowToStep>
+     *   <name>Step question</name>
+     *   <text>Step answer</text>
+     *   <url>https://example.com#anchor</url>
+     * </HowToStep>
      */
     static processHowToTags(content: string): { processedContent: string, howToJson: any } {
         if (!content || typeof content !== 'string') {
@@ -98,44 +127,79 @@ export class ContentProcessor {
 
         console.log('🔍 [HowTo] Checking content for HowTo tags...');
         
-        // Check if content has HowTo tags
-        const hasHowToTag = content.includes('[[HowTo]]');
-        const hasHowToStepTag = content.includes('[[HowToStep]]');
-        console.log('🔍 [HowTo] Has [[HowTo]]:', hasHowToTag);
-        console.log('🔍 [HowTo] Has [[HowToStep]]:', hasHowToStepTag);
+        // Initialize XML parser with options
+        const parser = new XMLParser({
+            ignoreAttributes: false,
+            parseTagValue: true,
+            trimValues: true,
+            ignoreDeclaration: true,
+            parseAttributeValue: true
+        });
 
-        // HowTo main block: [[HowTo]]Pergunta[[HowToAnswer:Resposta]]
-        const howToMainPattern = /\[\[HowTo\]\]([\s\S]*?)\[\[HowToAnswer:([\s\S]*?)\]\]/i;
+        // Extract HowTo main block
+        const howToMatches = content.match(/<HowTo>[\s\S]*?<\/HowTo>/gi) || [];
+        const hasHowToTag = howToMatches.length > 0;
+        console.log('🔍 [HowTo] Has <HowTo>:', hasHowToTag);
+        
         let howToName = '';
         let howToDescription = '';
-        let howToMatch = howToMainPattern.exec(content);
-        if (howToMatch) {
-            howToName = (howToMatch[1] || '').trim();
-            howToDescription = (howToMatch[2] || '').trim();
-            console.log('✅ [HowTo] Found main HowTo block');
-            console.log('   Name:', howToName.substring(0, 50) + '...');
-            console.log('   Description:', howToDescription.substring(0, 50) + '...');
+        
+        if (howToMatches.length > 0) {
+            try {
+                const parsed = parser.parse(howToMatches[0]!);
+                const howToData = parsed.HowTo || parsed.howto || {};
+                
+                howToName = howToData.name || '';
+                howToDescription = howToData.text || '';
+                
+                console.log('✅ [HowTo] Found main HowTo block');
+                console.log('   Name:', howToName.substring(0, 80));
+                console.log('   Description:', howToDescription.substring(0, 80));
+            } catch (error) {
+                console.error('❌ [HowTo] Error parsing main HowTo block:', error);
+            }
         } else {
             console.log('❌ [HowTo] No main HowTo block found');
         }
 
-        // HowToStep blocks: [[HowToStep]]Pergunta[[HowToStepAnswer:Resposta]]
-        // Use global regex to find all HowToStep blocks
+        // Extract all HowToStep blocks
+        const stepMatches = content.match(/<HowToStep>[\s\S]*?<\/HowToStep>/gi) || [];
+        const hasHowToStepTag = stepMatches.length > 0;
+        console.log('🔍 [HowTo] Has <HowToStep>:', hasHowToStepTag);
+        
         const steps: any[] = [];
-        const howToStepPattern = /\[\[HowToStep\]\]([\s\S]*?)\[\[HowToStepAnswer:([\s\S]*?)\]\]/g;
-        let match;
-        while ((match = howToStepPattern.exec(content)) !== null) {
-            const name = (match[1] || '').trim();
-            const text = (match[2] || '').trim();
-            console.log(`✅ [HowTo] Found HowToStep #${steps.length + 1}`);
-            console.log('   Name:', name.substring(0, 50) + '...');
-            console.log('   Text:', text.substring(0, 50) + '...');
-            steps.push({
-                "@type": "HowToStep",
-                name,
-                text
-            });
-        }
+        
+        stepMatches.forEach((stepXml, index) => {
+            try {
+                const parsed = parser.parse(stepXml);
+                const stepData = parsed.HowToStep || parsed.howtostep || {};
+                
+                const stepName = stepData.name || '';
+                const stepText = stepData.text || '';
+                const stepUrl = stepData.url || null;
+                
+                if (stepName || stepText) {
+                    const step: any = {
+                        "@type": "HowToStep",
+                        name: stepName,
+                        text: stepText
+                    };
+                    
+                    // Only add URL if it exists
+                    if (stepUrl) {
+                        step.url = stepUrl;
+                    }
+                    
+                    steps.push(step);
+                    console.log(`✅ [HowTo] Found HowToStep #${index + 1}`);
+                    console.log('   Name:', stepName.substring(0, 60));
+                    console.log('   Text:', stepText.substring(0, 60));
+                    if (stepUrl) console.log('   URL:', stepUrl);
+                }
+            } catch (error) {
+                console.error(`❌ [HowTo] Error parsing HowToStep #${index + 1}:`, error);
+            }
+        });
         
         console.log(`🔍 [HowTo] Total steps found: ${steps.length}`);
 
@@ -154,9 +218,15 @@ export class ContentProcessor {
         }
 
         // Remove all HowTo and HowToStep blocks from content
-        let processedContent = content
-            .replace(howToMainPattern, '')
-            .replace(howToStepPattern, '');
+        let processedContent = content;
+        howToMatches.forEach(match => {
+            processedContent = processedContent.replace(match, '');
+        });
+        stepMatches.forEach(match => {
+            processedContent = processedContent.replace(match, '');
+        });
+
+        console.log('🔍 [HowTo] Content processed, tags removed');
 
         return { processedContent, howToJson };
     }
