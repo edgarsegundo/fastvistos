@@ -36,15 +36,10 @@ const { entry } = Astro.props;
 
 // Process HowTo tags first, then RELATED-ARTICLE tags
 const rawContent = entry.body || '';
-console.log('🔍 [ASTRO] Starting HowTo processing...');
-console.log('🔍 [ASTRO] Raw content length:', rawContent.length);
 const { processedContent: contentNoHowTo, howToJson } = ContentProcessor.processHowToTags(rawContent);
-
 const processedContent = await ContentProcessor.processRelatedArticleTags(contentNoHowTo);
 
-console.log(`🛑🛑 processedContent called: ${JSON.stringify(processedContent)}`);
-
-// console.log(`🛑🛑 howToJson: ${JSON.stringify(howToJson)}`);
+console.log(`🛑🛑 howToJson: ${JSON.stringify(howToJson)}`);
 
 // Render the original content for headings (TOC)
 const { headings } = await entry.render();

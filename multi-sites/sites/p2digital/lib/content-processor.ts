@@ -14,8 +14,7 @@ export class ContentProcessor {
      * @param content - Raw markdown content
      * @returns Processed content with RELATED-ARTICLE tags resolved
      */
-    static async processContent(content: string): Promise<string> {
-        console.log(`🛑 (0)`);
+    static async processRelatedArticleTags(content: string): Promise<string> {
         if (!content || typeof content !== 'string') {
             console.log(`🛑 (1)`);
             return content;
@@ -25,13 +24,9 @@ export class ContentProcessor {
         const relatedArticlePattern = /<!--\s*<RelatedArticle>([\s\S]*?)<\/RelatedArticle>\s*-->/gi;
         
         let processedContent = content;
-        console.log(`🛑 (2) Searching for RelatedArticle tags...`);
         const matches = Array.from(content.matchAll(relatedArticlePattern));
 
-        console.log(`🛑 (3) Found ${matches.length} matches`);
-        
         if (matches.length === 0) {
-            console.log(`🛑 (4)`);
             return content;
         }
 
@@ -273,23 +268,4 @@ export class ContentProcessor {
         return true;
     }
 
-    /**
-     * Extract all RELATED-ARTICLE UUIDs from content (for debugging)
-     * @param content - Raw content to analyze
-     * @returns Array of UUIDs found in RELATED-ARTICLE tags
-     */
-    static extractRelatedArticleUuids(content: string): string[] {
-        const relatedArticlePattern = /\[\[RELATED-ARTICLE:([^\]]+)\]\]/gi;
-        const matches = Array.from(content.matchAll(relatedArticlePattern));
-        return matches.map(match => match[1]?.trim()).filter(Boolean);
-    }
-
-    /**
-     * Check if content contains RELATED-ARTICLE tags
-     * @param content - Content to check
-     * @returns true if content contains RELATED-ARTICLE tags
-     */
-    static hasRelatedArticleTags(content: string): boolean {
-        return /\[\[RELATED-ARTICLE:/i.test(content);
-    }
 }
