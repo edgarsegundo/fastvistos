@@ -1,3 +1,4 @@
+
 /**
  * Content Processor for RELATED-ARTICLE tags
  * Processes content before rendering to replace RELATED-ARTICLE blocks
@@ -84,6 +85,66 @@ export class ContentProcessor {
 
         return processedContent;
     }
+
+    /**
+     * Process HowTo and HowToStep tags, build HowTo JSON, and remove tags from content
+     * @param content - Raw markdown content
+     * @returns { processedContent: string, howToJson: object|null }
+     */
+    static processHowToTags(content: string): { processedContent: string, howToJson: any } {
+        if (!content || typeof content !== 'string') {
+            return { processedContent: content, howToJson: null };
+        }
+
+        // Patterns for HowTo and HowToStep blocks
+        const howToPattern = /\[\[HowTo\]\](.*?)\[\[\/HowToAnwer:(.*?)\]\]/gis;
+        const howToStepPattern = /\[\[HowToStep\]\](.*?)\[\[\/HowToStepAnwer:(.*?)\]\]/gis;
+
+        let howToMatch = howToPattern.exec(content);
+        let howToName = '';
+        let howToDescription = '';
+        if (howToMatch) {
+            howToName = (howToMatch[1] || '').trim();
+            howToDescription = (howToMatch[2] || '').trim();
+        }
+
+        // Find all HowToStep blocks
+        const steps: any[] = [];
+        let stepMatch;
+        while ((stepMatch = howToStepPattern.exec(content)) !== null) {
+            const name = (stepMatch[1] || '').trim();
+            const text = (stepMatch[2] || '').trim();
+            // Generate a URL-friendly anchor from the name
+            const anchor = name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            steps.push({
+                "@type": "HowToStep",
+                name,
+                text,
+                url: `https://...#${anchor}`
+            });
+        }
+
+        // Build HowTo JSON if any HowTo or HowToStep found
+        let howToJson = null;
+        if (howToName || steps.length > 0) {
+            howToJson = {
+                "@type": "HowTo",
+                name: howToName || "",
+                description: howToDescription || "",
+                step: steps
+            };
+        }
+
+        // Remove all HowTo and HowToStep blocks from content
+        let processedContent = content
+            .replace(howToPattern, '')
+            .replace(howToStepPattern, '');
+
+        return { processedContent, howToJson };
+    }    
 
     /**
      * Check if an article is published
