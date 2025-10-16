@@ -40,7 +40,7 @@ console.log('🔍 [ASTRO] Starting HowTo processing...');
 console.log('🔍 [ASTRO] Raw content length:', rawContent.length);
 const { processedContent: contentNoHowTo, howToJson } = ContentProcessor.processHowToTags(rawContent);
 
-const processedContent = await ContentProcessor.processContent(contentNoHowTo);
+const processedContent = await ContentProcessor.processRelatedArticleTags(contentNoHowTo);
 
 console.log(`🛑🛑 processedContent called: ${JSON.stringify(processedContent)}`);
 
