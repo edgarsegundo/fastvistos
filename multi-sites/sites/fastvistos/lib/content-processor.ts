@@ -51,8 +51,24 @@ export class ContentProcessor {
                 const parsed = parser.parse(xmlString);
                 const articleData = parsed.RelatedArticle || parsed.relatedarticle || {};
                 
-                const uuid = (articleData.id || '').trim();
-                const innerText = (articleData.text || '').trim();
+                // Handle both string and object cases for id and text
+                let uuid = '';
+                let innerText = '';
+                
+                if (typeof articleData.id === 'string') {
+                    uuid = articleData.id.trim();
+                } else if (articleData.id) {
+                    uuid = String(articleData.id).trim();
+                }
+                
+                if (typeof articleData.text === 'string') {
+                    innerText = articleData.text.trim();
+                } else if (articleData.text) {
+                    // If text is an object or has nested content, stringify it
+                    innerText = String(articleData.text).trim();
+                }
+                
+                console.log('🔍 Parsed articleData:', { uuid, innerText: innerText.substring(0, 100) });
                 
                 if (!uuid) {
                     console.warn('⚠️ related article tag found without ID, removing tag');
