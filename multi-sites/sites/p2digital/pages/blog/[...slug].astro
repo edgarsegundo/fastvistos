@@ -34,9 +34,13 @@ export async function getStaticPaths() {
 // Get the markdown entry from props
 const { entry } = Astro.props;
 
-// Process the raw content for RELATED-ARTICLE tags before rendering
+// Process HowTo tags first, then RELATED-ARTICLE tags
 const rawContent = entry.body || '';
-const processedContent = await ContentProcessor.processContent(rawContent);
+const { processedContent: contentNoHowTo, howToJson } = ContentProcessor.processHowToTags(rawContent);
+const processedContent = await ContentProcessor.processContent(contentNoHowTo);
+
+
+console.log(`🛑🛑🛑🛑 howToJson: ${JSON.stringify(howToJson)}`);
 
 // Render the original content for headings (TOC)
 const { headings } = await entry.render();
