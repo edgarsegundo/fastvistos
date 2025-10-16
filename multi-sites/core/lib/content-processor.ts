@@ -5,6 +5,7 @@
  */
 
 import { BlogService } from './blog-service.ts';
+import { XMLParser } from 'fast-xml-parser';
 
 export class ContentProcessor {
     /**
@@ -88,6 +89,7 @@ export class ContentProcessor {
 
     /**
      * Process HowTo and HowToStep XML-like tags, build HowTo JSON, and remove tags from content
+     * Uses fast-xml-parser for robust XML parsing
      * @param content - Raw markdown content with <HowTo> and <HowToStep> tags
      * @returns { processedContent: string, howToJson: object|null }
      * 
@@ -109,70 +111,79 @@ export class ContentProcessor {
 
         console.log('🔍 [HowTo] Checking content for HowTo tags...');
         
-        // Check if content has HowTo tags
-        const hasHowToTag = content.includes('<HowTo>');
-        const hasHowToStepTag = content.includes('<HowToStep>');
-        console.log('🔍 [HowTo] Has <HowTo>:', hasHowToTag);
-        console.log('🔍 [HowTo] Has <HowToStep>:', hasHowToStepTag);
+        // Initialize XML parser with options
+        const parser = new XMLParser({
+            ignoreAttributes: false,
+            parseTagValue: true,
+            trimValues: true,
+            ignoreDeclaration: true,
+            parseAttributeValue: true
+        });
 
-        // Extract main HowTo block: <HowTo>...</HowTo>
-        const howToMainPattern = /<HowTo>([\s\S]*?)<\/HowTo>/i;
+        // Extract HowTo main block
+        const howToMatches = content.match(/<HowTo>[\s\S]*?<\/HowTo>/gi) || [];
+        const hasHowToTag = howToMatches.length > 0;
+        console.log('🔍 [HowTo] Has <HowTo>:', hasHowToTag);
+        
         let howToName = '';
         let howToDescription = '';
         
-        const howToMatch = howToMainPattern.exec(content);
-        if (howToMatch) {
-            const howToContent = howToMatch[1];
-            // Extract <name> and <text> from HowTo block
-            const nameMatch = /<name>([\s\S]*?)<\/name>/i.exec(howToContent);
-            const textMatch = /<text>([\s\S]*?)<\/text>/i.exec(howToContent);
-            
-            howToName = nameMatch ? nameMatch[1].trim() : '';
-            howToDescription = textMatch ? textMatch[1].trim() : '';
-            
-            console.log('✅ [HowTo] Found main HowTo block');
-            console.log('   Name:', howToName.substring(0, 80));
-            console.log('   Description:', howToDescription.substring(0, 80));
+        if (howToMatches.length > 0) {
+            try {
+                const parsed = parser.parse(howToMatches[0]!);
+                const howToData = parsed.HowTo || parsed.howto || {};
+                
+                howToName = howToData.name || '';
+                howToDescription = howToData.text || '';
+                
+                console.log('✅ [HowTo] Found main HowTo block');
+                console.log('   Name:', howToName.substring(0, 80));
+                console.log('   Description:', howToDescription.substring(0, 80));
+            } catch (error) {
+                console.error('❌ [HowTo] Error parsing main HowTo block:', error);
+            }
         } else {
             console.log('❌ [HowTo] No main HowTo block found');
         }
 
-        // Extract all HowToStep blocks: <HowToStep>...</HowToStep>
-        const steps: any[] = [];
-        const howToStepPattern = /<HowToStep>([\s\S]*?)<\/HowToStep>/gi;
-        let stepMatch;
+        // Extract all HowToStep blocks
+        const stepMatches = content.match(/<HowToStep>[\s\S]*?<\/HowToStep>/gi) || [];
+        const hasHowToStepTag = stepMatches.length > 0;
+        console.log('🔍 [HowTo] Has <HowToStep>:', hasHowToStepTag);
         
-        while ((stepMatch = howToStepPattern.exec(content)) !== null) {
-            const stepContent = stepMatch[1];
-            
-            // Extract <name>, <text>, and optional <url> from HowToStep block
-            const stepNameMatch = /<name>([\s\S]*?)<\/name>/i.exec(stepContent);
-            const stepTextMatch = /<text>([\s\S]*?)<\/text>/i.exec(stepContent);
-            const stepUrlMatch = /<url>([\s\S]*?)<\/url>/i.exec(stepContent);
-            
-            const stepName = stepNameMatch ? stepNameMatch[1].trim() : '';
-            const stepText = stepTextMatch ? stepTextMatch[1].trim() : '';
-            const stepUrl = stepUrlMatch ? stepUrlMatch[1].trim() : null;
-            
-            if (stepName || stepText) {
-                const step: any = {
-                    "@type": "HowToStep",
-                    name: stepName,
-                    text: stepText
-                };
+        const steps: any[] = [];
+        
+        stepMatches.forEach((stepXml, index) => {
+            try {
+                const parsed = parser.parse(stepXml);
+                const stepData = parsed.HowToStep || parsed.howtostep || {};
                 
-                // Only add URL if it exists
-                if (stepUrl) {
-                    step.url = stepUrl;
+                const stepName = stepData.name || '';
+                const stepText = stepData.text || '';
+                const stepUrl = stepData.url || null;
+                
+                if (stepName || stepText) {
+                    const step: any = {
+                        "@type": "HowToStep",
+                        name: stepName,
+                        text: stepText
+                    };
+                    
+                    // Only add URL if it exists
+                    if (stepUrl) {
+                        step.url = stepUrl;
+                    }
+                    
+                    steps.push(step);
+                    console.log(`✅ [HowTo] Found HowToStep #${index + 1}`);
+                    console.log('   Name:', stepName.substring(0, 60));
+                    console.log('   Text:', stepText.substring(0, 60));
+                    if (stepUrl) console.log('   URL:', stepUrl);
                 }
-                
-                steps.push(step);
-                console.log(`✅ [HowTo] Found HowToStep #${steps.length}`);
-                console.log('   Name:', stepName.substring(0, 60));
-                console.log('   Text:', stepText.substring(0, 60));
-                if (stepUrl) console.log('   URL:', stepUrl);
+            } catch (error) {
+                console.error(`❌ [HowTo] Error parsing HowToStep #${index + 1}:`, error);
             }
-        }
+        });
         
         console.log(`🔍 [HowTo] Total steps found: ${steps.length}`);
 
@@ -191,9 +202,13 @@ export class ContentProcessor {
         }
 
         // Remove all HowTo and HowToStep blocks from content
-        let processedContent = content
-            .replace(howToMainPattern, '')
-            .replace(howToStepPattern, '');
+        let processedContent = content;
+        howToMatches.forEach(match => {
+            processedContent = processedContent.replace(match, '');
+        });
+        stepMatches.forEach(match => {
+            processedContent = processedContent.replace(match, '');
+        });
 
         console.log('🔍 [HowTo] Content processed, tags removed');
 
