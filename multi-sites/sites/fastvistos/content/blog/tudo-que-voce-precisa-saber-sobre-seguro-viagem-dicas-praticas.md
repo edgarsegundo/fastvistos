@@ -2,11 +2,11 @@
 title: "Tudo que Você Precisa Saber sobre Seguro Viagem: Dicas Práticas"
 description: "TDKVSPRSZSBRSBRSGRVJMDKSPRTKS"
 pubDate: "2025-10-17T22:05:17.000Z"
-updatedDate: "2025-10-17T23:50:38.774Z"
+updatedDate: "2025-10-17T23:58:37.365Z"
 slug: "tudo-que-voce-precisa-saber-sobre-seguro-viagem-dicas-praticas"
 topic: "Dicas Sobre Viagem"
 topicSlug: "dicas-sobre-viagem"
-image: "/assets/images/blog/fastvistos__jeshoots-com-mSESwdMZr-A-unsplash.jpg"
+image: "/assets/images/blog/fastvistos__seguro-viagem-com-a-comparar-viaje-com-tranquilidade.jpg"
 type: "public"
 published: true
 wordCount: "1572"
