@@ -1,5 +1,7 @@
 # Backog
 
+
+- make the entire card linkable in blogpage
 - implementar :
 
 https://fastvistos.com.br/blog/search?q={search_term_string}
