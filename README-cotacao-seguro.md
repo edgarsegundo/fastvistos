@@ -53,8 +53,6 @@
 
 ## Questionário Simplificado
 
-## 🧭 Questionário Completo — Seguro Viagem Turismo (Atualizado)
-
 ---
 
 ### **Bloco 1 — Informações básicas da viagem**
@@ -282,6 +280,19 @@ Perfeito! Seguindo exatamente o seu prompt atualizado, aqui está uma **seleçã
 | Bom           | MTA 100               | 1.043,63 | US$100.000          | US$1.500 / US$300 | US$1.500                      |
 | Bom           | CICLIC 150            | 1.137,06 | US$150.000          | US$1.200 / US$300 | US$1.200                      |
 | Bom           | UA 150                | 993,31   | US$150.000          | US$1.500 / US$200 | US$1.500                      |
+
+
+
+| 💼 **Faixa**      | 🧾 **Plano**          | 💵 **Preço (R$)** | 🏥 **Cobertura Médica** | 🧳 **Bagagem**      | 🏨 **Repouso / Voo Acompanhante** |
+| ----------------- | --------------------- | ----------------- | ----------------------- | ------------------- | --------------------------------- |
+| **Econômico**     | Intermac IL30         | 459,77            | US$ 30.000              | US$ 350 / US$ 100   | -                                 |
+| **Intermediário** | Affinity Essential 40 | 582,19            | US$ 40.000              | EUR / US$ 500       | -                                 |
+| **Intermediário** | CICLIC 35             | 796,38            | US$ 35.000              | US$ 1.200 / US$ 200 | -                                 |
+| **Intermediário** | MTA 50 Estudante      | 954,50            | US$ 50.000              | US$ 800 / US$ 200   | -                                 |
+| **Bom**           | MTA 100               | 1.043,63          | US$ 100.000             | US$ 1.500 / US$ 300 | US$ 1.500                         |
+| **Bom**           | CICLIC 150            | 1.137,06          | US$ 150.000             | US$ 1.200 / US$ 300 | US$ 1.200                         |
+| **Bom**           | UA 150                | 993,31            | US$ 150.000             | US$ 1.500 / US$ 200 | US$ 1.500                         |
+
 
 ---
 
