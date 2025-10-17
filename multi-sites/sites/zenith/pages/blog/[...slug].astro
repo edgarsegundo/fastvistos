@@ -118,33 +118,6 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         
         <article class="blog-article">
             <header class="article-header">
-
-                
-                <div class="mb-2 mt-6">
-                    <nav class="text-sm text-gray-300">
-                        <ol
-                            class="flex items-center font-small text-sm"
-                            style="font-size: 1.03rem;"
-                        >
-                            <li class="flex items-center">
-                                <a href={siteConfig.site.canonical} class="hover:text-gray-300"
-                                    >Home</a
-                                >
-                                <span class="mx-2 text-gray-400">/</span>
-                            </li>
-                            <li class="flex items-center">
-                                <a href="/blog" class="hover:text-gray-300">Blog</a>
-                                <span class="mx-2 text-gray-400">/</span>
-                            </li>
-                            
-                            <li class="">
-                                <a href="/blog" class="hover:text-gray-300">xxx</a>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-
-
                 <h1 class="article-title">{entry.data.title}</h1>
 
                 <div class="article-meta">
@@ -174,6 +147,26 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
                 <span class="article-reading-time">
                     Leitura: ≈{estimateReadingTime(Number(entry.data.wordCount))} min
                 </span>
+
+                
+                <div class="mb-2 mt-6 pl-14">
+                    <nav>
+                        <ol class="flex items-center text-xs font-normal space-x-1">
+                            <li class="flex items-center">
+                                <a href={siteConfig.site.canonical} class="text-[#6b6f76] opacity-80 hover:underline hover:text-blue-700 transition-colors">Home</a>
+                                <span class="mx-1 text-[#6b6f76] opacity-80">/</span>
+                            </li>
+                            <li class="flex items-center">
+                                <a href="/blog" class="text-[#6b6f76] opacity-80 hover:underline hover:text-blue-700 transition-colors">Blog</a>
+                                <span class="mx-1 text-[#6b6f76] opacity-80">/</span>
+                            </li>
+                            <li class="text-[#6b6f76] opacity-80">
+                                {entry.data.title}
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+
             </header>
 
             
