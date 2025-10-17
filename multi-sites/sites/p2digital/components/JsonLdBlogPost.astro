@@ -179,6 +179,10 @@ const faqBlock =
 faqList && Array.isArray(faqList) && faqList.length > 0
         ? {
               '@type': 'FAQPage',
+              mainEntityOfPage: {
+                  '@type': 'WebPage',
+                  '@id': postpageUrl,
+              },
               mainEntity: faqList.map((faq) => ({
                   '@type': 'Question',
                   name: faq.question,
@@ -217,7 +221,7 @@ const baseGraph = [
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
         inLanguage: siteConfig.site?.locale,
     },
-        ...howToLdJson,
+    ...(howToLdJson ? [howToLdJson] : []),
     {
         ...webPageBlock,
     },
