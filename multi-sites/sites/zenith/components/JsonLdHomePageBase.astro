@@ -89,6 +89,10 @@ const faqBlock =
 !disableFAQ && Array.isArray(faqList) && faqList.length > 0
         ? {
               '@type': 'FAQPage',
+              mainEntityOfPage: {
+                  '@type': 'WebPage',
+                  '@id': siteConfig.site?.canonical,
+              },
               mainEntity: faqList.map((faq) => ({
                   '@type': 'Question',
                   name: faq.question,

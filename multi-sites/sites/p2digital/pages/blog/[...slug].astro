@@ -118,6 +118,33 @@ const authorImageUrl = authorImage ? '/assets/images/blog/' + authorImage.replac
         
         <article class="blog-article">
             <header class="article-header">
+
+                
+                <div class="mb-2 mt-6">
+                    <nav class="text-sm text-gray-300">
+                        <ol
+                            class="flex items-center font-small text-sm"
+                            style="font-size: 1.03rem;"
+                        >
+                            <li class="flex items-center">
+                                <a href={siteConfig.site.canonical} class="hover:text-gray-300"
+                                    >Home</a
+                                >
+                                <span class="mx-2 text-gray-400">/</span>
+                            </li>
+                            <li class="flex items-center">
+                                <a href="/blog" class="hover:text-gray-300">Blog</a>
+                                <span class="mx-2 text-gray-400">/</span>
+                            </li>
+                            
+                            <li class="">
+                                <a href="/blog" class="hover:text-gray-300">xxx</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+
+
                 <h1 class="article-title">{entry.data.title}</h1>
 
                 <div class="article-meta">
