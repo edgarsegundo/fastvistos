@@ -1,5 +1,8 @@
 # Backog
 
+- melhorar artigo de dicas valiosas.
+    comentar sobre dica ...
+    
 - links at table of contents are not working
 
 - make the entire card linkable in blogpage

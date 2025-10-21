@@ -79,7 +79,7 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Visto Americano em Campinas | Fast Vistos — Assessoria Especializada em Vistos e Passaportes',
+            title: 'Despachante de Visto Americano em Campinas | Fast Vistos — Assessoria Especializada em Vistos e Passaportes',
             description: 'Fast Vistos — Assessoria especializada em visto americano, com sede em Campinas e atendimento em todo o Brasil. Agilidade e confiança no seu visto.',
             themeColor: '#0070f3',
             openGraph: {
