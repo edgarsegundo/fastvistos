@@ -36,20 +36,24 @@ npm run build:vibecode           # Build VibeCode for production
 # Add to package.json: "build:mysite": "node sync-blog.js mysite && SITE_ID=mysite astro build --config multi-sites.config.mjs"
 ```
 
-### **� Deployment to Server**
+### **Deployment/Publish to Server**
 
-Deploy your built sites to the production server using the deployment scripts:
-
-#### **Node.js Deployment Script**
+Deploy and Publish using `publish-from-remote.sh` script. It will automatically run dploy-site.js and other scripts necessary for publishing in production correctly.
 
 ```bash
-node deploy-site.js [siteid]
+./publish-from-remote.sh [siteid]
 ```
 
 🚨 **DO NOT RUN `deploy-site.js` UNTIL YOU HAVE BUILT YOUR SITE!** 🚨  
 > **Why?**  
 > - `deploy-site.js` ONLY deploys the contents of your `./dist/<siteid>/` folder.
 > - If you haven't built, that folder will be missing, outdated, or just plain wrong!
+
+### **Local Deployment**
+
+node generate-blog-content.js fastvistos
+npm run download-images:fastvistos
+npm run build:fastvistos
 
 #### **Bash Nginx Configuration Script**
 
