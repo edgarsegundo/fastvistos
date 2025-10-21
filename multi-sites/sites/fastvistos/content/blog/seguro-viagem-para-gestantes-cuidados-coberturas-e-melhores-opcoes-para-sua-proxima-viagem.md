@@ -2,7 +2,7 @@
 title: "Seguro Viagem para Gestantes: Cuidados, Coberturas e Melhores Opções para sua Próxima Viagem"
 description: "SGRVJMPRJSTNTSKDDSKBRTRSMLRSPKSPRSPRXMVJM"
 pubDate: "2025-10-20T22:15:49.000Z"
-updatedDate: "2025-10-20T22:59:55.638Z"
+updatedDate: "2025-10-21T10:51:53.256Z"
 slug: "seguro-viagem-para-gestantes-cuidados-coberturas-e-melhores-opcoes-para-sua-proxima-viagem"
 topic: "Dicas Sobre Viagem"
 topicSlug: "dicas-sobre-viagem"
@@ -20,6 +20,7 @@ Viajar durante a gravidez pode ser uma das experiências mais lindas e transform
 **é seguro viajar grávida? E preciso contratar um seguro viagem?**
 
 Neste guia completo, você vai entender **por que o seguro viagem é indispensável para gestantes**, o que ele cobre, como escolher o melhor plano e quais são as seguradoras mais recomendadas.
+
 
 ----------
 
