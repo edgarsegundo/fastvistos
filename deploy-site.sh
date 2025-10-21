@@ -195,9 +195,6 @@ main() {
 
     check_dist_folder "$site_id"
     deploy_to_server "$site_id"
-
-    # Sync images for the site before/after deploy
-    # ./sync-site-images.sh "$site_id"
 }
 
 # Run the script
