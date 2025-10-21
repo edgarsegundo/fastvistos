@@ -42,6 +42,19 @@ Deploy and Publish using `publish-from-remote.sh` script. It will automatically 
 
 ```bash
 ./publish-from-remote.sh [siteid]
+
+#  or using the alias
+pub
+```
+
+### **Local Pre-Deployment**
+
+To do a pre-deployment, run the alias pubpre which calls the script `publish-pre.sh`.
+
+Ex: 
+
+```bash
+pubpre [siteid]
 ```
 
 🚨 **DO NOT RUN `deploy-site.js` UNTIL YOU HAVE BUILT YOUR SITE!** 🚨  
