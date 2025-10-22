@@ -205,10 +205,10 @@
 .blog-content pre {
     background: #1a202c;
     color: #e2e8f0;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 0.75rem;
     overflow-x: auto;
-    margin: 2.5rem 0;
+    margin: 1.5rem 0;
     border: 1px solid #2d3748;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }

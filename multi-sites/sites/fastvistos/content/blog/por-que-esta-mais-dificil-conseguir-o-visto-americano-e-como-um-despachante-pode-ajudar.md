@@ -2,7 +2,7 @@
 title: "Por Que Está Mais Difícil Conseguir o Visto Americano — e Como um Despachante Pode Ajudar"
 description: "PRKSTMSDFSLKNSGRVSTMRKNKMMDSPXNTPDJDR"
 pubDate: "2025-10-22T18:38:10.000Z"
-updatedDate: "2025-10-22T18:44:45.689Z"
+updatedDate: "2025-10-22T18:52:26.148Z"
 slug: "por-que-esta-mais-dificil-conseguir-o-visto-americano-e-como-um-despachante-pode-ajudar"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -21,8 +21,6 @@ Viajar para os Estados Unidos é o sonho de muitos brasileiros, seja a passeio, 
 ----------
 
 ## **1. Está Mais Difícil Conseguir o Visto Americano?**
-
-![Gráfico de aumento da taxa de negação de vistos nos últimos anos](https://fastvistos.com.br/assets/images/blog/fastvistos__grafico-de-aumento-da-taxa-de-negacao-de-vistos-nos-ultimos-anos.webp)
 
 Nos últimos anos, o cenário para quem deseja obter o visto americano mudou significativamente:
 
