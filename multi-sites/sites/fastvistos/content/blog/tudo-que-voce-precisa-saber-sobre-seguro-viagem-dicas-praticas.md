@@ -2,7 +2,7 @@
 title: "Tudo que Você Precisa Saber sobre Seguro Viagem: Dicas Práticas"
 description: "TDKVSPRSZSBRSBRSGRVJMDKSPRTKS"
 pubDate: "2025-10-17T22:05:17.000Z"
-updatedDate: "2025-10-17T23:58:37.365Z"
+updatedDate: "2025-10-22T18:05:05.983Z"
 slug: "tudo-que-voce-precisa-saber-sobre-seguro-viagem-dicas-praticas"
 topic: "Dicas Sobre Viagem"
 topicSlug: "dicas-sobre-viagem"
@@ -247,7 +247,7 @@ Após a confirmação, você receberá a **apólice por e-mail** em poucas horas
 Mesmo depois de todas essas dicas, se você **ainda não tem tempo ou paciência para comparar planos**, nós podemos ajudar.  
 Criamos um **questionário rápido e simplificado** para facilitar sua escolha.
 
-Basta entrar em contato com a **Fast Vistos** pelo nosso <a href="https://wa.me/5521987654321" target="_blank">WhatsApp ↗</a>, **copiar e colar o questionário abaixo** com suas respostas — e nossa equipe fará todas as cotações e te enviará as melhores opções **sem custo algum**.
+Basta entrar em contato com a **Fast Vistos** pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a>, **copiar e colar o questionário abaixo** com suas respostas — e nossa equipe fará todas as cotações e te enviará as melhores opções **sem custo algum**.
 
 > **Questionário:**
 >1.  **Para qual país você vai viajar?**
@@ -269,7 +269,7 @@ Outra opção é **entrar diretamente no site da [Comparar Seguro de Viagem ↗]
 ![Empresa comparar seguro de viagem](https://fastvistos.com.br/assets/images/blog/fastvistos__empresa-comparar-seguro-de-viagem.webp)
 
 Ainda ficou com alguma dúvida? Confira nosso **FAQ abaixo**.  
-E se precisar de ajuda, entre em contato pelo nosso <a href="https://wa.me/5521987654321" target="_blank">WhatsApp ↗</a> — estamos à disposição para esclarecer **qualquer questão, sem compromisso**.
+E se precisar de ajuda, entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> — estamos à disposição para esclarecer **qualquer questão, sem compromisso**.
 
 ## Conclusão: Proteja sua viagem e viaje tranquilo
 
