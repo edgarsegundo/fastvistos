@@ -1,17 +1,18 @@
 const CACHE_NAME = 'fastvistos-v1';
-const urlsToCache = ['/', '/blog/', '/about/', '/assets/logo.webp', '/favicon.ico'];
+const urlsToCache = []; // nothing cached on install
 
-self.addEventListener('install', event => {
-    event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)));
 });
 
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request).then(response => {
-            if (response) {
-                return response;
-            }
-            return fetch(event.request);
-        })
-    );
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request)); // always go to network
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(cacheNames.map((cache) => caches.delete(cache)))
+    )
+  );
 });
