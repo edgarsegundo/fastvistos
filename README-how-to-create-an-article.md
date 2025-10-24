@@ -50,6 +50,17 @@ Ex:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 ## How to semi-automate an article creation with chapgpt
 
 ---
@@ -72,6 +83,24 @@ Acesse **cada artigo nos links abaixo** e extraia **todos os títulos de nível 
 - Título H2 nº2
 - ...
 ```
+
+
+
+### v2
+
+Extraia todos os tópicos do artigo que passarei no final
+
+**Instruções:**
+
+* **Elimine títulos repetidos ou muito semelhantes**, mantendo apenas uma versão de cada tópico.
+* Organize o resultado da seguinte forma:
+
+```
+Tópico 1
+Tópico 2
+...
+```
+
 
 **Links dos artigos:**
 
@@ -300,15 +329,195 @@ Este é o meu artigo, pesquise e faça um faq bem completo de perguntas e respos
 
 
 Convert this faq to this json format:
-
+[
     {
         question: '...',
         answer: '...',
     },
-
+]
 
 
 https://www.quora.com/search?q=insurance%20travel%20pregnance&type=question
 https://www.quora.com/unanswered/Do-you-need-travel-insurance-for-pregnancy-if-travelling-abroad-USA
 
 https://www.reddit.com/r/travel/comments/1nx2ggp/insurance_for_international_travel_when_pregnant/https://www.reddit.com/r/travel/comments/1nx2ggp/insurance_for_international_travel_when_pregnant/
+
+
+
+
+
+
+
+
+
+---
+
+
+
+## New
+
+### PROMPT #1: Criando o título
+
+Faça uma pesquisa na web sobre o tema “Orientação para Tirar Visto - Como Passar no Consulado”.
+
+Estude os principais artigos e páginas que aparecem na primeira página do Google.
+
+Analise os padrões dos títulos encontrados (tom, estilo, estrutura, palavras-chave e foco de conteúdo).
+
+Em seguida, parafraseie o tema original e crie 1 novo título origian, que seja:
+
+Claro, chamativo e relevante;
+
+Otimizado para SEO;
+
+Distinto dos títulos pesquisados e do próprio título que lhe foi passado (sem copiar estilo ou estrutura);
+
+Totalmente coerente com o tema “orientação para tirar visto” e “como passar no consulado”.
+
+### PROMPT #1-b: Criando meta title e meta description
+
+Agora adapte esse título em variações para meta title (≤60 caracteres) e meta description (140–160 caracteres) otimizadas para SEO. Quer que eu faça isso agora?
+
+### PROMPT #1-c: Extraindo o resultado em um formato
+
+Você é um assistente de SEO especializado em criação de metadados otimizados para mecanismos de busca e alta taxa de cliques (CTR).
+
+Com base no título que você criou, **gere um bloco JSON contendo os seguintes campos SEO**:
+
+* `title`: o novo título criado, claro e atrativo;
+* `metaTitle`: uma versão otimizada para SEO (até 60 caracteres), com foco em palavras-chave principais;
+* `metaDesc`: uma meta description envolvente (até 155 caracteres), que incentive o clique;
+* `slug`: a URL amigável derivada do título, em letras minúsculas e com hífens.
+
+**Formato de rxsposta obrigatório (não adicione explicações ou texto fora do JSON):**
+
+**Regras:**
+
+* Retorne **apenas o JSON válido**, sem comentários ou texto adicional.
+* Não inclua aspas duplas fora do JSON.
+* Use português natural e humano.
+* O JSON deve estar **sempre nesse formato exato**:
+
+
+```json
+{
+  "seoData": {
+    "title": "Novo título aqui...",
+    "metaTitle": "Meta title otimizado aqui...",
+    "metaDesc": "Meta description atraente e informativa aqui...",
+    "slug": "url-amigavel-aqui"
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+## 🧩 ESTRUTURA DE PROMPTS EM ETAPAS
+
+### **1️⃣ Prompt de Contexto e Diretriz Geral**
+
+👉 Objetivo: definir o *tema*, o *público*, o *tom de voz* e o *objetivo do artigo*.
+**Exemplo:**
+
+> Quero criar um artigo completo sobre **[tema]**.
+> O público são **[perfil do público]**.
+> O objetivo é **[ensinar, convencer, inspirar, vender, etc.]**.
+> Use um tom de voz **[ex: profissional, inspirador, informal, técnico]** e adote uma estrutura SEO-friendly.
+> Gere um **resumo do que o artigo deve abordar** e uma **estrutura de tópicos sugerida (H1, H2, H3)**.
+
+💡 *Resultado esperado*: uma estrutura clara de tópicos, com breve descrição de cada parte.
+
+---
+
+### **2️⃣ Prompt de Expansão de Tópicos**
+
+👉 Objetivo: aprofundar cada seção com conteúdo rico, dados e exemplos.
+
+**Exemplo:**
+
+> Expanda o tópico **[coloque aqui o título do tópico]** com:
+>
+> * Uma introdução envolvente
+> * 2 a 3 parágrafos de explicação aprofundada
+> * Exemplos práticos e analogias
+> * Se possível, dados ou referências atuais (até 2025)
+> * Um parágrafo de fechamento que prepare para o próximo tópico
+
+💡 *Resultado esperado*: cada seção com corpo textual denso e natural, sem parecer gerado por IA.
+
+---
+
+### **3️⃣ Prompt de Transição e Coesão**
+
+👉 Objetivo: melhorar o fluxo entre seções.
+
+**Exemplo:**
+
+> Analise o texto abaixo e sugira **melhores transições** entre os parágrafos e seções para deixá-lo mais fluido e natural.
+> Também verifique se há **repetições** e **inconsistências de tom**.
+> Texto:
+> [cole aqui o artigo ou parte dele]
+
+💡 *Resultado esperado*: um texto com ritmo e leitura agradável.
+
+---
+
+### **4️⃣ Prompt de Revisão Estilística e SEO**
+
+👉 Objetivo: refinar o artigo para publicação.
+
+**Exemplo:**
+
+> Revise o texto a seguir para:
+>
+> * Clareza e legibilidade
+> * Otimização SEO (palavras-chave, headings, meta descrição, intertítulos)
+> * Tom consistente com o público e o objetivo definidos
+> * Substitua clichês por frases mais naturais
+> * Sinalize pontos que poderiam ser fortalecidos com dados ou citações
+
+💡 *Resultado esperado*: versão final pronta para blog, LinkedIn ou Medium.
+
+---
+
+### **5️⃣ Prompt de Título e Chamadas**
+
+👉 Objetivo: gerar títulos e descrições atraentes.
+
+**Exemplo:**
+
+> Gere **5 opções de títulos** para este artigo que:
+>
+> * Sejam cativantes e claros
+> * Tenham até 60 caracteres
+> * Contenham a palavra-chave principal
+> * Transmitam benefício ou curiosidade
+>
+> Em seguida, gere **3 opções de meta descrição (até 155 caracteres)**.
+
+---
+
+## 🧠 DICA EXTRA — Prompt Mestre (se quiser condensar tudo)
+
+> Quero que você me ajude a criar um artigo top-notch sobre **[tema]**.
+> Siga este fluxo:
+>
+> 1. Crie uma estrutura de tópicos lógica e atrativa
+> 2. Expanda cada tópico com profundidade, exemplos e fluidez
+> 3. Garanta transições suaves e coesão geral
+> 4. Otimize para SEO
+> 5. Finalize com sugestões de título e meta descrição
+
+---
+
+Se quiser, posso te ajudar a montar um **template dinâmico** (em Markdown ou Notion) para gerar esses prompts automaticamente, bastando trocar o tema e o público.
+Quer que eu monte isso pra você?
