@@ -2,7 +2,7 @@
 title: "Meu visto foi negado, e agora?"
 description: "MVSTFNGDGR"
 pubDate: "2025-10-24T18:26:31.000Z"
-updatedDate: "2025-10-24T19:30:53.262Z"
+updatedDate: "2025-10-24T19:43:57.820Z"
 slug: "meu-visto-foi-negado-e-agora"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
