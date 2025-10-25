@@ -16,6 +16,8 @@ npm run download-images:"$SITEID"
 ~/Repos/pu.sh
 
 # Now run the following scripts on the VPS from your local machine
+# Restaura e atualiza o código no VPS
+ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && git restore . && git pull"
 ## Build site on VPS
 ssh edgar@72.60.57.150 "export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && npm run build:$SITEID"
 ## Deploy site on VPS

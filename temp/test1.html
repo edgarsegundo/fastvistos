@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sprite Animation - Boy with Bag</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      .sprite {
+        width: 48px; /* Largura de um frame */
+        height: 48px; /* Altura de um frame */
+        background-image: url("boy_with_bag.png");
+        background-repeat: no-repeat;
+        image-rendering: pixelated;
+      }
+
+      /* Row 1 - Idle */
+      .anim1 {
+        background-position-y: 0px;
+        animation: anim1 1s steps(4) infinite;
+      }
+      @keyframes anim1 {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: -192px; /* 48 * 4 */
+        }
+      }
+
+      /* Row 2 - Walk */
+      .anim2 {
+        background-position-y: -48px;
+        animation: anim2 0.8s steps(4) infinite;
+      }
+      @keyframes anim2 {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: -192px;
+        }
+      }
+
+      /* Row 3 - Run */
+      .anim3 {
+        background-position-y: -96px;
+        animation: anim3 0.6s steps(4) infinite;
+      }
+      @keyframes anim3 {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: -192px;
+        }
+      }
+
+      /* Row 4 - Jump */
+      .anim4 {
+        background-position-y: -144px;
+        animation: anim4 1s steps(4) infinite;
+      }
+      @keyframes anim4 {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: -192px;
+        }
+      }
+
+      /* Row 5 - Attack */
+      .anim5 {
+        background-position-y: -192px;
+        animation: anim5 0.8s steps(4) infinite;
+      }
+      @keyframes anim5 {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: -192px;
+        }
+      }
+
+      /* Row 6 - Fall */
+      .anim6 {
+        background-position-y: -240px;
+        animation: anim6 1s steps(4) infinite;
+      }
+      @keyframes anim6 {
+        from {
+          background-position-x: 0;
+        }
+        to {
+          background-position-x: -192px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-6">
+    <h1 class="text-white text-2xl font-bold mb-4">Boy with Bag — Sprite Animations</h1>
+
+    <div class="flex gap-8">
+      <div class="sprite anim1 scale-200"></div>
+      <div class="sprite anim2 scale-200"></div>
+      <div class="sprite anim3 scale-200"></div>
+    </div>
+
+    <div class="flex gap-8">
+      <div class="sprite anim4 scale-200"></div>
+      <div class="sprite anim5 scale-200"></div>
+      <div class="sprite anim6 scale-200"></div>
+    </div>
+  </body>
+</html>

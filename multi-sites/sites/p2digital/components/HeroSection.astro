@@ -2,113 +2,117 @@
 // Hero component
 ---
 
-<section class="pt-12 md:pt-2">
-    <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-        <!-- Left Col -->
-        <div
-            class="flex flex-col w-full md:w-1/2 justify-center items-start text-center md:text-left"
+<section class="relative overflow-hidden bg-gray-950 text-white pt-20 pb-24">
+  <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+    <!-- Left Column -->
+    <div
+      class="flex flex-col w-full md:w-1/2 justify-center items-center md:items-start text-center md:text-left space-y-6"
+    >
+      <p class="uppercase tracking-wide text-lg font-semibold text-gray-300">
+        VAI VIAJAR E PRECISA DE VISTO?
+      </p>
+
+      <h1
+        class="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight bg-gradient-to-r from-orange-400 to-yellow-300 bg-clip-text text-transparent animate-fade-in"
+      >
+        Realize Seu Sonho de Viajar!
+      </h1>
+
+      <p class="text-xl md:text-2xl text-gray-300 animate-fade-in-delay-1">
+        Converse com um especialista agora mesmo.
+      </p>
+
+      <button
+        class="wpp_button_link mx-auto md:mx-0 bg-white text-gray-800 font-bold rounded-full py-4 px-10 shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out focus:outline-none animate-fade-in-delay-2"
+        data-linkcode="%231"
+      >
+        <span class="hidden sm:inline text-orange-500"
+          >🔥 Tire Suas Dúvidas Agora no WhatsApp!</span
         >
-            <p
-                class="uppercase tracking-wide text-lg font-semibold text-gray-200 w-full"
-                style="color: white !important;"
-            >
-                VAI VIAJAR E PRECISA DE VISTO?
-            </p>
-            <h1
-                class="my-4 text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-white"
-            >
-                Realize Seu Sonho de Viajar!
-            </h1>
-            <p
-                class="leading-normal text-xl md:text-2xl lg:text-3xl font-medium text-gray-300 mb-8"
-                style="color: white !important;"
-            >
-                Converse com um especialista agora mesmo.
-            </p>
-            <button
-                class="wpp_button_link cta-button-wiggle mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-10 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                data-linkcode="%231"
-            >
-                <span class="hidden sm:inline" style="color: #FF8700 !important;"
-                    >🔥 Tire Suas Dúvidas Agora no WhatsApp!</span
-                >
-                <span class="inline sm:hidden" style="color: #FF8700 !important;"
-                    >🔥 Tire Suas Dúvidas!</span
-                >
-            </button>
-        </div>
-        <!-- Right Col -->
-        <div class="w-full md:w-1/2 text-center">
-            <img
-                class="w-full z-50 drop-shadow-lg brightness-110 contrast-105 rounded-xl"
-                src="assets/images/cover/woman_cover.webp"
-                loading="lazy"
-            />
-        </div>
+        <span class="inline sm:hidden text-orange-500">🔥 Tire Suas Dúvidas!</span>
+      </button>
     </div>
+
+    <!-- Right Column: Placeholder da Animação -->
+    <div
+      class="relative w-full md:w-1/2 mt-10 md:mt-0 flex justify-center items-center"
+    >
+      <div
+        id="animation-placeholder"
+        class="relative w-full h-64 sm:h-80 md:h-[28rem] lg:h-[32rem] bg-gradient-to-tr from-gray-800 to-gray-700 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center animate-float"
+      >
+        <p
+          class="text-gray-300 text-lg sm:text-xl md:text-2xl font-medium animate-pulse"
+        >
+          🚧 Construindo seu site...
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SVG Wave -->
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+    <svg
+      viewBox="0 0 1428 174"
+      xmlns="http://www.w3.org/2000/svg"
+      class="fill-white opacity-90"
+    >
+      <path
+        d="M0,0 C90.7,0.9 147.9,27.2 291.9,59.9 C387.9,81.7 543.6,89.3 759,82.7 C469.3,156.2 216.3,153.7 0,74.9"
+        opacity="0.2"
+      ></path>
+      <path
+        d="M100,104.7 C277.4,72.2 426.1,52.5 546.2,45.6 C666.2,38.6 810.5,41.8 979,55.1 C931.1,56.1 810.3,74.8 616.7,111.2 C423.1,147.6 250.8,145.5 100,104.7 Z"
+        opacity="0.2"
+      ></path>
+      <path
+        d="M1046,51.6 C1130.8,29.3 1279.0,17.6 1439,40.2 L1439,120 C1271.1,77.9 1140.1,55.1 1046,51.6 Z"
+        opacity="0.3"
+      ></path>
+    </svg>
+  </div>
 </section>
 
-<div class="relative -mt-12 lg:-mt-24">
-    <svg
-        viewBox="0 0 1428 174"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-    >
-        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g transform="translate(-2.000000, 44.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <path
-                    d="M0,0 C90.7283404,0.927527913 147.912752,27.187927 291.910178,59.9119003 C387.908462,81.7278826 543.605069,89.334785 759,82.7326078 C469.336065,156.254352 216.336065,153.6679 0,74.9732496"
-                    opacity="0.100000001"></path>
-                <path
-                    d="M100,104.708498 C277.413333,72.2345949 426.147877,52.5246657 546.203633,45.5787101 C666.259389,38.6327546 810.524845,41.7979068 979,55.0741668 C931.069965,56.122511 810.303266,74.8455141 616.699903,111.243176 C423.096539,147.640838 250.863238,145.462612 100,104.708498 Z"
-                    opacity="0.100000001"></path>
-                <path
-                    d="M1046,51.6521276 C1130.83045,29.328812 1279.08318,17.607883 1439,40.1656806 L1439,120 C1271.17211,77.9435312 1140.17211,55.1609071 1046,51.6521276 Z"
-                    id="Path-4"
-                    opacity="0.200000003"></path>
-            </g>
-            <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <path
-                    d="M0.457,34.035 C57.086,53.198 98.208,65.809 123.822,71.865 C181.454,85.495 234.295,90.29 272.033,93.459 C311.355,96.759 396.635,95.801 461.025,91.663 C486.76,90.01 518.727,86.372 556.926,80.752 C595.747,74.596 622.372,70.008 636.799,66.991 C663.913,61.324 712.501,49.503 727.605,46.128 C780.47,34.317 818.839,22.532 856.324,15.904 C922.689,4.169 955.676,2.522 1011.185,0.432 C1060.705,1.477 1097.39,3.129 1121.236,5.387 C1161.703,9.219 1208.621,17.821 1235.4,22.304 C1285.855,30.748 1354.351,47.432 1440.886,72.354 L1441.191,104.352 L1.121,104.031 L0.457,34.035 Z"
-                >
-                </path>
-            </g>
-        </g>
-    </svg>
-</div>
-
+<!-- ANIMAÇÕES INLINE -->
 <style>
-    .cta-button-wiggle {
-        color: #ff6901;
-        animation: wiggle 4s 2s infinite;
+  /* Animações básicas */
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
     }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    @keyframes wiggle {
-        5%,
-        50% {
-            transform: scale(1);
-        }
-        10% {
-            transform: scale(0.9);
-        }
-        15% {
-            transform: scale(1.15);
-        }
-        20% {
-            transform: scale(1.15) rotate(-5deg);
-        }
-        25% {
-            transform: scale(1.15) rotate(5deg);
-        }
-        30% {
-            transform: scale(1.15) rotate(-3deg);
-        }
-        35% {
-            transform: scale(1.15) rotate(2deg);
-        }
-        40% {
-            transform: scale(1.15) rotate(0);
-        }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
     }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Aplicação das animações via classes Tailwind-like */
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+  }
+
+  .animate-fade-in-delay-1 {
+    animation: fade-in 1s ease-out forwards;
+    animation-delay: 0.4s;
+  }
+
+  .animate-fade-in-delay-2 {
+    animation: fade-in 1s ease-out forwards;
+    animation-delay: 0.8s;
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
 </style>
