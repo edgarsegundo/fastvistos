@@ -2,14 +2,14 @@
 title: "Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo e Atualizado"
 description: "DKMNTSNTRVSTRTRDDPSPRTNKSVGKMPLTTLZD"
 pubDate: "2025-10-27T20:29:08.000Z"
-updatedDate: "2025-10-27T20:33:07.172Z"
+updatedDate: "2025-10-27T21:58:31.252Z"
 slug: "documentos-entrevista-e-retirada-de-passaporte-no-casv-guia-completo-e-atualizado"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__2149080787.jpg"
 type: "public"
 published: true
-wordCount: "1139"
+wordCount: "1137"
 ---
 
 <!--# Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo e Atualizado-->
@@ -163,10 +163,9 @@ Quer que tudo ocorra sem imprevistos? Siga estas recomendações:
 💡 **Extra:** Se precisar **reagendar o atendimento** ou **alterar o local de entrega do passaporte**, acesse o [portal do solicitante de visto](https://ais.usvisa-info.com/pt-br/niv).
 
 ----------
-
-[  
-![fastvistos assessoria de vistos com sede em Campinas](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 👉 Precisa de ajuda, entre em contato pelo nosso WhatsApp ↗ — estamos à disposição para esclarecer **qualquer questão, sem compromisso**.
+[
+![fastvistos assessoria de vistos com sede em Campinas](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 
 ----------
 
@@ -183,8 +182,6 @@ Confira também nosso artigo sobre [como preencher o DS-160 corretamente](https:
 ----------
 
 ### 🧭 **Resumo do artigo**
-
-Etapa
 
 Principais Cuidados
 
@@ -210,4 +207,4 @@ Revisar documentos, seguir regras de segurança e confirmar dados com antecedên
 
 ----------
 
-✅ **Organização e atenção aos detalhes** são o segredo para que o visto americano chegue até você **sem imprevistos e dentro do prazo esperado**.
+**Organização e atenção aos detalhes** são o segredo para que o visto americano chegue até você **sem imprevistos e dentro do prazo esperado**.
