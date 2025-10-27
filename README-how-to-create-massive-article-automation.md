@@ -5425,3 +5425,21 @@ Você receberá dois artigos sobre o mesmo assunto, porém com versões diferent
 
 ---
 
+
+
+
+
+
+
+## faq
+
+Este é o meu artigo, pesquise e faça um faq bem completo de perguntas e respostas de duvidas que nao foram abordadas no artigo:
+
+
+Convert this faq to this json format:
+[
+    {
+        question: '...',
+        answer: '...',
+    },
+]
