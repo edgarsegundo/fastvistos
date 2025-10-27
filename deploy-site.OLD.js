@@ -5,6 +5,12 @@ import path from 'path';
 import fs from 'fs';
 import readline from 'readline';
 
+// Server configuration
+const SERVER_CONFIG = {
+    user: 'edgar',
+    host: '72.60.57.150',
+};
+
 // Function to get all available sites from dist folder
 function getAvailableSites() {
     const distPath = path.join(process.cwd(), 'dist');
@@ -119,25 +125,38 @@ function checkDistFolder(siteId) {
     }
 }
 
-function deploySiteLocally(siteId) {
+function deployToServer(siteId) {
     const siteConfig = generateSiteConfig(siteId);
-    const localPath = path.join(process.cwd(), 'dist', siteId);
-    const deployPath = siteConfig.path;
+    const { user, host } = SERVER_CONFIG;
+    const remotePath = siteConfig.path;
+    const localPath = `./dist/${siteId}/`;
 
-    console.log(`🚀 Deploying ${siteId} locally...`);
-    console.log(`📁 Source path: ${localPath}`);
-    console.log(`📁 Deploy path: ${deployPath}`);
+    console.log(`🚀 Deploying ${siteId} to ${siteConfig.domain}...`);
+    console.log(`📁 Local path: ${localPath}`);
+    console.log(`📁 Remote path: ${remotePath}`);
     console.log('');
 
     try {
-        // Ensure target directory exists
-        execSync(`sudo mkdir -p ${deployPath}`, { stdio: 'inherit' });
+        // Step 1: Ensure remote directory exists with proper permissions (recursive chown)
+        console.log('📁 Setting up remote directory...');
+        const setupCommand = `ssh ${user}@${host} "sudo mkdir -p ${remotePath} && sudo chown -R ${user}:${user} ${remotePath}"`;
+        console.log(`Running: ${setupCommand}`);
+        execSync(setupCommand, { stdio: 'inherit' });
+        console.log('✅ Remote directory setup completed');
 
-        // Copy files
-        execSync(`sudo rsync -av --delete ${localPath}/ ${deployPath}/`, { stdio: 'inherit' });
+        // Step 2: Rsync files
+        console.log('\n📤 Syncing files...');
+        const rsyncCommand = `rsync -avz --delete ${localPath} ${user}@${host}:${remotePath}`;
+        console.log(`Running: ${rsyncCommand}`);
+        execSync(rsyncCommand, { stdio: 'inherit' });
+        console.log('✅ Files synced successfully');
 
-        // Set ownership for web server
-        execSync(`sudo chown -R www-data:www-data ${deployPath}`, { stdio: 'inherit' });
+        // Step 3: Fix ownership for web server
+        console.log('\n🔧 Fixing file ownership for web server...');
+        const chownCommand = `ssh ${user}@${host} "sudo chown -R www-data:www-data ${remotePath}"`;
+        console.log(`Running: ${chownCommand}`);
+        execSync(chownCommand, { stdio: 'inherit' });
+        console.log('✅ File ownership updated');
 
         console.log(`\n🎉 Deployment completed successfully!`);
         console.log(`🌐 Site should be available at: https://${siteConfig.domain}`);
@@ -150,14 +169,22 @@ function deploySiteLocally(siteId) {
 async function main() {
     let siteId = process.argv[2];
 
+    // If no site ID provided, prompt user to choose
     if (!siteId) {
-        siteId = await promptSiteSelection();
+        try {
+            siteId = await promptSiteSelection();
+        } catch (error) {
+            console.error('❌ Error during site selection:', error.message);
+            process.exit(1);
+        }
     } else {
+        // Validate the provided site ID
         validateSiteId(siteId);
     }
 
     checkDistFolder(siteId);
-    deploySiteLocally(siteId);
+    deployToServer(siteId);
 }
 
+// Run the script
 main();
