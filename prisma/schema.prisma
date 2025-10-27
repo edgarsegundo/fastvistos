@@ -175,8 +175,6 @@ model blog_article {
   is_removed                                                                                    Boolean
   id                                                                                            String                          @id @db.Char(32)
   title                                                                                         String                          @db.LongText
-  content_raw                                                                                   String?                         @db.LongText
-  content_html                                                                                  String?                         @db.LongText
   content_md                                                                                    String?                         @db.LongText
   type                                                                                          String                          @db.VarChar(50)
   slug                                                                                          String?                         @unique(map: "slug") @db.VarChar(255)
@@ -1289,7 +1287,7 @@ model blog_asset {
   is_removed        Boolean
   id                String   @id @db.Char(32)
   image             String?  @db.VarChar(100)
-  filename          String   @db.VarChar(255)
+  filename          String?  @db.VarChar(255)
   alt               String   @db.VarChar(255)
   image_type        String   @db.VarChar(50)
   width             Int?     @db.UnsignedInt
