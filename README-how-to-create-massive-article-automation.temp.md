@@ -5242,6 +5242,18 @@ Você é um blogueiro profissional, exímio curador e escritor de conteúdo com 
 	| São Paulo | Maior fluxo de atendimentos |
 	| Recife | Menor volume de agendamentos |
 	```
+10. Ao longo do artigo, insira 2 a 3 links de referência para outros artigos do nosso blog que sejam relevantes para o tema abordado. Use uma abordagem natural e persuasiva, como em uma recomendação ou chamada para ação, e formate da seguinte forma:
+	Exemplo: (Use exatamente esse padrão abaixo porque o nosso framework no backend vai fazer um parse dessa tag RelatedArticle e ajustar tudo)
+	```markdown
+	<!--<RelatedArticle>
+	<id>681ae5985b6e40d...</id>
+	<text>✈️ **Pronto para o próximo passo?**
+	Confira também nosso artigo sobre [**como preencher o DS-160 corretamente**](<<ARTICLE-URL>>) e evite os erros mais comuns que atrasam a aprovação do visto!</text>
+	</RelatedArticle>
+	-->
+	```
+	Infira quais são esses outros artigos do nosso blog
+	Garanta que os links se integrem ao contexto do artigo, sem parecer forçado, e variem entre os diferentes tópicos relacionados.
 
 No final, garanta que o artigo seja **coeso, fluido, visualmente agradável** e otimizado tanto para leitores quanto para motores de busca.
 
@@ -5371,6 +5383,23 @@ Sempre que o conteúdo contiver **informações em formato de tabela**, formate-
 	| Recife | Menor volume de agendamentos |
 	```
 
+### **12. Links de referência
+
+Ao longo do artigo, insira 2 a 3 links de referência para outros artigos do nosso blog que sejam relevantes para o tema abordado. Use uma abordagem natural e persuasiva, como em uma recomendação ou chamada para ação, e formate da seguinte forma:
+	Exemplo: (Use exatamente esse padrão abaixo porque o nosso framework no backend vai fazer um parse dessa tag RelatedArticle e ajustar tudo)
+
+	```markdown
+	<!--<RelatedArticle>
+	<id>681ae5985b6e40d...</id>
+	<text>✈️ **Pronto para o próximo passo?**
+	Confira também nosso artigo sobre [**como preencher o DS-160 corretamente**](<<ARTICLE-URL>>) e evite os erros mais comuns que atrasam a aprovação do visto!</text>
+	</RelatedArticle>
+	-->
+	```
+
+	Infira quais são esses outros artigos do nosso blog
+	Garanta que os links se integrem ao contexto do artigo, sem parecer forçado, e variem entre os diferentes tópicos relacionados.
+
 ---
 
 ### **Tópicos:**
@@ -5424,6 +5453,9 @@ Você receberá dois artigos sobre o mesmo assunto, porém com versões diferent
 * Opcional: Ao final, pode adicionar um **resumo ou conclusão reforçando os pontos principais**.
 
 ---
+
+
+
 
 
 
