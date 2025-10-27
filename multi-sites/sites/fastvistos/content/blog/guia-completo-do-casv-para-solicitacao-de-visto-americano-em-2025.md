@@ -2,14 +2,14 @@
 title: "Guia Completo do CASV para Solicitação de Visto Americano em 2025"
 description: "GKMPLTDKSVPRSLSTKDVSTMRKNM"
 pubDate: "2025-10-27T18:55:16.000Z"
-updatedDate: "2025-10-27T19:08:47.789Z"
+updatedDate: "2025-10-27T19:11:25.438Z"
 slug: "guia-completo-do-casv-para-solicitacao-de-visto-americano-em-2025"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__young-businessman-giving-paper-document-businesswoman-standing-outdoors.jpg"
 type: "public"
 published: true
-wordCount: "849"
+wordCount: "847"
 ---
 
 <!--# Guia Completo do CASV para Solicitação de Visto Americano em 2025-->
@@ -195,7 +195,6 @@ Seguindo este guia, você poderá:
 > Agende com antecedência, mantenha documentos organizados e acompanhe a agenda CASV regularmente. Com atenção aos detalhes, seu processo de visto será mais rápido, seguro e tranquilo.
 
 [
-
 ![fastvistos assessoria de vistos com sede em Campinas](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)
 
 👉 Precisa de ajuda, entre em contato pelo nosso <a  href="https://wa.me/551920422785"  target="_blank">WhatsApp ↗</a> — estamos à disposição para esclarecer **qualquer questão, sem compromisso**.
