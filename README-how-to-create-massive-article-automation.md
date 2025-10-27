@@ -1,3 +1,7 @@
+# Sequence of Prompts
+
+## PROMPT 1
+
 Analise a lista de termos de busca abaixo e identifique temas principais que permitam agrupar essas consultas em categorias lógicas.
 Não inclua as consultas na resposta — apresente apenas os temas, de forma clara e resumida.
 
@@ -4187,317 +4191,924 @@ www consuladoamericano
 
 
 
+## 🧠 **Prompt para Classificação de Temas de Queries**
 
+Você é um assistente especialista em categorização semântica e análise de intenção de busca.
 
+Sua tarefa é analisar um JSON de entrada contendo várias queries relacionadas a vistos americanos.  
+Cada item possui um campo `"query"` (texto da busca) e um campo `"theme"` com o placeholder `[[REPLACE_WITH_THEME]]`.  
 
+Você também receberá um segundo JSON com uma lista de temas possíveis, cada um contendo:
+- `"theme"`: nome do tema
+- `"description"`: breve explicação do que o tema cobre.
 
+Sua missão é:
+1. Ler **todas as queries** do primeiro JSON.
+2. Com base no **significado e contexto da query**, **identificar o tema mais adequado** no segundo JSON.
+3. Substituir o valor `[[REPLACE_WITH_THEME]]` pelo nome exato do tema correspondente (campo `"theme"` do segundo JSON).
+4. **Manter o restante da estrutura JSON exatamente igual** — inclusive campos como `"avgms"`, `"competition"`, `"cindex"`, etc.
+5. Retornar **apenas o JSON final**, sem explicações adicionais.
 
+### Regras de decisão:
+- Use a descrição dos temas como guia semântico.  
+- Priorize **a intenção da busca** sobre palavras isoladas.
+- Se uma query se encaixar em mais de um tema, escolha o mais **específico**.  
+- Nunca crie temas novos ou altere nomes de temas existentes.
+- O formato de saída deve ser **um JSON válido e idêntico ao original**, apenas com os placeholders substituídos.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-4 Passos
-
-https://chat.deepseek.com/a/chat/s/8c703b97-626c-4333-978e-320bdeaf0ff3
-
-
-Quero que você **analise semanticamente** a lista de termos a seguir e **agrupá-los por similaridade de tema**.
-
-As regras são:
-
-* Agrupe juntos todos os termos que **têm o mesmo sentido, tema ou intenção de busca**, mesmo que a redação varie (plural, acento, sinônimos, ordem das palavras etc.).
-* Cada grupo deve representar **um único conceito ou intenção de pesquisa** (por exemplo, “agendamento de visto americano”, “formulário DS-160”, “entrevista do visto americano”, etc.).
-* Dê **um nome curto e representativo para cada grupo** (exemplo: “Agendamento de Visto”, “Formulário DS-160”, “Entrevista Consulado”, etc.).
-* Liste os termos **dentro de cada grupo** em formato de lista com bullets.
-* Não repita termos em grupos diferentes.
-* Ignore pequenas variações de acento ou maiúsculas/minúsculas.
-
-**Formato de resposta esperado:**
-
-```markdown
-## [Nome do Grupo 1]
-- termo 1
-- termo 2
-- termo 3
-
-## [Nome do Grupo 2]
-- termo 4
-- termo 5
-...
+### Exemplo simplificado:
+#### Entrada:
+```json
+[
+  {"query": "160 visto americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50, "competition": "Baixo", "cindex": 14},
+  ...
+]
 ```
 
-Eis a lista de termos para agrupar:
-
-```
-160 visto americano
-214b visto negado
-221g visto americano
-a embaixada americana esta emitindo visto
-a entrevista do visto americano é em ingles
-a entrevista no consulado americano é em português
-a entrevista para o visto americano é em ingles
-acessar ds 160
-acessar formulario ds 160
-acessar formulario ds 160 preenchido
-acessoria de visto americano
-acessoria visto americano
-agencia de turismo visto americano
-agencia de visto americano
-agência de visto americano
-agencia imigração estados unidos
-agencia para tirar visto americano
-agência para tirar visto americano
-agencia para visto americano
-agencia que ajuda a tirar visto
-agencia visto americano
-agência visto americano
-agenda casv
-agenda consulado americano
-agenda consulado americano sp
-agenda de entrevista para visto americano
-agenda de visto americano
-agenda de visto americano sp
-agenda do consulado americano
-agenda para entrevista visto americano
-agenda para visto americano
-agenda para visto americano 2022
-agenda visto americano 2022
-agenda visto americano 2023
-agenda visto americano brasilia
-agenda visto americano porto alegre
-agenda visto americano sp
-agendamento americano
-agendamento casv
-agendamento casv 2022
-agendamento casv datas
-agendamento casv e consulado
-agendamento casv e consulado mesmo dia
-agendamento casv porto alegre
-agendamento casv sao paulo
-agendamento casv são paulo
-agendamento casv sp
-agendamento casv visto
-agendamento casv visto americano
-agendamento consulado americano
-agendamento consulado americano em sao paulo
-agendamento consulado americano porto alegre
-agendamento consulado americano sao paulo
-agendamento consulado americano são paulo
-agendamento consulado americano sp
-agendamento consulado americano visto
-agendamento consulado brasileiro em nova york
-agendamento consulado estados unidos
-agendamento consulado sao paulo
-agendamento consular e casv
-agendamento consular visto americano
-agendamento da entrevista do visto americano
-agendamento de entrevista consulado americano
-agendamento de entrevista consulado americano sp
-agendamento de entrevista de visto
-agendamento de entrevista de visto americano
-agendamento de entrevista no consulado americano
-agendamento de entrevista para passaporte
-agendamento de entrevista para visto americano
-agendamento de entrevista para visto americano em brasilia
-agendamento de entrevista visto
-agendamento de entrevista visto americano
-agendamento de passaporte americano
-agendamento de renovação de visto americano
-agendamento de visto
-agendamento de visto americano
-agendamento de visto americano 2022
-agendamento de visto americano 2023
-agendamento de visto americano brasilia
-agendamento de visto americano casv
-agendamento de visto americano datas
-agendamento de visto americano em brasilia
-agendamento de visto americano em brasília
-agendamento de visto americano em porto alegre
-agendamento de visto americano em sao paulo
-agendamento de visto americano em são paulo
-agendamento de visto americano em sp
-agendamento de visto americano porto alegre
-agendamento de visto americano sao paulo
-agendamento de visto americano site
-agendamento de visto americano sp
-agendamento de visto consulado americano
-agendamento de visto consulado americano sp
-agendamento de visto em porto alegre
-agendamento de visto em sao paulo
-agendamento de visto em sp
-agendamento de visto estados unidos
-agendamento de visto na embaixada americana em brasilia
-agendamento de visto no consulado americano
-agendamento de visto para estados unidos
-```
-
-
-
-
-
-
-
-
-
-## PROMPT 2
-
-Você é um especialista em SEO e copywriting.  
-Receberá uma lista de termos de busca relacionados a um mesmo tema (podendo conter variações, sinônimos, erros ortográficos e diferentes intenções dentro do mesmo tópico).
-
-Sua tarefa é **analisar semanticamente a lista** e, com base nela, **gerar metadados SEO completos**, que capturem a **intenção central** e também englobem as **principais variações de busca**, sem parecer forçado.
-
-### Regras:
-
-1. **Analise a lista** e identifique o **tema principal e suas variações secundárias**.
-2. Gere os seguintes campos em formato JSON:
-   - `title`: um título chamativo e natural, que contenha o termo principal e desperte interesse;
-   - `metaTitle`: versão otimizada para SEO (até 60 caracteres), contendo a palavra-chave mais importante;
-   - `metaDesc`: meta description envolvente (até 155 caracteres), que capture o sentido de todas as variações de busca (mesmo que alguns termos não apareçam literalmente);
-   - `keywords`: lista das principais palavras-chave e sinônimos relevantes extraídos da lista;
-   - `slug`: URL amigável (baseada no título, em letras minúsculas e separada por hifens);
-   - `intent`: descrição curta da intenção de busca (ex: "agendar entrevista", "preencher formulário", "contratar assessoria").
-3. Use **apenas a forma correta dos termos**, mas capture o significado dos erros (ex: “acessoria” = “assessoria”).
-4. O texto deve soar **natural, confiável e profissional**, adequado a um site sobre vistos, imigração ou serviços de viagem.
-5. Nunca repita a mesma palavra desnecessariamente.
-6. Evite menções explícitas a erros ortográficos — apenas leve em conta o significado por trás deles.
-7. Os textos devem ser otimizados para **CTR (atrair cliques)** e **semântica (rankear em buscas diversas)**.
-
-### Formato de resposta:
+#### Lista de temas:
 
 ```json
-{
-  "seoData": {
-    "title": "Título atrativo e natural aqui...",
-    "metaTitle": "Versão curta e otimizada aqui...",
-    "metaDesc": "Descrição envolvente que capture as variações de busca...",
-    "keywords": ["palavra1", "palavra2", "palavra3"],
-    "slug": "url-amigavel-baseada-no-titulo",
-    "intent": "descrição da intenção principal da busca"
-  }
-}
+[
+	{
+		"theme": "Formulário DS-160",
+		"description": "Preenchimento, acesso, confirmação e dúvidas sobre o formulário principal de solicitação de visto"
+	},
+	{
+		"theme": "Agendamento de Entrevista",
+		"description": "Marcação de data e local para entrevista no consulado, incluindo disponibilidade de datas"
+	},
+	{
+		"theme": "Centros de Atendimento (CASV)",
+		"description": "Informações sobre agendamento, documentos necessários e procedimentos nos CASV"
+	},
+	{
+		"theme": "Pagamento de Taxas",
+		"description": "Processo de pagamento da taxa do visto, emissão de boleto e valores atualizados"
+	},
+	{
+		"theme": "Documentação Necessária",
+		"description": "Lista de documentos exigidos para entrevista e diferentes categorias de visto"
+	},
+	{
+		"theme": "Renovação de Visto",
+		"description": "Processos para renovar visto, prazos, necessidade de entrevista e documentação"
+	},
+	{
+		"theme": "Tipos de Visto",
+		"description": "Diferentes categorias de visto (B1/B2, F1, J1, H1B, etc.) e suas especificações"
+	},
+	{
+		"theme": "Recusas e Problemas",
+		"description": "Motivos para negação de visto (214b, 221g) e procedimentos para recorrer"
+	},
+	{
+		"theme": "Entrevista Consular",
+		"description": "Preparação, procedimentos, idioma da entrevista e documentos para levar"
+	},
+	{
+		"theme": "Assessoria e Despachantes",
+		"description": "Serviços profissionais de auxílio no processo de obtenção de visto"
+	},
+	{
+		"theme": "Locais de Atendimento",
+		"description": "Consulados e embaixadas americanas no Brasil e seus endereços"
+	},
+	{
+		"theme": "Valores e Custos",
+		"description": "Custos totais do processo de visto, incluindo taxas consulares e serviços"
+	},
+	{
+		"theme": "Passaporte e Visto",
+		"description": "Relação entre passaporte e visto, validade e situações especiais"
+	},
+	{
+		"theme": "Elegibilidade e Requisitos",
+		"description": "Condições necessárias para obtenção do visto para diferentes perfis"
+	},
+	{
+		"theme": "Situações Especiais",
+		"description": "Procedimentos para menores de idade, idosos, emergências e casos específicos"
+	},
+	{
+		"theme": "Prazos e Tempos de Espera",
+		"description": "Duração do processo, tempo para agendamento e processamento do visto"
+	},
+	{
+		"theme": "Confirmações e Comprovantes",
+		"description": "Documentos de confirmação de agendamento, formulários e pagamentos"
+	},
+	{
+		"theme": "Reagendamento e Cancelamentos",
+		"description": "Procedimentos para alterar ou cancelar agendamentos já marcados"
+	},
+	{
+		"theme": "Visto de Turista B1/B2",
+		"description": "Especificações, requisitos e procedimentos para visto de turismo e negócios"
+	},
+	{
+		"theme": "Visto de Estudante",
+		"description": "Requisitos e procedimentos para visto de estudante (F1, J1) e documentação acadêmica"
+	},
+	{
+		"theme": "Visto de Trabalho",
+		"description": "Categorias de visto de trabalho, requisitos e processos específicos"
+	},
+	{
+		"theme": "Green Card e Vistos Permanentes",
+		"description": "Processos para obtenção de residência permanente nos EUA"
+	},
+	{
+		"theme": "Visto de Investidor",
+		"description": "Requisitos e procedimentos para vistos baseados em investimento (E2, EB-5)"
+	},
+	{
+		"theme": "Visto de Trânsito",
+		"description": "Procedimentos para visto de trânsito pelos Estados Unidos"
+	},
+	{
+		"theme": "Emergências e Urgências",
+		"description": "Processos para solicitação de visto em situações de emergência comprovada"
+	},
+	{
+		"theme": "Nacionalidades e Isenções",
+		"description": "Regras para diferentes nacionalidades e situações de isenção de visto"
+	},
+	{
+		"theme": "Procedimentos Pós-Entrevista",
+		"description": "Processos após a entrevista, retirada de passaporte e situações administrativas"
+	},
+	{
+		"theme": "Problemas Técnicos Online",
+		"description": "Dificuldades com sistemas, acesso a contas e problemas no preenchimento online"
+	},
+	{
+		"theme": "Fotos e Biometria",
+		"description": "Requisitos para fotos oficiais e procedimentos de coleta biométrica"
+	},
+	{
+		"theme": "Visto para Familiares",
+		"description": "Processos para visto familiar, documentação e requisitos específicos"
+	},
+	{
+		"theme": "Antecedentes e Histórico",
+		"description": "Declaração de antecedentes criminais, histórico de viagens e informações pessoais"
+	},
+	{
+		"theme": "Vínculos com o País de Origem",
+		"description": "Comprovação de vínculos fortes com o país de origem para evitar imigração ilegal"
+	},
+	{
+		"theme": "Viagens Anteriores aos EUA",
+		"description": "Impacto de viagens anteriores e histórico de compliance com vistos americanos"
+	},
+	{
+		"theme": "Situação Financeira",
+		"description": "Comprovação de recursos financeiros para custear a viagem e estadia"
+	},
+	{
+		"theme": "Seguro Saúde e Viagem",
+		"description": "Requisitos e recomendações sobre seguros para viajantes internacionais"
+	},
+	{
+		"theme": "Vacinas e Requisitos de Saúde",
+		"description": "Exigências de vacinação e condições de saúde para entrada nos EUA"
+	},
+	{
+		"theme": "Visto para Artistas e Atletas",
+		"description": "Procedimentos específicos para vistos de artistas, atletas e profissionais do entretenimento"
+	},
+	{
+		"theme": "Visto Religioso",
+		"description": "Requisitos e procedimentos para vistos de trabalhadores religiosos"
+	},
+	{
+		"theme": "Visto de Noivado (K-1)",
+		"description": "Processos para visto de noivado e união com cidadãos americanos"
+	},
+	{
+		"theme": "Extensão e Mudança de Status",
+		"description": "Procedimentos para extensão de estadia ou mudança de categoria de visto dentro dos EUA"
+	}
+]
 ```
 
-### Exemplo de entrada:
-
-```
-## Formulário DS-160
-- 160 visto americano
-- acessar ds 160
-- acessar formulario ds 160
-- acessar formulario ds 160 preenchido
-
-## Tipos e Status do Visto
-- 214b visto negado
-- 221g visto americano
-- a embaixada americana esta emitindo visto
-...
-```
-
-### Exemplo de saída:
+#### Saída esperada:
 
 ```json
+[
+  {"query": "160 visto americano", "theme": "Formulário DS-160", "avgms": 50, "competition": "Baixo", "cindex": 14}
+]
+```
+
+### Agora processe o JSON a seguir:
+
+#### Queries:
+
+
+```json
+[
+{"query": "visto americano negado 214b", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano negado como recorrer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano negado o que fazer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano negado por falta de vínculos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano no brasil onde tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano no japão", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano no passaporte", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano no passaporte vencido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano o", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano o que é", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano o que levar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano o que levar na entrevista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano o que precisa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano onde agendar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano onde fazer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano onde tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano onde tirar no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano online", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano ou seu dinheiro de volta", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano p1 p2 p3 p4", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para advogados", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para aposentados brasileiros", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para artistas", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para atletas", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para baba", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para bebê", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para bebê 2021", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 0},
+{"query": "visto americano para bebê 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 0},
+{"query": "visto americano para bebes", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para brasileiro", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para brasileiros 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para cidadão italiano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para crianças", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para cuidador de idosos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para disney", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para estrangeiros residentes no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para estudante", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para europeus", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para familia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para filhos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para idosos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para idosos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para idosos acima de 80 anos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para investidor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para investidor brasileiro", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para italianos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para maiores de 60 anos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para maiores de 65 anos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para menor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para menor com pais separados", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para menor de 18 anos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para menor de 5 anos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para menor desacompanhado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para militares brasileiros", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para morar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para passaporte italiano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para passaporte portugues", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para passeio", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para portugues", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para portugueses", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para que serve", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para trabalho", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano para trabalho temporário", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para transito", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para turismo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para turista 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para turista brasileiro", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para turistas brasileiros", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para vencer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano para viagem", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano parcelado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano passaporte", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano passaporte brasileiro", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano passaporte com menos de 6 meses", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano passaporte europeu", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano passaporte italiano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano passaporte portugues", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano passaporte vencido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano passo a passo 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 0},
+{"query": "visto americano passo a passo ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano passos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano permanente", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano poa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano policia federal", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano porto alegre 2021", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano porto alegre agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano porto alegre documentos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano porto alegre valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano prazo agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano prazo para agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano prazos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano preço 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 0},
+{"query": "visto americano preencher", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano preencher ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano preencher formulario", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano preencher formulario ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano prestes a vencer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano procedimento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano quais documentos levar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano quando renovar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano quanto custa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano questionario", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano r", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano r b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano rapido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano reagendar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano reagendar entrevista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano recem nascido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano recusado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50000},
+{"query": "visto americano renovação 2021", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 0},
+{"query": "visto americano renovação agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação prazo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação sem entrevista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação site oficial", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovação valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano renovar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano renovar antes do vencimento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano reprovado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano requisitos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano ribeirão preto", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano rj", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano santa catarina", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano sao paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano são paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano sao paulo agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano são paulo agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano schultz", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano site", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano site agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano site consulado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano site ds160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano site embaixada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano site oficial", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano site oficial ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano solicitar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano sp agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano taxa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto americano taxa consular", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano tipo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano tipo b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano tipo e", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano tipo o", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano tipo r", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano tipo r b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano trabalho", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano trabalho temporario", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano transito", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano turismo 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo b1 ou b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano turismo quanto tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo tipo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turismo valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano turista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano turista 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turista agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turista b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turista como tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turista passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano turista preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano turista valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano urgente", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano usa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valido e passaporte vencido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50000},
+{"query": "visto americano valor 2020", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor 2021", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor 2022 em reais", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor 2023", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor da taxa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano valor em reais", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano valor hoje", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor renovação", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano valor taxa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano valor turista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano venancio 2000", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vencendo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vencendo posso viajar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vencido como renovar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vencido na pandemia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vencido o que fazer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vencido renovação", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano viagem", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano vila mariana", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto americano visa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americano visitante", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto americo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto b1 b2 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 b2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 b2 o que é", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 b2 pode trabalhar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 b2 preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 b2 valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 e b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto b1 e b2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 o que é", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 ou b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 pode trabalhar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 trabalhador domestico", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b1 valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b12", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto b2 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto b2 o que é", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b2 para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b2 valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto b3 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto brasil estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto brasil eua", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto brasil para americanos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto brasil portugal", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto brasileiro para americanos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto c", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto c1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto canada para quem tem visto americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto canadense pode entrar nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto casv", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto como tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto consulado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto consulado americano agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado americano em sao paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado americano porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado americano sao paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado americano são paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto consulado porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de americano para o brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de angola para o brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de atleta", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de au pair estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de cortesia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de emergencia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de emergencia estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de entrada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de entrada nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudante canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudante estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudante estados unidos pode trabalhar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante estados unidos valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante f1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante negado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante negado perde o de turista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudante nova zelandia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de estudante para estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudante para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de estudo canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de habilidades especiais estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de habilidades extraordinárias", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de imigrante estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de imigrante para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de investidor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de investidor americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de investidor brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de investidor estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de não imigrante estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de noiva", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de noiva americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de noiva estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de noivado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de noivado americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de noivo brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de partner", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de passaporte para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de permanência nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de residencia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de residencia canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de residencia estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de residencia permanente canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de reunião familiar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de schengen", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de trabalho americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de trabalho estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de trabalho eua preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de trabalho eua valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de trabalho nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de trabalho para estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de trabalho para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de trabalho temporario nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de trânsito", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de transito americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de transito canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de transito estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de trânsito estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de transito para estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de transito para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de turismo canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de turismo eua quanto tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de turismo para estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de turista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de turista americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de turista americano valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de turista b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de turista canadense", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de turista estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de turista para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de turista para os estados unidos dura quanto tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de urgencia estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de urgência para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de viagem", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto de visitante", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto de visitante estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto do brasil para eua", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto do brasil para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto do estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto dos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto dos eua para o brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto ds", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto ds 160 formulario", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ds 160 o que é", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ds 160 passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ds 160 valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ds 2019", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ds160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto e 2 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e passaporte americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto e passaporte para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto e2 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e2 brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto e2 green card", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto e3 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eb 2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb 5 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto eb2 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb2 consulado americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb2 niw para advogados", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb2 niw quanto custa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eb2nw", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eb3 do brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb3 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eb3 quanto custa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb5 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eb5 valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eletronico estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto em passaporte vencido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto embaixada americana", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto embaixada estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto emergencial estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto entrada estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto esta", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto esta estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estado unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto estados unidos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estados unidos agendar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos belo horizonte", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos brasilia", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos como tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos consulado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos documentos necessários", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos embaixada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos entrevista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos esta", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos estudante", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estados unidos formulario", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos formulario ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos para brasileiros", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos para italianos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos para portugueses", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos passaporte europeu", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos passaporte vencido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estados unidos recife", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos renovação", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos rio de janeiro", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos sao paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos trabalho", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estados unidos turismo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estados unidos valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estadunidense", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto estudante americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estudante estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto estudante f1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua belo horizonte", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eua cidadania italiana", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua consulado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua em porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eua formulário", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eua no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eua passaporte", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua passaporte europeu", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto eua rj", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eua urgente", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto eus", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto f1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto f1 consulado americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto f1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto f1 para green card", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto f1 pode trabalhar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto f1 preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto f2 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto facil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto familia estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto familiar estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto ferias trabalho canada", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto formulario ds 160", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto green card", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto h2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto h2b como conseguir", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto h2b estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto hb1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto i20 pode trabalhar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto investidor americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto investidor estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto italiano estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto italiano estudante", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto italiano para brasileiros", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto j", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto j 1 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto j 1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto j estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto j1 americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto j1 consulado americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto j1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto j1 passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto j1 pode trabalhar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto j1 preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto j1 trabalho", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto k1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto l americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto l1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto l1 passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto l1b", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto m1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto na embaixada americana", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto não imigrante estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto negado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto negado 214b", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto negado 214b o que fazer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto negado 221g", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto negado estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto negado fica registrado", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto niw", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto no consulado americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto no passaporte para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto nomade digital estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto nômade digital estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto norte americano agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto nova iorque", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto o1", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto o1 estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto onde tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para americano entrar no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para americanos entrarem no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para americanos no brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para baba estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para brasileiros estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para entrar no estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para entrar nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para estados unidos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para estados unidos agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para estados unidos como tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para estados unidos porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para estados unidos preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para estados unidos turista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para estados unidos valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para estudante", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para estudante nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para ir aos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para ir para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para menor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para menor de 18", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para menor de 5 anos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para morar no estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para morar nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para nova iorque", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para nova york preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para o brasil para americanos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para o estados unidos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 0},
+{"query": "visto para o estados unidos valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "visto para os estados unidos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos como tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos em porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos no rio de janeiro", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos onde tirar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos passo a passo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos preço", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para os estados unidos quanto custa", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos turismo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos turista", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para os estados unidos valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para os eua em porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para passaporte americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para passeio nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para republica dominicana", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para são tomé e príncipe", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para trabalhar nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para trabalho estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para trabalho nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto para turismo estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para turismo nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para turista estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para viagem aos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para viajar para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para visitar estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para visitar parentes nos estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto para yonsei maior de idade", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto passaporte americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto passaporte estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto passaporte valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto permanente brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto permanente estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto portugal brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto pro estados unidos valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto pros estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto r b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto religioso estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto religioso para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto renovacao", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto renovação americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto residencia estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto temporario estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto tipo b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto tipo b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto trabalho americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto trabalho brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto trabalho estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto transito americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto transito estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turismo americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto turismo americano valor", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turismo angola", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turismo b1 b2", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turismo eua quanto tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto turismo para estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turismo para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turista estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto turista estados unidos quanto tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turista estados unidos tempo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto turista para os estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto u", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "visto u americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto u estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto usa brasil", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto usa porto alegre", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto usa sao paulo", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto valor americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto vencido", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto vencido americano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto vencido como renovar", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto vencido estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto vencido o que fazer", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "visto viagem estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "vistoeua", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 5000},
+{"query": "vistos américa assessoria consular", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "vistos americanos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "vistos americanos agendamento", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50000},
+{"query": "vistos americanos para brasileiros", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "vistos americanos tipos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 500},
+{"query": "vistos eb", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "vistos estados unidos tipos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "vistos negados estados unidos", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "vistos para estados unidos 2022", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50},
+{"query": "www consuladoamericano", "theme": "[[REPLACE_WITH_THEME]]", "avgms": 50}
+]
+```
+
+Retorne **apenas o JSON atualizado** com os temas substituídos corretamente.
+
+## PROMPT 3
+
+Você é um especialista em SEO e criação de conteúdo. Recebi uma lista de consultas relacionadas a “Centros de Atendimento (CASV)” e quero criar **1 a 3 artigos** que possam abranger **todas essas consultas**.
+
+Critérios:
+
+1. Cada artigo deve conter:
+
+* `"titulo"`: título claro, descritivo e atraente, com palavras-chave relevantes.
+* `"subtitulos"`: lista de H2/H3 que permitam encaixar consultas de forma natural e organizada.
+* `"MetaDescription"`: uma meta description curta, atraente e resumida.
+2. Não é necessário que todas as consultas apareçam na meta description; elas podem aparecer em qualquer parte do conteúdo (H1, H2, H3 ou corpo).
+3. Todas as consultas **devem estar contempladas em algum lugar do artigo**, de forma natural.
+4. Evite criar muitos artigos; **máximo 3**.
+5. Priorize intenção informativa e prática do usuário, sem perder foco em SEO.
+6. Considere tópicos como agendamento, documentos necessários, entrevistas, retirada de passaporte, cidades específicas (São Paulo, Porto Alegre, Brasília, Belo Horizonte) e relação entre CASV e Consulado.
+
+Lista de consultas:
+`[INSIRA AQUI A LISTA JSON]`
+
+**Retorne apenas um JSON no seguinte formato**:
+
+```json
+[
 {
-  "seoData": {
-    "title": "Agendamento de Visto Americano — Como Marcar Sua Entrevista no Consulado",
-    "metaTitle": "Agendamento de Visto Americano | CASV e Consulado",
-    "metaDesc": "Aprenda como agendar o visto americano no CASV e consulado. Passo a passo atualizado para São Paulo, Brasília e Porto Alegre.",
-    "keywords": ["agendamento visto americano", "agenda consulado americano", "CASV", "entrevista visto"],
-    "slug": "agendamento-visto-americano",
-    "intent": "agendar entrevista e marcar visto americano"
-  }
+    "titulo": "Título do Artigo 1",
+    "subtitulos": [
+    "Subtítulo 1",
+    "Subtítulo 2",
+    "Subtítulo 3"
+    ],
+    "MetaDescription": "Meta description do artigo 1."
+},
+{
+    "titulo": "Título do Artigo 2",
+    "subtitulos": [
+    "Subtítulo 1",
+    "Subtítulo 2"
+    ],
+    "MetaDescription": "Meta description do artigo 2."
 }
+]
 ```
 
-Agora gere o JSON com os metadados SEO para a lista a seguir:
+---
 
+[{"query":"agenda casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv","theme":"Centros de Atendimento (CASV)","avgms":5000},{"query":"agendamento casv 2022","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv datas","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv e consulado","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv e consulado mesmo dia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv porto alegre","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv sao paulo","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"agendamento casv são paulo","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"agendamento casv sp","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv visto","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento casv visto americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento consular e casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento de visto americano casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento do casv","theme":"Centros de Atendimento (CASV)","avgms":5000},{"query":"agendamento no casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento no casv o que levar","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento no casv sp","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento retirada passaporte casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendamento visto americano casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"agendamento visto casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"agendar casv","theme":"Centros de Atendimento (CASV)","avgms":5000},{"query":"agendar casv e consulado em cidades diferentes","theme":"Centros de Atendimento (CASV)","avgms":0},{"query":"agendar casv e consulado no mesmo dia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar casv sao paulo","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"agendar casv sp","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar casv visto americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar entrevista casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar entrevista no casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar entrevista visto americano casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar retirada de passaporte casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar retirada de passaporte no casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"agendar visto americano casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"agendar visto casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv","theme":"Centros de Atendimento (CASV)","avgms":50000},{"query":"casv agendamento","theme":"Centros de Atendimento (CASV)","avgms":5000},{"query":"casv agendamento 2022","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv agendamento de visto","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv agendamento retirada passaporte","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv agendamento sao paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv agendamento sp","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv agendamento telefone","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv agendamento visto","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv agendamento visto americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv agendar","theme":"Centros de Atendimento (CASV)","avgms":5000},{"query":"casv americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv belo horizonte","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv brasil","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv brasília está funcionando","theme":"Centros de Atendimento (CASV)","avgms":0},{"query":"casv consulado","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv consulado americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv de sao paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv documentos","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv documentos necessários","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv documentos para levar","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv ds 160","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv e consulado","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv e consulado no mesmo dia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv e entrevista no mesmo dia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv em porto alegre","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv em sao paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv em são paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv o que é","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv o que levar","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv ou consulado primeiro","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv pagamento de taxa","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv passaporte","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv porto alegre","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv porto alegre agendamento","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv reagendar","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv renovacao de visto","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv renovação de visto","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv sao paulo","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv são paulo","theme":"Centros de Atendimento (CASV)","avgms":5000},{"query":"casv são paulo agendamento","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv são paulo sp","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv são paulo vila mariana","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv site","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv site oficial","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv sp agendamento","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv visa","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv visto","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv visto agendamento","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv visto americano","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"casv visto americano agendamento","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv visto americano brasilia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv visto americano sao paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"casv visto sao paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"consulado americano casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"consulado americano sao paulo casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"consultar agendamento casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"contato casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"contato casv sao paulo","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentação casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos casv visto americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos levar casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"documentos necessarios casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos necessarios para levar no casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos necessarios para o casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos para casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos para levar ao casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"documentos para levar casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"documentos para levar no casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"documentos para levar no casv 2022","theme":"Centros de Atendimento (CASV)","avgms":0},{"query":"documentos para o casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"entrevista casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"entrevista casv o que levar","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"entrevista no casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"marcar casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"oq levar no casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"posso agendar casv e entrevista no mesmo dia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"posso agendar casv em outro estado","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"posso marcar casv e consulado no mesmo dia","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"primeiro casv ou consulado","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"site agendamento casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"site casv agendamento","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"site casv visto americano","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"site do casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"visto agendamento casv","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"visto americano agendamento casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"visto americano casv","theme":"Centros de Atendimento (CASV)","avgms":500},{"query":"visto americano casv o que levar","theme":"Centros de Atendimento (CASV)","avgms":50},{"query":"visto casv","theme":"Centros de Atendimento (CASV)","avgms":50}]
+
+## PROMPT 4
+
+Você é um especialista em SEO e criação de conteúdo. Tenho uma lista de artigos em JSON, no seguinte formato:
+
+```json
+[
+  {
+    "titulo": "Guia Completo de Agendamento e Atendimento no CASV para Visto Americano",
+    "subtitulos": [
+      "O que é o CASV e sua relação com o Consulado Americano",
+      "Como agendar no CASV: passo a passo",
+      "Agendamento no mesmo dia: CASV e Consulado",
+      "Agendamentos em diferentes cidades: São Paulo, Porto Alegre, Brasília e Belo Horizonte",
+      "Documentos necessários para levar ao CASV",
+      "Como funciona a entrevista e o que levar",
+      "Retirada de passaporte no CASV",
+      "Reagendamento e consultas de agendamento"
+    ],
+    "MetaDescription": "Tudo sobre CASV: agendamento, documentos, entrevistas e retirada de passaporte em São Paulo, Porto Alegre, Brasília e Belo Horizonte."
+  },
+  {
+    "titulo": "Documentos, Entrevista e Retirada de Passaporte no CASV",
+    "subtitulos": [
+      "Documentação exigida para o agendamento e entrevista",
+      "O que levar no CASV para visto americano",
+      "Passo a passo para a entrevista no CASV",
+      "Retirada de passaporte: prazos e procedimentos",
+      "Pagamentos e taxas no CASV",
+      "Dicas para evitar problemas no dia do atendimento"
+    ],
+    "MetaDescription": "Saiba quais documentos levar, como se preparar para a entrevista e retirar seu passaporte no CASV de forma rápida e organizada."
+  },
+  {
+    "titulo": "CASV: Localizações, Contatos e Agendamento nas Principais Cidades",
+    "subtitulos": [
+      "CASV em São Paulo: agendamento e endereço",
+      "CASV em Porto Alegre: horários e contato",
+      "CASV em Brasília e Belo Horizonte: informações importantes",
+      "Site oficial do CASV e agendamento online",
+      "Telefone e contato para dúvidas",
+      "Dicas para agendar em cidades diferentes e mesmo dia com o Consulado"
+    ],
+    "MetaDescription": "Encontre CASVs em São Paulo, Porto Alegre, Brasília e Belo Horizonte e saiba como agendar online ou por telefone com facilidade."
+  }
+]
 ```
-[cole aqui sua lista de termos]
-```
-## Formulário DS-160
-- 160 visto americano
-- acessar ds 160
-- acessar formulario ds 160
-- acessar formulario ds 160 preenchido
 
-## Tipos e Status do Visto
-- 214b visto negado
-- 221g visto americano
-- a embaixada americana esta emitindo visto
+Quero que você **adicione as seguintes consultas faltantes** em algum lugar nos artigos — elas podem ser incluídas nos `"subtitulos"` ou dentro da `"MetaDescription"` — mas **não remova nem altere nada que já exista**:
 
-## Entrevista para Visto Americano
-- a entrevista do visto americano é em ingles
-- a entrevista no consulado americano é em português
-- a entrevista para o visto americano é em ingles
-- agendamento da entrevista do visto americano
-- agendamento de entrevista consulado americano
-- agendamento de entrevista consulado americano sp
-- agendamento de entrevista de visto
-- agendamento de entrevista de visto americano
-- agendamento de entrevista no consulado americano
-- agendamento de entrevista para visto americano
-- agendamento de entrevista para visto americano em brasilia
-- agendamento de entrevista visto
-- agendamento de entrevista visto americano
-- agenda de entrevista para visto americano
-- agenda para entrevista visto americano
+**Consultas faltantes:**
 
-## Agendamento de Visto Americano
-- agenda de visto americano
-- agenda de visto americano sp
-- agenda para visto americano
-- agenda para visto americano 2022
-- agenda visto americano 2022
-- agenda visto americano 2023
-- agenda visto americano brasilia
-- agenda visto americano porto alegre
-- agenda visto americano sp
-- agendamento americano
-- agendamento de visto
-- agendamento de visto americano
-- agendamento de visto americano 2022
-- agendamento de visto americano 2023
-- agendamento de visto americano brasilia
-- agendamento de visto americano casv
-- agendamento de visto americano datas
-- agendamento de visto americano em brasilia
-- agendamento de visto americano em brasília
-- agendamento de visto americano em porto alegre
-- agendamento de visto americano em sao paulo
-- agendamento de visto americano em são paulo
-- agendamento de visto americano em sp
-- agendamento de visto americano porto alegre
-- agendamento de visto americano sao paulo
-- agendamento de visto americano site
-- agendamento de visto americano sp
-- agendamento de visto consulado americano
-- agendamento de visto consulado americano sp
-- agendamento de visto em porto alegre
-- agendamento de visto em sao paulo
-- agendamento de visto em sp
-- agendamento de visto estados unidos
-- agendamento de visto na embaixada americana em brasilia
-- agendamento de visto no consulado americano
-- agendamento de visto para estados unidos
-
-## Agendamento CASV e Consulado
 - agenda casv
-- agenda consulado americano
-- agenda consulado americano sp
-- agenda do consulado americano
 - agendamento casv
 - agendamento casv 2022
 - agendamento casv datas
@@ -4509,37 +5120,327 @@ Agora gere o JSON com os metadados SEO para a lista a seguir:
 - agendamento casv sp
 - agendamento casv visto
 - agendamento casv visto americano
-- agendamento consulado americano
-- agendamento consulado americano em sao paulo
-- agendamento consulado americano porto alegre
-- agendamento consulado americano sao paulo
-- agendamento consulado americano são paulo
-- agendamento consulado americano sp
-- agendamento consulado americano visto
 - agendamento consular e casv
-- agendamento consular visto americano
-- agendamento consulado estados unidos
-- agendamento consulado sao paulo
+- agendamento de visto americano casv
+- agendamento do casv
+- agendamento no casv
+- agendamento no casv o que levar
+- agendamento no casv sp
+- agendamento retirada passaporte casv
+- agendamento visto americano casv
+- agendamento visto casv    
 
-## Renovação e Passaporte
-- agendamento de passaporte americano
-- agendamento de renovação de visto americano
-- agendamento de entrevista para passaporte
+Critérios:
 
-## Agências e Assessoria para Visto
-- acessoria de visto americano
-- acessoria visto americano
-- agencia de turismo visto americano
-- agencia de visto americano
-- agência de visto americano
-- agencia imigração estados unidos
-- agencia para tirar visto americano
-- agência para tirar visto americano
-- agencia para visto americano
-- agencia que ajuda a tirar visto
-- agencia visto americano
-- agência visto americano
+1. Mantenha **todos os títulos, subtítulos e meta descriptions existentes**.
+2. Adicione essas consultas, seja como novos subtítulos ou inserindo nas meta descriptions, decisa onde fina melhor .
+3. Evite criar novos artigos; apenas ajuste os artigos existentes.
+4. **ATENÇÃO**: INCLUIR TODAS AS CONSULTAS CITADAS ACIMA SEM EXCEÇÃO
 
-## Agendamento de Outros Consulados
-- agendamento consulado brasileiro em nova york
+Retorne apenas o **JSON atualizado**, no mesmo formato que você recebeu, incluindo todas as consultas faltantes.
+
+
+### Resultado PROMPT 4
+
+```json
+[
+  {
+    "titulo": "Guia Completo de Agendamento e Atendimento no CASV para Visto Americano",
+    "subtitulos": [
+      "O que é o CASV e sua relação com o Consulado Americano",
+      "Como agendar no CASV: passo a passo",
+      "Agendamento no mesmo dia: CASV e Consulado",
+      "Agendamentos em diferentes cidades: São Paulo, Porto Alegre, Brasília e Belo Horizonte",
+      "Documentos necessários para levar ao CASV",
+      "Como funciona a entrevista e o que levar",
+      "Retirada de passaporte no CASV",
+      "Reagendamento e consultas de agendamento",
+      "Agenda CASV",
+      "Agendamento CASV",
+      "Agendamento CASV 2022",
+      "Agendamento CASV datas",
+      "Agendamento CASV e Consulado mesmo dia",
+      "Agendamento CASV Porto Alegre",
+      "Agendamento CASV São Paulo",
+      "Agendamento CASV SP",
+      "Agendamento CASV visto",
+      "Agendamento CASV visto americano",
+      "Agendamento consular e CASV",
+      "Agendamento de visto americano CASV",
+      "Agendamento do CASV",
+      "Agendamento no CASV",
+      "Agendamento no CASV o que levar",
+      "Agendamento no CASV SP",
+      "Agendamento retirada passaporte CASV",
+      "Agendamento visto americano CASV",
+      "Agendamento visto CASV"
+    ],
+    "MetaDescription": "Tudo sobre CASV: agendamento, documentos, entrevistas e retirada de passaporte em São Paulo, Porto Alegre, Brasília e Belo Horizonte. Inclui agenda CASV, agendamento CASV, agendamento CASV 2022, agendamento CASV datas e agendamento CASV e Consulado mesmo dia."
+  },
+  {
+    "titulo": "Documentos, Entrevista e Retirada de Passaporte no CASV",
+    "subtitulos": [
+      "Documentação exigida para o agendamento e entrevista",
+      "O que levar no CASV para visto americano",
+      "Passo a passo para a entrevista no CASV",
+      "Retirada de passaporte: prazos e procedimentos",
+      "Pagamentos e taxas no CASV",
+      "Dicas para evitar problemas no dia do atendimento",
+      "Agendamento no CASV o que levar",
+      "Agendamento retirada passaporte CASV",
+      "Agendamento visto americano CASV",
+      "Agendamento de visto americano CASV"
+    ],
+    "MetaDescription": "Saiba quais documentos levar, como se preparar para a entrevista e retirar seu passaporte no CASV de forma rápida e organizada. Inclui agendamento no CASV, agendamento no CASV SP e agendamento CASV visto."
+  },
+  {
+    "titulo": "CASV: Localizações, Contatos e Agendamento nas Principais Cidades",
+    "subtitulos": [
+      "CASV em São Paulo: agendamento e endereço",
+      "CASV em Porto Alegre: horários e contato",
+      "CASV em Brasília e Belo Horizonte: informações importantes",
+      "Site oficial do CASV e agendamento online",
+      "Telefone e contato para dúvidas",
+      "Dicas para agendar em cidades diferentes e mesmo dia com o Consulado",
+      "Agendamento CASV São Paulo",
+      "Agendamento CASV Porto Alegre",
+      "Agendamento CASV SP",
+      "Agendamento no CASV",
+      "Agendamento CASV e Consulado",
+      "Agendamento consular e CASV"
+    ],
+    "MetaDescription": "Encontre CASVs em São Paulo, Porto Alegre, Brasília e Belo Horizonte e saiba como agendar online ou por telefone com facilidade. Inclui agendamento CASV, agendamento CASV visto americano e agendamento CASV visto."
+  }
+]
 ```
+
+## PROMPT para criar artigo (versão 1)
+
+Você é um blogueiro profissional, exímio curador e escritor de conteúdo com profundo conhecimento em técnicas de SEO, marketing de conteúdo e engajamento online. Sua missão é transformar os tópicos que eu fornecer em um **artigo completo, impactante e envolvente**, estruturado em **Markdown**, pronto para publicação em blog.
+
+**Regras e diretrizes para produção do artigo:**
+
+1. **Título e subtítulos:** Crie um título chamativo e envolvente, seguido de subtítulos claros (H2 e H3) que organizem o conteúdo de forma lógica.
+2. **Introdução:** A introdução deve prender a atenção do leitor imediatamente, contextualizando o tema e destacando a relevância do conteúdo.
+3. **SEO:** Inclua palavras-chave de forma natural ao longo do texto, otimize headings, utilize meta-descrições, bullet points, listas numeradas e links internos e externos quando pertinente.
+4. **Tom e estilo:** Use um tom profissional, porém próximo e conversacional; varie frases curtas e longas para manter o ritmo; inclua exemplos e dados sempre que possível.
+5. **Engajamento:** Insira chamadas à ação estratégicas, perguntas retóricas e convites à interação.
+6. **Imagens estratégicas:** Sugira imagens usando a tag `[INSERIR IMAGE: descrição da imagem]` em locais estratégicos que aumentem a beleza do artigo e o engajamento do leitor.
+7. **Conclusão:** Conclua reforçando os principais pontos e incentivando o leitor a continuar interagindo, seja compartilhando, comentando ou explorando outros conteúdos do blog.
+8. **Markdown:** Utilize Markdown corretamente para títulos, subtítulos, listas, negrito, itálico, links, citações e códigos quando relevante.
+9. **Sempre que gerar uma tabela em Markdown** para artigos, use o formato completo com | para separar colunas e - para o cabeçalho, mantendo todas as colunas alinhadas e o texto organizado. Não use listas simples ou texto separado por quebras de linha; a tabela deve ser legível e pronta para publicação em Markdown.”
+
+No final, garanta que o artigo seja **coeso, fluido, visualmente agradável** e otimizado tanto para leitores quanto para motores de busca.
+
+**Atenção:** Todos os tópicos necessários para a produção serão fornecidos por mim abaixo. Utilize esses materiais, pois já foram cuidadosamente selecionados, mas sinta-se à vontade para acrescentar informações complementares quando necessário, a fim de tornar o artigo completo e coeso. Estruture o texto com base nesses conteúdos e siga rigorosamente as diretrizes mencionadas acima.
+
+**Tópicos:**
+```json
+{
+"titulo": "Guia Completo de Agendamento e Atendimento no CASV para Visto Americano",
+"subtitulos": [
+    "O que é o CASV e sua relação com o Consulado Americano",
+    "Como agendar no CASV: passo a passo",
+    "Agendamento no mesmo dia: CASV e Consulado",
+    "Agendamentos em diferentes cidades: São Paulo, Porto Alegre, Brasília e Belo Horizonte",
+    "Documentos necessários para levar ao CASV",
+    "Como funciona a entrevista e o que levar",
+    "Retirada de passaporte no CASV",
+    "Reagendamento e consultas de agendamento",
+    "Agenda CASV",
+    "Agendamento CASV",
+    "Agendamento CASV 2022",
+    "Agendamento CASV datas",
+    "Agendamento CASV e Consulado mesmo dia",
+    "Agendamento CASV Porto Alegre",
+    "Agendamento CASV São Paulo",
+    "Agendamento CASV SP",
+    "Agendamento CASV visto",
+    "Agendamento CASV visto americano",
+    "Agendamento consular e CASV",
+    "Agendamento de visto americano CASV",
+    "Agendamento do CASV",
+    "Agendamento no CASV",
+    "Agendamento no CASV o que levar",
+    "Agendamento no CASV SP",
+    "Agendamento retirada passaporte CASV",
+    "Agendamento visto americano CASV",
+    "Agendamento visto CASV"
+],
+"MetaDescription": "Tudo sobre CASV: agendamento, documentos, entrevistas e retirada de passaporte em São Paulo, Porto Alegre, Brasília e Belo Horizonte. Inclui agenda CASV, agendamento CASV, agendamento CASV 2022, agendamento CASV datas e agendamento CASV e Consulado mesmo dia."
+}
+```
+
+## PROMPT para criar artigo (versão 2)
+
+Você é um **redator e curador de conteúdo profissional**, especializado em **marketing digital, redação jornalística, copywriting estratégico e SEO avançado**.
+Sua missão é transformar os tópicos que eu fornecer em um **artigo completo, envolvente e profissional**, escrito em **Markdown**, pronto para publicação em blog.
+
+---
+
+### 🎯 **Diretrizes obrigatórias**
+
+#### **1. Estrutura editorial**
+
+* Crie um **título forte e informativo**, que desperte interesse e contenha variação natural das palavras-chave.
+* Organize o texto com **subtítulos (H2 e H3)** que criem uma leitura fluida e coerente.
+* Use **parágrafos curtos**, frases bem ritmadas e intertítulos estratégicos para escaneabilidade.
+
+---
+
+#### **2. Introdução**
+
+* Prenda o leitor já na primeira frase.
+* Apresente o tema de forma contextualizada e relevante.
+* Mostre por que o assunto é importante e o que o leitor vai aprender.
+
+---
+
+#### **3. Otimização para mecanismos de busca (SEO implícito)**
+
+* **Jamais mencione ou explique técnicas de SEO, palavras-chave ou otimização**.
+* Aplique boas práticas **de forma natural e imperceptível**:
+
+  * Use variações semânticas e expressões correlatas.
+  * Estruture bem os headings.
+  * Use listas, perguntas, e exemplos para enriquecer o texto.
+  * Inclua links internos e externos apenas quando forem realmente úteis.
+* Evite repetições forçadas e termos genéricos.
+
+---
+
+#### **4. Tom e estilo**
+
+* **Profissional, natural e autoritativo**, como um especialista conversando com o leitor.
+* Sem emojis, gírias, informalidades ou expressões artificiais.
+* Use voz ativa, linguagem clara e ritmo envolvente.
+* Quando cabível, insira exemplos, comparações, dados ou citações de fontes confiáveis.
+
+---
+
+#### **5. Engajamento sutil**
+
+* Estimule o leitor com perguntas retóricas e frases que criem continuidade.
+* Inclua chamadas à ação de forma **natural e elegante**, convidando à interação, leitura de outros artigos ou compartilhamento.
+* Evite qualquer frase que soe como “clique aqui” ou marketing direto.
+
+---
+
+#### **6. Imagens estratégicas**
+
+* Indique **pontos estratégicos** para imagens com a tag:
+  `[INSERIR IMAGEM: descrição da imagem]`
+* Priorize imagens relevantes, ilustrativas ou inspiradoras — nada genérico.
+* Use no máximo **3 a 4 sugestões por artigo**, distribuídas com propósito visual.
+
+---
+
+#### **7. Conclusão**
+
+* Retome os principais pontos do artigo.
+* Reforce o aprendizado e incentive o leitor a continuar explorando o blog.
+* Termine com uma frase forte, inspiradora ou de fechamento natural.
+
+---
+
+#### **8. Formatação e acabamento**
+
+* Utilize **Markdown corretamente** (`#`, `##`, `###`, listas, negrito, itálico, citações, etc.).
+* O texto deve ser **fluido, coeso, visualmente agradável e escaneável**.
+* Não use emojis, ícones, ou explicações técnicas desnecessárias.
+* Linguagem 100% natural, como um artigo humano e editorial.
+
+#### **9. Call to action**
+
+Ache o melhor lugar para inserir o `call to action` a seguir. Colocar exatamente o texto a seguir, não remover o alterar nada.
+
+```markdown
+[
+![fastvistos assessoria de vistos com sede em Campinas](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)
+👉 Precisa de ajuda, entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> — estamos à disposição para esclarecer **qualquer questão, sem compromisso**.
+```
+
+### **10. Exemplo de estrutura
+
+* Sempre colocar o título principal entre <!--# [[TÍTULO]]-->
+* Sempre colocar um subtítulo `Introdução` com um parágrafo introdutório.
+
+### **11. Tabelas
+
+* Sempre que gerar uma tabela em Markdown** para artigos, use o formato completo com | para separar colunas e - para o cabeçalho, mantendo todas as colunas alinhadas e o texto organizado. Não use listas simples ou texto separado por quebras de linha; a tabela deve ser legível e pronta para publicação em Markdown.”
+
+---
+
+### **Tópicos:**
+
+```json
+{
+"titulo": "Guia Completo de Agendamento e Atendimento no CASV para Visto Americano",
+"subtitulos": [
+    "O que é o CASV e sua relação com o Consulado Americano",
+    "Como agendar no CASV: passo a passo",
+    "Agendamento no mesmo dia: CASV e Consulado",
+    "Agendamentos em diferentes cidades: São Paulo, Porto Alegre, Brasília e Belo Horizonte",
+    "Documentos necessários para levar ao CASV",
+    "Como funciona a entrevista e o que levar",
+    "Retirada de passaporte no CASV",
+    "Reagendamento e consultas de agendamento",
+    "Agenda CASV",
+    "Agendamento CASV",
+    "Agendamento CASV 2025",
+    "Agendamento CASV datas",
+    "Agendamento CASV e Consulado mesmo dia",
+    "Agendamento CASV Porto Alegre",
+    "Agendamento CASV São Paulo",
+    "Agendamento CASV SP",
+    "Agendamento CASV visto",
+    "Agendamento CASV visto americano",
+    "Agendamento consular e CASV",
+    "Agendamento de visto americano CASV",
+    "Agendamento do CASV",
+    "Agendamento no CASV",
+    "Agendamento no CASV o que levar",
+    "Agendamento no CASV SP",
+    "Agendamento retirada passaporte CASV",
+    "Agendamento visto americano CASV",
+    "Agendamento visto CASV"
+],
+"MetaDescription": "Tudo sobre CASV: agendamento, documentos, entrevistas e retirada de passaporte em São Paulo, Porto Alegre, Brasília e Belo Horizonte. Inclui agenda CASV, agendamento CASV, agendamento CASV 2022, agendamento CASV datas e agendamento CASV e Consulado mesmo dia."
+}
+```
+
+## Prompt Final
+
+Você receberá dois artigos sobre o mesmo assunto, porém com versões diferentes. Sua missão é analisar, comparar e **criar um novo artigo unificado**, que reúna:
+
+1. Os pontos que os artigos têm em comum.
+2. Os pontos que se complementam entre si.
+3. As partes que estão melhor escritas ou mais completas.
+
+**Regras para unificação e produção do artigo final:**
+
+* Manter **clareza, coesão e fluidez** ao combinar trechos de diferentes artigos.
+* Reescrever onde necessário para que o texto fique **uniforme em estilo e tom**.
+* Evitar repetições desnecessárias; use apenas o que agrega valor.
+* Priorizar **informações corretas, completas e atualizadas**.
+* Organizar o artigo de forma lógica: introdução, desenvolvimento, conclusão (ou subtítulos coerentes).
+* Usar uma linguagem **profissional, objetiva e envolvente**.
+* Se houver conflito entre informações, **selecionar a versão mais confiável ou explicar brevemente a divergência**.
+* Incluir exemplos, dados ou detalhes relevantes de todos os artigos, quando possível, para enriquecer o conteúdo.
+* Quebrar parágrafos grandes e volumosos em parágrafos menores para facilitar a leitura. 
+* Ache o melhor lugar para inserir o call to action a seguir. Coloque exatamente o texto, sem remover ou alterar nada:
+    ```markdown
+    [
+    ![fastvistos assessoria de vistos com sede em Campinas](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)
+    👉 Precisa de ajuda, entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> — estamos à disposição para esclarecer **qualquer questão, sem compromisso**.
+    ```
+* Sempre que gerar uma tabela em Markdown para artigos, use o formato completo com | para separar colunas e - para o cabeçalho, mantendo todas as colunas alinhadas e o texto organizado. Não use listas simples ou texto separado por quebras de linha; a tabela deve ser legível e pronta para publicação em Markdown.”
+* Não esqueça de copiar as sugestões de **imagens estratégicas:** nos artigos. 
+
+**Formato de entrega:**
+
+* Artigo final completo, pronto para publicação.
+* Opcional: Ao final, pode adicionar um **resumo ou conclusão reforçando os pontos principais**.
+
+---
+
