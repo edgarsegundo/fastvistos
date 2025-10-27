@@ -21,7 +21,7 @@ ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && git restore . && git 
 ## Build site on VPS
 ssh edgar@72.60.57.150 "export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && npm run build:$SITEID"
 ## Deploy site on VPS
-ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && node deploy-site.js '$SITEID'"
+ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && node deploy-site-v2.js '$SITEID'"
 
 ## Sync site images on VPS
 ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && sudo ./sync-site-images.sh $SITEID"
