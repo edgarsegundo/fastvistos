@@ -30,7 +30,7 @@ ssh edgar@72.60.57.150 "export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.
 # ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && node test.js" 
 
 
-ssh edgar@72.60.57.150 "export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && node test.js"
+ssh edgar@72.60.57.150 "export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && node deploy-site-v2.js '$SITEID'"
 
 # ssh edgar@72.60.57.150 "/home/edgar/.nvm/versions/node/v22.0.0/bin/node /home/edgar/Repos/fastvistos/deploy-site-v2.js '$SITEID'"
 
