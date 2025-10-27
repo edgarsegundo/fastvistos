@@ -4,10 +4,6 @@ import { execSync } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import readline from 'readline';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Server configuration
 const SERVER_CONFIG = {
