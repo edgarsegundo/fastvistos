@@ -5460,6 +5460,36 @@ Você receberá dois artigos sobre o mesmo assunto, porém com versões diferent
 
 
 
+
+## Pedir para adicionar mais coisas no artigo
+
+Quero que você revise e edite o artigo abaixo sobre o CASV (Centro de Atendimento ao Solicitante de Visto).
+
+Seu objetivo é **adicionar subtítulos e seções otimizadas** com os seguintes temas e palavras-chave, integrando-os naturalmente ao texto já existente, **sem remover ou prejudicar os termos originais** do artigo:
+
+* CASV em São Paulo: agendamento e endereço
+* CASV em Porto Alegre: horários e contato
+* CASV em Brasília e Belo Horizonte: informações importantes
+* Site oficial do CASV e agendamento online
+* Telefone e contato para dúvidas
+* Dicas para agendar em cidades diferentes e mesmo dia com o Consulado
+
+Instruções adicionais:
+
+* Mantenha o **tom e estilo do artigo original**.
+* Cada novo subtítulo deve conter **texto explicativo original e informativo**, não apenas a frase-chave.
+* Otimize naturalmente o artigo para SEO, **sem repetir excessivamente as palavras-chave**.
+* Garanta que a leitura continue fluida e coerente.
+* Não altere o conteúdo essencial existente, apenas amplie.
+
+--- 
+
+Aqui está o artigo atual:
+[COLOQUE O ARTIGO ATUAL AQUI]
+
+
+
+
 ## faq
 
 Este é o meu artigo, pesquise e faça um faq bem completo de perguntas e respostas de duvidas que nao foram abordadas no artigo:
