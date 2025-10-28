@@ -2,14 +2,14 @@
 title: "Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo e Atualizado"
 description: "DKMNTSNTRVSTRTRDDPSPRTNKSVGKMPLTTLZD"
 pubDate: "2025-10-27T20:29:08.000Z"
-updatedDate: "2025-10-28T18:40:33.747Z"
+updatedDate: "2025-10-28T18:44:05.584Z"
 slug: "documentos-entrevista-e-retirada-de-passaporte-no-casv-guia-completo-e-atualizado"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__2149080787.jpg"
 type: "public"
 published: true
-wordCount: "1975"
+wordCount: "1951"
 ---
 
 <!--# Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo e Atualizado-->
@@ -139,10 +139,6 @@ Endereço: Rua Professor José Vieira de Mendonça, 770 – Engenho Nogueira –
 Por estar próximo à PUC Minas, o acesso é fácil tanto de carro quanto por transporte público.
 
 💬 **Observação:** nesses CASVs, o fluxo de atendimento é menor, o que facilita reagendamentos e ajustes de horário. Mesmo assim, **chegue no horário exato** do seu agendamento.
-
----
-
-Perfeito, Edgar! Aqui está a complementação do artigo com o **CASV do Rio de Janeiro**, mantendo o mesmo estilo das seções já existentes:
 
 ---
 
