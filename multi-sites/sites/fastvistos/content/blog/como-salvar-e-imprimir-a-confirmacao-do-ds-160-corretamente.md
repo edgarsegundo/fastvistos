@@ -2,14 +2,14 @@
 title: "Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"
 description: "KMSLVRMPRMRKNFRMKDDSKRRTMNT"
 pubDate: "2025-10-29T19:31:19.000Z"
-updatedDate: "2025-10-29T19:37:41.900Z"
+updatedDate: "2025-10-29T19:41:23.621Z"
 slug: "como-salvar-e-imprimir-a-confirmacao-do-ds-160-corretamente"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__2148377684.jpg"
 type: "public"
 published: true
-wordCount: "1473"
+wordCount: "1479"
 ---
 
 <!--
@@ -175,7 +175,7 @@ Muitos candidatos compartilham suas experiências ao preencher o formulário DS�
 > “Quero compartilhar algumas coisas que gostaria de saber antes da minha entrevista para o visto dos EUA… Confira duas vezes as informações no DS‑160. Qualquer inconsistência pode causar atrasos ou dúvidas.”
 >  **Fonte:** [Reddit – r/NCLEXVisaUpdates](https://www.reddit.com/r/NCLEXVisaUpdates/comments/1oieso9?utm_source=chatgpt.com)
 
-### Relato em vídeo (em português)
+### Veja o relato em vídeo de quem já preencheu o DS-160
 
 Um depoimento completo de aprovação do visto B1/B2, mostrando a entrevista no consulado brasileiro:
 
