@@ -306,17 +306,18 @@ app.delete('/page-section-version', async (req, res) => {
 });
 
 app.post('/publish-article', async (req, res) => {
-    const { url1, url2 } = req.body;
-    if (!url1 || !url2) {
-        return res.status(400).json({ error: 'Both url1 and url2 are required.' });
-    }
-    const artigo1 = await extractReadableText(url1);
-    const artigo2 = await extractReadableText(url2);
+    try {
+        const { url1, url2 } = req.body;
+        if (!url1 || !url2) {
+            return res.status(400).json({ error: 'Both url1 and url2 are required.' });
+        }
+        // const artigo1 = await extractReadableText(url1);
+        // const artigo2 = await extractReadableText(url2);
 
-    let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
+        // let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
 
-    // return { title, seoMetaDescription, markdownFinal };
-    const fastVistosPromo = `
+        // return { title, seoMetaDescription, markdownFinal };
+        const fastVistosPromo = `
 👉 **Fast Vistos** – Assessoria Especializada para Vistos e Passaportes
 
 Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com vistos de turismo**, nós cuidamos de tudo para você. Nossa equipe garante que cada etapa seja feita com **eficiência, segurança e atenção aos detalhes]**, para que você possa focar no que realmente importa.
@@ -328,12 +329,15 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-    `;
+        `;
 
-    // Append to markdownFinal
-    markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
-    res.json({ success: true, result: markdownFinal });
-    // console.log(text1);
+        // Append to markdownFinal
+        // markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error in /publish-article:', error);
+        res.status(500).json({ success: false, error: 'Internal server error.' });
+    }
 });
 
 export default app;
