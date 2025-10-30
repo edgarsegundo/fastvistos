@@ -1,6 +1,6 @@
 export async function reescreverArtigo(openai, textoArtigo1, textoArtigo2) {
   try {
-    return "reescreverArtigo test text";
+    // return "reescreverArtigo test text";
       const prompt = `
 Você é um assistente especialista em criar artigos informativos e originais, com estilo envolvente e linguagem natural. Sua tarefa é gerar conteúdo que **combine e transforme informações de múltiplos artigos**, criando um artigo novo, coeso e pronto para publicação.
 

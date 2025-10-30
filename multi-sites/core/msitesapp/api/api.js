@@ -317,8 +317,7 @@ app.post('/publish-article', async (req, res) => {
     let newArticle =  reescreverArtigo(openai, artigo1, "xxx");
     console.log('publish-article (2)  | newArticle: ', newArticle);
 
-    // const text2 = await extractReadableText(url2);
-    res.json({ success: true });
+    res.json({ success: true, result: newArticle });
     // console.log(text1);
 });
 
