@@ -313,13 +313,26 @@ app.post('/publish-article', async (req, res) => {
     const artigo1 = await extractReadableText(url1);
     const artigo2 = await extractReadableText(url2);
 
-
-    console.log('publish-article (1)  | artigo1: ', artigo1);
-
     let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
-    console.log('publish-article (2)  | newArticle: ', newArticle);
 
-    res.json({ success: true, result: newArticle });
+    // return { title, seoMetaDescription, markdownFinal };
+    const fastVistosPromo = `
+👉 **Fast Vistos** – Assessoria Especializada para Vistos e Passaportes
+
+Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com vistos de turismo**, nós cuidamos de tudo para você. Nossa equipe garante que cada etapa seja feita com **eficiência, segurança e atenção aos detalhes]**, para que você possa focar no que realmente importa.
+
+💬 **Entre em contato e descubra como podemos ajudar você:**  
+**Telefone/WhatsApp:** ☎ (19) 2042-2785  
+**Site:** https://fastvistos.com.br  
+**E-mail:** contato@fastvistos.com.br
+
+[![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
+**Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
+    `;
+
+    // Append to markdownFinal
+    markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
+    res.json({ success: true, result: markdownFinal });
     // console.log(text1);
 });
 

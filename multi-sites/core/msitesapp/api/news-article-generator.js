@@ -71,7 +71,10 @@ CERTIFICAÇÕES:
     try {
       // Converte \n para quebras de linha reais
       const markdownFinal = parsed.markdownText.replace(/\\n/g, "\n");
-      return markdownFinal;
+      const title = parsed.title;
+      const seoMetaDescription = parsed.seoMetaDescription;
+
+      return { title, seoMetaDescription, markdownFinal };
     } catch (e) {
       console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
       console.error("Conteúdo retornado:\n", artigoReescrito);
