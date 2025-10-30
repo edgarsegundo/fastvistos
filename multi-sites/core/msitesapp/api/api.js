@@ -2,7 +2,7 @@
 import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
 import { reescreverArtigo } from './news-article-generator.js';
-// import { openai } from '../openai-client.js'; // adjust path as needed
+import { openai } from '../openai-client.js'; // adjust path as needed
 
 // reescreverArtigo
 import express from 'express';
