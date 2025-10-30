@@ -1,6 +1,7 @@
 // To add a new lib, always import fom dist like for example: `../../dist/lib/libname.js`
 import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
+import { reescreverArtigo } from '../../dist/lib/news-article-generator.js';
 
 // reescreverArtigo
 import express from 'express';
@@ -308,11 +309,15 @@ app.post('/publish-article', async (req, res) => {
     if (!url1 || !url2) {
         return res.status(400).json({ error: 'Both url1 and url2 are required.' });
     }
-    const text1 = await extractReadableText(url1);
+    const artigo1 = await extractReadableText(url1);
 
-    console.log('publish-article (1)  | text1: ', text1);
+    console.log('publish-article (1)  | artigo1: ', artigo1);
 
-    // reescreverArtigo
+
+    reescreverArtigo(artigo1);
+
+    let newArticle =  reescreverArtigo(artigo1, "xxx");
+    console.log('publish-article (2)  | newArticle: ', newArticle);
 
     // const text2 = await extractReadableText(url2);
     res.json({ success: true });
