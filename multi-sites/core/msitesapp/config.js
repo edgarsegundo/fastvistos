@@ -4,6 +4,7 @@ const config = {
     // api
     api: {
         baseUrl: process.env.API_BASE_URL,
+        openAiKey: process.env.OPENAI_API_KEY
     },
 
     // Circuit Breaker Configuration

@@ -1,21 +1,25 @@
 import "dotenv/config"; 
 import OpenAI from "openai";
 import fs from "fs";
+import { config } from '../config.js';
 
-if (!process.env.OPENAI_API_KEY) {
+const OPENAI_API_KEY = config.api.openAiKey;
+
+if (!OPENAI_API_KEY) {
   console.error("❌ Erro: a variável de ambiente OPENAI_API_KEY não foi definida.");
   console.error("💡 Dica: defina sua chave com um dos comandos abaixo:");
   console.error("   - Linux/macOS: export OPENAI_API_KEY='sua_chave_aqui'");
   console.error("   - Windows PowerShell: setx OPENAI_API_KEY 'sua_chave_aqui'");
-  process.exit(1); // encerra o programa com erro
 }
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // já deve estar configurada
+  apiKey: OPENAI_API_KEY,
 });
 
-export async function reescreverArtigo(textoArtigo1, textoArtigo2, caminhoSaida) {
-  const prompt = `
+export async function reescreverArtigo(textoArtigo1, textoArtigo2) {
+  try {
+    return "reescreverArtigo test text";
+      const prompt = `
 Você é um assistente especialista em criar artigos informativos e originais, com estilo envolvente e linguagem natural. Sua tarefa é gerar conteúdo que **combine e transforme informações de múltiplos artigos**, criando um artigo novo, coeso e pronto para publicação.
 
 TAREFA AVANÇADA:
@@ -57,33 +61,42 @@ CERTIFICAÇÕES:
 * \`seoMetaDescription\` deve ser curta, atraente e otimizada para SEO.
 * A saída JSON deve ser válida, sem erros de formatação.
 * Nenhum conteúdo deve conter nomes, empresas, links ou propagandas.
-`;
+    `;
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [{ role: "user", content: prompt }],
-  });
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+    });
 
-  let artigoReescrito = response.choices[0].message.content;
+    let artigoReescrito = response.choices[0].message.content;
 
-  // Extrai o JSON da resposta (caso venha dentro de um bloco de código)
-  const jsonMatch = artigoReescrito.match(/```json\s*([\s\S]*?)\s*```/);
-  let jsonString = artigoReescrito;
-  if (jsonMatch) {
-    jsonString = jsonMatch[1];
+    // Extrai o JSON da resposta (caso venha dentro de um bloco de código)
+    const jsonMatch = artigoReescrito.match(/```json\s*([\s\S]*?)\s*```/);
+    let jsonString = artigoReescrito;
+    if (jsonMatch) {
+      jsonString = jsonMatch[1];
+    }
+
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch (e) {
+      console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
+      console.error("Conteúdo retornado:\n", artigoReescrito);
+      return null;
+    }
+
+    try {
+      // Converte \n para quebras de linha reais
+      const markdownFinal = parsed.markdownText.replace(/\\n/g, "\n");
+      return markdownFinal;
+    } catch (e) {
+      console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
+      console.error("Conteúdo retornado:\n", artigoReescrito);
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ Erro ao reescrever o artigo:", error);
+    return null;
   }
-
-  let parsed;
-  try {
-    parsed = JSON.parse(jsonString);
-  } catch (e) {
-    console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
-    console.error("Conteúdo retornado:\n", artigoReescrito);
-    process.exit(1);
-  }
-
-  // Converte \n para quebras de linha reais
-  const markdownFinal = parsed.markdownText.replace(/\\n/g, "\n");
-  fs.writeFileSync(caminhoSaida, markdownFinal, "utf8");
-  console.log("✅ Artigo reescrito e salvo em Markdown!");
 }
