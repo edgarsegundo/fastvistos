@@ -1,8 +1,21 @@
 import express from 'express';
+import OpenAI from "openai";
 import api from './api/api.js';
 import { config } from './config.js';
 
 const PORT = config.server.port;
+const OPENAI_API_KEY = config.api.openAiKey;
+
+if (!OPENAI_API_KEY) {
+  console.error("❌ Erro: a variável de ambiente OPENAI_API_KEY não foi definida.");
+  console.error("💡 Dica: defina sua chave com um dos comandos abaixo:");
+  console.error("   - Linux/macOS: export OPENAI_API_KEY='sua_chave_aqui'");
+  console.error("   - Windows PowerShell: setx OPENAI_API_KEY 'sua_chave_aqui'");
+}
+
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+});
 
 const app = express();
 
