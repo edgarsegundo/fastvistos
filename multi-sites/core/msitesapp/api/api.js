@@ -1,7 +1,7 @@
 // To add a new lib, always import fom dist like for example: `../../dist/lib/libname.js`
 import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
-import { reescreverArtigo } from '../../dist/lib/news-article-generator.js';
+import { reescreverArtigo } from './news-article-generator.js';
 
 // reescreverArtigo
 import express from 'express';
