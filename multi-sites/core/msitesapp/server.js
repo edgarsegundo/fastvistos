@@ -3,12 +3,13 @@ import api from './api/api.js';
 import { config } from './config.js';
 
 const PORT = config.server.port;
-if (!config.api.openAiKey) {
-  console.error("❌ Erro: a variável de ambiente OPENAI_API_KEY não foi definida.");
-  console.error("💡 Dica: defina sua chave com um dos comandos abaixo:");
-  console.error("   - Linux/macOS: export OPENAI_API_KEY='sua_chave_aqui'");
-  console.error("   - Windows PowerShell: setx OPENAI_API_KEY 'sua_chave_aqui'");
-}
+
+// if (!config.api.openAiKey) {
+//   console.error("❌ Erro: a variável de ambiente OPENAI_API_KEY não foi definida.");
+//   console.error("💡 Dica: defina sua chave com um dos comandos abaixo:");
+//   console.error("   - Linux/macOS: export OPENAI_API_KEY='sua_chave_aqui'");
+//   console.error("   - Windows PowerShell: setx OPENAI_API_KEY 'sua_chave_aqui'");
+// }
 
 const app = express();
 
