@@ -299,4 +299,11 @@ app.delete('/page-section-version', async (req, res) => {
     }
 });
 
+
+app.post('/publish-article', async (req, res) => {
+
+
+});
+
+
 export default app;
