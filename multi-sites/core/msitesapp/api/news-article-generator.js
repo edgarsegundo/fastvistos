@@ -1,24 +1,6 @@
-import "dotenv/config"; 
-import OpenAI from "openai";
-import fs from "fs";
-import { config } from '../config.js';
-
-const OPENAI_API_KEY = config.api.openAiKey;
-
-if (!OPENAI_API_KEY) {
-  console.error("❌ Erro: a variável de ambiente OPENAI_API_KEY não foi definida.");
-  console.error("💡 Dica: defina sua chave com um dos comandos abaixo:");
-  console.error("   - Linux/macOS: export OPENAI_API_KEY='sua_chave_aqui'");
-  console.error("   - Windows PowerShell: setx OPENAI_API_KEY 'sua_chave_aqui'");
-}
-
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-});
-
-export async function reescreverArtigo(textoArtigo1, textoArtigo2) {
+export async function reescreverArtigo(openai, textoArtigo1, textoArtigo2) {
   try {
-    return "reescreverArtigo test text";
+    // return "reescreverArtigo test text";
       const prompt = `
 Você é um assistente especialista em criar artigos informativos e originais, com estilo envolvente e linguagem natural. Sua tarefa é gerar conteúdo que **combine e transforme informações de múltiplos artigos**, criando um artigo novo, coeso e pronto para publicação.
 
