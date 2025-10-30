@@ -44,10 +44,21 @@ export async function extractReadableText(url) {
         .trim()
 
 
+        // ✂️ Deduplicate identical or near-identical lines
+        const seen = new Set();
         text = text
         .split('\n')
-        .filter((line, i, arr) => line.trim() && arr.indexOf(line) === i)
-        .join('\n');
+        .map(line => line.trim())
+        .filter(line => {
+            if (!line) return false;
+            // Normalize: lowercase + single spaces
+            const normalized = line.toLowerCase().replace(/\s+/g, ' ');
+            if (seen.has(normalized)) return false;
+            seen.add(normalized);
+            return true;
+        })
+        .join('\n');        
+
 
     } catch (err) {
         console.error('Error extracting article:', err);
