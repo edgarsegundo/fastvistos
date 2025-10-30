@@ -1,4 +1,6 @@
+import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
+// reescreverArtigo
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -299,11 +301,22 @@ app.delete('/page-section-version', async (req, res) => {
     }
 });
 
-
 app.post('/publish-article', async (req, res) => {
+    const { url1, url2 } = req.body;
+    if (!url1 || !url2) {
+        return res.status(400).json({ error: 'Both url1 and url2 are required.' });
+    }
+    const text1 = await extractReadableText(url1);
+
+    console.log('publish-article (1)');
 
 
+
+    // reescreverArtigo
+
+    // const text2 = await extractReadableText(url2);
+    res.json({ success: true });
+    // console.log(text1);
 });
-
 
 export default app;
