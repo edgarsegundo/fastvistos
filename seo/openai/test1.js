@@ -15,7 +15,11 @@ const openai = new OpenAI({
 });
 
 async function reescreverArtigo(caminhoArquivoEntrada, caminhoSaida) {
-  const textoOriginal = fs.readFileSync(caminhoArquivoEntrada, "utf8");
+
+  // Lê múltiplos arquivos de entrada e concatena os textos
+  const arquivosEntrada = ["artigo1_original.txt", "artigo2_original.txt"];
+  const textos = arquivosEntrada.map((arquivo) => fs.readFileSync(arquivo, "utf8"));
+  const textoOriginal = textos.join("\n\n");
 
   const prompt = `
 Você é um assistente especializado em reescrever artigos de forma criativa e natural, mantendo o significado original, mas alterando completamente a redação e a estrutura do texto.  
@@ -33,6 +37,7 @@ IMPORTANTE:
 - Não invente fatos novos.  
 - Use títulos e subtítulos claros e criativos.  
 - Use uma linguagem natural, sem parecer robótica.
+- NÃO inclua nomes de pessoas, empresas, marcas, links, contatos, propagandas ou referências de qualquer tipo. O artigo deve ser totalmente neutro e genérico, apenas com conteúdo informativo.
 
 ARTIGO ORIGINAL:
 """
@@ -52,8 +57,9 @@ Gere um artigo completo, totalmente reescrito e pronto para publicação, usando
 
 Certifique-se de que:
 
-* A seoMetaDescription seja curta, atraente e otimizada para SEO.
-* A saída JSON seja válida, sem erros de formatação.
+- A seoMetaDescription seja curta, atraente e otimizada para SEO.
+- A saída JSON seja válida, sem erros de formatação.
+- Nenhum conteúdo contenha nomes, empresas, links ou propagandas.
 `;
 
   const response = await openai.chat.completions.create({
@@ -61,11 +67,29 @@ Certifique-se de que:
     messages: [{ role: "user", content: prompt }],
   });
 
-  const artigoReescrito = response.choices[0].message.content;
+  let artigoReescrito = response.choices[0].message.content;
 
-  fs.writeFileSync(caminhoSaida, artigoReescrito, "utf8");
-  console.log("✅ Artigo reescrito com sucesso!");
+  // Extrai o JSON da resposta (caso venha dentro de um bloco de código)
+  const jsonMatch = artigoReescrito.match(/```json\s*([\s\S]*?)\s*```/);
+  let jsonString = artigoReescrito;
+  if (jsonMatch) {
+    jsonString = jsonMatch[1];
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonString);
+  } catch (e) {
+    console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
+    console.error("Conteúdo retornado:\n", artigoReescrito);
+    process.exit(1);
+  }
+
+  // Converte \n para quebras de linha reais
+  const markdownFinal = parsed.markdownText.replace(/\\n/g, "\n");
+  fs.writeFileSync(caminhoSaida, markdownFinal, "utf8");
+  console.log("✅ Artigo reescrito e salvo em Markdown!");
 }
 
 // Exemplo de uso:
-await reescreverArtigo("artigo_original.txt", "artigo_reescrito.md");
+await reescreverArtigo(null, "artigo_reescrito.md");

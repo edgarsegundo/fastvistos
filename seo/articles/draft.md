@@ -112,6 +112,44 @@ Com a **confirmação do DS-160** em mãos, sua jornada continua. O próximo pas
 
 Fique atento ao nosso blog, onde em breve teremos um guia atualizado sobre como realizar o agendamento da entrevista sem erros.
 
+Perfeito! Aqui está um subcapítulo pronto para o seu artigo, já traduzido e adaptado para o português, com os relatos selecionados e links às fontes originais:
+
+---
+
+## Depoimentos e Experiências de Candidatos
+
+Muitos candidatos compartilham suas experiências ao preencher o formulário DS‑160 e realizar a entrevista para o visto americano. Esses relatos ajudam a compreender o que realmente acontece no processo e fornecem **prova social**, mostrando que o sucesso é possível seguindo boas práticas.
+
+### Experiências Reais de Candidatos
+
+1. **Experiência direta e objetiva**
+
+> “Queria compartilhar a experiência dos meus pais com o visto B2, como agradecimento a este grupo por ajudar em cada etapa – do DS‑160 à aprovação do visto. O oficial fez apenas duas perguntas: 1. Para onde vocês vão? 2. Quantos dias vão ficar? O visto foi aprovado imediatamente! Acredito que preencher corretamente o DS‑160 foi fundamental.”
+> **Fonte:** [Reddit – r/usvisascheduling](https://www.reddit.com/r/usvisascheduling/comments/1jt3ar4?utm_source=chatgpt.com)
+
+2. **Organização e atenção aos detalhes**
+
+> “Após semanas acompanhando o fórum silenciosamente, finalmente consegui. Agendei os dois slots de entrevista para duas semanas depois. Dica: salve cada página de confirmação que receber. Eu não salvei a confirmação atualizada do agendamento e precisei imprimir o e-mail, mas deu tudo certo.”
+> **Fonte:** [Reddit – r/usvisascheduling](https://www.reddit.com/r/usvisascheduling/comments/1m65fuc?utm_source=chatgpt.com)
+
+3. **A importância de evitar erros no DS‑160**
+
+> “Quero compartilhar algumas coisas que gostaria de saber antes da minha entrevista para o visto dos EUA… Confira duas vezes as informações no DS‑160. Qualquer inconsistência pode causar atrasos ou dúvidas.”
+> **Fonte:** [Reddit – r/NCLEXVisaUpdates](https://www.reddit.com/r/NCLEXVisaUpdates/comments/1oieso9?utm_source=chatgpt.com)
+
+### Relato em vídeo (em português)
+
+Um depoimento completo de aprovação do visto B1/B2, mostrando a entrevista no consulado brasileiro:
+[✅ Visto APROVADO – Entrevista no Consulado Americano | Depoimento Completo (2023)](https://www.youtube.com/watch?v=jQvynwZ8hdc&utm_source=chatgpt.com)
+
+### Principais lições desses relatos
+
+* **DS‑160 correto e consistente:** preencha com atenção, revise e imprima a confirmação.
+* **Organização:** leve todos os documentos necessários e confirme horários de agendamento.
+* **Respostas claras e objetivas:** durante a entrevista, seja direto e honesto.
+* **Evite erros comuns:** datas incorretas, estado civil errado ou omissão de empregos podem gerar problemas.
+
+
 ## Conclusão: Prepare-se com Confiança
 
 Salvar e imprimir a **confirmação do DS-160** corretamente é um detalhe simples, mas que tem um peso enorme no sucesso da sua aplicação. Seguindo este guia, você evita o risco de ser barrado na porta do consulado por um documento inválido.
@@ -130,21 +168,4 @@ Agora que você está com o documento oficial em mãos, respire fundo e siga par
 A [Fast Vistos](https://fastvistos.com.br/) oferece assessoria completa para tirar suas dúvidas e guiar você em cada etapa, garantindo mais tranquilidade.  
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-
-## Perguntas Frequentes sobre a Confirmação do DS-160
-
-**O que acontece se eu levar o rascunho da confirmação para o consulado?**
-
-Levar o **rascunho da confirmação** em vez da **confirmação oficial do DS-160** pode resultar em recusa de atendimento no consulado. O documento oficial é obrigatório, pois contém o **código de barras** e as informações validadas pelo sistema. Sempre confira se o seu documento não possui botões como "Print Application" ou "Print Confirmation" na parte inferior.
-
-**Posso gerar novamente a confirmação oficial do DS-160?**
-
-Em geral, é possível acessar novamente a **confirmação oficial do DS-160** pelo site do consulado, usando o número de identificação da aplicação e as informações pessoais cadastradas. No entanto, nem sempre será possível recuperar o documento com todas as respostas detalhadas, por isso é fundamental salvar e imprimir assim que finalizar o preenchimento. [U.S. Department of State, 2025]
-
-**Como corrigir erros após enviar o DS-160?**
-
-Se você identificar **erros no DS-160** após o envio, não é possível editar o formulário já submetido. A recomendação é preencher um novo DS-160 com as informações corretas e levar ambos os comprovantes (o antigo e o novo) no dia da entrevista. Informe o oficial consular sobre o erro e apresente o formulário atualizado. [FAQ DS-160, 2025]
-
-Se ainda restarem **dúvidas DS-160** ou situações específicas, consulte a seção de **FAQ DS-160** no site oficial do consulado ou busque orientação com profissionais especializados em vistos.
-
 
