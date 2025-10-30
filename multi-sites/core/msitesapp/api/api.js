@@ -311,10 +311,12 @@ app.post('/publish-article', async (req, res) => {
         return res.status(400).json({ error: 'Both url1 and url2 are required.' });
     }
     const artigo1 = await extractReadableText(url1);
+    const artigo2 = await extractReadableText(url2);
+
 
     console.log('publish-article (1)  | artigo1: ', artigo1);
 
-    let newArticle =  await reescreverArtigo(openai, artigo1, "xxx");
+    let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
     console.log('publish-article (2)  | newArticle: ', newArticle);
 
     res.json({ success: true, result: newArticle });
