@@ -5,7 +5,7 @@ import { Readability } from '@mozilla/readability'
 import { htmlToText } from 'html-to-text'
 
 export async function extractReadableText(url) {
-    return "** extractReadableText called.";
+    // return "** extractReadableText called.";
     let text = null;
     try {
         const response = await fetch(url)
