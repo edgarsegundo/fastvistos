@@ -261,6 +261,58 @@ export class BlogService {
         }
     }
 
+    /**
+     * Create a new blog article.
+     * @param data Partial<blog_article> - All required fields for creation.
+     * @returns The created blog_article record.
+     */
+    static async createBlogArticle(data: {
+        id: string,
+        title: string,
+        content_md?: string,
+        type: string,
+        slug?: string,
+        published?: Date,
+        image?: string,
+        business_id?: string,
+        blog_topic_id: string,
+        seo_description?: string,
+        seo_image_caption?: string,
+        seo_image_height?: number,
+        seo_image_width?: number
+        // faq_json?: any,
+    }) {
+        try {
+            const now = new Date();
+            const businessId = data.business_id || this.getBusinessId();
+
+            const article = await prisma.blog_article.create({
+                data: {
+                    id: data.id,
+                    created: now,
+                    modified: now,
+                    is_removed: false,
+                    title: data.title,
+                    content_md: data.content_md,
+                    type: data.type,
+                    slug: data.slug,
+                    published: data.published,
+                    image: data.image,
+                    business_id: businessId,
+                    blog_topic_id: data.blog_topic_id,
+                    seo_description: data.seo_description,
+                    seo_image_caption: data.seo_image_caption,
+                    seo_image_height: data.seo_image_height,
+                    seo_image_width: data.seo_image_width,
+                    // faq_json: data.faq_json,
+                }
+            });
+            return article;
+        } catch (error) {
+            console.error('Error creating blog article:', error);
+            throw error;
+        }
+    }
     // Format date for display
     static formatDate(date: Date | string | null | undefined, locale: string = 'pt-BR'): string {
         if (!date) return 'Data não disponível';
