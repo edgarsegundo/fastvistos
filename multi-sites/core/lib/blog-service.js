@@ -37,7 +37,7 @@ export class BlogService {
                     seo_image_caption: data.seo_image_caption,
                     seo_image_height: data.seo_image_height,
                     seo_image_width: data.seo_image_width,
-                    // faq_json: data.faq_json,
+                    faq_json: [],
                 }
             });
             return article;
