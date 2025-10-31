@@ -361,8 +361,23 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
         // Append to markdownFinal
         // markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
-        
 
+        // implement calling createBlogArticle
+        // Instructions:
+        // 1) id, generate a new UUID for the article
+        // 2) title, just make a mockup title for now like "Artigo Gerado"
+        // 3) content_md, just make a simple markdown content like "# Artigo Gerado\n\nConteúdo do artigo."
+        // 4) type, use "public"
+        // 5) slug, generate a slug from the title like "artigo-gerado"
+        // 6) published, use new Date() for now
+        // 7) image, use the image_url from the request body
+        // 8) business_id, use the business_id from the request body
+        // 9) blog_topic_id, use the topic_id from the request body
+        // 10) seo_description, use a mockup description like "Descrição do artigo gerado."
+        // 11) seo_image_caption, just use "Imagem do artigo gerado"
+        // 12) seo_image_height and seo_image_width, just use 600 and 800 for now
+        console.log('🛑🛑🛑 Calling createBlogArticle with generated article data...');
+        
         try {
             await publishSiteFromVps(business_name);
         } catch (err) {
