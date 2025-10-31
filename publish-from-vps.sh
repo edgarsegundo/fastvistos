@@ -18,10 +18,10 @@ npm run download-images:"$SITEID"
 cd /home/edgar/Repos/fastvistos && git restore . && git pull
 
 ## Build site on VPS
-export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && npm run build:$SITEID
+export "PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && npm run build:$SITEID"
 
 ## Deploy site on VPS
-export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && node deploy-site.js '$SITEID'
+# export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && node deploy-site.js '$SITEID'
 
 ## Sync site images on VPS
-export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && sudo ./sync-site-images.sh $SITEID
+# export PATH=\$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && sudo ./sync-site-images.sh $SITEID
