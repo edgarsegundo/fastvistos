@@ -3,6 +3,7 @@ import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
 import { reescreverArtigo } from './news-article-generator.js';
 import { openai } from '../openai-client.js'; // adjust path as needed
+const { BlogService } = await import('../../dist/lib/blog-service.js');
 
 // reescreverArtigo
 import express from 'express';
@@ -363,7 +364,6 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
 
         // implement calling createBlogArticle
-        // Instructions:
         // 1) id, generate a new UUID for the article
         // 2) title, just make a mockup title for now like "Artigo Gerado"
         // 3) content_md, just make a simple markdown content like "# Artigo Gerado\n\nConteúdo do artigo."
@@ -376,8 +376,42 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // 10) seo_description, use a mockup description like "Descrição do artigo gerado."
         // 11) seo_image_caption, just use "Imagem do artigo gerado"
         // 12) seo_image_height and seo_image_width, just use 600 and 800 for now
-        console.log('🛑🛑🛑 Calling createBlogArticle with generated article data...');
+
+        // Generate UUID (v4) for id
+        const uuidv4 = () => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (Math.random()*16|0).toString(16));
+        const id = uuidv4();
+        const title = 'Artigo Gerado';
+        const content_md = '# Artigo Gerado\n\nConteúdo do artigo.';
+        const type = 'public';
+        const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const published = new Date();
+        const image = image_url;
+        const blog_topic_id = topic_id;
+        const seo_description = 'Descrição do artigo gerado.';
+        const seo_image_caption = 'Imagem do artigo gerado';
+        const seo_image_height = 600;
+        const seo_image_width = 800;
+
+        // Import BlogService dynamically to avoid circular deps
         
+        console.log('🛑🛑🛑 Calling createBlogArticle with generated article data...');
+        const createdArticle = await BlogService.createBlogArticle({
+            id,
+            title,
+            content_md,
+            type,
+            slug,
+            published,
+            image,
+            business_id,
+            blog_topic_id,
+            seo_description,
+            seo_image_caption,
+            seo_image_height,
+            seo_image_width,
+        });
+        console.log('✅ Article created:', createdArticle?.id);
+
         try {
             await publishSiteFromVps(business_name);
         } catch (err) {
