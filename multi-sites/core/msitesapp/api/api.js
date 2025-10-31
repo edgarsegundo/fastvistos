@@ -333,7 +333,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
         // Append to markdownFinal
         // markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
-        console.log('Article publishing simulated.'); // Placeholder for actual publishing logic
+        
 
         try {
             await publishSiteFromVps();
@@ -341,7 +341,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
             console.error('[ERROR] Failed to execute publish-from-vps.sh:', err);
             return res.status(500).json({ success: false, error: 'Failed to execute publish-from-vps.sh' });
         }
-
+        console.log('Article publishing simulated.'); // Placeholder for actual publishing logic
         res.json({ success: true });
     } catch (error) {
         console.error('Error in /publish-article:', error);
