@@ -3,6 +3,7 @@ import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
 import { reescreverArtigo } from './news-article-generator.js';
 import { openai } from '../openai-client.js'; // adjust path as needed
+import { v4 as uuidv4 } from 'uuid';
 const { BlogService } = await import('../../dist/lib/blog-service.js');
 
 // reescreverArtigo
@@ -377,9 +378,8 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // 11) seo_image_caption, just use "Imagem do artigo gerado"
         // 12) seo_image_height and seo_image_width, just use 600 and 800 for now
 
-        // Generate UUID (v4) for id
-        const uuidv4 = () => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (Math.random()*16|0).toString(16));
-        const id = uuidv4();
+    // Generate UUID (v4) for id
+    const id = uuidv4();
         const title = 'Artigo Gerado';
         const content_md = '# Artigo Gerado\n\nConteúdo do artigo.';
         const type = 'public';

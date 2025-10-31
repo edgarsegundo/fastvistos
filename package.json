@@ -7,7 +7,7 @@
     "msitesapp-start": "node ./multi-sites/core/msitesapp/server.js",
     "msitesapp-debug": "node --inspect=0.0.0.0:9229 --trace-warnings ./multi-sites/core/msitesapp/server.js",
     "msitesapp-debug-brk": "node --inspect-brk=0.0.0.0:9229 --trace-warnings ./multi-sites/core/msitesapp/server.js",
-    "postbuild:msitesapp": "cp ./multi-sites/core/lib/*.js ./multi-sites/core/dist/lib/",
+    "postbuild:msitesapp": "cp ./multi-sites/core/lib/* ./multi-sites/core/dist/lib/",
     "build:msitesapp": "tsc -p ./multi-sites/core/msitesapp/tsconfig.json && npm run postbuild:msitesapp",
     "dev": "astro dev",
     "build": "astro build",
