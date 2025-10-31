@@ -334,11 +334,40 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // Append to markdownFinal
         // markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
         console.log('Article publishing simulated.'); // Placeholder for actual publishing logic
+
+        try {
+            await publishSiteFromVps();
+        } catch (err) {
+            console.error('[ERROR] Failed to execute publish-from-vps.sh:', err);
+            return res.status(500).json({ success: false, error: 'Failed to execute publish-from-vps.sh' });
+        }
+
         res.json({ success: true });
     } catch (error) {
         console.error('Error in /publish-article:', error);
         res.status(500).json({ success: false, error: 'Internal server error.' });
     }
 });
+
+async function publishSiteFromVps() {
+    // Execute the shell script before publishing logic
+    const { exec } = await import('child_process');
+    const scriptPath = '/home/edgar/Repos/fastvistos/publish-from-vps.sh';
+    const siteId = 'fastvistos';
+    await new Promise((resolve, reject) => {
+        exec(`${scriptPath} ${siteId}`, {
+            cwd: '/home/edgar/Repos/fastvistos',
+            env: process.env,
+        }, (error, stdout, stderr) => {
+            console.log('[DEBUG] publish-from-vps.sh stdout:', stdout);
+            if (stderr) console.warn('[DEBUG] publish-from-vps.sh stderr:', stderr);
+            if (error) {
+                console.error('[ERROR] publish-from-vps.sh failed:', error);
+                return reject(error);
+            }
+            resolve({ stdout, stderr });
+        });
+    });
+}
 
 export default app;
