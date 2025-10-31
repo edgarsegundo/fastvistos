@@ -307,10 +307,38 @@ app.delete('/page-section-version', async (req, res) => {
 
 app.post('/publish-article', async (req, res) => {
     try {
-        const { url1, url2 } = req.body;
+        const {
+            url1,
+            url2,
+            topic_id,
+            business_id,
+            business_name,
+            image_url,
+            image_alt
+        } = req.body;
+
+        console.log('🛑🛑🛑 Received /publish-article request with body:', JSON.stringify(req.body, null, 2));
+        // Validate required fields
         if (!url1 || !url2) {
             return res.status(400).json({ error: 'Both url1 and url2 are required.' });
         }
+        if (!topic_id) {
+            return res.status(400).json({ error: 'topic_id is required.' });
+        }
+        if (!business_id) {
+            return res.status(400).json({ error: 'business_id is required.' });
+        }
+        if (!business_name) {
+            return res.status(400).json({ error: 'business_name is required.' });
+        }
+        if (!image_url) {
+            return res.status(400).json({ error: 'image_url is required.' });
+        }
+        if (!image_alt) {
+            return res.status(400).json({ error: 'image_alt is required.' });
+        }
+
+        // Now you can use all these consts below in your logic
         // const artigo1 = await extractReadableText(url1);
         // const artigo2 = await extractReadableText(url2);
 
@@ -336,7 +364,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         
 
         try {
-            await publishSiteFromVps();
+            await publishSiteFromVps(business_name);
         } catch (err) {
             console.error('[ERROR] Failed to execute publish-from-vps.sh:', err);
             return res.status(500).json({ success: false, error: 'Failed to execute publish-from-vps.sh' });
@@ -349,11 +377,10 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
     }
 });
 
-async function publishSiteFromVps() {
+async function publishSiteFromVps(siteId) {
     // Execute the shell script before publishing logic
     const { exec } = await import('child_process');
     const scriptPath = '/home/edgar/Repos/fastvistos/publish-from-vps.sh';
-    const siteId = 'fastvistos';
     await new Promise((resolve, reject) => {
         exec(`${scriptPath} ${siteId}`, {
             cwd: '/home/edgar/Repos/fastvistos',
