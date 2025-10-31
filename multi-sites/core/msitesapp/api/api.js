@@ -378,15 +378,19 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // 11) seo_image_caption, just use "Imagem do artigo gerado"
         // 12) seo_image_height and seo_image_width, just use 600 and 800 for now
 
-    // Generate UUID (v4) for id
-    const id = uuidv4();
+        // Generate UUID (v4) for id
+        // Generate UUID (v4) for id and remove dashes
+        let id = uuidv4();
+        id = id.replace(/-/g, '');
         const title = 'Artigo Gerado';
         const content_md = '# Artigo Gerado\n\nConteúdo do artigo.';
         const type = 'public';
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const published = new Date();
         const image = image_url;
-        const blog_topic_id = topic_id;
+        // Remove dashes from blog_topic_id and business_id if present
+        const blog_topic_id = typeof topic_id === 'string' ? topic_id.replace(/-/g, '') : topic_id;
+        const businessIdNoDash = typeof business_id === 'string' ? business_id.replace(/-/g, '') : business_id;
         const seo_description = 'Descrição do artigo gerado.';
         const seo_image_caption = 'Imagem do artigo gerado';
         const seo_image_height = 600;
@@ -403,7 +407,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
             slug,
             published,
             image,
-            business_id,
+            business_id: businessIdNoDash,
             blog_topic_id,
             seo_description,
             seo_image_caption,
