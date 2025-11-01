@@ -52,6 +52,8 @@ CERTIFICAÇÕES:
 
     let artigoReescrito = response.choices[0].message.content;
 
+    console.log('🛑🛑🛑 Artigo Reescrito Raw:', artigoReescrito);
+
     // Extrai o JSON da resposta (caso venha dentro de um bloco de código)
     const jsonMatch = artigoReescrito.match(/```json\s*([\s\S]*?)\s*```/);
     let jsonString = artigoReescrito;
