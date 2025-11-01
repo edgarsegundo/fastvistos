@@ -353,6 +353,12 @@ app.post('/publish-article', async (req, res) => {
         //     "markdownText": "Texto completo do artigo em Markdown"
         // };
 
+        // Validate the newArticle object
+        if (!newArticle || !newArticle.title || !newArticle.seoMetaDescription || !newArticle.markdownText) {
+            console.error('❌ Invalid article structure:', newArticle);
+            return res.status(500).json({ error: 'Failed to generate article. Invalid response from AI.' });
+        }
+
         // return { title, seoMetaDescription, markdownFinal };
         const fastVistosPromo = `
 👉 **Fast Vistos** – Assessoria Especializada para Vistos e Passaportes
