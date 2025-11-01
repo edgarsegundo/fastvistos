@@ -375,7 +375,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         `;
 
         // Append to markdownFinal
-        // markdownFinal = `${markdownFinal}\n\n${fastVistosPromo}`;
+        const content_md = `${newArticle.markdownText}\n\n${fastVistosPromo}`;
 
         // implement calling createBlogArticle
         // 1) id, generate a new UUID for the article
@@ -396,7 +396,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         let id = uuidv4();
         id = id.replace(/-/g, '');
         const title = newArticle.title;
-        const content_md = newArticle.markdownText;
+        
         const type = 'public';
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const published = new Date();
