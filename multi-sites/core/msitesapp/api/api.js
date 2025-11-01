@@ -343,13 +343,13 @@ app.post('/publish-article', async (req, res) => {
         const artigo1 = await extractReadableText(url1);
         const artigo2 = await extractReadableText(url2);
 
-        // let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
+        let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
 
-        let newArticle =  {
-            "title": "Artigo Auto Gerado",
-            "seoMetaDescription": "Descrição otimizada para SEO",
-            "markdownText": "Texto completo do artigo em Markdown"
-        };        
+        // let newArticle =  {
+        //     "title": "Artigo Auto Gerado",
+        //     "seoMetaDescription": "Descrição otimizada para SEO",
+        //     "markdownText": "Texto completo do artigo em Markdown"
+        // };        
 
         // return { title, seoMetaDescription, markdownFinal };
         const fastVistosPromo = `
