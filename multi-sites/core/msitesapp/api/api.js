@@ -6,7 +6,6 @@ import { openai } from '../openai-client.js'; // adjust path as needed
 import { v4 as uuidv4 } from 'uuid';
 const { BlogService } = await import('../../dist/lib/blog-service.js');
 
-// reescreverArtigo
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -341,10 +340,16 @@ app.post('/publish-article', async (req, res) => {
         }
 
         // Now you can use all these consts below in your logic
-        // const artigo1 = await extractReadableText(url1);
-        // const artigo2 = await extractReadableText(url2);
+        const artigo1 = await extractReadableText(url1);
+        const artigo2 = await extractReadableText(url2);
 
         // let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
+
+        let newArticle =  {
+            "title": "Artigo Auto Gerado",
+            "seoMetaDescription": "Descrição otimizada para SEO",
+            "markdownText": "Texto completo do artigo em Markdown"
+        };        
 
         // return { title, seoMetaDescription, markdownFinal };
         const fastVistosPromo = `
@@ -382,8 +387,8 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // Generate UUID (v4) for id and remove dashes
         let id = uuidv4();
         id = id.replace(/-/g, '');
-        const title = 'Artigo Gerado';
-        const content_md = '# Artigo Gerado\n\nConteúdo do artigo.';
+        const title = newArticle.title;
+        const content_md = newArticle.markdownText;
         const type = 'public';
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const published = new Date();
@@ -391,8 +396,8 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // Remove dashes from blog_topic_id and business_id if present
         const blog_topic_id = typeof topic_id === 'string' ? topic_id.replace(/-/g, '') : topic_id;
         const businessIdNoDash = typeof business_id === 'string' ? business_id.replace(/-/g, '') : business_id;
-        const seo_description = 'Descrição do artigo gerado.';
-        const seo_image_caption = 'Imagem do artigo gerado';
+        const seo_description = newArticle.seoMetaDescription;
+        const seo_image_caption = newArticle.title;
         const seo_image_height = 600;
         const seo_image_width = 800;
 
