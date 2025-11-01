@@ -429,6 +429,11 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         });
         console.log('✅ Article created:', createdArticle?.id);
 
+        // Count characters in content_md
+        const charCount = content_md ? content_md.length : 0;
+        // Build the blog article URL
+        const blogUrl = `https://fastvistos.com.br/blog/${slug}/?debug=true`;
+
         try {
             await publishSiteFromVps(business_name);
         } catch (err) {
@@ -436,7 +441,11 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
             return res.status(500).json({ success: false, error: 'Failed to execute publish-from-vps.sh' });
         }
         console.log('Article publishing simulated.'); // Placeholder for actual publishing logic
-        res.json({ success: true });
+        res.json({
+            success: true,
+            charCount,
+            blogUrl
+        });
     } catch (error) {
         console.error('Error in /publish-article:', error);
         res.status(500).json({ success: false, error: 'Internal server error.' });
