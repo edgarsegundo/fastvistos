@@ -2,7 +2,7 @@
 title: "Quais documentos levar no CASV em 2025"
 description: "KSDKMNTSLVRNKSVM"
 pubDate: "2025-11-03T14:13:22.000Z"
-updatedDate: "2025-11-03T14:25:58.162Z"
+updatedDate: "2025-11-03T14:28:16.658Z"
 slug: "documentos-levar-casv-2025"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -101,8 +101,8 @@ Após o atendimento no CASV, o próximo passo é a **entrevista no consulado**. 
 Depois da aprovação, o **passaporte com o visto é devolvido** no local de entrega escolhido durante o agendamento.
 
 <!--<RelatedArticle>
-<id>0684909c488e4aa6a4ed027957eb9c85</id>
-<text>Se quiser entender o processo de devolução, leia nosso outro artigo sobre como [**Acompanhar a Entrega do Passaporte** Após Aprovação do **Visto Americano**](<<ARTICLE-URL>>) .</text>
+<id>286af0a658d543fc9d901d3ebbfac74e</id>
+<text>Se quiser entender o processo de devolução, leia nosso outro artigo sobre como [Consultar e Acompanhar o **Status do Visto Americano**: Guia Completo 2025](<<ARTICLE-URL>>) .</text>
 </RelatedArticle>
 -->
 
