@@ -4,6 +4,7 @@ import { WebPageService } from '../../dist/lib/webpage-service.js';
 import { reescreverArtigo } from './news-article-generator.js';
 import { openai } from '../openai-client.js'; // adjust path as needed
 import { v4 as uuidv4 } from 'uuid';
+import slugify from 'slugify';
 const { BlogService } = await import('../../dist/lib/blog-service.js');
 
 import express from 'express';
@@ -398,7 +399,11 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         const title = newArticle.title;
         
         const type = 'public';
-        const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const slug = slugify(title, {
+            lower: true,       // tudo minúsculo
+            strict: true,      // remove caracteres não-alfanuméricos
+            locale: 'pt'       // trata acentuação PT-BR corretamente
+        });
         const published = new Date();
         const image = image_url;
         // Remove dashes from blog_topic_id and business_id if present
