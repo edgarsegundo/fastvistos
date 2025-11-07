@@ -32,7 +32,7 @@ Sua missão é transformar os tópicos que eu fornecer em um **artigo completo, 
   * Estruture bem os headings.
   * Use listas, perguntas, e exemplos para enriquecer o texto.
   * Inclua links internos e externos apenas quando forem realmente úteis.
-* Evite repetições forçadas e termos genéricos.
+  * Evite repetições forçadas e termos genéricos.
 
 ---
 
@@ -127,45 +127,124 @@ Ao longo do artigo, insira 2 a 3 links de referência para outros artigos do nos
 ### **13. **Tópicos e sub-tópicos (Esqueleto do artigo):**
 
 ```
-### **H1: Guia Completo para Agendar sua Entrevista do Visto Americano**
+## **1️⃣ Title Tag**
 
-### **Resumo introdutório:**
-Este guia detalha todo o processo de **agendamento do visto americano**, desde o cadastro no site oficial até a confirmação da entrevista no consulado. Você aprenderá o **passo a passo** completo, os **documentos necessários**, como verificar **datas disponíveis** em cidades como **São Paulo, Brasília e Porto Alegre**, e dicas essenciais para garantir seu agendamento com sucesso.
+> Quais documentos levar no CASV em 2025 – Checklist completo e atualizado
 
-### **H2: Entendendo o Processo de Agendamento**
-*   **H3: O que é e como funciona o agendamento consular?**
-*   **H3: Tipos de visto e a necessidade da entrevista**
+----------
 
-### **H2: Passo a Passo para Marcar sua Entrevista**
-*   **H3: Cadastro e login no site oficial do visto americano**
-*   **H3: Preenchimento do formulário DS-160 e pagamento da taxa**
-*   **H3: Acessando o sistema de agendamento para escolher data e local**
-*   **H3: Como consultar e confirmar seu agendamento**
+## **2️⃣ Meta Description**
 
-### **H2: Documentos, Taxas e Preparação para a Entrevista**
-*   **H3: Lista de documentos obrigatórios para o dia da entrevista**
-*   **H3: Valores e formas de pagamento das taxas consulares**
-*   **H3: O que esperar durante a entrevista no consulado**
+> Descubra todos os documentos essenciais para atendimento no CASV em 2025: passaporte, DS‑160, comprovante de agendamento e taxa MRV. Prepare-se e evite atrasos!
 
-### **H2: Agendamento por Cidade: Consulados dos EUA no Brasil**
-*   **H3: Como agendar no Consulado de São Paulo (SP)**
-*   **H3: Datas e procedimentos no Consulado de Brasília**
-*   **H3: Passo a passo para o agendamento em Porto Alegre**
-*   **H3: Informações sobre outras localidades (Rio de Janeiro, Belo Horizonte)**
+----------
 
-### **H2: Dicas e Solução de Problemas Comuns**
-*   **H3: O que fazer se não houver datas disponíveis?**
-*   **H3: Como remarcar ou consultar seu agendamento existente**
-*   **H3: Sites oficiais e links importantes para evitar golpes**
+## **3️⃣ URL sugerida**
 
-### **FAQ: Perguntas Frequentes sobre o Agendamento**
-1.  **Qual é o site oficial para agendar o visto americano?**
-2.  **Como verificar as datas disponíveis para a entrevista?**
-3.  **É possível adiar ou remarcar a data do meu agendamento?**
-4.  **Quanto tempo demora para conseguir uma vaga no consulado?**
-5.  **Preciso de agendamento para retirar o visto ou apenas para a entrevista?**
+> /documentos-levar-casv-2025/
 
-### **Meta Title:** Agendar Visto Americano: Passo a Passo e Datas 2024
-### **Meta Description:** Guia completo para agendar sua entrevista do visto americano. Aprenda o passo a passo no site oficial, documentos necessários e como consultar datas em SP, Brasília e Porto Alegre.
+----------
+
+## **4️⃣ Estrutura de H2/H3**
+
+### H2: O que é o CASV e por que é importante levar os documentos corretos
+
+-   Explicar brevemente o que é o CASV (Centro de Atendimento ao Solicitante de Visto).
+    
+-   Destacar que **documentos corretos evitam atrasos e problemas na entrevista consular**.
+    
+
+### H2: Quais documentos levar no atendimento no CASV
+
+-   **H3: Passaporte válido** – foto, validade mínima.
+    
+-   **H3: Confirmação do formulário DS‑160** – impressão do formulário com QR code.
+    
+-   **H3: Comprovante de agendamento** – datas corretas para o CASV e entrevista.
+    
+-   **H3: Pagamento da taxa MRV** – boleto ou comprovante eletrônico.
+    
+-   **H3: Documentos de menores ou dependentes** – quando aplicável.
+    
+
+### H2: Itens proibidos no CASV (dicas de preparação)
+
+-   Celulares, eletrônicos, mochilas grandes.
+    
+-   Documentos desatualizados ou incompletos.
+    
+
+### H2: Entrevista consular e retirada de passaporte – o que muda
+
+-   Breve explicação sobre fluxo após CASV.
+    
+-   Link interno para artigos já existentes sobre entrevista e retirada.
+    
+
+### H2: Checklist imprimível de documentos CASV 2025
+
+-   Lista resumida pronta para download / PDF.
+    
+-   Sugestão: **botão “Baixe o checklist”**.
+    
+
+### H2: Perguntas frequentes (FAQ Schema)
+
+-   **H3: Posso levar o celular no CASV?**
+    
+-   **H3: E se meu DS‑160 tiver erro?**
+    
+-   **H3: Qual a validade mínima do passaporte?**
+    
+-   **H3: Documentos de menores são obrigatórios?**
+    
+
+### H2: Conclusão
+
+-   Incentivar o leitor a **verificar todos os documentos antes da data de atendimento**.
+    
+-   Inserir link interno: “Para mais detalhes sobre entrevista e retirada de passaporte, veja nossos guias completos”.
+    
+
+----------
+
+## **5️⃣ Checklist sugerido (visível no artigo)**
+
+-   Passaporte válido
+    
+-   Confirmação DS‑160 impressa
+    
+-   Comprovante de agendamento CASV
+    
+-   Pagamento da taxa MRV
+    
+-   Documentos de menores (se aplicável)
+    
+-   Fotografia recente (se exigido)
+    
+-   Itens proibidos deixados em casa
+    
+
+_(Adicionar botão para download em PDF)_
+
+----------
+
+## **6️⃣ Dicas de SEO On-Page**
+
+1.  **Palavra-chave principal**: “quais documentos levar no CASV 2025” → usar no title, meta, H2 e no início do texto.
+    
+2.  **Palavras-chave secundárias**: “checklist CASV”, “documentos entrevista visto americano”, “preparar CASV 2025”.
+    
+3.  **Interlinkagem**:
+    
+    -   Linkar artigos existentes sobre CASV e retirada de passaporte.
+        
+    -   Linkar página principal sobre visto americano.
+        
+4.  **Rich Snippet**: usar FAQ Schema com as perguntas frequentes.
+    
+5.  **Imagens**: incluir imagens com alt text como “Documentos CASV 2025 checklist”.
+    
+
 ```
 

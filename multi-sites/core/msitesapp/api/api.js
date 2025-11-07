@@ -404,6 +404,9 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
             strict: true,      // remove caracteres não-alfanuméricos
             locale: 'pt'       // trata acentuação PT-BR corretamente
         });
+        
+
+
         const published = new Date();
         const image = image_url;
         // Remove dashes from blog_topic_id and business_id if present
