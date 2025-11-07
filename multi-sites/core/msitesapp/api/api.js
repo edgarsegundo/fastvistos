@@ -480,4 +480,45 @@ async function publishSiteFromVps(siteId) {
     });
 }
 
+// POST endpoint to receive email data from Postfix/Go pipeline
+app.post('postfix/receive-email', async (req, res) => {
+    try {
+        const { from, subject, body, nome, valor, data } = req.body;
+        
+        // Validate required fields
+        if (!from || !subject || !body) {
+            return res.status(400).json({ error: 'Missing required fields: from, subject, body.' });
+        }
+
+        // Log received email data
+        console.log('Received email from Postfix:', {
+            from,
+            subject,
+            nome: nome || 'N/A',
+            valor: valor || 'N/A',
+            data: data || 'N/A'
+        });
+
+        // TODO: Process the email data (save to database, send notification, etc.)
+        // Example:
+        // await EmailService.processPixTransfer({
+        //     from,
+        //     subject,
+        //     body,
+        //     nome,
+        //     valor,
+        //     data
+        // });
+
+        // Return success response
+        res.status(200).json({ 
+            success: true, 
+            message: 'Email received and processed successfully.' 
+        });
+    } catch (error) {
+        console.error('Error in /postfix/receive-email:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
 export default app;
