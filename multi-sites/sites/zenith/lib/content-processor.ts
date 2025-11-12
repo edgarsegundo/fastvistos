@@ -234,6 +234,60 @@ export class ContentProcessor {
     }
 
     /**
+     * Add automatic IDs to all headings (h2, h3, h4) for table of contents navigation
+     * @param content - HTML content
+     * @returns Content with IDs added to headings
+     */
+    static addHeadingIds(content: string): string {
+        if (!content || typeof content !== 'string') {
+            return content;
+        }
+
+        console.log('🔍 [HeadingIDs] Processing headings for TOC navigation...');
+
+        let processedContent = content;
+
+        // Process h2 headings - usando title diretamente
+        processedContent = processedContent.replace(
+            /<h2>(.*?)<\/h2>/gi,
+            (match, headingText) => {
+                // Usa o texto do heading como ID (mais fácil para criar TOC)
+                const id = headingText.trim();
+                console.log(`✅ [HeadingIDs] Added ID to h2: "${headingText}" -> #${id}`);
+                return `<h2 id="${id}">${headingText}</h2>`;
+            }
+        );
+
+        console.log("🔍 [HeadingIDs] All headings processed with IDs");
+        console.log(processedContent);
+
+        // // Process h3 headings (optional, for nested TOC)
+        // processedContent = processedContent.replace(
+        //     /<h3>(.*?)<\/h3>/gi,
+        //     (match, headingText) => {
+        //         const id = this.generateSlug(headingText);
+        //         console.log(`✅ [HeadingIDs] Added ID to h3: "${headingText}" -> #${id}`);
+        //         return `<h3 id="${id}">${headingText}</h3>`;
+        //     }
+        // );
+
+        // // Process h4 headings (optional)
+        // processedContent = processedContent.replace(
+        //     /<h4>(.*?)<\/h4>/gi,
+        //     (match, headingText) => {
+        //         const id = this.generateSlug(headingText);
+        //         console.log(`✅ [HeadingIDs] Added ID to h4: "${headingText}" -> #${id}`);
+        //         return `<h4 id="${id}">${headingText}</h4>`;
+        //     }
+        // );
+
+        console.log('✅ [HeadingIDs] All headings processed with IDs');
+
+        return processedContent;
+    }
+
+
+    /**
      * Check if an article is published
      * @param article - Article object from database
      * @returns true if article is published and public
