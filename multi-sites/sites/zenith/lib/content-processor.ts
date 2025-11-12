@@ -259,7 +259,6 @@ export class ContentProcessor {
         );
 
         console.log("🔍 [HeadingIDs] All headings processed with IDs");
-        console.log(processedContent);
 
         // // Process h3 headings (optional, for nested TOC)
         // processedContent = processedContent.replace(
