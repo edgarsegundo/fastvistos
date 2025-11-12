@@ -319,52 +319,66 @@ app.post('/publish-article', async (req, res) => {
             image_alt
         } = req.body;
 
-        console.log('Received /publish-article request with body:', JSON.stringify(req.body, null, 2));
+        console.log('ℹ️ Received /publish-article request with body:', JSON.stringify(req.body, null, 2));
+
         // Validate required fields
         if (!url1 || !url2) {
-            return res.status(400).json({ error: 'Both url1 and url2 are required.' });
+            return res.status(400).json({success: false, error: 'Both url1 and url2 are required.' });
         }
         if (!topic_id) {
-            return res.status(400).json({ error: 'topic_id is required.' });
+            return res.status(400).json({success: false, error: 'topic_id is required.' });
         }
         if (!business_id) {
-            return res.status(400).json({ error: 'business_id is required.' });
+            return res.status(400).json({success: false, error: 'business_id is required.' });
         }
         if (!business_name) {
-            return res.status(400).json({ error: 'business_name is required.' });
+            return res.status(400).json({success: false, error: 'business_name is required.' });
         }
         if (!image_url) {
-            return res.status(400).json({ error: 'image_url is required.' });
+            return res.status(400).json({success: false, error: 'image_url is required.' });
         }
         if (!image_alt) {
-            return res.status(400).json({ error: 'image_alt is required.' });
+            return res.status(400).json({success: false, error: 'image_alt is required.' });
         }
-
-        // Now you can use all these consts below in your logic
-
 
         let artigo1 = null;
         let artigo2 = null;
         let newArticle =  {
-                "title": "Artigo Auto Gerado",
-                "seoMetaDescription": "Descrição otimizada para SEO",
-                "markdownText": "Texto completo do artigo em Markdown"
-            };
-        
+            "title": "Artigo Auto Gerado",
+            "seoMetaDescription": "Descrição otimizada para SEO",
+            "markdownText": "Texto completo do artigo em Markdown"
+        };
 
         if (process.env.DEBUG === 'false') {
-            artigo1 = await extractReadableText(url1);
-            artigo2 = await extractReadableText(url2);
-            newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
+            try {
+                artigo1 = await extractReadableText(url1);
+            } catch (err) {
+                console.error('❌ Error during article 1 extraction/rewrite:', err);
+                return res.status(500).json({ success: false, error: 'Failed to extract article 1 from url1.' });
+            }
+
+            try {
+                artigo2 = await extractReadableText(url2);
+            } catch (err) {
+                console.error('❌ Error during article 2 extraction/rewrite:', err);
+                return res.status(500).json({ success: false, error: 'Failed to extract article 2 from url2.' });
+            }
+
+            try {
+                newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
+            } catch (err) {
+                console.error('❌ Error during article rewriting:', err);
+                return res.status(500).json({ success: false, error: 'Failed to rewrite articles.' });
+            }
         }
 
-        // console.log('🛑🛑🛑 Extracted artigo1:', artigo1.slice(0, 500)); // log first 500 chars
-        // console.log('🛑🛑🛑 Extracted artigo2:', artigo2.slice(0, 500)); // log first 500 chars
+        // console.log('ℹ️ Extracted artigo1:', artigo1.slice(0, 500)); // log first 500 chars
+        // console.log('ℹ️ Extracted artigo2:', artigo2.slice(0, 500)); // log first 500 chars
 
         // Validate the newArticle object
         if (!newArticle || !newArticle.title || !newArticle.seoMetaDescription || !newArticle.markdownText) {
             console.error('❌ Invalid article structure:', newArticle);
-            return res.status(500).json({ error: 'Failed to generate article. Invalid response from AI.' });
+            return res.status(500).json({ success: false, error: 'Failed to generate article. Invalid response from AI.' });
         }
 
         // return { title, seoMetaDescription, markdownFinal };
@@ -404,25 +418,31 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         const seo_image_height = 600;
         const seo_image_width = 800;
 
-        console.log('Calling createBlogArticle with generated article data...');
+        console.log('ℹ️ Calling createBlogArticle with generated article data...');
 
         if (process.env.DEBUG === 'false') {
-            const createdArticle = await BlogService.createBlogArticle({
-                id,
-                title,
-                content_md,
-                type,
-                slug,
-                published,
-                image,
-                business_id: businessIdNoDash,
-                blog_topic_id,
-                seo_description,
-                seo_image_caption,
-                seo_image_height,
-                seo_image_width,
-            });
-            console.log('✅ Article created:', createdArticle?.id);
+
+            try {
+                const createdArticle = await BlogService.createBlogArticle({
+                    id,
+                    title,
+                    content_md,
+                    type,
+                    slug,
+                    published,
+                    image,
+                    business_id: businessIdNoDash,
+                    blog_topic_id,
+                    seo_description,
+                    seo_image_caption,
+                    seo_image_height,
+                    seo_image_width,
+                });
+                console.log('ℹ️ Article created:', createdArticle?.id);
+            } catch (err) {
+                console.error('❌ Error during article creation:', err);
+                return res.status(500).json({ success: false, error: 'Failed to create article.' });
+            }
         }
 
         // Count characters in content_md
@@ -435,10 +455,10 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
                 await publishSiteFromVps(business_name);
             }
         } catch (err) {
-            console.error('[ERROR] Failed to execute publish-from-vps.sh:', err);
+            console.error('❌ Failed to execute publish-from-vps.sh:', err);
             return res.status(500).json({ success: false, error: 'Failed to execute publish-from-vps.sh' });
         }
-        console.log('Article publishing simulated.'); // Placeholder for actual publishing logic
+        console.log('ℹ️ Article publishing simulated.'); // Placeholder for actual publishing logic
 
         res.json({
             success: true,
@@ -447,7 +467,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
             title: newArticle.title
         });
     } catch (error) {
-        console.error('Error in /publish-article:', error);
+        console.error('❌ Error in /publish-article, Error: ', error);
         res.status(500).json({ success: false, error: 'Internal server error.' });
     }
 });
