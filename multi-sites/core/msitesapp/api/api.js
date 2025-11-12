@@ -452,7 +452,8 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         res.json({
             success: true,
             charCount,
-            blogUrl
+            blogUrl,
+            title: newArticle.title
         });
     } catch (error) {
         console.error('Error in /publish-article:', error);
