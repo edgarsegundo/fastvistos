@@ -435,7 +435,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         //     seo_image_height,
         //     seo_image_width,
         // });
-        console.log('✅ Article created:', createdArticle?.id);
+        // console.log('✅ Article created:', createdArticle?.id);
 
         // Count characters in content_md
         const charCount = content_md ? content_md.length : 0;
