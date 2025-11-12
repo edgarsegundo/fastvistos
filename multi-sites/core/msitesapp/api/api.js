@@ -341,18 +341,18 @@ app.post('/publish-article', async (req, res) => {
         }
 
         // Now you can use all these consts below in your logic
-        const artigo1 = await extractReadableText(url1);
-        const artigo2 = await extractReadableText(url2);
+        // const artigo1 = await extractReadableText(url1);
+        // const artigo2 = await extractReadableText(url2);
 
         // console.log('🛑🛑🛑 Extracted artigo1:', artigo1.slice(0, 500)); // log first 500 chars
         // console.log('🛑🛑🛑 Extracted artigo2:', artigo2.slice(0, 500)); // log first 500 chars
-        let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
+        // let newArticle =  await reescreverArtigo(openai, artigo1, artigo2);
 
-        // let newArticle =  {
-        //     "title": "Artigo Auto Gerado",
-        //     "seoMetaDescription": "Descrição otimizada para SEO",
-        //     "markdownText": "Texto completo do artigo em Markdown"
-        // };
+        let newArticle =  {
+            "title": "Artigo Auto Gerado",
+            "seoMetaDescription": "Descrição otimizada para SEO",
+            "markdownText": "Texto completo do artigo em Markdown"
+        };
 
         // Validate the newArticle object
         if (!newArticle || !newArticle.title || !newArticle.seoMetaDescription || !newArticle.markdownText) {
@@ -420,21 +420,21 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         // Import BlogService dynamically to avoid circular deps
         
         console.log('🛑🛑🛑 Calling createBlogArticle with generated article data...');
-        const createdArticle = await BlogService.createBlogArticle({
-            id,
-            title,
-            content_md,
-            type,
-            slug,
-            published,
-            image,
-            business_id: businessIdNoDash,
-            blog_topic_id,
-            seo_description,
-            seo_image_caption,
-            seo_image_height,
-            seo_image_width,
-        });
+        // const createdArticle = await BlogService.createBlogArticle({
+        //     id,
+        //     title,
+        //     content_md,
+        //     type,
+        //     slug,
+        //     published,
+        //     image,
+        //     business_id: businessIdNoDash,
+        //     blog_topic_id,
+        //     seo_description,
+        //     seo_image_caption,
+        //     seo_image_height,
+        //     seo_image_width,
+        // });
         console.log('✅ Article created:', createdArticle?.id);
 
         // Count characters in content_md
@@ -443,7 +443,7 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
         const blogUrl = `https://fastvistos.com.br/blog/${slug}/?debug=true`;
 
         try {
-            await publishSiteFromVps(business_name);
+            // await publishSiteFromVps(business_name);
         } catch (err) {
             console.error('[ERROR] Failed to execute publish-from-vps.sh:', err);
             return res.status(500).json({ success: false, error: 'Failed to execute publish-from-vps.sh' });
