@@ -2,7 +2,7 @@
 title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2025"
 description: "KMKNSLTRKMPNRSTTSDVSTMRKNGKMPLT"
 pubDate: "2025-10-14T21:49:40.000Z"
-updatedDate: "2025-10-17T21:46:50.430Z"
+updatedDate: "2025-11-17T18:08:08.516Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
