@@ -2,14 +2,14 @@
 title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2025"
 description: "KMKNSLTRKMPNRSTTSDVSTMRKNGKMPLT"
 pubDate: "2025-10-14T21:49:40.000Z"
-updatedDate: "2025-11-17T18:08:08.516Z"
+updatedDate: "2025-11-17T18:26:52.804Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__consultar-status-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "1652"
+wordCount: "1487"
 ---
 
 <!-- # Como consultar o status do visto americano no site oficial (guia atualizado 2025)-->
@@ -28,6 +28,27 @@ Muitas pessoas não sabem, mas o site oficial do **Consulado dos Estados Unidos*
 Se você está buscando **como rastrear o visto americano**, **acompanhar o status do visto**, **verificar situação do visto americano** ou **consultar andamento do processo**, este guia completo explica tudo sobre o acompanhamento oficial do seu visto americano.
 
 Neste artigo, vamos mostrar **passo a passo**, com **imagens ilustrativas**, como fazer essa consulta diretamente no site oficial — de forma rápida, segura e gratuita.
+
+<!-- ADICIONAR APÓS: <p>Neste artigo, vamos mostrar <strong>passo a passo</strong>... -->
+
+<div class="cta-urgent" style="background: #f0f9ff; border-left: 4px solid #0070f3; padding: 20px; margin: 25px 0; border-radius: 8px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <span style="background: #0070f3; color: white; padding: 8px 12px; border-radius: 6px; font-weight: bold;">🔵 CONSULTAR AGORA</span>
+        <strong style="color: #1a365d; font-size: 18px;">Status do Visto Americano - CEAC</strong>
+    </div>
+    <p style="margin: 0 0 16px 0; color: #2d3748;">
+        <strong>Acesse direto o site oficial:</strong><br>
+        <a href="https://ceac.state.gov/CEACStatTracker/Status.aspx" 
+           target="_blank"
+           style="color: #0070f3; font-weight: bold; text-decoration: underline; font-size: 16px;">
+           https://ceac.state.gov/CEACStatTracker/Status.aspx
+        </a>
+    </p>
+    <p style="margin: 0; color: #4a5568; font-size: 14px;">
+        ⚡ <strong>Resultado em segundos</strong> • 📅 <strong>Atualizado em tempo real</strong><br>
+        Veja abaixo como interpretar cada status e o que fazer em cada caso.
+    </p>
+</div>
 
 ---
 
@@ -186,12 +207,42 @@ Cada uma representa uma etapa diferente do processo de análise consular.
 
 Abaixo, explicamos o significado de cada status e o que fazer em cada caso:
 
-| Status | Significado | O que fazer |
-|--------|-------------|-------------|
-| 🟢 **Issued** | O visto foi aprovado e emitido com sucesso | Nenhuma ação necessária. O passaporte será enviado em alguns dias para o endereço informado no agendamento |
-| 🟡 **Administrative Processing** | O processo está em análise administrativa. Pode envolver verificação de dados adicionais ou checagem de segurança | Aguarde. Esse status pode durar de alguns dias a várias semanas. Evite tentar reagendar ou enviar novos formulários durante esse período |
-| 🔵 **Ready** | O caso está pronto para a entrevista ou aguardando ação do solicitante (como comparecimento ao CASV ou ao consulado) | Verifique o e-mail de confirmação e compareça na data e local informados |
-| 🔴 **Refused** | O visto foi negado com base em alguma seção da lei de imigração dos EUA (geralmente 214(b) ou 221(g)) | Leia atentamente a justificativa informada no consulado. Em alguns casos, é possível solicitar um novo visto corrigindo as pendências |
+
+<div class="status-table" style="overflow-x: auto; margin: 25px 0;">
+    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <thead style="background: #0070f3; color: white;">
+            <tr>
+                <th style="padding: 16px; text-align: left; font-weight: bold;">Status CEAC</th>
+                <th style="padding: 16px; text-align: left; font-weight: bold;">Significado</th>
+                <th style="padding: 16px; text-align: left; font-weight: bold;">O que fazer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 16px; font-weight: bold; color: #059669;">🟢 Issued</td>
+                <td style="padding: 16px;">Visto aprovado e emitido</td>
+                <td style="padding: 16px;">Aguardar entrega do passaporte (5-10 dias úteis)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 16px; font-weight: bold; color: #d97706;">🟡 Administrative Processing</td>
+                <td style="padding: 16px;">Caso em análise administrativa</td>
+                <td style="padding: 16px;">Aguarde 7-60 dias; pode exigir documentos adicionais</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 16px; font-weight: bold; color: #dc2626;">🔴 Refused (221g)</td>
+                <td style="padding: 16px;">Documentação faltando ou recusa</td>
+                <td style="padding: 16px;">Enviar documentos solicitados ou preparar nova aplicação</td>
+            </tr>
+            <tr>
+                <td style="padding: 16px; font-weight: bold; color: #2563eb;">🔵 Ready</td>
+                <td style="padding: 16px;">Pronto para entrevista</td>
+                <td style="padding: 16px;">Comparecer na data agendada</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
 
 ### Dicas importantes
 
