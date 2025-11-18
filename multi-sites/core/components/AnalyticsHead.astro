@@ -16,26 +16,12 @@ const { siteConfig } = Astro.props;
 
 // Analytics configuration
 const gtmId = siteConfig.analytics?.gtmId;
-const gtagId = siteConfig.analytics?.gtagId;
 const facebookPixelId = siteConfig.analytics?.facebookPixelId;
 ---
 
-<!-- Google Tag Manager (recomendado: gerenciar GA4 e Ads dentro do GTM) -->
+<!-- Google Tag Manager -->
 {gtmId && (
     <script async src={`https://www.googletagmanager.com/gtm.js?id=${gtmId}`}></script>
-)}
-
-<!-- Google Analytics 4 (GA4) separado, se necessário) -->
-{gtagId && (
-    <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}></script>
-        <script define:vars={{ gtagId }}>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', gtagId);
-        </script>
-    </>
 )}
 
 <!-- Facebook Pixel -->
