@@ -29,15 +29,18 @@ ${textoArtigo2}
 """
 
 INSTRUÇÃO DE SAÍDA:
-Gere o artigo completo em **Markdown** e em **formato JSON**, exatamente assim:
+Retorne APENAS um objeto JSON válido, sem blocos de código markdown (sem \`\`\`json), sem backticks extras, sem formatação adicional.
 
-\`\`\`json
-{
-  "title": "Título do artigo",
-  "seoMetaDescription": "Descrição otimizada para SEO",
-  "markdownText": "Texto completo do artigo em Markdown"
-}
-\`\`\`
+O conteúdo do artigo (markdownText) DEVE ser escrito em formato Markdown (com # para títulos, ## para subtítulos, listas, etc.).
+
+O JSON de resposta deve estar exatamente neste formato:
+
+{"title": "Título do artigo", "seoMetaDescription": "Descrição otimizada para SEO", "markdownText": "# Título\n\n## Subtítulo\n\nTexto do artigo em Markdown..."}
+
+IMPORTANTE: 
+- Retorne SOMENTE o objeto JSON puro, começando com { e terminando com }.
+- NÃO adicione \`\`\`json ou qualquer outra marcação ao redor do JSON.
+- O markdownText DEVE conter o artigo formatado em Markdown (com #, ##, listas, etc.).
 
 CERTIFICAÇÕES:
 * \`seoMetaDescription\` deve ser curta, atraente e otimizada para SEO.
@@ -54,34 +57,47 @@ CERTIFICAÇÕES:
 
     console.log('🛑🛑🛑 Artigo Reescrito Raw:', artigoReescrito);
 
-    // Extrai o JSON da resposta (caso venha dentro de um bloco de código)
-    const jsonMatch = artigoReescrito.match(/```json\s*([\s\S]*?)\s*```/);
-    let jsonString = artigoReescrito;
+    // Tenta extrair JSON de múltiplas formas (mais robusto)
+    let jsonString = artigoReescrito.trim();
+
+    // 1. Tenta detectar se está dentro de bloco de código markdown (```json...```)
+    const jsonMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
     if (jsonMatch) {
-      jsonString = jsonMatch[1];
+      jsonString = jsonMatch[1].trim();
+      console.log('✅ JSON extraído de bloco de código markdown');
+    }
+
+    // 2. Se ainda tiver texto antes/depois do JSON, tenta encontrar apenas o objeto
+    const jsonObjectMatch = jsonString.match(/\{[\s\S]*\}/);
+    if (jsonObjectMatch && jsonObjectMatch[0].length < jsonString.length) {
+      jsonString = jsonObjectMatch[0];
+      console.log('✅ JSON extraído usando regex de objeto');
     }
 
     let parsed;
     try {
       parsed = JSON.parse(jsonString);
+      console.log('✅ JSON parseado com sucesso');
     } catch (e) {
       console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
-      console.error("Conteúdo retornado:\n", artigoReescrito);
+      console.error("JSON extraído (primeiros 500 chars):\n", jsonString.substring(0, 500));
+      console.error("Conteúdo original (primeiros 500 chars):\n", artigoReescrito.substring(0, 500));
       return null;
     }
 
-    try {
-      // Converte \n para quebras de linha reais
-      const markdownText = parsed.markdownText.replace(/\\n/g, "\n");
-      const title = parsed.title;
-      const seoMetaDescription = parsed.seoMetaDescription;
-
-      return { title, seoMetaDescription, markdownText };
-    } catch (e) {
-      console.error("❌ Erro ao fazer parse do JSON retornado pelo GPT:", e);
-      console.error("Conteúdo retornado:\n", artigoReescrito);
+    // Valida que o objeto tem as propriedades esperadas
+    if (!parsed.title || !parsed.seoMetaDescription || !parsed.markdownText) {
+      console.error("❌ JSON parseado não contém as propriedades esperadas:", Object.keys(parsed));
+      console.error("Objeto recebido:", parsed);
       return null;
     }
+
+    // Retorna os dados extraídos (markdownText já vem com \n correto do JSON)
+    return {
+      title: parsed.title,
+      seoMetaDescription: parsed.seoMetaDescription,
+      markdownText: parsed.markdownText
+    };
   } catch (error) {
     console.error("❌ Erro ao reescrever o artigo:", error);
     return null;
