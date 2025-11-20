@@ -2,7 +2,7 @@
 title: "Formulário Visto Mexicano: Edite o PDF Online e Imprima"
 description: "FRMLRVSTMXKNDTPDFNLNMPRM"
 pubDate: "2025-11-18T11:23:07.000Z"
-updatedDate: "2025-11-20T16:18:34.243Z"
+updatedDate: "2025-11-20T17:25:07.552Z"
 slug: "formulario-visto-mexicano-edite-o-pdf-online-e-imprima"
 topic: "Dicas Sobre o Visto Mexicano"
 topicSlug: "dicas-sobre-o-visto-mexicano"
@@ -40,10 +40,10 @@ Com ela, você pode salvar o progresso, **imprimir o documento** pronto para lev
 ## Como usar o modelo pronto do Formulário de Visto Mexicano
 
 <!--
-<HowToStep>
+<HowTo>
 <name>Como usar o modelo pronto do Formulário de Visto Mexicano?</name>
 <text>Para utilizar o modelo disponível, basta selecionar o arquivo Formulário_Visto_Mexicano.pdf nos Templates do Servidor, clonar o documento para criar sua própria versão editável, preencher os campos diretamente na tela e, ao final, baixar o PDF já completo para imprimir.</text>
-</HowToStep>
+</HowTo>
 -->
 
 1.  **Clique no formulário**  
