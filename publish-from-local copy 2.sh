@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail  # Interrompe o script em caso de erro, variáveis não definidas ou falhas de pipe
+set -euo pipefail  # Interrompe o script em erros, variáveis não definidas ou falhas de pipe
 
 SITEID="$1"
 
@@ -42,21 +42,29 @@ fi
 
 # -------------------------
 
-# VPS Steps
+# VPS Steps (single SSH session)
 
 # -------------------------
 
-echo "Restoring and updating code on VPS..." | tee -a "$LOG_FILE"
+echo "Connecting to VPS and deploying..." | tee -a "$LOG_FILE"
 
-ssh edgar@72.60.57.150 "cd /home/edgar/Repos/fastvistos && git reset --hard && git clean -fd && git pull" 2>&1 | tee -a "$LOG_FILE"
+ssh edgar@72.60.57.150 "bash -s" <<EOF 2>&1 | tee -a "$LOG_FILE"
+export PATH=$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin
+cd /home/edgar/Repos/fastvistos
 
-echo "Building site on VPS..." | tee -a "$LOG_FILE"
-ssh edgar@72.60.57.150 "export PATH=$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && npm run build:$SITEID" 2>&1 | tee -a "$LOG_FILE"
+echo 'Restoring and pulling latest code...'
+git reset --hard
+git clean -fd
+git pull
 
-echo "Deploying site on VPS..." | tee -a "$LOG_FILE"
-ssh edgar@72.60.57.150 "export PATH=$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && node deploy-site.js '$SITEID'" 2>&1 | tee -a "$LOG_FILE"
+echo 'Building site for $SITEID...'
+npm run build:$SITEID
 
-echo "Syncing site images on VPS..." | tee -a "$LOG_FILE"
-ssh edgar@72.60.57.150 "export PATH=$PATH:/home/edgar/.nvm/versions/node/v22.0.0/bin && cd /home/edgar/Repos/fastvistos && sudo ./sync-site-images.sh $SITEID" 2>&1 | tee -a "$LOG_FILE"
+echo 'Deploying site...'
+node deploy-site.js '$SITEID'
+
+echo 'Syncing site images...'
+sudo ./sync-site-images.sh $SITEID
+EOF
 
 echo "===== DEPLOY COMPLETE: $SITEID at $(date) =====" | tee -a "$LOG_FILE"
