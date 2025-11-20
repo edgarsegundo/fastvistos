@@ -2,17 +2,17 @@
 title: "Precisa solicitar visto para o México? Saiba como!"
 description: "PRSZSLSTRVSTPRMXKSBKM"
 pubDate: "2025-09-30T23:10:51.000Z"
-updatedDate: "2025-11-20T16:38:54.483Z"
+updatedDate: "2025-11-20T17:20:45.518Z"
 slug: "como-tirar-o-visto-mexicano"
 topic: "Dicas Sobre o Visto Mexicano"
 topicSlug: "dicas-sobre-o-visto-mexicano"
 image: "/assets/images/blog/fastvistos__visa-3109800_1280_mexico.jpg"
 type: "public"
 published: true
-wordCount: "842"
+wordCount: "834"
 ---
 
-# Precisa solicitar visto para o México? Saiba como!
+<!--# Precisa solicitar visto para o México? Saiba como!-->
 
 Se você planeja visitar o México para turismo, negócios ou estudo e é cidadão brasileiro, será necessário solicitar um visto antes da viagem. Este guia prático irá explicar como tirar o visto mexicano no **Consulado Geral do México em São Paulo**.
 
@@ -51,6 +51,13 @@ Rua Estado de Israel, 549 – Moema – São Paulo/SP
 Para este guia, focaremos no **visto de turista (Tipo B)**, o mais comum entre brasileiros.
 
 ## Passo a Passo para Tirar o Visto Mexicano em São Paulo
+
+<!--
+<HowTo>
+<name>Passo a Passo para Tirar o Visto Mexicano em São Paulo</name>
+<text>Obter o visto mexicano em São Paulo é um processo que exige atenção aos detalhes e organização. Siga este guia completo para garantir que sua aplicação seja bem-sucedida.</text>
+</HowTo>
+-->
 
 ### PASSO 1: Preencha o Formulário Eletrônico Online
 
@@ -123,26 +130,11 @@ No dia da entrevista, leve todos os documentos listados abaixo:
 
 📄 *Obs.:* Todos os documentos devem estar em **cópias e originais**.
 
-### PASSO 4: Compareça à Entrevista no Consulado
+### PASSO 4: Pague a Taxa Consular
 
 <!--
 <HowToStep>
-<name>Passo 4 — Compareça à Entrevista no Consulado</name>
-<text>Compareça ao consulado na data e hora marcadas com toda a documentação. O atendimento geralmente leva 10-15 minutos, incluindo uma breve entrevista sobre o motivo da viagem e entrega dos documentos.</text>
-</HowToStep>
--->
-
-- Compareça ao consulado na data e hora marcadas com toda a documentação.
-- O atendimento é rápido (geralmente leva 10-15 minutos)
-- Será feito uma breve entrevista sobre o motivo da viagem
-- Você entregará todos os documentos
-- O oficial pode pedir esclarecimentos adicionais
-
-### PASSO 5: Pague a Taxa Consular
-
-<!--
-<HowToStep>
-<name>Passo 5 — Pague a Taxa Consular</name>
+<name>Passo 4 — Pague a Taxa Consular</name>
 <text>Efetue o pagamento da taxa de visto (aproximadamente R$ 280,00 a R$ 350,00 em 2024) no momento do agendamento ou no próprio consulado, utilizando cartão de crédito/débito, PIX ou dinheiro.</text>
 </HowToStep>
 -->
@@ -156,6 +148,22 @@ R$ 280,00 a R$ 350,00 (varia conforme câmbio e tipo de visto)
 Cartão de crédito/débito  
 PIX (recomendado)  
 Dinheiro (sujeito a variação)
+
+
+### PASSO 5: Compareça à Entrevista no Consulado
+
+<!--
+<HowToStep>
+<name>Passo 5 — Compareça à Entrevista no Consulado</name>
+<text>Compareça ao consulado na data e hora marcadas com toda a documentação. O atendimento geralmente leva 10-15 minutos, incluindo uma breve entrevista sobre o motivo da viagem e entrega dos documentos.</text>
+</HowToStep>
+-->
+
+- Compareça ao consulado na data e hora marcadas com toda a documentação.
+- O atendimento é rápido (geralmente leva 10-15 minutos)
+- Será feito uma breve entrevista sobre o motivo da viagem
+- Você entregará todos os documentos
+- O oficial pode pedir esclarecimentos adicionais
 
 ### PASSO 6: Aguarde a Análise e Retire o Passaporte
 
