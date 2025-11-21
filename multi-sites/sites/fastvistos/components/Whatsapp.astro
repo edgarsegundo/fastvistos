@@ -145,6 +145,11 @@
     const startChatButton = document.getElementById('start-chat');
     if (startChatButton) {
         startChatButton.addEventListener('click', function () {
+            // Envia evento para GTM
+            dataLayer.push({
+                event: 'start_chat_click'
+            });
+
             window.open(
                 `https://api.whatsapp.com/send?phone=551920422785&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20de%20vistos.${linkCode}`,
                 '_blank'
