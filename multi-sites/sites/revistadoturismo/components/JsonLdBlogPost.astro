@@ -1,0 +1,256 @@
+---
+/**
+ * JsonLdBlogPost.astro
+ * Gera JSON-LD para um BlogPosting (artigo/post), extensível com mentions, interactionStatistic, comment, etc.
+ */
+import { ensureTrailingSlash } from '../lib/utils.ts';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { getPersonBlock } from './JsonLdPersonBlock.astro';
+import { slugify, toThumbnailUrl, getValidatedImageUrl } from '../lib/utils.ts';
+import { siteConfig } from '../site-config.ts';
+
+const {
+    articleConfigFromDb,
+    blogConfigFromDb,
+    pubDate,
+    updatedDate,
+    wordCount,
+    howToLdJson = null,
+    mentions = [],
+    interactionStatistic = [],
+    comment = [],
+    extraGraph = [],
+    customData,
+} = Astro.props;
+
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const postpageUrl = `${canonicalValidated}blog/${articleConfigFromDb.slug}/`;
+
+let authorName, 
+    authorNameSlug, 
+    authorDescription = null, 
+    authorImageUrl = null,
+    authorUrl = null;
+
+/* This is simple solution for the author, if the user specifies the author
+in the article, we use that, if not, we check if the blog has a default
+author which has description, but in the future, a model should be created
+so we can assign an author to each article with description.
+*/
+if (articleConfigFromDb.author_name) {
+    authorName = articleConfigFromDb.author_name;
+    authorNameSlug = slugify(authorName);
+} else if (blogConfigFromDb?.author_name) {
+    authorName = blogConfigFromDb.author_name;
+    authorNameSlug = slugify(authorName);
+    authorDescription = blogConfigFromDb.author_description;
+    authorImageUrl = getValidatedImageUrl({
+        image: blogConfigFromDb.author_image,
+        imageUrl: null,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    });
+    authorUrl = blogConfigFromDb.author_url || null;
+} else {
+    authorName = siteConfig.site?.authorName || siteConfig.site?.siteName;
+    authorNameSlug = slugify(authorName);
+    authorDescription = articleConfigFromDb.seo_description;
+}
+
+const breadcrumbList = [
+    {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: canonicalValidated,
+    },
+    {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${canonicalValidated}blog/`,
+    },
+    {
+        '@type': 'ListItem',
+        position: 3,
+        name: articleConfigFromDb.title,
+        item: postpageUrl,
+    },
+];
+
+const imageId = `${postpageUrl}#image`;
+
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject: false,
+    imageId,
+    imageUrlValidated: getValidatedImageUrl({
+        image: articleConfigFromDb.image,
+        imageUrl: articleConfigFromDb.seo_image_url,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
+    caption: articleConfigFromDb.seo_image_caption,
+    width: articleConfigFromDb.seo_image_width,
+    height: articleConfigFromDb.seo_image_height,
+});
+
+const websiteId = `${canonicalValidated}#website`;
+const orgId = `${canonicalValidated}#organization`;
+
+// WebPage block
+const webPageBlock = getWebPageBlock({
+    disableWebPage: false,
+    pageUrl: postpageUrl,
+    siteName: articleConfigFromDb.title || siteConfig.site?.siteName,
+    websiteId,
+    orgId,
+    imageId: `${postpageUrl}#image`,
+    breadcrumbId: `${postpageUrl}#breadcrumb`,
+    description: articleConfigFromDb.seo_description,
+    pubDate,
+    updatedDate,
+    imageUrlValidated: getValidatedImageUrl({
+            image: articleConfigFromDb.image,
+            imageUrl: articleConfigFromDb.seo_image_url,
+            assetsUrlBase: siteConfig.site.assetsUrlBase
+        }),
+
+});
+
+const breadcrumbId = `${postpageUrl}#breadcrumb`;
+
+// BreadcrumbList
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb: false,
+    breadcrumbId,
+    breadcrumbList,
+    canonical: canonicalValidated,
+});
+
+// WebSite
+const webSiteBlock = getWebSiteBlock({
+    disableWebSite: false,
+    disableWebSiteSearchAction: true,
+    websiteId,
+    canonical: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
+    description: siteConfig.homePageConfig.seo.description,
+    orgId,
+});
+
+const logoId = `${canonicalValidated}#logo`;
+
+// --- Unified Organization + LocalBusiness block
+const orgBlock = {
+  '@type': 'Organization',
+  '@id': orgId,
+  name: siteConfig.site?.siteName,
+  url: canonicalValidated,
+  inLanguage: siteConfig.site.locale,
+  description: siteConfig.homePageConfig.seo.description,
+  logo: {
+    '@type': 'ImageObject',
+    inLanguage: siteConfig.site.locale,
+    '@id': logoId,
+    url: siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.site?.logo?.url,
+    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+  },
+  image: { '@id': logoId },
+};
+
+// 'https://fastvistos.com.br/schema/person/edgar-bola-segundo',
+const personBlock = getPersonBlock({
+    id: `${canonicalValidated}#/schema/person/${authorNameSlug}`,
+    name: authorName,
+    url: authorUrl,
+    description: authorDescription,
+    imageUrl: authorImageUrl,
+    imageId: `${canonicalValidated}#/schema/person/image/${authorNameSlug}`,
+});
+
+const faqList = articleConfigFromDb?.faq_json;
+
+// FAQ block
+const faqBlock =
+faqList && Array.isArray(faqList) && faqList.length > 0
+        ? {
+              '@type': 'FAQPage',
+              mainEntityOfPage: {
+                  '@type': 'WebPage',
+                  '@id': postpageUrl,
+              },
+              mainEntity: faqList.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: faq.answer,
+                  },
+              })),
+          }
+        : null;
+
+// https://fastvistos.com.br/#/schema/person/maria-oliveira
+const baseGraph = [
+    {
+        '@type': 'BlogPosting', // or Article?
+        '@id': `${postpageUrl}#article`,
+        isPartOf: { '@id': `${postpageUrl}` },
+        author: {
+            '@id': `${canonicalValidated}#/schema/person/${authorNameSlug}`,
+            url: `${canonicalValidated}#/schema/person/${authorNameSlug}`,
+            name: authorName,
+        },
+        headline: articleConfigFromDb.title,
+        description: articleConfigFromDb.seo_description,
+        datePublished: pubDate,
+        dateModified: updatedDate,
+        mainEntityOfPage: { '@id': `${postpageUrl}` },
+        wordCount: parseInt(wordCount),
+        publisher: { '@id': `${canonicalValidated}#organization` },
+        image: { '@id': `${postpageUrl}#image` },
+        primaryImageOfPage: { '@id': `${postpageUrl}#image` },
+        ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
+        // in the future I might have to use the toThumbnailUrl because I want to start creating smaller images
+        // this is why I will keep this comment for reference and remind myself to test it later
+        // ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
+        articleSection: [`${articleConfigFromDb.blog_topic.title}`],
+        inLanguage: siteConfig.site?.locale,
+    },
+    ...(howToLdJson ? [howToLdJson] : []),
+    {
+        ...webPageBlock,
+    },
+    {
+        ...imageObjectBlock,
+    },
+    {
+        ...breadcrumbBlock,
+    },
+    {
+        ...webSiteBlock,
+    },
+    {
+        ...orgBlock,
+    },
+    {
+        ...personBlock,
+    },
+    ...(faqBlock ? [faqBlock] : []),
+];
+
+const advancedGraph = [
+    ...(mentions.length ? [{ mentions: mentions }] : []),
+    ...(interactionStatistic.length ? [{ interactionStatistic: interactionStatistic }] : []),
+    ...(comment.length ? [{ comment: comment }] : []),
+    ...extraGraph,
+];
+const graph = [...baseGraph, ...advancedGraph];
+const jsonLd = customData ? customData : { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd, null, 2)} />

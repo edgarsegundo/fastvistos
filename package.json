@@ -45,7 +45,11 @@
     "dev:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro dev",
     "dev:watch:zenith": "node dev-with-sync.js zenith",
     "build:zenith": "node sync-blog.js zenith && SITE_ID=zenith astro build && node postbuild-updatable.js zenith",
-    "preview:zenith": "SITE_ID=zenith astro preview"
+    "preview:zenith": "SITE_ID=zenith astro preview",
+    "dev:revistadoturismo": "node sync-blog.js revistadoturismo && SITE_ID=revistadoturismo astro dev",
+    "dev:watch:revistadoturismo": "node dev-with-sync.js revistadoturismo",
+    "build:revistadoturismo": "node sync-blog.js revistadoturismo && SITE_ID=revistadoturismo astro build && node postbuild-updatable.js revistadoturismo",
+    "preview:revistadoturismo": "SITE_ID=revistadoturismo astro preview"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
