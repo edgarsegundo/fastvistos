@@ -1,0 +1,306 @@
+---
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { getImageObjectBlock } from './JsonLdImageObjectBlock.astro';
+import { ensureTrailingSlash, getValidatedImageUrl } from '../lib/utils.ts';
+import { siteConfig } from '../site-config.ts';
+
+const {
+    faqList = [],
+    servicesList = [],
+    reviewsList = [],
+    breadcrumbList = [],
+    disableFAQ = false,
+    disableServices = false,
+    disableReviews = false,
+    disableVideosReviews = false,
+    disableBreadcrumb = false,
+    disableWebSite = false,
+    disableImageObject = false,
+    disableWebPage = false,
+    disableWebSiteSearchAction = true,
+    disableOrganization = false,
+    disableLocalBusiness = false,
+    ...rest
+} = Astro.props;
+
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const websiteId = `${canonicalValidated}#website`;
+const orgId = `${canonicalValidated}#organization`;
+const imageId = `${canonicalValidated}#primaryimage`;
+const breadcrumbId = `${canonicalValidated}#breadcrumb`;
+const logoId = `${canonicalValidated}#logo`;
+
+// WebPage block
+const webPageBlock = getWebPageBlock({
+    disableWebPage: false,
+    pageUrl: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
+    websiteId,
+    orgId,
+    imageId,
+    breadcrumbId,
+    description: siteConfig.homePageConfig.seo.description,
+    pubDate: null,
+    updatedDate: null,
+    imageUrlValidated: getValidatedImageUrl({
+        image: null,
+        imageUrl: siteConfig.site.primaryImage?.url,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
+});
+
+// ImageObject (primary image)
+const imageObjectBlock = getImageObjectBlock({
+    disableImageObject: false,
+    imageId,
+    imageUrlValidated: getValidatedImageUrl({
+        image: null,
+        imageUrl: siteConfig.site.primaryImage?.url,
+        assetsUrlBase: siteConfig.site.assetsUrlBase
+    }),
+    width: siteConfig.site.primaryImage?.width,
+    height: siteConfig.site.primaryImage?.height,
+    caption: siteConfig.site.primaryImage?.alt,
+});
+
+// BreadcrumbList
+const breadcrumbBlock = getBreadcrumbBlock({
+    disableBreadcrumb,
+    breadcrumbId,
+    breadcrumbList,
+    canonical: canonicalValidated,
+});
+
+// WebSite
+const webSiteBlock = getWebSiteBlock({
+    disableWebSite: false,
+    disableWebSiteSearchAction: true,
+    websiteId,
+    canonical: canonicalValidated,
+    siteName: siteConfig.site?.siteName,
+    description: siteConfig.homePageConfig.seo.description,
+    orgId,
+});
+
+// FAQ block
+const faqBlock =
+!disableFAQ && Array.isArray(faqList) && faqList.length > 0
+        ? {
+              '@type': 'FAQPage',
+              mainEntityOfPage: {
+                  '@type': 'WebPage',
+                  '@id': siteConfig.site?.canonical,
+              },
+              mainEntity: faqList.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: faq.answer,
+                  },
+              })),
+          }
+        : null;
+
+// Services block
+const servicesBlock =
+    !disableServices && Array.isArray(servicesList) && servicesList.length > 0
+        ? servicesList.map((service) =>
+              service.schema
+                  ? service.schema
+                  : {
+                        '@type': 'Service',
+                        name: service.name,
+                        description: service.description,
+                        areaServed: 'Brazil',
+                        ...(service.offers ? { offers: service.offers } : {}),
+                        provider: { '@id': orgId },
+                    }
+          )
+        : null;
+
+// VideoObjects independentes para reviews em vídeo
+const videoObjects =
+    !disableVideosReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+        ? reviewsList
+              .filter((review) => review.videoId && review.thumbnail && review.url)
+              .map((review, idx) => {
+                  // Ensure uploadDate is in ISO 8601 with timezone (e.g., 2023-05-02T00:00:00-03:00)
+                  let uploadDate = review.uploadDate;
+                  if (uploadDate && !uploadDate.includes('T')) {
+                      uploadDate = `${uploadDate}T00:00:00-03:00`;
+                  }
+                  return {
+                      '@type': 'VideoObject',
+                      '@id': `${canonicalValidated}#review-video-${idx + 1}`,
+                      name: review.title || '',
+                      description: review.reviewBody || review.title || '',
+                      thumbnailUrl: review.thumbnail,
+                      contentUrl: review.url,
+                      embedUrl: `https://www.youtube.com/embed/${review.videoId}`,
+                      ...(uploadDate ? { uploadDate } : {}),
+                      publisher: {
+                          '@type': 'Organization',
+                          name: siteConfig.site?.siteName,
+                          logo: {
+                              '@type': 'ImageObject',
+                              url: siteConfig.site?.logo?.url,
+                              width: siteConfig.site?.logo?.width,
+                              height: siteConfig.site?.logo?.height
+                          },
+                      },
+                      mainEntityOfPage: {
+                          '@type': 'WebPage',
+                          '@id': canonicalValidated,
+                      },
+                  };
+              })
+        : [];
+
+const reviewsBlock =
+    !disableReviews && Array.isArray(reviewsList) && reviewsList.length > 0
+        ? reviewsList.map((review, idx) => {
+              const reviewBody = review.reviewBody || review.title || 'Ótimo serviço!';
+              const base = {
+                  '@type': 'Review',
+                  reviewBody,
+                  author: {
+                      '@type': 'Person',
+                      name: review.author,
+                  },
+                  reviewRating: {
+                      '@type': 'Rating',
+                      ratingValue: review.ratingValue || 5,
+                      bestRating: 5,
+                      worstRating: 1,
+                  },
+                  mainEntityOfPage: {
+                      '@type': 'WebPage',
+                      '@id': canonicalValidated,
+                  },
+              };
+              if (review.videoId && review.thumbnail && review.url) {
+                  return {
+                      ...base,
+                      associatedMedia: {
+                          '@id': `${canonicalValidated}#review-${idx + 1}`,
+                      },
+                  };
+              }
+              return base;
+          })
+        : [];
+
+// AggregateRating calculation
+let aggregateRating = null;
+if (reviewsBlock.length > 0) {
+    const ratings = reviewsBlock.map((r) =>
+        r.reviewRating && r.reviewRating.ratingValue ? Number(r.reviewRating.ratingValue) : 5
+    );
+    const reviewCount = ratings.length;
+    const ratingValue = reviewCount > 0 ? ratings.reduce((a, b) => a + b, 0) / reviewCount : 5;
+    aggregateRating = {
+        '@type': 'AggregateRating',
+        ratingValue: Number(ratingValue.toFixed(1)),
+        reviewCount,
+    };
+}
+
+// --- Unified Organization + LocalBusiness block
+const orgBlock = !disableOrganization && {
+  '@type': disableLocalBusiness 
+    ? 'Organization' 
+    : ['Organization', 'LocalBusiness', 'ProfessionalService'],
+  '@id': orgId,
+  name: siteConfig.site?.siteName,
+  url: canonicalValidated,
+  inLanguage: siteConfig.site.locale || 'pt-BR',
+  description: siteConfig.homePageConfig.seo.description,
+
+  logo: {
+    '@type': 'ImageObject',
+    '@id': logoId,
+    inLanguage: siteConfig.site.locale || 'pt-BR',
+    url: siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.site?.logo?.url,
+    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+  },
+
+  image: { '@id': logoId },
+
+  ...(disableLocalBusiness
+    ? {}
+    : {
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: siteConfig.site?.address?.streetAddress,
+          addressLocality: siteConfig.site?.address?.addressLocality,
+          addressRegion: siteConfig.site?.address?.addressRegion,
+          postalCode: siteConfig.site?.address?.postalCode,
+          addressCountry: siteConfig.site?.address?.addressCountry,
+        },
+
+        telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+          contactType: 'customer service',
+          areaServed: 'Brazil',
+          availableLanguage: ['Portuguese', 'English'],
+        },
+
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: siteConfig.site?.geo?.latitude,
+            longitude: siteConfig.site?.geo?.longitude,
+        },
+
+        priceRange: siteConfig.site?.priceRange || '$$',
+        openingHours: siteConfig.site?.openingHours,
+
+        serviceArea: {
+          '@type': 'Place',
+          name: siteConfig.site?.serviceArea?.name || 'Campinas e região metropolitana de São Paulo',
+        },
+
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: siteConfig.site?.aggregateRating?.ratingValue,
+          reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
+        },
+
+        sameAs: siteConfig.site?.sameAs,
+
+        hasMap: `https://www.google.com/maps/?q=${siteConfig.site?.geo?.latitude},${siteConfig.site?.geo?.longitude}`,
+
+        ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
+        ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+      }),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
+};
+
+const blocks = [
+    webPageBlock,
+    imageObjectBlock,
+    breadcrumbBlock,
+    webSiteBlock,
+    orgBlock,
+    faqBlock,
+    servicesBlock,
+    ...videoObjects,
+]
+    .filter(Boolean)
+    .flat();
+
+const jsonLdGraph = {
+    '@context': 'https://schema.org',
+    '@graph': blocks,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph, null, 2)} />

@@ -1,0 +1,37 @@
+---
+export function getBreadcrumbBlock({
+    disableBreadcrumb,
+    breadcrumbId,
+    breadcrumbList,
+    canonical,
+}: {
+    disableBreadcrumb: boolean;
+    breadcrumbId: string;
+    breadcrumbList?: any[];
+    canonical: string;
+}) {
+    if (disableBreadcrumb) return null;
+    // Ensure breadcrumb items have proper position increments
+    const processedBreadcrumbs = Array.isArray(breadcrumbList) && breadcrumbList.length > 0
+        ? breadcrumbList.map((item, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              name: item.name,
+              item: item.item,
+          }))
+        : [
+              {
+                  '@type': 'ListItem',
+                  position: 1,
+                  name: 'Home',
+                  item: canonical,
+              },
+          ];
+
+    return {
+        '@type': 'BreadcrumbList',
+        '@id': breadcrumbId,
+        itemListElement: processedBreadcrumbs,
+    };
+}
+---
