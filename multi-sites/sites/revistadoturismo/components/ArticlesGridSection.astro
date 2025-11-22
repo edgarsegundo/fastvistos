@@ -1,109 +1,118 @@
 ---
 // ArticlesGrid Section Component
-import { Image } from 'astro:assets';
+import ResponsiveImage from "./ResponsiveImage.astro";
+// import map from "@/generated-image-map.json";
+import map from "../../../../src/generated-image-map.json";
+
+
 import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
 import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
 import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
+
+const breakpointSizes = `
+  (max-width: 767px) 608px,
+  (max-width: 1023px) 356px,
+  (max-width: 1279px) 315px,
+  (max-width: 1535px) 400px,
+  485px
+`;
+
+const cards = [
+  {
+    key: "article1",
+    img: article1,
+    alt: "Restaurantes con vistas espectaculares",
+    title: "Los 10 restaurantes con las vistas más espectaculares del mundo",
+    desc: "Desde acantilados hasta rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.",
+    category: "Gastronomía",
+    time: "Hace 2 horas",
+  },
+  {
+    key: "article2",
+    img: article2,
+    alt: "Artigo 2",
+    title: "Playas paradisíacas que deberías visitar este verano",
+    desc: "Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.",
+    category: "Naturaleza",
+    time: "Hace 5 horas",
+  },
+  {
+    key: "article3",
+    img: article3,
+    alt: "Artigo 3",
+    title: "Tokyo en 3 días: la guía definitiva para no perderse nada",
+    desc: "Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.",
+    category: "Viajes urbanos",
+    time: "Hace 1 día",
+  },
+];
 ---
 
 <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-6">Últimos artigos</h2>
+  <h2 class="text-2xl font-bold mb-6">Últimos artigos</h2>
 
-    <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
+  <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {[
-            {
-                img: article1,
-                alt: "Restaurantes con vistas espectaculares",
-                title: "Los 10 restaurantes con las vistas más espectaculares del mundo",
-                desc: "Desde acantilados hasta rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.",
-                category: "Gastronomía",
-                time: "Hace 2 horas"
-            },
-            {
-                img: article2,
-                alt: "Artigo 2",
-                title: "Playas paradisíacas que deberías visitar este verano",
-                desc: "Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.",
-                category: "Naturaleza",
-                time: "Hace 5 horas"
-            },
-            {
-                img: article3,
-                alt: "Artigo 3",
-                title: "Tokyo en 3 días: la guía definitiva para no perderse nada",
-                desc: "Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.",
-                category: "Viajes urbanos",
-                time: "Hace 1 día"
-            }
-        ].map((card) => (
-            <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                <div class="aspect-[3/2] relative">
-                    <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+    {cards.map((card, i) => (
+      <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+        <div class="aspect-[3/2] relative">
+          <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
 
-                    <Image
-                        src={card.img}
-                        alt={card.alt}
-                        width={485}
-                        height={323}
-                        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width:1535px) 400px, 485px"
-                        class="w-full h-full object-cover"
-                    />
-                </div>
+          <ResponsiveImage
+            alt={card.alt}
+            width={485}
+            height={324}
+            sizes={breakpointSizes}
+            sources={{
+              avif: map[card.key].avif.join(", "),
+              webp: map[card.key].webp.join(", "),
+              jpeg: map[card.key].jpeg.join(", ")
+            }}
+            blurDataURL={map[card.key].blurDataURL}
+            priority={i === 0}
+          />
+        </div>
 
-                <div class="p-4">
-                    <h3 class="font-bold text-lg mb-2 line-clamp-2">{card.title}</h3>
-                    <p class="text-gray-600 text-sm mb-3 line-clamp-3">{card.desc}</p>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span>{card.category}</span>
-                        <span>{card.time}</span>
-                    </div>
-                </div>
-            </article>
-        ))}
-    </div>
+        <div class="p-4">
+          <h3 class="font-bold text-lg mb-2 line-clamp-2">{card.title}</h3>
+          <p class="text-gray-600 text-sm mb-3 line-clamp-3">{card.desc}</p>
+          <div class="flex items-center justify-between text-xs text-gray-500">
+            <span>{card.category}</span>
+            <span>{card.time}</span>
+          </div>
+        </div>
+      </article>
+    ))}
+
+  </div>
 </section>
 
-<script>
-function updateWxHLabels() {
-    const viewportLabel = document.getElementById('viewport-label');
-    if (viewportLabel) {
-        viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
-    }
 
-    const cards = document.querySelectorAll('[class*="aspect-"]');
-    cards.forEach(function(card) {
-        const rect = card.getBoundingClientRect();
-        const label = card.querySelector('.wxh-label');
-        if (label) {
-            const width = Math.round(rect.width);
-            const height = Math.round(rect.height);
-            const ratio = (width / height).toFixed(2);
-            label.textContent = width + ' x ' + height + ' (ratio: ' + ratio + ')';
-        }
-    });
+<script>
+// === Mostrar largura/altura real dos cards ===
+function updateWxHLabels() {
+  const viewportLabel = document.getElementById('viewport-label');
+  if (viewportLabel) {
+    viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
+  }
+
+  document.querySelectorAll('[class*="aspect-"]').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const label = card.querySelector('.wxh-label');
+    if (label) {
+      label.textContent = `${Math.round(rect.width)} x ${Math.round(rect.height)}`;
+    }
+  });
 }
 
 let resizeTimeout;
 function debouncedUpdate() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(updateWxHLabels, 50);
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(updateWxHLabels, 50);
 }
 
 window.addEventListener('load', updateWxHLabels);
 window.addEventListener('resize', debouncedUpdate);
-
-let rafId;
-window.addEventListener('resize', function () {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(updateWxHLabels);
-});
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateWxHLabels);
-} else {
-    updateWxHLabels();
-}
 </script>
