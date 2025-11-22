@@ -10,6 +10,23 @@ const {
   class: className = ""
 } = Astro.props;
 
+console.log("[ResponsiveImage] alt:", alt);
+console.log("[ResponsiveImage] width:", width);
+console.log("[ResponsiveImage] height:", height);
+console.log("[ResponsiveImage] sizes:", sizes);
+console.log("[ResponsiveImage] sources:", sources);
+console.log("[ResponsiveImage] blurDataURL:", blurDataURL);
+console.log("[ResponsiveImage] priority:", priority);
+console.log("[ResponsiveImage] class:", className);
+
+if (sources.webp) {
+  console.log("[ResponsiveImage] <source> webp srcset:", sources.webp);
+}
+if (sources.jpeg) {
+  console.log("[ResponsiveImage] <source> jpeg srcset:", sources.jpeg);
+}
+console.log("[ResponsiveImage] <img> fallback src:", blurDataURL);
+
 // Fallback = blur (1 só vez, muito leve)
 const fallbackSrc = blurDataURL;
 ---
