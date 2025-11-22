@@ -6,196 +6,73 @@ import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
 import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
 ---
 
-<!-- Articles Grid -->
 <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
-    <!-- Label para mostrar o tamanho da página -->
+    <h2 class="text-2xl font-bold mb-6">Últimos artigos</h2>
+
     <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- CARD TEMPLATE (all updated to aspect-[3/2]) -->
-        <!-- Card 1 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source srcset={article1.srcSet} sizes="(max-width: 768px) 100vw, 33vw" type="image/webp" />
-                    <Image src={article1} alt="Restaurantes con vistas espectaculares" class="w-full h-full object-cover" />
-                </picture>
-            </div>
+        {[
+            {
+                img: article1,
+                alt: "Restaurantes con vistas espectaculares",
+                title: "Los 10 restaurantes con las vistas más espectaculares del mundo",
+                desc: "Desde acantilados hasta rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.",
+                category: "Gastronomía",
+                time: "Hace 2 horas"
+            },
+            {
+                img: article2,
+                alt: "Artigo 2",
+                title: "Playas paradisíacas que deberías visitar este verano",
+                desc: "Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.",
+                category: "Naturaleza",
+                time: "Hace 5 horas"
+            },
+            {
+                img: article3,
+                alt: "Artigo 3",
+                title: "Tokyo en 3 días: la guía definitiva para no perderse nada",
+                desc: "Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.",
+                category: "Viajes urbanos",
+                time: "Hace 1 día"
+            }
+        ].map((card) => (
+            <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <div class="aspect-[3/2] relative">
+                    <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
 
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Los 10 restaurantes con las vistas más espectaculares del mundo
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Desde acantilados hasta rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Gastronomía</span>
-                    <span>Hace 2 horas</span>
+                    <Image
+                        src={card.img}
+                        alt={card.alt}
+                        width={485}
+                        height={323}
+                        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, (max-width:1535px) 400px, 485px"
+                        class="w-full h-full object-cover"
+                    />
                 </div>
-            </div>
-        </article>
 
-        <!-- Card 2 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source srcset={article2.srcSet} sizes="(max-width: 768px) 100vw, 33vw" type="image/webp" />
-                    <Image src={article2} alt="Artigo 2" class="w-full h-full object-cover" />
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Playas paradisíacas que deberías visitar este verano
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Naturaleza</span>
-                    <span>Hace 5 horas</span>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 line-clamp-2">{card.title}</h3>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-3">{card.desc}</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>{card.category}</span>
+                        <span>{card.time}</span>
+                    </div>
                 </div>
-            </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source srcset={article3.srcSet} sizes="(max-width: 768px) 100vw, 33vw" type="image/webp" />
-                    <Image src={article3} alt="Artigo 3" class="w-full h-full object-cover" />
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Tokyo en 3 días: la guía definitiva para no perderse nada
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Viajes urbanos</span>
-                    <span>Hace 1 día</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567894/master/w_300,h_225,c_limit/article4-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567894/master/w_600,h_450,c_limit/article4-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567894/master/w_400,h_300,c_limit/article4-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567894/master/w_800,h_600,c_limit/article4-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567894/master/w_400,h_300,c_limit/article4-desktop.jpg" 
-                            alt="Hoteles sostenibles" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Los hoteles más sostenibles que están cambiando el turismo
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Alojamientos que combinan lujo y responsabilidad ambiental, demostrando que el turismo puede ser positivo para el planeta.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Experiencias</span>
-                    <span>Hace 2 días</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- Card 5 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567895/master/w_300,h_225,c_limit/article5-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567895/master/w_600,h_450,c_limit/article5-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567895/master/w_400,h_300,c_limit/article5-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567895/master/w_800,h_600,c_limit/article5-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567895/master/w_400,h_300,c_limit/article5-desktop.jpg" 
-                            alt="Mercados locales" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Mercados locales: el alma de cada destino
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Sumérgete en la cultura local a través de sus mercados, donde los colores, sabores y aromas te contarán la verdadera historia del lugar.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Gastronomía</span>
-                    <span>Hace 3 días</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- Card 6 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567896/master/w_300,h_225,c_limit/article6-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567896/master/w_600,h_450,c_limit/article6-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567896/master/w_400,h_300,c_limit/article6-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567896/master/w_800,h_600,c_limit/article6-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567896/master/w_400,h_300,c_limit/article6-desktop.jpg" 
-                            alt="Senderismo en Europa" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Las mejores rutas de senderismo en Europa para este otoño
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Disfruta de los paisajes más espectaculares del continente mientras practicas senderismo en estas rutas cuidadosamente seleccionadas.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Naturaleza</span>
-                    <span>Hace 4 días</span>
-                </div>
-            </div>
-        </article>
-
+            </article>
+        ))}
     </div>
 </section>
 
 <script>
 function updateWxHLabels() {
-    // Mostrar tamanho da página (viewport)
     const viewportLabel = document.getElementById('viewport-label');
     if (viewportLabel) {
         viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
     }
-    // Mostrar tamanho de cada card
+
     const cards = document.querySelectorAll('[class*="aspect-"]');
     cards.forEach(function(card) {
         const rect = card.getBoundingClientRect();
@@ -209,33 +86,21 @@ function updateWxHLabels() {
     });
 }
 
-// Debounce function para evitar muitas chamadas
 let resizeTimeout;
 function debouncedUpdate() {
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-        updateWxHLabels();
-    }, 50); // Espera 50ms após parar de redimensionar
+    resizeTimeout = setTimeout(updateWxHLabels, 50);
 }
 
-// Executar quando a página carregar
-window.addEventListener('load', function() {
-    updateWxHLabels();
-});
-
-// Atualizar quando redimensionar (com debounce)
+window.addEventListener('load', updateWxHLabels);
 window.addEventListener('resize', debouncedUpdate);
 
-// Também atualizar durante o resize (tempo real)
 let rafId;
-window.addEventListener('resize', function() {
-    if (rafId) {
-        cancelAnimationFrame(rafId);
-    }
+window.addEventListener('resize', function () {
+    if (rafId) cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(updateWxHLabels);
 });
 
-// Executar imediatamente ao carregar o script
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateWxHLabels);
 } else {
