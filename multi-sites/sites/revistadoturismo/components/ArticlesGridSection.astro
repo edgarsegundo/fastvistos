@@ -8,9 +8,14 @@ import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
 import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
 import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
 
+import { siteConfig } from '../site-config.ts';
+
 const breakpoints = [400, 608];
 
 const breakpointSizes = breakpoints.map(bp => `${bp}px`).join(', ');
+
+const siteId = siteConfig.site.id;
+const imageBase = `/public-sites/${siteId}/assets/images-base/resized/`;
 
 const cards = [
   {
@@ -62,9 +67,9 @@ const cards = [
             sizes={breakpointSizes}
             breakpoints={breakpoints}
             sources={{
-              avif: map[card.key].avif?.join(", ") ?? "",
-              webp: map[card.key].webp.join(", "),
-              jpeg: map[card.key].jpeg.join(", ")
+              // avif: map[card.key].avif?.map(f => imageBase + f).join(", ") ?? "",
+              webp: map[card.key].webp.map(f => imageBase + f).join(", "),
+              jpeg: map[card.key].jpeg.map(f => imageBase + f).join(", ")
             }}
             blurDataURL={map[card.key].blurDataURL}
             priority={i === 0}

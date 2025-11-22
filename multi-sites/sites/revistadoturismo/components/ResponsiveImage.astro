@@ -1,53 +1,53 @@
 ---
-import { siteConfig } from '../site-config.ts';
-
-// Props:
-// base: "article1"
+// Props esperadas:
 // alt: texto
+// width, height: dimensões
+// sizes: string para atributo sizes
+// sources: { avif, webp, jpeg } (srcset já pronto)
+// blurDataURL: string base64 para placeholder
+// priority: boolean (opcional)
 // class: classes extras
-// breakpoints: [400, 608] (opcional)
-const { base, alt, class: className = "", breakpoints = [400, 608] } = Astro.props;
 
-console.log("[ResponsiveImage] base:", base);
+const {
+  alt,
+  width,
+  height,
+  sizes,
+  sources = {},
+  blurDataURL,
+  priority = false,
+  class: className = ""
+} = Astro.props;
+
+// Log props para debug
 console.log("[ResponsiveImage] alt:", alt);
+console.log("[ResponsiveImage] width:", width);
+console.log("[ResponsiveImage] height:", height);
+console.log("[ResponsiveImage] sizes:", sizes);
+console.log("[ResponsiveImage] sources:", sources);
+console.log("[ResponsiveImage] blurDataURL:", blurDataURL);
+console.log("[ResponsiveImage] priority:", priority);
 console.log("[ResponsiveImage] class:", className);
-console.log("[ResponsiveImage] breakpoints:", breakpoints);
-
-// siteId do site-config
-const siteId = siteConfig.site.id;
-console.log("[ResponsiveImage] siteId:", siteId);
-
-// Caminho base
-const basePath = `/public-sites/${siteId}/assets/images-base/resized/${base}`;
-console.log("[ResponsiveImage] basePath:", basePath);
-
-// Gera srcset dinamicamente
-function makeSrcSet(ext) {
-  return breakpoints.map((bp: number) => `${basePath}-${bp}.${ext} ${bp}w`).join(', ');
-}
 ---
 
 <picture class={className}>
-  <!-- WEBP -->
-  <source
-    type="image/webp"
-    srcset={makeSrcSet('webp')}
-    sizes={breakpoints.map(bp => `${bp}px`).join(', ')}
-  />
-
-  <!-- JPG fallback -->
-  <source
-    type="image/jpeg"
-    srcset={makeSrcSet('jpg')}
-    sizes={breakpoints.map(bp => `${bp}px`).join(', ')}
-  />
-
-  <!-- Fallback final -->
+  {sources.avif && (
+    <source type="image/avif" srcset={sources.avif} sizes={sizes} />
+  )}
+  {sources.webp && (
+    <source type="image/webp" srcset={sources.webp} sizes={sizes} />
+  )}
+  {sources.jpeg && (
+    <source type="image/jpeg" srcset={sources.jpeg} sizes={sizes} />
+  )}
   <img
-    src={`${basePath}-${breakpoints[breakpoints.length-1]}.jpg`}
+    src={sources.jpeg?.split(',')[0]?.split(' ')[0] || ''}
     alt={alt}
-    loading="lazy"
+    width={width}
+    height={height}
+    loading={priority ? "eager" : "lazy"}
     decoding="async"
-    class="w-full h-full object-cover"
+    class={`w-full h-full object-cover ${className}`}
+    style={blurDataURL ? `background: url('${blurDataURL}'); background-size: cover;` : undefined}
   />
 </picture>
