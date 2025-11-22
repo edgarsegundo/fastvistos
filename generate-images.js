@@ -6,7 +6,8 @@ const inputDir = "src/assets/revistadoturismo";
 const outDir = "public/generated-images";
 
 const breakpoints = [608, 356, 315, 400, 485]; // você definiu
-const scales = [1, 2, 3]; // retina
+const scales = [1, 2]; // retina
+// const scales = [1, 2, 3]; // retina
 
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
@@ -26,7 +27,7 @@ async function processImage(file) {
 
   outputIndex[baseName] = {
     blurDataURL: blurBase64,
-    avif: [],
+    // avif: [],
     webp: [],
     jpeg: [],
   };
