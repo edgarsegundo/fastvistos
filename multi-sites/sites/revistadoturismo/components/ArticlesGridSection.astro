@@ -3,12 +3,14 @@
 import { Image } from 'astro:assets';
 import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
 import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
+import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
 ---
 
 <!-- Articles Grid -->
 <section class="container mx-auto px-4 py-8">
     <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
-    
+    <!-- Label para mostrar o tamanho da página -->
+    <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         <!-- CARD TEMPLATE (all updated to aspect-[3/2]) -->
@@ -65,17 +67,8 @@ import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
             <div class="aspect-[3/2] relative">
                 <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
                 <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567893/master/w_300,h_225,c_limit/article3-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567893/master/w_600,h_450,c_limit/article3-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567893/master/w_400,h_300,c_limit/article3-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567893/master/w_800,h_600,c_limit/article3-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567893/master/w_400,h_300,c_limit/article3-desktop.jpg" 
-                            alt="Guía de Tokyo" 
-                            class="w-full h-full object-cover">
+                    <source srcset={article3.srcSet} sizes="(max-width: 768px) 100vw, 33vw" type="image/webp" />
+                    <Image src={article3} alt="Artigo 3" class="w-full h-full object-cover" />
                 </picture>
             </div>
 
@@ -197,7 +190,12 @@ import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
 
 <script>
 function updateWxHLabels() {
-    // Encontrar todos os divs com a classe aspect-[3/2]
+    // Mostrar tamanho da página (viewport)
+    const viewportLabel = document.getElementById('viewport-label');
+    if (viewportLabel) {
+        viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
+    }
+    // Mostrar tamanho de cada card
     const cards = document.querySelectorAll('[class*="aspect-"]');
     cards.forEach(function(card) {
         const rect = card.getBoundingClientRect();
