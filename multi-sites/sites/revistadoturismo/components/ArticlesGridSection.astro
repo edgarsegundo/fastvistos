@@ -1,5 +1,8 @@
 ---
 // ArticlesGrid Section Component
+import { Image } from 'astro:assets';
+import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
+import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
 ---
 
 <!-- Articles Grid -->
@@ -14,17 +17,8 @@
             <div class="aspect-[3/2] relative">
                 <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
                 <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567891/master/w_300,h_225,c_limit/article1-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567891/master/w_600,h_450,c_limit/article1-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)" 
-                        srcset="https://media.traveler.es/photos/6234567891/master/w_400,h_300,c_limit/article1-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567891/master/w_800,h_600,c_limit/article1-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567891/master/w_400,h_300,c_limit/article1-desktop.jpg" 
-                            alt="Restaurantes con vistas espectaculares" 
-                            class="w-full h-full object-cover">
+                    <source srcset={article1.srcSet} sizes="(max-width: 768px) 100vw, 33vw" type="image/webp" />
+                    <Image src={article1} alt="Restaurantes con vistas espectaculares" class="w-full h-full object-cover" />
                 </picture>
             </div>
 
@@ -47,17 +41,8 @@
             <div class="aspect-[3/2] relative">
                 <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
                 <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567892/master/w_300,h_225,c_limit/article2-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567892/master/w_600,h_450,c_limit/article2-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)" 
-                        srcset="https://media.traveler.es/photos/6234567892/master/w_400,h_300,c_limit/article2-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567892/master/w_800,h_600,c_limit/article2-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567892/master/w_400,h_300,c_limit/article2-desktop.jpg" 
-                            alt="Playas paradisíacas" 
-                            class="w-full h-full object-cover">
+                    <source srcset={article2.srcSet} sizes="(max-width: 768px) 100vw, 33vw" type="image/webp" />
+                    <Image src={article2} alt="Artigo 2" class="w-full h-full object-cover" />
                 </picture>
             </div>
 
