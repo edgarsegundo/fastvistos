@@ -1,24 +1,30 @@
 ---
-// ArticlesGrid Section Component
 import ResponsiveImage from "./ResponsiveImage.astro";
 import map from "../generated-image-map.json";
 
-import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
-import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
-import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
+import article1 from '../../../../public-sites/revistadoturismo/assets/images-base/article1.jpg';
+import article2 from '../../../../public-sites/revistadoturismo/assets/images-base/article2.jpg';
+import article3 from '../../../../public-sites/revistadoturismo/assets/images-base/article3.jpg';
+
+// import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
+// import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
+// import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
 
 import { siteConfig } from '../site-config.ts';
 
 const siteId = siteConfig.site.id;
-const imageBase = `/public-sites/${siteId}/assets/images-base/resized/`;
 
+const imageBase = `public-sites/${siteId}/assets/images-base/resized/`;
 
+// === A1-PRECISE — APENAS LAYOUT REAL ===
+// 1 card  → usa 100vw
+// 2 cards → metade da largura
+// 3 cards → ~33vw
 const sizes = `
-  (max-width: 768px) 608px,
-  (max-width: 1023px) 356px,
-  485px
+  (max-width: 768px) 100vw,
+  (max-width: 1023px) 50vw,
+  33vw
 `;
-
 
 const cards = [
   {
@@ -26,7 +32,7 @@ const cards = [
     img: article1,
     alt: "Restaurantes con vistas espectaculares",
     title: "Los 10 restaurantes con las vistas más espectaculares del mundo",
-    desc: "Desde acantilados até rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.",
+    desc: "Desde acantilados até rascacielos, estos restaurantes ofrecen experiencias culinárias inolvidables.",
     category: "Gastronomía",
     time: "Hace 2 horas",
   },
@@ -35,7 +41,7 @@ const cards = [
     img: article2,
     alt: "Artigo 2",
     title: "Playas paradisíacas que deberías visitar este verano",
-    desc: "Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.",
+    desc: "Arenas blancas, aguas turquesas y paisajes tropicales te esperan.",
     category: "Naturaleza",
     time: "Hace 5 horas",
   },
@@ -43,17 +49,22 @@ const cards = [
     key: "article3",
     img: article3,
     alt: "Artigo 3",
-    title: "Tokyo en 3 días: la guía definitiva para no perderse nada",
-    desc: "Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.",
+    title: "Tokyo en 3 días: guía definitiva",
+    desc: "Aprovecha al máximo tu visita con esta ruta cuidadosamente planificada.",
     category: "Viajes urbanos",
     time: "Hace 1 día",
   },
 ];
 
 function buildSrcSet(key, type) {
-  const files = map[key][type];
+  const entry = map[key];
+  if (!entry || !entry[type] || !Array.isArray(entry[type])) {
+    console.warn("🚨 buildSrcSet: tipo inexistente:", key, type);
+    return "";
+  }
 
-  // Considerando os 3 breakpoints reais: 356, 485 e 608 (cada um com 1x e 2x)
+  const files = entry[type];
+
   const filtered = files.filter(f =>
     f.includes("-356-1x") || f.includes("-356-2x") ||
     f.includes("-485-1x") || f.includes("-485-2x") ||
@@ -66,20 +77,22 @@ function buildSrcSet(key, type) {
 ---
 
 <section class="container mx-auto px-4 py-8">
-  <h2 class="text-2xl font-bold mb-6">Últimos artigos</h2>
+  <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
 
   <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
     {cards.map((card, i) => (
       <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+
         <div class="aspect-[3/2] relative">
           <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-          
+
           <ResponsiveImage
             alt={card.alt}
-            width={608}
-            height={405}
+            width={0}
+            height={0}
             sizes={sizes}
             sources={{
               webp: buildSrcSet(card.key, "webp"),
@@ -98,15 +111,17 @@ function buildSrcSet(key, type) {
             <span>{card.time}</span>
           </div>
         </div>
+
       </article>
     ))}
+
   </div>
 </section>
 
 <script>
-// === Mostrar largura/altura real dos cards ===
 function updateWxHLabels() {
   const viewportLabel = document.getElementById('viewport-label');
+
   if (viewportLabel) {
     viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
   }

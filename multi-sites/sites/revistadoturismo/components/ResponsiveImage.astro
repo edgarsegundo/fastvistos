@@ -1,8 +1,8 @@
 ---
 const {
   alt,
-  width,
-  height,
+  width = 608,
+  height = 405,
   sizes,
   sources = {},
   blurDataURL,
@@ -10,15 +10,22 @@ const {
   class: className = ""
 } = Astro.props;
 
-const fallbackSrc = sources.jpeg?.split(",")[0]?.trim().split(" ")[0] || "";
+// Pega o primeiro JPEG da lista, sem tentar dividir por espaço
+const fallbackSrc = sources.jpeg?.split(",")[0].trim() || "";
 ---
+
 <picture
   class={`relative block ${className}`}
-  style={blurDataURL ? `background-image:url('${blurDataURL}'); background-size:cover; background-position:center;` : undefined}
+  style={
+    blurDataURL
+      ? `background-image:url('${blurDataURL}'); background-size:cover; background-position:center;`
+      : undefined
+  }
 >
   {sources.webp && (
     <source type="image/webp" srcset={sources.webp} sizes={sizes} />
   )}
+
   {sources.jpeg && (
     <source type="image/jpeg" srcset={sources.jpeg} sizes={sizes} />
   )}
@@ -28,6 +35,8 @@ const fallbackSrc = sources.jpeg?.split(",")[0]?.trim().split(" ")[0] || "";
     alt={alt}
     width={width}
     height={height}
+    sizes={sizes}
+    srcset={sources.jpeg}
     loading={priority ? "eager" : "lazy"}
     decoding="async"
     class="w-full h-full object-cover"
