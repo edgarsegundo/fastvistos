@@ -1,4 +1,6 @@
 ---
+import { siteConfig } from '../site-config.ts';
+
 // Props:
 // base: "article1"
 // alt: texto
@@ -11,13 +13,17 @@ console.log("[ResponsiveImage] alt:", alt);
 console.log("[ResponsiveImage] class:", className);
 console.log("[ResponsiveImage] breakpoints:", breakpoints);
 
+// siteId do site-config
+const siteId = siteConfig.site.id;
+console.log("[ResponsiveImage] siteId:", siteId);
+
 // Caminho base
-const basePath = `/articles/${base}`;
+const basePath = `/public-sites/${siteId}/assets/images-base/resized/${base}`;
 console.log("[ResponsiveImage] basePath:", basePath);
 
 // Gera srcset dinamicamente
 function makeSrcSet(ext) {
-  return breakpoints.map(bp => `${basePath}-${bp}.${ext} ${bp}w`).join(', ');
+  return breakpoints.map((bp: number) => `${basePath}-${bp}.${ext} ${bp}w`).join(', ');
 }
 ---
 
