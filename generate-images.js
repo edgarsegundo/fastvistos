@@ -2,10 +2,20 @@ import sharp from "sharp";
 import fs from "fs";
 import path from "path";
 
-const inputDir = "src/assets/revistadoturismo";
-const outDir = "public/generated-images";
+// Recebe siteId via argumento CLI
+const args = process.argv.slice(2);
+const siteId = args[0];
+if (!siteId) {
+  console.error("❌ Usage: node generate-images.js <siteId>");
+  process.exit(1);
+}
 
-const breakpoints = [608, 356, 315, 400, 485]; // você definiu
+const inputDir = `public-sites/${siteId}/assets/images-base`;
+const outDir = path.join("public-sites", siteId, "assets", "images-base", "resized");
+
+// const breakpoints = [608, 356, 315, 400, 485]; // você definiu
+const breakpoints = [400, 608]; 
+
 const scales = [1, 2]; // retina
 // const scales = [1, 2, 3]; // retina
 
@@ -38,20 +48,20 @@ async function processImage(file) {
 
       const outName = `${baseName}-${bp}-${scale}x`;
 
-      // AVIF
-      const avifName = `${outName}.avif`;
-      await image.clone().resize(width).avif({ quality: 55 }).toFile(path.join(outDir, avifName));
-      outputIndex[baseName].avif.push(`${avifName} ${bp * scale}w`);
+    //   // AVIF
+    //   const avifName = `${outName}.avif`;
+    //   await image.clone().resize(width).avif({ quality: 55 }).toFile(path.join(outDir, avifName));
+    //   outputIndex[baseName].avif?.push?.(`${avifName} ${width}w`);
 
       // WebP
       const webpName = `${outName}.webp`;
       await image.clone().resize(width).webp({ quality: 70 }).toFile(path.join(outDir, webpName));
-      outputIndex[baseName].webp.push(`${webpName} ${bp * scale}w`);
+      outputIndex[baseName].webp.push(`${webpName} ${width}w`);
 
       // JPEG
       const jpgName = `${outName}.jpg`;
       await image.clone().resize(width).jpeg({ quality: 80 }).toFile(path.join(outDir, jpgName));
-      outputIndex[baseName].jpeg.push(`${jpgName} ${bp * scale}w`);
+      outputIndex[baseName].jpeg.push(`${jpgName} ${width}w`);
     }
   }
 
@@ -64,5 +74,8 @@ async function processImage(file) {
   }
 
   // salva mapa para o Astro importar
-  fs.writeFileSync("src/generated-image-map.json", JSON.stringify(outputIndex, null, 2));
+  const mapPath = path.join("public-sites", siteId, "assets", "images", "blog", "generated-image-map.json");
+  fs.writeFileSync(mapPath, JSON.stringify(outputIndex, null, 2));
+
+  console.log(`✅ Imagens geradas em ${outDir}`);
 })();
