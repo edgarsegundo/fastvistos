@@ -12,12 +12,39 @@ const siteId = siteConfig.site.id;
 
 const imageBase = `/public-sites/${siteId}/assets/images-base/resized/`;
 
+
+/*
+| Tipo de leeway      | px       | Quando usar                                |
+| ------------------- | -------- | ------------------------------------------ |
+| conservador         | 10px     | Máxima nitidez, economia moderada          |
+| ideal ⭐            | 15px     | Melhor equilíbrio entre nitidez e economia |
+| agressivo           | 20px     | Mais economia, sem perda perceptível       |
+| limite seguro       | 25px     | Máximo tolerável sem blur visível          |
+| não recomendado     | 30px+    | Pode ficar levemente borrado               |
+
+Observação importante:
+Aplicamos o leeway *somente nos dois primeiros breakpoints* porque esses são os únicos
+que representam o mesmo layout (1 card) variando pixel a pixel conforme o viewport muda.
+Ou seja, o tamanho real do card cresce ou encolhe suavemente, então vale a pena dar 
+uma margem para evitar trocar de imagem por diferenças de 1–5 px.
+
+Já os breakpoints seguintes não recebem leeway porque representam mudanças bruscas 
+de layout (1 → 2 cards, 2 → 3 cards). Nessas transições há saltos grandes no tamanho 
+dos cards, portanto usar leeway poderia escolher tamanhos errados e prejudicar a nitidez.
+*/
+
+// Ajuste aqui o leeway desejado:
+const LEEWAY = 15;
+
+// Refactoring: aplicar LEEWAY *apenas* nos 2 primeiros breakpoints
 const sizes = `
-  (max-width: 388px) 356px,
-  (max-width: 768px) 608px,
+  (max-width: ${388 + LEEWAY}px) 356px,
+  (max-width: ${517 + LEEWAY}px) 485px,
+  (max-width: 767px) 608px,
   (max-width: 1279px) 356px,
   485px
 `;
+
 
 const cards = [
   {
