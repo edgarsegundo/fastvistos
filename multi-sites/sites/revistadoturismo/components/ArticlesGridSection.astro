@@ -4,18 +4,13 @@ import ResponsiveImage from "./ResponsiveImage.astro";
 // import map from "@/generated-image-map.json";
 import map from "../../../../src/generated-image-map.json";
 
-
 import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
 import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
 import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
 
-const breakpointSizes = `
-  (max-width: 767px) 608px,
-  (max-width: 1023px) 356px,
-  (max-width: 1279px) 315px,
-  (max-width: 1535px) 400px,
-  485px
-`;
+const breakpoints = [400, 608];
+
+const breakpointSizes = breakpoints.map(bp => `${bp}px`).join(', ');
 
 const cards = [
   {
@@ -65,8 +60,9 @@ const cards = [
             width={485}
             height={324}
             sizes={breakpointSizes}
+            breakpoints={breakpoints}
             sources={{
-              avif: map[card.key].avif.join(", "),
+              avif: map[card.key].avif?.join(", ") ?? "",
               webp: map[card.key].webp.join(", "),
               jpeg: map[card.key].jpeg.join(", ")
             }}

@@ -3,59 +3,42 @@
 // base: "article1"
 // alt: texto
 // class: classes extras
-const { base, alt, class: className = "" } = Astro.props;
+// breakpoints: [400, 608] (opcional)
+const { base, alt, class: className = "", breakpoints = [400, 608] } = Astro.props;
 
 console.log("[ResponsiveImage] base:", base);
 console.log("[ResponsiveImage] alt:", alt);
 console.log("[ResponsiveImage] class:", className);
+console.log("[ResponsiveImage] breakpoints:", breakpoints);
 
 // Caminho base
 const basePath = `/articles/${base}`;
 console.log("[ResponsiveImage] basePath:", basePath);
+
+// Gera srcset dinamicamente
+function makeSrcSet(ext) {
+  return breakpoints.map(bp => `${basePath}-${bp}.${ext} ${bp}w`).join(', ');
+}
 ---
 
 <picture class={className}>
   <!-- WEBP -->
   <source
     type="image/webp"
-    srcset="
-      {basePath}-608.webp 608w,
-      {basePath}-356.webp 356w,
-      {basePath}-315.webp 315w,
-      {basePath}-400.webp 400w,
-      {basePath}-485.webp 485w
-    "
-    sizes="
-      (max-width: 767px) 608px,
-      (max-width: 1023px) 356px,
-      (max-width: 1279px) 315px,
-      (max-width: 1535px) 400px,
-      485px
-    "
+    srcset={makeSrcSet('webp')}
+    sizes={breakpoints.map(bp => `${bp}px`).join(', ')}
   />
 
   <!-- JPG fallback -->
   <source
     type="image/jpeg"
-    srcset="
-      {basePath}-608.jpg 608w,
-      {basePath}-356.jpg 356w,
-      {basePath}-315.jpg 315w,
-      {basePath}-400.jpg 400w,
-      {basePath}-485.jpg 485w
-    "
-    sizes="
-      (max-width: 767px) 608px,
-      (max-width: 1023px) 356px,
-      (max-width: 1279px) 315px,
-      (max-width: 1535px) 400px,
-      485px
-    "
+    srcset={makeSrcSet('jpg')}
+    sizes={breakpoints.map(bp => `${bp}px`).join(', ')}
   />
 
   <!-- Fallback final -->
   <img
-    src="{basePath}-485.jpg"
+    src={`${basePath}-${breakpoints[breakpoints.length-1]}.jpg`}
     alt={alt}
     loading="lazy"
     decoding="async"
