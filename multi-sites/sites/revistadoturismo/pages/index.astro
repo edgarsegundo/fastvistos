@@ -2,10 +2,13 @@
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+import ArticlesGridSection from '../components/ArticlesGridSection.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FooterSection from '../components/FooterSection.astro';
+import HeaderSection from '../components/HeaderSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
-
 
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
@@ -33,6 +36,14 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             disableReviews={false}
         />
     </Fragment>
+
+    <main class="min-h-screen">
+        <HeaderSection />
+        <HeroSection />
+        <ArticlesGridSection />
+        <FooterSection />
+    </main>
+
 
     <!-- Body content -->
     <p>This is the home page content for {siteConfig.site.siteName}.</p>

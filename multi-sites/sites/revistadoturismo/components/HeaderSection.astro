@@ -1,0 +1,54 @@
+---
+// Header Section Component
+---
+
+<!-- Header/Navigation -->
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+    <div class="container mx-auto px-4">
+        <!-- Mobile Header -->
+        <div class="flex items-center justify-between py-4 md:hidden">
+            <button class="p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            
+            <a href="/" class="flex-1 text-center">
+                <img src="https://www.traveler.es/verso/static/condenasttraveler-global/assets/logo-reverse.svg" 
+                        alt="Condé Nast Traveler" class="h-6 mx-auto">
+            </a>
+            
+            <button class="p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Desktop Header -->
+        <div class="hidden md:flex items-center justify-between py-4">
+            <nav class="flex items-center space-x-6">
+                <a href="/viajes-urbanos" class="text-sm font-medium hover:text-gray-600">Viajes urbanos</a>
+                <a href="/naturaleza" class="text-sm font-medium hover:text-gray-600">Naturaleza</a>
+                <a href="/gastronomia" class="text-sm font-medium hover:text-gray-600">Gastronomía</a>
+                <a href="/viajeros" class="text-sm font-medium hover:text-gray-600">Viajeros</a>
+                <a href="/experiencias" class="text-sm font-medium hover:text-gray-600">Experiencias</a>
+            </nav>
+
+            <a href="/" class="mx-8">
+                <img src="https://www.traveler.es/verso/static/condenasttraveler-global/assets/logo-reverse.svg" 
+                        alt="Condé Nast Traveler" class="h-6">
+            </a>
+
+            <nav class="flex items-center space-x-6">
+                <a href="https://suscripcion.traveler.es/" class="text-sm font-medium hover:text-gray-600">Suscríbete</a>
+                <a href="/newsletter" class="text-sm font-medium hover:text-gray-600">Newsletter</a>
+                <button class="p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </nav>
+        </div>
+    </div>
+</header>
