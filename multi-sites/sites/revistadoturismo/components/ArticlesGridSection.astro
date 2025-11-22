@@ -6,24 +6,16 @@ import article1 from '../../../../public-sites/revistadoturismo/assets/images-ba
 import article2 from '../../../../public-sites/revistadoturismo/assets/images-base/article2.jpg';
 import article3 from '../../../../public-sites/revistadoturismo/assets/images-base/article3.jpg';
 
-// import article1 from '../../../../src/assets/revistadoturismo/article1.jpg';
-// import article2 from '../../../../src/assets/revistadoturismo/article2.jpg';
-// import article3 from '../../../../src/assets/revistadoturismo/article3.jpg';
-
 import { siteConfig } from '../site-config.ts';
 
 const siteId = siteConfig.site.id;
 
-const imageBase = `public-sites/${siteId}/assets/images-base/resized/`;
+const imageBase = `/public-sites/${siteId}/assets/images-base/resized/`;
 
-// === A1-PRECISE — APENAS LAYOUT REAL ===
-// 1 card  → usa 100vw
-// 2 cards → metade da largura
-// 3 cards → ~33vw
 const sizes = `
-  (max-width: 768px) 100vw,
-  (max-width: 1023px) 50vw,
-  33vw
+  (max-width: 768px) 608px,
+  (max-width: 1023px) 356px,
+  485px
 `;
 
 const cards = [
@@ -57,13 +49,7 @@ const cards = [
 ];
 
 function buildSrcSet(key, type) {
-  const entry = map[key];
-  if (!entry || !entry[type] || !Array.isArray(entry[type])) {
-    console.warn("🚨 buildSrcSet: tipo inexistente:", key, type);
-    return "";
-  }
-
-  const files = entry[type];
+  const files = map[key][type];
 
   const filtered = files.filter(f =>
     f.includes("-356-1x") || f.includes("-356-2x") ||
@@ -73,7 +59,6 @@ function buildSrcSet(key, type) {
 
   return filtered.map(f => imageBase + f).join(", ");
 }
-
 ---
 
 <section class="container mx-auto px-4 py-8">
@@ -91,8 +76,8 @@ function buildSrcSet(key, type) {
 
           <ResponsiveImage
             alt={card.alt}
-            width={0}
-            height={0}
+            width={608}
+            height={405}
             sizes={sizes}
             sources={{
               webp: buildSrcSet(card.key, "webp"),
@@ -121,7 +106,6 @@ function buildSrcSet(key, type) {
 <script>
 function updateWxHLabels() {
   const viewportLabel = document.getElementById('viewport-label');
-
   if (viewportLabel) {
     viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
   }
