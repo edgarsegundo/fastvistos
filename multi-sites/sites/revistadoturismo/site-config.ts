@@ -3,16 +3,16 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
-        id: 'fastvistos',
-        siteName: 'Fast Vistos',
+        business_id: '???',
+        id: 'revistadoturismo',
+        siteName: 'Revista do Turismo',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: 'fastvistos.com.br',
-        canonical: 'https://fastvistos.com.br/',
+        domain: 'revistadoturismo.com.br',
+        canonical: 'https://revistadoturismo.com.br/',
         authorName: 'Daniela Otaviano',
         primaryImage: {
-            url: 'https://fastvistos.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp',
+            url: 'https://revistadoturismo.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp',
             width: 1280,
             height: 720,
             type: 'image/webp',
@@ -22,16 +22,16 @@ export const siteConfig: SiteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
+            url: 'https://revistadoturismo.com.br/assets/images/logo/logo-fast-orange.png',
             alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
             width: 530,
             height: 67,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // Important for search and social previews
+        thumbnailUrl: 'https://revistadoturismo.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // Important for search and social previews
 
-        assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
+        assetsUrlBase: 'https://revistadoturismo.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
         priceRange: '$$', // e.g. $, $$, $$$, $$$$
         openingHours: [
@@ -39,9 +39,9 @@ export const siteConfig: SiteConfig = {
             'Sa 09:00-13:00',
         ],
         sameAs: [  // Social media profiles
-            'https://www.facebook.com/fastvistos/',
-            'https://x.com/FVistos32701',
-            'https://www.youtube.com/@FastVistos/shorts',
+            'https://www.facebook.com/revistadoturismo/',
+            'https://x.com/revistadoturismo',
+            'https://www.youtube.com/@revistadoturismo/shorts',
         ],
         geo: {
             latitude: -22.8807734, // Latitude for the business location
@@ -133,14 +133,14 @@ export const siteConfig: SiteConfig = {
     },
 
     socialMedia: {
-        facebook: 'https://facebook.com/fastvistos',
-        twitter: '@fastvistos',
-        instagram: 'https://instagram.com/fastvistos',
-        youtube: 'https://youtube.com/@fastvistos',
+        facebook: 'https://facebook.com/revistadoturismo',
+        twitter: '@revistadoturismo',
+        instagram: 'https://instagram.com/revistadoturismo',
+        youtube: 'https://youtube.com/@revistadoturismo',
     },
 
     analytics: {
-        gtmId: 'GTM-59SRNCQD',
+        gtmId: 'GTM-XXXXXX',
     },
 
     verification: {
