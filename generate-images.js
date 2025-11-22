@@ -14,7 +14,7 @@ const inputDir = `public-sites/${siteId}/assets/images-base`;
 const outDir = path.join("public-sites", siteId, "assets", "images-base", "resized");
 
 // const breakpoints = [608, 356, 315, 400, 485]; // você definiu
-const breakpoints = [400, 608]; 
+const breakpoints = [356, 485, 608];
 
 const scales = [1, 2]; // retina
 // const scales = [1, 2, 3]; // retina
@@ -69,13 +69,19 @@ async function processImage(file) {
 }
 
 (async () => {
-  for (const img of images) {
-    await processImage(img);
-  }
+    for (const img of images) {
+        await processImage(img);
+    }
 
-  // salva mapa para o Astro importar
-  const mapPath = path.join("public-sites", siteId, "assets", "images", "blog", "generated-image-map.json");
-  fs.writeFileSync(mapPath, JSON.stringify(outputIndex, null, 2));
+    // salva mapa para o Astro importar
+    const mapPath = path.join(
+        "multi-sites",
+        "sites",
+        siteId,
+        "generated-image-map.json"
+    );
 
-  console.log(`✅ Imagens geradas em ${outDir}`);
+    fs.writeFileSync(mapPath, JSON.stringify(outputIndex, null, 2));
+
+    console.log(`✅ JSON gerado em ${mapPath}`);
 })();
