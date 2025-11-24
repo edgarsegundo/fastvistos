@@ -2,7 +2,7 @@
 title: "Seu Visto Americano: O que \"Issued\" e \"Nenhum Dado\" Significam no CEAC"
 description: "SVSTMRKNKSDNNMDDSGNFKMNSS"
 pubDate: "2025-11-24T22:25:56.000Z"
-updatedDate: "2025-11-24T22:26:58.083Z"
+updatedDate: "2025-11-24T22:31:45.800Z"
 slug: "seu-visto-americano-o-que-issued-e-nenhum-dado-significam-no-ceac"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
