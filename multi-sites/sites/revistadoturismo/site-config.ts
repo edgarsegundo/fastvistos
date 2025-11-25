@@ -3,7 +3,7 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: '???',
+        business_id: 'e3bbe77b68c44b81b69d1573a264ede8',
         id: 'revistadoturismo',
         siteName: 'Revista do Turismo',
         locale: 'pt-BR',
