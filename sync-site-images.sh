@@ -20,6 +20,12 @@ DEST_PATH="/var/www/${SITEID}/assets/images/blog/"
 
 sudo usermod -aG systemd-journal edgar
 
+SRC="/var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}__*"
+if ! ls $SRC 1>/dev/null 2>&1; then
+  echo "⚠️  Nenhum arquivo encontrado em $SRC. Sincronização ignorada."
+  exit 0
+fi
+
 # Rsync command
 sudo bash -c "rsync -avz --progress /var/lib/docker/volumes/microservicesadm_mediafiles/_data/images/${SITEID}__* /var/www/${SITEID}/assets/images/blog/"
 
