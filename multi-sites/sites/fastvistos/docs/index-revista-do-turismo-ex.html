@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condé Nast Traveler - Revista de viajes y estilo de vida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white font-sans">
+    <!-- Header/Navigation -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4">
+            <!-- Mobile Header -->
+            <div class="flex items-center justify-between py-4 md:hidden">
+                <button class="p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <a href="/" class="flex-1 text-center">
+                    <img src="https://www.traveler.es/verso/static/condenasttraveler-global/assets/logo-reverse.svg" 
+                         alt="Condé Nast Traveler" class="h-6 mx-auto">
+                </a>
+                
+                <button class="p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Desktop Header -->
+            <div class="hidden md:flex items-center justify-between py-4">
+                <nav class="flex items-center space-x-6">
+                    <a href="/viajes-urbanos" class="text-sm font-medium hover:text-gray-600">Viajes urbanos</a>
+                    <a href="/naturaleza" class="text-sm font-medium hover:text-gray-600">Naturaleza</a>
+                    <a href="/gastronomia" class="text-sm font-medium hover:text-gray-600">Gastronomía</a>
+                    <a href="/viajeros" class="text-sm font-medium hover:text-gray-600">Viajeros</a>
+                    <a href="/experiencias" class="text-sm font-medium hover:text-gray-600">Experiencias</a>
+                </nav>
+
+                <a href="/" class="mx-8">
+                    <img src="https://www.traveler.es/verso/static/condenasttraveler-global/assets/logo-reverse.svg" 
+                         alt="Condé Nast Traveler" class="h-6">
+                </a>
+
+                <nav class="flex items-center space-x-6">
+                    <a href="https://suscripcion.traveler.es/" class="text-sm font-medium hover:text-gray-600">Suscríbete</a>
+                    <a href="/newsletter" class="text-sm font-medium hover:text-gray-600">Newsletter</a>
+                    <button class="p-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="min-h-screen">
+        <!-- Hero Banner -->
+        <section class="relative bg-gray-100">
+            <div class="container mx-auto px-4 py-8">
+                <div class="relative aspect-[16/9] md:aspect-[21/9] rounded-lg overflow-hidden">
+                    <picture>
+                        <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567890/master/w_400,h_225,c_limit/hero-mobile.jpg 400w,
+                                        https://media.traveler.es/photos/6234567890/master/w_800,h_450,c_limit/hero-mobile.jpg 800w"
+                                sizes="100vw">
+                        <source media="(min-width: 769px)" 
+                                srcset="https://media.traveler.es/photos/6234567890/master/w_1200,h_600,c_limit/hero-desktop.jpg 1200w,
+                                        https://media.traveler.es/photos/6234567890/master/w_2000,h_1000,c_limit/hero-desktop.jpg 2000w"
+                                sizes="100vw">
+                        <img src="https://media.traveler.es/photos/6234567890/master/w_1200,h_600,c_limit/hero-desktop.jpg" 
+                             alt="Destino destacado" 
+                             class="w-full h-full object-cover">
+                    </picture>
+                    
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                        <h2 class="text-white text-xl md:text-3xl font-bold mb-2">
+                            Los destinos más increíbles para 2024
+                        </h2>
+                        <p class="text-white/90 text-sm md:text-base">
+                            Descubre los lugares que marcarán tendencia este año
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Articles Grid -->
+        <section class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- CARD TEMPLATE (all updated to aspect-[3/2]) -->
+                <!-- Card 1 -->
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+                        <picture>
+                            <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567891/master/w_300,h_225,c_limit/article1-mobile.jpg 300w,
+                                        https://media.traveler.es/photos/6234567891/master/w_600,h_450,c_limit/article1-mobile.jpg 600w"
+                                sizes="(max-width: 768px) 100vw">
+                            <source media="(min-width: 769px)" 
+                                srcset="https://media.traveler.es/photos/6234567891/master/w_400,h_300,c_limit/article1-desktop.jpg 400w,
+                                        https://media.traveler.es/photos/6234567891/master/w_800,h_600,c_limit/article1-desktop.jpg 800w"
+                                sizes="(min-width: 769px) 33vw">
+                            <img src="https://media.traveler.es/photos/6234567891/master/w_400,h_300,c_limit/article1-desktop.jpg" 
+                                 alt="Restaurantes con vistas espectaculares" 
+                                 class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">
+                            Los 10 restaurantes con las vistas más espectaculares del mundo
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                            Desde acantilados hasta rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>Gastronomía</span>
+                            <span>Hace 2 horas</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+                        <picture>
+                            <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567892/master/w_300,h_225,c_limit/article2-mobile.jpg 300w,
+                                        https://media.traveler.es/photos/6234567892/master/w_600,h_450,c_limit/article2-mobile.jpg 600w"
+                                sizes="(max-width: 768px) 100vw">
+                            <source media="(min-width: 769px)" 
+                                srcset="https://media.traveler.es/photos/6234567892/master/w_400,h_300,c_limit/article2-desktop.jpg 400w,
+                                        https://media.traveler.es/photos/6234567892/master/w_800,h_600,c_limit/article2-desktop.jpg 800w"
+                                sizes="(min-width: 769px) 33vw">
+                            <img src="https://media.traveler.es/photos/6234567892/master/w_400,h_300,c_limit/article2-desktop.jpg" 
+                                 alt="Playas paradisíacas" 
+                                 class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">
+                            Playas paradisíacas que deberías visitar este verano
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                            Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>Naturaleza</span>
+                            <span>Hace 5 horas</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+                        <picture>
+                            <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567893/master/w_300,h_225,c_limit/article3-mobile.jpg 300w,
+                                        https://media.traveler.es/photos/6234567893/master/w_600,h_450,c_limit/article3-mobile.jpg 600w"
+                                sizes="(max-width: 768px) 100vw">
+                            <source media="(min-width: 769px)"
+                                srcset="https://media.traveler.es/photos/6234567893/master/w_400,h_300,c_limit/article3-desktop.jpg 400w,
+                                        https://media.traveler.es/photos/6234567893/master/w_800,h_600,c_limit/article3-desktop.jpg 800w"
+                                sizes="(min-width: 769px) 33vw">
+                            <img src="https://media.traveler.es/photos/6234567893/master/w_400,h_300,c_limit/article3-desktop.jpg" 
+                                 alt="Guía de Tokyo" 
+                                 class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">
+                            Tokyo en 3 días: la guía definitiva para no perderse nada
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                            Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>Viajes urbanos</span>
+                            <span>Hace 1 día</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+                        <picture>
+                            <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567894/master/w_300,h_225,c_limit/article4-mobile.jpg 300w,
+                                        https://media.traveler.es/photos/6234567894/master/w_600,h_450,c_limit/article4-mobile.jpg 600w"
+                                sizes="(max-width: 768px) 100vw">
+                            <source media="(min-width: 769px)"
+                                srcset="https://media.traveler.es/photos/6234567894/master/w_400,h_300,c_limit/article4-desktop.jpg 400w,
+                                        https://media.traveler.es/photos/6234567894/master/w_800,h_600,c_limit/article4-desktop.jpg 800w"
+                                sizes="(min-width: 769px) 33vw">
+                            <img src="https://media.traveler.es/photos/6234567894/master/w_400,h_300,c_limit/article4-desktop.jpg" 
+                                 alt="Hoteles sostenibles" 
+                                 class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">
+                            Los hoteles más sostenibles que están cambiando el turismo
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                            Alojamientos que combinan lujo y responsabilidad ambiental, demostrando que el turismo puede ser positivo para el planeta.
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>Experiencias</span>
+                            <span>Hace 2 días</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 5 -->
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+                        <picture>
+                            <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567895/master/w_300,h_225,c_limit/article5-mobile.jpg 300w,
+                                        https://media.traveler.es/photos/6234567895/master/w_600,h_450,c_limit/article5-mobile.jpg 600w"
+                                sizes="(max-width: 768px) 100vw">
+                            <source media="(min-width: 769px)"
+                                srcset="https://media.traveler.es/photos/6234567895/master/w_400,h_300,c_limit/article5-desktop.jpg 400w,
+                                        https://media.traveler.es/photos/6234567895/master/w_800,h_600,c_limit/article5-desktop.jpg 800w"
+                                sizes="(min-width: 769px) 33vw">
+                            <img src="https://media.traveler.es/photos/6234567895/master/w_400,h_300,c_limit/article5-desktop.jpg" 
+                                 alt="Mercados locales" 
+                                 class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">
+                            Mercados locales: el alma de cada destino
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                            Sumérgete en la cultura local a través de sus mercados, donde los colores, sabores y aromas te contarán la verdadera historia del lugar.
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>Gastronomía</span>
+                            <span>Hace 3 días</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 6 -->
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
+                        <picture>
+                            <source media="(max-width: 768px)" 
+                                srcset="https://media.traveler.es/photos/6234567896/master/w_300,h_225,c_limit/article6-mobile.jpg 300w,
+                                        https://media.traveler.es/photos/6234567896/master/w_600,h_450,c_limit/article6-mobile.jpg 600w"
+                                sizes="(max-width: 768px) 100vw">
+                            <source media="(min-width: 769px)"
+                                srcset="https://media.traveler.es/photos/6234567896/master/w_400,h_300,c_limit/article6-desktop.jpg 400w,
+                                        https://media.traveler.es/photos/6234567896/master/w_800,h_600,c_limit/article6-desktop.jpg 800w"
+                                sizes="(min-width: 769px) 33vw">
+                            <img src="https://media.traveler.es/photos/6234567896/master/w_400,h_300,c_limit/article6-desktop.jpg" 
+                                 alt="Senderismo en Europa" 
+                                 class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">
+                            Las mejores rutas de senderismo en Europa para este otoño
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+                            Disfruta de los paisajes más espectaculares del continente mientras practicas senderismo en estas rutas cuidadosamente seleccionadas.
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>Naturaleza</span>
+                            <span>Hace 4 días</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <img src="https://www.traveler.es/verso/static/condenasttraveler-global/assets/logo-reverse.svg" 
+                     alt="Condé Nast Traveler" 
+                     class="h-6 mx-auto mb-4">
+                <p class="text-gray-400 text-sm">
+                    Revista de viajes y estilo de vida | Condé Nast Traveler
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    function updateWxHLabels() {
+        // Encontrar todos os divs com a classe aspect-[3/2]
+        const cards = document.querySelectorAll('[class*="aspect-"]');
+        cards.forEach(function(card) {
+            const rect = card.getBoundingClientRect();
+            const label = card.querySelector('.wxh-label');
+            if (label) {
+                const width = Math.round(rect.width);
+                const height = Math.round(rect.height);
+                const ratio = (width / height).toFixed(2);
+                label.textContent = width + ' x ' + height + ' (ratio: ' + ratio + ')';
+            }
+        });
+    }
+    
+    // Debounce function para evitar muitas chamadas
+    let resizeTimeout;
+    function debouncedUpdate() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            updateWxHLabels();
+        }, 50); // Espera 50ms após parar de redimensionar
+    }
+    
+    // Executar quando a página carregar
+    window.addEventListener('load', function() {
+        updateWxHLabels();
+    });
+    
+    // Atualizar quando redimensionar (com debounce)
+    window.addEventListener('resize', debouncedUpdate);
+    
+    // Também atualizar durante o resize (tempo real)
+    let rafId;
+    window.addEventListener('resize', function() {
+        if (rafId) {
+            cancelAnimationFrame(rafId);
+        }
+        rafId = requestAnimationFrame(updateWxHLabels);
+    });
+    
+    // Executar imediatamente ao carregar o script
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateWxHLabels);
+    } else {
+        updateWxHLabels();
+    }
+    </script>
+</body>
+</html>

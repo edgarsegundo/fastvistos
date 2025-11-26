@@ -1,261 +1,158 @@
 ---
-// ArticlesGrid Section Component
+import ResponsiveImage from "./ResponsiveImage.astro";
+import map from "../generated-image-map.json";
+
+import article1 from '../../../../public-sites/revistadoturismo/assets/images-base/article1.jpg';
+import article2 from '../../../../public-sites/revistadoturismo/assets/images-base/article2.jpg';
+import article3 from '../../../../public-sites/revistadoturismo/assets/images-base/article3.jpg';
+
+import { siteConfig } from '../site-config.ts';
+
+const siteId = siteConfig.site.id;
+
+const imageBase = `/public-sites/${siteId}/assets/images-base/resized/`;
+
+
+/*
+| Tipo de leeway      | px       | Quando usar                                |
+| ------------------- | -------- | ------------------------------------------ |
+| conservador         | 10px     | Máxima nitidez, economia moderada          |
+| ideal ⭐            | 15px     | Melhor equilíbrio entre nitidez e economia |
+| agressivo           | 20px     | Mais economia, sem perda perceptível       |
+| limite seguro       | 25px     | Máximo tolerável sem blur visível          |
+| não recomendado     | 30px+    | Pode ficar levemente borrado               |
+
+Observação importante:
+Aplicamos o leeway *somente nos dois primeiros breakpoints* porque esses são os únicos
+que representam o mesmo layout (1 card) variando pixel a pixel conforme o viewport muda.
+Ou seja, o tamanho real do card cresce ou encolhe suavemente, então vale a pena dar 
+uma margem para evitar trocar de imagem por diferenças de 1–5 px.
+
+Já os breakpoints seguintes não recebem leeway porque representam mudanças bruscas 
+de layout (1 → 2 cards, 2 → 3 cards). Nessas transições há saltos grandes no tamanho 
+dos cards, portanto usar leeway poderia escolher tamanhos errados e prejudicar a nitidez.
+*/
+
+// Ajuste aqui o leeway desejado:
+const LEEWAY = 15;
+
+// Refactoring: aplicar LEEWAY *apenas* nos 2 primeiros breakpoints
+const sizes = `
+  (max-width: ${388 + LEEWAY}px) 356px,
+  (max-width: ${517 + LEEWAY}px) 485px,
+  (max-width: 767px) 608px,
+  (max-width: 1279px) 356px,
+  485px
+`;
+
+
+const cards = [
+  {
+    key: "article1",
+    img: article1,
+    alt: "Restaurantes con vistas espectaculares",
+    title: "Los 10 restaurantes con las vistas más espectaculares del mundo",
+    desc: "Desde acantilados até rascacielos, estos restaurantes ofrecen experiencias culinárias inolvidables.",
+    category: "Gastronomía",
+    time: "Hace 2 horas",
+  },
+  {
+    key: "article2",
+    img: article2,
+    alt: "Artigo 2",
+    title: "Playas paradisíacas que deberías visitar este verano",
+    desc: "Arenas blancas, aguas turquesas y paisajes tropicales te esperan.",
+    category: "Naturaleza",
+    time: "Hace 5 horas",
+  },
+  {
+    key: "article3",
+    img: article3,
+    alt: "Artigo 3",
+    title: "Tokyo en 3 días: guía definitiva",
+    desc: "Aprovecha al máximo tu visita con esta ruta cuidadosamente planificada.",
+    category: "Viajes urbanos",
+    time: "Hace 1 día",
+  },
+];
+
+function buildSrcSet(key, type) {
+  const files = map[key][type];
+
+  const filtered = files.filter(f =>
+    f.includes("-356-1x") || f.includes("-356-2x") ||
+    f.includes("-485-1x") || f.includes("-485-2x") ||
+    f.includes("-608-1x") || f.includes("-608-2x")
+  );
+
+  return filtered.map(f => imageBase + f).join(", ");
+}
 ---
 
-<!-- Articles Grid -->
 <section class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
 
-        <!-- CARD TEMPLATE (all updated to aspect-[3/2]) -->
-        <!-- Card 1 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567891/master/w_300,h_225,c_limit/article1-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567891/master/w_600,h_450,c_limit/article1-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)" 
-                        srcset="https://media.traveler.es/photos/6234567891/master/w_400,h_300,c_limit/article1-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567891/master/w_800,h_600,c_limit/article1-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567891/master/w_400,h_300,c_limit/article1-desktop.jpg" 
-                            alt="Restaurantes con vistas espectaculares" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
+  <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
 
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Los 10 restaurantes con las vistas más espectaculares del mundo
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Desde acantilados hasta rascacielos, estos restaurantes ofrecen experiencias culinarias inolvidables con paisajes de ensueño.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Gastronomía</span>
-                    <span>Hace 2 horas</span>
-                </div>
-            </div>
-        </article>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- Card 2 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567892/master/w_300,h_225,c_limit/article2-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567892/master/w_600,h_450,c_limit/article2-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)" 
-                        srcset="https://media.traveler.es/photos/6234567892/master/w_400,h_300,c_limit/article2-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567892/master/w_800,h_600,c_limit/article2-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567892/master/w_400,h_300,c_limit/article2-desktop.jpg" 
-                            alt="Playas paradisíacas" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
+    {cards.map((card, i) => (
+      <article class="bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow">
 
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Playas paradisíacas que deberías visitar este verano
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Arenas blancas, aguas turquesas y paisajes tropicales te esperan en estos destinos de ensueño alrededor del globo.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Naturaleza</span>
-                    <span>Hace 5 horas</span>
-                </div>
-            </div>
-        </article>
+        <div class="aspect-[3/2] relative">
+          <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
 
-        <!-- Card 3 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567893/master/w_300,h_225,c_limit/article3-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567893/master/w_600,h_450,c_limit/article3-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567893/master/w_400,h_300,c_limit/article3-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567893/master/w_800,h_600,c_limit/article3-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567893/master/w_400,h_300,c_limit/article3-desktop.jpg" 
-                            alt="Guía de Tokyo" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
+          <ResponsiveImage
+            alt={card.alt}
+            width={608}
+            height={405}
+            sizes={sizes}
+            sources={{
+              webp: buildSrcSet(card.key, "webp"),
+              jpeg: buildSrcSet(card.key, "jpeg")
+            }}
+            blurDataURL={map[card.key].blurDataURL}
+            priority={i === 0}
+          />
+        </div>
 
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Tokyo en 3 días: la guía definitiva para no perderse nada
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Descubre cómo aprovechar al máximo tu visita a la capital japonesa con esta ruta cuidadosamente planificada.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Viajes urbanos</span>
-                    <span>Hace 1 día</span>
-                </div>
-            </div>
-        </article>
+        <div class="p-4">
+          <h3 class="font-bold text-lg mb-2 line-clamp-2">{card.title}</h3>
+          <p class="text-gray-600 text-sm mb-3 line-clamp-3">{card.desc}</p>
+          <div class="flex items-center justify-between text-xs text-gray-500">
+            <span>{card.category}</span>
+            <span>{card.time}</span>
+          </div>
+        </div>
 
-        <!-- Card 4 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567894/master/w_300,h_225,c_limit/article4-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567894/master/w_600,h_450,c_limit/article4-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567894/master/w_400,h_300,c_limit/article4-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567894/master/w_800,h_600,c_limit/article4-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567894/master/w_400,h_300,c_limit/article4-desktop.jpg" 
-                            alt="Hoteles sostenibles" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
+      </article>
+    ))}
 
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Los hoteles más sostenibles que están cambiando el turismo
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Alojamientos que combinan lujo y responsabilidad ambiental, demostrando que el turismo puede ser positivo para el planeta.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Experiencias</span>
-                    <span>Hace 2 días</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- Card 5 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567895/master/w_300,h_225,c_limit/article5-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567895/master/w_600,h_450,c_limit/article5-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567895/master/w_400,h_300,c_limit/article5-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567895/master/w_800,h_600,c_limit/article5-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567895/master/w_400,h_300,c_limit/article5-desktop.jpg" 
-                            alt="Mercados locales" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Mercados locales: el alma de cada destino
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Sumérgete en la cultura local a través de sus mercados, donde los colores, sabores y aromas te contarán la verdadera historia del lugar.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Gastronomía</span>
-                    <span>Hace 3 días</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- Card 6 -->
-        <article class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[3/2] relative">
-                <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-                <picture>
-                    <source media="(max-width: 768px)" 
-                        srcset="https://media.traveler.es/photos/6234567896/master/w_300,h_225,c_limit/article6-mobile.jpg 300w,
-                                https://media.traveler.es/photos/6234567896/master/w_600,h_450,c_limit/article6-mobile.jpg 600w"
-                        sizes="(max-width: 768px) 100vw">
-                    <source media="(min-width: 769px)"
-                        srcset="https://media.traveler.es/photos/6234567896/master/w_400,h_300,c_limit/article6-desktop.jpg 400w,
-                                https://media.traveler.es/photos/6234567896/master/w_800,h_600,c_limit/article6-desktop.jpg 800w"
-                        sizes="(min-width: 769px) 33vw">
-                    <img src="https://media.traveler.es/photos/6234567896/master/w_400,h_300,c_limit/article6-desktop.jpg" 
-                            alt="Senderismo en Europa" 
-                            class="w-full h-full object-cover">
-                </picture>
-            </div>
-
-            <div class="p-4">
-                <h3 class="font-bold text-lg mb-2 line-clamp-2">
-                    Las mejores rutas de senderismo en Europa para este otoño
-                </h3>
-                <p class="text-gray-600 text-sm mb-3 line-clamp-3">
-                    Disfruta de los paisajes más espectaculares del continente mientras practicas senderismo en estas rutas cuidadosamente seleccionadas.
-                </p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>Naturaleza</span>
-                    <span>Hace 4 días</span>
-                </div>
-            </div>
-        </article>
-
-    </div>
+  </div>
 </section>
 
 <script>
 function updateWxHLabels() {
-    // Encontrar todos os divs com a classe aspect-[3/2]
-    const cards = document.querySelectorAll('[class*="aspect-"]');
-    cards.forEach(function(card) {
-        const rect = card.getBoundingClientRect();
-        const label = card.querySelector('.wxh-label');
-        if (label) {
-            const width = Math.round(rect.width);
-            const height = Math.round(rect.height);
-            const ratio = (width / height).toFixed(2);
-            label.textContent = width + ' x ' + height + ' (ratio: ' + ratio + ')';
-        }
-    });
+  const viewportLabel = document.getElementById('viewport-label');
+  if (viewportLabel) {
+    viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
+  }
+
+  document.querySelectorAll('[class*="aspect-"]').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const label = card.querySelector('.wxh-label');
+    if (label) {
+      label.textContent = `${Math.round(rect.width)} x ${Math.round(rect.height)}`;
+    }
+  });
 }
 
-// Debounce function para evitar muitas chamadas
 let resizeTimeout;
 function debouncedUpdate() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-        updateWxHLabels();
-    }, 50); // Espera 50ms após parar de redimensionar
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(updateWxHLabels, 50);
 }
 
-// Executar quando a página carregar
-window.addEventListener('load', function() {
-    updateWxHLabels();
-});
-
-// Atualizar quando redimensionar (com debounce)
+window.addEventListener('load', updateWxHLabels);
 window.addEventListener('resize', debouncedUpdate);
-
-// Também atualizar durante o resize (tempo real)
-let rafId;
-window.addEventListener('resize', function() {
-    if (rafId) {
-        cancelAnimationFrame(rafId);
-    }
-    rafId = requestAnimationFrame(updateWxHLabels);
-});
-
-// Executar imediatamente ao carregar o script
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateWxHLabels);
-} else {
-    updateWxHLabels();
-}
 </script>
