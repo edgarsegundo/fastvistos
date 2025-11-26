@@ -49,7 +49,8 @@
     "dev:revistadoturismo": "node sync-blog.js revistadoturismo && SITE_ID=revistadoturismo astro dev",
     "dev:watch:revistadoturismo": "node dev-with-sync.js revistadoturismo",
     "build:revistadoturismo": "node sync-blog.js revistadoturismo && SITE_ID=revistadoturismo astro build && node postbuild-updatable.js revistadoturismo",
-    "preview:revistadoturismo": "SITE_ID=revistadoturismo astro preview"
+    "preview:revistadoturismo": "SITE_ID=revistadoturismo astro preview",
+    "download-images:revistadoturismo": "node download-blog-images.js revistadoturismo"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

@@ -143,6 +143,7 @@ async function addNpmScripts(siteId) {
             [`dev:watch:${siteId}`]: `node dev-with-sync.js ${siteId}`,
             [`build:${siteId}`]: `node sync-blog.js ${siteId} && SITE_ID=${siteId} astro build && node postbuild-updatable.js ${siteId}`,
             [`preview:${siteId}`]: `SITE_ID=${siteId} astro preview`,
+            [`download-images:${siteId}`]: `node download-blog-images.js ${siteId}`,
         };
 
         let addedScripts = [];
