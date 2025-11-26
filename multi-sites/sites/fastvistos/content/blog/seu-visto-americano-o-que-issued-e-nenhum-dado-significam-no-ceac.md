@@ -2,7 +2,7 @@
 title: "Seu Visto Americano: O que \"Issued\" e \"Nenhum Dado\" Significam no CEAC"
 description: "SVSTMRKNKSDNNMDDSGNFKMNSS"
 pubDate: "2025-11-24T22:25:56.000Z"
-updatedDate: "2025-11-24T22:31:45.800Z"
+updatedDate: "2025-11-24T22:36:10.374Z"
 slug: "seu-visto-americano-o-que-issued-e-nenhum-dado-significam-no-ceac"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -28,8 +28,6 @@ Este guia reúne informações atualizadas para 2025, relatos reais e um passo a
 
 
 ## ⚠️ As 5 Causas Reais do Erro "Your Search Did Not Return Any Data"
-
-![your-search-did-not-return-any-data-visto-americano-status-ceac](https://fastvistos.com.br/assets/images/blog/fastvistos__your-search-did-not-return-any-data-visto-americano-status-ceac.webp)
 
 Baseado em relatos e experiências de 2024-2025, estas são as razões concretas por trás da mensagem:
 
