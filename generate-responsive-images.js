@@ -6,7 +6,7 @@ import path from "path";
 const args = process.argv.slice(2);
 const siteId = args[0];
 if (!siteId) {
-  console.error("❌ Usage: node generate-images.js <siteId>");
+  console.error("❌ Usage: node generate-responsive-images.js <siteId>");
   process.exit(1);
 }
 
