@@ -20,17 +20,13 @@ import FooterSection from '../components/FooterSection.astro';
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
-
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
-
     themeToggleDisable={true}
-
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
-
     titleFromConf={siteConfig.homePageConfig.seo.title}
     descriptionFromConf={siteConfig.homePageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}
@@ -58,16 +54,13 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <!-- <StatsSection /> -->
     <!-- <CTASection /> -->
     <GoogleMapsSection />
-    <FaqSection 
-        relativePath="multi-sites/sites/zenith/components/FaqSection.astro" 
+    <FaqSection
+        relativePath="multi-sites/sites/zenith/components/FaqSection.astro"
         siteId={siteConfig.site.id}
     />
     <FooterSection />
 
     <Whatsapp />
-
-
 </SharedHomeLayout>
 
-<style is:global>
-</style>
+<style is:global></style>

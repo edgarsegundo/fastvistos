@@ -1,6 +1,6 @@
 ---
-import ResponsiveImage from "./ResponsiveImage.astro";
-import map from "../generated-image-map.json";
+import ResponsiveImage from './ResponsiveImage.astro';
+import map from '../generated-image-map.json';
 
 // import { siteConfig } from '../site-config.ts';
 
@@ -8,112 +8,115 @@ import map from "../generated-image-map.json";
 const imageBase = `/assets/images-responsive-base/resized/`;
 
 const cards = [
-  {
-    key: "article1",
-    img: `${imageBase}/article1.jpg`,
-    alt: "Restaurantes con vistas espectaculares",
-    title: "Los 10 restaurantes com as vistas mais espetaculares do mundo",
-    desc: "Desde acantilados até arranha-céus, estes restaurantes oferecem experiências culinárias inesquecíveis com paisagens de sonho.",
-    category: "Gastronomia",
-    time: "Há 2 horas",
-  },
-  {
-    key: "article2",
-    img: `${imageBase}/article2.jpg`,
-    alt: "Artigo 2",
-    title: "Praias paradisíacas que você deveria visitar neste verão",
-    desc: "Areias brancas, águas turquesa e paisagens tropicais esperam por você nestes destinos de sonho ao redor do mundo.",
-    category: "Natureza",
-    time: "Há 5 horas",
-  },
-  {
-    key: "article3",
-    img: `${imageBase}/article3.jpg`,
-    alt: "Artigo 3",
-    title: "Tóquio em 3 dias: o guia definitivo para não perder nada",
-    desc: "Descubra como aproveitar ao máximo sua visita à capital japonesa com este roteiro cuidadosamente planejado.",
-    category: "Viagens urbanas",
-    time: "Há 1 dia",
-  },
+    {
+        key: 'article1',
+        img: `${imageBase}/article1.jpg`,
+        alt: 'Restaurantes con vistas espectaculares',
+        title: 'Los 10 restaurantes com as vistas mais espetaculares do mundo',
+        desc: 'Desde acantilados até arranha-céus, estes restaurantes oferecem experiências culinárias inesquecíveis com paisagens de sonho.',
+        category: 'Gastronomia',
+        time: 'Há 2 horas',
+    },
+    {
+        key: 'article2',
+        img: `${imageBase}/article2.jpg`,
+        alt: 'Artigo 2',
+        title: 'Praias paradisíacas que você deveria visitar neste verão',
+        desc: 'Areias brancas, águas turquesa e paisagens tropicais esperam por você nestes destinos de sonho ao redor do mundo.',
+        category: 'Natureza',
+        time: 'Há 5 horas',
+    },
+    {
+        key: 'article3',
+        img: `${imageBase}/article3.jpg`,
+        alt: 'Artigo 3',
+        title: 'Tóquio em 3 dias: o guia definitivo para não perder nada',
+        desc: 'Descubra como aproveitar ao máximo sua visita à capital japonesa com este roteiro cuidadosamente planejado.',
+        category: 'Viagens urbanas',
+        time: 'Há 1 dia',
+    },
 ];
 
 function buildSrcSet(key, type) {
-  const files = map[key][type];
+    const files = map[key][type];
 
-  const filtered = files.filter(f =>
-    f.includes("-356-1x") || f.includes("-356-2x") ||
-    f.includes("-485-1x") || f.includes("-485-2x") ||
-    f.includes("-608-1x") || f.includes("-608-2x")
-  );
+    const filtered = files.filter(
+        (f) =>
+            f.includes('-356-1x') ||
+            f.includes('-356-2x') ||
+            f.includes('-485-1x') ||
+            f.includes('-485-2x') ||
+            f.includes('-608-1x') ||
+            f.includes('-608-2x')
+    );
 
-  return filtered.map(f => imageBase + f).join(", ");
+    return filtered.map((f) => imageBase + f).join(', ');
 }
 ---
 
 <section class="container mx-auto px-4 py-8">
-  <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
+    <h2 class="text-2xl font-bold mb-6">Últimos artículos</h2>
 
-  <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
+    <div id="viewport-label" class="mb-4 text-sm text-gray-700 font-mono"></div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+            cards.map((card, i) => (
+                <article class="bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-[3/2] relative">
+                        <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label" />
 
-    {cards.map((card, i) => (
-      <article class="bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                        <ResponsiveImage
+                            alt={card.alt}
+                            width={608}
+                            height={405}
+                            sizes="(max-width: 1023px) 400px, 608px"
+                            sources={{
+                                webp: map[card.key].webp.map((f) => imageBase + f).join(', '),
+                                jpeg: map[card.key].jpeg.map((f) => imageBase + f).join(', '),
+                            }}
+                            blurDataURL={map[card.key].blurDataURL}
+                            priority={i === 0}
+                        />
+                    </div>
 
-        <div class="aspect-[3/2] relative">
-          <span class="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded z-10 wxh-label"></span>
-
-          <ResponsiveImage
-            alt={card.alt}
-            width={608}
-            height={405}
-            sizes="(max-width: 1023px) 400px, 608px"
-            sources={{
-              webp: map[card.key].webp.map(f => imageBase + f).join(", "),
-              jpeg: map[card.key].jpeg.map(f => imageBase + f).join(", ")
-            }}
-            blurDataURL={map[card.key].blurDataURL}
-            priority={i === 0}
-          />
-        </div>
-
-        <div class="p-4">
-          <h3 class="font-bold text-lg mb-2 line-clamp-2">{card.title}</h3>
-          <p class="text-gray-600 text-sm mb-3 line-clamp-3">{card.desc}</p>
-          <div class="flex items-center justify-between text-xs text-gray-500">
-            <span>{card.category}</span>
-            <span>{card.time}</span>
-          </div>
-        </div>
-
-      </article>
-    ))}
-
-  </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 line-clamp-2">{card.title}</h3>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">{card.desc}</p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>{card.category}</span>
+                            <span>{card.time}</span>
+                        </div>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
 </section>
 
 <script>
-function updateWxHLabels() {
-  const viewportLabel = document.getElementById('viewport-label');
-  if (viewportLabel) {
-    viewportLabel.textContent = 'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
-  }
+    function updateWxHLabels() {
+        const viewportLabel = document.getElementById('viewport-label');
+        if (viewportLabel) {
+            viewportLabel.textContent =
+                'Viewport: ' + window.innerWidth + ' x ' + window.innerHeight;
+        }
 
-  document.querySelectorAll('[class*="aspect-"]').forEach(card => {
-    const rect = card.getBoundingClientRect();
-    const label = card.querySelector('.wxh-label');
-    if (label) {
-      label.textContent = `${Math.round(rect.width)} x ${Math.round(rect.height)}`;
+        document.querySelectorAll('[class*="aspect-"]').forEach((card) => {
+            const rect = card.getBoundingClientRect();
+            const label = card.querySelector('.wxh-label');
+            if (label) {
+                label.textContent = `${Math.round(rect.width)} x ${Math.round(rect.height)}`;
+            }
+        });
     }
-  });
-}
 
-let resizeTimeout;
-function debouncedUpdate() {
-  clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(updateWxHLabels, 50);
-}
+    let resizeTimeout;
+    function debouncedUpdate() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateWxHLabels, 50);
+    }
 
-window.addEventListener('load', updateWxHLabels);
-window.addEventListener('resize', debouncedUpdate);
+    window.addEventListener('load', updateWxHLabels);
+    window.addEventListener('resize', debouncedUpdate);
 </script>

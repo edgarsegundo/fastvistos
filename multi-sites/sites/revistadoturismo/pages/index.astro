@@ -14,11 +14,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
-
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
-
     titleFromConf={siteConfig.homePageConfig.seo.title}
     descriptionFromConf={siteConfig.homePageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}

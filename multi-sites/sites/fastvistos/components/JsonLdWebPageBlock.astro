@@ -42,9 +42,7 @@ export function getWebPageBlock({
         about: { '@id': orgId },
         primaryImageOfPage: { '@id': imageId },
         image: { '@id': imageId },
-        ...(imageUrlValidated
-            ? { thumbnailUrl: imageUrlValidated }
-            : {}),
+        ...(imageUrlValidated ? { thumbnailUrl: imageUrlValidated } : {}),
         ...(pubDate ? { datePublished: pubDate } : {}),
         ...(updatedDate ? { dateModified: updatedDate } : {}),
         description: description,

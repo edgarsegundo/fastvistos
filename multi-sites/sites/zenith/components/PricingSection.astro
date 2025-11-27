@@ -1,111 +1,148 @@
-<div updatable-section-uuid="02c53dbe-3fc9-49df-81b1-c7b7ab896a7b"
+<div
+    updatable-section-uuid="02c53dbe-3fc9-49df-81b1-c7b7ab896a7b"
     updatable-section-title="Pricing Section"
     updatable-section-filepath="multi-sites/sites/zenith/components/PricingSection.astro"
     updatable-section-siteid="zenith"
     updatable-section-businessid="5770497882464a4ab0bda055d011113b"
 >
-<section id="pricing" class="py-20 bg-muted/20 theme-transition">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center mb-4 text-foreground">Planos de Hospedagem</h2>
-        <p class="text-center text-muted-foreground mb-16">Escolha o plano ideal para o seu projeto</p>
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- Basic Plan -->
-            <div class="p-8 hover:shadow-xl theme-transition border border-border rounded-lg bg-card">
-                <h3 class="text-2xl font-bold mb-2 text-foreground">Básico</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-foreground">R$ 9,99</span>
-                    <span class="text-muted-foreground">/mês</span>
+    <section id="pricing" class="py-20 bg-muted/20 theme-transition">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4 text-foreground">
+                Planos de Hospedagem
+            </h2>
+            <p class="text-center text-muted-foreground mb-16">
+                Escolha o plano ideal para o seu projeto
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Basic Plan -->
+                <div
+                    class="p-8 hover:shadow-xl theme-transition border border-border rounded-lg bg-card"
+                >
+                    <h3 class="text-2xl font-bold mb-2 text-foreground">Básico</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-foreground">R$ 9,99</span>
+                        <span class="text-muted-foreground">/mês</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">1 site</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">10 GB de armazenamento</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Certificado SSL grátis</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">5 contas de email</span>
+                        </li>
+                    </ul>
+                    <button
+                        class="w-full px-4 py-2 border border-border text-foreground rounded-md hover:bg-muted transition-colors"
+                        >Começar Agora</button
+                    >
                 </div>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">1 site</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">10 GB de armazenamento</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Certificado SSL grátis</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">5 contas de email</span>
-                    </li>
-                </ul>
-                <button class="w-full px-4 py-2 border border-border text-foreground rounded-md hover:bg-muted transition-colors">Começar Agora</button>
-            </div>
-            <!-- Pro Plan -->
-            <div class="p-8 border-primary border-2 relative hover:shadow-xl theme-transition rounded-lg bg-card">
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                    Mais Popular
+                <!-- Pro Plan -->
+                <div
+                    class="p-8 border-primary border-2 relative hover:shadow-xl theme-transition rounded-lg bg-card"
+                >
+                    <div
+                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold"
+                    >
+                        Mais Popular
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-foreground">Profissional</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-foreground">R$ 24,99</span>
+                        <span class="text-muted-foreground">/mês</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Sites ilimitados</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">50 GB de armazenamento</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Certificado SSL grátis</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Emails ilimitados</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Backup diário</span>
+                        </li>
+                    </ul>
+                    <button
+                        class="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity"
+                        >Começar Agora</button
+                    >
                 </div>
-                <h3 class="text-2xl font-bold mb-2 text-foreground">Profissional</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-foreground">R$ 24,99</span>
-                    <span class="text-muted-foreground">/mês</span>
+                <!-- Enterprise Plan -->
+                <div
+                    class="p-8 hover:shadow-xl theme-transition border border-border rounded-lg bg-card"
+                >
+                    <h3 class="text-2xl font-bold mb-2 text-foreground">Empresarial</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-foreground">R$ 49,99</span>
+                        <span class="text-muted-foreground">/mês</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Sites ilimitados</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">100 GB de armazenamento</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Certificado SSL grátis</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Emails ilimitados</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">Backup diário + CDN</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"
+                            ></i>
+                            <span class="text-foreground">IP dedicado</span>
+                        </li>
+                    </ul>
+                    <button
+                        class="w-full px-4 py-2 border border-border text-foreground rounded-md hover:bg-muted transition-colors"
+                        >Começar Agora</button
+                    >
                 </div>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Sites ilimitados</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">50 GB de armazenamento</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Certificado SSL grátis</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Emails ilimitados</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Backup diário</span>
-                    </li>
-                </ul>
-                <button class="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity">Começar Agora</button>
-            </div>
-            <!-- Enterprise Plan -->
-            <div class="p-8 hover:shadow-xl theme-transition border border-border rounded-lg bg-card">
-                <h3 class="text-2xl font-bold mb-2 text-foreground">Empresarial</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-foreground">R$ 49,99</span>
-                    <span class="text-muted-foreground">/mês</span>
-                </div>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Sites ilimitados</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">100 GB de armazenamento</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Certificado SSL grátis</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Emails ilimitados</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">Backup diário + CDN</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i data-lucide="check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
-                        <span class="text-foreground">IP dedicado</span>
-                    </li>
-                </ul>
-                <button class="w-full px-4 py-2 border border-border text-foreground rounded-md hover:bg-muted transition-colors">Começar Agora</button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 </div>
