@@ -11,7 +11,7 @@ if (!siteId) {
 }
 
 const inputDir = `public/${siteId}/assets/images-responsive-base`;
-const outDir = path.join("public", siteId, "assets", "images-responsive-base");
+const outDir = path.join("public", siteId, "assets", "images-responsive-base", "resized");
 
 // const breakpoints = [608, 356, 315, 400, 485]; // você definiu
 const breakpoints = [356, 485, 608];
