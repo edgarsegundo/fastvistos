@@ -135,18 +135,21 @@ const businessId = siteConfig.site.business_id;
 
 </section>
 
-<script>
 
+<script define:vars={{ businessId }}>
+  window.__BUSINESS_ID__ = businessId;
+</script>
+
+
+<script>
 // Configurable batch size
 const BATCH_SIZE = 5;
 
-// Pass businessId from Astro to client
-window.__BUSINESS_ID__ = "{businessId}";
-
 // Real endpoint: returns next articles for a topic
 async function fetchNextArticles(topicId, offset, limit) {
+    debugger;
+    offset = 5;
   const businessId = window.__BUSINESS_ID__;
-  debugger;
   const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
   try {
     const res = await fetch(url);
@@ -169,8 +172,10 @@ const spinnerSVG = `<svg class='spinner' width='32' height='32' viewBox='0 0 32 
 
 // State: loaded articles per topic
 const topicStates = {};
+var offset = BATCH_SIZE;
 
 document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) => {
+    debugger;
     const topicId = carousel.id.replace('carousel-', '');
     topicStates[topicId] = {
         loading: false,
@@ -224,7 +229,7 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
                 carousel.appendChild(spinnerCard);
             }
             // Fetch next articles
-            const nextArticles = await fetchNextArticles(topicId, topicStates[topicId].offset, BATCH_SIZE);
+            const nextArticles = await fetchNextArticles(topicId, topicId, BATCH_SIZE);
             // Remove spinner cards
             for (let i = 0; i < BATCH_SIZE; i++) {
                 carousel.removeChild(carousel.lastChild);
