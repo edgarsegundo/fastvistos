@@ -41,7 +41,7 @@ npm run build:vibecode           # Build VibeCode for production
 This JS script processes all base images for a given site ID, generating multiple optimized versions (WebP and JPEG) at predefined breakpoints and retina scales, creates a blurred base64 placeholder for each image, saves the resized outputs in a structured directory, and produces a JSON index mapping each image to its responsive variants for use in the site’s frontend.
 
 ```bash
-node generate-images.js revistadoturismo
+node generate-responsive-images.js revistadoturismo
 ```
 
 ### **Deployment/Publish to Server**
