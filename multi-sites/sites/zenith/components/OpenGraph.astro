@@ -69,7 +69,6 @@ const {
 } = Astro.props;
 ---
 
-
 <meta property="og:type" content={type} />
 {url && <meta property="og:url" content={url} />}
 {title && <meta property="og:title" content={title} />}
@@ -101,7 +100,6 @@ const {
 
 {siteName && <meta property="og:site_name" content={siteName} />}
 <meta property="og:locale" content={locale} />
-
 
 {type === 'article' && author && <meta property="article:author" content={author} />}
 {

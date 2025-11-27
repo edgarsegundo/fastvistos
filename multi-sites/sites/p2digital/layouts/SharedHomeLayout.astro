@@ -19,7 +19,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
     : siteConfig.site.language.split('-')[0];
 
 const {
-    bodyClass = '', 
+    bodyClass = '',
     bodyStyle = '',
     themeToggleDisable = false, // New prop to control theme toggle visibility
 
@@ -43,16 +43,13 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
-        
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
             enhancedIndexing={false}
-
             canonical={canonicalConf}
             faviconPath={faviconPathFromConf}
             seo={seoFromConf}
-
             title={titleFromConf}
             description={descriptionFromConf}
             authorName={authorNameFromConf}
@@ -61,15 +58,12 @@ const {
             imageCaption={imageCaptionFromConf}
             imageWidth={imageWidthFromConf}
             imageHeight={imageHeightFromConf}
-
             pubDate={pubDate}
             updatedDate={updatedDate}
         />
 
-        
         <AnalyticsHead siteConfig={siteConfig} />
 
-        
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -81,14 +75,10 @@ const {
         <slot name="head" />
     </head>
     <body class={bodyClass} style={bodyStyle}>
-        
         <AnalyticsBody siteConfig={siteConfig} />
 
-        
         {!themeToggleDisable && <ThemeToggle />}
 
-        
         <slot />
-    </body>
-    <script src="../lib/updatable-editor.js"></script>
+    </body><script src="../lib/updatable-editor.js"></script>
 </html>
