@@ -177,7 +177,7 @@ model blog_article {
   title                                                                                         String                          @db.LongText
   content_md                                                                                    String?                         @db.LongText
   type                                                                                          String                          @db.VarChar(50)
-  slug                                                                                          String?                         @unique(map: "slug") @db.VarChar(255)
+  slug                                                                                          String?                         @db.VarChar(255)
   published                                                                                     DateTime?                       @db.DateTime(6)
   image                                                                                         String?                         @db.VarChar(100)
   business_id                                                                                   String                          @db.Char(32)
@@ -198,6 +198,7 @@ model blog_article {
 
   @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
+  @@index([slug], map: "blog_article_slug_c3fca16d")
 }
 
 model blog_config {
@@ -274,6 +275,7 @@ model blog_topic {
   seo_image_height  Int?           @db.UnsignedInt
   seo_image_url     String?        @db.VarChar(200)
   seo_image_width   Int?           @db.UnsignedInt
+  show_on_homepage  Boolean
   blog_article      blog_article[]
   blog_config       blog_config    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
   business          business       @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
@@ -298,6 +300,7 @@ model business {
   phone2_number                  String?                          @db.VarChar(15)
   email                          String?                          @db.VarChar(255)
   custom_config                  Json?
+  canonical_domain               String?                          @db.VarChar(255)
   actionable_group               actionable_group[]
   appointment_status_1           appointment_status_1[]
   appointment_status_2           appointment_status_2[]
