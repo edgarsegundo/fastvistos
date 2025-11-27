@@ -18,14 +18,14 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 
 // Create correct breadcrumb structure
 const breadcrumbList = [
-  {
-    name: "Home",
-    item: siteConfig.site.canonical, // This should be "https://fastvistos.com.br/"
-  },
-  {
-    name: "Blog",
-    item: `${siteConfig.site.canonical}blog/`, // This should be "https://fastvistos.com.br/blog/"
-  }
+    {
+        name: 'Home',
+        item: siteConfig.site.canonical, // This should be "https://fastvistos.com.br/"
+    },
+    {
+        name: 'Blog',
+        item: `${siteConfig.site.canonical}blog/`, // This should be "https://fastvistos.com.br/blog/"
+    },
 ];
 ---
 
@@ -33,7 +33,6 @@ const breadcrumbList = [
     canonicalConf={`${siteConfig.site.canonical}blog/`}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.blogPageConfig.seo}
-
     titleFromDb={blogConfigFromDb?.title}
     descriptionFromDb={blogConfigFromDb?.description}
     authorNameFromDb={blogConfigFromDb?.author_name}

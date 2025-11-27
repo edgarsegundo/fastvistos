@@ -22,16 +22,13 @@ import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
-
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
     themeToggleDisable={true}
-
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
-
     titleFromConf={siteConfig.homePageConfig.seo.title}
     descriptionFromConf={siteConfig.homePageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}
@@ -56,7 +53,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <HeroSection />
     <ServicesSection />
     <AboutSection />
-    
+
     <PassportSection />
     <CompararAd />
     <CarouselSection />

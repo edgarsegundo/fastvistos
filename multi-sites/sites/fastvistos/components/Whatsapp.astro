@@ -34,7 +34,8 @@
             <div
                 class="absolute top-20 left-20 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
                 style="border-color: #028069; background-color: #49D506;"
-            ></div>
+            >
+            </div>
 
             <div class="ml-3">
                 <div class="font-bold">Daniela</div>
@@ -66,7 +67,8 @@
                     <div
                         class="absolute left-0 top-0"
                         style="width: 0; height: 0; border-top: 12px solid white; border-left: 12px solid transparent; transform: translateX(-12px);"
-                    ></div>
+                    >
+                    </div>
 
                     <div
                         class="bg-white text-black p-3 rounded-tr-lg rounded-br-lg rounded-bl-lg shadow-lg"
@@ -147,7 +149,7 @@
         startChatButton.addEventListener('click', function () {
             // Envia evento para GTM
             dataLayer.push({
-                event: 'start_chat_click'
+                event: 'start_chat_click',
             });
 
             window.open(

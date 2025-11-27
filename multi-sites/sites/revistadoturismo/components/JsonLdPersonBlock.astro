@@ -1,15 +1,15 @@
 ---
-export function getPersonBlock({ 
-    id, 
-    name, 
+export function getPersonBlock({
+    id,
+    name,
     url,
     description,
     imageUrl,
     imageId,
- }: { 
-    id: string; 
-    name: string; 
-    url?: string | null; 
+}: {
+    id: string;
+    name: string;
+    url?: string | null;
     description?: string;
     imageUrl?: string | null;
     imageId?: string;
@@ -18,13 +18,13 @@ export function getPersonBlock({
         '@type': 'Person',
         '@id': id,
         name: name,
-        image: { 
+        image: {
             '@type': 'ImageObject',
-            'inLanguage': 'pt-BR',
+            inLanguage: 'pt-BR',
             '@id': imageId,
             url: imageUrl,
             contentUrl: imageUrl,
-            caption: name
+            caption: name,
         },
         ...(description ? { description } : {}),
         ...(url ? { url } : {}),

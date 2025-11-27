@@ -19,7 +19,7 @@ const htmlLang = siteConfig.site.useFullLanguageTag
     ? siteConfig.site.language
     : siteConfig.site.language.split('-')[0];
 
-const { 
+const {
     canonicalConf,
     faviconPathFromConf,
     seoFromConf,
@@ -48,11 +48,9 @@ const {
             generator={Astro.generator}
             noIndex={false}
             enhancedIndexing={false}
-
             canonical={canonicalConf}
             faviconPath={faviconPathFromConf}
             seo={seoFromConf}
-
             title={titleFromDb}
             description={descriptionFromDb}
             authorName={authorNameFromDb}
@@ -61,7 +59,6 @@ const {
             imageCaption={imageCaptionFromDb}
             imageWidth={imageWidthFromDb}
             imageHeight={imageHeightFromDb}
-
             pubDate={pubDate}
             updatedDate={updatedDate}
         />
