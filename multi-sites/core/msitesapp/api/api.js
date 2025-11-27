@@ -343,8 +343,10 @@ app.post('/publish-article', async (req, res) => {
 
         let artigo1 = null;
         let artigo2 = null;
+
+        const timestamp = new Date().getTime();
         let newArticle =  {
-            "title": "Artigo Auto Gerado",
+            title: `Artigo Auto Gerado ${timestamp}`,
             "seoMetaDescription": "Descrição otimizada para SEO",
             "markdownText": "Texto completo do artigo em Markdown"
         };
