@@ -95,7 +95,7 @@ export class BlogService {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
-            return await prisma.blog_article.findUnique({
+            return await prisma.blog_article.findFirst({
                 where: {
                     id: id,
                     business_id: businessId,
