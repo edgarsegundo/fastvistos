@@ -164,6 +164,34 @@ export class BlogService {
         }
     }
 
+    /**
+     * Get articles by topicId with offset and limit (for dynamic carousel loading)
+     */
+    static async getArticlesByTopicIdWithOffset(topicId: string, offset: number = 0, limit: number = 5) {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+            return await prisma.blog_article.findMany({
+                where: {
+                    business_id: businessId,
+                    blog_topic_id: topicId,
+                    is_removed: false,
+                    published: {
+                        lte: now,
+                    },
+                },
+                orderBy: {
+                    published: 'desc',
+                },
+                skip: offset,
+                take: limit,
+            });
+        } catch (error) {
+            console.error('Error fetching articles by topicId with offset:', error);
+            return [];
+        }
+    }    
+
     // Get recent articles (for sidebar, homepage, etc.)
     static async getRecentArticles(limit: number = 5) {
         try {

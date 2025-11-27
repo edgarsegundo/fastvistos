@@ -565,29 +565,23 @@ app.get('/next-articles', async (req, res) => {
             return res.json({ articles });
         }
 
-        // Real DB query
-        const { BlogService } = await import('../../dist/lib/blog-service.js');
         // Fetch articles for topic, sorted by published desc, skip offset, take limit
-        let allArticles = [];
-        if (typeof BlogService.getArticlesByTopicId === 'function') {
-            allArticles = await BlogService.getArticlesByTopicId(businessId, topicId);
-        } else {
-            // fallback: getArticlesByTopic (may need to filter by topicId)
-            const topicArticles = await BlogService.getArticlesByTopic(topicId);
-            allArticles = (topicArticles || []).filter(a => a.business_id === businessId);
-        }
-        // Defensive: filter out removed, sort, slice
-        const filtered = (allArticles || [])
-            .filter(a => !a.is_removed && a.published)
-            .sort((a, b) => new Date(b.published) - new Date(a.published));
-        const articles = filtered.slice(offset, offset + limit).map(a => ({
-            id: a.id,
-            slug: a.slug,
-            title: a.title,
-            image: a.image,
-            published: a.published,
-            seo_description: a.seo_description,
-        }));
+        let articles = await BlogService.getArticlesByTopicIdWithOffset(businessId, topicId, offset, limit);
+
+        // // Defensive: filter out removed, sort, slice
+        // const filtered = (allArticles || [])
+        //     .filter(a => !a.is_removed && a.published)
+        //     .sort((a, b) => new Date(b.published) - new Date(a.published));
+        // const articles = filtered.slice(offset, offset + limit).map(a => ({
+        //     id: a.id,
+        //     slug: a.slug,
+        //     title: a.title,
+        //     image: a.image,
+        //     published: a.published,
+        //     seo_description: a.seo_description,
+        // }));
+        console.log(`**** Fetched ${articles.length} articles for topic ${topicId} (offset: ${offset}, limit: ${limit})`);
+        console.log('**** Article IDs:', articles.map(a => a.id).join(', '));
         return res.json({ articles });
     } catch (error) {
         console.error('Error in /next-articles:', error);
