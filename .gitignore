@@ -215,3 +215,5 @@ multi-sites/sites/*/lib/updatable-editor.js
 !public/*/assets/images/cover/**
 
 public/**/assets/images-responsive-base/resized/
+
+multi-sites/sites/**/generated-image-map.json
