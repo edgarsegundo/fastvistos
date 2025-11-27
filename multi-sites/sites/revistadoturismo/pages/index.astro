@@ -6,6 +6,7 @@ import ArticlesGridSection from '../components/ArticlesGridSection.astro';
 import HeroSection from '../components/HeroSection.astro';
 import FooterSection from '../components/FooterSection.astro';
 import HeaderSection from '../components/HeaderSection.astro';
+import CarouselSection from '../components/CarouselSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -13,11 +14,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
-
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
-
     titleFromConf={siteConfig.homePageConfig.seo.title}
     descriptionFromConf={siteConfig.homePageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}
@@ -41,9 +40,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         <HeaderSection />
         <HeroSection />
         <ArticlesGridSection />
+        <CarouselSection />
         <FooterSection />
     </main>
-
 
     <!-- Body content -->
     <p>This is the home page content for {siteConfig.site.siteName}.</p>

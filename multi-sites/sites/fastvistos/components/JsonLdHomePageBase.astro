@@ -47,7 +47,7 @@ const webPageBlock = getWebPageBlock({
     imageUrlValidated: getValidatedImageUrl({
         image: null,
         imageUrl: siteConfig.site.primaryImage?.url,
-        assetsUrlBase: siteConfig.site.assetsUrlBase
+        assetsUrlBase: siteConfig.site.assetsUrlBase,
     }),
 });
 
@@ -58,7 +58,7 @@ const imageObjectBlock = getImageObjectBlock({
     imageUrlValidated: getValidatedImageUrl({
         image: null,
         imageUrl: siteConfig.site.primaryImage?.url,
-        assetsUrlBase: siteConfig.site.assetsUrlBase
+        assetsUrlBase: siteConfig.site.assetsUrlBase,
     }),
     width: siteConfig.site.primaryImage?.width,
     height: siteConfig.site.primaryImage?.height,
@@ -86,7 +86,7 @@ const webSiteBlock = getWebSiteBlock({
 
 // FAQ block
 const faqBlock =
-!disableFAQ && Array.isArray(faqList) && faqList.length > 0
+    !disableFAQ && Array.isArray(faqList) && faqList.length > 0
         ? {
               '@type': 'FAQPage',
               mainEntityOfPage: {
@@ -148,7 +148,7 @@ const videoObjects =
                               '@type': 'ImageObject',
                               url: siteConfig.site?.logo?.url,
                               width: siteConfig.site?.logo?.width,
-                              height: siteConfig.site?.logo?.height
+                              height: siteConfig.site?.logo?.height,
                           },
                       },
                       mainEntityOfPage: {
@@ -210,78 +210,80 @@ if (reviewsBlock.length > 0) {
 
 // --- Unified Organization + LocalBusiness block
 const orgBlock = !disableOrganization && {
-  '@type': disableLocalBusiness 
-    ? 'Organization' 
-    : ['Organization', 'LocalBusiness', 'ProfessionalService'],
-  '@id': orgId,
-  name: siteConfig.site?.siteName,
-  url: canonicalValidated,
-  inLanguage: siteConfig.site.locale || 'pt-BR',
-  description: siteConfig.homePageConfig.seo.description,
-
-  logo: {
-    '@type': 'ImageObject',
-    '@id': logoId,
+    '@type': disableLocalBusiness
+        ? 'Organization'
+        : ['Organization', 'LocalBusiness', 'ProfessionalService'],
+    '@id': orgId,
+    name: siteConfig.site?.siteName,
+    url: canonicalValidated,
     inLanguage: siteConfig.site.locale || 'pt-BR',
-    url: siteConfig.site?.logo?.url,
-    contentUrl: siteConfig.site?.logo?.url,
-    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
-    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
-    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
-  },
+    description: siteConfig.homePageConfig.seo.description,
 
-  image: { '@id': logoId },
+    logo: {
+        '@type': 'ImageObject',
+        '@id': logoId,
+        inLanguage: siteConfig.site.locale || 'pt-BR',
+        url: siteConfig.site?.logo?.url,
+        contentUrl: siteConfig.site?.logo?.url,
+        ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+        ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+        ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+    },
 
-  ...(disableLocalBusiness
-    ? {}
-    : {
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: siteConfig.site?.address?.streetAddress,
-          addressLocality: siteConfig.site?.address?.addressLocality,
-          addressRegion: siteConfig.site?.address?.addressRegion,
-          postalCode: siteConfig.site?.address?.postalCode,
-          addressCountry: siteConfig.site?.address?.addressCountry,
-        },
+    image: { '@id': logoId },
 
-        telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+    ...(disableLocalBusiness
+        ? {}
+        : {
+              address: {
+                  '@type': 'PostalAddress',
+                  streetAddress: siteConfig.site?.address?.streetAddress,
+                  addressLocality: siteConfig.site?.address?.addressLocality,
+                  addressRegion: siteConfig.site?.address?.addressRegion,
+                  postalCode: siteConfig.site?.address?.postalCode,
+                  addressCountry: siteConfig.site?.address?.addressCountry,
+              },
 
-        contactPoint: {
-          '@type': 'ContactPoint',
-          telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
-          contactType: 'customer service',
-          areaServed: 'Brazil',
-          availableLanguage: ['Portuguese', 'English'],
-        },
+              telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
 
-        geo: {
-            '@type': 'GeoCoordinates',
-            latitude: siteConfig.site?.geo?.latitude,
-            longitude: siteConfig.site?.geo?.longitude,
-        },
+              contactPoint: {
+                  '@type': 'ContactPoint',
+                  telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+                  contactType: 'customer service',
+                  areaServed: 'Brazil',
+                  availableLanguage: ['Portuguese', 'English'],
+              },
 
-        priceRange: siteConfig.site?.priceRange || '$$',
-        openingHours: siteConfig.site?.openingHours,
+              geo: {
+                  '@type': 'GeoCoordinates',
+                  latitude: siteConfig.site?.geo?.latitude,
+                  longitude: siteConfig.site?.geo?.longitude,
+              },
 
-        serviceArea: {
-          '@type': 'Place',
-          name: siteConfig.site?.serviceArea?.name || 'Campinas e região metropolitana de São Paulo',
-        },
+              priceRange: siteConfig.site?.priceRange || '$$',
+              openingHours: siteConfig.site?.openingHours,
 
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: siteConfig.site?.aggregateRating?.ratingValue,
-          reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
-        },
+              serviceArea: {
+                  '@type': 'Place',
+                  name:
+                      siteConfig.site?.serviceArea?.name ||
+                      'Campinas e região metropolitana de São Paulo',
+              },
 
-        sameAs: siteConfig.site?.sameAs,
+              aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingValue: siteConfig.site?.aggregateRating?.ratingValue,
+                  reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
+              },
 
-        hasMap: `https://www.google.com/maps/?q=${siteConfig.site?.geo?.latitude},${siteConfig.site?.geo?.longitude}`,
+              sameAs: siteConfig.site?.sameAs,
 
-        ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
-        ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
-      }),
-  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
+              hasMap: `https://www.google.com/maps/?q=${siteConfig.site?.geo?.latitude},${siteConfig.site?.geo?.longitude}`,
+
+              ...(reviewsBlock.length > 0 ? { review: reviewsBlock } : {}),
+              ...(aggregateRating && reviewsBlock.length > 1 ? { aggregateRating } : {}),
+          }),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
 };
 
 const blocks = [

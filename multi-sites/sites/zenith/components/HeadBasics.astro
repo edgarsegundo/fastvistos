@@ -5,12 +5,11 @@
  * To customize, edit the template.
  */
 
- // SEO Meta component that integrates with site-config
+// SEO Meta component that integrates with site-config
 import OpenGraph from './OpenGraph.astro';
 import TwitterCard from './TwitterCard.astro';
 import { siteConfig } from '../site-config.ts';
 import { getImageType, getValidatedImageUrl } from '../lib/utils.ts';
-
 
 export interface Props {
     generator?: string; // Generator meta content
@@ -35,7 +34,7 @@ export interface Props {
     updatedDate?: string; // Updated date for articles
 }
 
-const { 
+const {
     generator,
     noIndex,
     enhancedIndexing,
@@ -43,9 +42,9 @@ const {
     canonical,
     faviconPath,
     seo,
-    
-    title, 
-    description, 
+
+    title,
+    description,
     authorName,
     image,
     imageUrl,
@@ -60,7 +59,7 @@ const {
 const imageUrlValidated = getValidatedImageUrl({
     image,
     imageUrl,
-    assetsUrlBase: siteConfig.site.assetsUrlBase
+    assetsUrlBase: siteConfig.site.assetsUrlBase,
 });
 const imageType = getImageType(imageUrlValidated ?? '');
 ---
@@ -97,12 +96,13 @@ const imageType = getImageType(imageUrlValidated ?? '');
 <link rel="canonical" href={canonical} />
 
 {
-    siteConfig.verification?.googleSiteVerification && siteConfig.verification.googleSiteVerification.trim() !== '' && (
-        <meta
-            name="google-site-verification"
-            content={siteConfig.verification.googleSiteVerification}
-        />
-    )
+    siteConfig.verification?.googleSiteVerification &&
+        siteConfig.verification.googleSiteVerification.trim() !== '' && (
+            <meta
+                name="google-site-verification"
+                content={siteConfig.verification.googleSiteVerification}
+            />
+        )
 }
 
 {noIndex && <meta name="robots" content="noindex, nofollow" />}
@@ -130,10 +130,8 @@ const imageType = getImageType(imageUrlValidated ?? '');
     type={seo.openGraph?.type}
     locale={siteConfig.site.locale}
     author={authorName}
-
     publishedTime={pubDate}
     modifiedTime={updatedDate}
-
     section={seo.openGraph?.section}
     tags={seo.openGraph?.tags}
 />

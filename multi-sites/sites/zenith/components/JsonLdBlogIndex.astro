@@ -46,35 +46,37 @@ const breadcrumbId = `${blogpageUrl}#breadcrumb`;
 const logoId = `${canonicalValidated}#logo`;
 
 const orgEntity = {
-  '@type': 'Organization',
-  '@id': `${canonicalValidated}#organization`,
-  name: siteConfig.site.siteName,
-  logo: {
-    '@type': 'ImageObject',
-    url: siteConfig?.logo?.url,
-    width: siteConfig?.logo?.width,
-    height: siteConfig?.logo?.height,
-  }
+    '@type': 'Organization',
+    '@id': `${canonicalValidated}#organization`,
+    name: siteConfig.site.siteName,
+    logo: {
+        '@type': 'ImageObject',
+        url: siteConfig?.logo?.url,
+        width: siteConfig?.logo?.width,
+        height: siteConfig?.logo?.height,
+    },
 };
 
 const authorEntity = {
-  '@type': 'Person',
-  '@id': `${canonicalValidated}#/schema/person/${blogConfigFromDb?.author_name?.toLowerCase().replace(/\s+/g, '-')}`,
-  name: blogConfigFromDb?.author_name,
-  ...(blogConfigFromDb?.author_image ? {
-    image: {
-      '@type': 'ImageObject',
-      '@id': `${canonicalValidated}#/schema/person/${blogConfigFromDb?.author_name?.toLowerCase().replace(/\s+/g, '-')}-image`,
-      url: getValidatedImageUrl({
-        image: blogConfigFromDb.author_image,
-        imageUrl: null,
-        assetsUrlBase: siteConfig.site.assetsUrlBase
-      })
-    }
-  } : {}),
-  ...(siteConfig.site?.socialLinks && siteConfig.site.socialLinks.length > 0 
-      ? { sameAs: siteConfig.site.socialLinks } 
-      : {}),
+    '@type': 'Person',
+    '@id': `${canonicalValidated}#/schema/person/${blogConfigFromDb?.author_name?.toLowerCase().replace(/\s+/g, '-')}`,
+    name: blogConfigFromDb?.author_name,
+    ...(blogConfigFromDb?.author_image
+        ? {
+              image: {
+                  '@type': 'ImageObject',
+                  '@id': `${canonicalValidated}#/schema/person/${blogConfigFromDb?.author_name?.toLowerCase().replace(/\s+/g, '-')}-image`,
+                  url: getValidatedImageUrl({
+                      image: blogConfigFromDb.author_image,
+                      imageUrl: null,
+                      assetsUrlBase: siteConfig.site.assetsUrlBase,
+                  }),
+              },
+          }
+        : {}),
+    ...(siteConfig.site?.socialLinks && siteConfig.site.socialLinks.length > 0
+        ? { sameAs: siteConfig.site.socialLinks }
+        : {}),
 };
 
 const itemLists = topicsWithArticles.map((topic: any) => ({
@@ -91,7 +93,7 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
             description: article.seo_description || '',
             datePublished: article.published,
             dateModified: article.updated || article.published,
-            author: authorEntity,                    // can also be Person if needed
+            author: authorEntity, // can also be Person if needed
             publisher: orgEntity,
             inLanguage: siteConfig.site?.locale || 'pt-BR',
             mainEntityOfPage: {
@@ -99,16 +101,17 @@ const itemLists = topicsWithArticles.map((topic: any) => ({
                 '@id': `${blogpageUrl}${article.slug}`,
             },
             image: getImageObjectBlock({
-                    disableImageObject: false,
-                    imageId: `${blogpageUrl}${article.slug}#image`,
-                    imageUrlValidated: getValidatedImageUrl({image: article.image,
-                                                            imageUrl: article.seo_image_url,
-                                                assetsUrlBase: siteConfig.site.assetsUrlBase
-                    }),
-                    caption: article.seo_image_caption,
-                    width: article.seo_image_width,
-                    height: article.seo_image_height,
+                disableImageObject: false,
+                imageId: `${blogpageUrl}${article.slug}#image`,
+                imageUrlValidated: getValidatedImageUrl({
+                    image: article.image,
+                    imageUrl: article.seo_image_url,
+                    assetsUrlBase: siteConfig.site.assetsUrlBase,
                 }),
+                caption: article.seo_image_caption,
+                width: article.seo_image_width,
+                height: article.seo_image_height,
+            }),
         },
     })),
 }));
@@ -126,9 +129,10 @@ const webPageBlock = getWebPageBlock({
     description,
     pubDate: null,
     updatedDate: null,
-    imageUrlValidated: getValidatedImageUrl({image: image, 
-                                            imageUrl: imageUrl, 
-                                            assetsUrlBase: siteConfig.site.assetsUrlBase
+    imageUrlValidated: getValidatedImageUrl({
+        image: image,
+        imageUrl: imageUrl,
+        assetsUrlBase: siteConfig.site.assetsUrlBase,
     }),
     hasPartList: itemLists,
     disableHasPart: false,
@@ -144,10 +148,11 @@ const breadcrumbBlock = getBreadcrumbBlock({
 
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
-    imageId: `${blogpageUrl}#image`, 
-    imageUrlValidated: getValidatedImageUrl({image: image, 
-                                            imageUrl: imageUrl, 
-                                            assetsUrlBase: siteConfig.site.assetsUrlBase
+    imageId: `${blogpageUrl}#image`,
+    imageUrlValidated: getValidatedImageUrl({
+        image: image,
+        imageUrl: imageUrl,
+        assetsUrlBase: siteConfig.site.assetsUrlBase,
     }),
     caption: imageCaption,
     width: imageWidth,
@@ -167,33 +172,27 @@ const webSiteBlock = getWebSiteBlock({
 
 // --- Unified Organization + LocalBusiness block
 const orgBlock = {
-  '@type': 'Organization',
-  '@id': orgId,
-  name: siteConfig.site?.siteName,
-  url: canonicalValidated,
-  inLanguage: siteConfig.site.locale || 'pt-BR',
-  description: siteConfig.homePageConfig.seo.description,
-  logo: {
-    '@type': 'ImageObject',
+    '@type': 'Organization',
+    '@id': orgId,
+    name: siteConfig.site?.siteName,
+    url: canonicalValidated,
     inLanguage: siteConfig.site.locale || 'pt-BR',
-    '@id': logoId,
-    url: siteConfig.site?.logo?.url,
-    contentUrl: siteConfig.site?.logo?.url,
-    ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
-    ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
-    ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
-  },
-  image: { '@id': logoId },
-  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
+    description: siteConfig.homePageConfig.seo.description,
+    logo: {
+        '@type': 'ImageObject',
+        inLanguage: siteConfig.site.locale || 'pt-BR',
+        '@id': logoId,
+        url: siteConfig.site?.logo?.url,
+        contentUrl: siteConfig.site?.logo?.url,
+        ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+        ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+        ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+    },
+    image: { '@id': logoId },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
 };
 
-const blocks = [
-    webPageBlock,
-    imageObjectBlock,
-    breadcrumbBlock,
-    webSiteBlock,
-    orgBlock,
-]
+const blocks = [webPageBlock, imageObjectBlock, breadcrumbBlock, webSiteBlock, orgBlock]
     .filter(Boolean)
     .flat();
 
