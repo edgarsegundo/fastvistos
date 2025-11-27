@@ -535,4 +535,65 @@ app.post('postfix/receive-email', async (req, res) => {
     }
 });
 
+// GET endpoint to fetch next articles for carousel (dynamic loading)
+// const DEBUG_NEXT_ARTICLES = process.env.DEBUG_NEXT_ARTICLES === 'true';
+const DEBUG_NEXT_ARTICLES = true;
+app.get('/next-articles', async (req, res) => {
+    try {
+        const businessId = req.query.business_id;
+        const topicId = req.query.blog_topic_id;
+        const offset = parseInt(req.query.offset, 10) || 0;
+        const limit = parseInt(req.query.limit, 10) || 5;
+
+        if (!businessId || !topicId) {
+            return res.status(400).json({ error: 'Missing required business_id or blog_topic_id.' });
+        }
+
+        // Mock data for debug
+        if (DEBUG_NEXT_ARTICLES) {
+            const articles = Array.from({ length: limit }, (_, i) => {
+                const idx = offset + i + 1;
+                return {
+                    id: `mock-${topicId}-${idx}`,
+                    slug: `article-${topicId}-${idx}`,
+                    title: `Artigo ${idx} do Tópico ${topicId}`,
+                    image: '',
+                    published: new Date().toISOString(),
+                    seo_description: `SEO description for artigo ${idx}`,
+                };
+            });
+            return res.json({ articles });
+        }
+
+        // Real DB query
+        const { BlogService } = await import('../../dist/lib/blog-service.js');
+        // Fetch articles for topic, sorted by published desc, skip offset, take limit
+        let allArticles = [];
+        if (typeof BlogService.getArticlesByTopicId === 'function') {
+            allArticles = await BlogService.getArticlesByTopicId(businessId, topicId);
+        } else {
+            // fallback: getArticlesByTopic (may need to filter by topicId)
+            const topicArticles = await BlogService.getArticlesByTopic(topicId);
+            allArticles = (topicArticles || []).filter(a => a.business_id === businessId);
+        }
+        // Defensive: filter out removed, sort, slice
+        const filtered = (allArticles || [])
+            .filter(a => !a.is_removed && a.published)
+            .sort((a, b) => new Date(b.published) - new Date(a.published));
+        const articles = filtered.slice(offset, offset + limit).map(a => ({
+            id: a.id,
+            slug: a.slug,
+            title: a.title,
+            image: a.image,
+            published: a.published,
+            seo_description: a.seo_description,
+        }));
+        return res.json({ articles });
+    } catch (error) {
+        console.error('Error in /next-articles:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
 export default app;
+

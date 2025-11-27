@@ -136,28 +136,26 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles(limitPerTopic
 const BATCH_SIZE = 5;
 
 // Mock endpoint: returns next articles for a topic
-function fetchNextArticles(topicId, offset, limit) {
-    // Simulate network delay
-    return new Promise((resolve) => {
-    setTimeout(() => {
-        // Simulate no more articles after 20
-        if (offset >= 20) {
-            resolve([]);
-            return;
-        }
-        // Generate mock articles
-        const articles = Array.from({ length: limit }, (_, i) => {
-        const idx = offset + i + 1;
-        return {
-            slug: `article-${topicId}-${idx}`,
-            title: `Artigo ${idx} do Tópico ${topicId}`,
-            image: '', // Empty to trigger spinner
-            content_html: `Conteúdo do artigo ${idx}...`,
-        };
-        });
-        resolve(articles);
-    }, 800);
-    });
+// Real endpoint: returns next articles for a topic
+async function fetchNextArticles(topicId, offset, limit) {
+  // You may need to pass business_id from a global/site config
+  const businessId = window.SITE_BUSINESS_ID || 'fastvistos';
+  try {
+    const url = `/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch articles');
+    const data = await res.json();
+    // Map to expected card format
+    return (data.articles || []).map(article => ({
+      slug: article.slug,
+      title: article.title,
+      image: article.image || '',
+      content_html: article.seo_description || '',
+    }));
+  } catch (err) {
+    console.error('Error fetching next articles:', err);
+    return [];
+  }
 }
 
 // Spinner SVG
