@@ -40,8 +40,10 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
+        
         <AnalyticsHead siteConfig={siteConfig} />
 
+        
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -61,6 +63,7 @@ const {
             updatedDate={updatedDate}
         />
 
+        
         <link rel="preconnect" href="https://fastvistos.com.br" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,12 +78,16 @@ const {
         class={`bg-gray-50 leading-normal tracking-normal text-white`}
         style="font-family: 'Source Sans Pro', sans-serif;"
     >
+        
         <AnalyticsBody siteConfig={siteConfig} />
 
+        
         <BlogPageHeader />
 
+        
         <slot />
 
+        
         <BlogPageFooter />
     </body>
 </html><script src="../lib/updatable-editor.js"></script>

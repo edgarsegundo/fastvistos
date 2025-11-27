@@ -167,86 +167,86 @@ const spinnerSVG = `<svg class='spinner' width='32' height='32' viewBox='0 0 32 
 const topicStates = {};
 
 document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) => {
-      const topicId = carousel.id.replace('carousel-', '');
-      topicStates[topicId] = {
+    const topicId = carousel.id.replace('carousel-', '');
+    topicStates[topicId] = {
         loading: false,
         offset: carousel.children.length - 1, // initial loaded
         done: false,
-      };
+    };
 
-      // Helper: show spinner in empty image cards
-      function showSpinners() {
+    // Helper: show spinner in empty image cards
+    function showSpinners() {
         carousel.querySelectorAll('a').forEach(card => {
-          const img = card.querySelector('img');
-          if (img && !img.src) {
-            img.outerHTML = `<div style='display:flex;align-items:center;justify-content:center;height:100%;'>${spinnerSVG}</div>`;
-          }
+            const img = card.querySelector('img');
+            if (img && !img.src) {
+                img.outerHTML = `<div style='display:flex;align-items:center;justify-content:center;height:100%;'>${spinnerSVG}</div>`;
+            }
         });
-      }
+    }
 
-      // Fade logic: show fade only when not at end
-      const fade = carousel.parentElement.querySelector('.carousel-fade-right');
-      function updateFade() {
+    // Fade logic: show fade only when not at end
+    const fade = carousel.parentElement.querySelector('.carousel-fade-right');
+    function updateFade() {
         const maxScroll = carousel.scrollWidth - carousel.clientWidth;
         if (carousel.scrollLeft >= maxScroll - 2) {
-          if (fade) fade.classList.add('hide');
+            if (fade) fade.classList.add('hide');
         } else {
-          if (fade) fade.classList.remove('hide');
+            if (fade) fade.classList.remove('hide');
         }
-      }
-      carousel.addEventListener('scroll', updateFade);
-      setTimeout(updateFade, 100);
-
-      // Prevent wheel scroll past the end
-      carousel.addEventListener('wheel', (e) => {
-        const event = e as WheelEvent;
-        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-        if ((carousel.scrollLeft === 0 && event.deltaX < 0) || (carousel.scrollLeft === maxScroll && event.deltaX > 0)) {
-          event.preventDefault();
-        }
-      }, { passive: false });
-
-      // Load more articles when scrolled to end
-      carousel.addEventListener('scroll', async () => {
-    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-    if (carousel.scrollLeft >= maxScroll - 2 && !topicStates[topicId].loading && !topicStates[topicId].done) {
-        topicStates[topicId].loading = true;
-        // Add spinner cards
-        for (let i = 0; i < BATCH_SIZE; i++) {
-        const spinnerCard = document.createElement('a');
-        spinnerCard.className = "bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block";
-        spinnerCard.style.textDecoration = "none";
-        spinnerCard.innerHTML = `<div style='height:192px;width:100%;display:flex;align-items:center;justify-content:center;'>${spinnerSVG}</div><div class='p-6'></div>`;
-        carousel.appendChild(spinnerCard);
-        }
-        // Fetch next articles
-        const nextArticles = await fetchNextArticles(topicId, topicStates[topicId].offset, BATCH_SIZE);
-        // Remove spinner cards
-        for (let i = 0; i < BATCH_SIZE; i++) {
-        carousel.removeChild(carousel.lastChild);
-        }
-        if (nextArticles.length === 0) {
-            topicStates[topicId].done = true;
-        } else {
-        nextArticles.forEach(article => {
-            const card = document.createElement('a');
-            card.href = `/blog/${article.slug}`;
-            card.className = "bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block";
-            card.style.textDecoration = "none";
-            card.innerHTML = `
-            <img src='' alt='${article.slug}' class='w-full aspect-[1.67] object-cover' />
-            <div class='p-6'>
-                <h3 class='text-xl font-semibold mb-2 text-black'>${article.title}</h3>
-                <p class='text-gray-600 mb-4'>${article.content_html}</p>
-            </div>
-            `;
-            carousel.appendChild(card);
-        });
-        topicStates[topicId].offset += nextArticles.length;
-        showSpinners();
-        }
-        topicStates[topicId].loading = false;
     }
+    carousel.addEventListener('scroll', updateFade);
+    setTimeout(updateFade, 100);
+
+    // Prevent wheel scroll past the end
+    carousel.addEventListener('wheel', (e) => {
+    const event = e as WheelEvent;
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    if ((carousel.scrollLeft === 0 && event.deltaX < 0) || (carousel.scrollLeft === maxScroll && event.deltaX > 0)) {
+        event.preventDefault();
+    }
+    }, { passive: false });
+
+    // Load more articles when scrolled to end
+    carousel.addEventListener('scroll', async () => {
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if (carousel.scrollLeft >= maxScroll - 2 && !topicStates[topicId].loading && !topicStates[topicId].done) {
+            topicStates[topicId].loading = true;
+            // Add spinner cards
+            for (let i = 0; i < BATCH_SIZE; i++) {
+                const spinnerCard = document.createElement('a');
+                spinnerCard.className = "bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block";
+                spinnerCard.style.textDecoration = "none";
+                spinnerCard.innerHTML = `<div style='height:192px;width:100%;display:flex;align-items:center;justify-content:center;'>${spinnerSVG}</div><div class='p-6'></div>`;
+                carousel.appendChild(spinnerCard);
+            }
+            // Fetch next articles
+            const nextArticles = await fetchNextArticles(topicId, topicStates[topicId].offset, BATCH_SIZE);
+            // Remove spinner cards
+            for (let i = 0; i < BATCH_SIZE; i++) {
+                carousel.removeChild(carousel.lastChild);
+            }
+            if (nextArticles.length === 0) {
+                topicStates[topicId].done = true;
+            } else {
+                nextArticles.forEach(article => {
+                    const card = document.createElement('a');
+                    card.href = `/blog/${article.slug}`;
+                    card.className = "bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block";
+                    card.style.textDecoration = "none";
+                    card.innerHTML = `
+                    <img src='' alt='${article.slug}' class='w-full aspect-[1.67] object-cover' />
+                    <div class='p-6'>
+                        <h3 class='text-xl font-semibold mb-2 text-black'>${article.title}</h3>
+                        <p class='text-gray-600 mb-4'>${article.content_html}</p>
+                    </div>
+                    `;
+                    carousel.appendChild(card);
+                });
+                topicStates[topicId].offset += nextArticles.length;
+                showSpinners();
+            }
+            topicStates[topicId].loading = false;
+        }
     });
 });
 </script>

@@ -43,6 +43,7 @@ const {
 <!doctype html>
 <html lang={htmlLang}>
     <head>
+        
         <HeadBasics
             generator={Astro.generator}
             noIndex={false}
@@ -62,8 +63,10 @@ const {
             updatedDate={updatedDate}
         />
 
+        
         <AnalyticsHead siteConfig={siteConfig} />
 
+        
         <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,10 +78,13 @@ const {
         <slot name="head" />
     </head>
     <body class={bodyClass} style={bodyStyle}>
+        
         <AnalyticsBody siteConfig={siteConfig} />
 
+        
         {!themeToggleDisable && <ThemeToggle />}
 
+        
         <slot />
     </body><script src="../lib/updatable-editor.js"></script>
 </html>

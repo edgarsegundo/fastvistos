@@ -64,21 +64,31 @@ const imageUrlValidated = getValidatedImageUrl({
 const imageType = getImageType(imageUrlValidated ?? '');
 ---
 
+
 <meta charset="UTF-8" />
 
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 
 <link rel="icon" type="image/svg+xml" href={faviconPath} />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+
+
+
+
 {generator && <meta name="generator" content={generator} />}
+
 
 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+
 {title && <title>{title}</title>}
+
 
 <meta name="description" content={description} />
 <meta name="author" content={authorName} />
@@ -106,6 +116,7 @@ const imageType = getImageType(imageUrlValidated ?? '');
     )
 }
 
+
 <OpenGraph
     title={title}
     description={description}
@@ -125,6 +136,7 @@ const imageType = getImageType(imageUrlValidated ?? '');
     tags={seo.openGraph?.tags}
 />
 
+
 <TwitterCard
     title={seo.title}
     description={seo.description}
@@ -132,6 +144,7 @@ const imageType = getImageType(imageUrlValidated ?? '');
     url={siteConfig.site.canonical}
     site={siteConfig.socialMedia.twitter}
 />
+
 
 {
     seo.themeColor ? (
