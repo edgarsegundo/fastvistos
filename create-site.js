@@ -209,7 +209,7 @@ async function createSite() {
 
         // Check if site already exists
         const siteDir = join(__dirname, `multi-sites/sites/${siteId}`);
-        const publicSiteDir = join(__dirname, `public-sites/${siteId}`);
+        const publicSiteDir = join(__dirname, `public/${siteId}`);
         
         try {
             await fs.access(siteDir);
@@ -223,7 +223,7 @@ async function createSite() {
         
         try {
             await fs.access(publicSiteDir);
-            console.error(`❌ Public site directory '${siteId}' already exists in public-sites/`);
+            console.error(`❌ Public site directory '${siteId}' already exists in public/`);
             console.log('🚫 Exiting without making changes.');
             rl.close();
             return;
@@ -304,14 +304,14 @@ async function createSite() {
         await copyTemplateFiles(templateDir, siteDir, replacements);
         console.log(`📁 Created site structure from templates`);
 
-        // Copy public template files to public-sites folder
+        // Copy public template files to public folder
         const publicTemplateDir = join(__dirname, 'templates/public-template');
         
-        // Ensure public-sites directory exists
-        await ensureDir(join(__dirname, 'public-sites'));
+        // Ensure public directory exists
+        await ensureDir(join(__dirname, 'public'));
         
         await copyTemplateFiles(publicTemplateDir, publicSiteDir, replacements);
-        console.log(`📁 Created public assets structure in public-sites/${siteId}`);
+        console.log(`📁 Created public assets structure in public/${siteId}`);
 
         // Create root-level Tailwind config from template
         // const tailwindTemplate = join(__dirname, 'templates/tailwind.template.config.js');
@@ -327,7 +327,7 @@ async function createSite() {
         console.log(`   1. Update business_id in ${siteId}/site-config.ts with your actual business ID`);
         console.log(`   2. Customize styling in tailwind.${siteId}.config.js`);
         console.log(`   3. Add your content to ${siteId}/pages/`);
-        console.log(`   4. Add your assets to public-sites/${siteId}/`);
+        console.log(`   4. Add your assets to public/${siteId}/`);
         console.log(`   5. Run sync to update templates: npm run sync`);
         console.log(`\n💡 Generated business ID: ${businessId}`);
         console.log('    (Replace this with your actual business ID from the database)');

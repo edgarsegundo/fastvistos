@@ -4,7 +4,7 @@ export default {
         './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/sites/fastvistos/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/core/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-        './public-sites/fastvistos/**/*.html',
+        './public/fastvistos/**/*.html',
     ],
     theme: {
         extend: {

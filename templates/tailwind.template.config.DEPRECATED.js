@@ -4,7 +4,7 @@ export default {
         './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/sites/{{SITE_ID}}/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/core/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-        './public-sites/{{SITE_ID}}/**/*.html',
+        './public/{{SITE_ID}}/**/*.html',
     ],
     theme: {
         extend: {

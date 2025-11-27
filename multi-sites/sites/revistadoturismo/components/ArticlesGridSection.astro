@@ -2,15 +2,15 @@
 import ResponsiveImage from "./ResponsiveImage.astro";
 import map from "../generated-image-map.json";
 
-import { siteConfig } from '../site-config.ts';
+// import { siteConfig } from '../site-config.ts';
 
-const siteId = siteConfig.site.id;
-const imageBase = `/assets/${siteId}/images-base/resized/`;
+// const siteId = siteConfig.site.id;
+const imageBase = `/assets/images-responsive-base/resized/`;
 
 const cards = [
   {
     key: "article1",
-    img: `/assets/${siteId}/images-base/article1.jpg`,
+    img: `${imageBase}/article1.jpg`,
     alt: "Restaurantes con vistas espectaculares",
     title: "Los 10 restaurantes com as vistas mais espetaculares do mundo",
     desc: "Desde acantilados até arranha-céus, estes restaurantes oferecem experiências culinárias inesquecíveis com paisagens de sonho.",
@@ -19,7 +19,7 @@ const cards = [
   },
   {
     key: "article2",
-    img: `/assets/${siteId}/images-base/article2.jpg`,
+    img: `${imageBase}/article2.jpg`,
     alt: "Artigo 2",
     title: "Praias paradisíacas que você deveria visitar neste verão",
     desc: "Areias brancas, águas turquesa e paisagens tropicais esperam por você nestes destinos de sonho ao redor do mundo.",
@@ -28,7 +28,7 @@ const cards = [
   },
   {
     key: "article3",
-    img: `/assets/${siteId}/images-base/article3.jpg`,
+    img: `${imageBase}/article3.jpg`,
     alt: "Artigo 3",
     title: "Tóquio em 3 dias: o guia definitivo para não perder nada",
     desc: "Descubra como aproveitar ao máximo sua visita à capital japonesa com este roteiro cuidadosamente planejado.",
