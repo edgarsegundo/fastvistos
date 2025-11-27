@@ -196,6 +196,7 @@ model blog_article {
   blog_article_related_articles_blog_article_related_articles_from_blogarticle_idToblog_article blog_article_related_articles[] @relation("blog_article_related_articles_from_blogarticle_idToblog_article")
   blog_article_related_articles_blog_article_related_articles_to_blogarticle_idToblog_article   blog_article_related_articles[] @relation("blog_article_related_articles_to_blogarticle_idToblog_article")
 
+  @@unique([slug, business_id], map: "blog_article_slug_business_id_4dac40c1_uniq")
   @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
   @@index([slug], map: "blog_article_slug_c3fca16d")
