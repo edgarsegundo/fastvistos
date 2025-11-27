@@ -13,8 +13,28 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
 
 <style>
   .carousel-container::-webkit-scrollbar { display: none; }
-  .carousel-container { -ms-overflow-style: none; scrollbar-width: none; }
-  .carousel-container { scroll-behavior: smooth; }
+  .carousel-container { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+  .arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.55);
+    width: 42px;
+    height: 42px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 22px;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s;
+    z-index: 20;
+  }
+  .arrow-btn:hover { background: rgba(0,0,0,0.75); }
+  .arrow-left { left: -14px; }
+  .arrow-right { right: -14px; }
 </style>
 
 <section class="w-full">
@@ -28,13 +48,20 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
             </h2>
 
             <div class="relative pt-8">
+              <button class="arrow-btn arrow-left" onclick={`document.querySelector('#carousel-${topic.slug || topic.id}').scrollBy({left:-320, behavior:'smooth'})`}>
+                &#10094;
+              </button>
+              <button class="arrow-btn arrow-right" onclick={`document.querySelector('#carousel-${topic.slug || topic.id}').scrollBy({left:320, behavior:'smooth'})`}>
+                &#10095;
+              </button>
               <div
                 id={`carousel-${topic.slug || topic.id}`}
                 class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
               >
                 {topic.blog_article.map((article) => (
                   <a href={`/blog/${article.slug}`}
-                     class="bg-white border border-gray-200 hover:border-blue-500 transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:shadow-md hover:scale-105 rounded-none cursor-pointer block"
+                  
+                     class="bg-white xxxborder xxxborder-gray-200 xxxhover:border-blue-500 transition-all duration-300 flex-shrink-0 w-80 shadow-none xxxhover:shadow-md hover:scale-105 rounded-none cursor-pointer block"
                      style="text-decoration: none;"
                   >
                     <img
@@ -44,7 +71,7 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
                           : "https://via.placeholder.com/400x250"
                       }
                       alt={article.slug || article.title}
-                      class="w-full h-48 object-cover"
+                      class="w-full aspect-[1.7] object-cover"
                     />
 
                     <div class="p-6">
@@ -97,13 +124,15 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
       let scrollStart = 0;
 
       carousel.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
+        const touchEvent = e as TouchEvent;
+        startX = touchEvent.touches[0].clientX;
         scrollStart = carousel.scrollLeft;
       });
 
       carousel.addEventListener('touchmove', (e) => {
+        const touchEvent = e as TouchEvent;
         if (!startX) return;
-        const currentX = e.touches[0].clientX;
+        const currentX = touchEvent.touches[0].clientX;
         const diff = startX - currentX;
         carousel.scrollLeft = scrollStart + diff;
       });
