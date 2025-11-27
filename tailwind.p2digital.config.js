@@ -4,7 +4,7 @@ export default {
         './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/sites/p2digital/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
         './multi-sites/core/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-        './public-sites/p2digital/**/*.html',
+        './public/p2digital/**/*.html',
     ],
     theme: {
         extend: {

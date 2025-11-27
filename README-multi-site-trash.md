@@ -207,7 +207,7 @@ fastvistos/
 │       └── vibecode/              # VibeCode site
 │           ├── site-config.ts     # 🆕 VibeCode configuration
 │           └── ...                # Similar structure
-├── public-sites/                  # Site-specific public assets
+├── public/                  # Site-specific public assets
 │   ├── fastvistos/               # FastVistos assets
 │   ├── conceptvistos/            # ConceptVistos assets
 │   └── vibecode/                 # VibeCode assets
@@ -229,7 +229,7 @@ fastvistos/
 │ ├── layouts/ # VibeCode BaseLayout
 │ ├── pages/ # VibeCode pages
 │ └── content.config.ts # Astro content configuration
-├── public-sites/ # 🆕 Site-specific public assets
+├── public/ # 🆕 Site-specific public assets
 │ ├── fastvistos/ # FastVistos assets (favicons, images, etc.)
 │ ├── conceptvistos/ # ConceptVistos assets
 │ └── vibecode/ # VibeCode assets
@@ -268,7 +268,7 @@ Each site automatically:
 
 - ✅ Loads its own content from `multi-sites/sites/{site}/content/blog/`
 - ✅ Uses site-specific Tailwind configuration and theme
-- ✅ Serves assets from `public-sites/{site}/`
+- ✅ Serves assets from `public/{site}/`
 - ✅ Syncs shared blog templates via `sync-blog.js`
 - ✅ Validates content with Astro content collections
 
@@ -433,7 +433,7 @@ syncBlogToSite(siteId) {
 
 - Content: `multi-sites/sites/{site}/content/blog/*.md`
 - Styling: Each site's Tailwind configuration
-- Public assets: `public-sites/{site}/`
+- Public assets: `public/{site}/`
 
 ### JSON-LD SEO Components (`multi-sites/core/components/`)
 
@@ -538,7 +538,7 @@ plugins: [
 Each site has its own public folder with independent assets:
 
 ```
-public-sites/
+public/
 ├── fastvistos/        # FastVistos assets (favicons, images, etc.)
 ├── conceptvistos/     # ConceptVistos assets
 └── vibecode/          # VibeCode assets
@@ -746,19 +746,19 @@ Each site successfully builds with proper content collections:
 npm run build:fastvistos
 # ✅ 5 pages: home + blog listing + 3 articles
 # ✅ Content from: multi-sites/sites/fastvistos/content/blog/
-# ✅ Assets from: public-sites/fastvistos/
+# ✅ Assets from: public/fastvistos/
 
 # ConceptVistos Build Output
 npm run build:conceptvistos
 # ✅ 5 pages: home + blog listing + 3 articles
 # ✅ Content from: multi-sites/sites/conceptvistos/content/blog/
-# ✅ Assets from: public-sites/conceptvistos/
+# ✅ Assets from: public/conceptvistos/
 
 # VibeCode Build Output
 npm run build:vibecode
 # ✅ 5 pages: home + blog listing + 3 articles
 # ✅ Content from: multi-sites/sites/vibecode/content/blog/
-# ✅ Assets from: public-sites/vibecode/
+# ✅ Assets from: public/vibecode/
 ```
 
 ### How to Test Each Site
@@ -922,7 +922,7 @@ To add a new site to the architecture:
 
     ```bash
     mkdir -p multi-sites/sites/newsite/{layouts,pages,components}
-    mkdir -p public-sites/newsite
+    mkdir -p public/newsite
     ```
 
 3. **Create site-specific BaseLayout**:
@@ -1024,7 +1024,7 @@ const whatsappLink = SiteConfigHelper.getWhatsAppLink(siteConfig, 'Hello!');
 4. **Create public assets directory**:
 
     ```bash
-    mkdir -p public-sites/newsite
+    mkdir -p public/newsite
     # Add favicon, logo, etc.
     ```
 
