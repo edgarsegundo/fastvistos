@@ -143,7 +143,7 @@ export default defineConfig({
 
     // Multi-site configuration - each site has its own source directory
     srcDir: `./multi-sites/sites/${CURRENT_SITE}`,
-    publicDir: `./public-sites/${CURRENT_SITE}`,
+    publicDir: `./public/${CURRENT_SITE}`,
 
     // Multi-site output configuration
     outDir: `./dist/${CURRENT_SITE}`,

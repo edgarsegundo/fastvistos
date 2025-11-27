@@ -10,8 +10,8 @@ if (!siteId) {
   process.exit(1);
 }
 
-const inputDir = `public-sites/${siteId}/assets/images-base`;
-const outDir = path.join("public-sites", siteId, "assets", "images-base", "resized");
+const inputDir = `public/${siteId}/assets/images-responsive-base`;
+const outDir = path.join("public", siteId, "assets", "images-responsive-base", "resized");
 
 // const breakpoints = [608, 356, 315, 400, 485]; // você definiu
 const breakpoints = [356, 485, 608];

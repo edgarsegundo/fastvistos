@@ -109,7 +109,7 @@ async function downloadBlogImages(siteId) {
         // Create site-specific assets directory
         const LOCAL_ASSETS_DIR = path.join(
             __dirname,
-            'public-sites',
+            'public',
             siteId,
             'assets',
             'images',
@@ -256,7 +256,7 @@ function showHelp() {
     console.log('  node download-blog-images.js all\n');
     console.log('Features:');
     console.log('  ✅ Site-specific image downloading based on business_id');
-    console.log('  ✅ Images saved to public-sites/{site_id}/assets/images/blog/');
+    console.log('  ✅ Images saved to public/{site_id}/assets/images/blog/');
     console.log('  ✅ Automatic directory creation');
     console.log('  ✅ Duplicate detection and skipping');
     console.log('  ✅ Progress reporting and statistics');

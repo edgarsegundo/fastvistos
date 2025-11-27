@@ -447,8 +447,8 @@ Implemented true site-specific content while maintaining shared templates:
 Fixed public directory structure for complete site independence:
 
 - **Issue**: Sites shared a single `/public` directory causing asset conflicts
-- **Solution**: Site-specific directories in `/public-sites/{site}/`
-- **Configuration**: Astro config uses `publicDir: ./public-sites/${CURRENT_SITE}`
+- **Solution**: Site-specific directories in `/public/{site}/`
+- **Configuration**: Astro config uses `publicDir: ./public/${CURRENT_SITE}`
 - **Result**: Each site serves assets independently
 
 ### ✅ **Blog Sync System**
