@@ -7,6 +7,7 @@ if [ -z "$SITEID" ]; then
   exit 1
 fi
 
+node generate-responsive-images.js "$SITEID"
 node generate-blog-content.js "$SITEID"
 npm run download-images:"$SITEID"
 
