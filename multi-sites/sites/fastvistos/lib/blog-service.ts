@@ -192,7 +192,8 @@ export class BlogService {
     }
 
     // Get topics with their articles for carousel display
-    static async getTopicsWithArticles() {
+    // If limit is provided, only return that number of articles per topic (newest first)
+    static async getTopicsWithArticles(limit?: number) {
         try {
             const businessId = this.getBusinessId();
             const now = new Date();
@@ -222,6 +223,7 @@ export class BlogService {
                         orderBy: {
                             published: 'desc',
                         },
+                        ...(limit ? { take: limit } : {}),
                     },
                 },
                 orderBy: {
