@@ -7,6 +7,11 @@
 
 import { BlogService } from "../lib/blog-service.ts";
 
+import { siteConfig } from '../site-config.ts';
+
+const businessId = siteConfig.business_id;
+
+
 const limitPerTopic = 6;
 
 // Fetch topics with articles dynamically
@@ -137,9 +142,9 @@ const BATCH_SIZE = 5;
 
 // Mock endpoint: returns next articles for a topic
 // Real endpoint: returns next articles for a topic
-async function fetchNextArticles(topicId, offset, limit) {
+async function fetchNextArticles(businessId, topicId, offset, limit) {
   // You may need to pass business_id from a global/site config
-  const businessId = window.SITE_BUSINESS_ID || 'fastvistos';
+//   const businessId = window.SITE_BUSINESS_ID || 'fastvistos';
   try {
     const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
     const res = await fetch(url);
