@@ -17,9 +17,9 @@ node create-site.js
 ### **⚡ Development with Auto-Sync (RECOMMENDED)**
 
 ```bash
-npm run dev:watch:fastvistos      # FastVistos with auto-sync on file changes
-npm run dev:watch:conceptvistos   # ConceptVistos with auto-sync on file changes
-npm run dev:watch:vibecode       # VibeCode with auto-sync on file changes
+npm run dev:watch:fastvistos        # FastVistos with auto-sync on file changes
+npm run dev:watch:conceptvistos     # ConceptVistos with auto-sync on file changes
+npm run dev:watch:revistadoturismo  # VibeCode with auto-sync on file changes
 
 # For any new site you create:
 npm run dev:watch:mysite          # Replace 'mysite' with your site ID
