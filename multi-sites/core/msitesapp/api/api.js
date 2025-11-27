@@ -536,8 +536,8 @@ app.post('postfix/receive-email', async (req, res) => {
 });
 
 // GET endpoint to fetch next articles for carousel (dynamic loading)
-// const DEBUG_NEXT_ARTICLES = process.env.DEBUG_NEXT_ARTICLES === 'true';
-const DEBUG_NEXT_ARTICLES = true;
+const DEBUG_NEXT_ARTICLES = process.env.DEBUG_NEXT_ARTICLES === 'true';
+// const DEBUG_NEXT_ARTICLES = true;
 app.get('/next-articles', async (req, res) => {
     try {
         const businessId = req.query.business_id;
