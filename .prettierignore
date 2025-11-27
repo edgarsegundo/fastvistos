@@ -42,5 +42,5 @@ coverage/
 
 # Specific project files
 prisma/migrations/
-public-sites/
+public/
 uv.lock

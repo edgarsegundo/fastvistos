@@ -211,5 +211,5 @@ chatwoot.sqlite3-wal
 
 multi-sites/sites/*/lib/updatable-editor.js
 
-!public-sites/*/assets/images/cover/
-!public-sites/*/assets/images/cover/**
+!public/*/assets/images/cover/
+!public/*/assets/images/cover/**
