@@ -86,6 +86,7 @@ const businessId = siteConfig.site.business_id;
             <div class="relative pt-2">
               <div
                 id={`carousel-${topic.slug || topic.id}`}
+                data-topic-id={topic.id}
                 class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
               >
                 {topic.blog_article.map((article) => (
@@ -181,6 +182,7 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
         loading: false,
         offset: carousel.children.length - 1, // initial loaded
         done: false,
+        topicId: carousel.getAttribute('data-topic-id')
     };
 
     // Helper: show spinner in empty image cards
@@ -229,7 +231,8 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
                 carousel.appendChild(spinnerCard);
             }
             // Fetch next articles
-            const nextArticles = await fetchNextArticles(topicId, topicId, BATCH_SIZE);
+            let real_topicId = carousel.getAttribute('data-topic-id')
+            const nextArticles = await fetchNextArticles(real_topicId, 5, BATCH_SIZE);
             // Remove spinner cards
             for (let i = 0; i < BATCH_SIZE; i++) {
                 carousel.removeChild(carousel.lastChild);
