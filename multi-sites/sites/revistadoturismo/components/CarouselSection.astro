@@ -167,25 +167,47 @@ const spinnerSVG = `<svg class='spinner' width='32' height='32' viewBox='0 0 32 
 const topicStates = {};
 
 document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) => {
-    const topicId = carousel.id.replace('carousel-', '');
-    topicStates[topicId] = {
-    loading: false,
-    offset: carousel.children.length - 1, // initial loaded
-    done: false,
-    };
+      const topicId = carousel.id.replace('carousel-', '');
+      topicStates[topicId] = {
+        loading: false,
+        offset: carousel.children.length - 1, // initial loaded
+        done: false,
+      };
 
-    // Helper: show spinner in empty image cards
-    function showSpinners() {
-    carousel.querySelectorAll('a').forEach(card => {
-        const img = card.querySelector('img');
-        if (img && !img.src) {
-        img.outerHTML = `<div style='display:flex;align-items:center;justify-content:center;height:100%;'>${spinnerSVG}</div>`;
+      // Helper: show spinner in empty image cards
+      function showSpinners() {
+        carousel.querySelectorAll('a').forEach(card => {
+          const img = card.querySelector('img');
+          if (img && !img.src) {
+            img.outerHTML = `<div style='display:flex;align-items:center;justify-content:center;height:100%;'>${spinnerSVG}</div>`;
+          }
+        });
+      }
+
+      // Fade logic: show fade only when not at end
+      const fade = carousel.parentElement.querySelector('.carousel-fade-right');
+      function updateFade() {
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if (carousel.scrollLeft >= maxScroll - 2) {
+          if (fade) fade.classList.add('hide');
+        } else {
+          if (fade) fade.classList.remove('hide');
         }
-    });
-    }
+      }
+      carousel.addEventListener('scroll', updateFade);
+      setTimeout(updateFade, 100);
 
-    // Load more articles when scrolled to end
-    carousel.addEventListener('scroll', async () => {
+      // Prevent wheel scroll past the end
+      carousel.addEventListener('wheel', (e) => {
+        const event = e as WheelEvent;
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if ((carousel.scrollLeft === 0 && event.deltaX < 0) || (carousel.scrollLeft === maxScroll && event.deltaX > 0)) {
+          event.preventDefault();
+        }
+      }, { passive: false });
+
+      // Load more articles when scrolled to end
+      carousel.addEventListener('scroll', async () => {
     const maxScroll = carousel.scrollWidth - carousel.clientWidth;
     if (carousel.scrollLeft >= maxScroll - 2 && !topicStates[topicId].loading && !topicStates[topicId].done) {
         topicStates[topicId].loading = true;
