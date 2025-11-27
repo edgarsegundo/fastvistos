@@ -226,7 +226,7 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
         carousel.removeChild(carousel.lastChild);
         }
         if (nextArticles.length === 0) {
-        topicStates[topicId].done = true;
+            topicStates[topicId].done = true;
         } else {
         nextArticles.forEach(article => {
             const card = document.createElement('a');
