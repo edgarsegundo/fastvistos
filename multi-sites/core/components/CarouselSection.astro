@@ -40,6 +40,21 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
     border-color: #111; /* Tailwind blue-600 */
     opacity: .7;
   }
+  .carousel-fade-right {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 64px;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to left, rgba(0,0,0,0.10) 60%, rgba(255,255,255,0));
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .carousel-fade-right.hide {
+    opacity: 0;
+  }
 </style>
 
 <section class="w-full">
@@ -98,6 +113,8 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
                   </a>
                 ))}
               </div>
+
+              <div class="carousel-fade-right"></div>
             </div>
           </div>
         </div>
@@ -115,6 +132,18 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
     const scrollAmount = 320;
 
     carousels.forEach((carousel) => {
+      const fade = carousel.parentElement.querySelector('.carousel-fade-right');
+      function updateFade() {
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if (carousel.scrollLeft >= maxScroll - 2) {
+          if (fade) fade.classList.remove('hide');
+        } else {
+          if (fade) fade.classList.add('hide');
+        }
+      }
+      carousel.addEventListener('scroll', updateFade);
+      setTimeout(updateFade, 50); // Initial state
+
       document.addEventListener('keydown', (e) => {
         const rect = carousel.getBoundingClientRect();
         const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
@@ -142,13 +171,27 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles();
         if (!startX) return;
         const currentX = touchEvent.touches[0].clientX;
         const diff = startX - currentX;
-        carousel.scrollLeft = scrollStart + diff;
+        // Prevent scrolling past the end
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        let newScroll = scrollStart + diff;
+        if (newScroll < 0) newScroll = 0;
+        if (newScroll > maxScroll) newScroll = maxScroll;
+        carousel.scrollLeft = newScroll;
       });
 
       carousel.addEventListener('touchend', () => {
         startX = 0;
         scrollStart = 0;
       });
+
+      // Prevent wheel scroll past the end
+      carousel.addEventListener('wheel', (e) => {
+        const event = e as WheelEvent;
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if ((carousel.scrollLeft === 0 && event.deltaX < 0) || (carousel.scrollLeft === maxScroll && event.deltaX > 0)) {
+          event.preventDefault();
+        }
+      }, { passive: false });
     });
   </script>
 </section>
