@@ -7,15 +7,14 @@
 
 import { BlogService } from "../lib/blog-service.ts";
 
-import { siteConfig } from '../site-config.ts';
-
-const businessId = siteConfig.business_id;
-
-
 const limitPerTopic = 6;
 
 // Fetch topics with articles dynamically
 const topicsWithArticles = await BlogService.getTopicsWithArticles(limitPerTopic);
+
+// Get businessId from siteConfig (Astro server)
+import { siteConfig } from '../site-config.ts';
+const businessId = siteConfig.site.business_id;
 ---
 
 <style>
@@ -137,28 +136,30 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles(limitPerTopic
 </section>
 
 <script>
+
 // Configurable batch size
 const BATCH_SIZE = 5;
 
-// Mock endpoint: returns next articles for a topic
+// Pass businessId from Astro to client
+window.__BUSINESS_ID__ = "{businessId}";
+
 // Real endpoint: returns next articles for a topic
-async function fetchNextArticles(businessId, topicId, offset, limit) {
-  // You may need to pass business_id from a global/site config
-//   const businessId = window.SITE_BUSINESS_ID || 'fastvistos';
+async function fetchNextArticles(topicId, offset, limit) {
+  const businessId = window.__BUSINESS_ID__;
+  debugger;
+  const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
   try {
-    const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch articles');
+    if (!res.ok) return [];
     const data = await res.json();
-    // Map to expected card format
-    return (data.articles || []).map(article => ({
-      slug: article.slug,
-      title: article.title,
-      image: article.image || '',
-      content_html: article.seo_description || '',
+    // Map to expected card fields
+    return (data.articles || []).map(a => ({
+      slug: a.slug,
+      title: a.title,
+      image: a.image || '',
+      content_html: a.seo_description || '',
     }));
   } catch (err) {
-    console.error('Error fetching next articles:', err);
     return [];
   }
 }
