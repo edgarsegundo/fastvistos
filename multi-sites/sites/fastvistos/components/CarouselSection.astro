@@ -148,8 +148,6 @@ const BATCH_SIZE = 5;
 
 // Real endpoint: returns next articles for a topic
 async function fetchNextArticles(topicId, offset, limit) {
-    debugger;
-    offset = 5;
   const businessId = window.__BUSINESS_ID__;
   const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
   try {
@@ -231,7 +229,7 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
                 carousel.appendChild(spinnerCard);
             }
             // Fetch next articles
-            const nextArticles = await fetchNextArticles(topicStates[topicId].topicId, ???, BATCH_SIZE);
+            const nextArticles = await fetchNextArticles(topicStates[topicId].topicId, topicStates[topicId].offset, BATCH_SIZE);
             // Remove spinner cards
             for (let i = 0; i < BATCH_SIZE; i++) {
                 carousel.removeChild(carousel.lastChild);
