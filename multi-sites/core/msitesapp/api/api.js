@@ -545,6 +545,8 @@ app.get('/next-articles', async (req, res) => {
         const offset = parseInt(req.query.offset, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 5;
 
+        console.log(`**** /next-articles called with business_id=${businessId}, blog_topic_id=${topicId}, offset=${offset}, limit=${limit}`);
+
         if (!businessId || !topicId) {
             return res.status(400).json({ error: 'Missing required business_id or blog_topic_id.' });
         }
@@ -568,18 +570,6 @@ app.get('/next-articles', async (req, res) => {
         // Fetch articles for topic, sorted by published desc, skip offset, take limit
         const articles = await BlogService.getArticlesByTopicIdWithOffset(businessId, topicId, offset, limit);
 
-        // // Defensive: filter out removed, sort, slice
-        // const filtered = (allArticles || [])
-        //     .filter(a => !a.is_removed && a.published)
-        //     .sort((a, b) => new Date(b.published) - new Date(a.published));
-        // const articles = filtered.slice(offset, offset + limit).map(a => ({
-        //     id: a.id,
-        //     slug: a.slug,
-        //     title: a.title,
-        //     image: a.image,
-        //     published: a.published,
-        //     seo_description: a.seo_description,
-        // }));
         console.log(`**** Fetched ${articles.length} articles for topic ${topicId} (offset: ${offset}, limit: ${limit})`);
         console.log('**** Article IDs:', articles.map(a => a.id).join(', '));
         return res.json({ articles });
