@@ -219,16 +219,21 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
         const maxScroll = carousel.scrollWidth - carousel.clientWidth;
         if (carousel.scrollLeft >= maxScroll - 2 && !topicStates[topicId].loading && !topicStates[topicId].done) {
             topicStates[topicId].loading = true;
-            // Add spinner cards
-            for (let i = 0; i < BATCH_SIZE; i++) {
-                const spinnerCard = document.createElement('a');
-                spinnerCard.className = "bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block";
-                spinnerCard.style.textDecoration = "none";
-                spinnerCard.innerHTML = `<div style='height:192px;width:100%;display:flex;align-items:center;justify-content:center;'>${spinnerSVG}</div><div class='p-6'></div>`;
-                carousel.appendChild(spinnerCard);
-            }
-            // Fetch next articles
-            const nextArticles = await fetchNextArticles(topicStates[topicId].topicId, topicStates[topicId].offset, BATCH_SIZE);
+      // Add spinner cards
+      for (let i = 0; i < BATCH_SIZE; i++) {
+        const spinnerCard = document.createElement('a');
+        spinnerCard.className = "bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block";
+        spinnerCard.style.textDecoration = "none";
+        spinnerCard.innerHTML = `<div style='height:192px;width:100%;display:flex;align-items:center;justify-content:center;'>${spinnerSVG}</div><div class='p-6'></div>`;
+        carousel.appendChild(spinnerCard);
+      }
+      // Spinner delay flag (default true)
+      const SHOW_SPINNER_DELAY = true;
+      if (SHOW_SPINNER_DELAY) {
+        await new Promise(r => setTimeout(r, 300));
+      }
+      // Fetch next articles
+      const nextArticles = await fetchNextArticles(topicStates[topicId].topicId, topicStates[topicId].offset, BATCH_SIZE);
             // Remove spinner cards
             for (let i = 0; i < BATCH_SIZE; i++) {
                 carousel.removeChild(carousel.lastChild);
