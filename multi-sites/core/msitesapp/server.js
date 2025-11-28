@@ -1,13 +1,10 @@
 import express from 'express';
-
-const app = express();
-
 import api from './api/api.js';
 import { config } from './config.js';
 
 const PORT = config.server.port;
 
-
+const app = express();
 
 // Add process error handlers
 process.on('unhandledRejection', (reason, promise) => {
