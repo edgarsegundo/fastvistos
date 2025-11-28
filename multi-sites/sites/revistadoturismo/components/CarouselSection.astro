@@ -174,7 +174,6 @@ const topicStates = {};
 var offset = BATCH_SIZE;
 
 document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) => {
-    debugger;
     const topicId = carousel.id.replace('carousel-', '');
     topicStates[topicId] = {
         loading: false,
