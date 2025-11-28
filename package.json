@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:js": "prettier --write \"**/*.{js,mjs,ts,jsx,tsx}\"",
+    "format:file": "prettier --write",
     "format:astro": "prettier --write '**/*.astro' --plugin=prettier-plugin-astro",
     "format:md": "prettier --write \"**/*.md\"",
     "sync-blog": "node sync-blog.js",
