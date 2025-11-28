@@ -191,6 +191,75 @@ const businessId = siteConfig.site.business_id;
     const topicStates = {};
     var offset = BATCH_SIZE;
 
+    function createResponsiveImageMinimal({
+        imagePath, // ex: "/assets/images-responsive-base/resized/article3"
+        breakpoints = [356, 485, 608],
+        scales = [1, 2],
+        types = ["jpeg", "webp"],
+        alt = "",
+        className = "",
+        priority = false,
+        sizes = "(max-width: 1023px) 400px, 608px"
+    }) {
+        const sources = {};
+        let fallbackSrc = null;
+
+        types.forEach((type) => {
+            const srcsetParts = [];
+
+            breakpoints.forEach((bp) => {
+                scales.forEach((scale) => {
+                    const width = bp * scale;
+
+                    // Nome de arquivo compatível com Astro:
+                    //   <path>-<bp>-<scale>x.<type>
+                    const file = `${imagePath}-${bp}-${scale}x.${type}`;
+
+                    srcsetParts.push(`${file} ${width}w`);
+
+                    // Captura o menor arquivo como fallback
+                    // if (!fallbackSrc || width < fallbackSrc.width) {
+                    //     fallbackSrc = { file, width };
+                    // }
+                    if (scale === 1 && bp === Math.min(...breakpoints)) {
+                        fallbackSrc = { file, width };
+                    }                    
+                });
+            });
+
+            sources[type] = srcsetParts.join(", ");
+        });
+
+        const picture = document.createElement("picture");
+        picture.className = `relative block ${className}`;
+        picture.style.backgroundImage = `url('${fallbackSrc.file}')`;
+        picture.style.backgroundSize = "cover";
+        picture.style.backgroundPosition = "center";
+
+        // <source> tags
+        Object.entries(sources).forEach(([type, srcset]) => {
+            const source = document.createElement("source");
+            source.type = `image/${type}`;
+            source.srcset = srcset;
+            source.sizes = sizes;
+            picture.appendChild(source);
+        });
+
+        // <img> fallback
+        const img = document.createElement("img");
+        img.src = fallbackSrc.file;
+        img.alt = alt;
+        img.loading = priority ? "eager" : "lazy";
+        img.decoding = "async";
+        img.className = "w-full h-full object-cover transition-opacity duration-300";
+        img.style.opacity = "0";
+        img.onload = () => (img.style.opacity = "1");
+
+        picture.appendChild(img);
+
+        return picture;
+    }
+
     document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) => {
         const topicId = carousel.id.replace('carousel-', '');
         topicStates[topicId] = {
@@ -272,20 +341,47 @@ const businessId = siteConfig.site.business_id;
                 for (let i = 0; i < BATCH_SIZE; i++) {
                     carousel.removeChild(carousel.lastChild);
                 }
+
                 if (nextArticles.length === 0) {
                     topicStates[topicId].done = true;
                 } else {
                     nextArticles.forEach((article) => {
+
+
+
+
+
+
                         const card = document.createElement('a');
                         card.href = `/blog/${article.slug}`;
                         card.className =
                             'bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block';
                         card.style.textDecoration = 'none';
+
+
                         const imgSrc = article.image
-                            ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}`
+                            ? `/assets/images/blog/resized/${
+                                article.image
+                                    .replace(/^.*\//, '')      // remove path anterior
+                                    .replace(/\.[^.]+$/, '')    // remove a extensão
+                            }`
                             : 'https://via.placeholder.com/400x250';
+
+                       const img = createResponsiveImageMinimal({
+                            imagePath: imgSrc,
+                            breakpoints: [608, 320],
+                            scales: [1, 2],
+                            types: ['jpeg', 'webp'],
+                            alt: article.slug,
+                            className: 'w-full aspect-[1.67] object-cover',
+                            priority: false,
+                            sizes: "(max-width: 1023px) 320px, 608px"
+                        });
+
+
+// <img src='${imgSrc}' alt='${article.slug}' class='w-full aspect-[1.67] object-cover' />
                         card.innerHTML = `
-                    <img src='${imgSrc}' alt='${article.slug}' class='w-full aspect-[1.67] object-cover' />
+                    ${img.outerHTML}
                     <div class='p-6'>
                         <h3 class='text-xl font-semibold mb-2 text-black'>${article.title}</h3>
                         <p class='text-gray-600 mb-4'>${article.content_html}</p>
@@ -302,69 +398,3 @@ const businessId = siteConfig.site.business_id;
     });
 </script>
 
-<script>
-    function createResponsiveImageMinimal({
-        imagePath, // e.g. "/images/photo"
-        breakpoints = [608, 320],
-        scales = [1, 2],
-        types = ['jpeg', 'webp'],
-        alt = '',
-        className = '',
-        priority = false,
-    }) {
-        // Build sources object with srcset per file type
-        const sources = {};
-        let fallbackSrc = '';
-
-        types.forEach((type) => {
-            const srcsetParts = [];
-
-            breakpoints.forEach((bp) => {
-                scales.forEach((scale) => {
-                    const width = bp * scale;
-                    const file = `${imagePath}-${width}.${type}`;
-
-                    srcsetParts.push(`${file} ${width}w`);
-
-                    // Choose smallest image as fallback blur
-                    if (!fallbackSrc || width < parseInt(fallbackSrc.width)) {
-                        fallbackSrc = file;
-                    }
-                });
-            });
-
-            sources[type] = srcsetParts.join(', ');
-        });
-
-        // Default sizes: full width
-        const sizes = '100vw';
-
-        // ---- DOM Construction ----
-        const picture = document.createElement('picture');
-        picture.className = `relative block ${className}`;
-        picture.style.backgroundImage = `url('${fallbackSrc}')`;
-        picture.style.backgroundSize = 'cover';
-        picture.style.backgroundPosition = 'center';
-
-        Object.entries(sources).forEach(([type, srcset]) => {
-            const source = document.createElement('source');
-            source.type = `image/${type}`;
-            source.srcset = srcset;
-            source.sizes = sizes;
-            picture.appendChild(source);
-        });
-
-        const img = document.createElement('img');
-        img.src = fallbackSrc;
-        img.alt = alt;
-        img.loading = priority ? 'eager' : 'lazy';
-        img.decoding = 'async';
-        img.className = 'w-full h-full object-cover transition-opacity duration-300';
-        img.style.opacity = '0';
-        img.onload = () => (img.style.opacity = '1');
-
-        picture.appendChild(img);
-
-        return picture;
-    }
-</script>
