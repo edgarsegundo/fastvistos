@@ -46,4 +46,39 @@ export class BlogService {
             throw error;
         }
     }
+
+    /**
+     * Get articles by topicId with offset and limit (for dynamic carousel loading)
+     * @param {string} topicId
+     * @param {number} [offset=0]
+     * @param {number} [limit=5]
+     * @param {string} [businessId] - Pass explicitly if not using getBusinessId()
+     * @returns {Promise<Array>} Array of articles
+     */
+    static async getArticlesByTopicIdWithOffset(topicId, offset = 0, limit = 5, businessId) {
+        try {
+            // Use explicit businessId if provided, otherwise fallback to class method
+            const resolvedBusinessId = businessId || (typeof this.getBusinessId === 'function' ? this.getBusinessId() : undefined);
+            const now = new Date();
+            return await prisma.blog_article.findMany({
+                where: {
+                    business_id: resolvedBusinessId,
+                    blog_topic_id: topicId,
+                    is_removed: false,
+                    published: {
+                        lte: now,
+                    },
+                },
+                orderBy: {
+                    published: 'desc',
+                },
+                skip: offset,
+                take: limit,
+            });
+        } catch (error) {
+            console.error('Error fetching articles by topicId with offset:', error);
+            return [];
+        }
+    }
+
 }

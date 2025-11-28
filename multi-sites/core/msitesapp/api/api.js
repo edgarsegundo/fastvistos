@@ -566,7 +566,7 @@ app.get('/next-articles', async (req, res) => {
         }
 
         // Fetch articles for topic, sorted by published desc, skip offset, take limit
-        let articles = await BlogService.getArticlesByTopicIdWithOffset(businessId, topicId, offset, limit);
+        const articles = await BlogService.getArticlesByTopicIdWithOffset(businessId, topicId, offset, limit);
 
         // // Defensive: filter out removed, sort, slice
         // const filtered = (allArticles || [])
