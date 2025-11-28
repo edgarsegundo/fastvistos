@@ -49,13 +49,13 @@ export class BlogService {
 
     /**
      * Get articles by topicId with offset and limit (for dynamic carousel loading)
-     * @param {string} topicId
+    * @param {string} [businessId] - Pass explicitly if not using getBusinessId() 
+    * @param {string} topicId
      * @param {number} [offset=0]
      * @param {number} [limit=5]
-     * @param {string} [businessId] - Pass explicitly if not using getBusinessId()
      * @returns {Promise<Array>} Array of articles
      */
-    static async getArticlesByTopicIdWithOffset(topicId, offset = 0, limit = 5, businessId) {
+    static async getArticlesByTopicIdWithOffset(businessId, topicId, offset = 0, limit = 5) {
         try {
             // Use explicit businessId if provided, otherwise fallback to class method
             const resolvedBusinessId = businessId || (typeof this.getBusinessId === 'function' ? this.getBusinessId() : undefined);
