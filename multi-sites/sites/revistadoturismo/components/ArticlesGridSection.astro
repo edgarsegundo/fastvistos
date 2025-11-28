@@ -38,21 +38,21 @@ const cards = [
     },
 ];
 
-function buildSrcSet(key, type) {
-    const files = map[key][type];
+// function buildSrcSet(key, type) {
+//     const files = map[key][type];
 
-    const filtered = files.filter(
-        (f) =>
-            f.includes('-356-1x') ||
-            f.includes('-356-2x') ||
-            f.includes('-485-1x') ||
-            f.includes('-485-2x') ||
-            f.includes('-608-1x') ||
-            f.includes('-608-2x')
-    );
+//     const filtered = files.filter(
+//         (f) =>
+//             f.includes('-356-1x') ||
+//             f.includes('-356-2x') ||
+//             f.includes('-485-1x') ||
+//             f.includes('-485-2x') ||
+//             f.includes('-608-1x') ||
+//             f.includes('-608-2x')
+//     );
 
-    return filtered.map((f) => imageBase + f).join(', ');
-}
+//     return filtered.map((f) => imageBase + f).join(', ');
+// }
 ---
 
 <section class="container mx-auto px-4 py-8">
