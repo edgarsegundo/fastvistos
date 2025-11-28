@@ -1,6 +1,9 @@
 // blog-service.js
 // JavaScript version of createBlogArticle for use in Node.js (CommonJS or ESM)
 // Assumes prisma is imported from the correct location
+// ┌───────────────────────────────────────────────────────────────┐
+// │ Intended for use within api.js, our API running on the VPS    │
+// └───────────────────────────────────────────────────────────────┘
 
 import { prisma } from './prisma.js';
 
@@ -80,5 +83,4 @@ export class BlogService {
             return [];
         }
     }
-
 }

@@ -545,7 +545,7 @@ app.get('/next-articles', async (req, res) => {
         const offset = parseInt(req.query.offset, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 5;
 
-        console.log(`**** /next-articles called with business_id=${businessId}, blog_topic_id=${topicId}, offset=${offset}, limit=${limit}`);
+        // console.log(`**** /next-articles called with business_id=${businessId}, blog_topic_id=${topicId}, offset=${offset}, limit=${limit}`);
 
         if (!businessId || !topicId) {
             return res.status(400).json({ error: 'Missing required business_id or blog_topic_id.' });
