@@ -1,3 +1,20 @@
+import rateLimit from 'express-rate-limit';
+// Rate limiting for /next-articles
+const nextArticlesLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 30, // limit each IP to 30 requests per minute
+    message: { error: "Too many requests, please try again later." }
+});
+app.use('/next-articles', nextArticlesLimiter);
+
+// Restrict by origin (CORS-like, but for abuse monitoring)
+app.use('/next-articles', (req, res, next) => {
+    const allowedOrigin = 'https://fastvistos.com.br';
+    if (req.headers.origin && req.headers.origin !== allowedOrigin) {
+        return res.status(403).json({ error: 'Forbidden origin.' });
+    }
+    next();
+});
 // To add a new lib, always import fom dist like for example: `../../dist/lib/libname.js`
 import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
@@ -540,25 +557,31 @@ const DEBUG_NEXT_ARTICLES = process.env.DEBUG_NEXT_ARTICLES === 'true';
 // const DEBUG_NEXT_ARTICLES = true;
 app.get('/next-articles', async (req, res) => {
     try {
-        const businessId = req.query.business_id;
-        const topicId = req.query.blog_topic_id;
-        const offset = parseInt(req.query.offset, 10) || 0;
-        const limit = parseInt(req.query.limit, 10) || 5;
-
-        // console.log(`**** /next-articles called with business_id=${businessId}, blog_topic_id=${topicId}, offset=${offset}, limit=${limit}`);
-
-        if (!businessId || !topicId) {
-            return res.status(400).json({ error: 'Missing required business_id or blog_topic_id.' });
+        const { business_id, blog_topic_id, offset, limit } = req.query;
+        // Strict param validation
+        if (
+            typeof business_id !== 'string' ||
+            typeof blog_topic_id !== 'string' ||
+            isNaN(Number(offset)) ||
+            isNaN(Number(limit)) ||
+            Number(limit) > 20 || Number(limit) < 1 ||
+            Number(offset) < 0
+        ) {
+            console.warn(`Suspicious request: invalid params from IP ${req.ip}`, req.query);
+            return res.status(400).json({ error: 'Invalid query parameters.' });
+        }
+        if (Number(limit) > 10) {
+            console.warn(`Suspicious request: limit=${limit} from IP ${req.ip}`);
         }
 
         // Mock data for debug
         if (DEBUG_NEXT_ARTICLES) {
-            const articles = Array.from({ length: limit }, (_, i) => {
-                const idx = offset + i + 1;
+            const articles = Array.from({ length: Number(limit) }, (_, i) => {
+                const idx = Number(offset) + i + 1;
                 return {
-                    id: `mock-${topicId}-${idx}`,
-                    slug: `article-${topicId}-${idx}`,
-                    title: `Artigo ${idx} do Tópico ${topicId}`,
+                    id: `mock-${blog_topic_id}-${idx}`,
+                    slug: `article-${blog_topic_id}-${idx}`,
+                    title: `Artigo ${idx} do Tópico ${blog_topic_id}`,
                     image: '',
                     published: new Date().toISOString(),
                     seo_description: `SEO description for artigo ${idx}`,
@@ -568,9 +591,9 @@ app.get('/next-articles', async (req, res) => {
         }
 
         // Fetch articles for topic, sorted by published desc, skip offset, take limit
-        const articles = await BlogService.getArticlesByTopicIdWithOffset(businessId, topicId, offset, limit);
+        const articles = await BlogService.getArticlesByTopicIdWithOffset(business_id, blog_topic_id, Number(offset), Number(limit));
 
-        console.log(`**** Fetched ${articles.length} articles for topic ${topicId} (offset: ${offset}, limit: ${limit})`);
+        console.log(`**** Fetched ${articles.length} articles for topic ${blog_topic_id} (offset: ${offset}, limit: ${limit})`);
         console.log('**** Article IDs:', articles.map(a => a.id).join(', '));
         return res.json({ articles });
     } catch (error) {
