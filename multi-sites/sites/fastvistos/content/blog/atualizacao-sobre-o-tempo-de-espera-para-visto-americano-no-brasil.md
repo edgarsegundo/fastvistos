@@ -1,12 +1,12 @@
 ---
 title: "Atualização sobre o Tempo de Espera para Visto Americano no Brasil"
-description: "Atualização sobre o Tempo de Espera para Visto Americano no Brasil"
-pubDate: "2025-11-19T20:52:30.643Z"
-updatedDate: "2025-11-19T20:52:30.643Z"
+description: "TLZKSBRTMPDSPRPRVSTMRKNNBRZL"
+pubDate: "2025-11-19T20:52:30.000Z"
+updatedDate: "2025-11-28T14:30:05.608Z"
 slug: "atualizacao-sobre-o-tempo-de-espera-para-visto-americano-no-brasil"
 topic: "Notícias"
 topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__upload.webp"
+image: "/assets/images/blog/fastvistos__revistadoturismo__2147838893.jpg"
 type: "public"
 published: true
 wordCount: "408"
@@ -56,4 +56,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        
