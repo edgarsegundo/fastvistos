@@ -1,27 +1,13 @@
-import rateLimit from 'express-rate-limit';
-// Rate limiting for /next-articles
-const nextArticlesLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 30, // limit each IP to 30 requests per minute
-    message: { error: "Too many requests, please try again later." }
-});
-app.use('/next-articles', nextArticlesLimiter);
-
-// Restrict by origin (CORS-like, but for abuse monitoring)
-app.use('/next-articles', (req, res, next) => {
-    const allowedOrigin = 'https://fastvistos.com.br';
-    if (req.headers.origin && req.headers.origin !== allowedOrigin) {
-        return res.status(403).json({ error: 'Forbidden origin.' });
-    }
-    next();
-});
 // To add a new lib, always import fom dist like for example: `../../dist/lib/libname.js`
+
+import rateLimit from 'express-rate-limit';
 import { extractReadableText } from '../../dist/lib/txtify.js';
 import { WebPageService } from '../../dist/lib/webpage-service.js';
 import { reescreverArtigo } from './news-article-generator.js';
 import { openai } from '../openai-client.js'; // adjust path as needed
 import { v4 as uuidv4 } from 'uuid';
 import slugify from 'slugify';
+
 const { BlogService } = await import('../../dist/lib/blog-service.js');
 
 import express from 'express';
@@ -38,6 +24,24 @@ app.use((req, res, next) => {
         if (req.body) {
             console.log('Request body:', JSON.stringify(req.body, null, 2));
         }
+    }
+    next();
+});
+
+// Rate limiting for /next-articles
+const nextArticlesLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 30, // limit each IP to 30 requests per minute
+    message: { error: "Too many requests, please try again later." }
+});
+
+app.use('/next-articles', nextArticlesLimiter);
+
+// Restrict by origin (CORS-like, but for abuse monitoring)
+app.use('/next-articles', (req, res, next) => {
+    const allowedOrigin = 'https://fastvistos.com.br';
+    if (req.headers.origin && req.headers.origin !== allowedOrigin) {
+        return res.status(403).json({ error: 'Forbidden origin.' });
     }
     next();
 });
