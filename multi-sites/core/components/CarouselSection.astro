@@ -231,8 +231,7 @@ document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) =>
                 carousel.appendChild(spinnerCard);
             }
             // Fetch next articles
-            let real_topicId = carousel.getAttribute('data-topic-id')
-            const nextArticles = await fetchNextArticles(real_topicId, 5, BATCH_SIZE);
+            const nextArticles = await fetchNextArticles(topicStates[topicId].topicId, ???, BATCH_SIZE);
             // Remove spinner cards
             for (let i = 0; i < BATCH_SIZE; i++) {
                 carousel.removeChild(carousel.lastChild);
