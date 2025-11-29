@@ -315,7 +315,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
         function showSpinners() {
             carousel.querySelectorAll('a').forEach((card) => {
                 const img = card.querySelector('img');
-                if (img && !img.src) {
+                if (img && !img.currentSrc) {
                     img.outerHTML = `<div style='display:flex;align-items:center;justify-content:center;height:100%;'>${spinnerSVG}</div>`;
                 }
             });
@@ -376,7 +376,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                 // Fetch next articles
                 const nextArticles = await fetchNextArticles(
                     topicStates[topicId].topicId,
-                    topicStates[topicId].offset,
+                    topicStates[topicId].offset + 1,
                     BATCH_SIZE
                 );
                 // Remove spinner cards
@@ -402,7 +402,6 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                             }`
                             : 'https://via.placeholder.com/400x250';
 
-                        console.log('**** article.blurDataURL (1):', article.blurDataURL);
                         const img = createResponsiveImageMinimal({
                             imagePath: imgSrc,
                             breakpoints: [608, 320],
@@ -428,7 +427,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                         carousel.appendChild(card);
                     });
                     topicStates[topicId].offset += nextArticles.length;
-                    showSpinners();
+                    // showSpinners();
                 }
                 topicStates[topicId].loading = false;
             }
