@@ -37,14 +37,17 @@ const nextArticlesLimiter = rateLimit({
 
 app.use('/next-articles', nextArticlesLimiter);
 
-// Restrict by origin (CORS-like, but for abuse monitoring)
-app.use('/next-articles', (req, res, next) => {
-    const allowedOrigin = 'https://fastvistos.com.br';
-    if (req.headers.origin && req.headers.origin !== allowedOrigin) {
-        return res.status(403).json({ error: 'Forbidden origin.' });
-    }
-    next();
-});
+// São muitos os domínios que podem usar este endpoint, 
+// então desabilitei a verificação de origem e vou pensar numa
+// solução mais robusta no futuro
+// // Restrict by origin (CORS-like, but for abuse monitoring)
+// app.use('/next-articles', (req, res, next) => {
+//     const allowedOrigin = 'https://fastvistos.com.br';
+//     if (req.headers.origin && req.headers.origin !== allowedOrigin) {
+//         return res.status(403).json({ error: 'Forbidden origin.' });
+//     }
+//     next();
+// });
 
 app.get('/ping', (req, res) => {
     res.json({
