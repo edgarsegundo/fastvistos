@@ -178,6 +178,7 @@ const businessId = siteConfig.site.business_id;
                 title: a.title,
                 image: a.image || '',
                 content_html: a.seo_description || '',
+                blurDataURL: a.blur_base64 || ''
             }));
         } catch (err) {
             return [];
@@ -273,12 +274,14 @@ const businessId = siteConfig.site.business_id;
         className = "",
         priority = false,
         sizes = "(max-width: 1023px) 400px, 608px",
-        blurDataURL = "", // usado como fallback real
         width = null,
-        height = null
+        height = null,
+        blurDataURL = "",
     }) {
         const sources = {};
         const fallbackSrc = blurDataURL; // igual ao Astro
+
+        console.log('**** blurDataURL:', blurDataURL);
 
         // Gera srcsets iguais ao componente Astro
         types.forEach((type) => {
@@ -427,12 +430,6 @@ const businessId = siteConfig.site.business_id;
                     topicStates[topicId].done = true;
                 } else {
                     nextArticles.forEach((article) => {
-
-
-
-
-
-
                         const card = document.createElement('a');
                         card.href = `/blog/${article.slug}`;
                         card.className =
@@ -448,6 +445,7 @@ const businessId = siteConfig.site.business_id;
                             }`
                             : 'https://via.placeholder.com/400x250';
 
+                        console.log('**** article.blurDataURL (1):', article.blurDataURL);
                        const img = createResponsiveImageMinimal({
                             imagePath: imgSrc,
                             breakpoints: [608, 320],
@@ -457,9 +455,10 @@ const businessId = siteConfig.site.business_id;
                             className: 'w-full aspect-[1.67] object-cover',
                             priority: false,
                             sizes: "(max-width: 1023px) 320px, 608px",
-                            blurDataURL: article.blur_base64 || '',
+                            width: null,
+                            height: null,
+                            blurDataURL: article.blurDataURL || '',
                         });
-
 
 // <img src='${imgSrc}' alt='${article.slug}' class='w-full aspect-[1.67] object-cover' />
                         card.innerHTML = `
