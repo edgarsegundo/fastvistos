@@ -4,8 +4,9 @@
  * Dynamic carousel for topics and articles
  * Usage: <CarouselSection topicsWithArticles={topicsWithArticles} />
  */
-
+import ResponsiveImage from './ResponsiveImage.astro';
 import { BlogService } from '../lib/blog-service.ts';
+import path from 'path';
 
 const limitPerTopic = 6;
 
@@ -15,6 +16,29 @@ const topicsWithArticles = await BlogService.getTopicsWithArticles(limitPerTopic
 // Get businessId from siteConfig (Astro server)
 import { siteConfig } from '../site-config.ts';
 const businessId = siteConfig.site.business_id;
+
+function buildSources(filename, breakpoints, scales, imageBase) {
+    function buildSrcset(format) {
+        const entries = [];
+
+        breakpoints.forEach((bp) => {
+            scales.forEach((scale) => {
+                const realWidth = bp * scale;
+                const file = `${filename}-${bp}-${scale}x.${format}`;
+
+                entries.push(`${imageBase}${file} ${realWidth}w`);
+            });
+        });
+
+        return entries.join(', ');
+    }
+
+    return {
+        webp: buildSrcset('webp'),
+        jpeg: buildSrcset('jpeg'),
+    };
+}
+
 ---
 
 <style>
@@ -107,19 +131,26 @@ const businessId = siteConfig.site.business_id;
                                 data-topic-id={topic.id}
                                 class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
                             >
-                                {topic.blog_article.map((article) => (
+                                {topic.blog_article.map((article, i) => (
                                     <a
                                         href={`/blog/${article.slug}`}
                                         class="bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block"
                                         style="text-decoration: none;"
                                     >
-                                        <img
-                                            src={
-                                                article.image
-                                                    ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}`
-                                                    : 'https://via.placeholder.com/400x250'
-                                            }
+                                        <ResponsiveImage
                                             alt={article.slug || article.title}
+                                            width={608}
+                                            height={405}
+                                            sizes="(max-width: 1023px) 400px, 608px"
+                                            sources={buildSources(
+                                                path.parse(article.image).name,
+                                                    // article.image.replace(/\.[^.]+$/, ''),
+                                                    [608, 320],       // breakpoints
+                                                    [1, 2],           // scales
+                                                    `/assets/images/blog/resized/`         // "/assets/images-responsive-base/resized/"
+                                                )}
+                                            blurDataURL={article.blurDataURL}
+                                            priority={i === 0}
                                             class="w-full aspect-[1.67] object-cover"
                                         />
 
@@ -192,79 +223,6 @@ const businessId = siteConfig.site.business_id;
     const topicStates = {};
     // var offset = BATCH_SIZE;
 
-    // function createResponsiveImageMinimal({
-    //     imagePath, // ex: "/assets/images-responsive-base/resized/article3"
-    //     breakpoints = [356, 485, 608],
-    //     scales = [1, 2],
-    //     types = ["jpeg", "webp"],
-    //     alt = "",
-    //     className = "",
-    //     priority = false,
-    //     sizes = "(max-width: 1023px) 400px, 608px",
-    //     blurDataURL = "",
-    // }) {
-    //     const sources = {};
-    //     // let fallbackSrc = null;
-    //     // Fallback = blur (1 só vez, muito leve)
-    //     let fallbackSrc = blurDataURL;        
-
-    //     types.forEach((type) => {
-    //         const srcsetParts = [];
-
-    //         breakpoints.forEach((bp) => {
-    //             scales.forEach((scale) => {
-    //                 const width = bp * scale;
-
-    //                 // Nome de arquivo compatível com Astro:
-    //                 //   <path>-<bp>-<scale>x.<type>
-    //                 const file = `${imagePath}-${bp}-${scale}x.${type}`;
-
-    //                 srcsetParts.push(`${file} ${width}w`);
-
-    //                 // Captura o menor arquivo como fallback
-    //                 // if (!fallbackSrc || width < fallbackSrc.width) {
-    //                 //     fallbackSrc = { file, width };
-    //                 // }
-    //                 // if (scale === 1 && bp === Math.min(...breakpoints)) {
-    //                 //     fallbackSrc = { file, width };
-    //                 // }                    
-    //             });
-    //         });
-
-    //         sources[type] = srcsetParts.join(", ");
-    //     });
-
-    //     const picture = document.createElement("picture");
-    //     picture.className = `relative block ${className}`;
-    //     picture.style.backgroundImage = `url('${fallbackSrc}')`;
-    //     // picture.style.backgroundImage = `url('${fallbackSrc.file}')`;
-    //     picture.style.backgroundSize = "cover";
-    //     picture.style.backgroundPosition = "center";
-
-    //     // <source> tags
-    //     Object.entries(sources).forEach(([type, srcset]) => {
-    //         const source = document.createElement("source");
-    //         source.type = `image/${type}`;
-    //         source.srcset = srcset;
-    //         source.sizes = sizes;
-    //         picture.appendChild(source);
-    //     });
-
-    //     // <img> fallback
-    //     const img = document.createElement("img");
-    //     img.src = fallbackSrc.file;
-    //     img.alt = alt;
-    //     img.loading = priority ? "eager" : "lazy";
-    //     img.decoding = "async";
-    //     img.className = "w-full h-full object-cover transition-opacity duration-300";
-    //     img.style.opacity = "0";
-    //     img.onload = () => (img.style.opacity = "1");
-
-    //     picture.appendChild(img);
-
-    //     return picture;
-    // }
-
     function createResponsiveImageMinimal({
         imagePath, // ex: "/assets/images-responsive-base/resized/article3"
         breakpoints = [608, 320],
@@ -281,7 +239,7 @@ const businessId = siteConfig.site.business_id;
         const sources = {};
         const fallbackSrc = blurDataURL; // igual ao Astro
 
-        console.log('**** blurDataURL:', blurDataURL);
+        // console.log('**** blurDataURL:', blurDataURL);
 
         // Gera srcsets iguais ao componente Astro
         types.forEach((type) => {
