@@ -267,13 +267,13 @@ const businessId = siteConfig.site.business_id;
 
     function createResponsiveImageMinimal({
         imagePath, // ex: "/assets/images-responsive-base/resized/article3"
-        breakpoints = [356, 485, 608],
+        breakpoints = [608, 320],
         scales = [1, 2],
         types = ["jpeg", "webp"],
         alt = "",
         className = "",
         priority = false,
-        sizes = "(max-width: 1023px) 400px, 608px",
+        sizes = "(max-width: 1023px) 320px, 608px",
         width = null,
         height = null,
         blurDataURL = "",
@@ -436,7 +436,6 @@ const businessId = siteConfig.site.business_id;
                             'bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block';
                         card.style.textDecoration = 'none';
 
-
                         const imgSrc = article.image
                             ? `/assets/images/blog/resized/${
                                 article.image
@@ -446,7 +445,7 @@ const businessId = siteConfig.site.business_id;
                             : 'https://via.placeholder.com/400x250';
 
                         console.log('**** article.blurDataURL (1):', article.blurDataURL);
-                       const img = createResponsiveImageMinimal({
+                        const img = createResponsiveImageMinimal({
                             imagePath: imgSrc,
                             breakpoints: [608, 320],
                             scales: [1, 2],
@@ -460,14 +459,14 @@ const businessId = siteConfig.site.business_id;
                             blurDataURL: article.blurDataURL || '',
                         });
 
-// <img src='${imgSrc}' alt='${article.slug}' class='w-full aspect-[1.67] object-cover' />
-                        card.innerHTML = `
-                    ${img.outerHTML}
-                    <div class='p-6'>
-                        <h3 class='text-xl font-semibold mb-2 text-black'>${article.title}</h3>
-                        <p class='text-gray-600 mb-4'>${article.content_html}</p>
-                    </div>
-                    `;
+                        card.appendChild(img);
+                        const infoDiv = document.createElement('div');
+                        infoDiv.className = 'p-6';
+                        infoDiv.innerHTML = `
+                            <h3 class='text-xl font-semibold mb-2 text-black'>${article.title}</h3>
+                            <p class='text-gray-600 mb-4'>${article.content_html}</p>
+                        `;
+                        card.appendChild(infoDiv);
                         carousel.appendChild(card);
                     });
                     topicStates[topicId].offset += nextArticles.length;
