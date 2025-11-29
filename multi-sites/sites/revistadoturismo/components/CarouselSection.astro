@@ -189,7 +189,80 @@ const businessId = siteConfig.site.business_id;
 
     // State: loaded articles per topic
     const topicStates = {};
-    var offset = BATCH_SIZE;
+    // var offset = BATCH_SIZE;
+
+    // function createResponsiveImageMinimal({
+    //     imagePath, // ex: "/assets/images-responsive-base/resized/article3"
+    //     breakpoints = [356, 485, 608],
+    //     scales = [1, 2],
+    //     types = ["jpeg", "webp"],
+    //     alt = "",
+    //     className = "",
+    //     priority = false,
+    //     sizes = "(max-width: 1023px) 400px, 608px",
+    //     blurDataURL = "",
+    // }) {
+    //     const sources = {};
+    //     // let fallbackSrc = null;
+    //     // Fallback = blur (1 só vez, muito leve)
+    //     let fallbackSrc = blurDataURL;        
+
+    //     types.forEach((type) => {
+    //         const srcsetParts = [];
+
+    //         breakpoints.forEach((bp) => {
+    //             scales.forEach((scale) => {
+    //                 const width = bp * scale;
+
+    //                 // Nome de arquivo compatível com Astro:
+    //                 //   <path>-<bp>-<scale>x.<type>
+    //                 const file = `${imagePath}-${bp}-${scale}x.${type}`;
+
+    //                 srcsetParts.push(`${file} ${width}w`);
+
+    //                 // Captura o menor arquivo como fallback
+    //                 // if (!fallbackSrc || width < fallbackSrc.width) {
+    //                 //     fallbackSrc = { file, width };
+    //                 // }
+    //                 // if (scale === 1 && bp === Math.min(...breakpoints)) {
+    //                 //     fallbackSrc = { file, width };
+    //                 // }                    
+    //             });
+    //         });
+
+    //         sources[type] = srcsetParts.join(", ");
+    //     });
+
+    //     const picture = document.createElement("picture");
+    //     picture.className = `relative block ${className}`;
+    //     picture.style.backgroundImage = `url('${fallbackSrc}')`;
+    //     // picture.style.backgroundImage = `url('${fallbackSrc.file}')`;
+    //     picture.style.backgroundSize = "cover";
+    //     picture.style.backgroundPosition = "center";
+
+    //     // <source> tags
+    //     Object.entries(sources).forEach(([type, srcset]) => {
+    //         const source = document.createElement("source");
+    //         source.type = `image/${type}`;
+    //         source.srcset = srcset;
+    //         source.sizes = sizes;
+    //         picture.appendChild(source);
+    //     });
+
+    //     // <img> fallback
+    //     const img = document.createElement("img");
+    //     img.src = fallbackSrc.file;
+    //     img.alt = alt;
+    //     img.loading = priority ? "eager" : "lazy";
+    //     img.decoding = "async";
+    //     img.className = "w-full h-full object-cover transition-opacity duration-300";
+    //     img.style.opacity = "0";
+    //     img.onload = () => (img.style.opacity = "1");
+
+    //     picture.appendChild(img);
+
+    //     return picture;
+    // }
 
     function createResponsiveImageMinimal({
         imagePath, // ex: "/assets/images-responsive-base/resized/article3"
@@ -199,11 +272,15 @@ const businessId = siteConfig.site.business_id;
         alt = "",
         className = "",
         priority = false,
-        sizes = "(max-width: 1023px) 400px, 608px"
+        sizes = "(max-width: 1023px) 400px, 608px",
+        blurDataURL = "", // usado como fallback real
+        width = null,
+        height = null
     }) {
         const sources = {};
-        let fallbackSrc = null;
+        const fallbackSrc = blurDataURL; // igual ao Astro
 
+        // Gera srcsets iguais ao componente Astro
         types.forEach((type) => {
             const srcsetParts = [];
 
@@ -211,44 +288,48 @@ const businessId = siteConfig.site.business_id;
                 scales.forEach((scale) => {
                     const width = bp * scale;
 
-                    // Nome de arquivo compatível com Astro:
-                    //   <path>-<bp>-<scale>x.<type>
+                    // Nome igual ao Astro:
+                    // basepath-<bp>-<scale>x.<ext>
                     const file = `${imagePath}-${bp}-${scale}x.${type}`;
 
                     srcsetParts.push(`${file} ${width}w`);
-
-                    // Captura o menor arquivo como fallback
-                    // if (!fallbackSrc || width < fallbackSrc.width) {
-                    //     fallbackSrc = { file, width };
-                    // }
-                    if (scale === 1 && bp === Math.min(...breakpoints)) {
-                        fallbackSrc = { file, width };
-                    }                    
                 });
             });
 
             sources[type] = srcsetParts.join(", ");
         });
 
+        // <picture>
         const picture = document.createElement("picture");
         picture.className = `relative block ${className}`;
-        picture.style.backgroundImage = `url('${fallbackSrc.file}')`;
+        picture.style.backgroundImage = `url('${fallbackSrc}')`;
         picture.style.backgroundSize = "cover";
         picture.style.backgroundPosition = "center";
 
-        // <source> tags
-        Object.entries(sources).forEach(([type, srcset]) => {
-            const source = document.createElement("source");
-            source.type = `image/${type}`;
-            source.srcset = srcset;
-            source.sizes = sizes;
-            picture.appendChild(source);
-        });
+        // <source> webp
+        if (sources.webp) {
+            const s = document.createElement("source");
+            s.type = "image/webp";
+            s.srcset = sources.webp;
+            s.sizes = sizes;
+            picture.appendChild(s);
+        }
 
-        // <img> fallback
+        // <source> jpeg
+        if (sources.jpeg) {
+            const s = document.createElement("source");
+            s.type = "image/jpeg";
+            s.srcset = sources.jpeg;
+            s.sizes = sizes;
+            picture.appendChild(s);
+        }
+
+        // <img> fallback = blur, SEM srcset
         const img = document.createElement("img");
-        img.src = fallbackSrc.file;
+        img.src = fallbackSrc; // igual ao Astro: blur no fallback
         img.alt = alt;
+        if (width) img.width = width;
+        if (height) img.height = height;
         img.loading = priority ? "eager" : "lazy";
         img.decoding = "async";
         img.className = "w-full h-full object-cover transition-opacity duration-300";
@@ -375,7 +456,8 @@ const businessId = siteConfig.site.business_id;
                             alt: article.slug,
                             className: 'w-full aspect-[1.67] object-cover',
                             priority: false,
-                            sizes: "(max-width: 1023px) 320px, 608px"
+                            sizes: "(max-width: 1023px) 320px, 608px",
+                            blurDataURL: article.blur_base64 || '',
                         });
 
 

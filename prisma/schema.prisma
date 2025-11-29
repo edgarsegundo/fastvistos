@@ -228,25 +228,25 @@ model blog_post {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model blog_topic {
-  created               DateTime                @db.DateTime(6)
-  modified              DateTime                @db.DateTime(6)
-  is_removed            Boolean
-  id                    String                  @id @db.Char(32)
-  title                 String                  @db.VarChar(255)
-  slug                  String?                 @unique(map: "slug") @db.VarChar(255)
-  image                 String?                 @db.VarChar(100)
-  order                 Int                     @db.UnsignedInt
-  blog_config_id        String                  @db.Char(32)
-  business_id           String                  @db.Char(32)
-  metatitle             String?                 @db.LongText
-  seo_image_caption     String?                 @db.VarChar(255)
-  seo_image_height      Int?                    @db.UnsignedInt
-  seo_image_url         String?                 @db.VarChar(200)
-  seo_image_width       Int?                    @db.UnsignedInt
-  show_on_homepage      Boolean
-  blog_config           blog_config             @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
-  business              business                @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
-  blogging2_blogarticle blogging2_blogarticle[]
+  created           DateTime       @db.DateTime(6)
+  modified          DateTime       @db.DateTime(6)
+  is_removed        Boolean
+  id                String         @id @db.Char(32)
+  title             String         @db.VarChar(255)
+  slug              String?        @unique(map: "slug") @db.VarChar(255)
+  image             String?        @db.VarChar(100)
+  order             Int            @db.UnsignedInt
+  blog_config_id    String         @db.Char(32)
+  business_id       String         @db.Char(32)
+  metatitle         String?        @db.LongText
+  seo_image_caption String?        @db.VarChar(255)
+  seo_image_height  Int?           @db.UnsignedInt
+  seo_image_url     String?        @db.VarChar(200)
+  seo_image_width   Int?           @db.UnsignedInt
+  show_on_homepage  Boolean
+  blog_article      blog_article[]
+  blog_config       blog_config    @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
+  business          business       @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_topic_business_id_787b32b6_fk_business_id")
 
   @@index([blog_config_id], map: "blog_topic_blog_config_id_9bf21324_fk_blog_config_id")
   @@index([business_id], map: "blog_topic_business_id_787b32b6_fk_business_id")
@@ -274,10 +274,10 @@ model business {
   appointment_status_2           appointment_status_2[]
   appointment_status_3           appointment_status_3[]
   appointment_status_4           appointment_status_4[]
+  blog_article                   blog_article[]
   blog_asset                     blog_asset[]
   blog_config                    blog_config[]
   blog_topic                     blog_topic[]
-  blogging2_blogarticle          blogging2_blogarticle[]
   catalog_item                   catalog_item[]
   chatbot                        chatbot[]
   customer                       customer[]
@@ -1265,46 +1265,47 @@ model blog_asset {
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model blogging2_blogarticle {
-  created                                                                                                                  DateTime                                 @db.DateTime(6)
-  modified                                                                                                                 DateTime                                 @db.DateTime(6)
-  is_removed                                                                                                               Boolean
-  id                                                                                                                       String                                   @id @db.Char(32)
-  title                                                                                                                    String                                   @db.LongText
-  content_md                                                                                                               String?                                  @db.LongText
-  type                                                                                                                     String                                   @db.VarChar(50)
-  slug                                                                                                                     String?                                  @db.VarChar(255)
-  published                                                                                                                DateTime?                                @db.DateTime(6)
-  image                                                                                                                    String?                                  @db.VarChar(100)
-  business_id                                                                                                              String                                   @db.Char(32)
-  blog_topic_id                                                                                                            String                                   @db.Char(32)
-  metatitle                                                                                                                String?                                  @db.LongText
-  seo_description                                                                                                          String?                                  @db.LongText
-  seo_image_caption                                                                                                        String?                                  @db.VarChar(255)
-  seo_image_height                                                                                                         Int?                                     @db.UnsignedInt
-  seo_image_url                                                                                                            String?                                  @db.VarChar(200)
-  seo_image_width                                                                                                          Int?                                     @db.UnsignedInt
-  author_image                                                                                                             String?                                  @db.VarChar(100)
-  author_name                                                                                                              String?                                  @db.VarChar(255)
-  faq_json                                                                                                                 Json?
-  description                                                                                                              String?                                  @db.LongText
-  blur_base64                                                                                                              String?                                  @db.LongText
-  blog_topic                                                                                                               blog_topic                               @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
-  business                                                                                                                 business                                 @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
-  blogging2_blogarticle_related_articles_blogging2_blogarticle_related_articles_from_blogarticle_idToblogging2_blogarticle blogging2_blogarticle_related_articles[] @relation("blogging2_blogarticle_related_articles_from_blogarticle_idToblogging2_blogarticle")
-  blogging2_blogarticle_related_articles_blogging2_blogarticle_related_articles_to_blogarticle_idToblogging2_blogarticle   blogging2_blogarticle_related_articles[] @relation("blogging2_blogarticle_related_articles_to_blogarticle_idToblogging2_blogarticle")
+model blog_article {
+  created                                                                                       DateTime                        @db.DateTime(6)
+  modified                                                                                      DateTime                        @db.DateTime(6)
+  is_removed                                                                                    Boolean
+  id                                                                                            String                          @id @db.Char(32)
+  title                                                                                         String                          @db.LongText
+  content_md                                                                                    String?                         @db.LongText
+  type                                                                                          String                          @db.VarChar(50)
+  slug                                                                                          String?                         @db.VarChar(255)
+  published                                                                                     DateTime?                       @db.DateTime(6)
+  image                                                                                         String?                         @db.VarChar(100)
+  business_id                                                                                   String                          @db.Char(32)
+  blog_topic_id                                                                                 String                          @db.Char(32)
+  metatitle                                                                                     String?                         @db.LongText
+  seo_description                                                                               String?                         @db.LongText
+  seo_image_caption                                                                             String?                         @db.VarChar(255)
+  seo_image_height                                                                              Int?                            @db.UnsignedInt
+  seo_image_url                                                                                 String?                         @db.VarChar(200)
+  seo_image_width                                                                               Int?                            @db.UnsignedInt
+  author_image                                                                                  String?                         @db.VarChar(100)
+  author_name                                                                                   String?                         @db.VarChar(255)
+  faq_json                                                                                      Json?
+  description                                                                                   String?                         @db.LongText
+  blur_base64                                                                                   String?                         @db.LongText
+  blog_topic                                                                                    blog_topic                      @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
+  business                                                                                      business                        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
+  blog_article_related_articles_blog_article_related_articles_from_blogarticle_idToblog_article blog_article_related_articles[] @relation("blog_article_related_articles_from_blogarticle_idToblog_article")
+  blog_article_related_articles_blog_article_related_articles_to_blogarticle_idToblog_article   blog_article_related_articles[] @relation("blog_article_related_articles_to_blogarticle_idToblog_article")
 
+  @@unique([slug, business_id], map: "blogging2_blogarticle_slug_business_id_737618b5_uniq")
   @@index([blog_topic_id], map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   @@index([business_id], map: "blog_article_business_id_1a83f457_fk_business_id")
   @@index([slug], map: "blog_article_slug_c3fca16d")
 }
 
-model blogging2_blogarticle_related_articles {
-  id                                                                                                      Int                   @id @default(autoincrement())
-  from_blogarticle_id                                                                                     String                @db.Char(32)
-  to_blogarticle_id                                                                                       String                @db.Char(32)
-  blogging2_blogarticle_blogging2_blogarticle_related_articles_from_blogarticle_idToblogging2_blogarticle blogging2_blogarticle @relation("blogging2_blogarticle_related_articles_from_blogarticle_idToblogging2_blogarticle", fields: [from_blogarticle_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_related_from_blogarticle_id_dc5871f6_fk_blog_arti")
-  blogging2_blogarticle_blogging2_blogarticle_related_articles_to_blogarticle_idToblogging2_blogarticle   blogging2_blogarticle @relation("blogging2_blogarticle_related_articles_to_blogarticle_idToblogging2_blogarticle", fields: [to_blogarticle_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
+model blog_article_related_articles {
+  id                                                                           Int          @id @default(autoincrement())
+  from_blogarticle_id                                                          String       @db.Char(32)
+  to_blogarticle_id                                                            String       @db.Char(32)
+  blog_article_blog_article_related_articles_from_blogarticle_idToblog_article blog_article @relation("blog_article_related_articles_from_blogarticle_idToblog_article", fields: [from_blogarticle_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_related_from_blogarticle_id_dc5871f6_fk_blog_arti")
+  blog_article_blog_article_related_articles_to_blogarticle_idToblog_article   blog_article @relation("blog_article_related_articles_to_blogarticle_idToblog_article", fields: [to_blogarticle_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
 
   @@unique([from_blogarticle_id, to_blogarticle_id], map: "blog_article_related_art_from_blogarticle_id_to_b_f04f4c5d_uniq")
   @@index([to_blogarticle_id], map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
