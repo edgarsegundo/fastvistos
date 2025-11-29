@@ -140,14 +140,13 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                                         <ResponsiveImage
                                             alt={article.slug || article.title}
                                             width={608}
-                                            height={405}
-                                            sizes="(max-width: 1023px) 400px, 608px"
+                                            height={320}
+                                            sizes="(max-width: 1023px) 320px, 608px"
                                             sources={buildSources(
-                                                path.parse(article.image).name,
-                                                    // article.image.replace(/\.[^.]+$/, ''),
+                                                    path.parse(article.image).name,
                                                     [608, 320],       // breakpoints
                                                     [1, 2],           // scales
-                                                    `/assets/images/blog/resized/`         // "/assets/images-responsive-base/resized/"
+                                                    `/assets/images/blog/resized/`   // "resized/"
                                                 )}
                                             blurDataURL={article.blurDataURL}
                                             priority={i === 0}
