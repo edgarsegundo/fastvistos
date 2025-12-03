@@ -1,0 +1,17 @@
+---
+// WowItWorks.astro
+// Exibe uma imagem centralizada abaixo do hero
+// Ajuste o caminho da imagem conforme necessário
+const imageUrl = 'assets/images/services/como-o-servico-funciona.png';
+---
+
+<div class="w-full flex justify-center my-8">
+  <img 
+    src={imageUrl} 
+    alt="Wow, it works!" 
+    width="1080" 
+    height="411" 
+    class="mx-auto rounded shadow-lg max-w-full h-auto"
+    loading="lazy"
+  />
+</div>

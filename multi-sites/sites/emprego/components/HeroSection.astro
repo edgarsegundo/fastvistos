@@ -1,0 +1,41 @@
+---
+// Hero Section Component
+---
+
+<!-- Hero Banner -->
+<section class="relative bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+            <picture>
+                <source
+                    media="(max-width: 768px)"
+                    srcset="https://media.traveler.es/photos/6234567890/master/w_400,h_225,c_limit/hero-mobile.jpg 400w,
+                                https://media.traveler.es/photos/6234567890/master/w_800,h_450,c_limit/hero-mobile.jpg 800w"
+                    sizes="100vw"
+                />
+                <source
+                    media="(min-width: 769px)"
+                    srcset="https://media.traveler.es/photos/6234567890/master/w_1200,h_600,c_limit/hero-desktop.jpg 1200w,
+                                https://media.traveler.es/photos/6234567890/master/w_2000,h_1000,c_limit/hero-desktop.jpg 2000w"
+                    sizes="100vw"
+                />
+                <img
+                    src="https://media.traveler.es/photos/6234567890/master/w_1200,h_600,c_limit/hero-desktop.jpg"
+                    alt="Destino destacado"
+                    class="w-full h-full object-cover"
+                />
+            </picture>
+
+            <div
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6"
+            >
+                <h2 class="text-white text-xl md:text-3xl font-bold mb-2">
+                    Los destinos más increíbles para 2024
+                </h2>
+                <p class="text-white/90 text-sm md:text-base">
+                    Descubre los lugares que marcarán tendencia este año
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,63 @@
+---
+import { siteConfig } from '../site-config.ts';
+
+export function getWebPageBlock({
+    disableWebPage,
+    includeCollection = false,
+    pageUrl,
+    siteName,
+    websiteId,
+    orgId,
+    imageId,
+    breadcrumbId,
+    description,
+    pubDate,
+    updatedDate,
+    imageUrlValidated,
+    hasPartList = [],
+    disableHasPart = true,
+}: {
+    disableWebPage: boolean;
+    includeCollection?: boolean;
+    pageUrl: string;
+    siteName: string;
+    websiteId: string;
+    orgId: string;
+    imageId: string;
+    breadcrumbId: string;
+    description?: string;
+    pubDate?: string | null;
+    updatedDate?: string | null;
+    imageUrlValidated?: string | null;
+    hasPartList?: any[];
+    disableHasPart?: boolean;
+}) {
+    if (disableWebPage) return null;
+    return {
+        '@type': includeCollection ? ['WebPage', 'CollectionPage'] : 'WebPage',
+        '@id': pageUrl,
+        url: pageUrl,
+        name: siteName,
+        isPartOf: { '@id': websiteId },
+        about: { '@id': orgId },
+        primaryImageOfPage: { '@id': imageId },
+        image: { '@id': imageId },
+        ...(imageUrlValidated ? { thumbnailUrl: imageUrlValidated } : {}),
+        ...(pubDate ? { datePublished: pubDate } : {}),
+        ...(updatedDate ? { dateModified: updatedDate } : {}),
+        description: description,
+        breadcrumb: { '@id': breadcrumbId },
+        inLanguage: siteConfig.site?.localte || 'pt-BR',
+        potentialAction: [
+            {
+                '@type': 'ReadAction',
+                target: [pageUrl],
+            },
+        ],
+        // Only add hasPart if not disabled and hasPartList is a non-empty array
+        ...(!disableHasPart && Array.isArray(hasPartList) && hasPartList.length > 0
+            ? { hasPart: hasPartList }
+            : {}),
+    };
+}
+---
