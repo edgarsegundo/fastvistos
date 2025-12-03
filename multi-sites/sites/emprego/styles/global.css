@@ -20,4 +20,19 @@
 
 /* Custom Components */
 @layer components {
+    .gradient {
+        background: linear-gradient(270deg, #43ea7a 0%, #1fa463 50%, #2a905e 100%) !important;
+        /* background-color: #ff6901 !important; */
+    }
+}
+
+/* Custom Utilities */
+@layer utilities {
+    .fill-current {
+        fill: #ff6901;
+    }
+
+    .text-brand-primary {
+        color: #1b375c !important;
+    }
 }
