@@ -8,7 +8,7 @@ import ResponsiveImage from './ResponsiveImage.astro';
 import { BlogService } from '../lib/blog-service.ts';
 import path from 'path';
 
-const limitPerTopic = 6;
+const limitPerTopic = 5;
 
 // Fetch topics with articles dynamically
 const topicsWithArticles = await BlogService.getTopicsWithArticles(limitPerTopic);
@@ -192,7 +192,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
 
 <script>
     // Configurable batch size
-    const BATCH_SIZE = 5;
+    const BATCH_SIZE = 4;
 
     // Real endpoint: returns next articles for a topic
     async function fetchNextArticles(topicId, offset, limit) {
