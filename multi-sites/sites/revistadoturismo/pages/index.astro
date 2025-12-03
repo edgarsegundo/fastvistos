@@ -11,6 +11,8 @@ import CarouselSection from '../components/CarouselSection.astro';
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
+<!-- <link rel="stylesheet" href="/revistadoturismo/fonts/LinLibertine/style.css"> -->
+
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
@@ -60,4 +62,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     .home-main {
         min-height: 100vh;
     }
+
+    .font-linlibertine {
+        font-family: 'Linux Libertine', serif;
+    }    
 </style>
