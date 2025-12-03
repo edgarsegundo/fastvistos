@@ -221,7 +221,6 @@ function buildSources(filename, breakpoints, scales, imageBase) {
 
     // State: loaded articles per topic
     const topicStates = {};
-    // var offset = BATCH_SIZE;
 
     function createResponsiveImageMinimal({
         imagePath, // ex: "/assets/images-responsive-base/resized/article3"
@@ -311,24 +310,13 @@ function buildSources(filename, breakpoints, scales, imageBase) {
             topicId: carousel.getAttribute('data-topic-id'),
         };
 
-        // Helper: show spinner in empty image cards
-        function showSpinners() {
-            carousel.querySelectorAll('a').forEach((card) => {
-                const img = card.querySelector('img');
-                if (img && !img.currentSrc) {
-                    img.outerHTML = `<div style='display:flex;align-items:center;justify-content:center;height:100%;'>${spinnerSVG}</div>`;
-                }
-            });
-        }
-
-        // Fade logic: show fade only when not at end
         const fade = carousel.parentElement.querySelector('.carousel-fade-right');
         function updateFade() {
             const maxScroll = carousel.scrollWidth - carousel.clientWidth;
             if (carousel.scrollLeft >= maxScroll - 2) {
-                if (fade) fade.classList.add('hide');
+                if (fade) fade.classList.remove('hide'); // show at end
             } else {
-                if (fade) fade.classList.remove('hide');
+                if (fade) fade.classList.add('hide'); // hide otherwise
             }
         }
         carousel.addEventListener('scroll', updateFade);
@@ -379,7 +367,6 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                     topicStates[topicId].offset + 1,
                     BATCH_SIZE
                 );
-
 
                 // Remove spinner cards
                 for (let i = 0; i < BATCH_SIZE; i++) {
