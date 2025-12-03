@@ -1,0 +1,69 @@
+---
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import { siteConfig } from '../site-config.ts';
+import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FooterSection from '../components/FooterSection.astro';
+import HeaderSection from '../components/HeaderSection.astro';
+import WowItWorks from '../components/WowItWorks.astro';
+import CarouselSection from '../components/CarouselSection.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+---
+
+<!-- <link rel="stylesheet" href="/revistadoturismo/fonts/LinLibertine/style.css"> -->
+
+<SharedHomeLayout
+    bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
+    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.homePageConfig.seo}
+    titleFromConf={siteConfig.homePageConfig.seo.title}
+    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
+    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
+    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
+>
+    <!-- Additional head content specific to this layout -->
+    <Fragment slot="head">
+        <JsonLdHomePageBase
+            faqList={[]}
+            servicesList={[]}
+            reviewsList={[]}
+            disableReviews={false}
+        />
+    </Fragment>
+
+    <main class="min-h-screen">
+        <HeaderSection />
+        <HeroSection />
+        <WowItWorks />
+        <CarouselSection />
+        <FooterSection />
+    </main>
+
+    <!-- Body content -->
+    <!-- <p>This is the home page content for {siteConfig.site.siteName}.</p> -->
+</SharedHomeLayout>
+
+<style is:global>
+    .home-layout p,
+    .home-layout h3,
+    .home-layout ul,
+    .home-layout a,
+    .home-layout span {
+        color: #1b375c !important;
+    }
+
+    .home-main {
+        min-height: 100vh;
+    }
+
+    .font-linlibertine {
+        font-family: 'Linux Libertine', serif;
+    }    
+</style>

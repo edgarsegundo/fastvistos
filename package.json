@@ -52,7 +52,12 @@
     "dev:watch:revistadoturismo": "node dev-with-sync.js revistadoturismo",
     "build:revistadoturismo": "node sync-blog.js revistadoturismo && SITE_ID=revistadoturismo astro build && node postbuild-updatable.js revistadoturismo",
     "preview:revistadoturismo": "SITE_ID=revistadoturismo astro preview",
-    "download-images:revistadoturismo": "node download-blog-images.js revistadoturismo"
+    "download-images:revistadoturismo": "node download-blog-images.js revistadoturismo",
+    "dev:emprego": "node sync-blog.js emprego && SITE_ID=emprego astro dev",
+    "dev:watch:emprego": "node dev-with-sync.js emprego",
+    "build:emprego": "node sync-blog.js emprego && SITE_ID=emprego astro build && node postbuild-updatable.js emprego",
+    "preview:emprego": "SITE_ID=emprego astro preview",
+    "download-images:emprego": "node download-blog-images.js emprego"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
