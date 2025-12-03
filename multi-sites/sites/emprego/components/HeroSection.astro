@@ -2,7 +2,7 @@
 // Hero component
 ---
 
-<section class="pt-12 md:pt-2">
+<section class="pt-2 md:pt-0">
     <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <!-- Left Col -->
         <div
@@ -38,13 +38,13 @@
             </button>
         </div>
         <!-- Right Col -->
-        <div class="w-full md:w-1/2 text-center relative">
-            <div style="position: relative; top: 32px;">
+        <div class="w-full md:w-1/2 text-center relative flex items-start justify-center">
+            <div style="position: relative; top: 0;">
                 <img
-                    class="w-full drop-shadow-lg brightness-110 contrast-105 rounded-xl"
+                    class="w-full max-h-160 drop-shadow-lg brightness-110 contrast-105 rounded-xl object-contain"
                     src="assets/images/cover/woman_cover.png"
                     loading="lazy"
-                    style="z-index: -1; position: relative; z-index: 1;"
+                    style="position: relative; z-index: 1; margin-top: 0; margin-bottom: 0;"
                 />
             </div>
         </div>
