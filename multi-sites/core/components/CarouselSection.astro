@@ -8,7 +8,7 @@ import ResponsiveImage from './ResponsiveImage.astro';
 import { BlogService } from '../lib/blog-service.ts';
 import path from 'path';
 
-const limitPerTopic = 5;
+const limitPerTopic = 6;
 
 // Fetch topics with articles dynamically
 const topicsWithArticles = await BlogService.getTopicsWithArticles(limitPerTopic);
@@ -192,7 +192,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
 
 <script>
     // Configurable batch size
-    const BATCH_SIZE = 4;
+    const BATCH_SIZE = 6;
 
     // Real endpoint: returns next articles for a topic
     async function fetchNextArticles(topicId, offset, limit) {
@@ -200,6 +200,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
         const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
         try {
             const res = await fetch(url);
+
             if (!res.ok) return [];
             const data = await res.json();
             // Map to expected card fields
@@ -378,6 +379,8 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                     topicStates[topicId].offset + 1,
                     BATCH_SIZE
                 );
+
+
                 // Remove spinner cards
                 for (let i = 0; i < BATCH_SIZE; i++) {
                     carousel.removeChild(carousel.lastChild);
