@@ -8,6 +8,7 @@ import HeaderSection from '../components/HeaderSection.astro';
 import WowItWorks from '../components/WowItWorks.astro';
 import CallToAction from '../components/CallToAction.astro';
 import CarouselSection from '../components/CarouselSection.astro';
+import Navigation from '../components/Navigation.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -15,7 +16,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 <!-- <link rel="stylesheet" href="/revistadoturismo/fonts/LinLibertine/style.css"> -->
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
@@ -39,9 +40,12 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         />
     </Fragment>
 
-    <main class="min-h-screen">
-        <HeaderSection />
+    <div class="gradient">
+        <Navigation />
         <HeroSection />
+
+    </div>
+    <main class="min-h-screen">
         <WowItWorks />
         <CallToAction />
         <CarouselSection />
