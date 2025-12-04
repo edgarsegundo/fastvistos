@@ -191,6 +191,19 @@
         scrollTimeout = setTimeout(handleScroll, 100);
     });
 
-    // Initial focus
-    searchInput.focus();
+    // Check for URL parameter and auto-search
+    function checkURLParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryParam = urlParams.get('q');
+        
+        if (queryParam && queryParam.trim()) {
+            searchInput.value = queryParam.trim();
+            performSearch(false);
+        } else {
+            searchInput.focus();
+        }
+    }
+
+    // Run on page load
+    checkURLParams();
 </script>        
