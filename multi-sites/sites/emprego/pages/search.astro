@@ -1,0 +1,23 @@
+---
+import SharedGenericLayout from '../layouts/SharedGenericLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import { siteConfig } from '../site-config.ts';
+
+const pageTitle = "Buscar Candidatos - " + siteConfig.site.name;
+---
+
+<SharedGenericLayout
+    bodyClass="bg-gray-50"
+    titleFromConf={pageTitle}
+    descriptionFromConf="Encontre os melhores candidatos para sua vaga"
+    canonicalConf={`https://${siteConfig.site.domain}/search`}
+    faviconPathFromConf="/favicon.ico"
+>
+    <Navigation slot="header" />
+    
+    <main class="container mx-auto px-4 py-8">
+        <!-- Your search UI here -->
+
+        <h1 class="text-3xl font-bold mb-4">Buscar Candidatos</h1>
+    </main>
+</SharedGenericLayout>
