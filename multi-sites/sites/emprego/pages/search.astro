@@ -1,0 +1,34 @@
+---
+import SharedGenericLayout from '../layouts/SharedGenericLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import { siteConfig } from '../site-config.ts';
+import SearchSection from '../components/SearchSection.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+
+const pageTitle = "Buscar Candidatos - " + siteConfig.site.name;
+---
+
+<SharedGenericLayout
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
+    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    themeToggleDisable={true} // New prop to control theme toggle visibility
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.searchPageConfig.seo}
+    titleFromConf={siteConfig.searchPageConfig.seo.title}
+    descriptionFromConf={siteConfig.searchPageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
+    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
+    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
+>
+    <Navigation slot="header" />
+    
+    <main class="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <SearchSection />
+    </main>
+</SharedGenericLayout>
+

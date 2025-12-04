@@ -224,6 +224,11 @@ async function syncBlogToSite(siteId) {
         'utf-8'
     );
 
+    const sharedGenericLayout = await fs.readFile(
+        join(CORE_LAYOUTS_DIR, 'SharedGenericLayout.astro'),
+        'utf-8'
+    );
+
     // Read SEOMeta component for localization (special case)
     // const seoMetaComponent = await fs.readFile(join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'), 'utf-8');
 
@@ -312,6 +317,17 @@ async function syncBlogToSite(siteId) {
         )
         .replace(/import '\.\.\/styles\/global\.css';/g, `import '../styles/global.css';`);
 
+    const localizedSharedGenericLayout = sharedGenericLayout
+        .replace(
+            /import \{ getSiteConfig \} from '\.\.\/lib\/site-config\.js';/,
+            `import { siteConfig } from '../site-config.ts';`
+        )
+        .replace(/const siteConfig = getSiteConfig\(\);/, `// siteConfig imported directly`)
+        .replace(
+            /const siteId = import\.meta\.env\.SITE_ID \|\| 'fastvistos';/,
+            `const siteId = '${siteId}';`
+        )
+        .replace(/import '\.\.\/styles\/global\.css';/g, `import '../styles/global.css';`);
     // // Localize SEO components
     // const localizedSeoMetaComponent = seoMetaComponent
     //     .replace(
@@ -349,6 +365,10 @@ async function syncBlogToSite(siteId) {
     await fs.writeFile(
         join(siteLayoutsDir, 'SharedHomeLayout.astro'),
         stripAstroComments(localizedSharedHomeLayout)
+    );
+    await fs.writeFile(
+        join(siteLayoutsDir, 'SharedGenericLayout.astro'),
+        stripAstroComments(localizedSharedGenericLayout)
     );
 
     // Copy all core components automatically (except SEOMeta which needs localization)
