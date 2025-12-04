@@ -66,11 +66,10 @@
     const loadMoreIndicator = document.getElementById('loadMoreIndicator') as HTMLDivElement;
     const noResults = document.getElementById('noResults') as HTMLDivElement;
 
-    // Fetch candidates from API
+    // Fetch posts from API
     async function fetchCandidates(query: string, offset: number = 0, limit: number = pageSize) {
         try {
-            debugger;
-            const url = `https://emprego.p2digital.com.br/api/candidates/?query=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`;
+            const url = `https://emprego.p2digital.com.br/api/posts/search/?q=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`;
             const response = await fetch(url);
             
             if (!response.ok) {
@@ -78,15 +77,15 @@
             }
             
             const data = await response.json();
-            return data.results || data; // Adaptável para diferentes formatos de resposta
+            return data; // Retorna o objeto completo com has_more, total_count, etc.
         } catch (error) {
             console.error('Erro ao buscar candidatos:', error);
-            return [];
+            return { results: [], has_more: false, total_count: 0 };
         }
     }
 
-    // Render candidate card
-    function renderCandidateCard(candidate: any) {
+    // Render candidate card (now renders post)
+    function renderCandidateCard(post: any) {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1';
         
@@ -94,23 +93,16 @@
             <div class="flex items-start gap-4">
                 <div class="flex-shrink-0">
                     <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        ${(candidate.name || candidate.first_name || 'C')[0].toUpperCase()}
+                        ${(post.candidate_name || 'C')[0].toUpperCase()}
                     </div>
                 </div>
                 <div class="flex-1">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                        ${candidate.name || candidate.first_name + ' ' + (candidate.last_name || '')}
+                        ${post.candidate_name}
                     </h3>
                     <p class="text-gray-600 mb-3">
-                        ${candidate.description || candidate.bio || 'Profissional qualificado em busca de novas oportunidades. Experiência comprovada e habilidades diversificadas.'}
+                        ${post.highlighted_snippet}
                     </p>
-                    <div class="flex gap-2 flex-wrap">
-                        ${candidate.skills ? candidate.skills.split(',').slice(0, 3).map((skill: string) => `
-                            <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
-                                ${skill.trim()}
-                            </span>
-                        `).join('') : ''}
-                    </div>
                 </div>
             </div>
         `;
@@ -144,13 +136,15 @@
         }
         
         const offset = currentPage * pageSize;
-        const candidates = await fetchCandidates(currentSearchQuery, offset, pageSize);
+        const data = await fetchCandidates(currentSearchQuery, offset, pageSize);
         
         isLoading = false;
         loadingSpinner.classList.add('hidden');
         loadMoreIndicator.classList.add('hidden');
         
-        if (candidates.length === 0) {
+        const posts = data.results || [];
+        
+        if (posts.length === 0) {
             if (currentPage === 0) {
                 noResults.classList.remove('hidden');
             }
@@ -159,17 +153,15 @@
         }
         
         // Render results
-        candidates.forEach((candidate: any) => {
-            const card = renderCandidateCard(candidate);
+        posts.forEach((post: any) => {
+            const card = renderCandidateCard(post);
             resultsContainer.appendChild(card);
         });
         
         currentPage++;
         
-        // Check if we got fewer results than requested (means we're at the end)
-        if (candidates.length < pageSize) {
-            hasMoreResults = false;
-        }
+        // Use has_more from API response
+        hasMoreResults = data.has_more || false;
     }
 
     // Infinite scroll handler
