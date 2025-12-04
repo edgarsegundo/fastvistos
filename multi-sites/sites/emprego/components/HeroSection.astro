@@ -11,27 +11,27 @@
         </h1>
 
 
-<ul class="mt-8 text-lg md:text-xl lg:text-2xl font-medium text-gray-100 mb-8 space-y-3 text-center md:text-left">
-  <li class="flex items-center gap-2 justify-center md:justify-start">
-    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform rotate-6">1</span>
-    Informe seu <span class="font-bold text-green-300">WhatsApp</span>
-  </li>
-  <li class="flex items-center gap-2 justify-center md:justify-start">
-    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform -rotate-3">2</span>
-    Você receberá uma mensagem nossa
-  </li>
-  <li class="flex items-center gap-2 justify-center md:justify-start">
-    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform rotate-4">3</span>
-    Responda perguntas simples...
-  </li>
-  <li class="flex items-center gap-2 justify-center md:justify-start">
-    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform -rotate-5">4</span>
-    Comece a receber ligações para entrevistas
-  </li>
-</ul>
+        <ul class="mt-8 text-lg md:text-xl lg:text-2xl font-medium text-gray-100 mb-8 space-y-3 text-center md:text-left">
+        <li class="flex items-center gap-2 justify-center md:justify-start">
+            <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform rotate-6">1</span>
+            Informe seu <span class="font-bold text-green-300">WhatsApp</span>
+        </li>
+        <li class="flex items-center gap-2 justify-center md:justify-start">
+            <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform -rotate-3">2</span>
+            Você receberá uma mensagem nossa
+        </li>
+        <li class="flex items-center gap-2 justify-center md:justify-start">
+            <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform rotate-4">3</span>
+            Responda perguntas simples...
+        </li>
+        <li class="flex items-center gap-2 justify-center md:justify-start">
+            <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform -rotate-5">4</span>
+            Comece a receber ligações para entrevistas
+        </li>
+        </ul>
 
 
-
+<!-- 
 
         <button
             class="relative px-16 py-8 font-extrabold text-white text-3xl bg-gradient-to-r from-blue-600 via-cyan-400 to-green-400 rounded-full shadow-2xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-blue-400 transition-all duration-300 group"
@@ -40,7 +40,32 @@
             <span class="absolute inset-0 bg-gradient-to-r from-green-400 via-cyan-400 to-blue-600 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></span>
             <span class="relative z-10 animate-pulse group-hover:animate-none">Comece Já</span>
             <span class="absolute left-0 top-0 w-full h-full rounded-full border-4 border-white opacity-0 group-hover:opacity-100 animate-spin-slow"></span>
-        </button>
+        </button> -->
+
+<!-- <button class="relative group px-14 py-4 min-w-[300px] font-extrabold text-white text-2xl rounded-full border-4 border-white overflow-hidden transition-all duration-500 hover:text-green-400 focus:outline-none">
+  <span class="absolute inset-0 bg-gradient-to-r from-green-400 via-cyan-400 to-blue-600 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></span>
+  <span class="relative z-10 group-hover:animate-pulse">Comece Já</span>
+  <span class="absolute left-0 top-0 w-full h-full rounded-full border-4 border-white opacity-0 group-hover:opacity-100 animate-spin-slow"></span>
+</button> -->
+
+    <!-- Botão incrível -->
+    <button class="relative inline-block px-12 py-5 font-extrabold text-white text-2xl rounded-full overflow-hidden focus:outline-none group">
+      <!-- Gradiente animado atrás -->
+      <span class="absolute inset-0 bg-gradient-to-r from-green-400 via-cyan-400 to-blue-600 opacity-30 group-hover:opacity-60 transition duration-500 animate-pulse-slow rounded-full"></span>
+
+      <!-- Glow sutil com border -->
+      <span class="absolute inset-0 rounded-full border-4 border-white opacity-20 group-hover:opacity-40 animate-pulse-slow"></span>
+
+      <!-- Texto do botão -->
+      <span class="relative z-10">Comece Já!</span>
+
+      <!-- Animação extra de spin leve -->
+      <span class="absolute left-0 top-0 w-full h-full rounded-full border-2 border-white opacity-10 group-hover:opacity-20 animate-spin-slow"></span>
+    </button>
+
+
+
+
       </div>
     </div>
 
@@ -154,4 +179,25 @@
   50% { transform: translateY(-4px) rotate(var(--tw-rotate)); }
 }
 
+</style>
+
+
+<style>
+/* Pulso suave para glow */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Spin lento para borda */
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
 </style>
