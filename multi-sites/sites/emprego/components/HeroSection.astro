@@ -9,20 +9,30 @@
         <h1 class="my-4 text-4xl md:text-5xl font-extrabold leading-tight text-white">
           Quer achar emprego?
         </h1>
-        <ul class="text-lg md:text-xl lg:text-2xl font-medium text-gray-100 mb-8 space-y-3 text-center md:text-left">
-        <li class="flex items-start gap-2 justify-center md:justify-start">
-            <span class="font-bold text-green-400">1.</span> Informe seu <span class="font-bold text-green-300">WhatsApp</span>
-        </li>
-        <li class="flex items-start gap-2 justify-center md:justify-start">
-            <span class="font-bold text-green-400">2.</span> Você receberá uma mensagem nossa
-        </li>
-        <li class="flex items-start gap-2 justify-center md:justify-start">
-            <span class="font-bold text-green-400">3.</span> Responda perguntas simples...
-        </li>
-        <li class="flex items-start gap-2 justify-center md:justify-start">
-            <span class="font-bold text-green-400">4.</span> Comece a receber ligações para entrevistas
-        </li>
-        </ul>
+
+
+<ul class="mt-8 text-lg md:text-xl lg:text-2xl font-medium text-gray-100 mb-8 space-y-3 text-center md:text-left">
+  <li class="flex items-center gap-2 justify-center md:justify-start">
+    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform rotate-6">1</span>
+    Informe seu <span class="font-bold text-green-300">WhatsApp</span>
+  </li>
+  <li class="flex items-center gap-2 justify-center md:justify-start">
+    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform -rotate-3">2</span>
+    Você receberá uma mensagem nossa
+  </li>
+  <li class="flex items-center gap-2 justify-center md:justify-start">
+    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform rotate-4">3</span>
+    Responda perguntas simples...
+  </li>
+  <li class="flex items-center gap-2 justify-center md:justify-start">
+    <span class="border-2 border-green-400 rounded-full w-10 h-10 flex items-center justify-center text-green-400 font-bold transform -rotate-5">4</span>
+    Comece a receber ligações para entrevistas
+  </li>
+</ul>
+
+
+
+
         <button
             class="relative px-16 py-8 font-extrabold text-white text-3xl bg-gradient-to-r from-blue-600 via-cyan-400 to-green-400 rounded-full shadow-2xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-blue-400 transition-all duration-300 group"
             style="font-size:2rem; min-width:320px;"
@@ -117,4 +127,31 @@
 .animate-spin-slow {
   animation: spin-slow 2s linear infinite;
 }
+
+.bullet-anim {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+  animation: float 4s ease-in-out infinite;
+}
+
+.bullet-anim:nth-child(1) { animation-delay: 0s; }
+.bullet-anim:nth-child(2) { animation-delay: .3s; }
+.bullet-anim:nth-child(3) { animation-delay: .6s; }
+.bullet-anim:nth-child(4) { animation-delay: .9s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate)); }
+  50% { transform: translateY(-4px) rotate(var(--tw-rotate)); }
+}
+
 </style>
