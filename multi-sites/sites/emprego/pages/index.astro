@@ -18,6 +18,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    themeToggleDisable={true} // New prop to control theme toggle visibility
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
@@ -46,8 +47,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
     </div>
     <main class="min-h-screen">
-        <WowItWorks />
-        <CallToAction />
         <CarouselSection />
         <FooterSection />
     </main>
