@@ -197,9 +197,9 @@
         const queryParam = urlParams.get('q');
         
         if (queryParam && queryParam.trim()) {
-            // Decode URI component to handle any encoding issues
-            const decodedQuery = decodeURIComponent(queryParam.trim());
-            searchInput.value = decodedQuery;
+            // Remove any trailing slashes and clean the query
+            const cleanedQuery = queryParam.trim().replace(/\/+$/g, '');
+            searchInput.value = cleanedQuery;
             performSearch(false);
         } else {
             searchInput.focus();
