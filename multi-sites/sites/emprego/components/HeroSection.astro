@@ -131,7 +131,7 @@
   function redirectToSearch() {
     const searchTerm = heroSearchInput?.value.trim();
     if (searchTerm) {
-      window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+      window.location.href = `/search/?q=${encodeURIComponent(searchTerm)}`;
     }
   }
 
