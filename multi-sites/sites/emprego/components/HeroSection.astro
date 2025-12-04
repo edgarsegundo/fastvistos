@@ -70,6 +70,7 @@
     <div class="relative w-full flex items-center gap-2">
       <div class="relative flex-1">
         <input type="text"
+               id="hero-search-input"
                placeholder="Ex: auxiliar escritório Campinas"
                class="w-full py-2.5 pl-10 pr-3 rounded-xl text-gray-900 placeholder-gray-500
                       bg-white/60 backdrop-blur-lg focus:outline-none focus:ring-2
@@ -85,10 +86,11 @@
         </div>
       </div>
       <button
+        id="hero-search-btn"
         type="button"
         class="px-4 py-2.5 bg-green-500/80 hover:bg-green-600/90 text-white font-semibold rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-sm"
       >
-        IR
+        Ok
       </button>
     </div>
   </div>
@@ -120,6 +122,27 @@
     </g>
   </svg>
 </div>
+
+<script>
+  // Handle search redirection from hero section
+  const heroSearchInput = document.getElementById('hero-search-input') as HTMLInputElement;
+  const heroSearchBtn = document.getElementById('hero-search-btn') as HTMLButtonElement;
+
+  function redirectToSearch() {
+    const searchTerm = heroSearchInput?.value.trim();
+    if (searchTerm) {
+      window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+    }
+  }
+
+  heroSearchBtn?.addEventListener('click', redirectToSearch);
+  
+  heroSearchInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      redirectToSearch();
+    }
+  });
+</script>
 
 <style>
 .cta-button-wiggle {
