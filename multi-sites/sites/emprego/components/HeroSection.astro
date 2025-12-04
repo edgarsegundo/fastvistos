@@ -67,21 +67,29 @@
       Buscar candidato
     </label>
 
-    <div class="relative w-full">
-      <input type="text"
-             placeholder="Ex: auxiliar escritório Campinas"
-             class="w-full py-2.5 pl-10 pr-3 rounded-xl text-gray-900 placeholder-gray-500
-                    bg-white/60 backdrop-blur-lg focus:outline-none focus:ring-2
-                    focus:ring-green-400 transition-all duration-300 text-sm shadow-sm" />
+    <div class="relative w-full flex items-center gap-2">
+      <div class="relative flex-1">
+        <input type="text"
+               placeholder="Ex: auxiliar escritório Campinas"
+               class="w-full py-2.5 pl-10 pr-3 rounded-xl text-gray-900 placeholder-gray-500
+                      bg-white/60 backdrop-blur-lg focus:outline-none focus:ring-2
+                      focus:ring-green-400 transition-all duration-300 text-sm shadow-sm" />
 
-      <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-             class="w-5 h-5 text-gray-500">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.5 5.5a7.5 7.5 0 0011.15 11.15z" />
-        </svg>
+        <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+               viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+               class="w-5 h-5 text-gray-500">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.5 5.5a7.5 7.5 0 0011.15 11.15z" />
+          </svg>
+        </div>
       </div>
+      <button
+        type="button"
+        class="px-4 py-2.5 bg-green-500/80 hover:bg-green-600/90 text-white font-semibold rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-sm"
+      >
+        IR
+      </button>
     </div>
   </div>
 </div>
