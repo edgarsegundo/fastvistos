@@ -132,6 +132,24 @@ export const siteConfig: SiteConfig = {
         relatedPosts: true, // true/false
     },
 
+    searchPageConfig: {
+        seo: {
+            title: 'Emprego Aqui — Plataforma de empregos e oportunidades',
+            description: 'Emprego Aqui — Plataforma de empregos e oportunidades para encontrar vagas de emprego e desenvolver sua carreira.',
+            themeColor: '#0070f3',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: 'https://empregoaqui.com.br/assets/images/logo/home-page-main-image-emprego.webp',
+                    width: 1280,
+                    height: 720,
+                    type: 'image/webp',
+                    alt: 'Emprego Aqui - Plataforma de empregos e oportunidades'
+                }
+            }
+        },
+    },
+
     socialMedia: {
         facebook: 'https://facebook.com/empregoaqui',
         twitter: '@EmpregoAqui',
