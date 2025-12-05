@@ -41,6 +41,8 @@ export class BlogService {
                     seo_image_height: data.seo_image_height,
                     seo_image_width: data.seo_image_width,
                     faq_json: [],
+                    most_read: data.most_read ?? false,
+                    show_in_hero: data.show_in_hero ?? false,
                 }
             });
             return article;
