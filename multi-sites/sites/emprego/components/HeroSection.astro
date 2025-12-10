@@ -51,7 +51,7 @@
           </div>
 
           <!-- WhatsApp Input com floating label -->
-          <div class="relative w-48">
+          <div class="relative w-40 md:w-48">
             <input
               type="tel"
               id="hero-whatsapp"
@@ -71,7 +71,7 @@
           <!-- Botão Comece Já -->
           <button
             type="submit"
-            class="relative px-8 py-4 font-extrabold text-white text-xl rounded-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all duration-300 group shadow-xl hover:shadow-2xl hover:scale-105"
+            class="relative px-3 md:px-8 py-4 font-extrabold text-white text-base md:text-xl rounded-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all duration-300 group shadow-xl hover:shadow-2xl hover:scale-105"
           >
             <!-- Gradiente animado atrás -->
             <span class="absolute inset-0 bg-gradient-to-r from-green-500 via-cyan-400 to-blue-500 opacity-100 group-hover:opacity-90 transition duration-500 rounded-xl"></span>
@@ -80,7 +80,10 @@
             <span class="absolute inset-0 rounded-xl border-2 border-white/30 group-hover:border-white/50 animate-pulse-slow"></span>
 
             <!-- Texto do botão -->
-            <span class="relative z-10 drop-shadow-lg">Comece Já!</span>
+            <span class="relative z-10 drop-shadow-lg">
+              <span class="md:hidden inline-block text-center leading-tight">Comece<br/>Já!</span>
+              <span class="hidden md:inline">Comece Já!</span>
+            </span>
 
             <!-- Animação extra de brilho -->
             <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></span>
