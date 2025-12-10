@@ -90,9 +90,6 @@
           </button>
         </form>
 
-
-
-
       </div>
     </div>
 
@@ -102,53 +99,44 @@
         <img src="assets/images/cover/woman_cover.png"
              class="w-full max-h-full object-contain drop-shadow-lg brightness-110 contrast-105 rounded-xl z-0 fade-mask"
              loading="lazy" alt="woman cover" />
+        <!-- Search input refinado – versão compacta -->
+        <div class="absolute left-1/2 top-[85%] transform -translate-x-1/2 w-full max-w-xs z-30">
+          <div class="relative backdrop-blur-md bg-white/25 shadow-[0_4px_18px_rgba(0,0,0,0.18)] border border-white/20 rounded-2xl px-4 py-3 flex flex-col gap-2 animate-[slideUp_.7s_ease-out]">
 
+            <label class="text-gray-900/80 font-semibold text-xs tracking-wide uppercase">
+              Buscar candidato
+            </label>
 
-<!-- Search input refinado – versão compacta -->
-<div class="absolute left-1/2 top-[85%] transform -translate-x-1/2 w-full max-w-xs z-30">
-  <div class="relative backdrop-blur-md bg-white/25 shadow-[0_4px_18px_rgba(0,0,0,0.18)] border border-white/20 rounded-2xl px-4 py-3 flex flex-col gap-2 animate-[slideUp_.7s_ease-out]">
+            <div class="relative w-full flex items-center gap-2">
+              <div class="relative flex-1">
+                <input type="text"
+                      id="hero-search-input"
+                      placeholder="Ex: recepcionista são paulo"
+                      class="w-full py-2.5 pl-10 pr-3 rounded-xl text-gray-900 placeholder-gray-500
+                              bg-white/60 backdrop-blur-lg focus:outline-none focus:ring-2
+                              focus:ring-green-400 transition-all duration-300 text-sm shadow-sm" />
 
-    <label class="text-gray-900/80 font-semibold text-xs tracking-wide uppercase">
-      Buscar candidato
-    </label>
-
-    <div class="relative w-full flex items-center gap-2">
-      <div class="relative flex-1">
-        <input type="text"
-               id="hero-search-input"
-               placeholder="Ex: recepcionista são paulo"
-               class="w-full py-2.5 pl-10 pr-3 rounded-xl text-gray-900 placeholder-gray-500
-                      bg-white/60 backdrop-blur-lg focus:outline-none focus:ring-2
-                      focus:ring-green-400 transition-all duration-300 text-sm shadow-sm" />
-
-        <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-               viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-               class="w-5 h-5 text-gray-500">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.5 5.5a7.5 7.5 0 0011.15 11.15z" />
-          </svg>
+                <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                      viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                      class="w-5 h-5 text-gray-500">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.5 5.5a7.5 7.5 0 0011.15 11.15z" />
+                  </svg>
+                </div>
+              </div>
+              <button
+                id="hero-search-btn"
+                type="button"
+                class="px-4 py-2.5 bg-green-500/80 hover:bg-green-600/90 text-white font-semibold rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-sm"
+              >
+                Ok
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <button
-        id="hero-search-btn"
-        type="button"
-        class="px-4 py-2.5 bg-green-500/80 hover:bg-green-600/90 text-white font-semibold rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-sm"
-      >
-        Ok
-      </button>
     </div>
-  </div>
-</div>
-
-
-
-
-
-
-      </div>
-    </div>
-
   </div>
 </section>
 
