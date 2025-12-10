@@ -31,7 +31,7 @@
         </ul>
 
         <!-- Formulário WhatsApp com floating labels -->
-        <form id="hero-whatsapp-form" class="flex flex-wrap gap-3 items-end justify-center md:justify-start max-w-2xl">
+        <form id="hero-whatsapp-form" class="relative z-40 flex flex-wrap gap-3 items-end justify-center md:justify-start max-w-2xl">
           <!-- DDD Input com floating label -->
           <div class="relative w-18">
             <input
@@ -71,22 +71,22 @@
           <!-- Botão Comece Já -->
           <button
             type="submit"
-            class="relative px-3 md:px-8 py-3.5 md:py-4 font-extrabold text-white text-sm md:text-xl rounded-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all duration-300 group shadow-xl hover:shadow-2xl hover:scale-105"
+            class="relative z-50 px-3 md:px-8 py-3.5 md:py-4 font-extrabold text-white text-sm md:text-xl rounded-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all duration-300 group shadow-xl hover:shadow-2xl hover:scale-105"
           >
             <!-- Gradiente animado atrás -->
-            <span class="absolute inset-0 bg-gradient-to-r from-green-500 via-cyan-400 to-blue-500 opacity-100 group-hover:opacity-90 transition duration-500 rounded-xl"></span>
+            <span class="absolute inset-0 bg-gradient-to-r from-green-500 via-cyan-400 to-blue-500 opacity-100 group-hover:opacity-90 transition duration-500 rounded-xl pointer-events-none"></span>
 
             <!-- Glow sutil com border -->
-            <span class="absolute inset-0 rounded-xl border-2 border-white/30 group-hover:border-white/50 animate-pulse-slow"></span>
+            <span class="absolute inset-0 rounded-xl border-2 border-white/30 group-hover:border-white/50 animate-pulse-slow pointer-events-none"></span>
 
             <!-- Texto do botão -->
-            <span class="relative z-10 drop-shadow-lg">
+            <span class="relative z-10 drop-shadow-lg pointer-events-none">
               <span class="md:hidden inline-block text-center leading-tight">Comece<br/>Já!</span>
               <span class="hidden md:inline">Comece Já!</span>
             </span>
 
             <!-- Animação extra de brilho -->
-            <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></span>
+            <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none"></span>
           </button>
         </form>
 
@@ -273,6 +273,15 @@
     // Enviar formulário WhatsApp
     if (heroWhatsappForm) {
       console.log('Adicionando event listener ao formulário WhatsApp');
+      
+      // Teste: adicionar click listener no botão também
+      const submitBtn = heroWhatsappForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+      if (submitBtn) {
+        console.log('Botão submit encontrado, adicionando click listener');
+        submitBtn.addEventListener('click', (e) => {
+          console.log('BOTÃO CLICADO!', e);
+        });
+      }
       
       heroWhatsappForm.addEventListener('submit', async (e) => {
         console.log('Formulário submetido!');
