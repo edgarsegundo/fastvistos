@@ -215,31 +215,90 @@
     target.value = value;
   });
 
+  // Função para chamar API de onboarding
+  async function startWhatsAppOnboarding(ddd: string, phone: string) {
+    try {
+      const url = 'https://emprego.p2digital.com.br/api/candidateprofile/start-whatsapp-onboarding/';
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ddd, phone })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        // Tratar erros específicos
+        if (data.error === 'required_fields') {
+          throw new Error('Por favor, preencha DDD e WhatsApp.');
+        } else if (data.error === 'invalid_phone') {
+          throw new Error('Número de telefone inválido. Verifique DDD e número.');
+        } else if (data.error === 'failed_create_post') {
+          throw new Error('Erro ao criar perfil. Tente novamente.');
+        } else if (data.error === 'internal_error') {
+          throw new Error('Erro interno. Tente novamente mais tarde.');
+        } else {
+          throw new Error('Erro ao processar solicitação.');
+        }
+      }
+      
+      // Verificar resposta de sucesso
+      if (!data.success) {
+        throw new Error('Resposta inesperada do servidor.');
+      }
+      
+      return data;
+    } catch (error) {
+      console.error('Erro ao iniciar onboarding:', error);
+      throw error;
+    }
+  }
+
   // Enviar formulário WhatsApp
-  heroWhatsappForm?.addEventListener('submit', (e) => {
+  heroWhatsappForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const ddd = heroDddInput?.value.replace(/\D/g, '');
     const whatsapp = heroWhatsappInput?.value.replace(/\D/g, '');
     
-    if (ddd && whatsapp && ddd.length === 2 && whatsapp.length >= 8) {
-      const fullNumber = `55${ddd}${whatsapp}`;
-      const message = encodeURIComponent('Olá! Vim do site Emprego e gostaria de cadastrar meu currículo.');
-      const whatsappUrl = `https://wa.me/${fullNumber}?text=${message}`;
-      
-      // Abre WhatsApp em nova aba
-      window.open(whatsappUrl, '_blank');
-      
-      // Feedback visual
-      const submitBtn = heroWhatsappForm.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span class="relative z-10">✓ Enviado!</span>';
-        setTimeout(() => {
-          submitBtn.innerHTML = originalText;
-          heroWhatsappForm.reset();
-        }, 2000);
-      }
+    if (!ddd || !whatsapp || ddd.length !== 2 || whatsapp.length < 8) {
+      alert('Por favor, preencha DDD (2 dígitos) e WhatsApp (8-9 dígitos).');
+      return;
+    }
+    
+    const submitBtn = heroWhatsappForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (!submitBtn) return;
+
+    const originalText = submitBtn.innerHTML;
+
+    try {
+      // Desabilita botão e mostra loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="relative z-10">Enviando...</span>';
+
+      // Chama API de onboarding
+      await startWhatsAppOnboarding(ddd, whatsapp);
+
+      // Sucesso - mostra feedback
+      submitBtn.innerHTML = '<span class="relative z-10">✓ Enviado!</span>';
+      alert('Cadastro realizado com sucesso! Em breve você receberá uma mensagem no WhatsApp para completar seu perfil.');
+
+      // Aguarda 1 segundo e reseta formulário
+      setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        heroWhatsappForm.reset();
+      }, 1000);
+
+    } catch (error) {
+      // Mostra erro
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao processar solicitação.';
+      alert(errorMessage);
     }
   });
 </script>
