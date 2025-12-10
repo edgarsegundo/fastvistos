@@ -169,54 +169,68 @@
 </div>
 
 <script>
-  // Handle search redirection from hero section
-  const heroSearchInput = document.getElementById('hero-search-input') as HTMLInputElement;
-  const heroSearchBtn = document.getElementById('hero-search-btn') as HTMLButtonElement;
-
-  function redirectToSearch() {
-    const searchTerm = heroSearchInput?.value.trim();
-    if (searchTerm) {
-      window.location.href = `/search/?q=${encodeURIComponent(searchTerm)}`;
-    }
-  }
-
-  heroSearchBtn?.addEventListener('click', redirectToSearch);
-  
-  heroSearchInput?.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      redirectToSearch();
-    }
-  });
-
-  // Handle WhatsApp form submission
-  const heroWhatsappForm = document.getElementById('hero-whatsapp-form') as HTMLFormElement;
-  const heroDddInput = document.getElementById('hero-ddd') as HTMLInputElement;
-  const heroWhatsappInput = document.getElementById('hero-whatsapp') as HTMLInputElement;
-
-  // Validar e formatar apenas números no DDD
-  heroDddInput?.addEventListener('input', (e) => {
-    const target = e.target as HTMLInputElement;
-    target.value = target.value.replace(/\D/g, '');
-  });
-
-  // Validar e formatar apenas números no WhatsApp
-  heroWhatsappInput?.addEventListener('input', (e) => {
-    const target = e.target as HTMLInputElement;
-    let value = target.value.replace(/\D/g, '');
+  // Aguarda o DOM estar pronto
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM carregado - inicializando hero section');
     
-    // Formata: 98765-4321 ou 9876-5432
-    if (value.length > 5) {
-      if (value.length === 9) {
-        value = value.replace(/(\d{5})(\d{4})/, '$1-$2');
-      } else {
-        value = value.replace(/(\d{4,5})(\d{0,4})/, '$1-$2');
+    // Handle search redirection from hero section
+    const heroSearchInput = document.getElementById('hero-search-input') as HTMLInputElement;
+    const heroSearchBtn = document.getElementById('hero-search-btn') as HTMLButtonElement;
+
+    function redirectToSearch() {
+      const searchTerm = heroSearchInput?.value.trim();
+      if (searchTerm) {
+        window.location.href = `/search/?q=${encodeURIComponent(searchTerm)}`;
       }
     }
-    target.value = value;
-  });
 
-  // Função para chamar API de onboarding
-  async function startWhatsAppOnboarding(ddd: string, phone: string) {
+    heroSearchBtn?.addEventListener('click', redirectToSearch);
+    
+    heroSearchInput?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        redirectToSearch();
+      }
+    });
+
+    // Handle WhatsApp form submission
+    const heroWhatsappForm = document.getElementById('hero-whatsapp-form') as HTMLFormElement;
+    const heroDddInput = document.getElementById('hero-ddd') as HTMLInputElement;
+    const heroWhatsappInput = document.getElementById('hero-whatsapp') as HTMLInputElement;
+    
+    console.log('Elementos encontrados:', {
+      form: !!heroWhatsappForm,
+      ddd: !!heroDddInput,
+      whatsapp: !!heroWhatsappInput
+    });
+
+    // Validar e formatar apenas números no DDD
+    if (heroDddInput) {
+      heroDddInput.addEventListener('input', (e) => {
+        const target = e.target as HTMLInputElement;
+        target.value = target.value.replace(/\D/g, '');
+      });
+    }
+
+    // Validar e formatar apenas números no WhatsApp
+    if (heroWhatsappInput) {
+      heroWhatsappInput.addEventListener('input', (e) => {
+        const target = e.target as HTMLInputElement;
+        let value = target.value.replace(/\D/g, '');
+        
+        // Formata: 98765-4321 ou 9876-5432
+        if (value.length > 5) {
+          if (value.length === 9) {
+            value = value.replace(/(\d{5})(\d{4})/, '$1-$2');
+          } else {
+            value = value.replace(/(\d{4,5})(\d{0,4})/, '$1-$2');
+          }
+        }
+        target.value = value;
+      });
+    }
+
+    // Função para chamar API de onboarding
+    async function startWhatsAppOnboarding(ddd: string, phone: string) {
     try {
       const url = 'https://emprego.p2digital.com.br/api/candidateprofile/start-whatsapp-onboarding/';
       const response = await fetch(url, {
@@ -254,51 +268,61 @@
       console.error('Erro ao iniciar onboarding:', error);
       throw error;
     }
-  }
-
-  // Enviar formulário WhatsApp
-  heroWhatsappForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const ddd = heroDddInput?.value.replace(/\D/g, '');
-    const whatsapp = heroWhatsappInput?.value.replace(/\D/g, '');
-    
-    if (!ddd || !whatsapp || ddd.length !== 2 || whatsapp.length < 8) {
-      alert('Por favor, preencha DDD (2 dígitos) e WhatsApp (8-9 dígitos).');
-      return;
     }
-    
-    const submitBtn = heroWhatsappForm.querySelector('button[type="submit"]') as HTMLButtonElement;
-    if (!submitBtn) return;
 
-    const originalText = submitBtn.innerHTML;
+    // Enviar formulário WhatsApp
+    if (heroWhatsappForm) {
+      console.log('Adicionando event listener ao formulário WhatsApp');
+      
+      heroWhatsappForm.addEventListener('submit', async (e) => {
+        console.log('Formulário submetido!');
+        e.preventDefault();
+        
+        const ddd = heroDddInput?.value.replace(/\D/g, '');
+        const whatsapp = heroWhatsappInput?.value.replace(/\D/g, '');
+        
+        console.log('Valores capturados:', { ddd, whatsapp });
+        
+        if (!ddd || !whatsapp || ddd.length !== 2 || whatsapp.length < 8) {
+          alert('Por favor, preencha DDD (2 dígitos) e WhatsApp (8-9 dígitos).');
+          return;
+        }
+        
+        const submitBtn = heroWhatsappForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+        if (!submitBtn) return;
 
-    try {
-      // Desabilita botão e mostra loading
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="relative z-10">Enviando...</span>';
+        const originalText = submitBtn.innerHTML;
 
-      // Chama API de onboarding
-      await startWhatsAppOnboarding(ddd, whatsapp);
+        try {
+          // Desabilita botão e mostra loading
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="relative z-10">Enviando...</span>';
 
-      // Sucesso - mostra feedback
-      submitBtn.innerHTML = '<span class="relative z-10">✓ Enviado!</span>';
-      alert('Cadastro realizado com sucesso! Em breve você receberá uma mensagem no WhatsApp para completar seu perfil.');
+          // Chama API de onboarding
+          await startWhatsAppOnboarding(ddd, whatsapp);
 
-      // Aguarda 1 segundo e reseta formulário
-      setTimeout(() => {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-        heroWhatsappForm.reset();
-      }, 1000);
+          // Sucesso - mostra feedback
+          submitBtn.innerHTML = '<span class="relative z-10">✓ Enviado!</span>';
+          alert('Cadastro realizado com sucesso! Em breve você receberá uma mensagem no WhatsApp para completar seu perfil.');
 
-    } catch (error) {
-      // Mostra erro
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalText;
+          // Aguarda 1 segundo e reseta formulário
+          setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            heroWhatsappForm.reset();
+          }, 1000);
 
-      const errorMessage = error instanceof Error ? error.message : 'Erro ao processar solicitação.';
-      alert(errorMessage);
+        } catch (error) {
+          // Mostra erro
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+
+          const errorMessage = error instanceof Error ? error.message : 'Erro ao processar solicitação.';
+          alert(errorMessage);
+        }
+      });
+    } else {
+      console.error('Formulário hero-whatsapp-form não encontrado!');
     }
   });
 </script>
