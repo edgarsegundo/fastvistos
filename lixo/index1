@@ -11,8 +11,14 @@ import CarouselSection from '../components/CarouselSection.astro';
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link
-  href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&family=Manrope:wght@400;500;600&family=Spectral:wght@300;400;500;600&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&
+  family=Libre+Baskerville:wght@400;700&
+  family=Inter:wght@300;400;500;600&display=swap"
   rel="stylesheet"
 />
 
@@ -51,9 +57,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
 <style is:global>
   :root {
-    --font-title: 'Bodoni Moda', serif;
-    --font-subtitle: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: 'Spectral', Georgia, serif;
+    --font-title: 'Playfair Display', serif;
+    --font-subtitle: 'Libre Baskerville', serif;
+    --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
     --color-text-main: #1b375c;
   }
@@ -67,68 +73,65 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
   }
 
   section {
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
   }
 
-  /* TITLES — fashion editorial */
+  /* HEADINGS */
   h1 {
     font-family: var(--font-title);
-    font-size: clamp(2.9rem, 6vw, 4.2rem);
+    font-size: clamp(2.6rem, 5vw, 3.6rem);
     font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.2rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    font-feature-settings: "liga", "kern";
   }
 
   h2 {
     font-family: var(--font-title);
-    font-size: clamp(2.1rem, 4.8vw, 3rem);
-    font-weight: 600;
-    line-height: 1.1;
-    margin-bottom: 1rem;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
   }
 
-  /* SUBTITLES — quiet & precise */
   h3,
   h4 {
     font-family: var(--font-subtitle);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    margin-bottom: 0.6rem;
-    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
   }
 
   h3 {
-    font-size: 0.95rem;
+    font-size: 1.35rem;
   }
 
-  /* BODY TEXT — refined reading */
+  /* TEXT */
   p {
-    font-size: 1.02rem;
-    max-width: 62ch;
-    margin-bottom: 1.6rem;
+    font-size: 1.05rem;
+    max-width: 68ch;
+    margin-bottom: 1.4rem;
   }
 
   a {
-    font-family: var(--font-subtitle);
     color: inherit;
     text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
+    text-underline-offset: 3px;
   }
 
   /* EDITORIAL ELEMENTS */
   .kicker {
-    font-family: var(--font-subtitle);
+    font-family: var(--font-body);
     text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    opacity: 0.6;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
   }
 
   .deck {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
+    font-family: var(--font-subtitle);
+    font-size: 1.15rem;
     opacity: 0.85;
   }
 </style>

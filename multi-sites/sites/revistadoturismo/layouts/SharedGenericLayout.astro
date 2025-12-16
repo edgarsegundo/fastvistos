@@ -1,0 +1,80 @@
+---
+/**
+ * SharedGenericLayout.astro
+ * Generic layout for non-blog, non-home pages (search, about, contact, etc.)
+ */
+import '../styles/global.css';
+
+import HeadBasics from '../components/HeadBasics.astro';
+import AnalyticsHead from '../components/AnalyticsHead.astro';
+import AnalyticsBody from '../components/AnalyticsBody.astro';
+import { siteConfig } from '../site-config.ts';
+
+const htmlLang = siteConfig.site.useFullLanguageTag
+    ? siteConfig.site.language
+    : siteConfig.site.language.split('-')[0];
+
+const {
+    bodyClass = 'bg-white',
+    bodyStyle = '',
+    showHeader = true,
+    showFooter = true,
+    
+    canonicalConf,
+    faviconPathFromConf,
+    seoFromConf,
+    titleFromConf,
+    descriptionFromConf,
+    authorNameFromConf,
+    imageFromConf,
+    imageUrlFromConf,
+    imageCaptionFromConf,
+    imageWidthFromConf,
+    imageHeightFromConf,
+    
+    pubDate,
+    updatedDate,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+    <head>
+        <AnalyticsHead siteConfig={siteConfig} />
+        <HeadBasics
+            generator={Astro.generator}
+            noIndex={false}
+            enhancedIndexing={false}
+            canonical={canonicalConf}
+            faviconPath={faviconPathFromConf}
+            seo={seoFromConf}
+            title={titleFromConf}
+            description={descriptionFromConf}
+            authorName={authorNameFromConf}
+            image={imageFromConf}
+            imageUrl={imageUrlFromConf}
+            imageCaption={imageCaptionFromConf}
+            imageWidth={imageWidthFromConf}
+            imageHeight={imageHeightFromConf}
+            pubDate={pubDate}
+            updatedDate={updatedDate}
+        />
+        
+        <link rel="preconnect" href={`https://${siteConfig.site.domain}`} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap" rel="stylesheet" />
+        
+        <slot name="head" />
+    </head>
+    <body class={bodyClass} style={bodyStyle}>
+        <AnalyticsBody siteConfig={siteConfig} />
+        
+        {showHeader && <slot name="header" />}
+        
+        <slot />
+        
+        {showFooter && <slot name="footer" />}
+    </body>
+</html>
+<script src="../lib/updatable-editor.js"></script>
