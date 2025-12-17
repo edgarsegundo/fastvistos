@@ -13,11 +13,14 @@ import Navigation from '../components/Navigation.astro';
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
-<!-- <link rel="stylesheet" href="/revistadoturismo/fonts/LinLibertine/style.css"> -->
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal text-white antialiased`}
-    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    bodyClass={`${bodyClass} leading-normal tracking-normal`}
+    bodyStyle={`${bodyStyle}`}
     themeToggleDisable={true} // New prop to control theme toggle visibility
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
@@ -44,8 +47,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <div class="gradient">
         <Navigation />
         <HeroSection />
-
     </div>
+
     <main class="min-h-screen">
         <CarouselSection />
         <FooterSection />
@@ -56,19 +59,97 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 </SharedHomeLayout>
 
 <style is:global>
-    .home-layout p,
-    .home-layout h3,
-    .home-layout ul,
-    .home-layout a,
-    .home-layout span {
-        color: #1b375c !important;
-    }
+  :root {
+    --font-title: 'Poppins', system-ui, sans-serif;
+    --font-subtitle: 'Inter', system-ui, sans-serif;
+    --font-body: 'Roboto', system-ui, sans-serif;
 
-    .home-main {
-        min-height: 100vh;
-    }
+    --color-text-main: #1f2937;
+    --color-whatsapp: #25d366;
+    --color-whatsapp-dark: #128c7e;
+  }
 
-    .font-linlibertine {
-        font-family: 'Linux Libertine', serif;
-    }    
+  /* BASE — clean, popular, white */
+  body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--color-text-main);
+    background: #ffffff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  section {
+    margin-bottom: 2.5rem;
+  }
+
+  /* TITLES — job headline */
+  h1 {
+    font-family: var(--font-title);
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+
+  /* SUBTITLES — explanatory */
+  h3,
+  h4 {
+    font-family: var(--font-subtitle);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+  }
+
+  /* BODY — everyone understands */
+  p {
+    font-size: 1rem;
+    max-width: 72ch;
+    margin-bottom: 1rem;
+  }
+
+  a {
+    font-family: var(--font-subtitle);
+    color: var(--color-whatsapp-dark);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* CTA WhatsApp */
+  .btn-whatsapp {
+    display: inline-block;
+    font-family: var(--font-subtitle);
+    background: var(--color-whatsapp);
+    color: #ffffff;
+    padding: 0.75rem 1.2rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* MICROCOPY */
+  .kicker {
+    font-family: var(--font-subtitle);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-whatsapp-dark);
+  }
+
+  .deck {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
 </style>

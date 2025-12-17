@@ -239,6 +239,29 @@ export class BlogService {
         }
     }
 
+    /**
+     * Get topics to show on homepage, ordered by 'order'.
+     * Only topics with show_on_homepage = true and is_removed = false.
+     */
+    static async getHomepageTopics() {
+        try {
+            const businessId = this.getBusinessId();
+            return await prisma.blog_topic.findMany({
+                where: {
+                    business_id: businessId,
+                    is_removed: false,
+                    show_on_homepage: true,
+                },
+                orderBy: {
+                    order: 'asc',
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching homepage topics:', error);
+            return [];
+        }
+    }
+
     // Get articles with optional site filtering (for multi-site support)
     static async getArticles(siteId?: string, limit?: number) {
         try {
