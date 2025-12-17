@@ -1,5 +1,7 @@
 ---
 // Header Section Component
+import { BlogService } from '../lib/blog-service.ts';
+const topics = await BlogService.getHomepageTopics();
 ---
 
 <!-- Header/Navigation -->
@@ -39,17 +41,19 @@
         <!-- Desktop Header -->
         <div class="hidden md:flex items-center justify-between py-4">
             <nav class="flex items-center space-x-6">
-                <a href="/viajes-urbanos" class="text-sm font-medium hover:text-gray-600"
-                    >Viajes urbanos</a
-                >
-                <a href="/naturaleza" class="text-sm font-medium hover:text-gray-600">Naturaleza</a>
-                <a href="/gastronomia" class="text-sm font-medium hover:text-gray-600"
-                    >Gastronomía</a
-                >
-                <a href="/viajeros" class="text-sm font-medium hover:text-gray-600">Viajeros</a>
-                <a href="/experiencias" class="text-sm font-medium hover:text-gray-600"
-                    >Experiencias</a
-                >
+                {topics && topics.length > 0 ? (
+                  topics.map(topic => (
+                    <a
+                      href={topic.slug ? `/${topic.slug}` : '#'}
+                      class="text-sm font-medium hover:text-gray-600"
+                      key={topic.id}
+                    >
+                      {topic.title}
+                    </a>
+                  ))
+                ) : (
+                  <span class="text-gray-400 text-sm">Nenhum tópico</span>
+                )}
             </nav>
 
             <a href="/" class="mx-8">
