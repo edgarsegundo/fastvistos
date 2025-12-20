@@ -28,14 +28,16 @@ const filteredArticles = verticalArticle
 ---
 
 <section class="w-full max-w-7xl mx-auto px-4 py-12">
-  <h2 class="text-2xl font-bold mb-6">Artigos mais lidos</h2>
+  
+  <h2 class="text-2xl font-bold mb-10">Artigos mais lidos</h2>
+  <div class="w-1/12 border-b-2 border-gray-200 mb-8"></div>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     {verticalArticle ? (
       <>
         
         <div class="md:col-span-1 flex flex-col">
           <a href={`/blog/${verticalArticle.slug}`} class="block group">
-            <div class="aspect-[3/2] w-full overflow-hidden rounded-lg shadow-md">
+            <div class="aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md">
               <img
                 src={verticalArticle.image_vertical ? `/assets/images/blog/${verticalArticle.image_vertical.replace(/^.*\//, '')}` : 'https://via.placeholder.com/600x400'}
                 alt={verticalArticle.title}
