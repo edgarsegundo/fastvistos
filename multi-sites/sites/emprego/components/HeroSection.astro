@@ -1,141 +1,40 @@
-<section class="pt-2 md:pt-0">
-  <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+<section class="pt-4 pb-8">
+  <div class="container mx-auto max-w-3xl px-4 flex flex-col items-center">
+    <!-- Título principal -->
+    <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 text-center leading-tight mb-2">
+      Propostas das melhores empresas
+    </h1>
+    <p class="text-lg text-gray-700 text-center mb-2">
+      Seu emprego rápido, simples e direto do seu WhatsApp
+    </p>
+    <h2 class="text-2xl font-bold text-gray-900 text-center mb-2">Currículo IA Grátis</h2>
 
-    <!-- Left Col -->
-    <div class="flex flex-col w-full md:w-1/2 justify-center items-center md:items-start text-center md:text-left">
+    <!-- CTA 1 -->
+    <a href="#" class="mt-2 mb-4 inline-flex items-center justify-center px-8 py-3 bg-green-600 hover:bg-green-700 
+    !text-white hover:!text-white visited:!text-white
+    text-xl font-semibold rounded-full shadow transition-all duration-200">
+      <img src="assets/images/logo/logo-mobile.png" class="h-auto" />
+      Iniciar Currículo
+    </a>
 
-      <!-- Wrapper interno para deslocar o conteúdo -->
-      <div class="w-full md:w-11/12 lg:w-10/12 mx-auto md:ml-auto">
-        <h1 class="my-4 text-4xl md:text-5xl font-extrabold leading-tight text-white">
-          Quer achar emprego?
-        </h1>
-
-
-        <ul class="mt-8 text-base md:text-xl lg:text-2xl font-medium text-gray-100 mb-8 space-y-3 text-center md:text-left">
-        <li class="flex items-start md:items-center gap-2 justify-center md:justify-start">
-            <span class="border-2 border-green-400 rounded-full w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-green-400 font-bold text-sm md:text-base transform rotate-6">1</span>
-            Informe seu <span class="font-bold text-green-300">WhatsApp</span>
-        </li>
-        <li class="flex items-start md:items-center gap-2 justify-center md:justify-start">
-            <span class="border-2 border-green-400 rounded-full w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-green-400 font-bold text-sm md:text-base transform -rotate-3">2</span>
-            Você receberá uma mensagem nossa
-        </li>
-        <li class="flex items-start md:items-center gap-2 justify-center md:justify-start">
-            <span class="border-2 border-green-400 rounded-full w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-green-400 font-bold text-sm md:text-base transform rotate-4">3</span>
-            Responda perguntas simples...
-        </li>
-        <li class="flex items-start md:items-center gap-2 justify-center md:justify-start">
-            <span class="border-2 border-green-400 rounded-full w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-green-400 font-bold text-sm md:text-base transform -rotate-5">4</span>
-            Comece a receber ligações para entrevistas
-        </li>
-        </ul>
-
-        <!-- Formulário WhatsApp com floating labels -->
-        <form id="hero-whatsapp-form" class="relative z-40 flex flex-wrap gap-3 items-end justify-center md:justify-start max-w-2xl">
-          <!-- DDD Input com floating label -->
-          <div class="relative w-18">
-            <input
-              type="tel"
-              id="hero-ddd"
-              maxlength="3"
-              class="peer w-full px-3 py-4 bg-white/90 backdrop-blur-sm border-2 border-green-400/40 rounded-xl text-gray-800 font-semibold text-center text-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-400/30 transition-all duration-200 placeholder-transparent"
-              placeholder="DDD"
-              required
-            />
-            <label
-              for="hero-ddd"
-              class="absolute left-3 -top-2.5 bg-gradient-to-r from-green-400 to-green-500 px-2 py-0.5 rounded-md text-white text-xs font-bold transition-all duration-200 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:bg-transparent peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-white peer-focus:bg-gradient-to-r peer-focus:from-green-400 peer-focus:to-green-500"
-            >
-              DDD
-            </label>
-          </div>
-
-          <!-- WhatsApp Input com floating label -->
-          <div class="relative w-40 md:w-48">
-            <input
-              type="tel"
-              id="hero-whatsapp"
-              maxlength="10"
-              class="peer w-full px-4 py-4 bg-white/90 backdrop-blur-sm border-2 border-green-400/40 rounded-xl text-gray-800 font-semibold text-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-400/30 transition-all duration-200 placeholder-transparent"
-              placeholder="WhatsApp"
-              required
-            />
-            <label
-              for="hero-whatsapp"
-              class="absolute left-4 -top-2.5 bg-gradient-to-r from-green-400 to-green-500 px-2 py-0.5 rounded-md text-white text-xs font-bold transition-all duration-200 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:bg-transparent peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-white peer-focus:bg-gradient-to-r peer-focus:from-green-400 peer-focus:to-green-500"
-            >
-              WhatsApp
-            </label>
-          </div>
-
-          <!-- Botão Comece Já -->
-          <button
-            type="submit"
-            class="relative z-50 px-3 md:px-8 py-3.5 md:py-4 font-extrabold text-white text-sm md:text-xl rounded-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all duration-300 group shadow-xl hover:shadow-2xl hover:scale-105"
-          >
-            <!-- Gradiente animado atrás -->
-            <span class="absolute inset-0 bg-gradient-to-r from-green-500 via-cyan-400 to-blue-500 opacity-100 group-hover:opacity-90 transition duration-500 rounded-xl pointer-events-none"></span>
-
-            <!-- Glow sutil com border -->
-            <span class="absolute inset-0 rounded-xl border-2 border-white/30 group-hover:border-white/50 animate-pulse-slow pointer-events-none"></span>
-
-            <!-- Texto do botão -->
-            <span class="relative z-10 drop-shadow-lg pointer-events-none">
-              <span class="md:hidden inline-block text-center leading-tight">Comece<br/>Já!</span>
-              <span class="hidden md:inline">Comece Já!</span>
-            </span>
-
-            <!-- Animação extra de brilho -->
-            <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none"></span>
-          </button>
-        </form>
-
-      </div>
+    <!-- Imagem 4:3 -->
+    <div class="w-full max-w-2xl rounded-xl overflow-hidden mb-6 flex items-center justify-center bg-gray-100">
+      <img src="assets/images/cover/video-mockup-whats-vagas.png" alt="Conversa WhatsApp" class="object-cover w-full h-full" loading="lazy" />
     </div>
 
-    <!-- Right Column -->
-    <div class="relative w-full md:w-1/2 flex justify-center items-end">
-      <div class="relative w-full max-w-xl min-h-[420px] md:min-h-[520px] lg:min-h-[580px] flex items-end justify-start overflow-visible">
-        <img src="assets/images/cover/woman_cover.png"
-             class="w-full max-h-full object-contain drop-shadow-lg brightness-110 contrast-105 rounded-xl z-0 fade-mask"
-             loading="lazy" alt="woman cover" />
-        <!-- Search input refinado – versão compacta -->
-        <div class="absolute left-1/2 top-[85%] transform -translate-x-1/2 w-full max-w-xs z-30">
-          <div class="relative backdrop-blur-md bg-white/25 shadow-[0_4px_18px_rgba(0,0,0,0.18)] border border-white/20 rounded-2xl px-4 py-3 flex flex-col gap-2 animate-[slideUp_.7s_ease-out]">
-
-            <label class="text-gray-900/80 font-semibold text-xs tracking-wide uppercase">
-              Buscar candidato
-            </label>
-
-            <div class="relative w-full flex items-center gap-2">
-              <div class="relative flex-1">
-                <input type="text"
-                      id="hero-search-input"
-                      placeholder="Ex: recepcionista são paulo"
-                      class="w-full py-2.5 pl-10 pr-3 rounded-xl text-gray-900 placeholder-gray-500
-                              bg-white/60 backdrop-blur-lg focus:outline-none focus:ring-2
-                              focus:ring-green-400 transition-all duration-300 text-sm shadow-sm" />
-
-                <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                      viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                      class="w-5 h-5 text-gray-500">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.5 5.5a7.5 7.5 0 0011.15 11.15z" />
-                  </svg>
-                </div>
-              </div>
-              <button
-                id="hero-search-btn"
-                type="button"
-                class="px-4 py-2.5 bg-green-500/80 hover:bg-green-600/90 text-white font-semibold rounded-xl text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-sm"
-              >
-                Ok
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Bloco IA -->
+    <div class="w-full bg-gray-50 rounded-2xl shadow p-6 flex flex-col items-center">
+      <h3 class="text-xl md:text-2xl font-bold text-gray-900 text-center mb-2">
+        Deixe nossa Inteligência artificial encontrar a vaga ideal pra você
+      </h3>
+      <p class="text-base text-gray-700 text-center mb-4">
+        A IA <b>impulsiona</b> seu currículo para milhares de empresa e encontra vagas ideais conforme área, salário e localização.
+      </p>
+      <a href="#" class="inline-flex items-center justify-center px-8 py-3 bg-green-600 hover:bg-green-700 
+      !text-white hover:!text-white visited:!text-white
+      text-xl font-semibold rounded-full shadow transition-all duration-200">
+        Procurar Vagas
+      </a>
     </div>
   </div>
 </section>
