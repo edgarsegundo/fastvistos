@@ -7,6 +7,7 @@ import HeroSection from '../components/HeroSection.astro';
 import FooterSection from '../components/FooterSection.astro';
 import HeaderSection from '../components/HeaderSection.astro';
 import CarouselSection from '../components/CarouselSection.astro';
+import MostReadSection from '../components/MostReadSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -43,7 +44,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
   <main class="min-h-screen">
     <HeaderSection />
     <HeroSection />
-    <ArticlesGridSection />
+
+    <MostReadSection />
+    <!-- <ArticlesGridSection /> -->
     <CarouselSection />
     <FooterSection />
   </main>
