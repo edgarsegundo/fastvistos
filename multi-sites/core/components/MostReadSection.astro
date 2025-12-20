@@ -39,19 +39,27 @@ const filteredArticles = verticalArticle
           <a href={`/blog/${verticalArticle.slug}`} class="block group">
             <div class="aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md">
               <img
-                src={verticalArticle.image_vertical ? `/assets/images/blog/${verticalArticle.image_vertical.replace(/^.*\//, '')}` : 'https://via.placeholder.com/600x400'}
+                src={
+                  verticalArticle.image_vertical
+                    ? `/assets/images/blog/${verticalArticle.image_vertical.replace(/^.*\//, '')}`
+                    : 'https://via.placeholder.com/600x400'
+                }
                 alt={verticalArticle.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <h2 class="mt-4 text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+
+            <h2 class="mt-4 text-2xl font-bold text-gray-900 transition-colors group-hover:text-blue-700">
               {verticalArticle.title}
             </h2>
-            <div class="mt-2 text-gray-500 text-base">
+
+            <div class="mt-2 text-base text-gray-500">
               {formatDate(verticalArticle.published)}
             </div>
           </a>
         </div>
+
+
         <!-- Colunas 2 e 3: Lista de artigos -->
         <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredArticles.map((article, idx) => (
@@ -59,7 +67,7 @@ const filteredArticles = verticalArticle
               href={`/blog/${article.slug}`}
               class="flex items-center gap-4 bg-white rounded-lg shadow hover:shadow-lg transition-all p-3 group"
             >
-              <div class="w-28 h-20 flex-shrink-0 overflow-hidden rounded-md">
+              <div class="w-28 h-20 flex-shrink-0 overflow-hidden">
                 <img
                   src={article.image ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}` : 'https://via.placeholder.com/200x140'}
                   alt={article.title}
@@ -120,12 +128,3 @@ const filteredArticles = verticalArticle
     )}
   </div>
 </section>
-
-<style>
-@media (max-width: 767px) {
-  .md\:col-span-1, .md\:col-span-2, .md\:grid-cols-2, .md\:col-span-3, .md\:grid-cols-3 {
-    grid-column: span 1 / span 1 !important;
-    grid-template-columns: 1fr !important;
-  }
-}
-</style>
