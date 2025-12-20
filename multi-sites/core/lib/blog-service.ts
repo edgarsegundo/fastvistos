@@ -439,6 +439,37 @@ export class BlogService {
     }
 
     /**
+     * Get the most recent article with most_read = true and image_vertical = true.
+     * Returns one article or null if none found.
+     */
+    static async getArticleWithVerticalImage() {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+            return await prisma.blog_article.findFirst({
+                where: {
+                    business_id: businessId,
+                    is_removed: false,
+                    most_read: true,
+                    image_vertical: true,
+                    published: {
+                        lte: now,
+                    },
+                },
+                include: {
+                    blog_topic: true,
+                },
+                orderBy: {
+                    published: 'desc',
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching article with vertical image:', error);
+            return null;
+        }
+    }    
+
+    /**
      * Create a new blog article.
      * @param data Partial<blog_article> - All required fields for creation.
      * @returns The created blog_article record.
