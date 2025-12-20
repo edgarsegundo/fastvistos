@@ -1,0 +1,85 @@
+---
+/**
+ * MostReadSection.astro
+ * Exibe os 25 artigos mais lidos em layout 3 colunas (1 destaque + 2 colunas de lista)
+ * Usa BlogService.getMostReadArticles no lado do servidor Astro
+ */
+import { BlogService } from '../lib/blog-service.ts';
+import { siteConfig } from '../site-config.ts';
+
+const mostReadArticles = await BlogService.getMostReadArticles(25);
+
+function formatDate(date) {
+  if (!date) return '';
+  const d = new Date(date);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<section class="w-full max-w-7xl mx-auto px-4 py-12">
+  <h2 class="text-2xl font-bold mb-6">Artigos mais lidos</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Coluna 1: Artigo destaque -->
+    <div class="md:col-span-1 flex flex-col">
+      {mostReadArticles[0] && (
+        <a href={`/blog/${mostReadArticles[0].slug}`} class="block group">
+          <div class="aspect-[3/2] w-full overflow-hidden rounded-lg shadow-md">
+            <img
+              src={mostReadArticles[0].image ? `/assets/images/blog/${mostReadArticles[0].image.replace(/^.*\//, '')}` : 'https://via.placeholder.com/600x400'}
+              alt={mostReadArticles[0].title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <h2 class="mt-4 text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">
+            {mostReadArticles[0].title}
+          </h2>
+          <div class="mt-2 text-gray-500 text-base">
+            {formatDate(mostReadArticles[0].published)}
+          </div>
+        </a>
+      )}
+    </div>
+
+    <!-- Colunas 2 e 3: Lista de artigos -->
+    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {mostReadArticles.slice(1).map((article, idx) => (
+        <a
+          href={`/blog/${article.slug}`}
+          class="flex items-center gap-4 bg-white rounded-lg shadow hover:shadow-lg transition-all p-3 group"
+        >
+          <div class="w-28 h-20 flex-shrink-0 overflow-hidden rounded-md">
+            <img
+              src={article.image ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}` : 'https://via.placeholder.com/200x140'}
+              alt={article.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-semibold text-gray-900 truncate group-hover:text-blue-700 transition-colors">
+              {article.title}
+            </h3>
+            <div class="flex flex-wrap gap-2 mt-1 items-center">
+              {article.blog_topic && (
+                <span class="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded">
+                  {article.blog_topic.title}
+                </span>
+              )}
+              <span class="text-xs text-gray-500">
+                {formatDate(article.published)}
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+@media (max-width: 767px) {
+  .md\:col-span-1, .md\:col-span-2, .md\:grid-cols-2 {
+    grid-column: span 1 / span 1 !important;
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>

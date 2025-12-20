@@ -290,6 +290,155 @@ export class BlogService {
     }
 
     /**
+     * Get the article to show in the hero section (show_in_hero = true).
+     * Returns the most recent published article with show_in_hero, or null if none.
+     */
+    static async getShowInHeroArticle() {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+            return await prisma.blog_article.findFirst({
+                where: {
+                    business_id: businessId,
+                    is_removed: false,
+                    show_in_hero: true,
+                    published: {
+                        lte: now,
+                    },
+                },
+                orderBy: {
+                    published: 'desc',
+                },
+                include: {
+                    blog_topic: true,
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching show_in_hero article:', error);
+            return null;
+        }
+    }
+
+
+    /**
+     * Get up to `limit` most read articles, filling with non-most_read/non-show_in_hero if needed.
+     * First, fetch all articles with most_read = true (most recent first).
+     * If less than `limit`, fill with articles where most_read = false and show_in_hero = false (oldest first).
+     * Returns an array of articles (with blog_topic included).
+     */
+    // static async getMostReadArticles(limit: number = 25) {
+    //     try {
+    //         const businessId = this.getBusinessId();
+    //         const now = new Date();
+
+    //         // 1. Fetch all most_read articles (most recent first)
+    //         const mostRead = await prisma.blog_article.findMany({
+    //             where: {
+    //                 business_id: businessId,
+    //                 is_removed: false,
+    //                 most_read: true,
+    //                 published: { lte: now },
+    //             },
+    //             include: { blog_topic: true },
+    //             orderBy: { published: 'desc' },
+    //             take: limit,
+    //         });
+
+    //         // If enough, return
+    //         if (mostRead.length >= limit) return mostRead.slice(0, limit);
+
+    //         // 2. Fetch additional articles (not most_read, not show_in_hero, oldest first)
+    //         const needed = limit - mostRead.length;
+    //         const filler = await prisma.blog_article.findMany({
+    //             where: {
+    //                 business_id: businessId,
+    //                 is_removed: false,
+    //                 most_read: false,
+    //                 show_in_hero: false,
+    //                 published: { lte: now },
+    //             },
+    //             include: { blog_topic: true },
+    //             orderBy: { published: 'asc' },
+    //             take: needed,
+    //         });
+
+    //         // Combine and return up to limit
+    //         return [...mostRead, ...filler].slice(0, limit);
+    //     } catch (error) {
+    //         console.error('Error fetching most read articles:', error);
+    //         return [];
+    //     }
+    // }
+
+    /**
+     * Get up to `limit` most read articles, filling with non-most_read/non-show_in_hero if needed.
+     * When `debugFill` is true, the result is always padded to `limit`
+     * by repeating the first available article (for testing only).
+     */
+    static async getMostReadArticles(
+        limit: number = 25,
+        debugFill: boolean = false
+    ) {
+        try {
+            const businessId = this.getBusinessId();
+            const now = new Date();
+
+            // Helper to fetch articles
+            const fetchArticles = (params: Parameters<typeof prisma.blog_article.findMany>[0]) =>
+                prisma.blog_article.findMany({
+                    ...params,
+                    include: { blog_topic: true },
+                });
+
+            // 1. Most-read articles (newest first)
+            const mostRead = await fetchArticles({
+                where: {
+                    business_id: businessId,
+                    is_removed: false,
+                    most_read: true,
+                    published: { lte: now },
+                },
+                orderBy: { published: 'desc' },
+                take: limit,
+            });
+
+            let articles = [...mostRead];
+
+            // 2. Fill with non-most_read & non-hero if needed
+            if (articles.length < limit) {
+                const needed = limit - articles.length;
+
+                const filler = await fetchArticles({
+                    where: {
+                        business_id: businessId,
+                        is_removed: false,
+                        most_read: false,
+                        show_in_hero: false,
+                        published: { lte: now },
+                    },
+                    orderBy: { published: 'asc' },
+                    take: needed,
+                });
+
+                articles.push(...filler);
+            }
+
+            // 3. Debug: force completion to `limit` by repeating one article
+            if (debugFill && articles.length > 0 && articles.length < limit) {
+                const articleToRepeat = articles[0]; // deterministic choice
+                while (articles.length < limit) {
+                    articles.push(articleToRepeat);
+                }
+            }
+
+            return articles.slice(0, limit);
+        } catch (error) {
+            console.error('Error fetching most read articles:', error);
+            return [];
+        }
+    }
+
+    /**
      * Create a new blog article.
      * @param data Partial<blog_article> - All required fields for creation.
      * @returns The created blog_article record.
