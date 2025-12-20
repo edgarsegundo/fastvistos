@@ -1,8 +1,8 @@
 ---
-title: "América Latina B"
-description: "MRKLTNB"
+title: "América Latina B Edgar Rezende de Paula Segundo Meu Amigo Vamos ver o que vai dar isso aqui"
+description: "MRKLTNBDGRRZNDDPLSGNDMMGVMSVRKVDRSK"
 pubDate: "2025-11-27T19:27:05.000Z"
-updatedDate: "2025-11-28T23:52:11.742Z"
+updatedDate: "2025-12-20T23:06:48.843Z"
 slug: "america-latina-b"
 topic: "América Latina"
 topicSlug: "america-latina"

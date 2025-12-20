@@ -170,6 +170,25 @@
       "revistadoturismo__artigo2-320-2x.webp 640w"
     ]
   },
+  "revistadoturismo__humboldt-penguin-7711121_1920": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAeABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAYHAwX/xAAnEAABAwMBCAMBAAAAAAAAAAABAgMEAAURBgcSExQhMUFRFRYyYf/EABcBAAMBAAAAAAAAAAAAAAAAAAIDBAH/xAAdEQACAwACAwAAAAAAAAAAAAAAAQIDERNRFCEi/9oADAMBAAIRAxEAPwBO1Ythd8ZjcQZd/Q9imuxxWX4q4rCeEyEYxjvShoWN9j2mRkSt0xj0B7+RV91XZ7fZG4qmAAc7nbvUNVKt+2zbXrwic+1BqSpDZJSPVFNF3iOCe4Gd0I9UUfhw6J9OZs00sxYNRwZHM8ZYOOis1RtqtxPwDi0EcRC0kfyo1zs1rUKo0V4NOtHCV+Ky1Jqec/HdjT3C4EqAUU+aepqPopcG3o5jUdsS23zMhBeKElWPeKKmCpDZwUIITjpmil8j7BcWf//Z",
+    "jpeg": [
+      "revistadoturismo__humboldt-penguin-7711121_1920-1216-1x.jpeg 1216w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-1216-2x.jpeg 2432w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-608-1x.jpeg 608w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-608-2x.jpeg 1216w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-320-1x.jpeg 320w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "revistadoturismo__humboldt-penguin-7711121_1920-1216-1x.webp 1216w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-1216-2x.webp 2432w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-608-1x.webp 608w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-608-2x.webp 1216w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-320-1x.webp 320w",
+      "revistadoturismo__humboldt-penguin-7711121_1920-320-2x.webp 640w"
+    ]
+  },
   "revistadoturismo__jeshoots-com-mSESwdMZr-A-unsplash": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAYHBP/EACQQAAIBBAEDBQEAAAAAAAAAAAECAwAEBREHBiExFSIyQVFi/8QAFgEBAQEAAAAAAAAAAAAAAAAABAED/8QAGhEBAAIDAQAAAAAAAAAAAAAAAQACAxEhBP/aAAwDAQACEQMRAD8Apw5Gx6T+n5FZIJEPs0PmP2s/W3IWLbDMloTJLrQUeRSx1BFEeV8IDEpRojtddvqlPlcJZ5W4FpGsQ/mg+vDfSjxiPNmoJs7GjH8qXkdnEkdvGqqNabzRUggwTzwrK1/OC/fQHiisiocWVuruf//Z",
     "jpeg": [
@@ -187,6 +206,25 @@
       "revistadoturismo__jeshoots-com-mSESwdMZr-A-unsplash-608-2x.webp 1216w",
       "revistadoturismo__jeshoots-com-mSESwdMZr-A-unsplash-320-1x.webp 320w",
       "revistadoturismo__jeshoots-com-mSESwdMZr-A-unsplash-320-2x.webp 640w"
+    ]
+  },
+  "revistadoturismo__kitten-9861764_1280": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABwABA//EACEQAAICAQMFAQAAAAAAAAAAAAECAwQABQYRBxIhMUFR/8QAFQEBAQAAAAAAAAAAAAAAAAAAAwT/xAAcEQACAgIDAAAAAAAAAAAAAAABAgADBBIhQVH/2gAMAwEAAhEDEQA/ADbbnSu/q1lEV1SLkFmPwZu5umqQak8GnWO+JAAWI9nE/TNVlry2IoVC+PBBzhHYeWVy4H76yKy5lrB7gsSOISvsK0pCvIvIGWI91DJYZu8rz8GWAMl/Ye7T/9k=",
+    "jpeg": [
+      "revistadoturismo__kitten-9861764_1280-1216-1x.jpeg 1216w",
+      "revistadoturismo__kitten-9861764_1280-1216-2x.jpeg 2432w",
+      "revistadoturismo__kitten-9861764_1280-608-1x.jpeg 608w",
+      "revistadoturismo__kitten-9861764_1280-608-2x.jpeg 1216w",
+      "revistadoturismo__kitten-9861764_1280-320-1x.jpeg 320w",
+      "revistadoturismo__kitten-9861764_1280-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "revistadoturismo__kitten-9861764_1280-1216-1x.webp 1216w",
+      "revistadoturismo__kitten-9861764_1280-1216-2x.webp 2432w",
+      "revistadoturismo__kitten-9861764_1280-608-1x.webp 608w",
+      "revistadoturismo__kitten-9861764_1280-608-2x.webp 1216w",
+      "revistadoturismo__kitten-9861764_1280-320-1x.webp 320w",
+      "revistadoturismo__kitten-9861764_1280-320-2x.webp 640w"
     ]
   },
   "revistadoturismo__monuments-world-colors-background": {
