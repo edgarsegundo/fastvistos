@@ -1291,6 +1291,7 @@ model blog_article {
   blur_base64                                                                                   String?                         @db.LongText
   most_read                                                                                     Boolean
   show_in_hero                                                                                  Boolean
+  image_vertical                                                                                String?                         @db.VarChar(100)
   blog_topic                                                                                    blog_topic                      @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   business                                                                                      business                        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
   blog_article_related_articles_blog_article_related_articles_from_blogarticle_idToblog_article blog_article_related_articles[] @relation("blog_article_related_articles_from_blogarticle_idToblog_article")
