@@ -99,84 +99,94 @@ function buildSources(filename, breakpoints, scales, imageBase) {
     {
         topicsWithArticles.length > 0 ? (
             topicsWithArticles.map((topic) => (
-                <div class="relative mt-12 w-full">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative mt-12 w-full">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Header row: title + buttons -->
+                    <div class="flex items-end justify-between gap-4 mb-2">
+                    <!-- Left: title + underline -->
+                    <div>
                         <h2
-                            id={topic.slug || topic.id}
-                            class="text-3xl font-semibold mb-8 text-black"
+                        id={topic.slug || topic.id}
+                        class="text-3xl font-semibold"
                         >
-                            {topic.title}
+                        {topic.title}
                         </h2>
-                        <div class="w-1/12 border-b-2 border-gray-200 mb-8"></div>
-
-                        <div class="carousel-arrow-bar">
-                            <button
-                                class="arrow-btn-subtle"
-                                aria-label="Scroll left"
-                                onclick={`document.querySelector('#carousel-${topic.slug || topic.id}').scrollBy({left:-320, behavior:'smooth'})`}
-                            >
-                                &#10094;
-                            </button>
-                            <button
-                                class="arrow-btn-subtle"
-                                aria-label="Scroll right"
-                                onclick={`document.querySelector('#carousel-${topic.slug || topic.id}').scrollBy({left:320, behavior:'smooth'})`}
-                            >
-                                &#10095;
-                            </button>
-                        </div>
-
-                        <div class="relative pt-2">
-                            <div
-                                id={`carousel-${topic.slug || topic.id}`}
-                                data-topic-id={topic.id}
-                                class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
-                            >
-                                {topic.blog_article.map((article, i) => (
-                                    <a
-                                        href={`/blog/${article.slug}`}
-                                        class="bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block"
-                                        style="text-decoration: none;"
-                                    >
-                                        <ResponsiveImage
-                                            alt={article.slug || article.title}
-                                            width={608}
-                                            height={320}
-                                            sizes="(max-width: 1023px) 320px, 608px"
-                                            sources={buildSources(
-                                                    path.parse(article.image).name,
-                                                    [608, 320],       // breakpoints
-                                                    [1, 2],           // scales
-                                                    `/assets/images/blog/resized/`   // "resized/"
-                                                )}
-                                            blurDataURL={article.blurDataURL}
-                                            priority={i === 0}
-                                            class="w-full aspect-[1.67] object-cover"
-                                        />
-
-                                        <div class="p-6">
-                                            <h3 class="text-xl font-semibold mb-2 text-black">
-                                                {article.title.length > 70
-                                                    ? article.title.slice(0, 70) + '...'
-                                                    : article.title}
-                                            </h3>
-
-                                            <p class="text-gray-600 mb-4">
-                                                {article.content_html
-                                                    ? article.content_html
-                                                          .replace(/<[^>]*>/g, '')
-                                                          .slice(0, 150) + '...'
-                                                    : ''}
-                                            </p>
-                                        </div>
-                                    </a>
-                                ))}
-                            </div>
-
-                            <div class="carousel-fade-right" />
-                        </div>
+                        <div class="w-1/6 border-b-2 border-gray-200 mt-2"></div>
                     </div>
+
+                    <!-- Right: carousel buttons -->
+                    <div class="carousel-arrow-bar flex gap-2">
+                        <button
+                        class="arrow-btn-subtle"
+                        aria-label="Scroll left"
+                        onclick={`document.querySelector('#carousel-${topic.slug || topic.id}').scrollBy({ left: -320, behavior: 'smooth' })`}
+                        >
+                        &#10094;
+                        </button>
+
+                        <button
+                        class="arrow-btn-subtle"
+                        aria-label="Scroll right"
+                        onclick={`document.querySelector('#carousel-${topic.slug || topic.id}').scrollBy({ left: 320, behavior: 'smooth' })`}
+                        >
+                        &#10095;
+                        </button>
+                    </div>
+                    </div>
+
+                    <!-- Carousel -->
+                    <div class="relative pt-2">
+                    <div
+                        id={`carousel-${topic.slug || topic.id}`}
+                        data-topic-id={topic.id}
+                        class="carousel-container flex gap-6 overflow-x-auto pb-4 pt-4 px-4"
+                    >
+                        {topic.blog_article.map((article, i) => (
+                        <a
+                            href={`/blog/${article.slug}`}
+                            class="bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block"
+                            style="text-decoration: none;"
+                        >
+                            <ResponsiveImage
+                            alt={article.slug || article.title}
+                            width={608}
+                            height={320}
+                            sizes="(max-width: 1023px) 320px, 608px"
+                            sources={buildSources(
+                                path.parse(article.image).name,
+                                [608, 320],
+                                [1, 2],
+                                `/assets/images/blog/resized/`
+                            )}
+                            blurDataURL={article.blurDataURL}
+                            priority={i === 0}
+                            class="w-full aspect-[1.67] object-cover"
+                            />
+
+                            <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2 text-black">
+                                {article.title.length > 70
+                                ? article.title.slice(0, 70) + '...'
+                                : article.title}
+                            </h3>
+
+                            <p class="text-gray-600 mb-4">
+                                {article.content_html
+                                ? article.content_html
+                                    .replace(/<[^>]*>/g, '')
+                                    .slice(0, 150) + '...'
+                                : ''}
+                            </p>
+                            </div>
+                        </a>
+                        ))}
+                    </div>
+
+                    <div class="carousel-fade-right" />
+                    </div>
+
                 </div>
+            </div>
             ))
         ) : (
             <div class="text-center py-12">
@@ -410,7 +420,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                         const infoDiv = document.createElement('div');
                         infoDiv.className = 'p-6';
                         infoDiv.innerHTML = `
-                            <h3 class='text-xl font-semibold mb-2 text-black'>${article.title}</h3>
+                            <h3 class='text-xl font-semibold mb-2'>${article.title}</h3>
                             <p class='text-gray-600 mb-4'>${article.content_html}</p>
                         `;
                         card.appendChild(infoDiv);
