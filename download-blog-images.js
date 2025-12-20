@@ -129,6 +129,7 @@ async function downloadBlogImages(siteId) {
             },
             select: {
                 image: true,
+                image_vertical: true, // NEW FIELD
                 title: true,
                 slug: true,
             },
@@ -155,27 +156,42 @@ async function downloadBlogImages(siteId) {
         let downloadedCount = 0;
         let skippedCount = 0;
 
-        // Process article images
+        // Process article images (including image_vertical)
         for (const article of articles) {
+            // Main image
             if (article.image && !imageSet.has(article.image)) {
                 imageSet.add(article.image);
 
-                // Convert relative path to full URL
                 const fullImageUrl = MEDIA_BASE_URL + article.image;
-
-                // Create local filename (keep the same structure)
-                const localFilename = article.image.replace(/^images\//, ''); // Remove 'images/' prefix if present
+                const localFilename = article.image.replace(/^images\//, '');
                 const localPath = path.join(LOCAL_ASSETS_DIR, localFilename);
 
-                // Ensure subdirectories exist
                 const localDir = path.dirname(localPath);
                 ensureDirectoryExists(localDir);
 
-                // Check if file already exists
                 if (!fs.existsSync(localPath)) {
                     downloadPromises.push(downloadImage(fullImageUrl, localPath));
                 } else {
                     console.log('⏭️  Already exists (article):', localFilename);
+                    skippedCount++;
+                }
+            }
+
+            // NEW: Vertical image
+            if (article.image_vertical && !imageSet.has(article.image_vertical)) {
+                imageSet.add(article.image_vertical);
+
+                const fullImageUrl = MEDIA_BASE_URL + article.image_vertical;
+                const localFilename = article.image_vertical.replace(/^images\//, '');
+                const localPath = path.join(LOCAL_ASSETS_DIR, localFilename);
+
+                const localDir = path.dirname(localPath);
+                ensureDirectoryExists(localDir);
+
+                if (!fs.existsSync(localPath)) {
+                    downloadPromises.push(downloadImage(fullImageUrl, localPath));
+                } else {
+                    console.log('⏭️  Already exists (article vertical):', localFilename);
                     skippedCount++;
                 }
             }
@@ -186,18 +202,13 @@ async function downloadBlogImages(siteId) {
             if (topic.image && !imageSet.has(topic.image)) {
                 imageSet.add(topic.image);
 
-                // Convert relative path to full URL
                 const fullImageUrl = MEDIA_BASE_URL + topic.image;
-
-                // Create local filename (keep the same structure)
-                const localFilename = topic.image.replace(/^images\//, ''); // Remove 'images/' prefix if present
+                const localFilename = topic.image.replace(/^images\//, '');
                 const localPath = path.join(LOCAL_ASSETS_DIR, localFilename);
 
-                // Ensure subdirectories exist
                 const localDir = path.dirname(localPath);
                 ensureDirectoryExists(localDir);
 
-                // Check if file already exists
                 if (!fs.existsSync(localPath)) {
                     downloadPromises.push(downloadImage(fullImageUrl, localPath));
                 } else {
