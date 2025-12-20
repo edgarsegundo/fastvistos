@@ -111,7 +111,7 @@ const tasks = [
       inputDir: `public/${siteId}/assets/images/blog`,
       outputDir: `public/${siteId}/assets/images/blog/resized`,
       jsonOutput: `multi-sites/sites/${siteId}/generated-blog-image-map.json`,
-      breakpoints: [608, 320],
+      breakpoints: [1216, 608, 320],
       scales: [1, 2],
       types: ["jpeg", "webp"],
     },
