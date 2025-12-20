@@ -85,4 +85,36 @@ export class BlogService {
             return [];
         }
     }
+
+    /**
+     * Get the article to show in the hero section (show_in_hero = true).
+     * Returns the most recent published article with show_in_hero, or null if none.
+     * @param {string} businessId - Pass explicitly (required)
+     * @returns {Promise<Object|null>} The article or null
+     */
+    static async getShowInHeroArticle(businessId) {
+        try {
+            const now = new Date();
+            const article = await prisma.blog_article.findFirst({
+                where: {
+                    business_id: businessId,
+                    is_removed: false,
+                    show_in_hero: true,
+                    published: {
+                        lte: now,
+                    },
+                },
+                orderBy: {
+                    published: 'desc',
+                },
+                include: {
+                    blog_topic: true,
+                },
+            });
+            return article || null;
+        } catch (error) {
+            console.error('Error fetching show_in_hero article:', error);
+            return null;
+        }
+    }    
 }
