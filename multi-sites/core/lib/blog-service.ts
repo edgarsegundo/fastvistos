@@ -451,7 +451,6 @@ export class BlogService {
                     business_id: businessId,
                     is_removed: false,
                     most_read: true,
-                    image_vertical: true,
                     published: {
                         lte: now,
                     },

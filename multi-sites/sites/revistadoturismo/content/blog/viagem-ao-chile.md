@@ -2,7 +2,7 @@
 title: "Viagem ao Chile"
 description: "VJMXL"
 pubDate: "2025-11-27T12:10:05.000Z"
-updatedDate: "2025-11-28T23:52:39.866Z"
+updatedDate: "2025-12-20T20:21:24.932Z"
 slug: "viagem-ao-chile"
 topic: "América Latina"
 topicSlug: "america-latina"
