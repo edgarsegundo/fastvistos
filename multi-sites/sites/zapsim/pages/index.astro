@@ -7,21 +7,17 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} bg-slate-100 h-screen flex items-center justify-center`}
-    bodyStyle={`${bodyStyle} `}
+    bodyClass={`${bodyClass} h-screen overflow-hidden bg-[#0b141a]`}
+    bodyStyle={bodyStyle}
+    themeToggleDisable={true}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
     titleFromConf={siteConfig.homePageConfig.seo.title}
     descriptionFromConf={siteConfig.homePageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}
-    imageFromConf={null}
-    imageUrlFromConf={siteConfig.site.primaryImage.url}
-    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
-    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
-    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
 >
-    <!-- Additional head content specific to this layout -->
+    <!-- SEO / JSON-LD -->
     <Fragment slot="head">
         <JsonLdHomePageBase
             faqList={[]}
@@ -31,62 +27,56 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         />
     </Fragment>
 
-    <!-- Main chat container -->
-    <div
-        class="w-full max-w-4xl h-[90vh] bg-white shadow-lg rounded-lg flex flex-col overflow-hidden"
-    >
-        <!-- Chat header -->
-        <header class="flex items-center gap-4 px-4 py-3 bg-slate-200 border-b">
-            <div
-                class="w-10 h-10 rounded-full bg-slate-400 flex items-center justify-center text-white font-semibold"
-            >
+    <!-- APP CONTAINER -->
+    <div class="w-screen h-screen flex flex-col bg-[#efeae2]">
+
+        <!-- HEADER -->
+        <header class="h-14 px-4 flex items-center gap-3 bg-[#075e54] text-white">
+            <div class="w-9 h-9 rounded-full bg-[#128c7e] flex items-center justify-center text-xs font-bold">
                 BOT
             </div>
-            <div class="flex flex-col">
-                <span class="font-semibold text-sm">Test Chat</span>
-                <span class="text-xs text-slate-500">online</span>
+
+            <div class="flex flex-col leading-tight">
+                <span class="text-sm font-semibold">Test Chat</span>
+                <span class="text-[11px] opacity-80">online</span>
             </div>
         </header>
 
-        <!-- Message list -->
-        <main id="messages" class="flex-1 overflow-y-auto px-4 py-6 space-y-4 bg-slate-100">
-            <!-- Messages injected here -->
-        </main>
+        <!-- MESSAGES -->
+        <main
+            id="messages"
+            class="flex-1 overflow-y-auto px-3 py-4 space-y-2 bg-[#efeae2]"
+        ></main>
 
-        <!-- Input bar -->
-        <footer class="px-4 py-3 bg-slate-200 border-t">
-            <form id="chatForm" class="flex gap-3 items-center">
+        <!-- INPUT BAR -->
+        <footer class="px-3 py-2 bg-[#f0f2f5]">
+            <form id="chatForm" class="flex items-center gap-2">
                 <input
                     id="messageInput"
                     type="text"
                     placeholder="Type a message"
-                    class="flex-1 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+                    autocomplete="off"
+                    class="flex-1 rounded-full px-4 py-2 text-sm bg-white focus:outline-none"
                 />
                 <button
                     type="submit"
-                    class="bg-slate-600 text-white px-5 py-2 rounded-full text-sm hover:bg-slate-700"
+                    class="w-10 h-10 rounded-full bg-[#128c7e] text-white flex items-center justify-center"
                 >
-                    Send
+                    ➤
                 </button>
             </form>
         </footer>
+
     </div>
 </SharedHomeLayout>
 
 <style is:global>
-    :root {
-        --font-title: 'Bodoni Moda', serif;
-        --font-subtitle: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        --font-body: 'Spectral', Georgia, serif;
-
-        --color-text-main: #1b375c;
-    }
-
     body {
-        font-family: var(--font-body);
-        line-height: 1.7;
-        color: var(--color-text-main);
+        margin: 0;
+        overscroll-behavior: none;
         -webkit-font-smoothing: antialiased;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, Helvetica, Arial, sans-serif;
     }
 </style>
 
@@ -96,19 +86,22 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     const input = document.getElementById('messageInput');
 
     /**
-     * Utility to render a message bubble
+     * Render a WhatsApp-style bubble
      * @param {string} text
      * @param {'sent' | 'received'} type
      */
     function addMessage(text, type) {
         const wrapper = document.createElement('div');
-        wrapper.className = type === 'sent' ? 'flex justify-end' : 'flex justify-start';
+        wrapper.className =
+            type === 'sent'
+                ? 'flex justify-end'
+                : 'flex justify-start';
 
         const bubble = document.createElement('div');
         bubble.className =
             type === 'sent'
-                ? 'max-w-xs md:max-w-md px-4 py-2 rounded-lg bg-slate-600 text-white text-sm'
-                : 'max-w-xs md:max-w-md px-4 py-2 rounded-lg bg-white text-slate-800 text-sm shadow';
+                ? 'max-w-[75%] px-3 py-2 rounded-lg bg-[#dcf8c6] text-sm text-slate-900'
+                : 'max-w-[75%] px-3 py-2 rounded-lg bg-white text-sm text-slate-900 shadow';
 
         bubble.textContent = text;
 
@@ -117,52 +110,53 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // Handle user sending a message
+    // SEND MESSAGE
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const text = input.value.trim();
         if (!text) return;
 
         addMessage(text, 'sent');
         input.value = '';
 
-        // Backend hook — replace with real API logic later
+        // Backend hook (you handle it later)
         try {
             await fetch('/send-message', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: text }),
             });
-        } catch (err) {
-            // Silent fail for now (testing UI only)
+        } catch {
             console.warn('Backend not connected');
         }
     });
 
     /**
-     * Exposed global function for backend / dev console
-     * Example:
+     * Exposed global hook
      * window.receiveMessage({ message: 'Hello from bot' })
      */
     window.receiveMessage = function (payload) {
-        if (!payload || !payload.message) return;
+        if (!payload?.message) return;
         addMessage(payload.message, 'received');
     };
 
+    // Optional polling example
     let lastMessageId = 0;
 
-    // Poll backend for new messages
     setInterval(async () => {
         try {
             const res = await fetch('http://localhost:3999/messages');
             const data = await res.json();
 
-            data.filter((msg) => msg.id > lastMessageId).forEach((msg) => {
-                addMessage(msg.text, 'received');
-                lastMessageId = msg.id;
-            });
-        } catch (e) {
-            // backend down = ignore
+            data
+                .filter((m) => m.id > lastMessageId)
+                .forEach((m) => {
+                    addMessage(m.text, 'received');
+                    lastMessageId = m.id;
+                });
+        } catch {
+            // backend down — ignore
         }
     }, 1000);
 </script>
