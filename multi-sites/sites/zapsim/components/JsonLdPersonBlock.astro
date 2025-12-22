@@ -1,0 +1,33 @@
+---
+export function getPersonBlock({
+    id,
+    name,
+    url,
+    description,
+    imageUrl,
+    imageId,
+}: {
+    id: string;
+    name: string;
+    url?: string | null;
+    description?: string;
+    imageUrl?: string | null;
+    imageId?: string;
+}) {
+    return {
+        '@type': 'Person',
+        '@id': id,
+        name: name,
+        image: {
+            '@type': 'ImageObject',
+            inLanguage: 'pt-BR',
+            '@id': imageId,
+            url: imageUrl,
+            contentUrl: imageUrl,
+            caption: name,
+        },
+        ...(description ? { description } : {}),
+        ...(url ? { url } : {}),
+    };
+}
+---

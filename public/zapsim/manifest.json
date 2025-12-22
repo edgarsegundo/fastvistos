@@ -1,0 +1,19 @@
+{
+    "name": "Zapsim",
+    "short_name": "Zapsim",
+    "description": "Zapsim - Professional services and solutions",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0077b6",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "16x16 32x32",
+            "type": "image/x-icon"
+        }
+    ],
+    "categories": ["business", "serviços", "negócios", "vistos"],
+    "lang": "pt-BR"
+}
