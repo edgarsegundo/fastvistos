@@ -7,8 +7,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
-    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    bodyClass={`${bodyClass} bg-slate-100 h-screen flex items-center justify-center`}
+    bodyStyle={`${bodyStyle} `}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
@@ -31,20 +31,138 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         />
     </Fragment>
 
-    <!-- Body content -->
-    <p>This is the home page content for {siteConfig.site.siteName}.</p>
+    <!-- Main chat container -->
+    <div
+        class="w-full max-w-4xl h-[90vh] bg-white shadow-lg rounded-lg flex flex-col overflow-hidden"
+    >
+        <!-- Chat header -->
+        <header class="flex items-center gap-4 px-4 py-3 bg-slate-200 border-b">
+            <div
+                class="w-10 h-10 rounded-full bg-slate-400 flex items-center justify-center text-white font-semibold"
+            >
+                BOT
+            </div>
+            <div class="flex flex-col">
+                <span class="font-semibold text-sm">Test Chat</span>
+                <span class="text-xs text-slate-500">online</span>
+            </div>
+        </header>
+
+        <!-- Message list -->
+        <main id="messages" class="flex-1 overflow-y-auto px-4 py-6 space-y-4 bg-slate-100">
+            <!-- Messages injected here -->
+        </main>
+
+        <!-- Input bar -->
+        <footer class="px-4 py-3 bg-slate-200 border-t">
+            <form id="chatForm" class="flex gap-3 items-center">
+                <input
+                    id="messageInput"
+                    type="text"
+                    placeholder="Type a message"
+                    class="flex-1 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+                />
+                <button
+                    type="submit"
+                    class="bg-slate-600 text-white px-5 py-2 rounded-full text-sm hover:bg-slate-700"
+                >
+                    Send
+                </button>
+            </form>
+        </footer>
+    </div>
 </SharedHomeLayout>
 
 <style is:global>
-    .home-layout p,
-    .home-layout h3,
-    .home-layout ul,
-    .home-layout a,
-    .home-layout span {
-        color: #1b375c !important;
+    :root {
+        --font-title: 'Bodoni Moda', serif;
+        --font-subtitle: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-body: 'Spectral', Georgia, serif;
+
+        --color-text-main: #1b375c;
     }
 
-    .home-main {
-        min-height: 100vh;
+    body {
+        font-family: var(--font-body);
+        line-height: 1.7;
+        color: var(--color-text-main);
+        -webkit-font-smoothing: antialiased;
     }
 </style>
+
+<script>
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('messageInput');
+
+    /**
+     * Utility to render a message bubble
+     * @param {string} text
+     * @param {'sent' | 'received'} type
+     */
+    function addMessage(text, type) {
+        const wrapper = document.createElement('div');
+        wrapper.className = type === 'sent' ? 'flex justify-end' : 'flex justify-start';
+
+        const bubble = document.createElement('div');
+        bubble.className =
+            type === 'sent'
+                ? 'max-w-xs md:max-w-md px-4 py-2 rounded-lg bg-slate-600 text-white text-sm'
+                : 'max-w-xs md:max-w-md px-4 py-2 rounded-lg bg-white text-slate-800 text-sm shadow';
+
+        bubble.textContent = text;
+
+        wrapper.appendChild(bubble);
+        messagesEl.appendChild(wrapper);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    // Handle user sending a message
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'sent');
+        input.value = '';
+
+        // Backend hook — replace with real API logic later
+        try {
+            await fetch('/send-message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text }),
+            });
+        } catch (err) {
+            // Silent fail for now (testing UI only)
+            console.warn('Backend not connected');
+        }
+    });
+
+    /**
+     * Exposed global function for backend / dev console
+     * Example:
+     * window.receiveMessage({ message: 'Hello from bot' })
+     */
+    window.receiveMessage = function (payload) {
+        if (!payload || !payload.message) return;
+        addMessage(payload.message, 'received');
+    };
+
+    let lastMessageId = 0;
+
+    // Poll backend for new messages
+    setInterval(async () => {
+        try {
+            const res = await fetch('http://localhost:3999/messages');
+            const data = await res.json();
+
+            data.filter((msg) => msg.id > lastMessageId).forEach((msg) => {
+                addMessage(msg.text, 'received');
+                lastMessageId = msg.id;
+            });
+        } catch (e) {
+            // backend down = ignore
+        }
+    }, 1000);
+</script>
