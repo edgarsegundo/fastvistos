@@ -1,0 +1,194 @@
+---
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import { siteConfig } from '../site-config.ts';
+import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+---
+
+<SharedHomeLayout
+    bodyClass={`${bodyClass} h-screen overflow-hidden bg-[#0b141a]`}
+    bodyStyle={bodyStyle}
+    themeToggleDisable={true}
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.homePageConfig.seo}
+    titleFromConf={siteConfig.homePageConfig.seo.title}
+    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+>
+    <!-- SEO / JSON-LD -->
+    <Fragment slot="head">
+        <JsonLdHomePageBase
+            faqList={[]}
+            servicesList={[]}
+            reviewsList={[]}
+            disableReviews={false}
+        />
+    </Fragment>
+
+    <!-- APP CONTAINER -->
+    <div class="w-screen h-screen flex flex-col bg-[#efeae2]">
+
+        <!-- HEADER -->
+        <header class="h-14 px-4 flex items-center gap-3 bg-[#075e54] text-white">
+            <div class="w-9 h-9 rounded-full bg-[#128c7e] flex items-center justify-center text-xs font-bold">
+                BOT
+            </div>
+
+            <div class="flex flex-col leading-tight">
+                <span class="text-sm font-semibold">Test Chat</span>
+                <span class="text-[11px] opacity-80">online</span>
+            </div>
+        </header>
+
+        <!-- MESSAGES -->
+        <main
+            id="messages"
+            class="flex-1 overflow-y-auto px-3 py-4 space-y-2 bg-[#efeae2]"
+        ></main>
+
+        <!-- INPUT BAR -->
+        <footer class="px-3 py-2 bg-[#f0f2f5]">
+            <form id="chatForm" class="flex items-center gap-2">
+                <input
+                    id="messageInput"
+                    type="text"
+                    placeholder="Digite uma mensagem"
+                    autocomplete="off"
+                    class="flex-1 rounded-full px-4 py-2 text-sm bg-white focus:outline-none"
+                />
+                <button
+                    type="submit"
+                    class="w-10 h-10 rounded-full bg-[#128c7e] text-white flex items-center justify-center"
+                >
+                    ➤
+                </button>
+            </form>
+        </footer>
+
+    </div>
+</SharedHomeLayout>
+
+<style is:global>
+    body {
+        margin: 0;
+        overscroll-behavior: none;
+        -webkit-font-smoothing: antialiased;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, Helvetica, Arial, sans-serif;
+    }
+</style>
+
+<script>
+    fetch('http://localhost:3999/clear-messages', { method: 'POST' });
+
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('messageInput');
+
+    /**
+     * Render a WhatsApp-style bubble
+     * @param {string} text
+     * @param {'sent' | 'received'} type
+     */
+    function addMessage(text, type) {
+        const wrapper = document.createElement('div');
+        wrapper.className =
+            type === 'sent'
+                ? 'flex justify-end'
+                : 'flex justify-start';
+
+        const bubble = document.createElement('div');
+        bubble.className =
+            type === 'sent'
+                ? 'max-w-[75%] px-3 py-2 rounded-lg bg-[#dcf8c6] text-sm text-slate-900'
+                : 'max-w-[75%] px-3 py-2 rounded-lg bg-white text-sm text-slate-900 shadow';
+
+        bubble.textContent = text;
+
+        wrapper.appendChild(bubble);
+        messagesEl.appendChild(wrapper);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    // SEND MESSAGE
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'sent');
+        input.value = '';
+
+        // // Backend hook (você pode manter se quiser)
+        // try {
+        //     await fetch('/send-message', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ message: text }),
+        //     });
+        // } catch {
+        //     console.warn('Backend not connected');
+        // }
+
+        // ENVIO DIRETO PARA O ENDPOINT EXTERNO
+        const payload = {
+            event: "message_received",
+            data: {
+                id: Math.random().toString(16).slice(2).toUpperCase(), // Gera um ID aleatório
+                from: "5519991121805@s.whatsapp.net", // Ajuste conforme necessário
+                fromMe: false,
+                timestamp: Math.floor(Date.now() / 1000),
+                isGroup: false,
+                type: "text",
+                text: text
+            },
+            timestamp: new Date().toISOString(),
+            instance: "instance-001",
+            device: "whatsapp_device"
+        };
+
+        // ENVIO VIA PROXY LOCAL (Express)
+        try {
+            await fetch('http://localhost:3999/proxy-whatsapp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+        } catch {
+            console.warn('Falha ao enviar para o proxy local');
+        }
+    });
+
+// ...existing code...
+
+    /**
+     * Exposed global hook
+     * window.receiveMessage({ text: 'Hello from bot' })
+     */
+    window.receiveMessage = function (payload) {
+        if (!payload?.text) return;
+        addMessage(payload.text, 'received');
+    };
+
+    // Optional polling example
+    let lastMessageId = 0;
+
+    setInterval(async () => {
+        try {
+            const res = await fetch('http://localhost:3999/messages');
+            const data = await res.json();
+
+            data
+                .filter((m) => m.id > lastMessageId)
+                .forEach((m) => {
+                    addMessage(m.text, 'received');
+                    lastMessageId = m.id;
+                });
+        } catch {
+            // backend down — ignore
+        }
+    }, 1000);
+</script>
