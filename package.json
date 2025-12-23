@@ -57,7 +57,12 @@
     "dev:watch:emprego": "node dev-with-sync.js emprego",
     "build:emprego": "node sync-blog.js emprego && SITE_ID=emprego astro build && node postbuild-updatable.js emprego",
     "preview:emprego": "SITE_ID=emprego astro preview",
-    "download-images:emprego": "node download-blog-images.js emprego"
+    "download-images:emprego": "node download-blog-images.js emprego",
+    "dev:zapsim": "node sync-blog.js zapsim && SITE_ID=zapsim astro dev",
+    "dev:watch:zapsim": "node dev-with-sync.js zapsim",
+    "build:zapsim": "node sync-blog.js zapsim && SITE_ID=zapsim astro build && node postbuild-updatable.js zapsim",
+    "preview:zapsim": "SITE_ID=zapsim astro preview",
+    "download-images:zapsim": "node download-blog-images.js zapsim"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
