@@ -54,7 +54,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 <input
                     id="messageInput"
                     type="text"
-                    placeholder="Type a message"
+                    placeholder="Digite uma mensagem"
                     autocomplete="off"
                     class="flex-1 rounded-full px-4 py-2 text-sm bg-white focus:outline-none"
                 />
@@ -81,6 +81,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 </style>
 
 <script>
+    fetch('http://localhost:3999/clear-messages', { method: 'POST' });
+
     const messagesEl = document.getElementById('messages');
     const form = document.getElementById('chatForm');
     const input = document.getElementById('messageInput');
@@ -120,25 +122,55 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         addMessage(text, 'sent');
         input.value = '';
 
-        // Backend hook (you handle it later)
+        // // Backend hook (você pode manter se quiser)
+        // try {
+        //     await fetch('/send-message', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ message: text }),
+        //     });
+        // } catch {
+        //     console.warn('Backend not connected');
+        // }
+
+        // ENVIO DIRETO PARA O ENDPOINT EXTERNO
+        const payload = {
+            event: "message_received",
+            data: {
+                id: Math.random().toString(16).slice(2).toUpperCase(), // Gera um ID aleatório
+                from: "5519991121805@s.whatsapp.net", // Ajuste conforme necessário
+                fromMe: false,
+                timestamp: Math.floor(Date.now() / 1000),
+                isGroup: false,
+                type: "text",
+                text: text
+            },
+            timestamp: new Date().toISOString(),
+            instance: "instance-001",
+            device: "whatsapp_device"
+        };
+
+        // ENVIO VIA PROXY LOCAL (Express)
         try {
-            await fetch('/send-message', {
+            await fetch('http://localhost:3999/proxy-whatsapp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text }),
+                body: JSON.stringify(payload),
             });
         } catch {
-            console.warn('Backend not connected');
+            console.warn('Falha ao enviar para o proxy local');
         }
     });
 
+// ...existing code...
+
     /**
      * Exposed global hook
-     * window.receiveMessage({ message: 'Hello from bot' })
+     * window.receiveMessage({ text: 'Hello from bot' })
      */
     window.receiveMessage = function (payload) {
-        if (!payload?.message) return;
-        addMessage(payload.message, 'received');
+        if (!payload?.text) return;
+        addMessage(payload.text, 'received');
     };
 
     // Optional polling example
