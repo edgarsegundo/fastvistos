@@ -1,8 +1,8 @@
 ---
-title: "Quais documentos levar no CASV em 2025"
+title: "Quais documentos levar no CASV em 2026"
 description: "KSDKMNTSLVRNKSVM"
-pubDate: "2025-11-03T14:13:22.000Z"
-updatedDate: "2025-11-03T14:28:16.658Z"
+pubDate: "2026-01-22T17:25:37.000Z"
+updatedDate: "2026-01-22T17:26:29.780Z"
 slug: "documentos-levar-casv-2025"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -12,11 +12,11 @@ published: true
 wordCount: "668"
 ---
 
-<!--# Quais documentos levar no CASV em 2025 — Checklist completo e atualizado-->
+<!--# Quais documentos levar no CASV em 2026 — Checklist completo e atualizado-->
 
 ## **Introdução**
 
-Quem vai solicitar o **visto americano em 2025** precisa se preparar com atenção antes de comparecer ao **CASV (Centro de Atendimento ao Solicitante de Visto)**. Esse é o primeiro passo prático do processo e, por incrível que pareça, também o momento em que muitos candidatos enfrentam imprevistos por **esquecerem documentos essenciais**.
+Quem vai solicitar o **visto americano em 2026** precisa se preparar com atenção antes de comparecer ao **CASV (Centro de Atendimento ao Solicitante de Visto)**. Esse é o primeiro passo prático do processo e, por incrível que pareça, também o momento em que muitos candidatos enfrentam imprevistos por **esquecerem documentos essenciais**.
 
 Neste guia, você vai descobrir **exatamente o que levar ao CASV**, quais itens são proibidos e como se organizar para evitar atrasos, filas desnecessárias e até reagendamentos.
 
@@ -40,7 +40,7 @@ Ter todos os documentos corretos em mãos garante um atendimento rápido e tranq
 
 ## Quais documentos levar no atendimento no CASV
 
-Organize todos os papéis antes da data agendada. Abaixo, veja o **checklist completo e atualizado** para 2025:
+Organize todos os papéis antes da data agendada. Abaixo, veja o **checklist completo e atualizado** para 2026:
 
 ### **Passaporte válido**
 
@@ -72,7 +72,7 @@ Para crianças e adolescentes, leve **certidão de nascimento**, autorização d
 
 <!--<RelatedArticle>
 <id>1062a12118a14f6d8e1471667c7aaf01</id>
-<text>Para informações mais detalhadas, confira nosso outro artigo, o [Guia Completo do CASV para Solicitação de Visto Americano em 2025](<<ARTICLE-URL>>) .</text>
+<text>Para informações mais detalhadas, confira nosso outro artigo, o [Guia Completo do CASV para Solicitação de Visto Americano em 2026](<<ARTICLE-URL>>) .</text>
 </RelatedArticle>
 -->
 
@@ -102,13 +102,13 @@ Depois da aprovação, o **passaporte com o visto é devolvido** no local de ent
 
 <!--<RelatedArticle>
 <id>286af0a658d543fc9d901d3ebbfac74e</id>
-<text>Se quiser entender o processo de devolução, leia nosso outro artigo sobre como [Consultar e Acompanhar o **Status do Visto Americano**: Guia Completo 2025](<<ARTICLE-URL>>) .</text>
+<text>Se quiser entender o processo de devolução, leia nosso outro artigo sobre como [Consultar e Acompanhar o **Status do Visto Americano**: Guia Completo 2026](<<ARTICLE-URL>>) .</text>
 </RelatedArticle>
 -->
 
 ----------
 
-## Checklist de documentos CASV 2025
+## Checklist de documentos CASV 2026
 
 Antes de sair para o CASV, revise a lista abaixo. Ela resume tudo o que você precisa ter em mãos:
 

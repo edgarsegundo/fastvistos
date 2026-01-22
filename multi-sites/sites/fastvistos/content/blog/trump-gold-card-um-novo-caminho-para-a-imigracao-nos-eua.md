@@ -1,12 +1,12 @@
 ---
 title: "Trump Gold Card: Um Novo Caminho para a Imigração nos EUA"
-description: "Trump Gold Card: Um Novo Caminho para a Imigração nos EUA"
-pubDate: "2025-12-12T13:54:21.605Z"
-updatedDate: "2025-12-12T13:54:21.605Z"
+description: "TRMPGLDKRDMNVKMNPRMGRKNS"
+pubDate: "2025-12-12T13:54:21.000Z"
+updatedDate: "2026-01-22T17:39:33.100Z"
 slug: "trump-gold-card-um-novo-caminho-para-a-imigracao-nos-eua"
 topic: "Notícias"
 topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__upload.webp"
+image: "/assets/images/blog/fastvistos__freepik__trump-gold-card-promises-to-speed-up-the-visa-proc__89115.png"
 type: "public"
 published: true
 wordCount: "544"
@@ -52,4 +52,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        

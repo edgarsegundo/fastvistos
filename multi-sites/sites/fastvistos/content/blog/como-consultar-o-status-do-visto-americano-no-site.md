@@ -1,8 +1,8 @@
 ---
-title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2025"
+title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2026"
 description: "KMKNSLTRKMPNRSTTSDVSTMRKNGKMPLT"
-pubDate: "2025-10-14T21:49:40.000Z"
-updatedDate: "2025-11-21T21:07:57.111Z"
+pubDate: "2026-01-22T17:24:27.000Z"
+updatedDate: "2026-01-22T17:24:29.422Z"
 slug: "como-consultar-o-status-do-visto-americano-no-site"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -12,7 +12,7 @@ published: true
 wordCount: "1735"
 ---
 
-<!-- # Como consultar o status do visto americano no site oficial (guia atualizado 2025)-->
+<!-- # Como consultar o status do visto americano no site oficial (guia atualizado 2026)-->
 
 ## **Antes de tudo: entenda como funciona o CEAC (e por que tanta gente se confunde)**
 

@@ -1,8 +1,8 @@
 ---
-title: "Guia Completo do CASV para Solicitação de Visto Americano em 2025"
+title: "Guia Completo do CASV para Solicitação de Visto Americano em 2026"
 description: "GKMPLTDKSVPRSLSTKDVSTMRKNM"
-pubDate: "2025-10-27T18:55:16.000Z"
-updatedDate: "2025-10-27T22:04:07.460Z"
+pubDate: "2026-01-22T17:24:50.000Z"
+updatedDate: "2026-01-22T17:24:52.894Z"
 slug: "guia-completo-do-casv-para-solicitacao-de-visto-americano-em-2025"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -12,13 +12,13 @@ published: true
 wordCount: "847"
 ---
 
-<!--# Guia Completo do CASV para Solicitação de Visto Americano em 2025-->
+<!--# Guia Completo do CASV para Solicitação de Visto Americano em 2026-->
 
 ## Introdução
 
 Obter um visto americano envolve várias etapas, e uma das mais importantes é o contato com o **Centro de Atendimento ao Solicitante de Visto (CASV)**. Ele é responsável pela coleta de dados biométricos e preparação do solicitante para a entrevista no **Consulado dos Estados Unidos**.
 
-Em 2025, o processo passou por ajustes significativos, incluindo otimizações no agendamento e mudanças no atendimento presencial, tornando a experiência mais ágil e organizada. Este guia detalha **como agendar o CASV, documentos necessários, entrevista consular, retirada de passaporte e peculiaridades de cada cidade**, permitindo que você planeje seu processo de forma eficiente e sem imprevistos.
+Em 2026, o processo passou por ajustes significativos, incluindo otimizações no agendamento e mudanças no atendimento presencial, tornando a experiência mais ágil e organizada. Este guia detalha **como agendar o CASV, documentos necessários, entrevista consular, retirada de passaporte e peculiaridades de cada cidade**, permitindo que você planeje seu processo de forma eficiente e sem imprevistos.
 
 ![CASV com solicitantes de visto aguardando atendimento](https://fastvistos.com.br/assets/images/blog/fastvistos__casv-com-solicitantes-de-visto-aguardando-atendimento.webp)
 
@@ -47,7 +47,7 @@ O agendamento é feito **online**, pelo portal oficial de vistos, após o preenc
     
 2.  Selecionar o tipo de visto e a cidade do atendimento;
     
-3.  Efetuar o pagamento da taxa MRV (válida para 2025);
+3.  Efetuar o pagamento da taxa MRV (válida para 2026);
     
 4.  Escolher datas disponíveis para o CASV e, se possível, para a entrevista no consulado.
     
@@ -153,7 +153,7 @@ Após a aprovação do visto, o passaporte pode ser retirado conforme opção es
 
 **Pontos importantes:**
 
--   Confirmar prazos estimados (em 2025, média de 5 a 10 dias úteis);
+-   Confirmar prazos estimados (em 2026, média de 5 a 10 dias úteis);
     
 -   Levar documento de identidade original;
     

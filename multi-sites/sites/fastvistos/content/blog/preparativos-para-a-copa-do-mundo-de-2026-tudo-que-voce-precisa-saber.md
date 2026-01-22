@@ -1,8 +1,8 @@
 ---
 title: "Preparativos para a Copa do Mundo de 2026: Tudo Que Você Precisa Saber"
-description: "Preparativos para a Copa do Mundo de 2026: Tudo Que Você Precisa Saber"
-pubDate: "2025-11-18T12:35:16.607Z"
-updatedDate: "2025-11-18T12:35:16.607Z"
+description: "PRPRTVSPRKPDMNDDTDKVSPRSZSBR"
+pubDate: "2026-01-22T17:27:28.000Z"
+updatedDate: "2026-01-22T17:27:58.501Z"
 slug: "preparativos-para-a-copa-do-mundo-de-2026-tudo-que-voce-precisa-saber"
 topic: "Notícias"
 topicSlug: "noticias"
@@ -63,4 +63,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        
