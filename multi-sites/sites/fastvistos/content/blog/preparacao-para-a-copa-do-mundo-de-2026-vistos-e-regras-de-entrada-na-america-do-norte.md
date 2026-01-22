@@ -1,8 +1,8 @@
 ---
 title: "Preparação para a Copa do Mundo de 2026: Vistos e Regras de Entrada na América do Norte"
-description: "Preparação para a Copa do Mundo de 2026: Vistos e Regras de Entrada na América do Norte"
-pubDate: "2025-12-05T20:37:53.028Z"
-updatedDate: "2025-12-05T20:37:53.028Z"
+description: "PRPRKPRKPDMNDDVSTSRGRSDNTRDNMRKDNRT"
+pubDate: "2026-01-22T17:28:38.000Z"
+updatedDate: "2026-01-22T17:28:49.323Z"
 slug: "preparacao-para-a-copa-do-mundo-de-2026-vistos-e-regras-de-entrada-na-america-do-norte"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -64,4 +64,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        

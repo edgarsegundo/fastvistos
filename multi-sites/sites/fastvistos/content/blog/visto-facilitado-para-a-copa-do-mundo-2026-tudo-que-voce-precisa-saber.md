@@ -1,8 +1,8 @@
 ---
 title: "Visto Facilitado para a Copa do Mundo 2026: Tudo que você Precisa Saber"
-description: "Visto Facilitado para a Copa do Mundo 2026: Tudo que você Precisa Saber"
-pubDate: "2025-11-19T19:04:21.792Z"
-updatedDate: "2025-11-19T19:04:21.792Z"
+description: "VSTFSLTDPRKPDMNDTDKVSPRSZSBR"
+pubDate: "2026-01-22T17:27:44.000Z"
+updatedDate: "2026-01-22T17:27:46.151Z"
 slug: "visto-facilitado-para-a-copa-do-mundo-2026-tudo-que-voce-precisa-saber"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
@@ -62,4 +62,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        

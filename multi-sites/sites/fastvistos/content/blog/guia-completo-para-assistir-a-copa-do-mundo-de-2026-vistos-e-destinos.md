@@ -1,8 +1,8 @@
 ---
 title: "Como Assistir à Copa do Mundo de 2026: Vistos e Destinos"
 description: "KMSSTRKPDMNDDVSTSDSTNS"
-pubDate: "2025-11-27T16:52:30.000Z"
-updatedDate: "2025-11-27T16:57:40.139Z"
+pubDate: "2026-01-22T17:28:17.000Z"
+updatedDate: "2026-01-22T17:28:22.064Z"
 slug: "guia-completo-para-assistir-a-copa-do-mundo-de-2026-vistos-e-destinos"
 topic: "Notícias"
 topicSlug: "noticias"
