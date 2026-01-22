@@ -1,12 +1,12 @@
 ---
 title: "Oportunidades de Imigração para Profissionais de Saúde na Flórida: O Impacto da Senate Bill 7016"
-description: "Oportunidades de Imigração para Profissionais de Saúde na Flórida: O Impacto da Senate Bill 7016"
-pubDate: "2025-11-03T17:17:47.288Z"
-updatedDate: "2025-11-03T17:17:47.289Z"
+description: "PRTNDDSDMGRKPRPRFSNSDSDNFLRDMPTDSNTBLL"
+pubDate: "2025-11-03T17:17:47.000Z"
+updatedDate: "2026-01-22T17:53:35.072Z"
 slug: "oportunidades-de-imigra-o-para-profissionais-de-sa-de-na-fl-rida-o-impacto-da-senate-bill-7016"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__upload.webp"
+image: "/assets/images/blog/fastvistos__psychologist-9988009_1280.jpg"
 type: "public"
 published: true
 wordCount: "657"
@@ -54,4 +54,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        
