@@ -32,6 +32,10 @@ export const faqData = [
         question: 'Posso aplicar para visto mesmo com negativa anterior?',
         answer: 'Sim! Analisamos cada caso individualmente e desenvolvemos estratégias específicas para superar negativas anteriores.',
     },
+    {
+        question: 'Vocês atendem apenas em Campinas ou em todo o Brasil?',
+        answer: 'Atendemos clientes de TODO O BRASIL! Nosso serviço é 100% online para clientes de outros estados, com suporte completo via WhatsApp, videochamada e envio/recebimento de documentos por Sedex. Temos sede física em Campinas/SP para quem prefere atendimento presencial, mas a maioria dos nossos clientes é de outras cidades e estados, que realizam todo o processo de forma remota com a mesma eficiência e taxa de aprovação superior a 95%.',
+    }
 ];
 
 export function formatAnswerForDisplay(answer) {
