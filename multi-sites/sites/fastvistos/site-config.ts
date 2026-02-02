@@ -47,8 +47,9 @@ export const siteConfig: SiteConfig = {
             latitude: -22.8807734, // Latitude for the business location
             longitude: -47.0596895, // Longitude for the business location
         },
+        // ✅ CORRIGIDO: Mudado para cobertura nacional
         serviceArea: {
-            name: 'Campinas e região metropolitana de São Paulo',
+            name: 'Brasil',
         },
         aggregateRating: {
             ratingValue: '5.0',
@@ -61,11 +62,12 @@ export const siteConfig: SiteConfig = {
             postalCode: '13075-420',
             addressCountry: 'BR',
         },
+        // ✅ MELHORADO: Adicionado área de cobertura nacional
         contactPoint: {
             telephone: '+551920422785',
             telephoneFormatted: '+55 (19) 2042-2785',
             contactType: 'Customer Service',
-            areaServed: 'BR',
+            areaServed: ['BR', 'São Paulo'], // Array para múltiplas áreas
             availableLanguage: ['Portuguese', 'English'],
             email: 'contato@fastvistos.com.br',
         },
@@ -79,8 +81,10 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Despachante de Visto Americano em Campinas | Fast Vistos — Assessoria Especializada em Vistos e Passaportes',
-            description: 'Despachante de Visto Americano em Campinas | Fast Vistos — Assessoria Especializada em Vistos e Passaportes. Atendimento rápido e seguro em todo o Brasil',
+            // ✅ OPÇÃO 1 IMPLEMENTADA: Título focado em "Todo Brasil"
+            title: 'Fast Vistos - Assessoria de Vistos Americanos para Todo Brasil | Campinas SP',
+            // ✅ OPÇÃO 1 IMPLEMENTADA: Descrição com foco nacional
+            description: 'Assessoria especializada em vistos americanos com atendimento em todo o Brasil. Sede em Campinas/SP. Taxa de aprovação 95%+. Agende sua entrevista.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
@@ -89,14 +93,19 @@ export const siteConfig: SiteConfig = {
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
-                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
-                }
+                    alt: 'Fast Vistos - Assessoria de vistos americanos para todo Brasil'
+                },
+                // ✅ ADICIONADO: OG Title e Description para redes sociais
+                title: 'Fast Vistos - Assessoria de Vistos Americanos para Todo Brasil',
+                description: 'Assessoria especializada em vistos americanos com atendimento em todo o Brasil. Sede em Campinas/SP.',
             }
         },
     },
 
     blogPageConfig: {
         seo: {
+            title: 'Blog Fast Vistos - Dicas e Informações sobre Vistos Internacionais',
+            description: 'Artigos e dicas sobre vistos americanos, canadenses, passaportes e viagens internacionais. Atendimento para todo Brasil.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
@@ -104,7 +113,8 @@ export const siteConfig: SiteConfig = {
                     'vistos internacionais',
                     'visto americano',
                     'visto canadense',
-                    'passaporte brasileiro'
+                    'passaporte brasileiro',
+                    'todo brasil' // ✅ ADICIONADO: Palavra-chave nacional
                 ],
             }
         },
@@ -123,7 +133,8 @@ export const siteConfig: SiteConfig = {
                     'vistos internacionais',
                     'visto americano',
                     'visto canadense',
-                    'passaporte brasileiro'
+                    'passaporte brasileiro',
+                    'atendimento todo brasil' // ✅ ADICIONADO
                 ],
             }
         },
