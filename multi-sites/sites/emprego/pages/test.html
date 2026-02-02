@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Página de Teste</title>
+
+  <style>
+    :root {
+      /* Verde estilo WhatsApp (levemente escurecido) */
+      --primary: #1f8f4a;
+      --primary-dark: #18733c;
+      --text: #1f2937;
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    main {
+      padding: 24px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1, h2 {
+      margin-top: 0;
+      color: var(--primary-dark);
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    Página de Teste – Tema Verde
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Olá 👋</h1>
+      <p>
+        Esta é uma página HTML simples para testar layout, tipografia,
+        cores e componentes básicos.
+      </p>
+      <p>
+        Link de exemplo: <a href="#">ver detalhes</a>
+      </p>
+      <button>Ação Principal</button>
+    </div>
+
+    <div class="card">
+      <h2>Outro Card</h2>
+      <p>
+        Ideal para validar como textos longos, botões e cores se comportam
+        em um layout real.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 – Página de teste
+  </footer>
+
+</body>
+</html>
