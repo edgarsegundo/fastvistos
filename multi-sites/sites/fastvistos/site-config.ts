@@ -113,6 +113,18 @@ export const siteConfig: SiteConfig = {
                 service: 'Assessoria para Visto Mexicano',
                 priceCurrency: 'BRL',
             },
+            {
+                service: 'Assessoria para Registro Nacional de Estrangeiros (RNE)',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Assessoria para ESTA (Autorização Eletrônica para os EUA)',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Assessoria para ETIAS (Autorização Eletrônica para a Europa)',
+                priceCurrency: 'BRL',
+            },
         ],
 
         address: {
