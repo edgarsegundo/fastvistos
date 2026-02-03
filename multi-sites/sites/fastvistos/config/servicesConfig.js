@@ -84,5 +84,92 @@ export const servicesData = [
             },
         },
     },
+    {
+        id: 'rne',
+        title: 'RNE',
+        subtitle: 'REGISTRO NACIONAL DE ESTRANGEIROS',
+        description:
+            'Assessoria para estrangeiros que precisam regularizar sua situação no Brasil, renovação e emissão do RNE.',
+        bullets: [
+            'Documentação e orientações',
+            'Agendamento e acompanhamento',
+            'Suporte em todo o processo',
+            'Regularização migratória',
+        ],
+        image: '/images/servicos/rne.webp',
+        cta: {
+            label: 'Solicitar',
+            url: '/solicitar-rne',
+        },
+        schema: {
+            '@type': 'Service',
+            name: 'Assessoria para Registro Nacional de Estrangeiros (RNE)',
+            serviceType: 'Consultoria e assessoria para regularização migratória e emissão/renovação do RNE no Brasil',
+            description:
+                'Acompanhamento completo para estrangeiros que precisam regularizar sua situação no Brasil, renovação e emissão do RNE.',
+            offers: {
+                '@type': 'Offer',
+                priceCurrency: 'BRL',
+            },
+        },
+    },
+    {
+        id: 'esta',
+        title: 'ESTA',
+        subtitle: 'AUTORIZAÇÃO ELETRÔNICA 🇺🇸',
+        description:
+            'Autorização eletrônica de viagem para os EUA. Facilita sua entrada sem necessidade de visto para turismo ou negócios.',
+        bullets: [
+            'Preenchimento do formulário',
+            'Orientação sobre requisitos',
+            'Suporte até a aprovação',
+            'Válido por até 2 anos',
+        ],
+        image: '/images/servicos/esta.webp',
+        cta: {
+            label: 'Solicitar',
+            url: '/solicitar-esta',
+        },
+        schema: {
+            '@type': 'Service',
+            name: 'Assessoria para ESTA (Autorização Eletrônica para os EUA)',
+            serviceType: 'Consultoria e assessoria para obtenção da autorização eletrônica de viagem (ESTA) para os Estados Unidos',
+            description:
+                'Acompanhamento completo para obtenção da autorização eletrônica de viagem (ESTA) para os Estados Unidos, válida por até 2 anos.',
+            offers: {
+                '@type': 'Offer',
+                priceCurrency: 'BRL',
+            },
+        },
+    },
+    {
+        id: 'etias',
+        title: 'ETIAS',
+        subtitle: 'AUTORIZAÇÃO ELETRÔNICA 🇪🇺',
+        description:
+            'Autorização eletrônica para viagens à Europa. Sistema de pré-autorização para entrada nos países do Espaço Schengen.',
+        bullets: [
+            'Preenchimento do formulário',
+            'Orientação sobre requisitos',
+            'Suporte até a aprovação',
+            'Válido por até 3 anos',
+        ],
+        image: '/images/servicos/etias.webp',
+        cta: {
+            label: 'Solicitar',
+            url: '/solicitar-etias',
+        },
+        schema: {
+            '@type': 'Service',
+            name: 'Assessoria para ETIAS (Autorização Eletrônica para a Europa)',
+            serviceType: 'Consultoria e assessoria para obtenção da autorização eletrônica de viagem (ETIAS) para o Espaço Schengen',
+            description:
+                'Acompanhamento completo para obtenção da autorização eletrônica de viagem (ETIAS) para entrada nos países do Espaço Schengen, válida por até 3 anos.',
+            offers: {
+                '@type': 'Offer',
+                priceCurrency: 'BRL',
+            },
+        },
+    },
     // Adicione outros serviços conforme necessário
 ];
