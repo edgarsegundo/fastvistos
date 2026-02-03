@@ -2,8 +2,109 @@
 // Videos section component
 ---
 
+<!-- Custom Styles -->
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    .gradient {
+        background: linear-gradient(90deg, #0d3461 0%, #1f4e7a 50%, #2a5e90 100%);
+    }
+    .fill-current {
+        fill: #ff6901;
+    }
+    .carousel {
+        width: 100%;
+        overflow-x: scroll;
+        padding: 30px;
+        position: relative;
+        box-sizing: border-box;
+        scrollbar-width: none;
+    }
+    .carousel::-webkit-scrollbar {
+        display: none;
+    }
+    .carousel__container {
+        white-space: nowrap;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+    .categories__title {
+        color: rgb(77, 55, 102);
+        font-size: 28px;
+        position: absolute;
+        padding-left: 30px;
+    }
+    .carousel-item {
+        width: 200px;
+        height: 117px;
+        padding: 6px;
+        border-radius: 20px;
+        background-color: #ff8700;
+        overflow: hidden;
+        margin-right: 10px;
+        margin-top: 70px;
+        display: inline-block;
+        cursor: pointer;
+        transition: 1000ms all;
+        transform-origin: center left;
+        position: relative;
+    }
+    .carousel-item:hover ~ .carousel-item {
+        transform: translate3d(100px, 0, 0);
+    }
+    .carousel__container:hover .carousel-item {
+        opacity: 0.3;
+    }
+    .carousel__container:hover .carousel-item:hover {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+    .carousel-item__img {
+        width: 200px;
+        height: 250px;
+        object-fit: cover;
+    }
+    .carousel-item__details:hover {
+        opacity: 1;
+    }
+    .carousel-item__details span {
+        font-size: 0.9rem;
+        color: #2ecc71;
+    }
+    .carousel-item__details .controls {
+        padding-top: 180px;
+    }
+    .carousel-item__details--title,
+    .carousel-item__details--subtitle {
+        color: #fff;
+        margin: 5px 0;
+    }
+    .typed-text {
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        width: 0;
+        animation:
+            typing 3s steps(60) 1s forwards,
+            blink 0.75s step-end infinite;
+    }
+    @keyframes typing {
+        to {
+            width: 100%;
+        }
+    }
+    @keyframes blink {
+        50% {
+            border-color: transparent;
+        }
+    }
+</style>
+
 <!-- videos section -->
-<section class="bg-white border-b py-12 md:py-8" id="casos-de-sucesso">
+<section class="bg-white border-b" id="casos-de-sucesso">
     <div class="container mx-auto py-10 hidden lg:block">
         <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800" style="color: #1B375C;">
             Casos de Sucesso
@@ -150,7 +251,7 @@
             </div>
         </div>
     </div>
-    <div class="container mx-auto py-10 md:hidden">
+    <div class="container mx-auto py-2 md:hidden">
         <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800" style="color: #1B375C;">
             Casos de Sucesso
         </h2>
@@ -304,28 +405,48 @@
 </section>
 
 <!-- Typed Text Script -->
-<script>
-    const typedTextElements = document.querySelectorAll('.typed-text');
-    const text = "Digite 'Fast Vistos' no seu navegador e confira as avaliações!";
-    const typingSpeed = 100; // Speed of typing (ms)
-    const restartDelay = 4000; // Delay before restarting (ms)
+<script is:inline>
+    (function() {
+        function initTypeWriter() {
+            const typedTextElements = document.querySelectorAll('.typed-text');
+            console.log('Found elements:', typedTextElements.length);
+            
+            if (typedTextElements.length === 0) {
+                console.log('No .typed-text elements found, retrying...');
+                setTimeout(initTypeWriter, 100);
+                return;
+            }
 
-    function typeText(element, index = 0) {
-        if (index < text.length) {
-            element.textContent += text.charAt(index);
-            setTimeout(() => typeText(element, index + 1), typingSpeed);
-        } else {
-            setTimeout(() => resetTyping(element), restartDelay);
+            const text = "Digite 'Fast Vistos' no seu navegador e confira as avaliações!";
+            const typingSpeed = 100;
+            const restartDelay = 4000;
+
+            function typeText(element, index = 0) {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    setTimeout(() => typeText(element, index + 1), typingSpeed);
+                } else {
+                    setTimeout(() => resetTyping(element), restartDelay);
+                }
+            }
+
+            function resetTyping(element) {
+                element.textContent = "";
+                typeText(element);
+            }
+
+            typedTextElements.forEach(element => {
+                console.log('Starting animation for element:', element);
+                typeText(element);
+            });
         }
-    }
 
-    function resetTyping(element) {
-        element.textContent = ""; // Clear text
-        typeText(element); // Restart animation
-    }
-
-    // Start typing effect for each element
-    typedTextElements.forEach(element => typeText(element));
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTypeWriter);
+        } else {
+            initTypeWriter();
+        }
+    })();
 </script>    
 
 <!-- Video Load Script -->
