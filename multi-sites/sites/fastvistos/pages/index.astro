@@ -17,6 +17,8 @@ import { faqData } from '../config/faqConfig.js';
 import { servicesData } from '../config/servicesConfig.js';
 import { reviewVideos } from '../config/reviewVideosConfig.js';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+import VideosSection from '../components/VideosSection.astro';
+
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -59,6 +61,15 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro"
         siteId={siteConfig.site.id}
     />
+
+
+    <VideosSection />
+
+
+
+
+
+
     <GoogleMapsSection />
     <CallToActionSection />
     <FooterSection />
