@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
 
         assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
-        priceRange: 'R$', // e.g. $, $$, $$$, $$$$
+        priceRange: 'R$ sob consulta', // e.g. $, $$, $$$, $$$$
         openingHoursSpecification: [
             {
                 "@type": "OpeningHoursSpecification",
@@ -69,9 +69,52 @@ export const siteConfig: SiteConfig = {
             name: 'Brazil',
         },
         aggregateRating: {
-            ratingValue: '5.0',
-            reviewCount: '298',
+            ratingValue: 5,
+            reviewCount: 298,
         },
+
+        reviews: [
+            {
+                author: 'Analice de Medeiros Chianca Pavan',
+                datePublished: '2025-01-20',
+                reviewBody: 'Excelente assessoria para visto americano! O processo foi super rápido, a Daniela é extremamente atenciosa e demonstra muito conhecimento em cada etapa. Me senti muito segura e bem orientada o tempo todo. Recomendo fortemente para quem busca um atendimento sério, eficiente e de alta qualidade.',
+                ratingValue: 5,
+            },
+            {
+                author: 'Jetsuo Mine',
+                datePublished: '2025-01-28',
+                reviewBody: 'Processo muito ágil, claro e confiável. Meu visto saiu em menos de 15 dias.',
+                ratingValue: 5,
+            },
+            {
+                author: 'Aramis Lima',
+                datePublished: '2025-01-31',
+                reviewBody: 'Excelente consultoria, me orientaram em todo o processo e ainda deram dicas importantes para garantir uma ótima experiência. Super recomendo.',
+                ratingValue: 5,
+            },
+            {
+                author: 'Selma Aparecida de Rezende Borim',
+                datePublished: '2024-12-27',
+                reviewBody: 'Atendimento top, equipe muito atenciosa e conseguiram datas bem próximas para a entrevista. Eu recomendo.',
+                ratingValue: 5,
+            },
+        ],
+
+        makesOffer: [
+            {
+                service: 'Assessoria para Visto Americano',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Assessoria para eTA Canadá',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Assessoria para Visto Mexicano',
+                priceCurrency: 'BRL',
+            },
+        ],
+
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',
@@ -83,30 +126,30 @@ export const siteConfig: SiteConfig = {
         contactPoint: {
             telephone: '+551920422785',
             telephoneFormatted: '+55 (19) 2042-2785',
-            contactType: 'Customer Service',
-            areaServed: ['BR', 'São Paulo'], // Array para múltiplas áreas
-            availableLanguage: ['Portuguese', 'English'],
-            email: 'contato@fastvistos.com.br',
-            whatsapp: {
-                telephone: '+551920422785',
-                contactType: "customer support",
-                contactOption: "WhatsApp",
-                url: "https://wa.me/551920422785",
-                areaServed: "BR",
-                availableLanguage: ["pt-BR"]
+            contactType: 'customer service',
+            areaServed: {
+                "@type": "Country",
+                "name": "Brazil"
             },
+            availableLanguage: ["pt-BR", "en"],
+            email: 'contato@fastvistos.com.br',
         },
         whatsapp: {
             telephone: '+551920422785',
             telephoneFormatted: '+55 (19) 2042-2785',
-            contactType: 'Customer Service',
-            areaServed: ['BR', 'São Paulo'], // Array para múltiplas áreas
-            availableLanguage: ['Portuguese', 'English'],
+            contactType: 'customer support',
+            contactOption: "WhatsApp",
+            url: "https://wa.me/551920422785",
+            areaServed: {
+                "@type": "Country",
+                "name": "Brazil"
+            },
+            availableLanguage: ["pt-BR", "en"],
             email: 'contato@fastvistos.com.br',
-        },        
+        },
         socialMedia: {
             facebook: 'https://www.facebook.com/fastvistos/',
-            twitter: '@yourtwitter',
+            twitter: '@FVistos32701',
             instagram: '',
             youtube: '',
         },
