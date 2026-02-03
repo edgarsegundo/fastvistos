@@ -1,3 +1,4 @@
+import type Whatsapp from './components/Whatsapp.astro';
 import type { SiteConfig } from './lib/site-config-model.ts';
 
 // 🌐 Shared Site Config (site + branding + global stuff)
@@ -33,10 +34,26 @@ export const siteConfig: SiteConfig = {
 
         assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
-        priceRange: '$$', // e.g. $, $$, $$$, $$$$
-        openingHours: [
-            'Mo-Fr 09:00-18:00',
-            'Sa 09:00-13:00',
+        priceRange: 'R$', // e.g. $, $$, $$$, $$$$
+        openingHoursSpecification: [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+                ],
+                "opens": "09:00",
+                "closes": "18:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "09:00",
+                "closes": "13:00"
+            }
         ],
         sameAs: [  // Social media profiles
             'https://www.facebook.com/fastvistos/',
@@ -68,27 +85,25 @@ export const siteConfig: SiteConfig = {
             telephoneFormatted: '+55 (19) 2042-2785',
             contactType: 'Customer Service',
             areaServed: ['BR', 'São Paulo'], // Array para múltiplas áreas
-
-
-// Verificar se é assim mesmo e refatorar
-// Em vez de só strings, o ideal é usar objetos estruturados:
-// "areaServed": [
-//   {
-//     "@type": "Country",
-//     "name": "Brazil",
-//     "sameAs": "https://www.wikidata.org/wiki/Q155"
-//   },
-//   {
-//     "@type": "City",
-//     "name": "São Paulo",
-//     "sameAs": "https://www.wikidata.org/wiki/Q174"
-//   }
-// ]
-
-
             availableLanguage: ['Portuguese', 'English'],
             email: 'contato@fastvistos.com.br',
+            whatsapp: {
+                telephone: '+551920422785',
+                contactType: "customer support",
+                contactOption: "WhatsApp",
+                url: "https://wa.me/551920422785",
+                areaServed: "BR",
+                availableLanguage: ["pt-BR"]
+            },
         },
+        whatsapp: {
+            telephone: '+551920422785',
+            telephoneFormatted: '+55 (19) 2042-2785',
+            contactType: 'Customer Service',
+            areaServed: ['BR', 'São Paulo'], // Array para múltiplas áreas
+            availableLanguage: ['Portuguese', 'English'],
+            email: 'contato@fastvistos.com.br',
+        },        
         socialMedia: {
             facebook: 'https://www.facebook.com/fastvistos/',
             twitter: '@yourtwitter',

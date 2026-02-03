@@ -244,13 +244,29 @@ const orgBlock = !disableOrganization && {
 
               telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
 
-              contactPoint: {
-                  '@type': 'ContactPoint',
-                  telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
-                  contactType: 'customer service',
-                  areaServed: 'Brazil',
-                  availableLanguage: ['Portuguese', 'English'],
-              },
+                contactPoint: [
+                    {
+                        '@type': 'ContactPoint',
+                        contactType: 'customer service',
+                        telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+                        areaServed: Array.isArray(siteConfig.site?.contactPoint?.areaServed)
+                            ? siteConfig.site.contactPoint.areaServed
+                            : [siteConfig.site?.contactPoint?.areaServed || 'BR'],
+                        availableLanguage: siteConfig.site?.contactPoint?.availableLanguage || ['pt-BR', 'en'],
+                        ...(siteConfig.site?.contactPoint?.email && { email: siteConfig.site.contactPoint.email }),
+                    },
+                    ...(siteConfig.site?.contactPoint?.whatsapp
+                        ? [{
+                            '@type': 'ContactPoint',
+                            contactType: siteConfig.site.contactPoint.whatsapp.contactType || 'customer support',
+                            contactOption: siteConfig.site.contactPoint.whatsapp.contactOption || 'WhatsApp',
+                            url: siteConfig.site.contactPoint.whatsapp.url,
+                            telephone: siteConfig.site.contactPoint.whatsapp.telephone,
+                            areaServed: siteConfig.site.contactPoint.whatsapp.areaServed || 'BR',
+                            availableLanguage: siteConfig.site.contactPoint.whatsapp.availableLanguage || ['pt-BR'],
+                        }]
+                        : [])
+                ],
 
               geo: {
                   '@type': 'GeoCoordinates',
@@ -258,8 +274,15 @@ const orgBlock = !disableOrganization && {
                   longitude: siteConfig.site?.geo?.longitude,
               },
 
-              priceRange: siteConfig.site?.priceRange || '$$',
-              openingHours: siteConfig.site?.openingHours,
+              priceRange: siteConfig.site?.priceRange || 'R$',
+
+            // openingHoursSpecification is the recommended schema.org format for LocalBusiness.
+            // openingHours exists only for legacy support — never combine both.
+              ...(siteConfig.site?.openingHoursSpecification
+                  ? { openingHoursSpecification: siteConfig.site.openingHoursSpecification }
+                  : siteConfig.site?.openingHours
+                      ? { openingHours: siteConfig.site.openingHours }
+                      : {}),
 
               serviceArea: {
                   '@type': 'Place',
