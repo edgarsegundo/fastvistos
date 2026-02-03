@@ -135,6 +135,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     opacity: 0.85;
   }
 
+  /* LOGO */
   .logo-revista {
     display: flex;
     flex-direction: column;
@@ -142,6 +143,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     line-height: 1;
     color: #1b375c;
   }
+  .logo-revista.logo-revista-black { color: #fff; }
 
   .logo-small {
     font-family: var(--font-title), serif;
@@ -153,6 +155,12 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     opacity: 0.85;
   }
 
+  .logo-small.no-flex {
+    text-align: left;
+    display: block;
+    margin-bottom: -6px;
+  }
+
   .logo-large {
     font-family: var(--font-title), serif;
     font-size: 2rem;
@@ -160,11 +168,12 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     letter-spacing: -0.02em;
     text-transform: uppercase;
     display: flex;
-    align-items: center;
   }
 
-  .logo-star {
-    margin: 0 2px;
+  .logo-large.no-flex {
+    display: block;
+    margin-top: 0;
+    
   }
 
   @media (max-width: 768px) {
