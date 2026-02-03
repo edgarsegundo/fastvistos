@@ -18,6 +18,7 @@ import { servicesData } from '../config/servicesConfig.js';
 import { reviewVideos } from '../config/reviewVideosConfig.js';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 import VideosSection from '../components/VideosSection.astro';
+import NationalSection from '../components/NationalSection.astro';
 
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
@@ -53,6 +54,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <Navigation />
     <HeroSection />
     <ServicesSection />
+
+    <!-- <NationalSection /> -->
+
     <AboutSection />
     <PassportSection />
     <!-- <CompararAd /> -->

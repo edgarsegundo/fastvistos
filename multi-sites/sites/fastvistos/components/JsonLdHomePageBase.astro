@@ -114,7 +114,7 @@ const servicesBlock =
                         '@type': 'Service',
                         name: service.name,
                         description: service.description,
-                        areaServed: 'Brazil',
+                        areaServed: service.areaServed || 'Brazil',
                         ...(service.offers ? { offers: service.offers } : {}),
                         provider: { '@id': orgId },
                     }

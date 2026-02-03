@@ -1,0 +1,156 @@
+---
+// Componente Astro para a seção de atendimento nacional
+---
+
+<section class="bg-gradient-to-b from-blue-50 to-white py-16">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">
+        <span class="text-orange-500">🌎 Atendemos Todo o Brasil</span>
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Não importa onde você está! Oferecemos <strong class="text-blue-600">atendimento 100% online</strong> 
+        para clientes de todos os estados brasileiros.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <!-- Coluna 1: Atendimento Online -->
+      <div class="bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
+        <div class="flex items-center mb-6">
+          <div class="bg-green-100 p-3 rounded-full mr-4">
+            <span class="text-3xl">📱</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-800">Atendimento Online</h3>
+        </div>
+        <p class="text-gray-700 mb-6">
+          Para clientes de <strong class="text-blue-600">outros estados</strong>, oferecemos assessoria completa via:
+        </p>
+        <ul class="space-y-3 mb-6">
+          <li class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span><strong>WhatsApp/Telefone:</strong> Suporte diário</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span><strong>Videochamadas:</strong> Orientação personalizada</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span><strong>E-mail:</strong> Documentação e dúvidas</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-green-500 mr-2">✓</span>
+            <span><strong>Sedex:</strong> Envio e recebimento de documentos</span>
+          </li>
+        </ul>
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <p class="text-sm text-blue-800">
+            <strong>📍 Já atendemos clientes de:</strong> São Paulo, Rio de Janeiro, Minas Gerais, Paraná, 
+            Rio Grande do Sul, Santa Catarina, Bahia, Pernambuco, e muitos outros estados!
+          </p>
+        </div>
+      </div>
+
+      <!-- Coluna 2: Atendimento Presencial -->
+      <div class="bg-white p-8 rounded-2xl shadow-xl border border-orange-100">
+        <div class="flex items-center mb-6">
+          <div class="bg-orange-100 p-3 rounded-full mr-4">
+            <span class="text-3xl">🏢</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-800">Sede em Campinas/SP</h3>
+        </div>
+        <p class="text-gray-700 mb-6">
+          Para clientes da <strong class="text-orange-600">região de Campinas e São Paulo</strong>, 
+          oferecemos também atendimento presencial:
+        </p>
+        <ul class="space-y-3 mb-6">
+          <li class="flex items-start">
+            <span class="text-orange-500 mr-2">📍</span>
+            <span><strong>Endereço:</strong> Av. Júlio Diniz, 257 - Taquaral, Campinas/SP</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 mr-2">🕐</span>
+            <span><strong>Horário:</strong> Seg-Sex: 9h-18h | Sáb: 9h-13h</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 mr-2">📞</span>
+            <span><strong>Telefone:</strong> (19) 2042-2785</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-orange-500 mr-2">🎯</span>
+            <span><strong>Área:</strong> Grande Campinas e região metropolitana de SP</span>
+          </li>
+        </ul>
+        <div class="bg-orange-50 p-4 rounded-lg">
+          <p class="text-sm text-orange-800">
+            <strong>💡 Dica:</strong> Mesmo morando em Campinas, você pode optar pelo atendimento online 
+            para maior comodidade e agilidade!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloco de Destaque -->
+    <div class="max-w-4xl mx-auto mt-12 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8 rounded-2xl shadow-lg">
+      <div class="text-center">
+        <h3 class="text-2xl font-bold mb-4">Por que escolher a Fast Vistos?</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <div class="text-center">
+            <div class="text-4xl mb-2">✅</div>
+            <p class="font-semibold">Mesma eficiência</p>
+            <p class="text-sm opacity-90">Online ou presencial</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl mb-2">📈</div>
+            <p class="font-semibold">95%+ de aprovação</p>
+            <p class="text-sm opacity-90">Taxa comprovada</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl mb-2">🚀</div>
+            <p class="font-semibold">Atendimento ágil</p>
+            <p class="text-sm opacity-90">Resposta em até 1h</p>
+          </div>
+        </div>
+        <button data-linkcode="%231" class="wpp_button_link mt-8 bg-white text-blue-600 hover:bg-blue-50 font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 duration-300 ease-in-out">
+          Fale com um Especialista Agora!
+        </button>
+      </div>
+    </div>
+
+    <!-- Cidades/Estados (Dinâmico) -->
+    <div class="mt-12 text-center">
+      <p class="text-gray-600 mb-4">Atendemos clientes de todo o Brasil, incluindo:</p>
+      <div id="cidades-dynamic" class="flex flex-wrap justify-center gap-2 mb-2">
+        <!-- Será preenchido via JavaScript abaixo -->
+      </div>
+      <p class="text-gray-500 text-sm">E muitas outras cidades de todos os estados brasileiros</p>
+    </div>
+  </div>
+</section>
+
+<!-- Script para cidades dinâmicas -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const cities = [
+    "São Paulo/SP", "Rio de Janeiro/RJ", "Belo Horizonte/MG", "Curitiba/PR", 
+    "Porto Alegre/RS", "Brasília/DF", "Salvador/BA", "Fortaleza/CE", "Recife/PE",
+    "Goiânia/GO", "Manaus/AM", "Belém/PA", "Florianópolis/SC", "Vitória/ES",
+    "Campinas/SP", "São José dos Campos/SP", "Ribeirão Preto/SP", "Sorocaba/SP"
+  ];
+
+  const container = document.getElementById('cidades-dynamic');
+  if (!container) return;
+
+  // Embaralha e pega 12 cidades
+  const shuffled = [...cities].sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0, 12);
+
+  selected.forEach(city => {
+    const span = document.createElement('span');
+    span.className = 'bg-white border border-gray-200 px-4 py-2 rounded-full shadow-sm text-gray-700 text-sm';
+    span.textContent = city;
+    container.appendChild(span);
+  });
+});
+</script>
