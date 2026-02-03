@@ -20,11 +20,12 @@ export const servicesData = [
         schema: {
             '@type': 'Service',
             name: 'Assessoria para Visto Americano',
+            serviceType: 'Consultoria e assessoria para solicitação de visto americano B1/B2',
             description:
                 'Acompanhamento completo para solicitação de vistos de turismo, estudo, trabalho e negócios para os EUA.',
             offers: {
                 '@type': 'Offer',
-                price: 'Sob consulta',
+                // price: 'Sob consulta', // ❌ Avoid using 'Sob consulta' if possible, better to leave it out or provide a numeric value
                 priceCurrency: 'BRL',
             },
         },
@@ -44,11 +45,12 @@ export const servicesData = [
         schema: {
             '@type': 'Service',
             name: 'Assessoria para eTA Canadá',
+            serviceType: 'Consultoria e assessoria para obtenção da autorização eletrônica de viagem (eTA) para o Canadá',
             description:
                 'Acompanhamento completo para obtenção da autorização eletrônica de viagem (eTA) para o Canadá.',
             offers: {
                 '@type': 'Offer',
-                price: 'Sob consulta',
+                // price: 'Sob consulta', // ❌ Avoid using 'Sob consulta' if possible, better to leave it out or provide a numeric value
                 priceCurrency: 'BRL',
             },
         },
@@ -72,11 +74,12 @@ export const servicesData = [
         schema: {
             '@type': 'Service',
             name: 'Assessoria para Visto Mexicano',
+            serviceType: 'Consultoria e assessoria para solicitação de visto mexicano para turismo, negócios ou estudos',
             description:
                 'Acompanhamento completo para solicitação de visto mexicano para turismo, negócios ou estudos.',
             offers: {
                 '@type': 'Offer',
-                price: 'Sob consulta',
+                // price: 'Sob consulta', // ❌ Avoid using 'Sob consulta' if possible, better to leave it out or provide a numeric value
                 priceCurrency: 'BRL',
             },
         },
