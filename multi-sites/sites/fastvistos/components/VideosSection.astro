@@ -362,11 +362,14 @@
 </script>    
 
 <!-- Video Load Script -->
-<script>
-    document.getElementById("show-more-videos").addEventListener("click", function () {
-        document.querySelectorAll(".video-item.hidden").forEach(video => video.classList.remove("hidden"));
-        this.style.display = "none";
-    });
+<script is:inline>
+    const showMoreButton = document.getElementById("show-more-videos");
+    if (showMoreButton) {
+        showMoreButton.addEventListener("click", function () {
+            document.querySelectorAll(".video-item.hidden").forEach(video => video.classList.remove("hidden"));
+            this.style.display = "none";
+        });
+    }
 
     function loadVideo(element, videoId) {
         const iframe = document.createElement("iframe");
@@ -379,6 +382,9 @@
 
         element.parentNode.replaceChild(iframe, element);
     }
+
+    // Make loadVideo available globally
+    window.loadVideo = loadVideo;
 </script>
 
 <!-- Change the colour #f8fafc to match the previous section colour -->
