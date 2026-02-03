@@ -110,12 +110,12 @@ const topics = await BlogService.getHomepageTopics();
         font-weight: 700;
         letter-spacing: -0.02em;
         text-transform: uppercase;
+        display: flex;
+        align-items: center;
     }
 
-    @media (max-width: 768px) {
-        .logo-large {
-            font-size: 1.5rem;
-        }
+    .logo-star {
+        margin: 0 2px;
         .logo-small {
             font-size: 0.55rem;
         }
