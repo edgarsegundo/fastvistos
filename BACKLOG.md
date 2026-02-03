@@ -20,3 +20,23 @@
     como ajudamos
 
     Isso destrava E-E-A-T inteiro.
+
+
+- 💡 Nuance importante (estratégia avançada):
+
+Se no futuro você quiser ranquear para cidades específicas, o ideal não é listar cidades no schema, e sim:
+
+Criar landing pages por cidade
+Ex:
+/visto-americano-sao-paulo
+/visto-americano-rio-de-janeiro
+
+Cada uma com:
+
+Service
+
+areaServed = aquela cidade
+
+Conteúdo real
+
+👉 Schema não substitui páginas locais. Ele só reforça o que já existe.
