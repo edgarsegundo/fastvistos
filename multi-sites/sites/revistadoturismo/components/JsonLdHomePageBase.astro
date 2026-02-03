@@ -107,18 +107,16 @@ const faqBlock =
 // Services block
 const servicesBlock =
     !disableServices && Array.isArray(servicesList) && servicesList.length > 0
-        ? servicesList.map((service) =>
-              service.schema
-                  ? service.schema
-                  : {
-                        '@type': 'Service',
-                        name: service.name,
-                        description: service.description,
-                        areaServed: service.areaServed || 'Brazil',
-                        ...(service.offers ? { offers: service.offers } : {}),
-                        provider: { '@id': orgId },
-                    }
-          )
+        ? servicesList
+            .filter(service => !!service.schema)
+            .map(service => ({
+                ...service.schema,
+                provider: { '@id': orgId },
+                mainEntityOfPage: { '@id': canonicalValidated },
+                areaServed: service.schema.areaServed
+                    ? service.schema.areaServed
+                    : { '@type': 'Country', name: 'Brazil' },
+            }))
         : null;
 
 // VideoObjects independentes para reviews em vídeo

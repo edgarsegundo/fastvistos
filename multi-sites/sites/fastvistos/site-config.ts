@@ -49,11 +49,11 @@ export const siteConfig: SiteConfig = {
         },
         // ✅ CORRIGIDO: Mudado para cobertura nacional
         serviceArea: {
-            name: 'Brasil',
+            name: 'Brazil',
         },
         aggregateRating: {
             ratingValue: '5.0',
-            reviewCount: '277',
+            reviewCount: '298',
         },
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
@@ -68,6 +68,24 @@ export const siteConfig: SiteConfig = {
             telephoneFormatted: '+55 (19) 2042-2785',
             contactType: 'Customer Service',
             areaServed: ['BR', 'São Paulo'], // Array para múltiplas áreas
+
+
+// Verificar se é assim mesmo e refatorar
+// Em vez de só strings, o ideal é usar objetos estruturados:
+// "areaServed": [
+//   {
+//     "@type": "Country",
+//     "name": "Brazil",
+//     "sameAs": "https://www.wikidata.org/wiki/Q155"
+//   },
+//   {
+//     "@type": "City",
+//     "name": "São Paulo",
+//     "sameAs": "https://www.wikidata.org/wiki/Q174"
+//   }
+// ]
+
+
             availableLanguage: ['Portuguese', 'English'],
             email: 'contato@fastvistos.com.br',
         },
