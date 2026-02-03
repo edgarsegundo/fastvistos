@@ -108,15 +108,15 @@ const faqBlock =
 const servicesBlock =
     !disableServices && Array.isArray(servicesList) && servicesList.length > 0
         ? servicesList
-            .filter(service => !!service.schema)
-            .map(service => ({
-                ...service.schema,
-                provider: { '@id': orgId },
-                mainEntityOfPage: { '@id': canonicalValidated },
-                areaServed: service.schema.areaServed
-                    ? service.schema.areaServed
-                    : { '@type': 'Country', name: 'Brazil' },
-            }))
+              .filter((service) => !!service.schema)
+              .map((service) => ({
+                  ...service.schema,
+                  provider: { '@id': orgId },
+                  mainEntityOfPage: { '@id': canonicalValidated },
+                  areaServed: service.schema.areaServed
+                      ? service.schema.areaServed
+                      : { '@type': 'Country', name: 'Brazil' },
+              }))
         : null;
 
 // VideoObjects independentes para reviews em vídeo
@@ -244,29 +244,39 @@ const orgBlock = !disableOrganization && {
 
               telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
 
-                contactPoint: [
-                    {
-                        '@type': 'ContactPoint',
-                        contactType: 'customer service',
-                        telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
-                        areaServed: Array.isArray(siteConfig.site?.contactPoint?.areaServed)
-                            ? siteConfig.site.contactPoint.areaServed
-                            : [siteConfig.site?.contactPoint?.areaServed || 'BR'],
-                        availableLanguage: siteConfig.site?.contactPoint?.availableLanguage || ['pt-BR', 'en'],
-                        ...(siteConfig.site?.contactPoint?.email && { email: siteConfig.site.contactPoint.email }),
-                    },
-                    ...(siteConfig.site?.contactPoint?.whatsapp
-                        ? [{
-                            '@type': 'ContactPoint',
-                            contactType: siteConfig.site.contactPoint.whatsapp.contactType || 'customer support',
-                            contactOption: siteConfig.site.contactPoint.whatsapp.contactOption || 'WhatsApp',
-                            url: siteConfig.site.contactPoint.whatsapp.url,
-                            telephone: siteConfig.site.contactPoint.whatsapp.telephone,
-                            areaServed: siteConfig.site.contactPoint.whatsapp.areaServed || 'BR',
-                            availableLanguage: siteConfig.site.contactPoint.whatsapp.availableLanguage || ['pt-BR'],
-                        }]
-                        : [])
-                ],
+              contactPoint: [
+                  {
+                      '@type': 'ContactPoint',
+                      contactType: 'customer service',
+                      telephone: siteConfig.site?.contactPoint?.telephoneFormatted,
+                      areaServed: Array.isArray(siteConfig.site?.contactPoint?.areaServed)
+                          ? siteConfig.site.contactPoint.areaServed
+                          : siteConfig.site?.contactPoint?.areaServed || 'BR',
+                      availableLanguage: siteConfig.site?.contactPoint?.availableLanguage || [
+                          'pt-BR',
+                          'en',
+                      ],
+                      ...(siteConfig.site?.contactPoint?.email && {
+                          email: siteConfig.site.contactPoint.email,
+                      }),
+                  },
+                  ...(siteConfig.site?.whatsapp
+                      ? [
+                            {
+                                '@type': 'ContactPoint',
+                                contactType:
+                                    siteConfig.site.whatsapp.contactType || 'customer support',
+                                contactOption: siteConfig.site.whatsapp.contactOption || 'WhatsApp',
+                                url: siteConfig.site.whatsapp.url,
+                                telephone: siteConfig.site.whatsapp.telephone,
+                                areaServed: siteConfig.site.whatsapp.areaServed || 'BR',
+                                availableLanguage: siteConfig.site.whatsapp.availableLanguage || [
+                                    'pt-BR',
+                                ],
+                            },
+                        ]
+                      : []),
+              ],
 
               geo: {
                   '@type': 'GeoCoordinates',
@@ -276,13 +286,13 @@ const orgBlock = !disableOrganization && {
 
               priceRange: siteConfig.site?.priceRange || 'R$',
 
-            // openingHoursSpecification is the recommended schema.org format for LocalBusiness.
-            // openingHours exists only for legacy support — never combine both.
+              // openingHoursSpecification is the recommended schema.org format for LocalBusiness.
+              // openingHours exists only for legacy support — never combine both.
               ...(siteConfig.site?.openingHoursSpecification
                   ? { openingHoursSpecification: siteConfig.site.openingHoursSpecification }
                   : siteConfig.site?.openingHours
-                      ? { openingHours: siteConfig.site.openingHours }
-                      : {}),
+                    ? { openingHours: siteConfig.site.openingHours }
+                    : {}),
 
               serviceArea: {
                   '@type': 'Place',
@@ -296,6 +306,38 @@ const orgBlock = !disableOrganization && {
                   ratingValue: siteConfig.site?.aggregateRating?.ratingValue,
                   reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
               },
+
+              ...(siteConfig.site?.reviews
+                  ? {
+                        review: siteConfig.site.reviews.map((review) => ({
+                            '@type': 'Review',
+                            author: {
+                                '@type': 'Person',
+                                name: review.author,
+                            },
+                            datePublished: review.datePublished,
+                            reviewBody: review.reviewBody,
+                            reviewRating: {
+                                '@type': 'Rating',
+                                ratingValue: review.ratingValue,
+                                bestRating: 5,
+                            },
+                        })),
+                    }
+                  : {}),
+
+              ...(siteConfig.site?.makesOffer?.length
+                  ? {
+                        makesOffer: siteConfig.site.makesOffer.map((offer) => ({
+                            '@type': 'Offer',
+                            itemOffered: {
+                                '@type': 'Service',
+                                name: offer.service,
+                            },
+                            priceCurrency: offer.priceCurrency,
+                        })),
+                    }
+                  : {}),
 
               sameAs: siteConfig.site?.sameAs,
 

@@ -48,6 +48,12 @@ export function getWebPageBlock({
         description: description,
         breadcrumb: { '@id': breadcrumbId },
         inLanguage: siteConfig.site?.localte || 'pt-BR',
+        speakable: {
+            '@type': 'SpeakableSpecification',
+            cssSelector: [
+                'h1',
+            ],
+        },        
         potentialAction: [
             {
                 '@type': 'ReadAction',
