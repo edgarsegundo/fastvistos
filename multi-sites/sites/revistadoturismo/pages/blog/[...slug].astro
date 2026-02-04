@@ -21,6 +21,7 @@ import { marked } from 'marked';
 import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
 
+
 // Generate static paths from the markdown files in content/blog/
 export async function getStaticPaths() {
     const blogEntries = await getCollection('blog');
@@ -111,6 +112,7 @@ const authorImageUrl = authorImage
 >
     
     <Fragment slot="head">
+        <!-- <link rel="stylesheet" href="/shared.css" /> -->
         <JsonLdBlogPost
             articleConfigFromDb={articleFromDb}
             blogConfigFromDb={blogConfigFromDb}
@@ -122,7 +124,6 @@ const authorImageUrl = authorImage
     </Fragment>
 
     <div class="blog-layout-container">
-        
         <article class="blog-article">
             <header class="article-header">
                 <h1 class="article-title">{entry.data.title}</h1>
@@ -402,7 +403,6 @@ const authorImageUrl = authorImage
                 )
             }
         </article>
-
         
         <aside class="sidebar-container">
             
@@ -418,6 +418,10 @@ const authorImageUrl = authorImage
         </aside>
     </div>
 </SharedBlogLayout>
+
+<style is:global>
+    @import '/shared.css';
+</style>
 
 <style>
     .blog-layout-container {
