@@ -136,6 +136,15 @@
             const menuIcon = document.getElementById('menu-icon');
             const closeIcon = document.getElementById('close-icon');
 
+            const resetHeaderStyles = () => {
+                if (header && window.innerWidth >= 768) {
+                    // Remove estilos inline quando em desktop
+                    header.style.backgroundColor = '';
+                    header.style.backdropFilter = '';
+                    header.style.boxShadow = '';
+                }
+            };
+
             btn?.addEventListener('click', () => {
                 const expanded = btn.getAttribute('aria-expanded') === 'true';
                 
@@ -159,6 +168,12 @@
                     }
                 }
             });
+
+            // Detecta mudança de tamanho da tela
+            window.addEventListener('resize', resetHeaderStyles);
+            
+            // Verifica no carregamento
+            resetHeaderStyles();
         });
     </script>
 </div>
