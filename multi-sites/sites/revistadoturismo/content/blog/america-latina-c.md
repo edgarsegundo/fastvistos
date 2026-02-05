@@ -1,12 +1,12 @@
 ---
-title: "Seguro para a Espanhã é obrigatório? Entenda  as regras antes de embarcar no avião"
+title: "América Latina C - Seguro para a Europa é obrigatório? Entenda  as regras antes de embarcar no avião"
 description: "Incluir a contratação de um seguro viagem para Europa é importante na hora de se planejar para conhecer o continente."
-pubDate: "2026-02-05T14:09:32.000Z"
-updatedDate: "2026-02-05T18:46:57.825Z"
-slug: "america-latina-b"
+pubDate: "2026-02-05T19:27:53.000Z"
+updatedDate: "2026-02-05T14:06:51.143Z"
+slug: "america-latina-c"
 topic: "América Latina"
 topicSlug: "america-latina"
-image: "/assets/images/blog/revistadoturismo__2149117758.jpg"
+image: "/assets/images/blog/revistadoturismo__2149272128.jpg"
 type: "public"
 published: true
 wordCount: "670"

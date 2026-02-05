@@ -137,91 +137,91 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
     <!-- Article -->
     <main class="w-full px-4 sm:px-6 lg:px-42 pt-12 mt-16">
 
-        <!-- Breadcrumb -->
-        <nav class="text-sm text-textSecondary mb-6">
-            <span>
-                <a
-                    href={siteConfig.site.canonical}
-                    class=""
-                    >Home</a
-                >                
-            </span>
-            <span class="mx-2">›</span>
-            <span>
-                <a
-                    href="/blog"
-                    class=""
-                    >Blog</a
-                >
-            </span>
-            <span class="mx-2">›</span>
-            <span class="font-small text-[#6b6f76] opacity-80">
+            <!-- Breadcrumb -->
+            <nav class="text-sm text-textSecondary mb-6">
+                <span>
+                    <a
+                        href={siteConfig.site.canonical}
+                        class=""
+                        >Home</a
+                    >                
+                </span>
+                <span class="mx-2">›</span>
+                <span>
+                    <a
+                        href="/blog"
+                        class=""
+                        >Blog</a
+                    >
+                </span>
+                <span class="mx-2">›</span>
+                <span class="font-small text-[#6b6f76] opacity-80">
+                    {entry.data.title}
+                </span>
+            </nav>
+
+            <!-- Title -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-8 max-w-5xl">
                 {entry.data.title}
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-lg sm:text-xl text-textSecondary mb-10 max-w-3xl">
+                {entry.data.description && entry.data.description}
+            </p>
+
+            <!-- Category -->
+            <span class="inline-block text-sm font-medium mb-10">
+                {entry.data.topic && <span class="article-topic">{entry.data.topic}</span>}
             </span>
-        </nav>
 
-        <!-- Title -->
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-8 max-w-5xl">
-            {entry.data.title}
-        </h1>
+            <!-- Meta -->
+            <div class="flex flex-wrap items-center gap-4 text-sm text-textSecondary mb-12">
+                <div class="flex items-center gap-1">
+                    <span>⏱</span>
+                    <span>{estimateReadingTime(Number(entry.data.wordCount))} minutos de leitura</span>
+                </div>
+                <span>Por: <strong class="font-medium text-gray-900">Mariana Neves</strong></span>
 
-        <!-- Subtitle -->
-        <p class="text-lg sm:text-xl text-textSecondary mb-10 max-w-3xl">
-            {entry.data.description && entry.data.description}
-        </p>
-
-        <!-- Category -->
-        <span class="inline-block text-sm font-medium mb-10">
-            {entry.data.topic && <span class="article-topic">{entry.data.topic}</span>}
-        </span>
-
-        <!-- Meta -->
-        <div class="flex flex-wrap items-center gap-4 text-sm text-textSecondary mb-12">
-            <div class="flex items-center gap-1">
-                <span>⏱</span>
-                <span>{estimateReadingTime(Number(entry.data.wordCount))} minutos de leitura</span>
-            </div>
-            <span>Por: <strong class="font-medium text-gray-900">Mariana Neves</strong></span>
-
-            <span>
-                Publicado em
-                <time datetime={entry.data.pubDate}>
-                    {
-                        new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: '2-digit',
-                        })
-                    }
-                </time>
-
-                {showUpdatedDate && ' | Atualizado em '}
-                {showUpdatedDate && (
-                    <time datetime={entry.data.updatedDate}>
+                <span>
+                    Publicado em
+                    <time datetime={entry.data.pubDate}>
                         {
-                            new Date(entry.data.updatedDate).toLocaleDateString('pt-BR', {
+                            new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
                                 day: '2-digit',
                                 month: '2-digit',
                                 year: '2-digit',
                             })
                         }
                     </time>
-                )}    
 
-            </span>
+                    {showUpdatedDate && ' | Atualizado em '}
+                    {showUpdatedDate && (
+                        <time datetime={entry.data.updatedDate}>
+                            {
+                                new Date(entry.data.updatedDate).toLocaleDateString('pt-BR', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: '2-digit',
+                                })
+                            }
+                        </time>
+                    )}    
 
-        </div>
+                </span>
 
-        <!-- Hero Image -->
-        {
-            entry.data.image && entry.data.image !== '/assets/images/blog/' && (
-                <img
-                    src={entry.data.image}
-                    alt={entry.data.title}
-                    class="w-full h-[360px] sm:h-[460px] lg:h-[620px] object-cover mb-24"
-                />
-            )
-        }
+            </div>
+
+            <!-- Hero Image -->
+            {
+                entry.data.image && entry.data.image !== '/assets/images/blog/' && (
+                    <img
+                        src={entry.data.image}
+                        alt={entry.data.title}
+                        class="w-full h-[360px] sm:h-[460px] lg:h-[620px] object-cover mb-24"
+                    />
+                )
+            }
 
         <!-- Article Container with Sidebar -->
         <div class="w-full flex flex-col lg:flex-row gap-12">
@@ -230,14 +230,218 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                 <!-- Article Content -->
                 <div class="blog-content prose prose-lg max-w-none" set:html={processedHtml} />
 
-                <!-- FAQ Section -->
-                {/* Seu FAQ aqui */}
+                {
+                    faqData && Array.isArray(faqData) && faqData.length > 0 && (
+                        <div class="faq-section">
+                            <div class="faq-divider" />
+                            <div class="faq-card">
+                                <h2 class="faq-title">Perguntas Frequentes</h2>
+                                <div class="faq-list">
+                                    {faqData.map((item, index) => (
+                                        <div class="faq-item" key={index}>
+                                            <button
+                                                class="faq-question"
+                                                onclick={`toggleFaq(${index})`}
+                                                aria-expanded="false"
+                                                aria-controls={`faq-answer-${index}`}
+                                            >
+                                                <span class="faq-question-text">{item.question}</span>
+                                                <svg
+                                                    class="faq-chevron"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M19 9l-7 7-7-7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                            <div
+                                                class="faq-answer"
+                                                id={`faq-answer-${index}`}
+                                                style="display: none;"
+                                            >
+                                                <p>{item.answer}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
 
-                <!-- Author Section -->
-                {/* Seu Author aqui */}
 
-                <!-- Related Articles -->
-                {/* Seus artigos relacionados aqui */}
+                {
+                    authorName && (
+                        <div class="author-section">
+                            <div class="author-divider" />
+                            <div class="author-card">
+                                {authorImageUrl && (
+                                    <div class="author-image">
+                                        <img src={authorImageUrl} alt={authorName} />
+                                    </div>
+                                )}
+                                <div class="author-content">
+                                    <div class="author-info">
+                                        <span class="author-label">Escrito por</span>
+                                        <h3 class="author-name">{authorName}</h3>
+                                    </div>
+                                    {authorDescription && (
+                                        <p class="author-description">{authorDescription}</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                <div class="disclaimer-section">
+                    <div class="disclaimer-card">
+                        <div class="disclaimer-content">
+                            <p>
+                                <strong>Nota:</strong> As informações deste artigo são para fins educativos.
+                                Sempre verifique dados atualizados em fontes oficiais antes de tomar decisões
+                                importantes.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {
+                    relatedArticles && relatedArticles.length > 0 && (
+                        <div class="related-articles-section">
+                            <div class="related-articles-divider">
+                                <div class="divider-line" />
+                                <div class="divider-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="divider-line" />
+                            </div>
+
+                            <div class="related-articles-container">
+                                <h2 class="related-articles-title">
+                                    <span class="title-gradient">Artigos Relacionados</span>
+                                </h2>
+                                <p class="related-articles-subtitle">
+                                    Continue sua leitura com estes tópicos conectados
+                                </p>
+
+                                <div
+                                    class={`related-articles-grid ${
+                                        relatedArticles.length === 1
+                                            ? 'single-card'
+                                            : relatedArticles.length === 2
+                                            ? 'two-cards'
+                                            : ''
+                                    }`}
+                                >
+                                    {relatedArticles.slice(0, 4).map((article) => {
+                                        const imageUrl =
+                                            article.seo_image_url ||
+                                            (article.image
+                                                ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}`
+                                                : null);
+                                        const fallbackImage =
+                                            '/assets/images/blog/logo-bg-white-blog.png';
+
+                                        return (
+                                            <a
+                                                href={`/blog/${article.slug}`}
+                                                class="related-article-card"
+                                            >
+                                                <div class="related-article-image">
+                                                    {imageUrl ? (
+                                                        <img
+                                                            src={imageUrl}
+                                                            alt={article.title}
+                                                            loading="lazy"
+                                                        />
+                                                    ) : (
+                                                        <div class="related-article-placeholder">
+                                                            <svg
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                            >
+                                                                <rect
+                                                                    x="3"
+                                                                    y="3"
+                                                                    width="18"
+                                                                    height="18"
+                                                                    rx="2"
+                                                                    ry="2"
+                                                                />
+                                                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                                                <polyline points="21,15 16,10 5,21" />
+                                                            </svg>
+                                                        </div>
+                                                    )}
+                                                    <div class="related-article-overlay">
+                                                        <div class="overlay-gradient" />
+                                                        <div class="read-more-badge">
+                                                            <span>Ler artigo</span>
+                                                            <svg
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                            >
+                                                                <path
+                                                                    fill-rule="evenodd"
+                                                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                                    clip-rule="evenodd"
+                                                                />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="related-article-content">
+                                                    <h3 class="related-article-title">
+                                                        {article.title}
+                                                    </h3>
+                                                    {article.blog_topic && (
+                                                        <span class="related-article-topic">
+                                                            {article.blog_topic.title}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </a>
+                                        );
+                                    })}
+                                </div>
+
+                                {relatedArticles.length > 4 && (
+                                    <div class="related-articles-more">
+                                        <p class="more-articles-text">
+                                            E mais <strong>{relatedArticles.length - 4}</strong> artigos
+                                            relacionados em nosso blog
+                                        </p>
+                                        <a href="/blog" class="explore-blog-btn">
+                                            <span>Explorar Blog</span>
+                                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )
+                }
             </article>
 
             <!-- Sidebar -->
@@ -254,7 +458,28 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                         <h3 class="font-semibold text-lg mb-4">Publicidade</h3>
                         {/* Suas propagandas aqui */}
                     </div>
+
+
+
+
+            <SidebarAbove />
+
+            
+            <div class="toc-responsive">
+                <TableOfContents headings={headings} />
+            </div>
+
+            
+            {AffiliateAds && <AffiliateAds />}
+
+
                 </div>
+
+
+
+
+
+
             </aside>
         </div>
 
@@ -266,3 +491,53 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
     @import '/shared.css';
 </style>
 
+
+<script>
+    function toggleFaq(index: number) {
+        const button = document.querySelector(`button[onclick="toggleFaq(${index})"]`);
+        const answer = document.getElementById(`faq-answer-${index}`);
+
+        if (!button || !answer) return;
+
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+        // Close all other FAQ items
+        document.querySelectorAll('.faq-question').forEach((btn, idx) => {
+            if (idx !== index) {
+                btn.setAttribute('aria-expanded', 'false');
+                const otherAnswer = document.getElementById(`faq-answer-${idx}`);
+                if (otherAnswer) {
+                    otherAnswer.style.display = 'none';
+                }
+            }
+        });
+
+        // Toggle current item
+        if (isExpanded) {
+            button.setAttribute('aria-expanded', 'false');
+            answer.style.display = 'none';
+        } else {
+            button.setAttribute('aria-expanded', 'true');
+            answer.style.display = 'block';
+        }
+    }
+
+    // Make function globally available
+    (window as any).toggleFaq = toggleFaq;
+
+    // Handle image fallbacks for related articles
+    function handleImageError(img: HTMLImageElement) {
+        img.src = '/assets/images/blog/logo-bg-white-blog.png';
+        img.onerror = null; // Prevent infinite loop
+    }
+
+    // Set up image error handling after DOM loads
+    document.addEventListener('DOMContentLoaded', () => {
+        const relatedImages = document.querySelectorAll('.related-article-image img');
+        relatedImages.forEach((img) => {
+            (img as HTMLImageElement).onerror = function () {
+                handleImageError(this as HTMLImageElement);
+            };
+        });
+    });
+</script>
