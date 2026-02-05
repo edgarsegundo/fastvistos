@@ -91,6 +91,17 @@ if (articleFromDb?.id) {
 const authorImageUrl = authorImage
     ? '/assets/images/blog/' + authorImage.replace(/^.*\//, '')
     : null;
+
+
+// No topo do script, após const { entry } = Astro.props;
+const pubDate = new Date(entry.data.pubDate);
+pubDate.setHours(0, 0, 0, 0);
+
+const updatedDate = entry.data.updatedDate ? new Date(entry.data.updatedDate) : null;
+if (updatedDate) updatedDate.setHours(0, 0, 0, 0);
+
+const showUpdatedDate = updatedDate && updatedDate > pubDate;
+
 ---
 
 <SharedBlogLayout
@@ -144,13 +155,13 @@ const authorImageUrl = authorImage
                 >
             </span>
             <span class="mx-2">›</span>
-            <span class="text-nubank font-small text-[#6b6f76] opacity-80">
+            <span class="font-small text-[#6b6f76] opacity-80">
                 {entry.data.title}
             </span>
         </nav>
 
         
-        <h1 class="text-nubank text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-8 max-w-5xl">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-8 max-w-5xl">
             {entry.data.title}
         </h1>
 
@@ -160,7 +171,7 @@ const authorImageUrl = authorImage
         </p>
 
         
-        <span class="inline-block text-sm font-medium text-nubank mb-10">
+        <span class="inline-block text-sm font-medium mb-10">
             {entry.data.topic && <span class="article-topic">{entry.data.topic}</span>}
         </span>
 
@@ -171,17 +182,34 @@ const authorImageUrl = authorImage
                 <span>{estimateReadingTime(Number(entry.data.wordCount))} minutos de leitura</span>
             </div>
             <span>Por: <strong class="font-medium text-gray-900">Mariana Neves</strong></span>
-            <span>Publicado em
-                    <time datetime={entry.data.pubDate}>
+
+            <span>
+                Publicado em
+                <time datetime={entry.data.pubDate}>
+                    {
+                        new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                        })
+                    }
+                </time>
+
+                {showUpdatedDate && ' | Atualizado em '}
+                {showUpdatedDate && (
+                    <time datetime={entry.data.updatedDate}>
                         {
-                            new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
-                                year: '2-digit',
-                                month: '2-digit',
+                            new Date(entry.data.updatedDate).toLocaleDateString('pt-BR', {
                                 day: '2-digit',
+                                month: '2-digit',
+                                year: '2-digit',
                             })
                         }
                     </time>
+                )}    
+
             </span>
+
         </div>
 
         
@@ -197,11 +225,7 @@ const authorImageUrl = authorImage
 
     </main>
 
-
     <div class="blog-layout-container">
-
-
-
 
         <article class="blog-article">
             <header class="article-header">
