@@ -221,7 +221,42 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                     class="w-full h-[360px] sm:h-[460px] lg:h-[620px] object-cover mb-24"
                 />
             )
-        }        
+        }
+
+        
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12">
+            
+            <article class="flex-1 max-w-4xl">
+                
+                <div class="blog-content prose prose-lg max-w-none" set:html={processedHtml} />
+
+                
+                {/* Seu FAQ aqui */}
+
+                
+                {/* Seu Author aqui */}
+
+                
+                {/* Seus artigos relacionados aqui */}
+            </article>
+
+            
+            <aside class="lg:w-80 flex-shrink-0">
+                <div class="lg:sticky lg:top-24 space-y-8">
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-4">Neste artigo</h3>
+                        {/* Seu TOC aqui */}
+                    </div>
+
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-4">Publicidade</h3>
+                        {/* Suas propagandas aqui */}
+                    </div>
+                </div>
+            </aside>
+        </div>
 
     </main>
 
