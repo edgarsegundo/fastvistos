@@ -1,12 +1,12 @@
 ---
 title: "Guia Completo para Obter o Visto Americano"
-description: "Guia Completo para Obter o Visto Americano"
-pubDate: "2026-01-22T18:20:07.491Z"
-updatedDate: "2026-01-22T18:20:07.491Z"
+description: "GKMPLTPRBTRVSTMRKN"
+pubDate: "2026-01-22T18:20:07.000Z"
+updatedDate: "2026-02-05T23:49:56.533Z"
 slug: "guia-completo-para-obter-o-visto-americano"
 topic: "Dicas Sobre o Visto Americano"
 topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__upload.webp"
+image: "/assets/images/blog/fastvistos__lasvegas.webp"
 type: "public"
 published: true
 wordCount: "654"
@@ -84,4 +84,3 @@ Sabemos que sua rotina é corrida. Se você não tem tempo para **trâmites com 
 
 [![Fast Vistos - Assessoria de Vistos](https://fastvistos.com.br/assets/images/blog/fastvistos__fastvistos-assessoria-de-vistos-com-sede-em-campinas.webp)](https://fastvistos.com.br/)  
 **Entre em contato pelo nosso <a href="https://wa.me/551920422785" target="_blank">WhatsApp ↗</a> sem compromisso!**
-        
