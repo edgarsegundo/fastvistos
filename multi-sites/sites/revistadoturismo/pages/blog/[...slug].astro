@@ -224,9 +224,9 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
         }
 
         
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12">
+        <div class="w-full flex flex-col lg:flex-row gap-12">
             
-            <article class="flex-1 max-w-4xl">
+            <article class="flex-1 min-w-0">
                 
                 <div class="blog-content prose prose-lg max-w-none" set:html={processedHtml} />
 
@@ -241,7 +241,7 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
             </article>
 
             
-            <aside class="lg:w-80 flex-shrink-0">
+            <aside class="w-full lg:w-80 flex-shrink-0">
                 <div class="lg:sticky lg:top-24 space-y-8">
                     
                     <div class="bg-gray-50 p-6 rounded-lg">
