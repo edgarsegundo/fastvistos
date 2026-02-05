@@ -21,6 +21,7 @@ import { marked } from 'marked';
 import '../../styles/markdown-blog.css';
 import { ensureTrailingSlash } from '../../lib/utils.ts';
 
+
 // Generate static paths from the markdown files in content/blog/
 export async function getStaticPaths() {
     const blogEntries = await getCollection('blog');
@@ -109,8 +110,9 @@ const authorImageUrl = authorImage
         ? new Date(articleFromDb.modified).toISOString()
         : undefined}
 >
-    <!-- Additional head content specific to this layout -->
+    
     <Fragment slot="head">
+        <!-- <link rel="stylesheet" href="/shared.css" /> -->
         <JsonLdBlogPost
             articleConfigFromDb={articleFromDb}
             blogConfigFromDb={blogConfigFromDb}
@@ -121,8 +123,86 @@ const authorImageUrl = authorImage
         />
     </Fragment>
 
+    <!-- Article -->
+    <main class="w-full px-4 sm:px-6 lg:px-42 pt-12 mt-16">
+
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-textSecondary mb-6">
+            <span>
+                <a
+                    href={siteConfig.site.canonical}
+                    class=""
+                    >Home</a
+                >                
+            </span>
+            <span class="mx-2">›</span>
+            <span>
+                <a
+                    href="/blog"
+                    class=""
+                    >Blog</a
+                >
+            </span>
+            <span class="mx-2">›</span>
+            <span class="text-nubank font-small text-[#6b6f76] opacity-80">
+                {entry.data.title}
+            </span>
+        </nav>
+
+        <!-- Title -->
+        <h1 class="text-nubank text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-8 max-w-5xl">
+            {entry.data.title}
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-lg sm:text-xl text-textSecondary mb-10 max-w-3xl">
+            {entry.data.description && entry.data.description}
+        </p>
+
+        <!-- Category -->
+        <span class="inline-block text-sm font-medium text-nubank mb-10">
+            {entry.data.topic && <span class="article-topic">{entry.data.topic}</span>}
+        </span>
+
+        <!-- Meta -->
+        <div class="flex flex-wrap items-center gap-4 text-sm text-textSecondary mb-12">
+            <div class="flex items-center gap-1">
+                <span>⏱</span>
+                <span>{estimateReadingTime(Number(entry.data.wordCount))} minutos de leitura</span>
+            </div>
+            <span>Por: <strong class="font-medium text-gray-900">Mariana Neves</strong></span>
+            <span>Publicado em
+                    <time datetime={entry.data.pubDate}>
+                        {
+                            new Date(entry.data.pubDate).toLocaleDateString('pt-BR', {
+                                year: '2-digit',
+                                month: '2-digit',
+                                day: '2-digit',
+                            })
+                        }
+                    </time>
+            </span>
+        </div>
+
+        <!-- Hero Image -->
+        {
+            entry.data.image && entry.data.image !== '/assets/images/blog/' && (
+                <img
+                    src={entry.data.image}
+                    alt={entry.data.title}
+                    class="w-full h-[360px] sm:h-[460px] lg:h-[620px] object-cover mb-24"
+                />
+            )
+        }        
+
+    </main>
+
+
     <div class="blog-layout-container">
-        <!-- Main Article Content -->
+
+
+
+
         <article class="blog-article">
             <header class="article-header">
                 <h1 class="article-title">{entry.data.title}</h1>
@@ -155,7 +235,7 @@ const authorImageUrl = authorImage
                     Leitura: ≈{estimateReadingTime(Number(entry.data.wordCount))} min
                 </span>
 
-                <!-- Breadcrumb -->
+                
                 <div class="mb-2 mt-6 pl-14">
                     <nav>
                         <ol class="flex items-center text-xs font-normal space-x-1">
@@ -183,10 +263,10 @@ const authorImageUrl = authorImage
                 </div>
             </header>
 
-            <!-- Professional styled markdown content -->
+            
             <div class="blog-content" set:html={processedHtml} />
 
-            <!-- FAQ Section -->
+            
             {
                 faqData && Array.isArray(faqData) && faqData.length > 0 && (
                     <div class="faq-section">
@@ -232,7 +312,7 @@ const authorImageUrl = authorImage
                 )
             }
 
-            <!-- Author Section -->
+            
             {
                 authorName && (
                     <div class="author-section">
@@ -257,7 +337,7 @@ const authorImageUrl = authorImage
                 )
             }
 
-            <!-- Disclaimer Section -->
+            
             <div class="disclaimer-section">
                 <div class="disclaimer-card">
                     <div class="disclaimer-content">
@@ -270,7 +350,7 @@ const authorImageUrl = authorImage
                 </div>
             </div>
 
-            <!-- Related Articles Section -->
+            
             {
                 relatedArticles && relatedArticles.length > 0 && (
                     <div class="related-articles-section">
@@ -403,21 +483,28 @@ const authorImageUrl = authorImage
             }
         </article>
 
-        <!-- Table of Contents Sidebar -->
+
+
+
+        
         <aside class="sidebar-container">
-            <!-- Customização Acima do TOC -->
+            
             <SidebarAbove />
 
-            <!-- Table of Contents -->
+            
             <div class="toc-responsive">
                 <TableOfContents headings={headings} />
             </div>
 
-            <!-- Customização Abaixo do TOC -->
+            
             {AffiliateAds && <AffiliateAds />}
         </aside>
     </div>
 </SharedBlogLayout>
+
+<style is:global>
+    @import '/shared.css';
+</style>
 
 <style>
     .blog-layout-container {
