@@ -231,6 +231,30 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                 <div class="blog-content prose prose-lg max-w-none" set:html={processedHtml} />
 
                 {
+                    authorName && (
+                        <div class="author-section">
+                            <div class="author-divider" />
+                            <div class="author-card">
+                                {authorImageUrl && (
+                                    <div class="author-image">
+                                        <img src={authorImageUrl} alt={authorName} />
+                                    </div>
+                                )}
+                                <div class="author-content">
+                                    <div class="author-info">
+                                        <span class="author-label">Escrito por</span>
+                                        <h3 class="author-name">{authorName}</h3>
+                                    </div>
+                                    {authorDescription && (
+                                        <p class="author-description">{authorDescription}</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                {
                     faqData && Array.isArray(faqData) && faqData.length > 0 && (
                         <div class="faq-section">
                             <div class="faq-divider" />
@@ -269,31 +293,6 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                                             </div>
                                         </div>
                                     ))}
-                                </div>
-                            </div>
-                        </div>
-                    )
-                }
-
-
-                {
-                    authorName && (
-                        <div class="author-section">
-                            <div class="author-divider" />
-                            <div class="author-card">
-                                {authorImageUrl && (
-                                    <div class="author-image">
-                                        <img src={authorImageUrl} alt={authorName} />
-                                    </div>
-                                )}
-                                <div class="author-content">
-                                    <div class="author-info">
-                                        <span class="author-label">Escrito por</span>
-                                        <h3 class="author-name">{authorName}</h3>
-                                    </div>
-                                    {authorDescription && (
-                                        <p class="author-description">{authorDescription}</p>
-                                    )}
                                 </div>
                             </div>
                         </div>
@@ -447,40 +446,14 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
             <!-- Sidebar -->
             <aside class="w-full lg:w-80 flex-shrink-0">
                 <div class="lg:sticky lg:top-24 space-y-8">
-                    <!-- Índice / Table of Contents -->
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="font-semibold text-lg mb-4">Neste artigo</h3>
-                        {/* Seu TOC aqui */}
+                    <SidebarAbove />
+                    <div class="toc-responsive">
+                        <TableOfContents headings={headings} />
                     </div>
-
-                    <!-- Propaganda / Ads -->
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="font-semibold text-lg mb-4">Publicidade</h3>
-                        {/* Suas propagandas aqui */}
-                    </div>
-
-
-
-
-            <SidebarAbove />
-
-            
-            <div class="toc-responsive">
-                <TableOfContents headings={headings} />
-            </div>
-
-            
-            {AffiliateAds && <AffiliateAds />}
-
-
+                    {AffiliateAds && <AffiliateAds />}
                 </div>
-
-
-
-
-
-
             </aside>
+
         </div>
 
     </main>
@@ -490,7 +463,6 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
 <style is:global>
     @import '/shared.css';
 </style>
-
 
 <script>
     function toggleFaq(index: number) {
