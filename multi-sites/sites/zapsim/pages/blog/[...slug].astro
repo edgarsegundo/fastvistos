@@ -181,7 +181,10 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                     <span>⏱</span>
                     <span>{estimateReadingTime(Number(entry.data.wordCount))} minutos de leitura</span>
                 </div>
-                <span>Por: <strong class="font-medium text-gray-900">Mariana Neves</strong></span>
+
+                {authorName && authorName.trim() !== '' && (
+                    <span>Por: <strong class="font-medium text-gray-900">{authorName}</strong></span>
+                )}                
 
                 <span>
                     Publicado em
