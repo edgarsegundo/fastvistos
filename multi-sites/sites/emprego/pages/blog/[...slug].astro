@@ -339,7 +339,7 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
                     </h2>
 
                     
-                    <div class="grid gap-10 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
+                    <div class="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                         {relatedArticles.slice(0, 4).map((article) => {
                             const imageUrl =
                                 article.seo_image_url ||
