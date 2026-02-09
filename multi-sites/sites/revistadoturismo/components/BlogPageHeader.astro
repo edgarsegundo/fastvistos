@@ -9,27 +9,23 @@
     updatable-section-siteid="revistadoturismo"
     updatable-section-businessid="41a5c7f95e924d54b120ab9a0e1843c8"
 >
-    <header class="bg-white py-12 px-4 shadow-sm lg:px-8">
-        <div class="mx-auto" style="max-width: 1280px;">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div class="flex items-center mb-3 md:mb-0">
-                    <a href="https://fastvistos.com.br">
-                        <img
-                            src="/assets/images/logo/logo-fast-orange.png"
-                            alt="Logo Fast Vistos"
-                            class="h-4 sm:h-8 w-auto"
-                            loading="lazy"
-                        />
-                    </a>
-                </div>
+    <header id="mobile-header" class="py-4">
+        <div class="w-full px-4 sm:px-6 lg:px-42">
+            <div class="flex justify-between items-center">
+                <!-- Logo Area -->
+                <a href="/" class="flex items-center min-w-[180px]">
+                    <div class="logo-revista">
+                        <div class="logo-small">Revista <span class="preposition">do</span></div>
+                        <div class="logo-large">Turismo</div>
+                    </div>
+                </a>
 
-                <nav>
-                    <ul
-                        class="flex flex-col md:flex-row gap-y-4 md:gap-x-10 list-disc list-inside text-orange-500"
-                    >
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block">
+                    <ul class="flex gap-x-10 list-disc list-inside text-orange-500">
                         <li>
                             <a
-                                href="https://fastvistos.com.br"
+                                href="https://revistadoturismo.com.br"
                                 class="text-[15px] font-medium text-gray-700 hover:text-orange-600"
                             >
                                 Home
@@ -46,8 +42,82 @@
                         <li>
                             <a
                                 onclick="window.open('https://api.whatsapp.com/send?phone=551920422785&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20de%20vistos.%231', '_blank')"
-                                class="text-[15px] font-medium text-gray-700 hover:text-orange-600"
-                                style="cursor: pointer;"
+                                class="text-[15px] font-medium text-gray-700 hover:text-orange-600 cursor-pointer"
+                            >
+                                Contato
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button
+                    id="mobile-menu-btn"
+                    type="button"
+                    class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-orange-600 hover:bg-gray-100 focus:outline-none transition-colors"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                >
+                    <span class="sr-only">Abrir menu</span>
+                    <!-- Icon when menu is closed -->
+                    <svg
+                        id="menu-icon"
+                        class="block h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        ></path>
+                    </svg>
+                    <!-- Icon when menu is open -->
+                    <svg
+                        id="close-icon"
+                        class="hidden h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <nav class="py-4">
+                    <ul class="space-y-1">
+                        <li>
+                            <a
+                                href="https://revistadoturismo.com.br"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-100"
+                            >
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="https://fastvistos.com.br/blog/"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-100"
+                            >
+                                Blog
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                onclick="window.open('https://api.whatsapp.com/send?phone=551920422785&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20de%20vistos.%231', '_blank')"
+                                class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-gray-100 cursor-pointer"
                             >
                                 Contato
                             </a>
@@ -57,4 +127,61 @@
             </div>
         </div>
     </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const header = document.getElementById('mobile-header');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            const resetHeaderStyles = () => {
+                if (header && window.innerWidth >= 768) {
+                    // Remove estilos inline quando em desktop
+                    header.style.backgroundColor = '';
+                    header.style.backdropFilter = '';
+                    header.style.boxShadow = '';
+                    
+                    // Fecha o menu e reseta o estado
+                    menu?.classList.add('hidden');
+                    menuIcon?.classList.remove('hidden');
+                    menuIcon?.classList.add('block');
+                    closeIcon?.classList.add('hidden');
+                    closeIcon?.classList.remove('block');
+                    btn?.setAttribute('aria-expanded', 'false');
+                }
+            };
+
+            btn?.addEventListener('click', () => {
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                
+                btn.setAttribute('aria-expanded', (!expanded).toString());
+                menu?.classList.toggle('hidden');
+                menuIcon?.classList.toggle('hidden');
+                menuIcon?.classList.toggle('block');
+                closeIcon?.classList.toggle('hidden');
+                closeIcon?.classList.toggle('block');
+                
+                // Adiciona/remove fundo quando o menu abre
+                if (header) {
+                    if (expanded) {
+                        header.style.backgroundColor = 'transparent';
+                        header.style.backdropFilter = 'none';
+                        header.style.boxShadow = 'none';
+                    } else {
+                        header.style.backgroundColor = 'rgba(244, 244, 244, 0.95)';
+                        header.style.backdropFilter = 'blur(8px)';
+                        header.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+                    }
+                }
+            });
+
+            // Detecta mudança de tamanho da tela
+            window.addEventListener('resize', resetHeaderStyles);
+            
+            // Verifica no carregamento
+            resetHeaderStyles();
+        });
+    </script>
 </div>
