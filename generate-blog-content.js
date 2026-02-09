@@ -115,13 +115,13 @@ function generateMarkdownContent(article) {
 
     // Create frontmatter
     const frontmatter = `---
-title: "${article.title.replace(/"/g, '\\"')}"
-description: "${(article.description || article.description).replace(/"/g, '\\"')}"
+title: "${(article.title || '').replace(/"/g, '\\"')}"
+description: "${(article.description || article.metatitle || '').replace(/"/g, '\\"')}"
 pubDate: "${publishedDate}"
 updatedDate: "${modifiedDate}"
 slug: "${article.slug}"
-topic: "${article.blog_topic.title}"
-topicSlug: "${article.blog_topic.slug}"
+topic: "${(article.blog_topic?.title || '').replace(/"/g, '\\"')}"
+topicSlug: "${article.blog_topic?.slug || ''}"
 image: "/assets/images/blog/${article.image && typeof article.image === 'string' ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
 published: true
