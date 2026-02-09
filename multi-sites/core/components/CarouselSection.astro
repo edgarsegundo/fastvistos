@@ -169,14 +169,11 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                                 ? article.title.slice(0, 70) + '...'
                                 : article.title}
                             </h3>
-
-                            <p class="text-gray-600 mb-4">
-                                {article.content_html
-                                ? article.content_html
-                                    .replace(/<[^>]*>/g, '')
-                                    .slice(0, 150) + '...'
-                                : ''}
-                            </p>
+                                <p class="text-gray-600 mb-4">
+                                    {(article.seo_description || article.description || article.content_html || '')
+                                        .replace(/<[^>]*>/g, '')
+                                        .slice(0, 150) + '...'}
+                                </p>
                             </div>
                         </a>
                         ))}
