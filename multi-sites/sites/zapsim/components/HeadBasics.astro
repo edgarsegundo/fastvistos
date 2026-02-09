@@ -144,7 +144,7 @@ const imageType = getImageType(imageUrlValidated ?? '');
     description={seo.description}
     image={imageUrlValidated}
     url={siteConfig.site.canonical}
-    site={siteConfig.socialMedia.twitter}
+    site={siteConfig.site.socialMedia?.twitter || undefined}
 />
 
 
