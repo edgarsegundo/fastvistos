@@ -27,10 +27,8 @@ function question(prompt) {
     });
 }
 
-// Generate a random business ID (32 character hex string)
-function generateBusinessId() {
-    return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-}
+// Import crypto at module level
+import crypto from 'crypto';
 
 // Process template file by replacing placeholders
 async function processTemplate(templatePath, replacements) {
@@ -103,6 +101,23 @@ function validateSiteName(siteName) {
     }
     if (siteName.length > 50) {
         return 'Site name must be less than 50 characters';
+    }
+    return null;
+}
+
+function validateEmail(email) {
+    if (!email) return null; // Email is optional
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return 'Invalid email format';
+    }
+    return null;
+}
+
+function validatePhone(value, fieldName) {
+    if (!value) return null; // Phone fields are optional
+    if (!/^\d+$/.test(value)) {
+        return `${fieldName} must contain only digits`;
     }
     return null;
 }
@@ -246,25 +261,58 @@ async function createSite() {
             return;
         }
 
-        // Get site name
-        const suggestedName = siteId.charAt(0).toUpperCase() + siteId.slice(1).replace(/-/g, ' ');
-        console.log(`\nSuggested name: ${suggestedName}`);
-        const siteNameInput = await question(
-            `Enter site name (or press Enter for "${suggestedName}"): `
-        );
-        const siteName = siteNameInput || suggestedName;
+        // Derive site name from siteId (capitalize first letter)
+        const siteName = siteId.charAt(0).toUpperCase() + siteId.slice(1).replace(/-/g, ' ');
 
-        const siteNameError = validateSiteName(siteName);
-        if (siteNameError) {
-            console.error(`❌ ${siteNameError}`);
+        // Business information prompts (derive from siteId)
+        console.log('\n📊 Business Information (for database):');
+        console.log('   Leave fields empty to skip optional fields\n');
+
+        // Use siteId as business name and derive display name
+        const businessName = siteId;
+        const displayName = siteName; // Capitalized version of siteId
+
+        const email = await question('Enter business email (optional): ');
+        const emailError = validateEmail(email);
+        if (emailError) {
+            console.error(`❌ ${emailError}`);
             rl.close();
             return;
         }
 
-        console.log('\n📋 Site Configuration:');
+        console.log('\nPhone number (optional - leave all empty to skip):');
+        const phoneCountryCode = await question('  Country code (e.g., 1, 55): ');
+        const phoneCountryError = validatePhone(phoneCountryCode, 'Country code');
+        if (phoneCountryError) {
+            console.error(`❌ ${phoneCountryError}`);
+            rl.close();
+            return;
+        }
+
+        const phoneAreaCode = await question('  Area code (e.g., 11, 212): ');
+        const phoneAreaError = validatePhone(phoneAreaCode, 'Area code');
+        if (phoneAreaError) {
+            console.error(`❌ ${phoneAreaError}`);
+            rl.close();
+            return;
+        }
+
+        const phoneNumber = await question('  Phone number: ');
+        const phoneNumberError = validatePhone(phoneNumber, 'Phone number');
+        if (phoneNumberError) {
+            console.error(`❌ ${phoneNumberError}`);
+            rl.close();
+            return;
+        }
+
+        console.log('\n📋 Configuration Summary:');
         console.log(`   Site ID: ${siteId}`);
+        console.log(`   Display Name: ${displayName}`);
         console.log(`   Domain: ${domain}`);
-        console.log(`   Name: ${siteName}`);
+        console.log(`   Email: ${email || '(not provided)'}`);
+        if (phoneCountryCode || phoneAreaCode || phoneNumber) {
+            console.log(`   Phone: +${phoneCountryCode || ''} (${phoneAreaCode || ''}) ${phoneNumber || ''}`);
+        }
 
         // Robust confirmation prompt: only accept y/n, repeat if invalid
         let confirm = '';
@@ -281,10 +329,35 @@ async function createSite() {
             }
         }
 
-        console.log('\n🔨 Creating site structure...');
+        console.log('\n🔨 Creating business in database...');
 
-        // Generate business ID
-        const businessId = generateBusinessId();
+        // Import BlogService and create business
+        const { BlogService } = await import('./multi-sites/core/lib/blog-service.js');
+        
+        const businessData = {
+            name: businessName,
+            display_name: displayName,
+            canonical_domain: domain,
+        };
+        
+        if (email) businessData.email = email;
+        if (phoneCountryCode) businessData.phone1_country_code = phoneCountryCode;
+        if (phoneAreaCode) businessData.phone1_area_code = phoneAreaCode;
+        if (phoneNumber) businessData.phone1_number = phoneNumber;
+
+        let businessId;
+        try {
+            const business = await BlogService.createBusiness(businessData);
+            businessId = business.id;
+            console.log(`✅ Business created with ID: ${businessId}`);
+        } catch (error) {
+            console.error('❌ Failed to create business in database:', error.message);
+            console.log('💡 Please check database connection and try again.');
+            rl.close();
+            return;
+        }
+
+        console.log('\n🔨 Creating site structure...');
 
         // Prepare template replacements
         replacements = {
@@ -324,13 +397,12 @@ async function createSite() {
 
         console.log('\n✅ Site created successfully!');
         console.log('\n📋 Next steps:');
-        console.log(`   1. Update business_id in ${siteId}/site-config.ts with your actual business ID`);
-        console.log(`   2. Customize styling in tailwind.${siteId}.config.js`);
-        console.log(`   3. Add your content to ${siteId}/pages/`);
-        console.log(`   4. Add your assets to public/${siteId}/`);
-        console.log(`   5. Run sync to update templates: npm run sync`);
-        console.log(`\n💡 Generated business ID: ${businessId}`);
-        console.log('    (Replace this with your actual business ID from the database)');
+        console.log(`   1. Customize styling in tailwind.${siteId}.config.js`);
+        console.log(`   2. Add your content to ${siteId}/pages/`);
+        console.log(`   3. Add your assets to public/${siteId}/`);
+        console.log(`   4. Run sync to update templates: npm run sync`);
+        console.log(`\n💡 Business ID: ${businessId}`);
+        console.log('    (Automatically created and linked to your site)');
     } catch (error) {
         console.error('❌ Error creating site:', error.message);
     } finally {

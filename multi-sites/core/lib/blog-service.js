@@ -14,6 +14,43 @@ export class BlogService {
     }
 
     /**
+     * Create a new business.
+     * @param {Object} data - Business fields (name, display_name, canonical_domain, email, phone fields)
+     * @returns {Promise<Object>} The created business record.
+     */
+    static async createBusiness(data) {
+        try {
+            const crypto = await import('crypto');
+            const uuid = crypto.randomUUID().replace(/-/g, ''); // 32 hex chars, no hyphens
+            
+            const businessData = {
+                id: uuid,
+                name: data.name,
+                display_name: data.display_name,
+                canonical_domain: data.canonical_domain,
+                created: new Date(),
+                modified: new Date(),
+                is_removed: false,
+            };
+            
+            // Add optional fields if provided
+            if (data.email) businessData.email = data.email;
+            if (data.phone1_country_code) businessData.phone1_country_code = data.phone1_country_code;
+            if (data.phone1_area_code) businessData.phone1_area_code = data.phone1_area_code;
+            if (data.phone1_number) businessData.phone1_number = data.phone1_number;
+            
+            const business = await prisma.business.create({
+                data: businessData
+            });
+            
+            return business;
+        } catch (error) {
+            console.error('Error creating business:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Create a new blog article.
      * @param {Object} data - All required fields for creation.
      * @returns {Promise<Object>} The created blog_article record.

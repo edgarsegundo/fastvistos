@@ -62,7 +62,12 @@
     "dev:watch:zapsim": "node dev-with-sync.js zapsim",
     "build:zapsim": "node sync-blog.js zapsim && SITE_ID=zapsim astro build && node postbuild-updatable.js zapsim",
     "preview:zapsim": "SITE_ID=zapsim astro preview",
-    "download-images:zapsim": "node download-blog-images.js zapsim"
+    "download-images:zapsim": "node download-blog-images.js zapsim",
+    "dev:gabrielmacedonio": "node sync-blog.js gabrielmacedonio && SITE_ID=gabrielmacedonio astro dev",
+    "dev:watch:gabrielmacedonio": "node dev-with-sync.js gabrielmacedonio",
+    "build:gabrielmacedonio": "node sync-blog.js gabrielmacedonio && SITE_ID=gabrielmacedonio astro build && node postbuild-updatable.js gabrielmacedonio",
+    "preview:gabrielmacedonio": "SITE_ID=gabrielmacedonio astro preview",
+    "download-images:gabrielmacedonio": "node download-blog-images.js gabrielmacedonio"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
