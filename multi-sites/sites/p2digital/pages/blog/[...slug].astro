@@ -55,6 +55,12 @@ let processedHtml = await marked(processedContent, {
 processedHtml = await ContentProcessor.addHeadingIds(processedHtml);
 
 const articleFromDb = await BlogService.getArticleBySlugFromDb(entry.slug);
+
+// If article doesn't exist in database, return 404
+if (!articleFromDb) {
+    return Astro.redirect('/404', 404);
+}
+
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const canonical = siteConfig.site.canonical
     ? new URL(ensureTrailingSlash(siteConfig.site.canonical) + 'blog/' + entry.slug).toString()

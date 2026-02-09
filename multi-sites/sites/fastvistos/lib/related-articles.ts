@@ -68,12 +68,16 @@ export class RelatedArticlesService {
                 is_removed: false,
                 published: {
                     not: null
+                },
+                slug: {
+                    not: null
                 }
             },
             select: {
                 id: true,
                 title: true,
                 slug: true,
+                description: true,
                 seo_description: true,
                 published: true,
                 image: true,
