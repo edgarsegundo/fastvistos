@@ -122,7 +122,7 @@ updatedDate: "${modifiedDate}"
 slug: "${article.slug}"
 topic: "${article.blog_topic.title}"
 topicSlug: "${article.blog_topic.slug}"
-image: "/assets/images/blog/${article.image ? article.image.replace(/^.*\//, '') : ''}"
+image: "/assets/images/blog/${article.image && typeof article.image === 'string' ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
 published: true
 wordCount: "${wordCount}"
