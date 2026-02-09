@@ -385,6 +385,19 @@ async function syncBlogToSite(siteId) {
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
+    
+    // Copy shared.css to public directory if it exists in core
+    try {
+        const sharedCSSPath = join(__dirname, 'multi-sites/core/styles/shared.css');
+        const sitePublicDir = join(__dirname, `public/${siteId}`);
+        await ensureDir(sitePublicDir);
+        
+        const sharedCSS = await fs.readFile(sharedCSSPath, 'utf-8');
+        await fs.writeFile(join(sitePublicDir, 'shared.css'), sharedCSS);
+        console.log(`✅ Copied shared.css to public/${siteId}/`);
+    } catch (sharedCSSErr) {
+        console.log(`⚠️  Warning: Could not copy shared.css (file may not exist yet)`);
+    }
 
     // Sync core library files to site lib directory
     await fs.writeFile(join(siteLibDir, 'blog-service.ts'), blogServiceContent);
