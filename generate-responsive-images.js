@@ -39,11 +39,11 @@ export class ResponsiveImageProcessor {
     }
 
     getImages() {
-        return fs.readdirSync(this.inputDir).filter((file) => /\.(jpg|jpeg|png)$/i.test(file));
+        return fs.readdirSync(this.inputDir).filter((file) => /\.(jpg|jpeg|png|webp)$/i.test(file));
     }
 
     async processImage(file) {
-        const baseName = file.replace(/\.(jpg|jpeg|png)$/i, '');
+        const baseName = file.replace(/\.(jpg|jpeg|png|webp)$/i, '');
         const inputPath = path.join(this.inputDir, file);
         const image = sharp(inputPath);
 
