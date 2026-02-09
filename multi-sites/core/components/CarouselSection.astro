@@ -153,7 +153,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                             height={320}
                             sizes="(max-width: 1023px) 320px, 608px"
                             sources={buildSources(
-                                path.parse(article.image).name,
+                                path.parse(article.image).name.replace(/^[^_]+__/, ''),
                                 [608, 320],
                                 [1, 2],
                                 `/assets/images/blog/resized/`
@@ -399,6 +399,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                                 article.image
                                     .replace(/^.*\//, '')      // remove path anterior
                                     .replace(/\.[^.]+$/, '')    // remove a extensão
+                                    .replace(/^[^_]+__/, '')    // remove siteid__ prefix
                             }`
                             : 'https://via.placeholder.com/400x250';
 
