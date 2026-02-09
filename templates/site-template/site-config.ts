@@ -3,9 +3,9 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: '', // ex: '41a5c7f95e924d54b120ab9a0e1843c8'
-        id: '', // ex: 'fastvistos'
-        siteName: '', // ex: 'Fast Vistos'
+        business_id: '[BUSINESS_ID]',
+        id: '[SITE_ID]',
+        siteName: '[SITE_NAME]',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
         domain: '', // ex: 'fastvistos.com.br'
