@@ -40,8 +40,6 @@ echo "ERROR: Failed to push changes." | tee -a "$LOG_FILE"
 exit 1
 fi
 
-exit 0
-
 # -------------------------
 
 # VPS Steps (corrigido)
