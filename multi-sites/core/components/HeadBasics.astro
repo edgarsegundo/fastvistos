@@ -157,7 +157,7 @@ and brand-consistent whenever someone posts your page on social media.
     description={seo.description}
     image={imageUrlValidated}
     url={siteConfig.site.canonical}
-    site={siteConfig.socialMedia.twitter}
+    site={siteConfig.site.socialMedia?.twitter || undefined}
 />
 
 <!--
