@@ -357,6 +357,36 @@ async function createSite() {
             return;
         }
 
+        // Create user for business via API
+        console.log('\n🔨 Creating user and profile...');
+        try {
+            const response = await fetch('https://sys.fastvistos.com.br/api/create-user-for-business/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    business_id: businessId,
+                    email: email || `${siteId}@example.com`,
+                    username: siteId,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                console.error(`❌ Failed to create user: ${result.error || 'Unknown error'}`);
+                console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
+            } else {
+                console.log(`✅ User created: ${result.username} (ID: ${result.user_id})`);
+                console.log(`✅ Profile created (ID: ${result.profile_id})`);
+                console.log(`🔑 Temporary password: ${result.username}`);
+            }
+        } catch (error) {
+            console.error('❌ Error calling user creation API:', error.message);
+            console.log('💡 Business was created but user creation failed. Check API connectivity.');
+        }
+
         console.log('\n🔨 Creating site structure...');
 
         // Prepare template replacements
