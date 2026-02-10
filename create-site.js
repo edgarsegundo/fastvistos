@@ -372,15 +372,24 @@ async function createSite() {
                 }),
             });
 
-            const result = await response.json();
-
-            if (!response.ok || !result.success) {
-                console.error(`❌ Failed to create user: ${result.error || 'Unknown error'}`);
+            // Check if response is JSON before parsing
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error(`❌ API returned non-JSON response (status ${response.status})`);
+                console.log('💡 Response preview:', text.substring(0, 200));
                 console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
             } else {
-                console.log(`✅ User created: ${result.username} (ID: ${result.user_id})`);
-                console.log(`✅ Profile created (ID: ${result.profile_id})`);
-                console.log(`🔑 Temporary password: ${result.username}`);
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    console.error(`❌ Failed to create user: ${result.error || 'Unknown error'}`);
+                    console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
+                } else {
+                    console.log(`✅ User created: ${result.username} (ID: ${result.user_id})`);
+                    console.log(`✅ Profile created (ID: ${result.profile_id})`);
+                    console.log(`🔑 Temporary password: ${result.username}`);
+                }
             }
         } catch (error) {
             console.error('❌ Error calling user creation API:', error.message);
