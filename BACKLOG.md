@@ -1,5 +1,18 @@
 # Backlogs
 
+
+## revista do turismo
+
+- 
+        primaryImage: {
+            url: 'https://revistadoturismo.com.br/assets/images/logo/???',
+        logo: {
+            url: 'https://revistadoturismo.com.br/assets/images/logo/???',
+thumbnailUrl: 'https://revistadoturismo.com.br/assets/images/logo/???', // Important for search and social previews
+
+
+- o icone busca está de enfeite no multi-sites/sites/revistadoturismo/components/HeaderSection.astro
+
 ## fastvistos
 
 - 🔥 Ação de maior impacto (recomendada)
