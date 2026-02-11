@@ -1,6 +1,6 @@
 ---
 title: "América Latina A"
-description: ""
+description: "MRKLTN"
 pubDate: "2025-11-27T19:26:12.000Z"
 updatedDate: "2026-02-09T10:49:01.704Z"
 slug: "america-latina-a"

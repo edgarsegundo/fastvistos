@@ -1,6 +1,6 @@
 ---
 title: "Viajar ao Uruguay"
-description: ""
+description: "VJRRG"
 pubDate: "2025-11-27T15:58:37.000Z"
 updatedDate: "2025-11-28T23:52:21.389Z"
 slug: "viajar-ao-uruguay"
