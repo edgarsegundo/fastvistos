@@ -10,86 +10,83 @@ export const siteConfig: SiteConfig = {
         faviconPath: '/favicon.ico',
         domain: 'revistadoturismo.com.br',
         canonical: 'https://revistadoturismo.com.br/',
-        authorName: 'Daniela Otaviano',
+        authorName: 'Edgar Rezende',
         primaryImage: {
-            url: 'https://revistadoturismo.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp',
+            url: 'https://revistadoturismo.com.br/assets/images/logo/primary-image-revista-turismo.webp',
             width: 1280,
             height: 720,
             type: 'image/webp',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+            alt: 'Revista digital brasileira sobre viagens, cultura e experiências turísticas.',
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://revistadoturismo.com.br/assets/images/logo/logo-fast-orange.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
+            url: 'https://revistadoturismo.com.br/assets/images/logo/???',
+            alt: 'Revista do Turismo - Revista digital brasileira sobre viagens, cultura e experiências turísticas',
             width: 530,
             height: 67,
         },
-        primaryColor: '#0070f3',
-        secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://revistadoturismo.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // Important for search and social previews
+        primaryColor: '#111828',
+        secondaryColor: '#6776E0',
+        thumbnailUrl: 'https://revistadoturismo.com.br/assets/images/logo/???', // Important for search and social previews
 
         assetsUrlBase: 'https://revistadoturismo.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
         priceRange: '$$', // e.g. $, $$, $$$, $$$$
-        openingHours: [
-            'Mo-Fr 09:00-18:00',
-            'Sa 09:00-13:00',
-        ],
+        // openingHours: [],
         sameAs: [  // Social media profiles
-            'https://www.facebook.com/revistadoturismo/',
-            'https://x.com/revistadoturismo',
-            'https://www.youtube.com/@revistadoturismo/shorts',
+            // 'https://www.facebook.com/revistadoturismo/',
+            // 'https://x.com/revistadoturismo',
+            // 'https://www.youtube.com/@revistadoturismo/shorts',
         ],
-        geo: {
-            latitude: -22.8807734, // Latitude for the business location
-            longitude: -47.0596895, // Longitude for the business location
-        },
-        serviceArea: {
-            name: 'Campinas e região metropolitana de São Paulo',
-        },
-        aggregateRating: {
-            ratingValue: '5.0',
-            reviewCount: '277',
-        },
-        address: {
-            streetAddress: 'Av. Júlio Diniz, 257',
-            addressLocality: 'Taquaral, Campinas',
-            addressRegion: 'SP',
-            postalCode: '13075-420',
-            addressCountry: 'BR',
-        },
-        contactPoint: {
-            telephone: '+551920422785',
-            telephoneFormatted: '+55 (19) 2042-2785',
-            contactType: 'Customer Service',
-            areaServed: 'BR',
-            availableLanguage: ['Portuguese', 'English'],
-            email: 'contato@fastvistos.com.br',
-        },
-        socialMedia: {
-            facebook: 'https://www.facebook.com/fastvistos/',
-            twitter: '@yourtwitter',
-            instagram: '',
-            youtube: '',
-        },
+        // geo: {
+        //     latitude: -22.8807734, // Latitude for the business location
+        //     longitude: -47.0596895, // Longitude for the business location
+        // },
+        // serviceArea: {
+        //     name: 'Campinas e região metropolitana de São Paulo',
+        // },
+        // aggregateRating: {
+        //     ratingValue: '5.0',
+        //     reviewCount: '277',
+        // },
+        // address: {
+        //     streetAddress: 'Av. Júlio Diniz, 257',
+        //     addressLocality: 'Taquaral, Campinas',
+        //     addressRegion: 'SP',
+        //     postalCode: '13075-420',
+        //     addressCountry: 'BR',
+        // },
+        // contactPoint: {
+        //     telephone: '+551920422785',
+        //     telephoneFormatted: '+55 (19) 2042-2785',
+        //     contactType: 'Customer Service',
+        //     areaServed: 'BR',
+        //     availableLanguage: ['Portuguese', 'English'],
+        //     email: 'contato@fastvistos.com.br',
+        // },
+        // socialMedia: {
+        //     facebook: 'https://www.facebook.com/fastvistos/',
+        //     twitter: '@yourtwitter',
+        //     instagram: '',
+        //     youtube: '',
+        // },
     },
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
-            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
+            title: 'Revista do Turismo - Sua fonte de inspiração para viagens, cultura e experiências turísticas',
+            description: 'Revista do Turismo — Sua fonte de inspiração para viagens, cultura e experiências turísticas. Descubra destinos, dicas e histórias para suas próximas aventuras.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://fastvistos.com.br/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp',
+                    url: 'https://revistadoturismo.com.br/assets/images/logo/home-page-main-image-revista-turismo.webp',
                     width: 1280,
                     height: 720,
                     type: 'image/webp',
-                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+                    alt: 'Revista do Turismo - Sua fonte de inspiração para viagens, cultura e experiências turísticas'
                 }
             }
         },
@@ -97,15 +94,15 @@ export const siteConfig: SiteConfig = {
 
     blogPageConfig: {
         seo: {
-            themeColor: '#0070f3',
+            themeColor: '#111828',
             openGraph: {
                 type: 'blog',
-                tags: [
-                    'vistos internacionais',
-                    'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro'
-                ],
+                // tags: [
+                //     'vistos internacionais',
+                //     'visto americano',
+                //     'visto canadense',
+                //     'passaporte brasileiro'
+                // ],
             }
         },
         pagination: {
@@ -115,16 +112,16 @@ export const siteConfig: SiteConfig = {
 
     blogPostConfig: {
         seo: {
-            themeColor: '#0070f3',
+            themeColor: '#111828',
             openGraph: {
                 type: 'article',
-                section: 'Serviços de Vistos e Documentos',
-                tags: [
-                    'vistos internacionais',
-                    'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro'
-                ],
+                section: 'Turismo',
+                // tags: [
+                //     'vistos internacionais',
+                //     'visto americano',
+                //     'visto canadense',
+                //     'passaporte brasileiro'
+                // ],
             }
         },
         readingTime: true, // true/false
@@ -132,20 +129,20 @@ export const siteConfig: SiteConfig = {
         relatedPosts: true, // true/false
     },
 
-    socialMedia: {
-        facebook: 'https://facebook.com/revistadoturismo',
-        twitter: '@revistadoturismo',
-        instagram: 'https://instagram.com/revistadoturismo',
-        youtube: 'https://youtube.com/@revistadoturismo',
-    },
+    // socialMedia: {
+    //     facebook: 'https://facebook.com/revistadoturismo',
+    //     twitter: '@revistadoturismo',
+    //     instagram: 'https://instagram.com/revistadoturismo',
+    //     youtube: 'https://youtube.com/@revistadoturismo',
+    // },
 
-    analytics: {
-        gtmId: 'GTM-XXXXXX',
-    },
+    // analytics: {
+    //     gtmId: 'GTM-XXXXXX',
+    // },
 
-    verification: {
-        googleSiteVerification: '',
-    },
+    // verification: {
+    //     googleSiteVerification: '',
+    // },
 
     features: {
         blog: true, // true/false

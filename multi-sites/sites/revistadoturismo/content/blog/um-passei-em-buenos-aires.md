@@ -1,6 +1,6 @@
 ---
 title: "Um Passei em Buenos Aires"
-description: ""
+description: "MPSMBNSRS"
 pubDate: "2025-11-27T12:08:38.000Z"
 updatedDate: "2025-11-28T23:52:44.989Z"
 slug: "um-passei-em-buenos-aires"
