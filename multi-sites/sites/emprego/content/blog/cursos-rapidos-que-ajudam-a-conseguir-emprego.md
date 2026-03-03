@@ -1,6 +1,6 @@
 ---
 title: "Cursos Rápidos Que Ajudam a Conseguir Emprego"
-description: "KRSSRPDSKJDMKNSGRMPRG"
+description: "Capacitações curtas que aumentam as chances de contratação em pouco tempo."
 pubDate: "2025-12-03T20:20:07.000Z"
 updatedDate: "2025-12-03T20:21:04.698Z"
 slug: "cursos-rapidos-que-ajudam-a-conseguir-emprego"

@@ -1,6 +1,6 @@
 ---
 title: "Empresas Anunciam Vagas em Massa: Veja as Áreas Beneficiadas"
-description: "MPRZSNNSMVGSMMSVJSRSBNFSDS"
+description: "Panorama das empresas que abriram grandes processos seletivos e os segmentos que mais receberam novas oportunidades."
 pubDate: "2025-12-03T20:35:11.000Z"
 updatedDate: "2025-12-03T20:45:56.872Z"
 slug: "empresas-anunciam-vagas-em-massa-veja-as-areas-beneficiadas"

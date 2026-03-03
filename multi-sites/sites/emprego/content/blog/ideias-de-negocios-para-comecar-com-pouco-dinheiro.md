@@ -1,6 +1,6 @@
 ---
 title: "Ideias de Negócios Para Começar Com Pouco Dinheiro"
-description: "DSDNGSSPRKMKRKMPKDNR"
+description: "Sugestões de negócios acessíveis para iniciar mesmo com investimento baixo."
 pubDate: "2025-12-03T20:10:48.000Z"
 updatedDate: "2025-12-03T20:10:52.691Z"
 slug: "ideias-de-negocios-para-comecar-com-pouco-dinheiro"

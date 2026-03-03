@@ -1,6 +1,6 @@
 ---
 title: "Tendências do Trabalho no Brasil: O Que Esperar Nos Próximos Meses"
-description: "TNDNSSDTRBLNBRZLKSPRRNSPRXMSMZS"
+description: "Análise das principais mudanças previstas para o mercado e das áreas com maior potencial de crescimento no país."
 pubDate: "2025-12-03T20:32:35.000Z"
 updatedDate: "2025-12-03T20:46:41.822Z"
 slug: "tendencias-do-trabalho-no-brasil-o-que-esperar-nos-proximos-meses"
