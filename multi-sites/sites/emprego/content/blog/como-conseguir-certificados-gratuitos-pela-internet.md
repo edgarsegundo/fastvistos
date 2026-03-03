@@ -1,6 +1,6 @@
 ---
 title: "Como Conseguir Certificados Gratuitos Pela Internet"
-description: "KMKNSGRSRTFKDSGRTTSPLNTRNT"
+description: "Plataformas confiáveis que disponibilizam cursos com certificados gratuitos."
 pubDate: "2025-12-03T20:18:49.000Z"
 updatedDate: "2025-12-03T20:18:57.396Z"
 slug: "como-conseguir-certificados-gratuitos-pela-internet"

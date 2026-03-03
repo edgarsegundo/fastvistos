@@ -1,6 +1,6 @@
 ---
 title: "Como Vender Pela Internet Sem Complicação"
-description: "KMVNDRPLNTRNTSMKMPLKK"
+description: "Guia básico para iniciar vendas online de forma rápida e prática."
 pubDate: "2025-12-03T20:07:07.000Z"
 updatedDate: "2025-12-03T20:07:16.476Z"
 slug: "como-vender-pela-internet-sem-complicacao"

@@ -1,6 +1,6 @@
 ---
 title: "Dicas Para Organizar as Finanças do Seu Pequeno Negócio"
-description: "DKSPRRGNZRSFNNKSDSPKNNGS"
+description: "Boas práticas para controlar despesas, lucros e planejamento financeiro."
 pubDate: "2025-12-03T20:04:04.000Z"
 updatedDate: "2025-12-03T20:04:16.475Z"
 slug: "dicas-para-organizar-as-financas-do-seu-pequeno-negocio"
