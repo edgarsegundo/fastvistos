@@ -2,7 +2,7 @@
 title: "A Nova Perspectiva dos Vistos B1B2 para Brasileiros em 2026"
 description: "NVPRSPTVDSVSTSBBPRBRZLRSM"
 pubDate: "2026-02-04T18:33:03.000Z"
-updatedDate: "2026-02-04T18:37:49.356Z"
+updatedDate: "2026-03-03T15:03:51.041Z"
 slug: "a-nova-perspectiva-dos-vistos-b1b2-para-brasileiros-em-2025"
 topic: "Notícias"
 topicSlug: "noticias"
