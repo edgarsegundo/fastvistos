@@ -227,6 +227,25 @@
       "fastvistos__consultar-status-visto-americano-320-2x.webp 640w"
     ]
   },
+  "fastvistos__couleur-figs-1620590_1280": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAYBAwQF/8QAIhAAAgICAgEFAQAAAAAAAAAAAQIDBAAFESESBhMiMlFh/8QAFQEBAQAAAAAAAAAAAAAAAAAABQL/xAAeEQACAgICAwAAAAAAAAAAAAABAgADBBESUSEicf/aAAwDAQACEQMRAD8ARNDSTVyV7luQsR8vb46zrauWntdpLelRpwSVEQP1xfbZ2FqPByrIy+I5Ha5k1EZoIxru4Z+y3OTZXkNy9vkRqyMJAoFZPezI9RNFV200cUh8OeQPz+YZZJVjlcvIPJj2ScMSr5BQCfMHtZWclRodT//Z",
+    "jpeg": [
+      "fastvistos__couleur-figs-1620590_1280-1216-1x.jpeg 1216w",
+      "fastvistos__couleur-figs-1620590_1280-1216-2x.jpeg 2432w",
+      "fastvistos__couleur-figs-1620590_1280-608-1x.jpeg 608w",
+      "fastvistos__couleur-figs-1620590_1280-608-2x.jpeg 1216w",
+      "fastvistos__couleur-figs-1620590_1280-320-1x.jpeg 320w",
+      "fastvistos__couleur-figs-1620590_1280-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "fastvistos__couleur-figs-1620590_1280-1216-1x.webp 1216w",
+      "fastvistos__couleur-figs-1620590_1280-1216-2x.webp 2432w",
+      "fastvistos__couleur-figs-1620590_1280-608-1x.webp 608w",
+      "fastvistos__couleur-figs-1620590_1280-608-2x.webp 1216w",
+      "fastvistos__couleur-figs-1620590_1280-320-1x.webp 320w",
+      "fastvistos__couleur-figs-1620590_1280-320-2x.webp 640w"
+    ]
+  },
   "fastvistos__desenho-reprentando-pessoas-viajando-pelo-mundo": {
     "blurDataURL": "data:image/jpeg;base64,UklGRo4AAABXRUJQVlA4IIIAAADwAwCdASoUAA0APm0skkWkIqGYBABABsSzAE6ZQAGnXKhjlK5iCv4AAP7902/84+gJulwdJO9KfWnf2u91+1nfOgmR1jdflwjoXreR+tEVl2sRCKyn+eV8e3YxDKjkG3Z1ZJT2KPm4recqZXEsMN5z/mbU5Bv9VHbQRpGVEwZDeAAA",
     "jpeg": [
@@ -263,6 +282,25 @@
       "fastvistos__documento-visto-americano-608-2x.webp 1216w",
       "fastvistos__documento-visto-americano-320-1x.webp 320w",
       "fastvistos__documento-visto-americano-320-2x.webp 640w"
+    ]
+  },
+  "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAHABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAcG/8QAIBAAAQQCAQUAAAAAAAAAAAAAAgABAwQFESEGEhMVMf/EABcBAAMBAAAAAAAAAAAAAAAAAAECAwT/xAAaEQACAwEBAAAAAAAAAAAAAAAAEQECEzFR/9oADAMBAAIRAxEAPwCZ4imdW15REG1xpUfIdd5b1kFapIIHGHaz6RFPKrZo5CMHZyOSlmKSQwMy5J3b66IiXKoHPp//2Q==",
+    "jpeg": [
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-1216-1x.jpeg 1216w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-1216-2x.jpeg 2432w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-608-1x.jpeg 608w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-608-2x.jpeg 1216w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-320-1x.jpeg 320w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-1216-1x.webp 1216w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-1216-2x.webp 2432w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-608-1x.webp 608w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-608-2x.webp 1216w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-320-1x.webp 320w",
+      "fastvistos__eduardo-rocha-e-silva-hlALVN916-0-unsplash-320-2x.webp 640w"
     ]
   },
   "fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117": {
@@ -396,6 +434,25 @@
       "fastvistos__lasvegas-608-2x.webp 1216w",
       "fastvistos__lasvegas-320-1x.webp 320w",
       "fastvistos__lasvegas-320-2x.webp 640w"
+    ]
+  },
+  "fastvistos__lucas-souza-71bcQ68rj5s-unsplash": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEBf/EACQQAAEDAgQHAAAAAAAAAAAAAAEAAgMEEQUSIZEiMTNBRJKi/8QAFgEBAQEAAAAAAAAAAAAAAAAAAQIE/8QAHBEAAgICAwAAAAAAAAAAAAAAAAEDUQQWBRVB/9oADAMBAAIRAxEAPwB0tVhchsyr+SpZaWiOrqmwPLhWA6Ngc2zG7K9jWuy5mg6dwjYsleIzrh4bZWIMNHkj1KEiKKPJ02bBCNlyaRXTQWz/2Q==",
+    "jpeg": [
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-1216-1x.jpeg 1216w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-1216-2x.jpeg 2432w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-608-1x.jpeg 608w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-608-2x.jpeg 1216w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-320-1x.jpeg 320w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-1216-1x.webp 1216w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-1216-2x.webp 2432w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-608-1x.webp 608w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-608-2x.webp 1216w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-320-1x.webp 320w",
+      "fastvistos__lucas-souza-71bcQ68rj5s-unsplash-320-2x.webp 640w"
     ]
   },
   "fastvistos__mariia-shalabaieva-HBkpnDVc_Ic-unsplash": {
