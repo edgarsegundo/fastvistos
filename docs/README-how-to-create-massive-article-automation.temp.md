@@ -5504,7 +5504,7 @@ Este é o meu artigo, pesquise e faça um faq bem completo de perguntas e respos
 Convert this faq to this json format:
 [
     {
-        question: '...',
-        answer: '...',
+        "question": "...",
+        "answer": "...",
     },
 ]
