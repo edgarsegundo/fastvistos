@@ -67,7 +67,12 @@
     "dev:watch:gabrielmacedonio": "node dev-with-sync.js gabrielmacedonio",
     "build:gabrielmacedonio": "node sync-blog.js gabrielmacedonio && SITE_ID=gabrielmacedonio astro build && node postbuild-updatable.js gabrielmacedonio",
     "preview:gabrielmacedonio": "SITE_ID=gabrielmacedonio astro preview",
-    "download-images:gabrielmacedonio": "node download-blog-images.js gabrielmacedonio"
+    "download-images:gabrielmacedonio": "node download-blog-images.js gabrielmacedonio",
+    "dev:centraldevistos": "node sync-blog.js centraldevistos && SITE_ID=centraldevistos astro dev",
+    "dev:watch:centraldevistos": "node dev-with-sync.js centraldevistos",
+    "build:centraldevistos": "node sync-blog.js centraldevistos && SITE_ID=centraldevistos astro build && node postbuild-updatable.js centraldevistos",
+    "preview:centraldevistos": "SITE_ID=centraldevistos astro preview",
+    "download-images:centraldevistos": "node download-blog-images.js centraldevistos"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
