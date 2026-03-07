@@ -1,14 +1,19 @@
 ---
+// https://chatgpt.com/share/69ab2149-1758-8010-9bb5-9454272fb731
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+
+import Navigation from '../components/Navigation.astro';
+import HeroSection from '../components/HeroSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
+    bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
     bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    themeToggleDisable={true}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
@@ -32,19 +37,16 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <!-- Body content -->
+    <Navigation />
+    <HeroSection />
+
+    <!-- Body content -->
     <p>This is the home page content for {siteConfig.site.siteName}.</p>
 </SharedHomeLayout>
 
 <style is:global>
-    .home-layout p,
-    .home-layout h3,
-    .home-layout ul,
-    .home-layout a,
-    .home-layout span {
-        color: #1b375c !important;
-    }
+</style>
 
-    .home-main {
-        min-height: 100vh;
-    }
+<!-- CSS specific to this page -->
+<style>
 </style>
