@@ -1,0 +1,157 @@
+---
+// Footer Section Component
+---
+
+<footer class="bg-white">
+    <div class="container mx-auto px-8">
+        <div class="w-full flex flex-col md:flex-row py-6">
+            <div class="flex-1 mb-6 text-black flex justify-center lg:justify-start">
+                <a
+                    class="text-pink-600 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+                    href="https://fastvistos.com.br"
+                >
+                    <img src="assets/images/logo/logo-footer.png" alt="FastVistos" class="w-32" />
+                </a>
+            </div>
+            <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">FORMAS DE PAGAMENTO</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img src="assets/images/payments/visa.png" alt="visa" width="40" />
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img
+                            src="assets/images/payments/mastercard.png"
+                            alt="mastercard"
+                            width="40"
+                        />
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img
+                            src="assets/images/payments/mercadopago.png"
+                            alt="mercadopago"
+                            width="40"
+                        />
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <img src="assets/images/payments/paypal.png" alt="paypal" width="45" />
+                    </li>
+                </ul>
+            </div>
+            <!-- <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">Social</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a href="#"
+                            class="no-underline hover:underline text-gray-800 hover:text-pink-500">Facebook</a>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a href="#"
+                            class="no-underline hover:underline text-gray-800 hover:text-pink-500">Linkedin</a>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a href="#"
+                            class="no-underline hover:underline text-gray-800 hover:text-pink-500">Twitter</a>
+                    </li>
+                </ul>
+            </div> -->
+            <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">Endereço</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <span class="no-underline text-gray-800">Av. Júlio Diniz, 257</span>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <span class="no-underline text-gray-800">Taquaral, Campinas - SP</span>
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a
+                            href="#"
+                            data-linkcode="%231"
+                            class="wpp_button_link no-underline hover:underline text-gray-800 hover:text-pink-500"
+                            >📞 &nbsp;(19) 2042-2785</a
+                        >
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <span class="no-underline text-gray-800"
+                            >✉️ &nbsp;contato@fastvistos.com.br</span
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="flex-1">
+                <p class="uppercase text-gray-500 md:mb-6">Legal</p>
+                <ul class="list-reset mb-6">
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a
+                            onclick="openTermsPopup();"
+                            class="cursor-pointer no-underline hover:underline text-gray-800 hover:text-pink-500"
+                            >Termos</a
+                        >
+                    </li>
+                    <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                        <a
+                            onclick="openPrivacyPolicyPopup();"
+                            class="cursor-pointer no-underline hover:underline text-gray-800 hover:text-pink-500"
+                            >Privacidade</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Copyright Section -->
+        <div class="w-full border-t border-gray-300 pt-6 mt-6">
+            <div class="flex flex-col gap-4 text-sm text-gray-600">
+
+                <!-- Aviso legal -->
+                <p class="text-center md:text-left">
+                    * Este site é propriedade de uma empresa privada sediada em Campinas e não tem
+                    relação com a Embaixada dos Estados Unidos.
+                </p>
+
+                <!-- CNPJ -->
+                <p class="text-center md:text-right">
+                    <small>
+                        CNPJ 45.043.027/0001-08 – fastvistos © 2025 – Todos os direitos reservados
+                    </small>
+                </p>
+
+                <!-- Cidades atendidas -->
+                <p class="text-gray-400 text-[10px] font-light leading-relaxed text-center">
+                    Já atendemos online em Campinas e região, incluindo Paulínia, Valinhos, Vinhedo,
+                    Sumaré, Hortolândia, Indaiatuba, Americana, Santa Bárbara d’Oeste, Nova Odessa,
+                    Jaguariúna, Holambra, Monte Mor, Elias Fausto, Limeira, Piracicaba, Rio Claro,
+                    Araras, Mogi Mirim, Mogi Guaçu, Itatiba, Jundiaí, Louveira, Cabreúva, Salto,
+                    Itu, Sorocaba, Tatuí, Boituva, São Roque, Atibaia, Bragança Paulista,
+                    Serra Negra, Amparo, Águas de Lindóia, além de atendimento nas principais
+                    capitais: São Paulo, Rio de Janeiro, Belo Horizonte, Curitiba, Porto Alegre,
+                    Brasília, Salvador, Fortaleza, Recife — e em todo o Brasil.
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+    <br />
+</footer>
+
+<script>
+    // Make functions globally accessible
+    (globalThis as any).openTermsPopup = function () {
+        window.open(
+            'terms.html',
+            'Termos de Uso',
+            'width=800,height=1024,resizable=yes,scrollbars=yes'
+        );
+        return false;
+    };
+
+    (globalThis as any).openPrivacyPolicyPopup = function () {
+        window.open(
+            'privacy_policy.html',
+            'Política de Privacidade',
+            'width=800,height=1024,resizable=yes,scrollbars=yes'
+        );
+        return false;
+    };
+</script>
