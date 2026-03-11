@@ -244,22 +244,36 @@
      HERO
 ════════════════════════════════════════ -->
 <section class="hero-section pt-12 md:pt-4">
-    <div class="container px-4 mx-auto flex flex-wrap flex-col md:flex-row items-center gap-8 pb-16">
+    <div class="container px-4 mx-auto flex flex-col items-center text-center gap-6 md:gap-8 pb-16">
 
-    <!-- Badge versão 3: outline branco -->
-    <div style="display:inline-flex; align-items:center; gap:6px; background:transparent; border:2px solid #fff; color:#fff; font-family:'Sora',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:5px 16px; border-radius:999px; margin-bottom:1rem;">
-      <svg width="10" height="10" fill="#FF6600" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
-      Assessoria especializada
-    </div>
+    <!-- Badge + Título + Subtítulo -->
+    <div class="flex flex-col items-center text-center w-full gap-0">
 
-    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-center w-full"
-      style="color: #FF8700; font-family: 'Sora', sans-serif; letter-spacing: -0.03em; line-height: 1;">
-      VISTO FÁCIL
-    </h1>
-    <p class="text-lg md:text-2xl text-center text-white mt-3"
-      style="font-family: 'Inter', sans-serif; font-weight: 500;">
-      Atendimento em todo o Brasil.
-    </p>
+      <!-- Badge -->
+      <div class="inline-flex items-center justify-center gap-1.5 bg-transparent border-2 border-white text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+        <svg width="10" height="10" fill="#FF6600" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
+        Assessoria especializada
+      </div>
+
+      <!-- H1 -->
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-center w-full leading-none tracking-tight mb-6"
+        style="color: #FE8700; font-family: 'Sora', sans-serif;">
+        VISTO FÁCIL
+      </h1>
+
+      <!-- Subtítulo -->
+      <p class="text-lg md:text-2xl text-center text-white w-full font-medium mb-8">
+        Atendimento em todo o Brasil.
+      </p>
+
+      <!-- CTA -->
+      <a href="#fale-conosco"
+        class="inline-flex items-center justify-center gap-2 bg-[#FE8700] hover:bg-[#e07900] text-white font-bold text-lg md:text-xl px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20.52 3.48A12 12 0 0 0 3.48 20.52L2 22l1.48-1.48A12 12 0 1 0 20.52 3.48zM12 21a9 9 0 1 1 9-9 9 9 0 0 1-9 9zm4.95-6.39c-.27-.14-1.6-.79-1.85-.88s-.43-.14-.61.14-.7.88-.86 1.06-.32.2-.59.07a7.44 7.44 0 0 1-2.19-1.35 8.23 8.23 0 0 1-1.52-1.88c-.16-.27 0-.42.12-.56s.27-.32.41-.48a1.9 1.9 0 0 0 .27-.45.5.5 0 0 0 0-.48c-.07-.14-.61-1.47-.84-2s-.44-.46-.61-.47h-.52a1 1 0 0 0-.72.34 3.05 3.05 0 0 0-.95 2.27 5.29 5.29 0 0 0 1.1 2.8 12.13 12.13 0 0 0 4.64 4.11c.65.28 1.15.45 1.55.57a3.73 3.73 0 0 0 1.71.11 2.8 2.8 0 0 0 1.83-1.29 2.27 2.27 0 0 0 .16-1.29c-.07-.12-.25-.19-.52-.33z"/>
+        </svg>
+        Fale Conosco
+      </a>
 
   </div>
 </section>
