@@ -13,6 +13,7 @@ import FooterSection from '../components/FooterSection.astro';
 import Whatsapp from '../components/Whatsapp.astro';
 import VideosSection from '../components/VideosSection.astro';
 import CallToActionSection from '../components/CallToActionSection.astro';
+import GoogleReviewsSection from '../components/GoogleReviewsSection.astro';
 
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
@@ -58,9 +59,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         siteId={siteConfig.site.id}
     />
     <!-- <GoogleMapsSection /> -->
+     <!-- <GoogleReviewsSection /> -->
 
-    <div class="w-full flex justify-center my-12 px-4" role="region" aria-label="Avaliação dos clientes do Google"> <div class="w-full max-w-5xl bg-white rounded-xl shadow-lg p-6 flex gap-4 items-center overflow-visible max-h-[360px]"> <div class="flex-shrink-0 w-[220px] min-w-[140px] text-center pr-2 border-r border-gray-100"> <h3 class="text-gray-900 text-base mb-1">Avaliação dos clientes</h3> <div class="font-extrabold text-2xl">5.0</div> <div class="text-amber-500 text-lg" aria-hidden="true">⭐⭐⭐⭐⭐</div> <div class="text-sm text-gray-500 mt-1">com base em <strong class="text-gray-700">299 avaliações</strong></div> <div class="mt-2"> <img src="https://fastvistos.com.br/assets/images/blog/fastvistos__avaliacoes-google-business.webp" alt="Google" width="80" class="mx-auto" /> </div> </div> <div class="flex-1 pl-4"> <p class="text-gray-900 text-lg font-semibold mb-1">Excelente atendimento e suporte rápido</p> <p class="text-gray-500 text-sm leading-6">Nossos clientes relatam agilidade no processo e apoio durante toda a jornada. Veja relatos reais clicando no botão abaixo.</p> <a class="inline-block mt-3 text-blue-600 font-semibold hover:underline" href="https://share.google/eqbXOlAGZM1MdSOQb" target="_blank" rel="noopener">Ver depoimentos no Google ↗</a> </div> </div> </div>
-    
     <CallToActionSection />
 
 
