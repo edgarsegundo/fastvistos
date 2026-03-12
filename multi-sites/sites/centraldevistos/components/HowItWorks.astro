@@ -1,0 +1,264 @@
+---
+// Hero component — Central de Vistos
+---
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500&display=swap');
+
+  /* ── FLOW SECTION ── */
+  .flow-section {
+    background: #fff;
+    padding: 60px 0 48px;
+  }
+
+  .flow-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0A1628;
+    margin-bottom: 4px;
+  }
+  .flow-subtitle {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    font-weight: 800;
+    color: #0A1628;
+    margin-bottom: 40px;
+  }
+  .flow-subtitle em {
+    font-style: normal;
+    color: #1A56DB;
+  }
+
+  /* steps grid */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  /* connector line between steps */
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 80px; /* center of the image */
+    left: calc(10% + 16px);
+    right: calc(10% + 16px);
+    height: 2px;
+    background: linear-gradient(90deg, #1A56DB 0%, #60A5FA 100%);
+    z-index: 0;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* step image wrapper */
+  .step-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    margin-bottom: 16px;
+    position: relative;
+    border: 3px solid #fff;
+    outline: 2px solid #E2E8F0;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .step-img-wrap:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(26,86,219,0.18);
+    outline-color: #1A56DB;
+  }
+
+  /* step number badge */
+  .step-num {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 28px;
+    height: 28px;
+    background: #1A56DB;
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .step-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .step-label {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0A1628;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.90rem;
+    color: #64748B;
+    line-height: 1.5;
+  }
+
+  /* arrow between steps (hidden on mobile) */
+  .step-arrow {
+    position: absolute;
+    right: -10px;
+    top: 40px;
+    color: #1A56DB;
+    font-size: 1.1rem;
+    z-index: 2;
+  }
+
+  /* last step highlight */
+  .step:last-child .step-img-wrap {
+    outline-color: #FFD600;
+  }
+  .step:last-child .step-num {
+    background: #FFD600;
+    color: #0A1628;
+  }
+
+  /* footer note */
+  .flow-footer {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #94A3B8;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .flow-footer strong {
+    color: #1A56DB;
+  }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .steps-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .steps-grid::before { display: none; }
+    .step-arrow { display: none; }
+  }
+  @media (max-width: 480px) {
+    .steps-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<!-- ═══════════════════════════════════════
+     COMO FUNCIONA  (flow section)
+════════════════════════════════════════ -->
+<section class="flow-section">
+  <div class="container px-4 mx-auto">
+
+
+
+
+
+    <!-- ── section heading ── -->
+    <div class="text-center mb-12">
+
+      <!-- eyebrow -->
+      <div class="inline-flex items-center gap-3 mb-4">
+        <span class="block h-px w-8" style="background:#1A56DB;"></span>
+        <span class="text-xs font-bold tracking-widest uppercase" style="color:#1A56DB; font-family:'Sora',sans-serif;">Nossa metodologia</span>
+        <span class="block h-px w-8" style="background:#1A56DB;"></span>
+      </div>
+
+      <!-- title -->
+      <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-3" style="font-family:'Sora',sans-serif; color:#0A1628; letter-spacing:-0.03em;">
+        Como Funciona?
+      </h2>
+
+      <!-- subtitle -->
+      <p class="text-base text-slate-500 max-w-lg mx-auto" style="font-family:'Inter',sans-serif;">
+        Simples, transparente e sem surpresas — do primeiro contato ao visto carimbado no seu passaporte.
+      </p>
+
+    </div>
+
+
+
+
+
+    <div class="steps-grid">
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-img-wrap">
+          <span class="step-num">1</span>
+          <img src="assets/images/hero/freepik__a-professional-customer-support-specialist-wearing__1452.png" alt="Fale com um especialista" loading="lazy"/>
+        </div>
+        <p class="step-label">Fale com um especialista</p>
+        <p class="step-desc">Nossa equipe orienta você passo a passo e coleta todas as informações.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-img-wrap">
+          <span class="step-num">2</span>
+          <img src="assets/images/hero/freepik__a-photorealistic-logistics-scene-showing-an-intern__1453.png" alt="Envio seguro de documentos" loading="lazy"/>
+        </div>
+        <p class="step-label">Envio seguro de documentos</p>
+        <p class="step-desc">Programamos a coleta do passaporte via <strong>Sedex</strong> com rastreamento.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-img-wrap">
+          <span class="step-num">3</span>
+          <img src="assets/images/hero/freepik__a-photorealistic-office-scene-showing-a-profession__1454.png" alt="Equipe especializada acompanha" loading="lazy"/>
+        </div>
+        <p class="step-label">Equipe especializada acompanha</p>
+        <p class="step-desc">Seu passaporte é recebido próximo aos consulados em São Paulo.</p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-img-wrap">
+          <span class="step-num">4</span>
+          <img src="assets/images/hero/freepik__a-photorealistic-closeup-of-a-person-holding-a-mod__1455.png" alt="Acompanhamento em tempo real" loading="lazy"/>
+        </div>
+        <p class="step-label">Acompanhamento em tempo real</p>
+        <p class="step-desc">Você recebe atualizações e suporte sempre que precisar.</p>
+      </div>
+
+      <!-- Step 5 — highlight -->
+      <div class="step">
+        <div class="step-img-wrap">
+          <span class="step-num">5</span>
+          <img src="assets/images/hero/freepik__the-attached-drawing-is-provided-only-as-a-visual-__1456.png" alt="Passaporte com visto pronto" loading="lazy"/>
+        </div>
+        <p class="step-label">Seu passaporte retorna com o visto pronto 🎉</p>
+        <p class="step-desc">Com segurança e acompanhamento personalizado do início ao fim.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
