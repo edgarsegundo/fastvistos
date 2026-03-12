@@ -2,10 +2,13 @@
 // Navigation component with logo and menu
 ---
 
-<nav id="header" class="w-full z-50 top-0 text-white gradient">
-  <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-4 py-4 border-b border-gray-200 mb-2 px-2">
-    <div class="pl-4 flex items-center font-bold">
-      <img alt="logo" data-ssr-src-done="true" fetchpriority="high" src="https://static.wixstatic.com/media/da1c00_6cb69cbf962f43ad83b84fe45034eb39~mv2.png" style="width: 127px; height: 30px; object-fit: contain; object-position: center center;">
+<nav id="header" class="w-full z-50 top-0 text-white">
+  <div class="w-full container mx-auto flex flex-wrap items-center justify-between py-4 border-b border-gray-200 mb-2 px-2">
+    <div class="pl-4 flex flex-col items-start font-bold">
+      <img alt="logo" data-ssr-src-done="true" fetchpriority="high" 
+            src="assets/images/hero/empregoaqui_two_arrows.avif" 
+            class="h-[60px] object-contain object-left">
+      <span class="text-xs text-gray-500 mt-0.5">Aqui você encontra o emprego que tanto procura.</span>
     </div>
 
     <div class="block lg:hidden pr-4">
@@ -27,22 +30,7 @@
           <line x1="3" y1="18" x2="21" y2="18" stroke-width="1" stroke-linecap="round"/>
         </svg>
       </button>
-
     </div>
-
-    <!-- <div id="nav-content" class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 lg:bg-transparent p-4 lg:p-0 z-20">
-      <ul class="list-reset lg:flex justify-end flex-1 items-center">
-        <li class="mr-3">
-          <a class="inline-block top-link text-black lg:text-gray-300 py-2 px-4 font-bold no-underline link-click" href="#casos-de-sucesso">Casos de Sucesso</a>
-        </li>
-        <li class="mr-3">
-          <a class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click" href="/test.html">FAQ</a>
-        </li>
-        <li class="mr-3">
-          <a class="inline-block top-link text-black lg:text-gray-300 no-underline hover:text-gray-800 hover:text-underline py-2 px-4 link-click" href="https://admin.empregoaqui.com.br/entrar/">Área da Empresa</a>
-        </li>        
-      </ul>
-    </div> -->
   </div>
   <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
 </nav>
