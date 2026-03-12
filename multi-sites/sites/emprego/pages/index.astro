@@ -51,75 +51,49 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         <HeroSection />
         <HowItWorks />
 
-
-
-
-        
-
-        <div class="w-full p-6 flex flex-col items-center px-4 mt-6"> <!--bg-gray-50 rounded-2xl shadow -->
-          <h3 class="text-xl md:text-2xl font-bold text-gray-900 text-center mb-2" style="color: #232320; font-size: 21.23px; font-family: inter">
-            Em menos de 2 minutos seu currículo estará pronto e você poderá começar a receber propostas de emprego
-          </h3>
-
-
-          <a 
-            href="https://wa.me/5519988055816?text=Ol%C3%A1!%20Quero%20criar%20meu%20curr%C3%ADculo%20com%20a%20IA%20%F0%9F%91%8B"
-            class="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-semibold text-2xl py-3 rounded-lg transition duration-200 mt-10" 
-            style="font-family: inter; color: #ffffff; background-color: #37D315;"
-          >
-            Quero meu currículo
-          </a>
-
-
-        </div>
-
-        <h2 class="text-4xl font-bold mt-6 text-center" 
+        <h2 class="text-4xl font-bold mt-16 text-center" 
           style="font-family: 'Bricolage Grotesque', sans-serif !important; font-size: 28px; color: #232320;">
         Porque o emprego aqui é diferente?
         </h2>
 
-
-
         <WhyUs />
 
+        <div class="container mx-auto max-w-3xl px-8 flex flex-col items-center">
+          <h2 class="text-4xl font-bold mt-16 text-center" 
+            style="font-family: 'Bricolage Grotesque', sans-serif !important; font-size: 28px; color: #232320;">
+          EMPRESAS
+          </h2>
 
-        <h2 class="text-4xl font-bold mt-6 text-center" 
-          style="font-family: 'Bricolage Grotesque', sans-serif !important; font-size: 28px; color: #232320;">
-        EMPRESAS
-        </h2>
+          <section class="py-2 bg-gray-100 px-4 flex justify-center">
+            <div class="max-w-xl w-full rounded-3xl shadow-lg border border-gray-200 p-8 sm:p-10" style="background-color: #FFFFF7">
 
+              <!-- Logos inline -->
+              <div class="flex items-center gap-4 mb-6">
+                <img src="assets/images/hero/empregoaqui_two_arrows.avif" alt="Emprego Aqui" class="h-12 object-contain">
+                <img src="assets/images/services/handshake.avif" alt="Emprego Aqui" class="h-16 object-contain">
+              </div>
 
+              <!-- Texto -->
+              <p class="leading-relaxed" 
+                  style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; color: #232320;">
+                Clique no botão abaixo e acesse centenas de currículos de candidatos qualificados. Com o Emprego Aqui, sua empresa contrata de forma rápida, segura e eficiente.
+              </p>
 
-
-        <section class="py-2 bg-gray-100 px-4 flex justify-center">
-          <div class="max-w-xl w-full rounded-3xl shadow-lg border border-gray-200 p-8 sm:p-10" style="background-color: #FFFFF7">
-
-            <!-- Logos inline -->
-            <div class="flex items-center gap-4 mb-6">
-              <img src="assets/images/hero/empregoaqui_two_arrows.avif" alt="Emprego Aqui" class="h-12 object-contain">
-              <img src="assets/images/services/handshake.avif" alt="Emprego Aqui" class="h-16 object-contain">
             </div>
 
-            <!-- Texto -->
-            <p class="leading-relaxed" 
-                style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; color: #232320;">
-              Clique no botão abaixo e acesse centenas de currículos de candidatos qualificados. Com o Emprego Aqui, sua empresa contrata de forma rápida, segura e eficiente.
-            </p>
 
+            
+          </section>
+
+          <div class="w-full  flex flex-col items-center px-4">
+            <a 
+              href="https://admin.empregoaqui.com.br/api/posts/search-page/"
+              class="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-semibold text-2xl py-3 rounded-lg transition duration-200" 
+              style="font-family: inter; color: #ffffff; background-color: #37D315;"
+            >
+              Procurar candidatos
+            </a>
           </div>
-
-
-          
-        </section>
-
-        <div class="w-full  flex flex-col items-center px-4">
-          <a 
-            href="https://admin.empregoaqui.com.br/api/posts/search-page/"
-            class="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-semibold text-2xl py-3 rounded-lg transition duration-200" 
-            style="font-family: inter; color: #ffffff; background-color: #37D315;"
-          >
-            Procurar candidatos
-          </a>
         </div>
 
       <!-- <a href="https://admin.empregoaqui.com.br/api/posts/search-page/" class="inline-flex items-center justify-center px-8 py-3 bg-green-600 hover:bg-green-700 
