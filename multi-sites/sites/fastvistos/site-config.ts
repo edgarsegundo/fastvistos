@@ -1,4 +1,3 @@
-import type Whatsapp from './components/Whatsapp.astro';
 import type { SiteConfig } from './lib/site-config-model.ts';
 
 // 🌐 Shared Site Config (site + branding + global stuff)
@@ -70,7 +69,7 @@ export const siteConfig: SiteConfig = {
         },
         aggregateRating: {
             ratingValue: 5,
-            reviewCount: 298,
+            reviewCount: 300,
         },
 
         reviews: [
@@ -170,9 +169,9 @@ export const siteConfig: SiteConfig = {
     homePageConfig: {
         seo: {
             // ✅ OPÇÃO 1 IMPLEMENTADA: Título focado em "Todo Brasil"
-            title: 'Fast Vistos - Assessoria de Vistos Americanos para Todo Brasil | Campinas SP',
+            title: 'Fast Vistos - Assessoria de Visto Americano para Todo Brasil | Campinas SP',
             // ✅ OPÇÃO 1 IMPLEMENTADA: Descrição com foco nacional
-            description: 'Assessoria especializada em vistos americanos com atendimento em todo o Brasil. Sede em Campinas/SP. Taxa de aprovação 95%+. Agende sua entrevista.',
+            description: 'Assessoria especializada em visto americano com atendimento em todo o Brasil. Sede em Campinas/SP. Taxa de aprovação 95%+. Processo rápido e seguro. Fale pelo WhatsApp.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
@@ -181,19 +180,19 @@ export const siteConfig: SiteConfig = {
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
-                    alt: 'Fast Vistos - Assessoria de vistos americanos para todo Brasil'
+                    alt: 'Fast Vistos - Assessoria de visto americano para todo Brasil'
                 },
                 // ✅ ADICIONADO: OG Title e Description para redes sociais
-                title: 'Fast Vistos - Assessoria de Vistos Americanos para Todo Brasil',
-                description: 'Assessoria especializada em vistos americanos com atendimento em todo o Brasil. Sede em Campinas/SP.',
+                title: 'Fast Vistos - Assessoria de Visto Americano para Todo Brasil',
+                description: 'Assessoria especializada em visto americano com atendimento em todo o Brasil. Sede em Campinas/SP.',
             }
         },
     },
 
     blogPageConfig: {
         seo: {
-            title: 'Blog Fast Vistos - Dicas e Informações sobre Vistos Internacionais',
-            description: 'Artigos e dicas sobre vistos americanos, canadenses, passaportes e viagens internacionais. Atendimento para todo Brasil.',
+            title: 'Blog Fast Vistos | Visto Americano, DS-160, Entrevista Consular e Mais',
+            description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
