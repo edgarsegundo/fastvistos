@@ -1,5 +1,5 @@
 ---
-// Hero component — Central de Vistos
+// How it works Section Component
 ---
 
 <style>
@@ -168,97 +168,94 @@
     .steps-grid { grid-template-columns: 1fr; }
   }
 </style>
-
+ 
 
 <!-- ═══════════════════════════════════════
      COMO FUNCIONA  (flow section)
 ════════════════════════════════════════ -->
-<section class="flow-section">
-  <div class="container px-4 mx-auto">
 
+<section class="bg-white border-b md:py-16" id="nossos-servicos">
+    <div class="container mx-auto flex flex-wrap pt-4 pb-12">
+        <h2
+            class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800"
+            style="color: #1B375C;"
+        >
+            Como Funciona?
+        </h2>
+        <div class="w-full mb-4">
+            <div
+                class="h-1 mx-auto bg-gradient-to-r w-64 opacity-25 my-0 py-0 rounded-t"
+                style="background-color: #0c59be;"
+            >
+            </div>
+        </div>
 
+        <div class="container px-4 mx-auto">
+            <!-- ── section heading ── -->
+            <div class="text-center mb-12">
 
+              <!-- subtitle -->
+              <p class="text-base text-slate-500 max-w-lg mx-auto" style="font-family:'Inter',sans-serif;">
+                Simples, transparente e sem surpresas — do primeiro contato ao visto carimbado no seu passaporte.
+              </p>
 
+            </div>
+            <div class="steps-grid">
 
-    <!-- ── section heading ── -->
-    <div class="text-center mb-12">
+              <!-- Step 1 -->
+              <div class="step">
+                <div class="step-img-wrap">
+                  <span class="step-num">1</span>
+                  <img src="assets/images/hero/freepik__a-professional-customer-support-specialist-wearing__1452.png" alt="Fale com um especialista" loading="lazy"/>
+                </div>
+                <p class="step-label">Fale com um especialista</p>
+                <p class="step-desc">Nossa equipe orienta você passo a passo e coleta todas as informações.</p>
+              </div>
 
-      <!-- eyebrow -->
-      <div class="inline-flex items-center gap-3 mb-4">
-        <span class="block h-px w-8" style="background:#1A56DB;"></span>
-        <span class="text-xs font-bold tracking-widest uppercase" style="color:#1A56DB; font-family:'Sora',sans-serif;">Nossa metodologia</span>
-        <span class="block h-px w-8" style="background:#1A56DB;"></span>
-      </div>
+              <!-- Step 2 -->
+              <div class="step">
+                <div class="step-img-wrap">
+                  <span class="step-num">2</span>
+                  <img src="assets/images/hero/freepik__a-photorealistic-logistics-scene-showing-an-intern__1453.png" alt="Envio seguro de documentos" loading="lazy"/>
+                </div>
+                <p class="step-label">Envio seguro de documentos</p>
+                <p class="step-desc">Programamos a coleta do passaporte via <strong>Sedex</strong> com rastreamento.</p>
+              </div>
 
-      <!-- title -->
-      <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-3" style="font-family:'Sora',sans-serif; color:#0A1628; letter-spacing:-0.03em;">
-        Como Funciona?
-      </h2>
+              <!-- Step 3 -->
+              <div class="step">
+                <div class="step-img-wrap">
+                  <span class="step-num">3</span>
+                  <img src="assets/images/hero/freepik__a-photorealistic-office-scene-showing-a-profession__1454.png" alt="Equipe especializada acompanha" loading="lazy"/>
+                </div>
+                <p class="step-label">Equipe especializada acompanha</p>
+                <p class="step-desc">Seu passaporte é recebido próximo aos consulados em São Paulo.</p>
+              </div>
 
-      <!-- subtitle -->
-      <p class="text-base text-slate-500 max-w-lg mx-auto" style="font-family:'Inter',sans-serif;">
-        Simples, transparente e sem surpresas — do primeiro contato ao visto carimbado no seu passaporte.
-      </p>
+              <!-- Step 4 -->
+              <div class="step">
+                <div class="step-img-wrap">
+                  <span class="step-num">4</span>
+                  <img src="assets/images/hero/freepik__a-photorealistic-closeup-of-a-person-holding-a-mod__1455.png" alt="Acompanhamento em tempo real" loading="lazy"/>
+                </div>
+                <p class="step-label">Acompanhamento em tempo real</p>
+                <p class="step-desc">Você recebe atualizações e suporte sempre que precisar.</p>
+              </div>
+
+              <!-- Step 5 — highlight -->
+              <div class="step">
+                <div class="step-img-wrap">
+                  <span class="step-num">5</span>
+                  <img src="assets/images/hero/freepik__the-attached-drawing-is-provided-only-as-a-visual-__1456.png" alt="Passaporte com visto pronto" loading="lazy"/>
+                </div>
+                <p class="step-label">Seu passaporte retorna com o visto pronto 🎉</p>
+                <p class="step-desc">Com segurança e acompanhamento personalizado do início ao fim.</p>
+              </div>
+
+            </div>
+
+        </div>
+
 
     </div>
-
-
-
-
-
-    <div class="steps-grid">
-
-      <!-- Step 1 -->
-      <div class="step">
-        <div class="step-img-wrap">
-          <span class="step-num">1</span>
-          <img src="assets/images/hero/freepik__a-professional-customer-support-specialist-wearing__1452.png" alt="Fale com um especialista" loading="lazy"/>
-        </div>
-        <p class="step-label">Fale com um especialista</p>
-        <p class="step-desc">Nossa equipe orienta você passo a passo e coleta todas as informações.</p>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="step">
-        <div class="step-img-wrap">
-          <span class="step-num">2</span>
-          <img src="assets/images/hero/freepik__a-photorealistic-logistics-scene-showing-an-intern__1453.png" alt="Envio seguro de documentos" loading="lazy"/>
-        </div>
-        <p class="step-label">Envio seguro de documentos</p>
-        <p class="step-desc">Programamos a coleta do passaporte via <strong>Sedex</strong> com rastreamento.</p>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="step">
-        <div class="step-img-wrap">
-          <span class="step-num">3</span>
-          <img src="assets/images/hero/freepik__a-photorealistic-office-scene-showing-a-profession__1454.png" alt="Equipe especializada acompanha" loading="lazy"/>
-        </div>
-        <p class="step-label">Equipe especializada acompanha</p>
-        <p class="step-desc">Seu passaporte é recebido próximo aos consulados em São Paulo.</p>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="step">
-        <div class="step-img-wrap">
-          <span class="step-num">4</span>
-          <img src="assets/images/hero/freepik__a-photorealistic-closeup-of-a-person-holding-a-mod__1455.png" alt="Acompanhamento em tempo real" loading="lazy"/>
-        </div>
-        <p class="step-label">Acompanhamento em tempo real</p>
-        <p class="step-desc">Você recebe atualizações e suporte sempre que precisar.</p>
-      </div>
-
-      <!-- Step 5 — highlight -->
-      <div class="step">
-        <div class="step-img-wrap">
-          <span class="step-num">5</span>
-          <img src="assets/images/hero/freepik__the-attached-drawing-is-provided-only-as-a-visual-__1456.png" alt="Passaporte com visto pronto" loading="lazy"/>
-        </div>
-        <p class="step-label">Seu passaporte retorna com o visto pronto 🎉</p>
-        <p class="step-desc">Com segurança e acompanhamento personalizado do início ao fim.</p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
+</section>    

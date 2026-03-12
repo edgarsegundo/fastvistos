@@ -1,24 +1,18 @@
 <section class="pt-4">
   <div class="container mx-auto max-w-3xl px-4 flex flex-col items-center">
-    <div class="flex justify-center items-center mb-6">
-      <img 
-        src="assets/images/hero/empregoaqui_two_arrows.avif"
-        alt="Conversa WhatsApp"
-        
-        loading="lazy"
-      />
-    </div>
 
     <!-- Título principal -->
     <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 text-center leading-tight mb-2"
-      style="color: #232320; font-size: 34.744px; font-family: assistant-v2, sans-serif">
-      Pare de perder tempo procurando emprego...
+    style="font-size: 28.8px; font-family: 'Open Sans', sans-serif;"
+    >
+      Pare de Perder Tempo Procurando Emprego
     </h1>
-    <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-2 mt-4" style="color: #54BE1A; font-size: 46.368px; padding: 0 10px 0 10px; font-family: inter">
-      Aqui o emprego encontra você!
-    </h2>
-    <!-- <h2 class="text-2xl font-bold text-gray-900 text-center mb-2">Currículo IA Grátis</h2> -->
 
+    <p class="text-3xl md:text-4xl font-extrabold text-center mb-2 mt-4"
+    style="font-size: 14.4px; font-family: Montserrat, sans-serif;"
+    >
+      Aqui o emprego encontra você!
+    </p>
     <!-- <a href="https://t.me/empregoaqui_cv_bot?text=Ol%C3%A1!%20Quero%20criar%20meu%20curr%C3%ADculo%20com%20a%20IA%20%F0%9F%91%8B" 
       class="mt-2 mb-4 inline-flex items-center justify-center px-8 py-3 bg-green-600 hover:bg-green-700 
       !text-white hover:!text-white visited:!text-white
@@ -27,16 +21,32 @@
       Iniciar Currículo
     </a> -->
 
+    <div class="relative w-full">
+        <video id="hero-video" autoplay muted loop playsinline preload="metadata">
+          <source src="assets/images/hero/hero-mobile.webm" type="video/webm" media="(max-width:768px)">
+          <source src="assets/images/hero/hero-desktop.webm" type="video/webm">
+          <source src="assets/images/hero/hero-mobile.mp4" type="video/mp4" media="(max-width:768px)">
+          <source src="assets/images/hero/hero-desktop.mp4" type="video/mp4">
+        </video>
 
-    <video controls playsinline preload="metadata">
+        <!-- Botão de mute -->
+        <button id="mute-btn"
+          class="absolute bottom-5 right-3 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition z-50 cursor-pointer">
+          🔇
+        </button>
+    </div>
 
-      <source src="assets/images/hero/hero-mobile.webm" type="video/webm" media="(max-width:768px)">
-      <source src="assets/images/hero/hero-desktop.webm" type="video/webm">
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('hero-video') as HTMLVideoElement;
+        const btn = document.getElementById('mute-btn') as HTMLButtonElement;
 
-      <source src="assets/images/hero/hero-mobile.mp4" type="video/mp4" media="(max-width:768px)">
-      <source src="assets/images/hero/hero-desktop.mp4" type="video/mp4">
-
-    </video>
+        btn.addEventListener('click', () => {
+          video.muted = !video.muted;
+          btn.textContent = video.muted ? '🔇' : '🔊';
+        });
+      });
+    </script>
 
     <!-- <a href="https://wa.me/5519988055816?text=Ol%C3%A1!%20Quero%20criar%20meu%20curr%C3%ADculo%20com%20a%20IA%20%F0%9F%91%8B"
           class="mt-2 mb-4 inline-flex items-center justify-center px-8 py-3 bg-green-600 hover:bg-green-700 
