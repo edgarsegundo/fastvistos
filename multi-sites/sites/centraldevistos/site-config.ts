@@ -167,8 +167,8 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos - Assessoria de Visto Americano para todo o Brasil', // ex: 'Fast Vistos - Assessoria de Visto Americano para todo Brasil | Campinas SP'
-            description: 'Assessoria especializada em visto americano para todo o Brasil. Taxa de aprovação acima de 95%. Processo rápido e seguro. Fale pelo WhatsApp.', // ex: 'Assessoria especializada em visto americano com atendimento em todo o Brasil. Sede em Campinas/SP. Taxa de aprovação 95%+. Agende sua entrevista.'
+            title: 'Assessoria em Visto Americano para Todo o Brasil | Fast Vistos',
+            description: 'Assessoria especializada em visto americano para todo o Brasil. Taxa de aprovação acima de 95%. Processo rápido e seguro. Fale pelo WhatsApp.',
             themeColor: '#0070f3', // ex:'#0070f3'
             openGraph: {
                 type: 'website',
@@ -177,27 +177,28 @@ export const siteConfig: SiteConfig = {
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
-                    alt: 'Fast Vistos - Assessoria de visto americano para todo o Brasil', // ex: 'Fast Vistos - Assessoria de visto americano para todo Brasil'
+                    alt: 'Fast Vistos - Assessoria de visto americano para todo o Brasil',
                 },
-                title: 'Fast Vistos - Assessoria de Visto Americano para todo o Brasil', // ex: 'Fast Vistos - Assessoria de Visto Americano para todo Brasil'
-                description: 'Assessoria especializada em visto americano para todo o Brasil. Taxa de aprovação acima de 95%. Processo rápido e seguro. Fale pelo WhatsApp.', // ex: 'Assessoria especializada em visto americano com atendimento em todo o Brasil. Sede em Campinas/SP.'
+                title: 'Precisa de Visto Americano? Resolvemos para você 🇺🇸',
+                description: 'Mais de 300 clientes aprovados. Atendemos em todo o Brasil. Fale agora pelo WhatsApp e comece seu processo hoje.',
             }
         },
     },
 
     blogPageConfig: {
         seo: {
-            title: 'Blog Fast Vistos | Visto Americano, DS-160, Entrevista Consular e Mais',
+            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Fast Vistos',
             description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
                 tags: [
-                    'vistos internacionais',
                     'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro',
-                    'todo o brasil' // ✅ ADICIONADO: Palavra-chave nacional
+                    'DS-160',
+                    'entrevista consular',
+                    'visto B1 B2',
+                    'ESTA EUA',
+                    'assessoria de vistos',
                 ],
             }
         },
@@ -213,11 +214,12 @@ export const siteConfig: SiteConfig = {
                 type: 'article',
                 section: 'Serviços de Vistos e Documentos',
                 tags: [
-                    'vistos internacionais',
                     'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro',
-                    'atendimento todo o Brasil' // ✅ ADICIONADO
+                    'DS-160',
+                    'entrevista consular',
+                    'visto B1 B2',
+                    'ESTA EUA',
+                    'assessoria de vistos',
                 ],
             }
         },
