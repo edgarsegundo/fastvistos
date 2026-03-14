@@ -1,6 +1,6 @@
 ---
 title: "Trump Gold Card: Um Novo Caminho para a Imigração nos EUA"
-description: "TRMPGLDKRDMNVKMNPRMGRKNS"
+description: ""
 pubDate: "2025-12-12T13:54:21.000Z"
 updatedDate: "2026-01-22T17:39:33.100Z"
 slug: "trump-gold-card-um-novo-caminho-para-a-imigracao-nos-eua"

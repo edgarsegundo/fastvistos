@@ -1,6 +1,6 @@
 ---
 title: "Preparativos para a Copa do Mundo de 2026: Tudo Que Você Precisa Saber"
-description: "PRPRTVSPRKPDMNDDTDKVSPRSZSBR"
+description: ""
 pubDate: "2026-01-22T17:27:28.000Z"
 updatedDate: "2026-01-22T17:51:05.135Z"
 slug: "preparativos-para-a-copa-do-mundo-de-2026-tudo-que-voce-precisa-saber"

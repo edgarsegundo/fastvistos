@@ -1,6 +1,6 @@
 ---
 title: "Seguro Viagem para Gestantes: Cuidados, Coberturas e Melhores Opções para sua Próxima Viagem"
-description: "SGRVJMPRJSTNTSKDDSKBRTRSMLRSPKSPRSPRXMVJM"
+description: ""
 pubDate: "2025-10-20T22:15:49.000Z"
 updatedDate: "2025-10-21T10:51:53.256Z"
 slug: "seguro-viagem-para-gestantes-cuidados-coberturas-e-melhores-opcoes-para-sua-proxima-viagem"

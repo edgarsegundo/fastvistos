@@ -116,7 +116,7 @@ function generateMarkdownContent(article) {
     // Create frontmatter
     const frontmatter = `---
 title: "${(article.title || '').replace(/"/g, '\\"')}"
-description: "${(article.description || article.metatitle || '').replace(/"/g, '\\"')}"
+description: "${(article.description || '').replace(/"/g, '\\"')}"
 pubDate: "${publishedDate}"
 updatedDate: "${modifiedDate}"
 slug: "${article.slug}"
