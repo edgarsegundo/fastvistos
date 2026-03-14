@@ -1,6 +1,6 @@
 ---
 title: "Direitos dos Passageiros Aéreos no Brasil: Como Se Proteger"
-description: "DRTSDSPSJRSRSNBRZLKMSPRTJR"
+description: ""
 pubDate: "2025-11-19T10:25:58.000Z"
 updatedDate: "2025-11-19T10:36:11.350Z"
 slug: "direitos-dos-passageiros-aereos-no-brasil-como-se-proteger"

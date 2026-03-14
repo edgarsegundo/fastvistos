@@ -1,6 +1,6 @@
 ---
 title: "Atualização sobre o Tempo de Espera para Visto Americano no Brasil"
-description: "TLZKSBRTMPDSPRPRVSTMRKNNBRZL"
+description: ""
 pubDate: "2025-11-19T20:52:30.000Z"
 updatedDate: "2025-11-28T14:30:05.608Z"
 slug: "atualizacao-sobre-o-tempo-de-espera-para-visto-americano-no-brasil"

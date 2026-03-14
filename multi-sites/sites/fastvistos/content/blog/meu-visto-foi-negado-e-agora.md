@@ -1,6 +1,6 @@
 ---
 title: "Meu visto foi negado, e agora?"
-description: "MVSTFNGDGR"
+description: ""
 pubDate: "2025-10-24T18:26:31.000Z"
 updatedDate: "2025-10-24T19:43:57.820Z"
 slug: "meu-visto-foi-negado-e-agora"

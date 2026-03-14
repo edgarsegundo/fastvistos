@@ -1,6 +1,6 @@
 ---
 title: "Preparação para a Copa do Mundo de 2026: Vistos e Regras de Entrada na América do Norte"
-description: "PRPRKPRKPDMNDDVSTSRGRSDNTRDNMRKDNRT"
+description: ""
 pubDate: "2026-01-22T17:28:38.000Z"
 updatedDate: "2026-01-22T17:50:44.849Z"
 slug: "preparacao-para-a-copa-do-mundo-de-2026-vistos-e-regras-de-entrada-na-america-do-norte"

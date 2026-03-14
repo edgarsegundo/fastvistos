@@ -1,6 +1,6 @@
 ---
 title: "Por Que Está Mais Difícil Conseguir o Visto Americano — e Como um Despachante Pode Ajudar"
-description: "PRKSTMSDFSLKNSGRVSTMRKNKMMDSPXNTPDJDR"
+description: ""
 pubDate: "2025-10-22T18:38:10.000Z"
 updatedDate: "2025-10-24T13:27:36.069Z"
 slug: "por-que-esta-mais-dificil-conseguir-o-visto-americano-e-como-um-despachante-pode-ajudar"

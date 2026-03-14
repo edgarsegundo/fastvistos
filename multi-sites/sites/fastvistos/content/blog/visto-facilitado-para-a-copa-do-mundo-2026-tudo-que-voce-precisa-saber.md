@@ -1,6 +1,6 @@
 ---
 title: "Visto Facilitado para a Copa do Mundo 2026: Tudo que você Precisa Saber"
-description: "VSTFSLTDPRKPDMNDTDKVSPRSZSBR"
+description: ""
 pubDate: "2026-01-22T17:27:44.000Z"
 updatedDate: "2026-01-22T17:27:46.151Z"
 slug: "visto-facilitado-para-a-copa-do-mundo-2026-tudo-que-voce-precisa-saber"
