@@ -209,6 +209,9 @@ if (reviewsBlock.length > 0) {
     };
 }
 
+const logoCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const orgLogoId = `${logoCanonical}#logo`;
+
 // --- Unified Organization + LocalBusiness block
 const orgBlock = !disableOrganization && {
     '@type': disableLocalBusiness
@@ -222,7 +225,7 @@ const orgBlock = !disableOrganization && {
 
     logo: {
         '@type': 'ImageObject',
-        '@id': logoId,
+        '@id': orgLogoId,
         inLanguage: siteConfig.site.locale || 'pt-BR',
         url: siteConfig.site?.logo?.url,
         contentUrl: siteConfig.site?.logo?.url,
@@ -231,7 +234,7 @@ const orgBlock = !disableOrganization && {
         ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
     },
 
-    image: { '@id': logoId },
+    image: { '@id': orgLogoId },
 
     ...(disableLocalBusiness
         ? {}
