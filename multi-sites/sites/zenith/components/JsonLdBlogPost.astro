@@ -84,6 +84,31 @@ const breadcrumbList = [
 
 const imageId = `${postpageUrl}#image`;
 
+
+
+const rawImage = articleConfigFromDb.image;
+const seoImageUrl = articleConfigFromDb.seo_image_url;
+
+const validatedImage = getValidatedImageUrl({
+    image: rawImage,
+    imageUrl: seoImageUrl,
+    assetsUrlBase: siteConfig.site.assetsUrlBase,
+});
+
+console.log('🖼️ IMAGE DEBUG START');
+console.log('rawImage:', rawImage);
+console.log('seoImageUrl:', seoImageUrl);
+console.log('assetsBase:', siteConfig.site.assetsUrlBase);
+console.log('validatedImage:', validatedImage);
+
+
+
+
+
+
+
+
+
 const imageObjectBlock = getImageObjectBlock({
     disableImageObject: false,
     imageId,
@@ -96,6 +121,10 @@ const imageObjectBlock = getImageObjectBlock({
     width: articleConfigFromDb.seo_image_width,
     height: articleConfigFromDb.seo_image_height,
 });
+
+
+console.log('🧱 imageObjectBlock:', imageObjectBlock);
+console.log('🖼️ IMAGE DEBUG END');
 
 const websiteId = `${canonicalValidated}#website`;
 
@@ -212,6 +241,7 @@ const faqBlock =
           }
         : null;
 
+// Debug logs for each block 
 [
   ['webPageBlock', webPageBlock],
   ['imageObjectBlock', imageObjectBlock],
@@ -228,7 +258,6 @@ const faqBlock =
   );
 });  
 
-// https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
         '@type': 'BlogPosting', // or Article?
@@ -249,33 +278,18 @@ const baseGraph = [
         image: { '@id': `${postpageUrl}#image` },
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },
         ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
-        // in the future I might have to use the toThumbnailUrl because I want to start creating smaller images
-        // this is why I will keep this comment for reference and remind myself to test it later
-        // ...(imageObjectBlock?.url ? { thumbnailUrl: toThumbnailUrl(imageObjectBlock.url) } : {}),
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
         inLanguage: siteConfig.site?.locale,
     },
     ...(howToLdJson ? [howToLdJson] : []),
-    {
-        ...webPageBlock,
-    },
-    {
-        ...imageObjectBlock,
-    },
-    {
-        ...breadcrumbBlock,
-    },
-    {
-        ...webSiteBlock,
-    },
-    {
-        ...orgBlock,
-    },
-    {
-        ...personBlock,
-    },
+    webPageBlock,
+    imageObjectBlock,
+    breadcrumbBlock,
+    webSiteBlock,
+    orgBlock,
+    personBlock,
     ...(faqBlock ? [faqBlock] : []),
-];
+].filter(Boolean);
 
 const advancedGraph = [
     ...(mentions.length ? [{ mentions: mentions }] : []),
