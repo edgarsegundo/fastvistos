@@ -97,6 +97,12 @@ const imageObjectBlock = getImageObjectBlock({
     height: articleConfigFromDb.seo_image_height,
 });
 
+console.log('🖼️ imageUrlValidated:', getValidatedImageUrl({
+    image: articleConfigFromDb.image,
+    imageUrl: articleConfigFromDb.seo_image_url,
+    assetsUrlBase: siteConfig.site.assetsUrlBase,
+}));
+
 const websiteId = `${canonicalValidated}#website`;
 
 const orgCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
@@ -252,7 +258,11 @@ const baseGraph = [
             primaryImageOfPage: { '@id': `${postpageUrl}#image` },
         }),
 
-        ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
+        ...(imageObjectBlock?.url
+            ? { thumbnailUrl: imageObjectBlock.url }
+            : imageObjectBlock?.contentUrl
+            ? { thumbnailUrl: imageObjectBlock.contentUrl }
+            : {}),        
 
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
         inLanguage: siteConfig.site?.locale,
