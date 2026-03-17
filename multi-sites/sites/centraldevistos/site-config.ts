@@ -8,11 +8,11 @@ export const siteConfig: SiteConfig = {
         siteName: 'Fast Vistos',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: 'centraldevistos.com.br', // ex: 'fastvistos.com.br'
-        canonical: 'https://centraldevistos.com.br/', // ex: 'https://fastvistos.com.br/'
+        domain: 'centraldevistos.com', // ex: 'fastvistos.com.br'
+        canonical: 'https://centraldevistos.com/', // ex: 'https://fastvistos.com.br/'
         authorName: 'Daniela Otaviano', // ex: 'Daniela Otaviano'
         primaryImage: {
-            url: 'https://centraldevistos.com.br/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
+            url: 'https://centraldevistos.com/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
             width: 1200,
             height: 630,
             type: 'image/webp',
@@ -22,16 +22,16 @@ export const siteConfig: SiteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://centraldevistos.com.br/assets/images/ld-json/logo/logo-fast-vistos-assessoria.png',
+            url: 'https://centraldevistos.com/assets/images/ld-json/logo/logo-fast-vistos-assessoria.png',
             alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil', // ex: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
             width: 530,
             height: 67,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://centraldevistos.com.br/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp', 
+        thumbnailUrl: 'https://centraldevistos.com/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp', 
         
-        assetsUrlBase: 'https://centraldevistos.com.br/assets/images/blog/', // ex: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
+        assetsUrlBase: 'https://centraldevistos.com/assets/images/blog/', // ex: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
         
         priceRange: 'R$ sob consulta', // e.g. $, $$, $$$, $$$$
         openingHoursSpecification: [
@@ -142,7 +142,7 @@ export const siteConfig: SiteConfig = {
                 "name": "Brazil"
             },
             availableLanguage: ["pt-BR", "en"],
-            email: 'contato@centraldevistos.com.br', // ex: 'contato@fastvistos.com.br'
+            email: 'contato@centraldevistos.com', // ex: 'contato@fastvistos.com.br'
         },
         whatsapp: {
             telephone: '+551150283044', // ex: '+551920422785'
@@ -155,7 +155,7 @@ export const siteConfig: SiteConfig = {
                 "name": "Brazil"
             },
             availableLanguage: ["pt-BR", "en"],
-            email: 'contato@centraldevistos.com.br', // ex: 'contato@fastvistos.com.br'
+            email: 'contato@centraldevistos.com', // ex: 'contato@fastvistos.com.br'
         },
         socialMedia: {
             facebook: 'https://www.facebook.com/fastvistos/',
@@ -173,7 +173,7 @@ export const siteConfig: SiteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://centraldevistos.com.br/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
+                    url: 'https://centraldevistos.com/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
