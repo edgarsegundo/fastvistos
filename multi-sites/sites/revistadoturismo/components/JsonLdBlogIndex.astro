@@ -68,9 +68,9 @@ const orgEntity = {
     url: siteConfig.organization?.canonical || siteConfig.site.canonical,
     logo: {
         '@type': 'ImageObject',
-        url: siteConfig?.logo?.url,
-        width: siteConfig?.logo?.width,
-        height: siteConfig?.logo?.height,
+        url: siteConfig.organization?.logo?.url || siteConfig?.logo?.url,
+        width: siteConfig.organization?.logo?.width || siteConfig?.logo?.width,
+        height: siteConfig.organization?.logo?.height || siteConfig?.logo?.height,
     },
 };
 

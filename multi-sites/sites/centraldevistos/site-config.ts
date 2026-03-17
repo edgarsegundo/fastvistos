@@ -24,8 +24,8 @@ export const siteConfig: SiteConfig = {
         logo: {
             url: 'https://centraldevistos.com/assets/images/ld-json/logo/logo-fast-vistos-assessoria.png',
             alt: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil', // ex: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
-            width: 530,
-            height: 67,
+            width: 300,
+            height: 60,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
@@ -145,6 +145,12 @@ export const siteConfig: SiteConfig = {
         name: 'Fast Vistos',
         url: 'https://fastvistos.com.br',
         canonical: 'https://fastvistos.com.br/',
+        logo: {
+            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas',
+            width: 530,
+            height: 67,
+        },
     },
 
     homePageConfig: {
