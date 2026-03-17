@@ -1,0 +1,611 @@
+---
+// src/pages/vistos/[slug].astro
+// Página individual de visto por país
+
+import SharedGenericLayout from '../../layouts/SharedGenericLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import FooterSection from '../../components/FooterSection.astro';
+import Whatsapp from '../../components/Whatsapp.astro';
+import { siteConfig } from '../../site-config.ts';
+
+export async function getStaticPaths() {
+  const countries = [
+  {
+    slug: "eua",
+    name: "Estados Unidos",
+    flag: "🇺🇸",
+    typeCode: "required",
+    typeLabel: "Exige visto",
+    visaName: "Visto B1/B2",
+    summary: "O visto americano de turismo e negócios é um dos mais solicitados por brasileiros. Exige entrevista consular e documentação financeira.",
+    prazo: "30 a 90 dias",
+    validade: "10 anos",
+    entrevista: true,
+    taxa: "US$ 185",
+    docs: [
+      "Passaporte válido por no mínimo 6 meses",
+      "Formulário DS-160 preenchido online",
+      "Foto padrão americano",
+      "Comprovante de vínculos com o Brasil (emprego, imóvel, família)",
+      "Comprovante de renda ou extratos bancários",
+      "Pagamento da taxa MRV (US$ 185)",
+    ],
+    tipos: [
+      { code: "B1/B2", label: "Turismo e negócios", desc: "O mais comum para brasileiros. Válido por até 10 anos com múltiplas entradas." },
+      { code: "F1", label: "Estudante", desc: "Para cursos com duração acima de 18h semanais." },
+      { code: "J1", label: "Intercâmbio", desc: "Para programas de trabalho e estudo reconhecidos." },
+    ],
+    whatsappText: "Olá! Quero assessoria para tirar o visto americano.",
+  },
+  {
+    slug: "portugal",
+    name: "Portugal",
+    flag: "🇵🇹",
+    typeCode: "free",
+    typeLabel: "Isento de visto",
+    visaName: "Entrada livre",
+    summary: "Brasileiros não precisam de visto para Portugal por até 90 dias a cada 180 dias. Para estadia longa, estudo ou trabalho, é necessário o visto D.",
+    prazo: "Imediato (entrada livre)",
+    validade: "90 dias por semestre",
+    entrevista: false,
+    taxa: "Gratuito (curta duração)",
+    docs: [
+      "Passaporte ou documento de identidade válido",
+      "Comprovante de acomodação",
+      "Seguro de viagem com cobertura mínima de €30.000",
+      "Comprovante de meios financeiros (€75/dia ou €1.050 mín.)",
+      "Passagem de volta",
+    ],
+    tipos: [
+      { code: "Isento", label: "Turismo até 90 dias", desc: "Nenhum visto necessário. Válido para toda a União Europeia (Schengen)." },
+      { code: "Visto D", label: "Longa duração", desc: "Para quem quer morar, estudar ou trabalhar em Portugal." },
+      { code: "Golden Visa", label: "Investimento", desc: "Para investidores. Abre caminho para residência permanente." },
+    ],
+    whatsappText: "Olá! Quero informações sobre o visto D para Portugal.",
+  },
+  {
+    slug: "canada",
+    name: "Canadá",
+    flag: "🇨🇦",
+    typeCode: "eta",
+    typeLabel: "eTA obrigatório",
+    visaName: "eTA",
+    summary: "Brasileiros precisam de eTA (Autorização de Viagem Eletrônica) para visitar o Canadá de avião. O processo é 100% online e rápido.",
+    prazo: "Minutos a 72h",
+    validade: "5 anos",
+    entrevista: false,
+    taxa: "CAD$ 7",
+    docs: [
+      "Passaporte válido",
+      "Cartão de crédito para pagamento (CAD$ 7)",
+      "E-mail válido",
+      "Não ter histórico de imigração irregular",
+    ],
+    tipos: [
+      { code: "eTA", label: "Turismo (avião)", desc: "Obrigatório para voos ao Canadá. Não serve para entrada terrestre ou marítima." },
+      { code: "Visitor Visa", label: "Visto de visitante", desc: "Necessário para entrada por terra ou para quem não é elegível ao eTA." },
+      { code: "Study Permit", label: "Estudo", desc: "Para cursos acima de 6 meses em instituição canadense." },
+    ],
+    whatsappText: "Olá! Preciso de ajuda com o eTA ou visto canadense.",
+  },
+  {
+    slug: "reino-unido",
+    name: "Reino Unido",
+    flag: "🇬🇧",
+    typeCode: "required",
+    typeLabel: "Exige visto",
+    visaName: "Standard Visitor",
+    summary: "Após o Brexit, o Reino Unido saiu do espaço Schengen. Brasileiros precisam de visto específico para entrar no país.",
+    prazo: "15 a 30 dias úteis",
+    validade: "6 meses por entrada",
+    entrevista: false,
+    taxa: "£115",
+    docs: [
+      "Passaporte válido",
+      "Formulário online preenchido",
+      "Biometria coletada em VAC",
+      "Comprovante financeiro (extratos bancários)",
+      "Carta de intenção de viagem",
+      "Comprovante de vínculo com o Brasil",
+    ],
+    tipos: [
+      { code: "Standard Visitor", label: "Turismo", desc: "Para visitas de até 6 meses. Não permite trabalho." },
+      { code: "Student Visa", label: "Estudante", desc: "Para cursos acima de 6 meses." },
+      { code: "Skilled Worker", label: "Trabalho", desc: "Requer oferta de emprego de empresa britânica licenciada." },
+    ],
+    whatsappText: "Olá! Quero assessoria para o visto do Reino Unido.",
+  },
+  {
+    slug: "australia",
+    name: "Austrália",
+    flag: "🇦🇺",
+    typeCode: "eta",
+    typeLabel: "eVisitor",
+    visaName: "eVisitor (subclass 651)",
+    summary: "Brasileiros podem solicitar o eVisitor australiano online de forma gratuita. Permite estadias de até 3 meses por visita.",
+    prazo: "Instantâneo a alguns dias",
+    validade: "12 meses / 3 meses por estadia",
+    entrevista: false,
+    taxa: "Gratuito",
+    docs: [
+      "Passaporte biométrico válido",
+      "E-mail válido",
+      "Sem condenações criminais",
+      "Boa saúde (declaração)",
+    ],
+    tipos: [
+      { code: "eVisitor 651", label: "Turismo / negócios", desc: "Gratuito, 100% online. Múltiplas entradas em 12 meses." },
+      { code: "Working Holiday 417", label: "Trabalho e férias", desc: "Para jovens de 18 a 30 anos. Permite trabalhar e estudar." },
+      { code: "Student Visa 500", label: "Estudante", desc: "Para cursos reconhecidos pelo governo australiano." },
+    ],
+    whatsappText: "Olá! Preciso de ajuda com o visto australiano.",
+  },
+  {
+    slug: "alemanha",
+    name: "Alemanha",
+    flag: "🇩🇪",
+    typeCode: "required",
+    typeLabel: "Schengen",
+    visaName: "Visto Schengen",
+    summary: "O visto Schengen emitido pela Alemanha dá acesso a 26 países europeus. Ideal para quem planeja uma viagem pela Europa.",
+    prazo: "15 dias úteis",
+    validade: "90 dias em 180 dias",
+    entrevista: false,
+    taxa: "€90",
+    docs: [
+      "Passaporte válido por 3 meses após a data de retorno",
+      "Formulário Schengen preenchido",
+      "Foto recente padrão",
+      "Seguro de viagem com cobertura de €30.000",
+      "Comprovante de hospedagem",
+      "Extrato bancário dos últimos 3 meses",
+      "Comprovante de emprego ou atividade",
+    ],
+    tipos: [
+      { code: "Schengen C", label: "Turismo e negócios", desc: "Curta duração. Acesso a todos os países do espaço Schengen." },
+      { code: "Visto Nacional D", label: "Longa duração", desc: "Para estudar, trabalhar ou se reunir com família na Alemanha." },
+    ],
+    whatsappText: "Olá! Preciso de assessoria para o visto Schengen / Alemanha.",
+  },
+  {
+    slug: "franca",
+    name: "França",
+    flag: "🇫🇷",
+    typeCode: "required",
+    typeLabel: "Schengen",
+    visaName: "Visto Schengen",
+    summary: "Mesmo processo do Schengen padrão, mas emitido pelo consulado francês. Necessário quando a França é o principal destino ou ponto de entrada.",
+    prazo: "15 dias úteis",
+    validade: "90 dias em 180 dias",
+    entrevista: false,
+    taxa: "€90",
+    docs: [
+      "Passaporte válido",
+      "Formulário de pedido de visto",
+      "Foto padrão Schengen",
+      "Seguro viagem (€30.000 mínimo)",
+      "Passagem aérea confirmada",
+      "Comprovante de hospedagem na França",
+      "Extratos bancários recentes",
+    ],
+    tipos: [
+      { code: "Schengen C", label: "Turismo", desc: "Curta duração. Acesso ao espaço Schengen completo." },
+      { code: "Visto D", label: "Estudante / Trabalho", desc: "Para estadias longas com atividade específica." },
+    ],
+    whatsappText: "Olá! Preciso de ajuda com o visto para a França.",
+  },
+  {
+    slug: "japao",
+    name: "Japão",
+    flag: "🇯🇵",
+    typeCode: "free",
+    typeLabel: "Isento de visto",
+    visaName: "Entrada livre",
+    summary: "Brasileiros estão isentos de visto para o Japão por até 90 dias para turismo. Um dos destinos mais procurados sem burocracia.",
+    prazo: "Imediato",
+    validade: "90 dias",
+    entrevista: false,
+    taxa: "Gratuito",
+    docs: [
+      "Passaporte válido",
+      "Comprovante de hospedagem no Japão",
+      "Comprovante financeiro",
+      "Passagem de retorno confirmada",
+    ],
+    tipos: [
+      { code: "Isento", label: "Turismo até 90 dias", desc: "Sem burocracia. Apenas passaporte válido." },
+      { code: "Visto de trabalho", label: "Trabalho", desc: "Exige patrocínio de empresa japonesa e aprovação prévia." },
+      { code: "Visto de estudante", label: "Estudo", desc: "Para cursos em instituições reconhecidas pelo Japão." },
+    ],
+    whatsappText: "Olá! Quero informações sobre visto de longa duração para o Japão.",
+  },
+  {
+    slug: "italia",
+    name: "Itália",
+    flag: "🇮🇹",
+    typeCode: "required",
+    typeLabel: "Schengen",
+    visaName: "Visto Schengen",
+    summary: "A Itália faz parte do espaço Schengen. O visto emitido pelo consulado italiano dá acesso a 26 países europeus.",
+    prazo: "15 dias úteis",
+    validade: "90 dias em 180 dias",
+    entrevista: false,
+    taxa: "€90",
+    docs: [
+      "Passaporte válido",
+      "Formulário Schengen",
+      "Foto padrão",
+      "Seguro viagem com cobertura mínima de €30.000",
+      "Reserva de hotel ou carta convite",
+      "Comprovante financeiro",
+      "Passagem aérea",
+    ],
+    tipos: [
+      { code: "Schengen C", label: "Turismo", desc: "Curta duração com acesso a toda a Europa Schengen." },
+      { code: "Visto D", label: "Estudo / Trabalho", desc: "Para quem vai morar, estudar ou trabalhar na Itália." },
+    ],
+    whatsappText: "Olá! Preciso de ajuda com o visto para a Itália.",
+  },
+  {
+    slug: "nova-zelandia",
+    name: "Nova Zelândia",
+    flag: "🇳🇿",
+    typeCode: "eta",
+    typeLabel: "NZeTA",
+    visaName: "NZeTA",
+    summary: "Brasileiros precisam de NZeTA (New Zealand Electronic Travel Authority) para visitar a Nova Zelândia. O processo é online e simples.",
+    prazo: "72h (recomenda-se solicitar com antecedência)",
+    validade: "2 anos ou expiração do passaporte",
+    entrevista: false,
+    taxa: "NZD$ 23 (app) ou NZD$ 17 (web)",
+    docs: [
+      "Passaporte válido",
+      "Cartão de crédito ou débito",
+      "Foto do rosto (pelo app) ou passaporte",
+      "E-mail válido",
+    ],
+    tipos: [
+      { code: "NZeTA", label: "Turismo / trânsito", desc: "Obrigatório para entrar na Nova Zelândia de avião. Múltiplas entradas." },
+      { code: "Working Holiday", label: "Trabalho e férias", desc: "Para jovens de 18 a 30 anos. Temporada de até 12 meses." },
+    ],
+    whatsappText: "Olá! Preciso de ajuda com o NZeTA ou visto para a Nova Zelândia.",
+  },
+];
+  return countries.map(c => ({
+    params: { slug: c.slug },
+    props: { country: c },
+  }));
+}
+
+const { country } = Astro.props;
+const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.whatsappText)}`;
+---
+
+<SharedGenericLayout
+  titleFromConf={`Visto para ${country.name} — Central de Vistos`}
+  descriptionFromConf={country.summary}
+  canonicalConf={`https://centraldevistos.com/vistos/${country.slug}`}
+  faviconPathFromConf={siteConfig.site.faviconPath}
+  seoFromConf={{
+    title: `Visto para ${country.name} — Central de Vistos`,
+    description: country.summary,
+    themeColor: '#0070f3',
+    openGraph: {
+      type: 'article',
+      image: siteConfig.site.primaryImage,
+      title: `Visto para ${country.name} — Central de Vistos`,
+      description: country.summary,
+    }
+  }}
+  bodyClass="bg-gray-50">
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </Fragment>
+  <Navigation />
+
+<div class="country-page">
+
+  <!-- Hero do país -->
+  <div class="cp-hero">
+    <div class="cp-hero-inner">
+      <a href="/vistos" class="cp-back">← Voltar ao guia</a>
+      <div class="cp-flag">{country.flag}</div>
+      <h1 class="cp-title">Visto para {country.name}</h1>
+      <p class="cp-summary">{country.summary}</p>
+      <div class={`cp-type-badge cp-type--${country.typeCode}`}>{country.typeLabel}</div>
+    </div>
+  </div>
+
+  <div class="cp-body">
+
+    <!-- Info rápida -->
+    <div class="cp-quick">
+      <div class="cp-quick-item">
+        <span class="cp-quick-label">Prazo de emissão</span>
+        <span class="cp-quick-value">{country.prazo}</span>
+      </div>
+      <div class="cp-quick-item">
+        <span class="cp-quick-label">Validade</span>
+        <span class="cp-quick-value">{country.validade}</span>
+      </div>
+      <div class="cp-quick-item">
+        <span class="cp-quick-label">Entrevista</span>
+        <span class="cp-quick-value">{country.entrevista ? "Obrigatória" : "Não exige"}</span>
+      </div>
+      <div class="cp-quick-item">
+        <span class="cp-quick-label">Taxa consular</span>
+        <span class="cp-quick-value">{country.taxa}</span>
+      </div>
+    </div>
+
+    <!-- Tipos de visto -->
+    <div class="cp-section">
+      <h2 class="cp-section-title">Tipos de visto disponíveis</h2>
+      <div class="cp-tipos">
+        {country.tipos.map(t => (
+          <div class="cp-tipo-card">
+            <div class="cp-tipo-code">{t.code}</div>
+            <div class="cp-tipo-label">{t.label}</div>
+            <div class="cp-tipo-desc">{t.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Documentos -->
+    <div class="cp-section">
+      <h2 class="cp-section-title">Documentos necessários</h2>
+      <ul class="cp-docs">
+        {country.docs.map(doc => (
+          <li class="cp-doc-item">
+            <span class="cp-doc-check">✓</span>
+            {doc}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- CTA -->
+    <div class="cp-cta">
+      <p class="cp-cta-text">
+        Quer garantir a aprovação do seu visto para {country.name}?<br/>
+        Nossa equipe cuida de tudo por você.
+      </p>
+      <a href={wppLink} target="_blank" rel="noopener noreferrer" class="cp-wpp-btn wpp_button_link">
+        💬 Solicitar assessoria — <strong>É Grátis!</strong>
+      </a>
+      <p class="cp-cta-sub">Operado pela equipe da <strong>FastVistos.com.br</strong></p>
+    </div>
+
+  </div>
+</div>
+
+  <FooterSection />
+  <Whatsapp />
+</SharedGenericLayout>
+
+<style>
+  .country-page {
+    min-height: 100vh;
+    background: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Hero */
+  .cp-hero {
+    background: linear-gradient(301deg, #16202a 0%, #6f616d 100%);
+    padding: 40px 20px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cp-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  .cp-hero-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+  }
+
+  .cp-back {
+    display: inline-block;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+
+  .cp-back:hover { color: rgba(255,255,255,0.75); }
+
+  .cp-flag { font-size: 56px; line-height: 1; margin-bottom: 12px; }
+
+  .cp-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(24px, 6vw, 40px);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .cp-summary {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .cp-type-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .cp-type--free     { background: rgba(37,162,68,0.2);  color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+  .cp-type--eta      { background: rgba(0,119,182,0.25); color: #60bfff; border: 1px solid rgba(96,191,255,0.3); }
+  .cp-type--required { background: rgba(234,179,8,0.2);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+
+  /* Body */
+  .cp-body {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  /* Quick info */
+  .cp-quick {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: -24px;
+    margin-bottom: 28px;
+  }
+
+  .cp-quick-item {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cp-quick-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .cp-quick-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1f2937;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* Sections */
+  .cp-section { margin-bottom: 28px; }
+
+  .cp-section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 14px;
+  }
+
+  /* Tipos */
+  .cp-tipos { display: flex; flex-direction: column; gap: 10px; }
+
+  .cp-tipo-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .cp-tipo-code {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0077b6;
+    background: rgba(0,119,182,0.08);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .cp-tipo-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .cp-tipo-desc { font-size: 13px; color: #6b7280; line-height: 1.5; }
+
+  /* Docs */
+  .cp-docs { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .cp-doc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: #374151;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  .cp-doc-check {
+    color: #0077b6;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* CTA */
+  .cp-cta {
+    background: linear-gradient(301deg, #16202a 0%, #6f616d 100%);
+    border-radius: 20px;
+    padding: 32px 24px;
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  .cp-cta-text {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .cp-wpp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: #0077b6;
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 15px 28px;
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    transition: transform 0.2s;
+    margin-bottom: 14px;
+    display: inline-flex;
+  }
+
+  .cp-wpp-btn:hover { transform: translateY(-2px); }
+
+  .cp-cta-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 8px;
+  }
+
+  .cp-cta-sub strong { color: rgba(255,255,255,0.5); }
+</style>

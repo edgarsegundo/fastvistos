@@ -6,6 +6,7 @@ import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 import Navigation from '../components/Navigation.astro';
 import HeroSection from '../components/HeroSection.astro';
+import VisaGuide from '../components/VisaGuide.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import PassportSection from '../components/PassportSection.astro';
 import FaqSection from '../components/FaqSection.astro';
@@ -49,10 +50,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <!-- Body content -->
     <Navigation />
     <HeroSection />
-    <ServicesSection />
+    <VisaGuide />
+    <!-- <ServicesSection />
     <PassportSection />
     <HowItWorks />
-    <VideosSection />
+    <VideosSection /> -->
     <FaqSection
         relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro"
         siteId={siteConfig.site.id}
