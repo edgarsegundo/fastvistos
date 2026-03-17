@@ -43,15 +43,14 @@ const blogpageUrl = `${canonicalValidated}blog/`;
 
 const websiteId = `${canonicalValidated}#website`;
 
-const orgCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
-const orgId = `${orgCanonical}#organization`;
+const orgCanonicalValidated = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const orgId = `${orgCanonicalValidated}#organization`;
 
 const breadcrumbId = `${blogpageUrl}#breadcrumb`;
-const logoId = `${canonicalValidated}#logo`;
 
 const orgEntity = {
     '@type': 'Organization',
-    '@id': `${orgCanonical}#organization`,
+    '@id': `${orgCanonicalValidated}#organization`,
     name: siteConfig.organization?.name || siteConfig.site.siteName,
     url: siteConfig.organization?.canonical || siteConfig.site.canonical,
     logo: {
@@ -175,28 +174,6 @@ const webSiteBlock = getWebSiteBlock({
     orgId,
 });
 
-// --- Unified Organization + LocalBusiness block
-// const orgBlock = {
-//     '@type': 'Organization',
-//     '@id': orgId,
-//     name: siteConfig.organization?.name || siteConfig.site?.siteName,
-//     url: siteConfig.organization?.canonical || canonicalValidated,
-//     inLanguage: siteConfig.site.locale || 'pt-BR',
-//     description: siteConfig.homePageConfig.seo.description,
-//     logo: {
-//         '@type': 'ImageObject',
-//         inLanguage: siteConfig.site.locale || 'pt-BR',
-//         '@id': logoId,
-//         url: siteConfig.site?.logo?.url,
-//         contentUrl: siteConfig.site?.logo?.url,
-//         ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
-//         ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
-//         ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
-//     },
-//     image: { '@id': logoId },
-//     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
-// };
-
 const orgBlock = {
     '@type': 'Organization',
     '@id': orgId,
@@ -207,7 +184,7 @@ const orgBlock = {
     logo: {
         '@type': 'ImageObject',
         inLanguage: siteConfig.site.locale || 'pt-BR',
-        '@id': logoId,
+        '@id': `${orgCanonicalValidated}#logo`,
         url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
         contentUrl: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
         ...(siteConfig.organization?.logo?.width
@@ -226,7 +203,7 @@ const orgBlock = {
             ? { caption: siteConfig.site.logo.alt }
             : {}),
     },
-    image: { '@id': logoId },
+    image: { '@id': `${orgCanonicalValidated}#logo` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
 };
 
