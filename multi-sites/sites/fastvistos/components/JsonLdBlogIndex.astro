@@ -191,8 +191,8 @@ const webSiteBlock = getWebSiteBlock({
 const orgBlock = {
     '@type': 'Organization',
     '@id': orgId,
-    name: siteConfig.site?.siteName,
-    url: canonicalValidated,
+    name: siteConfig.organization?.name || siteConfig.site?.siteName,
+    url: siteConfig.organization?.canonical || canonicalValidated,
     inLanguage: siteConfig.site.locale || 'pt-BR',
     description: siteConfig.homePageConfig.seo.description,
     logo: {
