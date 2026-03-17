@@ -27,7 +27,10 @@ const {
 
 const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
 const websiteId = `${canonicalValidated}#website`;
-const orgId = `${canonicalValidated}#organization`;
+
+const orgCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const orgId = `${orgCanonical}#organization`;
+
 const imageId = `${canonicalValidated}#primaryimage`;
 const breadcrumbId = `${canonicalValidated}#breadcrumb`;
 const logoId = `${canonicalValidated}#logo`;

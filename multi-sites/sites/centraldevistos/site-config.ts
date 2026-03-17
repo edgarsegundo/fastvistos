@@ -9,7 +9,7 @@ export const siteConfig: SiteConfig = {
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
         domain: 'centraldevistos.com', // ex: 'fastvistos.com.br'
-        canonical: 'https://fastvistos.com.br/',
+        canonical: 'https://centraldevistos.com/',
         authorName: 'Especialistas da Fast Vistos', 
         primaryImage: {
             url: 'https://centraldevistos.com/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
@@ -138,6 +138,13 @@ export const siteConfig: SiteConfig = {
             instagram: '', // ex: 'https://www.instagram.com/fastvistos/'
             youtube: '', // ex: 'https://www.youtube.com/@FastVistos/shorts'
         },
+    },
+
+    organization: {
+        id: 'https://fastvistos.com.br/#organization',
+        name: 'Fast Vistos',
+        url: 'https://fastvistos.com.br',
+        canonical: 'https://fastvistos.com.br/',
     },
 
     homePageConfig: {

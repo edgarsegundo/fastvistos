@@ -26,9 +26,8 @@ const {
     customData,
 } = Astro.props;
 
-const canonicalValidated = ensureTrailingSlash(
-  siteConfig.blogPageConfig?.canonical || siteConfig.site.canonical
-);
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+
 const postpageUrl = `${canonicalValidated}blog/${articleConfigFromDb.slug}/`;
 
 let authorName,
@@ -98,7 +97,10 @@ const imageObjectBlock = getImageObjectBlock({
 });
 
 const websiteId = `${canonicalValidated}#website`;
-const orgId = `${canonicalValidated}#organization`;
+
+const orgCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const orgId = `${orgCanonical}#organization`;
+
 
 // WebPage block
 const webPageBlock = getWebPageBlock({

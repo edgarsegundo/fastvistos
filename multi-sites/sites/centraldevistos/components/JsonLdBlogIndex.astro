@@ -37,14 +37,15 @@ const {
 const topicsWithArticles = await BlogService.getTopicsWithArticles();
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 
-const canonicalValidated = ensureTrailingSlash(
-  siteConfig.blogPageConfig?.canonical || siteConfig.site.canonical
-);
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
 
 const blogpageUrl = `${canonicalValidated}blog/`;
 
 const websiteId = `${canonicalValidated}#website`;
-const orgId = `${canonicalValidated}#organization`;
+
+const orgCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const orgId = `${orgCanonical}#organization`;
+
 const breadcrumbId = `${blogpageUrl}#breadcrumb`;
 const logoId = `${canonicalValidated}#logo`;
 
