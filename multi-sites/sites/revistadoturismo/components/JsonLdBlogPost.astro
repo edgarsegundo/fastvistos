@@ -110,7 +110,7 @@ const webPageBlock = getWebPageBlock({
     siteName: articleConfigFromDb.title || siteConfig.site?.siteName,
     websiteId,
     orgId,
-    imageId: `${postpageUrl}#image`,
+    imageId: imageObjectBlock ? `${postpageUrl}#image` : null,
     breadcrumbId: `${postpageUrl}#breadcrumb`,
     description: articleConfigFromDb.seo_description,
     pubDate,
@@ -231,7 +231,7 @@ const faqBlock =
 
 const baseGraph = [
     {
-        '@type': 'BlogPosting', // or Article?
+        '@type': 'BlogPosting',
         '@id': `${postpageUrl}#article`,
         isPartOf: { '@id': `${postpageUrl}` },
         author: {
@@ -246,12 +246,14 @@ const baseGraph = [
         mainEntityOfPage: { '@id': `${postpageUrl}` },
         wordCount: parseInt(wordCount),
         publisher: { '@id': `${canonicalOrgValidated}#organization` },
+
         ...(imageObjectBlock && {
             image: { '@id': `${postpageUrl}#image` },
             primaryImageOfPage: { '@id': `${postpageUrl}#image` },
-        }),        
-        primaryImageOfPage: { '@id': `${postpageUrl}#image` },
+        }),
+
         ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
+
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
         inLanguage: siteConfig.site?.locale,
     },
