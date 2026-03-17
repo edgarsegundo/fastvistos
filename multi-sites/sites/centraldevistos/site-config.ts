@@ -12,7 +12,7 @@ export const siteConfig: SiteConfig = {
         canonical: 'https://centraldevistos.com.br/', // ex: 'https://fastvistos.com.br/'
         authorName: 'Daniela Otaviano', // ex: 'Daniela Otaviano'
         primaryImage: {
-            url: '', // ex: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp',
+            url: 'https://centraldevistos.com.br/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
             width: 1200,
             height: 630,
             type: 'image/webp',
@@ -22,14 +22,14 @@ export const siteConfig: SiteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: '', // ex: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png'
+            url: 'https://centraldevistos.com.br/assets/images/ld-json/logo/logo-fast-vistos-assessoria.png',
             alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil', // ex: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
             width: 530,
             height: 67,
         },
-        primaryColor: '', // ex: '#0070f3'
-        secondaryColor: '', // ex: '#1c1c1e'
-        thumbnailUrl: '', // ex: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp', // Important for search and social previews
+        primaryColor: '#0070f3',
+        secondaryColor: '#1c1c1e',
+        thumbnailUrl: 'https://centraldevistos.com.br/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp', 
         
         assetsUrlBase: 'https://centraldevistos.com.br/assets/images/blog/', // ex: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
         
@@ -134,8 +134,8 @@ export const siteConfig: SiteConfig = {
         },
 
         contactPoint: {
-            telephone: '', // ex: '+551920422785'
-            telephoneFormatted: '', // ex: '+55 (19) 2042-2785'
+            telephone: '+551150283044', // ex: '+551920422785'
+            telephoneFormatted: '+55 (11) 5028-3044', // ex: '+55 (19) 2042-2785'
             contactType: 'customer service',
             areaServed: {
                 "@type": "Country",
@@ -145,11 +145,11 @@ export const siteConfig: SiteConfig = {
             email: 'contato@centraldevistos.com.br', // ex: 'contato@fastvistos.com.br'
         },
         whatsapp: {
-            telephone: '', // ex: '+551920422785'
-            telephoneFormatted: '', // ex: '+55 (19) 2042-2785'
+            telephone: '+551150283044', // ex: '+551920422785'
+            telephoneFormatted: '+55 (11) 5028-3044', // ex: '+55 (19) 2042-2785'
             contactType: 'customer support',
             contactOption: "WhatsApp",
-            url: '', // ex: 'https://wa.me/551920422785'
+            url: 'https://wa.me/551150283044', // ex: 'https://wa.me/551920422785'
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
@@ -173,7 +173,7 @@ export const siteConfig: SiteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '', // ex: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp'
+                    url: 'https://centraldevistos.com.br/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
