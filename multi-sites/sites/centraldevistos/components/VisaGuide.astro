@@ -80,16 +80,31 @@ const countries = [
   <!-- CTA de rodapé -->
   <div class="vg-footer-cta">
     <p>Não encontrou seu destino ou ficou com dúvidas?</p>
-    <button class="wpp_button_link vg-wpp-btn" data-linkcode="%231">
+    <!-- <button class="wpp_button_link vg-wpp-btn" data-linkcode="%231">
       💬 Falar com especialista — <strong>É Grátis!</strong>
+    </button> -->
+
+
+    <button
+    class="wpp_button_link cta-button-wiggle"
+    data-linkcode="%231"
+    >
+    <span class="hidden sm:inline" style="color: #FF8700 !important;">
+        Atendimento pelo WhatsApp — <strong>É Grátis!</strong>
+    </span>
+    <span class="inline sm:hidden" style="color: #FF8700 !important;">
+        WhatsApp — <strong>Grátis!</strong>
+    </span>
     </button>
+
+
   </div>
 
 </section>
 
 <style>
   .visa-guide-section {
-    background: linear-gradient(301deg, #16202a 0%, #6f616d 100%);
+    background: linear-gradient(180deg, #5D535F 0%, #16202a 60%);
     padding: 48px 16px 56px;
     position: relative;
     overflow: hidden;
@@ -99,7 +114,7 @@ const countries = [
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 24px 24px;
     pointer-events: none;
   }
@@ -236,6 +251,40 @@ const countries = [
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  .cta-button-wiggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    padding: 16px 28px;
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    animation: wiggle 4s 2s infinite;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .cta-button-wiggle:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  @keyframes wiggle {
+    5%,  50% { transform: scale(1); }
+    10%      { transform: scale(0.9); }
+    15%      { transform: scale(1.15); }
+    20%      { transform: scale(1.15) rotate(-5deg); }
+    25%      { transform: scale(1.15) rotate(5deg); }
+    30%      { transform: scale(1.15) rotate(-3deg); }
+    35%      { transform: scale(1.15) rotate(2deg); }
+    40%      { transform: scale(1.15) rotate(0); }
+  }
+
+
 </style>
 
 <script>
