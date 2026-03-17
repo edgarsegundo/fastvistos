@@ -246,7 +246,10 @@ const baseGraph = [
         mainEntityOfPage: { '@id': `${postpageUrl}` },
         wordCount: parseInt(wordCount),
         publisher: { '@id': `${canonicalOrgValidated}#organization` },
-        image: { '@id': `${postpageUrl}#image` },
+        ...(imageObjectBlock && {
+            image: { '@id': `${postpageUrl}#image` },
+            primaryImageOfPage: { '@id': `${postpageUrl}#image` },
+        }),        
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },
         ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
         articleSection: [`${articleConfigFromDb.blog_topic.title}`],
