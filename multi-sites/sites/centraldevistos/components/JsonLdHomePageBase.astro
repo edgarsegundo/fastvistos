@@ -28,7 +28,9 @@ const {
 const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
 const websiteId = `${canonicalValidated}#website`;
 
-const orgCanonicalValidated = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const orgCanonicalValidated = ensureTrailingSlash(
+    siteConfig.organization?.canonical || siteConfig.site.canonical
+);
 const orgId = `${orgCanonicalValidated}#organization`;
 
 const imageId = `${canonicalValidated}#primaryimage`;
@@ -147,8 +149,12 @@ const videoObjects =
                           logo: {
                               '@type': 'ImageObject',
                               url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
-                              width: siteConfig.organization?.logo?.width || siteConfig.site?.logo?.width,
-                              height: siteConfig.organization?.logo?.height || siteConfig.site?.logo?.height,
+                              width:
+                                  siteConfig.organization?.logo?.width ||
+                                  siteConfig.site?.logo?.width,
+                              height:
+                                  siteConfig.organization?.logo?.height ||
+                                  siteConfig.site?.logo?.height,
                           },
                       },
                       mainEntityOfPage: {
@@ -208,7 +214,9 @@ if (reviewsBlock.length > 0) {
     };
 }
 
-const logoCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const logoCanonical = ensureTrailingSlash(
+    siteConfig.organization?.canonical || siteConfig.site.canonical
+);
 const orgLogoId = `${logoCanonical}#logo`;
 
 // --- Unified Organization + LocalBusiness block
@@ -228,9 +236,21 @@ const orgBlock = !disableOrganization && {
         inLanguage: siteConfig.site.locale || 'pt-BR',
         url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
         contentUrl: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
-        ...(siteConfig.organization?.logo?.width ? { width: siteConfig.organization.logo.width } : siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
-        ...(siteConfig.organization?.logo?.height ? { height: siteConfig.organization.logo.height } : siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
-        ...(siteConfig.organization?.logo?.alt ? { caption: siteConfig.organization.logo.alt } : siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+        ...(siteConfig.organization?.logo?.width
+            ? { width: siteConfig.organization.logo.width }
+            : siteConfig.site?.logo?.width
+              ? { width: siteConfig.site.logo.width }
+              : {}),
+        ...(siteConfig.organization?.logo?.height
+            ? { height: siteConfig.organization.logo.height }
+            : siteConfig.site?.logo?.height
+              ? { height: siteConfig.site.logo.height }
+              : {}),
+        ...(siteConfig.organization?.logo?.alt
+            ? { caption: siteConfig.organization.logo.alt }
+            : siteConfig.site?.logo?.alt
+              ? { caption: siteConfig.site.logo.alt }
+              : {}),
     },
 
     image: { '@id': orgLogoId },
@@ -312,7 +332,7 @@ const orgBlock = !disableOrganization && {
                   reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
               },
 
-              ...(siteConfig.site?.reviews
+              ...(siteConfig.site?.reviews?.length > 0
                   ? {
                         review: siteConfig.site.reviews.map((review) => ({
                             '@type': 'Review',
