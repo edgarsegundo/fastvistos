@@ -297,7 +297,7 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
       description: country.summary,
     }
   }}
-  bodyClass="bg-gray-50">
+  bodyClass="gradient text-white">
   <Fragment slot="head">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -306,19 +306,21 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
   <Navigation />
 
 <div class="country-page">
+  <div class="cp-container">
+  <div class="cp-card">
 
-  <!-- Hero do país -->
-  <div class="cp-hero">
-    <div class="cp-hero-inner">
-      <a href="/vistos" class="cp-back">← Voltar ao guia</a>
-      <div class="cp-flag">{country.flag}</div>
-      <h1 class="cp-title">Visto para {country.name}</h1>
-      <p class="cp-summary">{country.summary}</p>
-      <div class={`cp-type-badge cp-type--${country.typeCode}`}>{country.typeLabel}</div>
+    <!-- Hero do país -->
+    <div class="cp-hero">
+      <div class="cp-hero-inner">
+        <a href="/#visa-guide" class="cp-back">← Voltar ao guia</a>
+        <div class="cp-flag">{country.flag}</div>
+        <h1 class="cp-title">Visto para {country.name}</h1>
+        <p class="cp-summary">{country.summary}</p>
+        <div class={`cp-type-badge cp-type--${country.typeCode}`}>{country.typeLabel}</div>
+      </div>
     </div>
-  </div>
 
-  <div class="cp-body">
+    <div class="cp-body">
 
     <!-- Info rápida -->
     <div class="cp-quick">
@@ -379,8 +381,10 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
       <p class="cp-cta-sub">Operado pela equipe da <strong>FastVistos.com.br</strong></p>
     </div>
 
-  </div>
-</div>
+  </div><!-- /cp-body -->
+  </div><!-- /cp-card -->
+  </div><!-- /cp-container -->
+</div><!-- /country-page -->
 
   <FooterSection />
   <Whatsapp />
@@ -389,14 +393,26 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
 <style>
   .country-page {
     min-height: 100vh;
-    background: #f8f9fa;
     font-family: 'Inter', sans-serif;
+    padding: 0 16px 64px;
+  }
+
+  .cp-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding-top: 32px;
+  }
+
+  .cp-card {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
   }
 
   /* Hero */
   .cp-hero {
-    background: linear-gradient(301deg, #16202a 0%, #6f616d 100%);
-    padding: 40px 20px 48px;
+    background: linear-gradient(160deg, rgba(22,32,42,0.96) 0%, rgba(58,40,60,0.92) 100%);
+    padding: 40px 24px 48px;
     position: relative;
     overflow: hidden;
   }
@@ -461,9 +477,12 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
 
   /* Body */
   .cp-body {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 0 16px 60px;
+    background: #fff;
+    padding: 28px 20px 40px;
+  }
+
+  @media (min-width: 640px) {
+    .cp-body { padding: 36px 40px 48px; }
   }
 
   /* Quick info */
@@ -471,8 +490,11 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: -24px;
     margin-bottom: 28px;
+  }
+
+  @media (min-width: 640px) {
+    .cp-quick { grid-template-columns: repeat(4, 1fr); }
   }
 
   .cp-quick-item {
@@ -513,6 +535,10 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(country.wh
 
   /* Tipos */
   .cp-tipos { display: flex; flex-direction: column; gap: 10px; }
+
+  @media (min-width: 640px) {
+    .cp-tipos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  }
 
   .cp-tipo-card {
     background: #fff;
