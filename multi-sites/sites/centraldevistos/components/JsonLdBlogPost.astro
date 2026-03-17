@@ -145,10 +145,30 @@ const webSiteBlock = getWebSiteBlock({
 const logoId = `${canonicalValidated}#logo`;
 
 // --- Unified Organization + LocalBusiness block
+// const orgBlock = {
+//     '@type': 'Organization',
+//     '@id': orgId,
+//     name: siteConfig.site?.siteName,
+//     url: canonicalValidated,
+//     inLanguage: siteConfig.site.locale,
+//     description: siteConfig.homePageConfig.seo.description,
+//     logo: {
+//         '@type': 'ImageObject',
+//         inLanguage: siteConfig.site.locale,
+//         '@id': logoId,
+//         url: siteConfig.site?.logo?.url,
+//         contentUrl: siteConfig.site?.logo?.url,
+//         ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+//         ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+//         ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+//     },
+//     image: { '@id': logoId },
+// };
+
 const orgBlock = {
     '@type': 'Organization',
     '@id': orgId,
-    name: siteConfig.site?.siteName,
+    name: siteConfig.organization?.name || siteConfig.site?.siteName,
     url: canonicalValidated,
     inLanguage: siteConfig.site.locale,
     description: siteConfig.homePageConfig.seo.description,

@@ -144,7 +144,7 @@ const videoObjects =
                       ...(uploadDate ? { uploadDate } : {}),
                       publisher: {
                           '@type': 'Organization',
-                          name: siteConfig.site?.siteName,
+                          name: siteConfig.organization?.name || siteConfig.site?.siteName,
                           logo: {
                               '@type': 'ImageObject',
                               url: siteConfig.site?.logo?.url,
