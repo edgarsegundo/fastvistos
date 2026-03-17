@@ -147,9 +147,9 @@ const videoObjects =
                           name: siteConfig.organization?.name || siteConfig.site?.siteName,
                           logo: {
                               '@type': 'ImageObject',
-                              url: siteConfig.organization?.logo?.url || siteConfig?.logo?.url,
-                              width: siteConfig.organization?.logo?.width || siteConfig?.logo?.width,
-                              height: siteConfig.organization?.logo?.height || siteConfig?.logo?.height,
+                              url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+                              width: siteConfig.organization?.logo?.width || siteConfig.site?.logo?.width,
+                              height: siteConfig.organization?.logo?.height || siteConfig.site?.logo?.height,
                           },
                       },
                       mainEntityOfPage: {
