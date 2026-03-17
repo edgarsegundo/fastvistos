@@ -176,6 +176,27 @@ const webSiteBlock = getWebSiteBlock({
 });
 
 // --- Unified Organization + LocalBusiness block
+// const orgBlock = {
+//     '@type': 'Organization',
+//     '@id': orgId,
+//     name: siteConfig.organization?.name || siteConfig.site?.siteName,
+//     url: siteConfig.organization?.canonical || canonicalValidated,
+//     inLanguage: siteConfig.site.locale || 'pt-BR',
+//     description: siteConfig.homePageConfig.seo.description,
+//     logo: {
+//         '@type': 'ImageObject',
+//         inLanguage: siteConfig.site.locale || 'pt-BR',
+//         '@id': logoId,
+//         url: siteConfig.site?.logo?.url,
+//         contentUrl: siteConfig.site?.logo?.url,
+//         ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
+//         ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
+//         ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+//     },
+//     image: { '@id': logoId },
+//     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
+// };
+
 const orgBlock = {
     '@type': 'Organization',
     '@id': orgId,
@@ -187,11 +208,23 @@ const orgBlock = {
         '@type': 'ImageObject',
         inLanguage: siteConfig.site.locale || 'pt-BR',
         '@id': logoId,
-        url: siteConfig.site?.logo?.url,
-        contentUrl: siteConfig.site?.logo?.url,
-        ...(siteConfig.site?.logo?.width ? { width: siteConfig.site.logo.width } : {}),
-        ...(siteConfig.site?.logo?.height ? { height: siteConfig.site.logo.height } : {}),
-        ...(siteConfig.site?.logo?.alt ? { caption: siteConfig.site.logo.alt } : {}),
+        url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+        contentUrl: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+        ...(siteConfig.organization?.logo?.width
+            ? { width: siteConfig.organization.logo.width }
+            : siteConfig.site?.logo?.width
+            ? { width: siteConfig.site.logo.width }
+            : {}),
+        ...(siteConfig.organization?.logo?.height
+            ? { height: siteConfig.organization.logo.height }
+            : siteConfig.site?.logo?.height
+            ? { height: siteConfig.site.logo.height }
+            : {}),
+        ...(siteConfig.organization?.logo?.alt
+            ? { caption: siteConfig.organization.logo.alt }
+            : siteConfig.site?.logo?.alt
+            ? { caption: siteConfig.site.logo.alt }
+            : {}),
     },
     image: { '@id': logoId },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalValidated },
