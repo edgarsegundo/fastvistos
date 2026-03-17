@@ -142,7 +142,9 @@ const webSiteBlock = getWebSiteBlock({
     orgId,
 });
 
-const logoId = `${canonicalValidated}#logo`;
+
+const logoCanonical = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const logoId = `${logoCanonical}#logo`;
 
 // --- Unified Organization + LocalBusiness block
 const orgBlock = {
