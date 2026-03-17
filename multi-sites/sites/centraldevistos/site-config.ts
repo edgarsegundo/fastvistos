@@ -5,25 +5,25 @@ export const siteConfig: SiteConfig = {
     site: {
         business_id: '3cfe8493907c488480f55c9ee10f8c05',
         id: 'centraldevistos',
-        siteName: 'Fast Vistos',
+        siteName: 'Central de Vistos',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
         domain: 'centraldevistos.com', // ex: 'fastvistos.com.br'
-        canonical: 'https://centraldevistos.com/', // ex: 'https://fastvistos.com.br/'
-        authorName: 'Daniela Otaviano', // ex: 'Daniela Otaviano'
+        canonical: 'https://fastvistos.com.br/',
+        authorName: 'Especialistas da Fast Vistos', 
         primaryImage: {
             url: 'https://centraldevistos.com/assets/images/ld-json/primary-image/assessoria-visto-americano-fastvistos.webp',
             width: 1200,
             height: 630,
             type: 'image/webp',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil' // ex: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
+            alt: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil' // ex: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
             url: 'https://centraldevistos.com/assets/images/ld-json/logo/logo-fast-vistos-assessoria.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil', // ex: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
+            alt: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de vistos e documentos de viagem para todo o Brasil', // ex: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
             width: 530,
             height: 67,
         },
@@ -71,32 +71,7 @@ export const siteConfig: SiteConfig = {
             reviewCount: 300,
         },
 
-        reviews: [
-            {
-                author: 'Analice de Medeiros Chianca Pavan',
-                datePublished: '2025-01-20',
-                reviewBody: 'Excelente assessoria para visto americano! O processo foi super rápido, a Daniela é extremamente atenciosa e demonstra muito conhecimento em cada etapa. Me senti muito segura e bem orientada o tempo todo. Recomendo fortemente para quem busca um atendimento sério, eficiente e de alta qualidade.',
-                ratingValue: 5,
-            },
-            {
-                author: 'Jetsuo Mine',
-                datePublished: '2025-01-28',
-                reviewBody: 'Processo muito ágil, claro e confiável. Meu visto saiu em menos de 15 dias.',
-                ratingValue: 5,
-            },
-            {
-                author: 'Aramis Lima',
-                datePublished: '2025-01-31',
-                reviewBody: 'Excelente consultoria, me orientaram em todo o processo e ainda deram dicas importantes para garantir uma ótima experiência. Super recomendo.',
-                ratingValue: 5,
-            },
-            {
-                author: 'Selma Aparecida de Rezende Borim',
-                datePublished: '2024-12-27',
-                reviewBody: 'Atendimento top, equipe muito atenciosa e conseguiram datas bem próximas para a entrevista. Eu recomendo.',
-                ratingValue: 5,
-            },
-        ],
+        reviews: [],
 
         makesOffer: [
             {
@@ -167,8 +142,8 @@ export const siteConfig: SiteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'Assessoria em Visto Americano para Todo o Brasil | Fast Vistos',
-            description: 'Assessoria especializada em visto americano para todo o Brasil. Taxa de aprovação acima de 95%. Processo rápido e seguro. Fale pelo WhatsApp.',
+            title: 'Tudo sobre Vistos: EUA, Canadá, Europa | Central de Vistos',
+            description: 'Tire suas dúvidas sobre vistos, DS-160, entrevistas e documentação para viajar ao exterior, e, se precisar, fale com um especialista.',
             themeColor: '#0070f3', // ex:'#0070f3'
             openGraph: {
                 type: 'website',
@@ -177,19 +152,20 @@ export const siteConfig: SiteConfig = {
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
-                    alt: 'Fast Vistos - Assessoria de visto americano para todo o Brasil',
+                    alt: 'Central de Vistos - Informações sobre vistos operado pela Fast Vistos - Assessoria de visto americano para todo o Brasil',
                 },
-                title: 'Precisa de Visto Americano? Resolvemos para você 🇺🇸',
-                description: 'Mais de 300 clientes aprovados. Atendemos em todo o Brasil. Fale agora pelo WhatsApp e comece seu processo hoje.',
+                title: 'Guia completo para tirar visto americano 🇺🇸',
+                description: 'Entenda como funciona o processo, documentos e entrevista para tirar o visto americano.'
             }
         },
     },
 
     blogPageConfig: {
         seo: {
-            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Fast Vistos',
+            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Central de Vistos',
             description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
             themeColor: '#0070f3',
+            canonical: 'https://centraldevistos.com/',
             openGraph: {
                 type: 'website',
                 tags: [
@@ -212,7 +188,7 @@ export const siteConfig: SiteConfig = {
             themeColor: '#0070f3',
             openGraph: {
                 type: 'article',
-                section: 'Serviços de Vistos e Documentos',
+                section: 'Guias sobre Vistos e Viagens Internacionais',
                 tags: [
                     'visto americano',
                     'DS-160',

@@ -26,7 +26,9 @@ const {
     customData,
 } = Astro.props;
 
-const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const canonicalValidated = ensureTrailingSlash(
+  siteConfig.blogPageConfig?.canonical || siteConfig.site.canonical
+);
 const postpageUrl = `${canonicalValidated}blog/${articleConfigFromDb.slug}/`;
 
 let authorName,
