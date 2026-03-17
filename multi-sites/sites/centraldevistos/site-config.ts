@@ -142,7 +142,7 @@ export const siteConfig: SiteConfig = {
                 "name": "Brazil"
             },
             availableLanguage: ["pt-BR", "en"],
-            email: 'contato@centraldevistos.com', // ex: 'contato@fastvistos.com.br'
+            email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
         },
         whatsapp: {
             telephone: '+551150283044', // ex: '+551920422785'
@@ -155,7 +155,7 @@ export const siteConfig: SiteConfig = {
                 "name": "Brazil"
             },
             availableLanguage: ["pt-BR", "en"],
-            email: 'contato@centraldevistos.com', // ex: 'contato@fastvistos.com.br'
+            email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
         },
         socialMedia: {
             facebook: 'https://www.facebook.com/fastvistos/',
