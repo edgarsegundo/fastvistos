@@ -27,6 +27,7 @@ const {
 } = Astro.props;
 
 const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const canonicalOrgValidated = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
 
 const postpageUrl = `${canonicalValidated}blog/${articleConfigFromDb.slug}/`;
 
@@ -211,6 +212,22 @@ const faqBlock =
           }
         : null;
 
+[
+  ['webPageBlock', webPageBlock],
+  ['imageObjectBlock', imageObjectBlock],
+  ['breadcrumbBlock', breadcrumbBlock],
+  ['webSiteBlock', webSiteBlock],
+  ['personBlock', personBlock],
+].forEach(([name, value]) => {
+  console.log(
+    !value
+      ? `❌ ${name}: null/undefined`
+      : Object.keys(value).length === 0
+      ? `⚠️ ${name}: vazio`
+      : `✅ ${name}: OK`
+  );
+});  
+
 // https://fastvistos.com.br/#/schema/person/maria-oliveira
 const baseGraph = [
     {
@@ -228,7 +245,7 @@ const baseGraph = [
         dateModified: updatedDate,
         mainEntityOfPage: { '@id': `${postpageUrl}` },
         wordCount: parseInt(wordCount),
-        publisher: { '@id': `${canonicalValidated}#organization` },
+        publisher: { '@id': `${canonicalOrgValidated}#organization` },
         image: { '@id': `${postpageUrl}#image` },
         primaryImageOfPage: { '@id': `${postpageUrl}#image` },
         ...(imageObjectBlock?.url ? { thumbnailUrl: imageObjectBlock.url } : {}),
