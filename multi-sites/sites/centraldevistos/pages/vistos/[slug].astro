@@ -264,9 +264,9 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
         Nossa equipe cuida de tudo por você.
       </p>
       <a href={wppLink} target="_blank" rel="noopener noreferrer" class="cp-wpp-btn wpp_button_link">
-        💬 Solicitar assessoria — <strong>É Grátis!</strong>
+        💬 &nbsp;&nbsp;Solicitar assessoria</strong>
       </a>
-      <p class="cp-cta-sub">Operado pela equipe da <strong>FastVistos.com.br</strong></p>
+      <p class="cp-cta-sub">Operado pela equipe da <strong>fastvistos.com.br</strong></p>
     </div>
 
   </div><!-- /cp-body -->
@@ -292,14 +292,17 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
   }
 
   .cp-card {
-    border-radius: 24px;
+    border-top-right-radius: 34px;
+    border-bottom-right-radius: 34px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0,0,0,0.45);
   }
 
   /* Hero */
   .cp-hero {
-    background: linear-gradient(160deg, rgba(22,32,42,0.96) 0%, rgba(58,40,60,0.92) 100%);
+    background: #B89B5B;
     padding: 40px 24px 48px;
     position: relative;
     overflow: hidden;
@@ -360,7 +363,7 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
   }
 
   .cp-type--free     { background: rgba(37,162,68,0.2);  color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-  .cp-type--eta      { background: rgba(0,119,182,0.25); color: #60bfff; border: 1px solid rgba(96,191,255,0.3); }
+  .cp-type--eta      { background: #a0d2f4; color: #0077b6; border: 1px solid #60bfff; }
   .cp-type--required { background: rgba(234,179,8,0.2);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
 
   /* Body */
@@ -481,25 +484,27 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
 
   /* CTA */
   .cp-cta {
-    background: linear-gradient(301deg, #16202a 0%, #6f616d 100%);
+    background: linear-gradient(301deg, #a0d2f4 0%, #60bfff 100%);
     border-radius: 20px;
     padding: 32px 24px;
     text-align: center;
     margin-top: 32px;
+    box-shadow: 0 8px 32px rgba(96,191,255,0.15);
   }
 
   .cp-cta-text {
     font-size: 15px;
-    color: rgba(255,255,255,0.65);
+    color: #1a3651;
     line-height: 1.6;
     margin-bottom: 20px;
+    font-weight: 600;
   }
 
   .cp-wpp-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: white;
+    background: #fff;
     color: #0077b6;
     font-family: 'Sora', sans-serif;
     font-size: 15px;
@@ -507,21 +512,25 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
     padding: 15px 28px;
     border-radius: 100px;
     text-decoration: none;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
-    transition: transform 0.2s;
+    box-shadow: 0 8px 28px rgba(96,191,255,0.18);
+    border: 2px solid #a0d2f4;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     margin-bottom: 14px;
-    display: inline-flex;
   }
 
-  .cp-wpp-btn:hover { transform: translateY(-2px); }
+  .cp-wpp-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(96,191,255,0.25);
+    border-color: #60bfff;
+  }
 
   .cp-cta-sub {
     font-size: 12px;
-    color: rgba(255,255,255,0.3);
+    color: #1a3651cc;
     margin-top: 8px;
   }
 
-  .cp-cta-sub strong { color: rgba(255,255,255,0.5); }
+  .cp-cta-sub strong { color: #0077b6; }
 
   /* Badge de confiabilidade */
   .cp-conf-badge {
@@ -603,5 +612,20 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
     margin-bottom: 8px;
     line-height: 1.6;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>
+
+
 
