@@ -63,7 +63,15 @@ const atualizadoEm: string = j.atualizadoEm ?? apiData.coletado_em ?? '';
 const solicitacao: string = j.solicitacao ?? '';
 const seguroSaude: boolean = Boolean(j.seguroSaude ?? apiData.seguro_saude);
 
-const summary = solicitacao || `${visaName} — ${typeLabel}`;
+let summary = '';
+// if (visaName && typeLabel && visaName !== typeLabel) {
+//   summary = `${visaName} — ${typeLabel}`;
+// } else if (visaName) {
+if (visaName) {
+  summary = visaName;
+} else if (typeLabel) {
+  summary = typeLabel;
+} // se nenhum, summary fica vazio
 const whatsappText = `Olá! Preciso de informações sobre visto para ${nome}.`;
 const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappText)}`;
 ---
@@ -170,6 +178,14 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
             </li>
           ))}
         </ul>
+      </div>
+    )}
+
+    <!-- Card de Solicitação -->
+    {solicitacao && (
+      <div class="cp-section">
+        <h2 class="cp-section-title">Dica Rápida para Solicitar</h2>
+        <div class="cp-solicitacao-card">{solicitacao}</div>
       </div>
     )}
 
@@ -576,4 +592,16 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
     margin-bottom: 20px;
     margin-top: -12px;
   }
+  .cp-solicitacao-card {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-size: 15px;
+    color: #334155;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
 </style>
+
