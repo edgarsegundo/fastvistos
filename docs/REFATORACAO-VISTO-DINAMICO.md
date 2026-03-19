@@ -86,7 +86,7 @@ A refatoração deve garantir performance, escalabilidade e facilidade de atuali
 - **Build inicial:** Gere todas as páginas de visto (SSG).
 - **Atualizações:** Use um script incremental que detecta países alterados (com base em `atualizadoEm` ou similar) e só re-builda esses países.
 - **Publicação:** Separe comandos/aliases para build global (raro) e build incremental (rotina).
-- **Fallback:** Se não houver snapshot atual, exiba o último disponível ou um aviso.
+- **Fallback:** Fallback: Em caso de falha na obtenção do snapshot mais recente, exiba o último snapshot disponível (se houver) ou um aviso de indisponibilidade temporária.
 
 ---
 
@@ -127,6 +127,35 @@ Para garantir eficiência e evitar rebuild global desnecessário, recomenda-se o
   - Comparar com um arquivo local (ex: `last-build.json`).
   - Retornar a lista de slugs alterados.
   - Atualizar o arquivo local após o build.
+
+---
+
+## Integração com Scripts de Publicação e Aliases
+
+Para garantir que o fluxo incremental seja realmente utilizado no dia a dia, integre a lógica descrita acima aos scripts e aliases já existentes no projeto:
+
+- **publish-from-local.sh** e **publish-pre.sh**: São os scripts principais de publicação. Devem ser adaptados para:
+  - Executar o script incremental (`detect-changed-countries.js`) antes do build.
+  - Só rodar o build para os países alterados, conforme detectado.
+  - Exemplo de trecho adaptado:
+    ```bash
+    CHANGED=$(node detect-changed-countries.js "$SITEID") # retorna pt,eua,franca
+    if [ -z "$CHANGED" ]; then
+      echo "Nenhum país alterado, nada a publicar."
+      exit 0
+    fi
+    npm run build:"$SITEID" -- --slugs=$CHANGED
+    # prossegue com o deploy normalmente
+    ```
+
+- **Aliases pub/pubpre**: Esses aliases devem apenas chamar os scripts acima, garantindo que a lógica incremental seja sempre aplicada, independentemente do comando utilizado pelo usuário.
+
+> **Nota:**
+ > **Nota:**
+ > Certifique-se de que qualquer novo script ou ajuste preserve a compatibilidade com esses aliases, para evitar duplicidade de lógica e garantir que todo o time utilize o fluxo incremental.
+ >
+ > **Importante:**
+ > Os aliases `pub` e `pubpre` são usados para múltiplos projetos do monorepo. A lógica incremental de build de vistos (incluindo o script `detect-changed-countries.js` e o controle de slugs) é específica para o projeto `centraldevistos/`. Outros projetos podem manter seus fluxos de build/deploy originais.
 
 ---
 
