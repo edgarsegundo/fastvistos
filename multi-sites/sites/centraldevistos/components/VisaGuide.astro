@@ -2,18 +2,38 @@
 // components/VisaGuide.astro
 // Guia de Vistos por País — componente reutilizável
 
-const countries = [
-  { slug: "eua",          name: "Estados Unidos", flag: "🇺🇸", type: "Exige visto",  typeCode: "required", visaName: "B1/B2",            desc: "Turismo e negócios",      popular: true  },
-  { slug: "portugal",     name: "Portugal",        flag: "🇵🇹", type: "Isento",       typeCode: "free",     visaName: "Livre",             desc: "até 90 dias sem visto",   popular: true  },
-  { slug: "canada",       name: "Canadá",          flag: "🇨🇦", type: "eTA",          typeCode: "eta",      visaName: "eTA",               desc: "Autorização eletrônica",  popular: true  },
-  { slug: "reino-unido",  name: "Reino Unido",     flag: "🇬🇧", type: "Exige visto",  typeCode: "required", visaName: "Standard Visitor",  desc: "Turismo e trânsito",      popular: true  },
-  { slug: "australia",    name: "Austrália",       flag: "🇦🇺", type: "eVisitor",     typeCode: "eta",      visaName: "eVisitor",          desc: "Autorização eletrônica",  popular: true  },
-  { slug: "alemanha",     name: "Alemanha",        flag: "🇩🇪", type: "Schengen",     typeCode: "required", visaName: "Schengen",          desc: "Acesso a 26 países",      popular: false },
-  { slug: "franca",       name: "França",          flag: "🇫🇷", type: "Schengen",     typeCode: "required", visaName: "Schengen",          desc: "Acesso a 26 países",      popular: false },
-  { slug: "japao",        name: "Japão",           flag: "🇯🇵", type: "Isento",       typeCode: "free",     visaName: "Livre",             desc: "até 90 dias sem visto",   popular: false },
-  { slug: "italia",       name: "Itália",          flag: "🇮🇹", type: "Schengen",     typeCode: "required", visaName: "Schengen",          desc: "Acesso a 26 países",      popular: false },
-  { slug: "nova-zelandia",name: "Nova Zelândia",   flag: "🇳🇿", type: "NZeTA",        typeCode: "eta",      visaName: "NZeTA",             desc: "Autorização eletrônica",  popular: false },
-];
+
+// Lista estática de slugs populares
+const POPULAR = ["eua", "portugal", "canada", "reino-unido", "australia"];
+
+// Função para gerar flag unicode a partir do ISO
+function flagFromIso(iso) {
+  if (!iso || iso.length !== 2) return "🌍";
+  return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join("");
+}
+
+// Função para derivar typeCode a partir do typeLabel
+function typeCodeFromLabel(label) {
+  const l = (label ?? '').toLowerCase();
+  if (l.includes('isento') || l.includes('livre')) return 'free';
+  if (l.includes('eta') || l.includes('visitor') || l.includes('nzeta') || l.includes('eletrôn')) return 'eta';
+  return 'required';
+}
+
+// Busca dinâmica dos países em build time
+const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
+let countries = await fetch(`${API_BASE}/api/visa-countries`).then(r => r.json());
+
+// Mapeia para o formato esperado pelo componente
+countries = countries.map(c => ({
+  slug: c.id,
+  name: c.nome,
+  flag: flagFromIso(c.codigo_iso),
+  typeLabel: c.type_label ?? '',
+  typeCode: c.type_code ?? typeCodeFromLabel(c.type_label),
+  visaName: c.visa_name ?? c.type_label ?? '',
+  popular: POPULAR.includes(c.id)
+}));
 ---
 
 <section class="visa-guide-section">
@@ -62,9 +82,11 @@ const countries = [
         <div class="vg-card-flag">{c.flag}</div>
         <div class="vg-card-body">
           <div class="vg-card-name">{c.name}</div>
-          <div class="vg-card-desc">{c.desc}</div>
+          <div class="vg-card-desc">{c.typeLabel}</div>
         </div>
-        <div class={`vg-badge vg-badge--${c.typeCode}`}>{c.visaName}</div>
+        {c.typeCode && c.visaName ? (
+          <div class={`vg-badge vg-badge--${c.typeCode}`}>{c.visaName}</div>
+        ) : null}
         <div class="vg-arrow">›</div>
       </a>
     ))}
