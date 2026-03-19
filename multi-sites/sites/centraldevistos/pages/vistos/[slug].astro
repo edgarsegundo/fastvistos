@@ -8,10 +8,10 @@ import FooterSection from '../../components/FooterSection.astro';
 import Whatsapp from '../../components/Whatsapp.astro';
 import { siteConfig } from '../../site-config.ts';
 
-const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3099';
+const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
 
 export async function getStaticPaths() {
-  const apiBase = import.meta.env.VISA_API_BASE || 'http://localhost:3099';
+  const apiBase = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
   const res = await fetch(`${apiBase}/api/visa-countries`);
   if (!res.ok) throw new Error(`[centraldevistos] /api/visa-countries falhou: HTTP ${res.status} — verifique se o serviço está rodando em ${apiBase}`);
   const countries = await res.json();

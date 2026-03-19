@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LAST_BUILD_FILE = path.join(__dirname, 'last-build.json');
-const API_BASE = process.env.VISA_API_BASE || 'http://localhost:3099';
+const API_BASE = process.env.VISA_API_BASE || 'http://localhost:3001';
 const SITE_ID = process.argv[2] || 'centraldevistos';
 
 // Somente age para o projeto centraldevistos
