@@ -40,8 +40,11 @@ function typeCodeFromLabel(label: string): string {
 
 // País
 const nome = apiData.nome ?? slug;
-const codigoIso = apiData.codigo_iso ?? '';
+// console.log(`[${slug}] Dados do API:`, apiData); 
+const codigoIso = apiData.pais_id ?? '';
+// console.log('>>> codigoIso:', JSON.stringify(codigoIso), 'tipo:', typeof codigoIso);
 const flag = flagFromIso(codigoIso);
+// console.log('>>> flag:', flag);
 const typeLabel = j.typeLabel ?? apiData.type_label ?? 'Visto exigido';
 const typeCode = typeCodeFromLabel(typeLabel);
 const visaName = j.visaName ?? typeLabel;
@@ -313,7 +316,7 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
 
   .cp-back:hover { color: rgba(255,255,255,0.75); }
 
-  .cp-flag { font-size: 56px; line-height: 1; margin-bottom: 12px; }
+  .cp-flag { font-size: 72px; line-height: 1; margin-bottom: 12px; }
 
   .cp-title {
     font-family: 'Sora', sans-serif;
