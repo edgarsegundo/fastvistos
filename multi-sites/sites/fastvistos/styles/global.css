@@ -1,13 +1,59 @@
 @import 'tailwindcss';
 
-/* Custom Base Styles */
+@theme {
+  --color-custom-dark: #e2532b;
+  
+  --color-primary-50: #eff8ff;
+  --color-primary-100: #daedff;
+  --color-primary-200: #bee1ff;
+  --color-primary-300: #91d0ff;
+  --color-primary-400: #5db4fd;
+  --color-primary-500: #3b95fa;
+  --color-primary-600: #2575ef;
+  --color-primary-700: #1d5ddc;
+  --color-primary-800: #1e4ab3;
+  --color-primary-900: #1e408d;
+  --color-primary-950: #172957;
+
+  --color-secondary-50: #fff7ed;
+  --color-secondary-100: #ffeed4;
+  --color-secondary-200: #ffd9a8;
+  --color-secondary-300: #ffbe71;
+  --color-secondary-400: #ff9738;
+  --color-secondary-500: #ff7900;
+  --color-secondary-600: #e05e00;
+  --color-secondary-700: #b84902;
+  --color-secondary-800: #953b08;
+  --color-secondary-900: #7a3209;
+  --color-secondary-950: #461801;
+
+  --color-accent-50: #f0f9ff;
+  --color-accent-100: #e0f2fe;
+  --color-accent-200: #bae6fd;
+  --color-accent-300: #7dd3fc;
+  --color-accent-400: #38bdf8;
+  --color-accent-500: #0ea5e9;
+  --color-accent-600: #0284c7;
+  --color-accent-700: #0369a1;
+  --color-accent-800: #075985;
+  --color-accent-900: #0c4a6e;
+  --color-accent-950: #082f49;
+
+  --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 
+@layer base é para estilos aplicados diretamente em elementos HTML (html, body, *, h1...) — sem classes, 
+sem seletores customizados. São os comportamentos base do site que valem para tudo. A fonte saiu daqui 
+porque agora vive no @theme, mas box-sizing, scroll-behavior, margin, line-height continuam fazendo 
+sentido aqui — são resets e defaults globais que não pertencem a nenhum componente específico.
+*/
 @layer base {
     * {
         box-sizing: border-box;
     }
 
     html {
-        font-family: 'Source Sans Pro', sans-serif;
         scroll-behavior: smooth;
     }
 
@@ -18,7 +64,14 @@
     }
 }
 
-/* Custom Components */
+/*
+@layer components é para classes que você inventa e que agrupam várias propriedades CSS.
+Use quando uma combinação de estilos se repete em mais de um lugar e faz sentido ter um nome.
+Uma classe component descreve O QUE É (.gradient, .carousel, .chat-window).
+
+Por estar no meio da cascata (base → components → utilities), qualquer classe utilitária
+do Tailwind como text-white ou text-sm sempre sobrescreve suas classes aqui.
+*/
 @layer components {
     .gradient {
         background: linear-gradient(270deg, #0077b6 0%, #1f4e7a 50%, #2a5e90 100%) !important;
@@ -129,7 +182,13 @@
     }
 }
 
-/* Custom Utilities */
+/*
+@layer utilities é para classes de propósito único — fazem uma coisa só, como as do próprio Tailwind.
+Uma utility descreve O QUE FAZ (.fill-current, .text-brand-primary).
+
+Por estar no topo da cascata (base → components → utilities), sempre vence em conflito
+com qualquer classe de components ou base — incluindo as suas e as do Tailwind.
+*/
 @layer utilities {
     .fill-current {
         fill: #ff6901;
