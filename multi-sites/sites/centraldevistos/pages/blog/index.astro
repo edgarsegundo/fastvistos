@@ -20,11 +20,11 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const breadcrumbList = [
     {
         name: 'Home',
-        item: siteConfig.site.canonical, // This should be "https://fastvistos.com.br/"
+        item: siteConfig.site.canonical,
     },
     {
         name: 'Blog',
-        item: `${siteConfig.site.canonical}blog/`, // This should be "https://fastvistos.com.br/blog/"
+        item: `${siteConfig.site.canonical}blog/`,
     },
 ];
 ---
