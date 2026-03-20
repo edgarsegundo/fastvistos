@@ -1,13 +1,21 @@
 @import 'tailwindcss';
 
-/* Custom Base Styles */
+@theme {
+  --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 
+@layer base é para estilos aplicados diretamente em elementos HTML (html, body, *, h1...) — sem classes, 
+sem seletores customizados. São os comportamentos base do site que valem para tudo. A fonte saiu daqui 
+porque agora vive no @theme, mas box-sizing, scroll-behavior, margin, line-height continuam fazendo 
+sentido aqui — são resets e defaults globais que não pertencem a nenhum componente específico.
+*/
 @layer base {
     * {
         box-sizing: border-box;
     }
 
     html {
-        font-family: 'Source Sans Pro', sans-serif;
         scroll-behavior: smooth;
     }
 
@@ -18,7 +26,74 @@
     }
 }
 
-/* Custom Components */
+/*
+@layer components é para classes que você inventa e que agrupam várias propriedades CSS.
+Use quando uma combinação de estilos se repete em mais de um lugar e faz sentido ter um nome.
+Uma classe component descreve O QUE É (.gradient, .carousel, .chat-window).
+
+Por estar no meio da cascata (base → components → utilities), qualquer classe utilitária
+do Tailwind como text-white ou text-sm sempre sobrescreve suas classes aqui.
+*/
 @layer components {
+    /* LOGO */
+    .logo-revista {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1;
+        color: #1b375c;
+    }
+    .logo-revista.logo-revista-black {
+        color: #fff;
+    }
+
+    .logo-small {
+        font-family: var(--font-title), serif;
+        font-size: 0.65rem;
+        font-weight: 400;
+        letter-spacing: 0.6em;
+        text-transform: uppercase;
+        margin-bottom: -2px;
+        opacity: 0.85;
+        margin-left: 0.2em;
+    }
+
+    .logo-small.no-flex {
+        text-align: left;
+        display: block;
+        margin-bottom: -14px;
+    }
+
+    .logo-large {
+        font-family: var(--font-title), serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        display: flex;
+    }
+
+    .logo-large.no-flex {
+        display: block;
+        margin-top: 0;
+    }
+
+    @media (max-width: 768px) {
+        .logo-small {
+            font-size: 0.55rem;
+        }
+    }
+
+
+
 }
 
+/*
+@layer utilities é para classes de propósito único — fazem uma coisa só, como as do próprio Tailwind.
+Uma utility descreve O QUE FAZ (.fill-current, .text-brand-primary).
+
+Por estar no topo da cascata (base → components → utilities), sempre vence em conflito
+com qualquer classe de components ou base — incluindo as suas e as do Tailwind.
+*/
+@layer utilities {
+}

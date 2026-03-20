@@ -182,6 +182,38 @@ Para estilos simples e específicos, use Tailwind direto no HTML. Crie uma class
 
 ---
 
+## `<style>` local vs `is:global` no Astro
+
+Por padrão, o `<style>` no Astro faz scoping automático — o CSS fica isolado no componente e não afeta nada fora dele, nem os componentes filhos.
+
+```astro
+<style>
+    /* Só afeta elementos DESTE arquivo */
+    .hero { min-height: 100vh; }
+</style>
+```
+
+O `is:global` remove esse scoping — o CSS vaza para fora e afeta o projeto todo, como se estivesse no `global.css`, porem a partir do nivel que está.
+
+```astro
+<style is:global>
+    /* Afeta QUALQUER elemento do projeto, incluindo componentes filhos */
+    .home-layout p { color: #1b375c; }
+</style>
+```
+
+**Quando usar `is:global`:** quando você precisa estilizar elementos dentro de componentes filhos. Um `<style>` normal no `index.astro` não atravessa o HTML de `<HeroSection>` ou `<Navigation>` — o `is:global` é necessário nesses casos.
+
+**Quando não usar:** se o estilo é só para elementos do próprio arquivo, use `<style>` normal. Se precisa ser compartilhado entre várias páginas, mova para o `global.css`.
+
+| | Escopo |
+|---|---|
+| `<style>` | Só o componente atual |
+| `<style is:global>` | Todo o projeto, incluindo filhos |
+| `global.css` | Todo o projeto |
+
+---
+
 ## Como usar as cores no HTML/Astro
 
 O Tailwind v4 converte automaticamente `--color-*` em classes utilitárias:

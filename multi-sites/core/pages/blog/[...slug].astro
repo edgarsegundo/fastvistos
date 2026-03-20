@@ -129,7 +129,6 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
 >
     
     <Fragment slot="head">
-        <!-- <link rel="stylesheet" href="/shared.css" /> -->
         <JsonLdBlogPost
             articleConfigFromDb={articleFromDb}
             blogConfigFromDb={blogConfigFromDb}
@@ -424,10 +423,6 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
     </main>
 
 </SharedBlogLayout>
-
-<style is:global>
-    @import '/shared.css';
-</style>
 
 <script>
     function toggleFaq(index: number) {
