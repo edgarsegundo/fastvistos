@@ -386,15 +386,22 @@ async function syncBlogToSite(siteId) {
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
     
-    // Copy shared.css to public directory if it exists in core
+    // Copy shared.css to public directory if it exists in core, but do NOT overwrite if already present
     try {
         const sharedCSSPath = join(__dirname, 'multi-sites/core/styles/shared.css');
         const sitePublicDir = join(__dirname, `public/${siteId}`);
         await ensureDir(sitePublicDir);
-        
-        const sharedCSS = await fs.readFile(sharedCSSPath, 'utf-8');
-        await fs.writeFile(join(sitePublicDir, 'shared.css'), sharedCSS);
-        console.log(`✅ Copied shared.css to public/${siteId}/`);
+        const siteSharedCSSPath = join(sitePublicDir, 'shared.css');
+        try {
+            await fs.access(siteSharedCSSPath);
+            // File already exists, do not overwrite
+            console.log(`⏩ Skipped shared.css for public/${siteId}/ (already exists)`);
+        } catch {
+            // File does not exist, copy it
+            const sharedCSS = await fs.readFile(sharedCSSPath, 'utf-8');
+            await fs.writeFile(siteSharedCSSPath, sharedCSS);
+            console.log(`✅ Copied shared.css to public/${siteId}/`);
+        }
     } catch (sharedCSSErr) {
         console.log(`⚠️  Warning: Could not copy shared.css (file may not exist yet)`);
     }
