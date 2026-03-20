@@ -128,8 +128,6 @@ const SITES = await loadSiteConfigurations();
 const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
 const siteConfig = SITES[CURRENT_SITE] || SITES.fastvistos;
 
-console.log('🛠️ Tailwind config path:', `./tailwind.${CURRENT_SITE}.config.js`);
-
 console.log('🛑 Astro site URL:', siteConfig.url);
 
 // Helper function
