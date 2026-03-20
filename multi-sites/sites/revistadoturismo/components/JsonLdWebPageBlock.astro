@@ -23,7 +23,7 @@ export function getWebPageBlock({
     siteName: string;
     websiteId: string;
     orgId: string;
-    imageId: string;
+    imageId: string | null;
     breadcrumbId: string;
     description?: string;
     pubDate?: string | null;
@@ -40,8 +40,8 @@ export function getWebPageBlock({
         name: siteName,
         isPartOf: { '@id': websiteId },
         about: { '@id': orgId },
-        primaryImageOfPage: { '@id': imageId },
-        image: { '@id': imageId },
+        ...(imageId ? { primaryImageOfPage: { '@id': imageId } } : {}),
+        ...(imageId ? { image: { '@id': imageId } } : {}),
         ...(imageUrlValidated ? { thumbnailUrl: imageUrlValidated } : {}),
         ...(pubDate ? { datePublished: pubDate } : {}),
         ...(updatedDate ? { dateModified: updatedDate } : {}),

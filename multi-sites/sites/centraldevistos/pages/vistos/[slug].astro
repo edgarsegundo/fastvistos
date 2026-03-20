@@ -108,19 +108,20 @@ const breadcrumbList = [
 ---
 
 <SharedGenericLayout
-  titleFromConf={`Visto para ${nome} — Central de Vistos`}
-  descriptionFromConf={summary}
+  titleFromConf={`Visto para ${nome} | Requisitos, Custo e Como Solicitar ${currentYear}`}
+  descriptionFromConf={metaDescription}
   canonicalConf={canonicalVisto}
   faviconPathFromConf={siteConfig.site.faviconPath}
+  authorNameFromConf={siteConfig.organization?.name || siteConfig.site?.siteName}
   seoFromConf={{
-    title: `Visto para ${nome} — Central de Vistos`,
-    description: summary,
+    title: `Visto para ${nome} | Requisitos, Custo e Como Solicitar ${currentYear}`,
+    description: metaDescription,
     themeColor: '#0070f3',
     openGraph: {
       type: 'article',
       image: siteConfig.site.primaryImage,
-      title: `Visto para ${nome} — Central de Vistos`,
-      description: summary,
+      title: `Visto para ${nome} | Requisitos, Custo e Como Solicitar ${currentYear}`,
+      description: metaDescription,
     }
   }}
   bodyClass="gradient text-white">

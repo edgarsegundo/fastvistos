@@ -140,10 +140,10 @@ const imageType = getImageType(imageUrlValidated ?? '');
 
 
 <TwitterCard
-    title={seo.title}
-    description={seo.description}
+    title={seo.title || title}
+    description={seo.description || description}
     image={imageUrlValidated}
-    url={siteConfig.site.canonical}
+    url={canonical}
     site={siteConfig.site.socialMedia?.twitter || undefined}
 />
 
