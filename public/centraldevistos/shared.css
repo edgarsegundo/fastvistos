@@ -1,7 +1,7 @@
 :root {
-    --font-title: "Bodoni Moda", serif;
-    --font-subtitle: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: "Spectral", Georgia, serif;
+    --font-title: "Source Sans Pro", sans-serif;
+    --font-subtitle: "Source Sans Pro", sans-serif;
+    --font-body: "Source Sans Pro", sans-serif;
     --color-text-main: #1b375c;
     --color-bg-main: #F4F4F4;
 }
