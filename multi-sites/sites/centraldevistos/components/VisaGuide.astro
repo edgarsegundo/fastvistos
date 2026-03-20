@@ -65,8 +65,8 @@ countries = countries.map(c => ({
 
   <!-- Filtros de tipo -->
   <div class="vg-filters" id="vg-filters">
-    <button class="vg-filter active" data-filter="all">Todos</button>
-    <button class="vg-filter" data-filter="popular">⭐ Populares</button>
+    <button class="vg-filter" data-filter="all">Todos</button>
+    <button class="vg-filter active" data-filter="popular">⭐ Populares</button>
   </div>
 
   <!-- Grid de países -->
@@ -318,8 +318,12 @@ countries = countries.map(c => ({
   const filters = document.querySelectorAll('.vg-filter');
   const cards   = document.querySelectorAll('.vg-card');
 
-  let activeFilter = 'all';
+
+  let activeFilter = 'popular';
   let searchQuery  = '';
+
+  // Aplica o filtro inicial ao carregar a página
+  applyFilters();
 
   function applyFilters() {
     let visible = 0;
