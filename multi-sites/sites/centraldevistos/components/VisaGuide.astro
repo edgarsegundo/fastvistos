@@ -1,0 +1,371 @@
+---
+// components/VisaGuide.astro
+// Guia de Vistos por País — componente reutilizável
+
+
+// Lista estática de slugs populares
+const POPULAR = ["US", "PT", "CA", "GB", "AU"];
+
+// Função para gerar flag unicode a partir do ISO
+function flagFromIso(iso) {
+  if (!iso || iso.length !== 2) return "🌍";
+  return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join("");
+}
+
+// Função para derivar typeCode a partir do typeLabel
+function typeCodeFromLabel(label) {
+//   console.log("[VisaGuide] Derivando typeCode de typeLabel:", label);
+  const l = (label ?? '').toLowerCase();
+  if (l.includes('isento') || l.includes('livre')) return 'free';
+  if (l.includes('eta') || l.includes('visitor') || l.includes('nzeta') || l.includes('eletrôn')) return 'eta';
+  return 'required';
+}
+
+// Busca dinâmica dos países em build time
+const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
+let countries = await fetch(`${API_BASE}/api/visa-countries`).then(r => r.json());
+console.log("[VisaGuide] countries API response:", countries); // <-- Adicione esta linha
+
+// Mapeia para o formato esperado pelo componente
+countries = countries.map(c => ({
+  slug: c.slug,
+  name: c.nome,
+  flag: flagFromIso(c.codigo_iso),
+  typeLabel: c.type_label ?? '',
+  typeCode: c.type_code ?? typeCodeFromLabel(c.type_label),
+  visaName: c.visa_name ?? c.type_label ?? '',
+  popular: POPULAR.includes(c.codigo_iso) || false,
+}));
+
+// console.log("[VisaGuide] countries after mapping:", countries); // <-- E esta linha
+---
+
+<section class="visa-guide-section">
+
+  <div class="vg-header">
+    <h2 id="visa-guide" class="vg-title">Guia de Vistos de Turismo por País</h2>
+    <p class="vg-sub">Saiba o que você precisa antes de viajar</p>
+  </div>
+
+  <!-- Barra de busca -->
+  <div class="vg-search-wrap">
+    <div class="vg-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+      </svg>
+      <input
+        id="vg-input"
+        type="text"
+        placeholder="Buscar país..."
+        autocomplete="off"
+        aria-label="Buscar país"
+      />
+    </div>
+  </div>
+
+  <!-- Filtros de tipo -->
+  <div class="vg-filters" id="vg-filters">
+    <button class="vg-filter" data-filter="all">Todos</button>
+    <button class="vg-filter active" data-filter="popular">⭐ Populares</button>
+  </div>
+
+  <!-- Grid de países -->
+  <div class="vg-grid" id="vg-grid">
+    {countries.map((c, i) => (
+      <a
+        href={`/vistos/${c.slug}`}
+        class="vg-card"
+        data-name={c.name.toLowerCase()}
+        data-type={c.typeCode}
+        data-popular={c.popular ? "true" : "false"}
+        style={`animation-delay: ${i * 0.05}s`}
+      >
+        <div class="vg-card-flag">{c.flag}</div>
+        <div class="vg-card-body">
+          <div class="vg-card-name">{c.name}</div>
+          <div class="vg-card-desc">{c.typeLabel}</div>
+        </div>
+        {c.typeCode && c.visaName ? (
+          <div class={`vg-badge vg-badge--${c.typeCode}`}>{c.visaName}</div>
+        ) : null}
+        <div class="vg-arrow">›</div>
+      </a>
+    ))}
+  </div>
+
+  <!-- Estado vazio -->
+  <div class="vg-empty" id="vg-empty" style="display:none;">
+    <span>🔍</span>
+    <p>Nenhum país encontrado.<br/>Fale com nossos especialistas!</p>
+    <a href="#whatsapp" class="vg-empty-cta">💬 Consultar no WhatsApp</a>
+  </div>
+
+  <!-- CTA de rodapé -->
+  <div class="vg-footer-cta">
+    <p>Não encontrou seu destino ou ficou com dúvidas?</p>
+    <!-- <button class="wpp_button_link vg-wpp-btn" data-linkcode="%231">
+      💬 Falar com especialista — <strong>É Grátis!</strong>
+    </button> -->
+
+
+    <button
+    class="wpp_button_link cta-button-wiggle"
+    data-linkcode="%231"
+    >
+    <span class="hidden sm:inline" style="color: #FF8700 !important;">
+        Atendimento pelo <strong>WhatsApp!</strong>
+    </span>
+    <span class="inline sm:hidden" style="color: #FF8700 !important;">
+        Estamos no WhatsApp!
+    </span>
+    </button>
+
+
+  </div>
+
+</section>
+
+<style>
+  .visa-guide-section {
+    background: linear-gradient(180deg, #5D535F 0%, #16202a 60%);
+    padding: 48px 16px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .visa-guide-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  .vg-header { text-align: center; margin-bottom: 28px; position: relative; }
+
+  .vg-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(22px, 5vw, 36px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .vg-sub { font-size: 15px; color: rgba(255,255,255,0.45); }
+
+  .vg-search-wrap { max-width: 450px; margin: 0 auto 20px; position: relative; }
+
+  .vg-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    padding: 13px 16px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .vg-search:focus-within {
+    border-color: rgba(0,119,182,0.6);
+    background: rgba(255,255,255,0.10);
+  }
+
+  .vg-search svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.35); flex-shrink: 0; }
+
+  .vg-search input {
+    background: none; border: none; outline: none;
+    font-size: 15px; color: #fff; width: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .vg-search input::placeholder { color: rgba(255,255,255,0.3); }
+
+  .vg-filters {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .vg-filters::-webkit-scrollbar { display: none; }
+
+  .vg-filter {
+    flex-shrink: 0; font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05);
+    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .vg-filter:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+  .vg-filter.active {
+    background: linear-gradient(270deg, #0077b6 0%, #2a5e90 100%);
+    border-color: transparent; color: #fff;
+  }
+
+  .vg-grid { display: flex; flex-direction: column; gap: 10px; max-width: 450px; margin: 0 auto; }
+
+  .vg-card {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px; padding: 14px 16px; text-decoration: none;
+    transition: background 0.18s, border-color 0.18s, transform 0.18s;
+    animation: fadeUp 0.4s ease both; cursor: pointer;
+  }
+
+  .vg-card:hover {
+    background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.18);
+    transform: translateX(3px);
+  }
+
+  .vg-card.hidden { display: none; }
+
+  .vg-card-flag { font-size: 28px; line-height: 1; flex-shrink: 0; }
+  .vg-card-body { flex: 1; min-width: 0; }
+
+  .vg-card-name {
+    font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
+    color: #fff; margin-bottom: 2px;
+  }
+
+  .vg-card-desc { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  .vg-badge {
+    flex-shrink: 0; font-size: 10px; font-weight: 700;
+    padding: 4px 10px; border-radius: 100px;
+    letter-spacing: 0.03em; font-family: 'Inter', sans-serif;
+  }
+
+  .vg-badge--free     { background: rgba(37,162,68,0.18);  color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+  .vg-badge--eta      { background: rgba(0,119,182,0.22);  color: #60bfff; border: 1px solid rgba(96,191,255,0.25); }
+  .vg-badge--required { background: rgba(234,179,8,0.18);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+
+  .vg-arrow { font-size: 18px; color: rgba(255,255,255,0.2); flex-shrink: 0; transition: color 0.18s; }
+  .vg-card:hover .vg-arrow { color: rgba(255,255,255,0.5); }
+
+  .vg-empty { text-align: center; padding: 40px 16px; color: rgba(255,255,255,0.35); }
+  .vg-empty span { font-size: 36px; display: block; margin-bottom: 12px; }
+  .vg-empty p { font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+
+  .vg-empty-cta {
+    display: inline-block; background: white; color: #0077b6;
+    font-weight: 700; font-size: 14px; padding: 12px 24px;
+    border-radius: 100px; text-decoration: none;
+  }
+
+  .vg-footer-cta { text-align: center; margin-top: 40px; position: relative; }
+  .vg-footer-cta p { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+
+  .vg-wpp-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: #0077b6;
+    font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700;
+    padding: 15px 32px; border-radius: 100px; border: none;
+    cursor: pointer; box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .vg-wpp-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.3); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .cta-button-wiggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    padding: 16px 28px;
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    animation: wiggle 4s 2s infinite;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .cta-button-wiggle:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  @keyframes wiggle {
+    5%,  50% { transform: scale(1); }
+    10%      { transform: scale(0.9); }
+    15%      { transform: scale(1.15); }
+    20%      { transform: scale(1.15) rotate(-5deg); }
+    25%      { transform: scale(1.15) rotate(5deg); }
+    30%      { transform: scale(1.15) rotate(-3deg); }
+    35%      { transform: scale(1.15) rotate(2deg); }
+    40%      { transform: scale(1.15) rotate(0); }
+  }
+
+
+</style>
+
+<script is:inline>
+  console.log("[VisaGuide] Script carregado");
+  const input   = document.getElementById('vg-input');
+  const grid    = document.getElementById('vg-grid');
+  const empty   = document.getElementById('vg-empty');
+  const filters = document.querySelectorAll('.vg-filter');
+  const cards   = document.querySelectorAll('.vg-card');
+
+
+  let activeFilter = 'popular';
+  let searchQuery  = '';
+
+  // Aplica o filtro inicial ao carregar a página
+  applyFilters();
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach(card => {
+      const name    = card.dataset.name ?? '';
+      const type    = card.dataset.type ?? '';
+      const popular = card.dataset.popular === 'true';
+
+      const matchSearch = name.includes(searchQuery);
+      const matchFilter =
+        activeFilter === 'all'     ? true :
+        activeFilter === 'popular' ? popular :
+        type === activeFilter;
+
+      if (matchSearch && matchFilter) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    empty.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  input.addEventListener('input', () => {
+    console.log("[VisaGuide] input change", input.value);
+    searchQuery = input.value.toLowerCase().trim();
+    applyFilters();
+  });
+
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      console.log("[VisaGuide] filtro clicado", btn.dataset.filter);
+      filters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter ?? 'all';
+      applyFilters();
+    });
+  });
+</script>

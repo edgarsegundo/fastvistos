@@ -21,6 +21,8 @@
 /* Custom Components */
 @layer components {
     .gradient {
-        background: linear-gradient(301deg, #16202a 0%, #6f616d 100%) !important;
+        /* background: linear-gradient(301deg, #16202a 0%, #6f616d 100%) !important; */
+        background: linear-gradient(301deg, #EBD18E 0%, #6f616d 100%) !important;
+        
     }    
 }
