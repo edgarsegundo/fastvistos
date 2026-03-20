@@ -184,8 +184,13 @@ countries = countries.map(c => ({
   .vg-search input::placeholder { color: rgba(255,255,255,0.3); }
 
   .vg-filters {
-    display: flex; gap: 8px; overflow-x: auto; padding: 0 0 4px;
-    margin: 0 auto 20px; scrollbar-width: none; max-width: 600px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    max-width: 600px;
+    width: 100%;
   }
 
   .vg-filters::-webkit-scrollbar { display: none; }
