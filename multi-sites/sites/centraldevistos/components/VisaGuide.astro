@@ -24,7 +24,7 @@ function typeCodeFromLabel(label) {
 // Busca dinâmica dos países em build time
 const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
 let countries = await fetch(`${API_BASE}/api/visa-countries`).then(r => r.json());
-// console.log("[VisaGuide] countries API response:", countries); // <-- Adicione esta linha
+console.log("[VisaGuide] countries API response:", countries); // <-- Adicione esta linha
 
 // Mapeia para o formato esperado pelo componente
 countries = countries.map(c => ({

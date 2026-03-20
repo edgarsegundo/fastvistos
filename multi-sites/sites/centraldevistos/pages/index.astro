@@ -1,9 +1,5 @@
 ---
 // https://chatgpt.com/share/69ab2149-1758-8010-9bb5-9454272fb731
-
-
-import '../styles/global.css';
-
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
@@ -69,10 +65,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <Whatsapp />    
 
 </SharedHomeLayout>
-
-<div class="bg-testtailwind text-white p-4">Teste Tailwind config</div>
-
- <div class="bg-blue-900 text-white p-4">Teste padrão</div>
 
 <style is:global>
 </style>
