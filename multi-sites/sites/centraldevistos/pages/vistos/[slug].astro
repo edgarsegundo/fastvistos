@@ -3,10 +3,13 @@
 // Página individual de visto por país — dados dinâmicos via visa-crawler
 
 import SharedGenericLayout from '../../layouts/SharedGenericLayout.astro';
+import JsonLdVisaPage from '../../components/JsonLdVisaPage.astro';
 import Navigation from '../../components/Navigation.astro';
 import FooterSection from '../../components/FooterSection.astro';
 import Whatsapp from '../../components/Whatsapp.astro';
 import { siteConfig } from '../../site-config.ts';
+
+import { ensureTrailingSlash } from '../../lib/utils.ts';
 
 const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
 
@@ -18,11 +21,15 @@ export async function getStaticPaths() {
   const countries = await res.json();
   if (!Array.isArray(countries) || countries.length === 0)
     throw new Error(`[centraldevistos] /api/visa-countries retornou lista vazia em ${apiBase}`);
-  return countries.map((c: { id: string }) => ({ params: { slug: c.id } }));
+  return countries.map((c: { id: string; slug: string }) => ({
+    params: { slug: c.slug },
+    props: { apiId: c.id },
+  }));
 }
 
 const { slug } = Astro.params;
-const apiData = await fetch(`${API_BASE}/api/visa/${slug}`).then(r => r.json());
+const { apiId } = Astro.props;
+const apiData = await fetch(`${API_BASE}/api/visa/${apiId}`).then(r => r.json());
 const j = apiData.json_completo ?? {};
 
 // Helpers
@@ -74,12 +81,36 @@ if (visaName) {
 } // se nenhum, summary fica vazio
 const whatsappText = `Olá! Preciso de informações sobre visto para ${nome}.`;
 const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappText)}`;
+
+const currentYear = new Date().getFullYear();
+const metaDescription = [
+  `Saiba tudo sobre o visto para ${nome}`,
+  documentos.length > 0 ? `documentos necessários` : null,
+  prazo !== '—' ? `prazo de ${prazo}` : null,
+  custo !== 'Gratuito' ? `taxa de ${custo}` : null,
+  `e como solicitar em ${currentYear}. Assessoria especializada.`,
+].filter(Boolean).join(', ');
+
+const canonicalValidated = ensureTrailingSlash(siteConfig.site.canonical);
+const canonicalVisto = `${canonicalValidated}vistos/${slug}/`;
+
+// Create correct breadcrumb structure
+const breadcrumbList = [
+    {
+        name: 'Home',
+        item: siteConfig.site.canonical,
+    },
+    {
+        name: 'Vistos',
+        item: `${siteConfig.site.canonical}vistos/`,
+    },
+];
 ---
 
 <SharedGenericLayout
   titleFromConf={`Visto para ${nome} — Central de Vistos`}
   descriptionFromConf={summary}
-  canonicalConf={`https://centraldevistos.com/vistos/${slug}`}
+  canonicalConf={canonicalVisto}
   faviconPathFromConf={siteConfig.site.faviconPath}
   seoFromConf={{
     title: `Visto para ${nome} — Central de Vistos`,
@@ -93,7 +124,21 @@ const wppLink = `https://wa.me/551150283044?text=${encodeURIComponent(whatsappTe
     }
   }}
   bodyClass="gradient text-white">
+
   <Fragment slot="head">
+    <JsonLdVisaPage
+      nome={nome}
+      slug={slug}
+      canonical={canonicalVisto}
+      description={metaDescription}
+      typeLabel={typeLabel}
+      custo={custo}
+      prazo={prazo}
+      validade={validade}
+      documentos={documentos}
+      atualizadoEm={atualizadoEm}
+    />
+  
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
