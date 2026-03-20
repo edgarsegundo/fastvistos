@@ -109,8 +109,8 @@ export const siteConfig: SiteConfig = {
         },
 
         contactPoint: {
-            telephone: '+551150283044', // ex: '+551920422785'
-            telephoneFormatted: '+55 (11) 5028-3044', // ex: '+55 (19) 2042-2785'
+            telephone: '+551150283044',
+            telephoneFormatted: '+55 (11) 5028-3044',
             contactType: 'customer service',
             areaServed: {
                 "@type": "Country",
@@ -120,11 +120,11 @@ export const siteConfig: SiteConfig = {
             email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
         },
         whatsapp: {
-            telephone: '+551150283044', // ex: '+551920422785'
-            telephoneFormatted: '+55 (11) 5028-3044', // ex: '+55 (19) 2042-2785'
+            telephone: '+551150283044',
+            telephoneFormatted: '+55 (11) 5028-3044',
             contactType: 'customer support',
             contactOption: "WhatsApp",
-            url: 'https://wa.me/551150283044', // ex: 'https://wa.me/551920422785'
+            url: 'https://wa.me/551150283044',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"

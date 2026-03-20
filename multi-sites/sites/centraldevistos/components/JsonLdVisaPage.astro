@@ -1,0 +1,222 @@
+---
+/**
+ * JsonLdVisaPage.astro
+ * JSON-LD para páginas dinâmicas de visto (/vistos/[slug])
+ *
+ * Reutiliza os mesmos helpers de bloco do JsonLdBlogPost:
+ *   getWebSiteBlock, getWebPageBlock, getBreadcrumbBlock
+ *
+ * Schemas gerados:
+ *   - Article          (conteúdo editorial da página)
+ *   - Service          (assessoria de vistos — rich result)
+ *   - FAQPage          (perguntas dinâmicas com dados reais do visto)
+ *   - WebPage
+ *   - BreadcrumbList
+ *   - WebSite
+ *   - Organization
+ */
+
+import { ensureTrailingSlash } from '../lib/utils.ts';
+import { getWebSiteBlock } from './JsonLdWebSiteBlock.astro';
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { siteConfig } from '../site-config.ts';
+
+interface Props {
+  nome: string;         // "Estados Unidos"
+  slug: string;         // "eua"
+  canonical: string;    // URL canônica completa
+  description: string;  // meta description
+  typeLabel: string;    // "Visto exigido" / "Isento" etc.
+  custo: string;        // "US$ 185" ou "Gratuito"
+  prazo: string;        // "15 dias úteis"
+  validade: string;     // "10 anos"
+  documentos: string[];
+  atualizadoEm?: string;
+}
+
+const {
+  nome,
+  slug,
+  canonical,
+  description,
+  typeLabel,
+  custo,
+  prazo,
+  validade,
+  documentos,
+  atualizadoEm,
+} = Astro.props;
+
+// ── IDs canônicos (padrão idêntico ao JsonLdBlogPost) ─────────────────────────
+const siteCanonical = ensureTrailingSlash(siteConfig.site.canonical);
+const orgCanonical  = ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical);
+const pageUrl       = ensureTrailingSlash(canonical);
+const websiteId     = `${siteCanonical}#website`;
+const orgId         = `${orgCanonical}#organization`;
+const breadcrumbId  = `${pageUrl}#breadcrumb`;
+const logoId        = `${orgCanonical}#logo`;
+
+// Converte "2026-03-18" para "2026-03-18T00:00:00-03:00"
+function toIsoDate(date: string): string {
+  if (!date) return '';
+  // Se já tem T (já está em formato ISO completo), retorna como está
+  if (date.includes('T')) return date;
+  // Adiciona meia-noite no horário de Brasília
+  return `${date}T00:00:00-03:00`;
+}
+
+// ── Blocos reutilizados ───────────────────────────────────────────────────────
+
+const webSiteBlock = getWebSiteBlock({
+  disableWebSite: false,
+  disableWebSiteSearchAction: false,
+  websiteId,
+  canonical: siteCanonical,
+  siteName: siteConfig.site?.siteName,
+  description: siteConfig.homePageConfig.seo.description,
+  orgId,
+});
+
+const webPageBlock = getWebPageBlock({
+  disableWebPage: false,
+  pageUrl,
+  siteName: `Visto para ${nome} | Requisitos, Custo e Como Solicitar`,
+  websiteId,
+  orgId,
+  imageId: null,
+  breadcrumbId,
+  description,
+  pubDate: atualizadoEm ? toIsoDate(atualizadoEm) : undefined,
+  updatedDate: atualizadoEm ? toIsoDate(atualizadoEm) : undefined,
+  imageUrlValidated: null,
+});
+
+const breadcrumbBlock = getBreadcrumbBlock({
+  disableBreadcrumb: false,
+  breadcrumbId,
+  breadcrumbList: [
+    { '@type': 'ListItem', position: 1, name: 'Home',            item: siteCanonical },
+    { '@type': 'ListItem', position: 2, name: 'Vistos',          item: `${siteCanonical}vistos/` },
+    { '@type': 'ListItem', position: 3, name: `Visto para ${nome}`, item: pageUrl },
+  ],
+  canonical: siteCanonical,
+});
+
+// ── Organization (igual ao JsonLdBlogPost) ────────────────────────────────────
+const orgBlock = {
+  '@type': 'Organization',
+  '@id': orgId,
+  name: siteConfig.organization?.name || siteConfig.site?.siteName,
+  url: siteConfig.organization?.canonical || siteCanonical,
+  inLanguage: siteConfig.site.locale,
+  description: siteConfig.homePageConfig.seo.description,
+  logo: {
+    '@type': 'ImageObject',
+    '@id': logoId,
+    url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+  },
+  image: { '@id': logoId },
+};
+
+// ── Article ───────────────────────────────────────────────────────────────────
+const articleBlock = {
+  '@type': 'Article',
+  '@id': `${pageUrl}#article`,
+  headline: `Visto para ${nome}: Requisitos, Custo e Como Solicitar`,
+  description,
+  url: pageUrl,
+  isPartOf: { '@id': websiteId },
+  publisher: { '@id': orgId },
+  author: {
+    '@type': 'Organization',
+    '@id': orgId,
+    name: siteConfig.organization?.name || siteConfig.site?.siteName,
+  },
+  image: {
+    '@type': 'ImageObject',
+    '@id': logoId,
+    url: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+    contentUrl: siteConfig.organization?.logo?.url || siteConfig.site?.logo?.url,
+  },  
+  inLanguage: siteConfig.site?.locale || 'pt-BR',
+  ...(atualizadoEm ? {
+    dateModified: toIsoDate(atualizadoEm),
+    datePublished: toIsoDate(atualizadoEm),
+  } : {}),
+};
+
+// ── Service ───────────────────────────────────────────────────────────────────
+const serviceBlock = {
+  '@type': 'Service',
+  name: `Assessoria para Visto de ${nome}`,
+  description: `Assessoria especializada para solicitação de visto para ${nome}. Orientação sobre documentos, prazos e processo completo.`,
+  provider: { '@id': orgId },
+  serviceType: 'Assessoria de Vistos',
+  areaServed: { '@type': 'Country', name: 'Brasil' },
+  url: pageUrl,
+};
+
+// ── FAQPage ───────────────────────────────────────────────────────────────────
+// ATENÇÃO: o Google exige que estas perguntas estejam VISÍVEIS na página HTML.
+// O [slug].astro renderiza a seção <details> FAQ com as mesmas perguntas.
+const isento = typeLabel.toLowerCase().includes('isent') || typeLabel.toLowerCase().includes('livre');
+
+const faqs = [
+  {
+    question: `Brasileiros precisam de visto para entrar em ${nome}?`,
+    answer: isento
+      ? `Não. Cidadãos brasileiros estão isentos de visto para ${nome}.`
+      : `Sim. Cidadãos brasileiros precisam de visto para ${nome}. O tipo exigido é: ${typeLabel}.`,
+  },
+  ...(documentos.length > 0 ? [{
+    question: `Quais documentos são necessários para o visto de ${nome}?`,
+    answer: `Os documentos exigidos para o visto de ${nome} são: ${documentos.slice(0, 8).join(', ')}.`,
+  }] : []),
+  ...(prazo && prazo !== '—' ? [{
+    question: `Quanto tempo demora para sair o visto de ${nome}?`,
+    answer: `O prazo médio de emissão do visto para ${nome} é de ${prazo}. Recomenda-se solicitar com antecedência.`,
+  }] : []),
+  ...(validade && validade !== '—' ? [{
+    question: `Qual a validade do visto para ${nome}?`,
+    answer: `O visto para ${nome} tem validade de ${validade}.`,
+  }] : []),
+  {
+    question: `Quanto custa o visto para ${nome}?`,
+    answer: custo === 'Gratuito'
+      ? `O visto para ${nome} é gratuito para cidadãos brasileiros.`
+      : `A taxa consular do visto para ${nome} é de ${custo}. Este valor pode ser reajustado; consulte a embaixada para valores atualizados.`,
+  },
+  {
+    question: `Vale a pena contratar uma assessoria para tirar o visto de ${nome}?`,
+    answer: `Contratar uma assessoria aumenta as chances de aprovação, especialmente para ${nome}, pois a equipe conhece os requisitos atuais, organiza os documentos e acompanha todo o processo.`,
+  },
+];
+
+const faqBlock = {
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+
+// ── @graph final ──────────────────────────────────────────────────────────────
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    articleBlock,
+    serviceBlock,
+    faqBlock,
+    webPageBlock,
+    breadcrumbBlock,
+    webSiteBlock,
+    orgBlock,
+  ].filter(Boolean),
+};
+
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

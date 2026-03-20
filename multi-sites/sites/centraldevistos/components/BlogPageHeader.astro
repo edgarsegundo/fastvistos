@@ -9,12 +9,26 @@
     updatable-section-siteid="centraldevistos"
     updatable-section-businessid="3cfe8493907c488480f55c9ee10f8c05"
 >
-    <header class="bg-white py-12 px-4 shadow-sm lg:px-8">
+    <header class="bg-white py-4 px-4 shadow-sm lg:px-8">
         <div class="mx-auto" style="max-width: 1280px;">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                 
-                <div class="flex items-center mb-3 md:mb-0">
-                    <a href="https://fastvistos.com.br">
+                <div class="flex flex-col items-start">
+                    <a class="toggleColour no-underline hover:no-underline" href="/">
+                        <div class="site-name">centraldevistos.com</div>
+                        <div class="flex items-center gap-2 site-operado">
+                            <span>OPERADO POR</span>
+                            <img
+                                src="/assets/images/logo/logo-fast-orange.png"
+                                class="h-3 w-auto"
+                                alt="FastVistos"
+                            />
+                        </div>
+                    </a>
+                </div>
+
+                <!-- <div class="flex items-center mb-3 md:mb-0">
+                    <a href="https://centraldevistos.com">
                         <img
                             src="/assets/images/logo/logo-fast-orange.png"
                             alt="Logo Fast Vistos"
@@ -22,15 +36,15 @@
                             loading="lazy"
                         />
                     </a>
-                </div>
+                </div> -->
                 
                 <nav>
                     <ul
-                        class="flex flex-col md:flex-row gap-y-4 md:gap-x-10 list-disc list-inside text-orange-500"
+                        class="flex flex-col md:flex-row gap-y-2 md:gap-x-10 mt-4 mb-2 list-disc list-inside text-orange-500"
                     >
                         <li>
                             <a
-                                href="https://fastvistos.com.br"
+                                href="https://centraldevistos.com"
                                 class="text-[15px] font-medium text-gray-700 hover:text-orange-600"
                             >
                                 Home
@@ -38,7 +52,7 @@
                         </li>
                         <li>
                             <a
-                                href="https://fastvistos.com.br/blog/"
+                                href="https://centraldevistos.com/blog/"
                                 class="text-[15px] font-medium text-gray-700 hover:text-orange-600"
                             >
                                 Blog
@@ -46,7 +60,7 @@
                         </li>
                         <li>
                             <a
-                                onclick="window.open('https://api.whatsapp.com/send?phone=551920422785&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20de%20vistos.%231', '_blank')"
+                                onclick="window.open('https://api.whatsapp.com/send?phone=551150283044&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20de%20vistos.%231', '_blank')"
                                 class="text-[15px] font-medium text-gray-700 hover:text-orange-600"
                                 style="cursor: pointer;"
                             >
@@ -59,3 +73,22 @@
         </div>
     </header>
 </div>
+
+<style>
+.site-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1B375C;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    line-height: 1.2;
+}
+ 
+.site-operado {
+    font-size: 9px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.35);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+</style>

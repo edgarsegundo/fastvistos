@@ -71,6 +71,7 @@
     "dev:centraldevistos": "node sync-blog.js centraldevistos && SITE_ID=centraldevistos astro dev",
     "dev:watch:centraldevistos": "node dev-with-sync.js centraldevistos",
     "build:centraldevistos": "node sync-blog.js centraldevistos && SITE_ID=centraldevistos astro build && node postbuild-updatable.js centraldevistos",
+    "build:centraldevistos:incremental": "node detect-changed-countries.js centraldevistos | xargs -I{} sh -c 'SITE_ID=centraldevistos VISA_SLUGS={} astro build'",
     "preview:centraldevistos": "SITE_ID=centraldevistos astro preview",
     "download-images:centraldevistos": "node download-blog-images.js centraldevistos"
   },
@@ -82,6 +83,7 @@
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.5",
     "axios": "^1.11.0",
+    "better-sqlite3": "^12.8.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.6.1",
     "express": "^4.18.2",
