@@ -194,6 +194,11 @@ export const siteConfig: SiteConfig = {
         pagination: {
             postsPerPage: 10,
         },
+        customStyles: {
+            cssVars: {
+                '--blog-bg-color': '#4A4047',
+            },
+        },
     },
 
     blogPostConfig: {
