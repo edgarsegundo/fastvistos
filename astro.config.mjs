@@ -179,9 +179,7 @@ export default defineConfig({
 
     vite: {
         plugins: [
-            tailwindcss({
-                config: `./tailwind.${CURRENT_SITE}.config.js`,
-            }),
+            tailwindcss(),
             {
                 name: 'sitemap-xml-header',
                 configureServer(server) {
