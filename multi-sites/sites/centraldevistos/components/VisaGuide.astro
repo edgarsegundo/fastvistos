@@ -4,7 +4,7 @@
 
 
 // Lista estática de slugs populares
-const POPULAR = ["eua", "portugal", "canada", "reino-unido", "australia"];
+const POPULAR = ["US", "PT", "CA", "GB", "AU"];
 
 // Função para gerar flag unicode a partir do ISO
 function flagFromIso(iso) {
@@ -14,6 +14,7 @@ function flagFromIso(iso) {
 
 // Função para derivar typeCode a partir do typeLabel
 function typeCodeFromLabel(label) {
+//   console.log("[VisaGuide] Derivando typeCode de typeLabel:", label);
   const l = (label ?? '').toLowerCase();
   if (l.includes('isento') || l.includes('livre')) return 'free';
   if (l.includes('eta') || l.includes('visitor') || l.includes('nzeta') || l.includes('eletrôn')) return 'eta';
@@ -33,8 +34,10 @@ countries = countries.map(c => ({
   typeLabel: c.type_label ?? '',
   typeCode: c.type_code ?? typeCodeFromLabel(c.type_label),
   visaName: c.visa_name ?? c.type_label ?? '',
-  popular: POPULAR.includes(c.id)
+  popular: POPULAR.includes(c.codigo_iso) || false,
 }));
+
+// console.log("[VisaGuide] countries after mapping:", countries); // <-- E esta linha
 ---
 
 <section class="visa-guide-section">
@@ -64,9 +67,6 @@ countries = countries.map(c => ({
   <div class="vg-filters" id="vg-filters">
     <button class="vg-filter active" data-filter="all">Todos</button>
     <button class="vg-filter" data-filter="popular">⭐ Populares</button>
-    <button class="vg-filter" data-filter="free">✓ Isentos</button>
-    <button class="vg-filter" data-filter="eta">⚡ eTA / eVisitor</button>
-    <button class="vg-filter" data-filter="required">📋 Exige visto</button>
   </div>
 
   <!-- Grid de países -->
@@ -310,12 +310,13 @@ countries = countries.map(c => ({
 
 </style>
 
-<script>
-  const input   = document.getElementById('vg-input') as HTMLInputElement;
-  const grid    = document.getElementById('vg-grid')!;
-  const empty   = document.getElementById('vg-empty')!;
-  const filters = document.querySelectorAll<HTMLButtonElement>('.vg-filter');
-  const cards   = document.querySelectorAll<HTMLElement>('.vg-card');
+<script is:inline>
+  console.log("[VisaGuide] Script carregado");
+  const input   = document.getElementById('vg-input');
+  const grid    = document.getElementById('vg-grid');
+  const empty   = document.getElementById('vg-empty');
+  const filters = document.querySelectorAll('.vg-filter');
+  const cards   = document.querySelectorAll('.vg-card');
 
   let activeFilter = 'all';
   let searchQuery  = '';
@@ -344,12 +345,14 @@ countries = countries.map(c => ({
   }
 
   input.addEventListener('input', () => {
+    console.log("[VisaGuide] input change", input.value);
     searchQuery = input.value.toLowerCase().trim();
     applyFilters();
   });
 
   filters.forEach(btn => {
     btn.addEventListener('click', () => {
+      console.log("[VisaGuide] filtro clicado", btn.dataset.filter);
       filters.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeFilter = btn.dataset.filter ?? 'all';
