@@ -16,6 +16,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 // Fetch blog data using the business-aware blog service
 const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 
+const blogBgColor =
+  siteConfig.blogPageConfig?.customStyles?.cssVars?.['--blog-bg-color'] || '#000'; // fallback para preto
+
+  console.log('xxxx blogBgColor:', blogBgColor);
+
 // Create correct breadcrumb structure
 const breadcrumbList = [
     {
@@ -57,7 +62,10 @@ const breadcrumbList = [
     </Fragment>
 
     
-    <section class="bg-black py-20 px-4 lg:px-8">
+    <section
+    class="py-20 px-4 lg:px-8"
+    style={`background-color: ${blogBgColor};`}
+    >     
         <div class="mx-auto" style="max-width: 1220px;">
             <div class="">
                 
