@@ -3,7 +3,7 @@ export const siteConfig = {
     site: {
         business_id: '3cfe8493907c488480f55c9ee10f8c05',
         id: 'centraldevistos',
-        siteName: 'Central de Vistos',
+        siteName: 'Central de Vistos 2',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
         domain: 'centraldevistos.com', // ex: 'fastvistos.com.br'
