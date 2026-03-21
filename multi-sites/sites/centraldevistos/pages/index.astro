@@ -17,13 +17,13 @@ import CallToActionSection from '../components/CallToActionSection.astro';
 import GoogleReviewsSection from '../components/GoogleReviewsSection.astro';
 // import HowItWorks from '../components/HowItWorks.astro';
 
-
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
+
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
-    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    bodyClass={`${bodyClass} gradient`}
+    bodyStyle={`${bodyStyle}`}
     themeToggleDisable={true}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}

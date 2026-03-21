@@ -1,0 +1,397 @@
+---
+import PrototypeLayout from '../layouts/PrototypeLayout.astro';
+---
+
+<PrototypeLayout
+>
+
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+  <!-- HEADER -->
+  <header class="bg-primary-500 text-white px-8 py-12 mb-12">
+    <div class="max-w-5xl mx-auto">
+      <span class="inline-block bg-white/20 text-white text-xs px-3 py-1 rounded-full tracking-widest uppercase mb-4">
+        versão Tailwind — roda no projeto Astro
+      </span>
+      <h1 class="text-4xl font-bold leading-tight">Style Guide</h1>
+      <p class="mt-2 text-lg opacity-80">
+        Referência visual com classes Tailwind geradas pelo <code class="bg-black/20 px-2 py-0.5 rounded">theme.css</code>.
+      </p>
+    </div>
+  </header>
+
+  <div class="max-w-5xl mx-auto px-8 pb-24">
+
+    <!-- ============ CORES ============ -->
+    <section class="mb-20">
+      <div class="text-xs uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-6">Paleta de Cores</div>
+
+      <!-- Primary -->
+      <div class="mb-6">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Primary — cor principal da marca</div>
+        <div class="flex rounded-lg overflow-hidden shadow-sm">
+          <div class="flex-1 h-16 bg-primary-50"></div>
+          <div class="flex-1 h-16 bg-primary-100"></div>
+          <div class="flex-1 h-16 bg-primary-200"></div>
+          <div class="flex-1 h-16 bg-primary-300"></div>
+          <div class="flex-1 h-16 bg-primary-400"></div>
+          <div class="flex-1 h-16 bg-primary-500 relative"><span class="absolute bottom-1 left-1 text-white text-xs font-bold">500★</span></div>
+          <div class="flex-1 h-16 bg-primary-600"></div>
+          <div class="flex-1 h-16 bg-primary-700"></div>
+          <div class="flex-1 h-16 bg-primary-800"></div>
+          <div class="flex-1 h-16 bg-primary-900"></div>
+          <div class="flex-1 h-16 bg-primary-950"></div>
+        </div>
+        <div class="flex text-xs text-gray-400 mt-1">
+          <span class="flex-1 text-center">50</span><span class="flex-1 text-center">100</span><span class="flex-1 text-center">200</span><span class="flex-1 text-center">300</span><span class="flex-1 text-center">400</span>
+          <span class="flex-1 text-center font-bold text-primary-600">500</span>
+          <span class="flex-1 text-center">600</span><span class="flex-1 text-center">700</span><span class="flex-1 text-center">800</span><span class="flex-1 text-center">900</span><span class="flex-1 text-center">950</span>
+        </div>
+      </div>
+
+      <!-- Secondary -->
+      <div class="mb-6">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Secondary — cor de apoio, CTAs, badges</div>
+        <div class="flex rounded-lg overflow-hidden shadow-sm">
+          <div class="flex-1 h-16 bg-secondary-50"></div>
+          <div class="flex-1 h-16 bg-secondary-100"></div>
+          <div class="flex-1 h-16 bg-secondary-200"></div>
+          <div class="flex-1 h-16 bg-secondary-300"></div>
+          <div class="flex-1 h-16 bg-secondary-400"></div>
+          <div class="flex-1 h-16 bg-secondary-500 relative"><span class="absolute bottom-1 left-1 text-white text-xs font-bold">500★</span></div>
+          <div class="flex-1 h-16 bg-secondary-600"></div>
+          <div class="flex-1 h-16 bg-secondary-700"></div>
+          <div class="flex-1 h-16 bg-secondary-800"></div>
+          <div class="flex-1 h-16 bg-secondary-900"></div>
+          <div class="flex-1 h-16 bg-secondary-950"></div>
+        </div>
+        <div class="flex text-xs text-gray-400 mt-1">
+          <span class="flex-1 text-center">50</span><span class="flex-1 text-center">100</span><span class="flex-1 text-center">200</span><span class="flex-1 text-center">300</span><span class="flex-1 text-center">400</span>
+          <span class="flex-1 text-center font-bold text-secondary-600">500</span>
+          <span class="flex-1 text-center">600</span><span class="flex-1 text-center">700</span><span class="flex-1 text-center">800</span><span class="flex-1 text-center">900</span><span class="flex-1 text-center">950</span>
+        </div>
+      </div>
+
+      <!-- Accent -->
+      <div class="mb-10">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Accent — terceira cor, destaques pontuais</div>
+        <div class="flex rounded-lg overflow-hidden shadow-sm">
+          <div class="flex-1 h-16 bg-accent-50"></div>
+          <div class="flex-1 h-16 bg-accent-100"></div>
+          <div class="flex-1 h-16 bg-accent-200"></div>
+          <div class="flex-1 h-16 bg-accent-300"></div>
+          <div class="flex-1 h-16 bg-accent-400"></div>
+          <div class="flex-1 h-16 bg-accent-500 relative"><span class="absolute bottom-1 left-1 text-white text-xs font-bold">500★</span></div>
+          <div class="flex-1 h-16 bg-accent-600"></div>
+          <div class="flex-1 h-16 bg-accent-700"></div>
+          <div class="flex-1 h-16 bg-accent-800"></div>
+          <div class="flex-1 h-16 bg-accent-900"></div>
+          <div class="flex-1 h-16 bg-accent-950"></div>
+        </div>
+        <div class="flex text-xs text-gray-400 mt-1">
+          <span class="flex-1 text-center">50</span><span class="flex-1 text-center">100</span><span class="flex-1 text-center">200</span><span class="flex-1 text-center">300</span><span class="flex-1 text-center">400</span>
+          <span class="flex-1 text-center font-bold text-accent-600">500</span>
+          <span class="flex-1 text-center">600</span><span class="flex-1 text-center">700</span><span class="flex-1 text-center">800</span><span class="flex-1 text-center">900</span><span class="flex-1 text-center">950</span>
+        </div>
+      </div>
+
+      <!-- Semânticas — Texto -->
+      <div class="mb-8">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Semânticas — Texto</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-text)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-text</div><div class="text-xs text-gray-400">corpo do texto, parágrafos</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-text-muted)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-text-muted</div><div class="text-xs text-gray-400">legendas, metadados, placeholders</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14 bg-gray-800 flex items-center justify-center px-3">
+              <span class="text-sm font-semibold" style="color: var(--color-text-inverse)">Texto sobre fundo escuro</span>
+            </div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-text-inverse</div><div class="text-xs text-gray-400">texto sobre fundos escuros</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-text-disabled)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-text-disabled</div><div class="text-xs text-gray-400">texto em elementos desabilitados</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Semânticas — Backgrounds -->
+      <div class="mb-8">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Semânticas — Backgrounds</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14 border border-gray-100" style="background-color: var(--color-bg)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-bg</div><div class="text-xs text-gray-400">fundo padrão da página</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-bg-alt)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-bg-alt</div><div class="text-xs text-gray-400">seções alternadas (zebra)</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-bg-dark)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-bg-dark</div><div class="text-xs text-gray-400">hero, seções escuras da marca</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-surface)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-surface</div><div class="text-xs text-gray-400">fundo de cards, painéis</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-surface-raised)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-surface-raised</div><div class="text-xs text-gray-400">modais, dropdowns elevados</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-surface-overlay)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-surface-overlay</div><div class="text-xs text-gray-400">backdrop de modais</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-disabled)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-disabled</div><div class="text-xs text-gray-400">fundo de elementos desabilitados</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Semânticas — Bordas e Interação -->
+      <div class="mb-8">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Semânticas — Bordas e Interação</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14 bg-gray-50 flex items-center justify-center">
+              <div class="w-3/4 h-8 rounded border-2" style="border-color: var(--color-border)"></div>
+            </div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-border</div><div class="text-xs text-gray-400">divisores, bordas de cards e inputs</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-hover)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-hover</div><div class="text-xs text-gray-400">fundo ao passar o mouse em itens de menu</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14 bg-gray-50 flex items-center justify-center">
+              <div class="w-3/4 h-8 rounded-lg border-2" style="border-color: var(--color-focus); box-shadow: 0 0 0 3px var(--color-focus)"></div>
+            </div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-focus</div><div class="text-xs text-gray-400">anel de foco (acessibilidade)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Semânticas — Estados e Feedback -->
+      <div class="mb-8">
+        <div class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Semânticas — Estados e Feedback</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-success)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-success</div><div class="text-xs text-gray-400">ícones e textos de sucesso</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-success-bg)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-success-bg</div><div class="text-xs text-gray-400">fundo de alertas de sucesso</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-warning)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-warning</div><div class="text-xs text-gray-400">ícones e textos de atenção</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-warning-bg)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-warning-bg</div><div class="text-xs text-gray-400">fundo de alertas de atenção</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-error)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-error</div><div class="text-xs text-gray-400">ícones e textos de erro</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-error-bg)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-error-bg</div><div class="text-xs text-gray-400">fundo de alertas de erro</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-info)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-info</div><div class="text-xs text-gray-400">ícones e textos informativos</div></div>
+          </div>
+          <div class="rounded-lg overflow-hidden shadow-sm">
+            <div class="h-14" style="background-color: var(--color-info-bg)"></div>
+            <div class="bg-white p-2"><div class="text-xs font-mono text-gray-700">--color-info-bg</div><div class="text-xs text-gray-400">fundo de alertas informativos</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TIPOGRAFIA ============ -->
+    <section class="mb-20">
+      <div class="text-xs uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-6">Tipografia</div>
+
+      <div class="space-y-3">
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-4xl · --font-heading · títulos principais h1</div>
+          <div class="text-4xl font-bold leading-tight">Breathe life into your walls</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-3xl · --font-heading · subtítulos h2</div>
+          <div class="text-3xl font-bold leading-tight">Find What You're Looking For</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-2xl · seções h3</div>
+          <div class="text-2xl">Interior & Exterior Wall Paints</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-xl · lead, intro de seção</div>
+          <div class="text-xl">Premium quality, damp proof solutions</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-lg · corpo destacado, subtítulos pequenos</div>
+          <div class="text-lg">Experience The Expertise Of Berger Paints</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-base · --font-sans · corpo padrão, parágrafos</div>
+          <div class="text-base">Precise quotations that include advice on products specific to your requirements.</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-sm · legendas, labels, texto secundário</div>
+          <div class="text-sm text-gray-400">Express Painting · Waterproofing · Products</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">text-xs · uppercase · tracking-widest · eyebrow, badges, tags</div>
+          <div class="text-xs uppercase tracking-widest text-gray-400">Style Guide · Referência Interna · v1.0</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-2">font-mono · --font-mono · código, variáveis, valores técnicos</div>
+          <div class="font-mono text-sm bg-gray-50 p-3 rounded-lg">--color-primary-500: #86a5a8;<br>--font-heading: 'humansans_medium';</div>
+        </div>
+      </div>
+
+      <!-- Pesos -->
+      <div class="bg-white rounded-xl p-6 shadow-sm mt-3">
+        <div class="font-mono text-xs text-gray-400 mb-4">Font weights — use consistentemente para hierarquia visual</div>
+        <div class="flex flex-wrap gap-8">
+          <div><div class="font-mono text-xs text-gray-400 mb-1">font-normal (400) · corpo, parágrafos</div><div class="text-xl font-normal">Berger Paints</div></div>
+          <div><div class="font-mono text-xs text-gray-400 mb-1">font-medium (500) · labels, nav links</div><div class="text-xl font-medium">Berger Paints</div></div>
+          <div><div class="font-mono text-xs text-gray-400 mb-1">font-semibold (600) · botões, subtítulos</div><div class="text-xl font-semibold">Berger Paints</div></div>
+          <div><div class="font-mono text-xs text-gray-400 mb-1">font-bold (700) · títulos, destaques</div><div class="text-xl font-bold">Berger Paints</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPONENTES ============ -->
+    <section class="mb-20">
+      <div class="text-xs uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-6">Componentes</div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- btn-primary -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-4">.btn-primary · CTA principal, sobre fundo de marca</div>
+          <div class="bg-primary-500 p-8 rounded-lg flex justify-center">
+            <button class="bg-white text-gray-900 px-10 py-3.5 rounded-full font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+              Explore Now
+            </button>
+          </div>
+          <div class="mt-3 font-mono text-xs text-gray-400 bg-gray-50 p-3 rounded-lg">bg-white px-10 py-3.5 rounded-full font-semibold</div>
+        </div>
+
+        <!-- btn-secondary -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-4">.btn-secondary · ação secundária, cor de apoio</div>
+          <div class="p-8 flex justify-center">
+            <button class="bg-secondary-500 hover:bg-secondary-600 text-white px-8 py-3.5 rounded-full font-semibold transition-colors duration-300">
+              Express Painting →
+            </button>
+          </div>
+          <div class="mt-3 font-mono text-xs text-gray-400 bg-gray-50 p-3 rounded-lg">bg-secondary-500 hover:bg-secondary-600 text-white rounded-full</div>
+        </div>
+
+        <!-- card-menu -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-4">.card-menu · navegação por categoria, links de serviços</div>
+          <div class="space-y-2">
+            <div class="bg-secondary-500 hover:bg-secondary-600 text-white rounded-2xl p-4 flex items-center gap-3 cursor-pointer transition-colors duration-300">
+              <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center text-lg flex-shrink-0">🖌️</div>
+              <div class="text-sm font-semibold">Express Painting</div>
+            </div>
+            <div class="bg-secondary-500 hover:bg-secondary-600 text-white rounded-2xl p-4 flex items-center gap-3 cursor-pointer transition-colors duration-300">
+              <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center text-lg flex-shrink-0">💧</div>
+              <div class="text-sm font-semibold">Waterproofing</div>
+            </div>
+          </div>
+          <div class="mt-3 font-mono text-xs text-gray-400 bg-gray-50 p-3 rounded-lg">bg-secondary-500 hover:bg-secondary-600 rounded-2xl</div>
+        </div>
+
+        <!-- hero-bg -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <div class="font-mono text-xs text-gray-400 mb-4">.hero-bg · seção hero, fundo de cor da marca</div>
+          <div class="bg-primary-500 text-white p-8 rounded-lg">
+            <h2 class="text-3xl font-bold leading-tight mb-3">Breathe life<br>into your walls</h2>
+            <p class="opacity-85 mb-5 text-lg">Transforming Your Walls With A Century Of Trust.</p>
+            <button class="bg-white text-gray-900 px-8 py-3 rounded-full font-semibold shadow-md">
+              Explore Now
+            </button>
+          </div>
+          <div class="mt-3 font-mono text-xs text-gray-400 bg-gray-50 p-3 rounded-lg">bg-primary-500 text-white rounded-lg</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ TOKENS ============ -->
+    <section class="mb-20">
+      <div class="text-xs uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-6">Border Radius — arredondamento de elementos</div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="bg-white p-4 shadow-sm rounded-lg"><div class="font-mono text-xs text-gray-400 mb-1">rounded-sm</div><div class="text-xs text-gray-300 mb-2">inputs, badges pequenos</div><div class="bg-primary-200 h-10 rounded-sm"></div></div>
+        <div class="bg-white p-4 shadow-sm rounded-lg"><div class="font-mono text-xs text-gray-400 mb-1">rounded-md</div><div class="text-xs text-gray-300 mb-2">botões, campos de formulário</div><div class="bg-primary-200 h-10 rounded-md"></div></div>
+        <div class="bg-white p-4 shadow-sm rounded-lg"><div class="font-mono text-xs text-gray-400 mb-1">rounded-lg</div><div class="text-xs text-gray-300 mb-2">cards, painéis, modais</div><div class="bg-primary-200 h-10 rounded-lg"></div></div>
+        <div class="bg-white p-4 shadow-sm rounded-lg"><div class="font-mono text-xs text-gray-400 mb-1">rounded-2xl</div><div class="text-xs text-gray-300 mb-2">cards maiores, hero sections</div><div class="bg-primary-200 h-10 rounded-2xl"></div></div>
+        <div class="bg-white p-4 shadow-sm rounded-lg"><div class="font-mono text-xs text-gray-400 mb-1">rounded-full</div><div class="text-xs text-gray-300 mb-2">pills, avatares, botões CTA</div><div class="bg-primary-200 h-10 rounded-full"></div></div>
+      </div>
+
+      <div class="text-xs uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-6 mt-10">Sombras — elevação e profundidade</div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-lg shadow-sm"><div class="font-mono text-xs text-gray-400 mb-1">shadow-sm</div><div class="text-xs text-gray-300 mb-3">cards sutis, inputs</div><div class="bg-white h-10 rounded-md shadow-sm"></div></div>
+        <div class="bg-white p-4 rounded-lg shadow-sm"><div class="font-mono text-xs text-gray-400 mb-1">shadow-md</div><div class="text-xs text-gray-300 mb-3">cards padrão, dropdowns</div><div class="bg-white h-10 rounded-md shadow-md"></div></div>
+        <div class="bg-white p-4 rounded-lg shadow-sm"><div class="font-mono text-xs text-gray-400 mb-1">shadow-lg</div><div class="text-xs text-gray-300 mb-3">modais, popovers</div><div class="bg-white h-10 rounded-md shadow-lg"></div></div>
+        <div class="bg-white p-4 rounded-lg shadow-sm"><div class="font-mono text-xs text-gray-400 mb-1">shadow-xl</div><div class="text-xs text-gray-300 mb-3">drawers, sidebars flutuantes</div><div class="bg-white h-10 rounded-md shadow-xl"></div></div>
+      </div>
+
+      <div class="text-xs uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-2 mb-6 mt-10">Z-Index — camadas de sobreposição</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <table class="w-full bg-white rounded-xl overflow-hidden shadow-sm text-sm">
+          <thead><tr class="bg-gray-50"><th class="p-3 text-left font-mono text-xs text-gray-400 uppercase tracking-wide">Variável</th><th class="p-3 text-left font-mono text-xs text-gray-400 uppercase tracking-wide">Valor</th><th class="p-3 text-left font-mono text-xs text-gray-400 uppercase tracking-wide">Uso</th></tr></thead>
+          <tbody>
+            <tr class="border-t border-gray-100"><td class="p-3 font-mono text-xs">--z-base</td><td class="p-3 font-bold text-secondary-600">0</td><td class="p-3 text-gray-500 text-xs">Fluxo normal do documento</td></tr>
+            <tr class="border-t border-gray-100"><td class="p-3 font-mono text-xs">--z-above</td><td class="p-3 font-bold text-secondary-600">10</td><td class="p-3 text-gray-500 text-xs">Elementos que sobrepõem o conteúdo</td></tr>
+            <tr class="border-t border-gray-100"><td class="p-3 font-mono text-xs">--z-sticky</td><td class="p-3 font-bold text-secondary-600">100</td><td class="p-3 text-gray-500 text-xs">Nav e headers fixos (sticky)</td></tr>
+            <tr class="border-t border-gray-100"><td class="p-3 font-mono text-xs">--z-overlay</td><td class="p-3 font-bold text-secondary-600">200</td><td class="p-3 text-gray-500 text-xs">Backdrops e overlays semitransparentes</td></tr>
+            <tr class="border-t border-gray-100"><td class="p-3 font-mono text-xs">--z-modal</td><td class="p-3 font-bold text-secondary-600">300</td><td class="p-3 text-gray-500 text-xs">Modais, drawers, sidebars</td></tr>
+            <tr class="border-t border-gray-100"><td class="p-3 font-mono text-xs">--z-toast</td><td class="p-3 font-bold text-secondary-600">400</td><td class="p-3 text-gray-500 text-xs">Toasts e notificações sempre no topo</td></tr>
+          </tbody>
+        </table>
+        <div class="bg-white rounded-xl p-6 shadow-sm space-y-4">
+          <div class="font-mono text-xs text-gray-400 mb-2">Transições — velocidade de animações</div>
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-primary-500 rounded-full transition-all duration-150 hover:scale-150 cursor-pointer flex-shrink-0"></div>
+            <div><div class="font-mono text-xs text-gray-500">--transition-fast · 150ms</div><div class="text-xs text-gray-300">feedback imediato, hovers rápidos</div></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-secondary-500 rounded-full transition-all duration-300 hover:scale-150 cursor-pointer flex-shrink-0"></div>
+            <div><div class="font-mono text-xs text-gray-500">--transition-base · 300ms</div><div class="text-xs text-gray-300">padrão, a maioria das animações</div></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-gray-400 rounded-full transition-all duration-500 hover:scale-150 cursor-pointer flex-shrink-0"></div>
+            <div><div class="font-mono text-xs text-gray-500">--transition-slow · 500ms</div><div class="text-xs text-gray-300">modais, sidebars, transições de página</div></div>
+          </div>
+          <p class="text-xs text-gray-300 italic">Passe o mouse nos círculos para ver as transições.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+
+</PrototypeLayout>
+
+<style is:global>
+</style>
+
+<!-- CSS specific to this page -->
+<style>
+</style>
