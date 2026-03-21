@@ -6,7 +6,7 @@ export const siteConfig = {
         siteName: 'Central de Vistos 2',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: 'centraldevistos.com', // ex: 'fastvistos.com.br'
+        domain: 'centraldevistos22.com', // ex: 'fastvistos.com.br'
         canonical: 'https://centraldevistos.com/',
         authorName: 'Especialistas da Fast Vistos', 
         primaryImage: {
