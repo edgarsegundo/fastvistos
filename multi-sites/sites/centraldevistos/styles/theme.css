@@ -36,6 +36,9 @@
   Ex: .btn-primary, .hero-section, .card-produto
 */
 @layer components {
+  .gradient {
+      background: linear-gradient(301deg, #ebd18e, #6f616d) !important;
+  }
 }
 
 /*
