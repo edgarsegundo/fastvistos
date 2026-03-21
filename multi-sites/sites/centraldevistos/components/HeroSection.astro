@@ -1,36 +1,36 @@
 ---
 // Hero component
 ---
-<section class="pt-12 md:pt-2">
+<section class="pt-6 md:pt-2 bg-surface-inverse">
     <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <!-- Left Col -->
         <div
             class="flex flex-col w-full md:w-1/2 justify-center items-start text-center md:text-left"
         >
-            <h1
-                class="my-4 text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white"
-            >
-                A MAIOR CENTRAL DE INFORMAÇÕES SOBRE VISTOS DO BRASIL
+            <h1 class="font-heading font-normal text-[42px] md:text-[72px] leading-[1.15] tracking-[-0.03em] text-white">
+                A maior central de informações sobre vistos do Brasil
             </h1>
-            <p
-                class="leading-normal text-xl md:text-2xl lg:text-3xl font-medium text-gray-300 mb-4 w-full"
-                style="color: #FF8700 !important;"
-            >
-                Tire dúvidas, entenda os requisitos e peça seu visto com quem entende
+
+            <p class="opacity-85 leading-normal text-lg text-text-inverse mt-6 mb-4">
+                Tire dúvidas, entenda os requisitos e peça seu visto com quem entende</p>            
             </p>
-            <p class="text-base md:text-lg text-gray-200 mb-2 w-full" style="color: white !important;">
-                Serviço realizado pela equipe da <a href="https://fastvistos.com.br" target="_blank" rel="noopener" class="font-semibold opacity-70 hover:opacity-100 transition-opacity underline decoration-dotted" style="color: white !important;">fastvistos.com.br</a>
-            </p>
+            <!-- <p class="text-base md:text-lg text-gray-200 mb-2 w-full">
+                Serviço realizado pela equipe da <a href="https://fastvistos.com.br" target="_blank" rel="noopener" class="font-semibold opacity-70 hover:opacity-100 transition-opacity underline decoration-dotted">fastvistos.com.br</a>
+            </p> -->
+
             <button
-                class="wpp_button_link cta-button-wiggle mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-10 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out flex items-center gap-2"
+                class="wpp_button_link cta-button-wiggle bg-surface-card mx-auto lg:mx-0 hover:underline 
+                text-text 
+                font-semibold
+                rounded-2xl my-6 py-4 px-10 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out flex items-center gap-2"
                 data-linkcode="%231"
             >
                 <span style="font-size: 1.5rem;">💬</span>
-                <span class="hidden sm:inline" style="color: #FF8700 !important;"
-                    >Atendimento pelo <strong>WhatsApp!</strong></span
+                <span class="hidden sm:inline"
+                    >Fale com com um especialista</span
                 >
-                <span class="inline sm:hidden" style="color: #FF8700 !important;"
-                    >Tire dúvidas pelo <strong>WhatsApp</strong></span
+                <span class="inline sm:hidden" 
+                    >Fale com com um especialista</span
                 >
             </button>
             
@@ -46,7 +46,7 @@
                         src="assets/images/cover/casal-feliz-pulando-de-alegria-passaportes-para-viajar.webp"
                         loading="lazy"
                         alt="Casal feliz segurando passaportes indo viajar"
-                        style="z-index: -1; position: relative;"
+                        style="z-index: 0; position: relative;"
                     />
                 </picture>
             </div>
@@ -54,7 +54,7 @@
     </div>
 </section>
 
-<div class="relative -mt-12 lg:-mt-24">
+<!-- <div class="relative -mt-12 lg:-mt-24">
     <svg
         viewBox="0 0 1428 174"
         version="1.1"
@@ -83,11 +83,10 @@
             </g>
         </g>
     </svg>
-</div>
+</div> -->
 
 <style>
     .cta-button-wiggle {
-        color: #ff6901;
         animation: wiggle 4s 2s infinite;
     }
 

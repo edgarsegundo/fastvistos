@@ -124,7 +124,8 @@ const breadcrumbList = [
       description: metaDescription,
     }
   }}
-  bodyClass="gradient text-white">
+  bodyClass="gradient text-white bg-surface-inverse"
+  >
 
   <Fragment slot="head">
     <JsonLdVisaPage
@@ -149,7 +150,6 @@ const breadcrumbList = [
 <div class="country-page">
   <div class="cp-container">
   <div class="cp-card">
-
     <!-- Hero do país -->
     <div class="cp-hero">
       <div class="cp-hero-inner">
@@ -348,7 +348,7 @@ const breadcrumbList = [
 
   /* Hero */
   .cp-hero {
-    background: #B89B5B;
+    background: var(--color-secondary-500);
     padding: 40px 24px 48px;
     position: relative;
     overflow: hidden;
