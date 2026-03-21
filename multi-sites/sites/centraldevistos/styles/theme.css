@@ -23,61 +23,95 @@
      CORES DA MARCA
      ===================== */
 
-  /* Cor principal — botões, links, destaques */
-  --color-primary-50:  ;
-  --color-primary-100: ;
-  --color-primary-200: ;
-  --color-primary-300: ;
-  --color-primary-400: ;
-  --color-primary-500: ; /* tom base → bg-primary-500, text-primary-500, etc. */
-  --color-primary-600: ;
-  --color-primary-700: ;
-  --color-primary-800: ;
-  --color-primary-900: ;
-  --color-primary-950: ;
+  /* Verde sábio — cor primária do hero e nav */
+  --color-primary-50:  #f4f8f4;
+  --color-primary-100: #e3ede3;
+  --color-primary-200: #c6dbc7;
+  --color-primary-300: #9fc3a1;
+  --color-primary-400: #72a575;
+  --color-primary-500: #86a5a8; /* theme-color do site */
+  --color-primary-600: #4d7c50;
+  --color-primary-700: #3d6340;
+  --color-primary-800: #344f36;
+  --color-primary-900: #2b412e;
+  --color-primary-950: #162318;
 
-  /* Cor secundária — CTAs, badges, elementos de apoio */
-  --color-secondary-50:  ;
-  --color-secondary-100: ;
-  --color-secondary-200: ;
-  --color-secondary-300: ;
-  --color-secondary-400: ;
-  --color-secondary-500: ; /* tom base */
-  --color-secondary-600: ;
-  --color-secondary-700: ;
-  --color-secondary-800: ;
-  --color-secondary-900: ;
-  --color-secondary-950: ;
+  /* Verde escuro teal — cor dos botões de destaque (Express Painting, Waterproofing) */
+  --color-secondary-50:  #eef5f5;
+  --color-secondary-100: #d4e8e8;
+  --color-secondary-200: #add3d3;
+  --color-secondary-300: #7ab8b8;
+  --color-secondary-400: #4e9d9e;
+  --color-secondary-500: #3d8485; /* tom base dos cards de menu */
+  --color-secondary-600: #316a6b;
+  --color-secondary-700: #2b5758;
+  --color-secondary-800: #264748;
+  --color-secondary-900: #233c3d;
+  --color-secondary-950: #112121;
+
+  /* Accent — sem terceira cor definida para este site, usando primary como fallback */
+  --color-accent-50:  #f4f8f4;
+  --color-accent-100: #e3ede3;
+  --color-accent-200: #c6dbc7;
+  --color-accent-300: #9fc3a1;
+  --color-accent-400: #72a575;
+  --color-accent-500: #86a5a8;
+  --color-accent-600: #4d7c50;
+  --color-accent-700: #3d6340;
+  --color-accent-800: #344f36;
+  --color-accent-900: #2b412e;
+  --color-accent-950: #162318;
 
   /* =====================
-     CORES SEMÂNTICAS
+     CORES SEMÂNTICAS — TEXTO
      ===================== */
 
-  /* Texto */
-  --color-text:         ; /* corpo principal */
-  --color-text-muted:   ; /* secundário, legendas, metadados */
-  --color-text-inverse: ; /* texto sobre fundo escuro */
+  --color-text:          #1a1a1a; /* corpo do texto, parágrafos */
+  --color-text-muted:    #6b7280; /* legendas, metadados, placeholders */
+  --color-text-inverse:  #ffffff; /* texto sobre fundos escuros */
+  --color-text-disabled: #9ca3af; /* texto em elementos desabilitados */
 
-  /* Backgrounds */
-  --color-bg:           ; /* fundo padrão do site */
-  --color-bg-alt:       ; /* seções alternadas (zebra pattern) */
-  --color-bg-dark:      ; /* seções escuras, hero */
+  /* =====================
+     CORES SEMÂNTICAS — BACKGROUNDS
+     ===================== */
 
-  /* Bordas */
-  --color-border:       ; /* divisores, bordas de cards */
+  --color-bg:              #ffffff; /* fundo padrão da página */
+  --color-bg-alt:          #f9fafb; /* seções alternadas (zebra) */
+  --color-bg-dark:         #86a5a8; /* hero — verde sábio da marca */
+  --color-surface:         #ffffff; /* fundo de cards, painéis */
+  --color-surface-raised:  #ffffff; /* modais, dropdowns elevados */
+  --color-surface-overlay: rgba(0, 0, 0, 0.4); /* backdrop semitransparente de modais */
+  --color-disabled:        #f3f4f6; /* fundo de elementos desabilitados */
 
-  /* Estados */
-  --color-success:      ;
-  --color-warning:      ;
-  --color-error:        ;
+  /* =====================
+     CORES SEMÂNTICAS — BORDAS E INTERAÇÃO
+     ===================== */
+
+  --color-border: #e5e7eb; /* divisores, bordas de cards e inputs */
+  --color-hover:  #f3f4f6; /* fundo ao passar o mouse em itens de menu */
+  --color-focus:  #86a5a8; /* anel de foco (acessibilidade) — usa primary */
+
+  /* =====================
+     CORES SEMÂNTICAS — ESTADOS E FEEDBACK
+     ===================== */
+
+  --color-success:    #4d7c50; /* ícones e textos de sucesso */
+  --color-success-bg: #f0faf0; /* fundo de alertas de sucesso */
+  --color-warning:    #f59e0b; /* ícones e textos de atenção */
+  --color-warning-bg: #fffbeb; /* fundo de alertas de atenção */
+  --color-error:      #ef4444; /* ícones e textos de erro */
+  --color-error-bg:   #fef2f2; /* fundo de alertas de erro */
+  --color-info:       #3b82f6; /* ícones e textos informativos */
+  --color-info-bg:    #eff6ff; /* fundo de alertas informativos */
 
   /* =====================
      TIPOGRAFIA — FAMÍLIAS
      ===================== */
 
-  --font-sans:    ; /* corpo, parágrafos — sobrescreve o padrão do Tailwind */
-  --font-heading: ; /* títulos h1-h4 */
-  --font-mono:    ; /* código */
+  /* Berger usa fontes customizadas carregadas via @font-face */
+  --font-sans:    'graphik_regularregular', 'Graphik', system-ui, -apple-system, sans-serif;
+  --font-heading: 'humansans_medium', 'graphiksemibold', system-ui, sans-serif;
+  --font-mono:    'SF Mono', 'Monaco', 'Menlo', monospace;
 
   /* =====================
      TIPOGRAFIA — TAMANHOS
@@ -105,15 +139,15 @@
      TIPOGRAFIA — LINE HEIGHT
      ===================== */
 
-  --line-height-tight:  1.25;
-  --line-height-base:   1.6;
-  --line-height-loose:  1.8;
+  --line-height-tight: 1.1;  /* títulos grandes como "Breathe life into your walls" */
+  --line-height-base:  1.6;
+  --line-height-loose: 1.8;
 
   /* =====================
      ESPAÇAMENTO
      ===================== */
 
-  --spacing-section: ; /* padding entre seções da página */
+  --spacing-section: 5rem; /* espaço generoso entre seções */
 
   /* =====================
      BORDAS — RAIOS
@@ -122,7 +156,8 @@
   --radius-sm:   0.25rem;
   --radius-md:   0.5rem;
   --radius-lg:   1rem;
-  --radius-full: 9999px;
+  --radius-xl:   1.5rem;  /* cards de menu arredondados */
+  --radius-full: 9999px;  /* botão "Explore Now" é pill */
 
   /* =====================
      SOMBRAS
@@ -131,25 +166,26 @@
   --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
   --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.1);
   --shadow-lg:  0 10px 25px -5px rgba(0,0,0,0.15);
+  --shadow-nav: 0 2px 8px rgba(0,0,0,0.12); /* sombra do nav fixo */
 
   /* =====================
      TRANSIÇÕES
      ===================== */
 
-  --transition-fast:   150ms ease;
-  --transition-base:   300ms ease;
-  --transition-slow:   500ms ease;
+  --transition-fast: 150ms ease; /* feedback imediato, hovers rápidos */
+  --transition-base: 300ms ease; /* padrão, a maioria das animações */
+  --transition-slow: 500ms ease; /* modais, sidebars, transições de página */
 
   /* =====================
      Z-INDEX
      ===================== */
 
-  --z-base:    0;
-  --z-above:   10;
-  --z-sticky:  100;
-  --z-overlay: 200;
-  --z-modal:   300;
-  --z-toast:   400;
+  --z-base:    0;   /* fluxo normal do documento */
+  --z-above:   10;  /* elementos que sobrepõem o conteúdo */
+  --z-sticky:  100; /* nav e headers fixos (sticky) */
+  --z-overlay: 200; /* backdrops e overlays semitransparentes */
+  --z-modal:   300; /* modais, drawers, sidebars */
+  --z-toast:   400; /* toasts e notificações sempre no topo */
 
   /* =====================
      CONTAINER / LAYOUT
@@ -175,26 +211,58 @@
 
 /*
   @layer base — use apenas para sobrescrever o reset do global.css.
-  Ex: mudar line-height do body, background-color padrão, etc.
 */
 @layer base {
-}
-
-/*
-  @layer components — classes reutilizáveis específicas deste site.
-  Use quando uma combinação de estilos se repete em mais de um lugar.
-  Ex: .btn-primary, .hero-section, .card-produto
-*/
-@layer components {
-  .gradient {
-      background: linear-gradient(301deg, #ebd18e, #6f616d) !important;
+  body {
+    color: var(--color-text);
+    background-color: var(--color-bg);
   }
 }
 
 /*
+  @layer components — classes reutilizáveis específicas deste site.
+*/
+@layer components {
+
+  /* Botão principal — pill branco como "Explore Now" */
+  .btn-primary {
+    background-color: #ffffff;
+    color: var(--color-text);
+    padding: 0.875rem 2.5rem;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-base);
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Card de menu — estilo teal arredondado */
+  .card-menu {
+    background-color: var(--color-secondary-500);
+    color: var(--color-text-inverse);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: background-color var(--transition-base);
+  }
+
+  .card-menu:hover {
+    background-color: var(--color-secondary-600);
+  }
+
+  /* Hero com fundo verde sábio */
+  .hero-bg {
+    background-color: var(--color-bg-dark);
+  }
+
+}
+
+/*
   @layer utilities — classes atômicas específicas deste site.
-  Use quando a classe faz uma coisa só.
-  Ex: .text-brand-primary, .fill-brand
 */
 @layer utilities {
 }

@@ -229,6 +229,12 @@ async function syncBlogToSite(siteId) {
         'utf-8'
     );
 
+    const prototypeLayout = await fs.readFile(
+        join(CORE_LAYOUTS_DIR, 'PrototypeLayout.astro'),
+        'utf-8'
+    );
+
+
     // Read SEOMeta component for localization (special case)
     // const seoMetaComponent = await fs.readFile(join(CORE_COMPONENTS_DIR, 'SEOMeta.astro'), 'utf-8');
 
@@ -369,6 +375,10 @@ async function syncBlogToSite(siteId) {
     await fs.writeFile(
         join(siteLayoutsDir, 'SharedGenericLayout.astro'),
         stripAstroComments(localizedSharedGenericLayout)
+    );
+    await fs.writeFile(
+        join(siteLayoutsDir, 'PrototypeLayout.astro'),
+        stripAstroComments(prototypeLayout)
     );
 
     // Copy all core components automatically (except SEOMeta which needs localization)
