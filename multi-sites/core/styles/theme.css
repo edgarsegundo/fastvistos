@@ -20,6 +20,7 @@
 @theme {
   --color-primary-500: #3b95fa;
   --color-secondary-500: #ff7900;
+  --color-text-main: #1b375c;
   --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
 }
 

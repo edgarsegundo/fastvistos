@@ -87,6 +87,10 @@ const {
 
         <slot name="head" />
     </head>
+
+    <!-- Cuidado, isso pode sobrescrever estilos globais nos arquivos global.css e theme.css
+    <body
+        class={`leading-normal tracking-normal`} -->
     <body class={bodyClass} style={bodyStyle}>
         <!-- Analytics Body Tags -->
         <AnalyticsBody siteConfig={siteConfig} />

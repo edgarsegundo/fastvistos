@@ -84,8 +84,13 @@ const {
 
         <slot name="head" />
     </head>
+
+    <!-- Cuidado, isso pode sobrescrever estilos globais nos arquivos global.css e theme.css
     <body
-        class={`bg-gray-50 leading-normal tracking-normal text-white`}
+        class={`leading-normal tracking-normal`} -->
+
+    <body
+        class=""
         style=""
     >
         <!-- font-family: 'Source Sans Pro', sans-serif; -->
