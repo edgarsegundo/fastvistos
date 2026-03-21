@@ -4,6 +4,8 @@
  * Site Creation Script
  * Creates a new site with all necessary folders and configuration files using template files
  */
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
