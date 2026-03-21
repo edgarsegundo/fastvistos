@@ -385,25 +385,38 @@ async function syncBlogToSite(siteId) {
 
     // Write core styles
     await fs.writeFile(join(siteStylesDir, 'markdown-blog.css'), markdownBlogCSS);
-    
-    // Copy shared.css to public directory if it exists in core, but do NOT overwrite if already present
+
+    // Copiar theme.css para multi-sites/sites/[site]/styles/ se não existir
     try {
-        const sharedCSSPath = join(__dirname, 'multi-sites/core/styles/shared.css');
-        const sitePublicDir = join(__dirname, `public/${siteId}`);
-        await ensureDir(sitePublicDir);
-        const siteSharedCSSPath = join(sitePublicDir, 'shared.css');
+        const themeCSSPath = join(__dirname, 'multi-sites/core/styles/theme.css');
+        const siteThemeDir = join(__dirname, `multi-sites/sites/${siteId}/styles`);
+        await ensureDir(siteThemeDir);
+        const siteThemeCSSPath = join(siteThemeDir, 'theme.css');
         try {
-            await fs.access(siteSharedCSSPath);
+            await fs.access(siteThemeCSSPath);
             // File already exists, do not overwrite
-            console.log(`⏩ Skipped shared.css for public/${siteId}/ (already exists)`);
+            console.log(`⏩ Skipped theme.css for multi-sites/sites/${siteId}/styles/ (already exists)`);
         } catch {
             // File does not exist, copy it
-            const sharedCSS = await fs.readFile(sharedCSSPath, 'utf-8');
-            await fs.writeFile(siteSharedCSSPath, sharedCSS);
-            console.log(`✅ Copied shared.css to public/${siteId}/`);
+            const themeCSS = await fs.readFile(themeCSSPath, 'utf-8');
+            await fs.writeFile(siteThemeCSSPath, themeCSS);
+            console.log(`✅ Copied theme.css to multi-sites/sites/${siteId}/styles/`);
         }
-    } catch (sharedCSSErr) {
-        console.log(`⚠️  Warning: Could not copy shared.css (file may not exist yet)`);
+    } catch (themeCSSErr) {
+        console.log(`⚠️  Warning: Could not copy theme.css (file may not exist yet)`);
+    }
+
+    // Copiar SEMPRE o global.css para multi-sites/sites/[site]/styles/, sobrescrevendo se já existir
+    try {
+        const globalCSSPath = join(__dirname, 'multi-sites/core/styles/global.css');
+        const siteThemeDir = join(__dirname, `multi-sites/sites/${siteId}/styles`);
+        await ensureDir(siteThemeDir);
+        const siteGlobalCSSPath = join(siteThemeDir, 'global.css');
+        const globalCSS = await fs.readFile(globalCSSPath, 'utf-8');
+        await fs.writeFile(siteGlobalCSSPath, globalCSS);
+        console.log(`✅ Copied (and overwrote) global.css to multi-sites/sites/${siteId}/styles/`);
+    } catch (globalCSSErr) {
+        console.log(`⚠️  Warning: Could not copy global.css (file may not exist yet)`);
     }
 
     // Sync core library files to site lib directory

@@ -1,0 +1,47 @@
+/*
+  arquivo de customização deste site — estende e sobrescreve o global.css.
+  
+  Use este arquivo para:
+  - Adicionar cores e fontes da marca via @theme
+  - Sobrescrever variáveis do global.css via @theme
+  - Adicionar componentes específicos deste site via @layer components
+  - Adicionar utilities específicas deste site via @layer utilities
+  - Sobrescrever o reset do global.css via @layer base (só se necessário)
+
+  O Tailwind e o CSS juntam este arquivo com o global.css automaticamente.
+  O que estiver aqui tem prioridade sobre o global.css.
+*/
+
+/*
+  @theme — cores e fontes da marca deste site.
+  Cada variável --color-* gera automaticamente classes Tailwind:
+  --color-primary-500 → bg-primary-500, text-primary-500, border-primary-500, etc.
+*/
+@theme {
+  --color-primary-500: #3b95fa;
+  --color-secondary-500: #ff7900;
+  --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+  @layer base — use apenas para sobrescrever o reset do global.css.
+  Ex: mudar line-height do body, background-color padrão, etc.
+*/
+@layer base {
+}
+
+/*
+  @layer components — classes reutilizáveis específicas deste site.
+  Use quando uma combinação de estilos se repete em mais de um lugar.
+  Ex: .btn-primary, .hero-section, .card-produto
+*/
+@layer components {
+}
+
+/*
+  @layer utilities — classes atômicas específicas deste site.
+  Use quando a classe faz uma coisa só.
+  Ex: .text-brand-primary, .fill-brand
+*/
+@layer utilities {
+}
