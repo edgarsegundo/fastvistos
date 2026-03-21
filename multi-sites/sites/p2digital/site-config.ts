@@ -1,7 +1,5 @@
-import type { SiteConfig } from './lib/site-config-model.ts';
-
 // 🌐 Shared Site Config (site + branding + global stuff)
-export const siteConfig: SiteConfig = {
+export const siteConfig = {
     site: {
         business_id: '5810c2b6125c402a9cff53fcc9d61bf5',
         id: 'p2digital',
