@@ -20,7 +20,7 @@ let faqData: Faq[];
 
 try {
     faqData = await getFaqJson(siteId); // Pass siteId dynamically
-    console.log(`🛑 Fetched ${faqData.length} FAQ items for site ${siteId}`);
+    console.log(`✅ Fetched ${faqData.length} FAQ items for site ${siteId}`);
 } catch (err) {
     console.error(`🛑🛑 Failed to fetch FAQ data for site ${siteId}:`, err);
     faqData = [];
