@@ -1,5 +1,5 @@
 // 🌐 Shared Site Config (site + branding + global stuff)
-export const siteConfig: SiteConfig = {
+export const siteConfig = {
     site: {
         business_id: 'f2f289b919c74d769d6237bb8717e043',
         id: 'flyfred',
