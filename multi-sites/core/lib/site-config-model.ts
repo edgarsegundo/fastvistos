@@ -43,8 +43,8 @@ export const siteConfig: SiteConfig = {
         secondaryColor: '#1c1c1e',
         thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
 
-        image: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // General image for the site
         assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
+
         priceRange: '$$', // e.g. $, $$, $$$, $$$$
         openingHours: [
             'Mo-Fr 09:00-18:00',
@@ -66,6 +66,7 @@ export const siteConfig: SiteConfig = {
             ratingValue: '5.0',
             reviewCount: '277',
         },
+
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',
@@ -73,14 +74,32 @@ export const siteConfig: SiteConfig = {
             postalCode: '13075-420',
             addressCountry: 'BR',
         },
+
         contactPoint: {
             telephone: '+551920422785',
             telephoneFormatted: '+55 (19) 2042-2785',
             contactType: 'Customer Service',
-            areaServed: 'BR',
+            areaServed: {
+                "@type": "Country",
+                "name": "Brazil"
+            },            
             availableLanguage: ['Portuguese', 'English'],
             email: 'contato@fastvistos.com.br',
         },
+        whatsapp: {
+            telephone: '+551150283044',
+            telephoneFormatted: '+55 (11) 5028-3044',
+            contactType: 'customer support',
+            contactOption: "WhatsApp",
+            url: 'https://wa.me/551150283044',
+            areaServed: {
+                "@type": "Country",
+                "name": "Brazil"
+            },
+            availableLanguage: ["pt-BR", "en"],
+            email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
+        },
+
         socialMedia: {
             facebook: 'https://www.facebook.com/fastvistos/',
             twitter: '@yourtwitter',
@@ -88,6 +107,19 @@ export const siteConfig: SiteConfig = {
             youtube: '',
         },
     },
+
+    organization: {
+        id: 'https://fastvistos.com.br/#organization',
+        name: 'Fast Vistos',
+        url: 'https://fastvistos.com.br',
+        canonical: 'https://fastvistos.com.br/',
+        logo: {
+            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas',
+            width: 530,
+            height: 67,
+        },
+    },    
 
     homePageConfig: {
         seo: {
@@ -102,14 +134,19 @@ export const siteConfig: SiteConfig = {
                     height: 630,
                     type: 'image/jpeg',
                     alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
-                }
+                },
+                title: 'Guia completo para tirar visto americano 🇺🇸',
+                description: 'Entenda como funciona o processo, documentos e entrevista para tirar o visto americano.'
             }
         },
     },
 
     blogPageConfig: {
         seo: {
+            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Central de Vistos',
+            description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
             themeColor: '#0070f3',
+            canonical: 'https://centraldevistos.com/',
             openGraph: {
                 type: 'blog',
                 tags: [
@@ -122,6 +159,11 @@ export const siteConfig: SiteConfig = {
         },
         pagination: {
             postsPerPage: 10,
+        },
+        customStyles: {
+            cssVars: {
+                '--blog-bg-color': '#4A4047',
+            },
         },
     },
 

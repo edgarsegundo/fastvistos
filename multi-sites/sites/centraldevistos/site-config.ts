@@ -206,6 +206,7 @@ export const siteConfig: SiteConfig = {
             themeColor: '#0070f3',
             openGraph: {
                 type: 'article',
+                author: 'Central de Vistos',
                 section: 'Guias sobre Vistos e Viagens Internacionais',
                 tags: [
                     'visto americano',
