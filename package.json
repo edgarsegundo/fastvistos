@@ -73,7 +73,12 @@
     "build:centraldevistos": "node sync-blog.js centraldevistos && SITE_ID=centraldevistos astro build && node postbuild-updatable.js centraldevistos",
     "build:centraldevistos:incremental": "node detect-changed-countries.js centraldevistos | xargs -I{} sh -c 'SITE_ID=centraldevistos VISA_SLUGS={} astro build'",
     "preview:centraldevistos": "SITE_ID=centraldevistos astro preview",
-    "download-images:centraldevistos": "node download-blog-images.js centraldevistos"
+    "download-images:centraldevistos": "node download-blog-images.js centraldevistos",
+    "dev:flyfred": "node sync-blog.js flyfred && SITE_ID=flyfred astro dev",
+    "dev:watch:flyfred": "node dev-with-sync.js flyfred",
+    "build:flyfred": "node sync-blog.js flyfred && SITE_ID=flyfred astro build && node postbuild-updatable.js flyfred",
+    "preview:flyfred": "SITE_ID=flyfred astro preview",
+    "download-images:flyfred": "node download-blog-images.js flyfred"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

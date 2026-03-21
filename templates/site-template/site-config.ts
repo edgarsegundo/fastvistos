@@ -3,207 +3,171 @@ import type { SiteConfig } from './lib/site-config-model.ts';
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig: SiteConfig = {
     site: {
-        business_id: '[BUSINESS_ID]',
-        id: '[SITE_ID]',
-        siteName: '[SITE_NAME]',
+        business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
+        id: 'fastvistos',
+        siteName: 'Fast Vistos',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: '', // ex: 'fastvistos.com.br'
-        canonical: '', // ex: 'https://fastvistos.com.br/'
-        authorName: '', // ex: 'Daniela Otaviano'
+        domain: 'fastvistos.com.br',
+        canonical: 'https://fastvistos.com.br/',
+        authorName: 'Daniela Otaviano',
         primaryImage: {
-            url: '', // ex: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp',
+            url: '/images/og-fast-vistos.jpg',
             width: 1200,
             height: 630,
-            type: 'image/webp',
-            alt: '' // ex: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
+            type: 'image/jpeg',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: '', // ex: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png'
-            alt: '', // ex: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas'
-            width: 530,
-            height: 67,
+            url: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
+            width: 512,
+            height: 512,
         },
-        primaryColor: '', // ex: '#0070f3'
-        secondaryColor: '', // ex: '#1c1c1e'
-        thumbnailUrl: '', // ex: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp', // Important for search and social previews
-        
-        assetsUrlBase: '', // ex: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
-        
-        priceRange: 'R$ sob consulta', // e.g. $, $$, $$$, $$$$
-        openingHoursSpecification: [
-            {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday"
-                ],
-                "opens": "09:00",
-                "closes": "18:00"
-            },
-            {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": "Saturday",
-                "opens": "09:00",
-                "closes": "13:00"
-            }
+        primaryColor: '#0070f3',
+        secondaryColor: '#1c1c1e',
+        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+
+        assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
+
+        priceRange: '$$', // e.g. $, $$, $$$, $$$$
+        openingHours: [
+            'Mo-Fr 09:00-18:00',
+            'Sa 09:00-13:00',
         ],
         sameAs: [  // Social media profiles
-            // ex: 'https://www.facebook.com/fastvistos/',
-            // ex: 'https://x.com/FVistos32701',
-            // ex: 'https://www.youtube.com/@FastVistos/shorts',
+            'https://www.facebook.com/fastvistos/',
+            'https://x.com/FVistos32701',
+            'https://www.youtube.com/@FastVistos/shorts',
         ],
-        // geo: {
-        //     latitude: -22.8807734, // Latitude for the business location
-        //     longitude: -47.0596895, // Longitude for the business location
-        // },
-        serviceArea: {
-            name: 'Brazil',
+        geo: {
+            latitude: -22.8807734, // Latitude for the business location
+            longitude: -47.0596895, // Longitude for the business location
         },
-        // aggregateRating: {
-        //     ratingValue: 5,
-        //     reviewCount: 298,
-        // },
-
-        // reviews: [
-        //     {
-        //         author: 'Analice de Medeiros Chianca Pavan',
-        //         datePublished: '2025-01-20',
-        //         reviewBody: 'Excelente assessoria para visto americano! O processo foi super rápido, a Daniela é extremamente atenciosa e demonstra muito conhecimento em cada etapa. Me senti muito segura e bem orientada o tempo todo. Recomendo fortemente para quem busca um atendimento sério, eficiente e de alta qualidade.',
-        //         ratingValue: 5,
-        //     },
-        //     {
-        //         author: 'Jetsuo Mine',
-        //         datePublished: '2025-01-28',
-        //         reviewBody: 'Processo muito ágil, claro e confiável. Meu visto saiu em menos de 15 dias.',
-        //         ratingValue: 5,
-        //     },
-        //     {
-        //         author: 'Aramis Lima',
-        //         datePublished: '2025-01-31',
-        //         reviewBody: 'Excelente consultoria, me orientaram em todo o processo e ainda deram dicas importantes para garantir uma ótima experiência. Super recomendo.',
-        //         ratingValue: 5,
-        //     },
-        //     {
-        //         author: 'Selma Aparecida de Rezende Borim',
-        //         datePublished: '2024-12-27',
-        //         reviewBody: 'Atendimento top, equipe muito atenciosa e conseguiram datas bem próximas para a entrevista. Eu recomendo.',
-        //         ratingValue: 5,
-        //     },
-        // ],
-
-        // makesOffer: [
-        //     {
-        //         service: 'Assessoria para Visto Americano',
-        //         priceCurrency: 'BRL',
-        //     },
-        //     {
-        //         service: 'Assessoria para eTA Canadá',
-        //         priceCurrency: 'BRL',
-        //     },
-        //     {
-        //         service: 'Assessoria para Visto Mexicano',
-        //         priceCurrency: 'BRL',
-        //     },
-        //     {
-        //         service: 'Assessoria para Registro Nacional de Estrangeiros (RNE)',
-        //         priceCurrency: 'BRL',
-        //     },
-        //     {
-        //         service: 'Assessoria para ESTA (Autorização Eletrônica para os EUA)',
-        //         priceCurrency: 'BRL',
-        //     },
-        //     {
-        //         service: 'Assessoria para ETIAS (Autorização Eletrônica para a Europa)',
-        //         priceCurrency: 'BRL',
-        //     },
-        // ],
+        serviceArea: {
+            name: 'Campinas e região metropolitana de São Paulo',
+        },
+        aggregateRating: {
+            ratingValue: '5.0',
+            reviewCount: '277',
+        },
 
         address: {
-            streetAddress: '', // ex: 'Av. Júlio Diniz, 257'
-            addressLocality: '', // ex: 'Taquaral, Campinas'
-            addressRegion: '', // ex: 'SP'
-            postalCode: '', // ex: '13087-001'
+            streetAddress: 'Av. Júlio Diniz, 257',
+            addressLocality: 'Taquaral, Campinas',
+            addressRegion: 'SP',
+            postalCode: '13075-420',
             addressCountry: 'BR',
         },
+
         contactPoint: {
-            telephone: '', // ex: '+551920422785'
-            telephoneFormatted: '', // ex: '+55 (19) 2042-2785'
-            contactType: 'customer service',
+            telephone: '+551920422785',
+            telephoneFormatted: '+55 (19) 2042-2785',
+            contactType: 'Customer Service',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
-            },
-            availableLanguage: ["pt-BR", "en"],
-            email: '', // ex: 'contato@fastvistos.com.br'
+            },            
+            availableLanguage: ['Portuguese', 'English'],
+            email: 'contato@fastvistos.com.br',
         },
         whatsapp: {
-            telephone: '', // ex: '+551920422785'
-            telephoneFormatted: '', // ex: '+55 (19) 2042-2785'
+            telephone: '+551150283044',
+            telephoneFormatted: '+55 (11) 5028-3044',
             contactType: 'customer support',
             contactOption: "WhatsApp",
-            url: '', // ex: 'https://wa.me/551920422785'
+            url: 'https://wa.me/551150283044',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
             },
             availableLanguage: ["pt-BR", "en"],
-            email: '', // ex: 'contato@fastvistos.com.br'
+            email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
         },
+
         socialMedia: {
-            facebook: '', // ex: 'https://www.facebook.com/fastvistos/'
-            twitter: '',  // ex: '@FVistos32701'
-            instagram: '', // ex: 'https://www.instagram.com/fastvistos/'
-            youtube: '', // ex: 'https://www.youtube.com/@FastVistos/shorts'
+            facebook: 'https://www.facebook.com/fastvistos/',
+            twitter: '@yourtwitter',
+            instagram: '',
+            youtube: '',
         },
     },
 
+    organization: {
+        id: 'https://fastvistos.com.br/#organization',
+        name: 'Fast Vistos',
+        url: 'https://fastvistos.com.br',
+        canonical: 'https://fastvistos.com.br/',
+        logo: {
+            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
+            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas',
+            width: 530,
+            height: 67,
+        },
+    },    
+
     homePageConfig: {
         seo: {
-            title: '', // ex: 'Fast Vistos - Assessoria de Vistos Americanos para Todo Brasil | Campinas SP'
-            description: '', // ex: 'Assessoria especializada em vistos americanos com atendimento em todo o Brasil. Sede em Campinas/SP. Taxa de aprovação 95%+. Agende sua entrevista.'
-            themeColor: '', // ex:'#0070f3'
+            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
+            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
+            themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '', // ex: 'https://fastvistos.com.br/assets/images/logo/visto-americano-campinas-fastvistos.webp'
+                    url: '/images/og-fast-vistos.jpg',
                     width: 1200,
                     height: 630,
-                    type: 'image/webp',
-                    alt: '', // ex: 'Fast Vistos - Assessoria de vistos americanos para todo Brasil'
+                    type: 'image/jpeg',
+                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
                 },
-                title: '', // ex: 'Fast Vistos - Assessoria de Vistos Americanos para Todo Brasil'
-                description: '', // ex: 'Assessoria especializada em vistos americanos com atendimento em todo o Brasil. Sede em Campinas/SP.'
+                title: 'Guia completo para tirar visto americano 🇺🇸',
+                description: 'Entenda como funciona o processo, documentos e entrevista para tirar o visto americano.'
             }
         },
     },
 
     blogPageConfig: {
         seo: {
-            title: '', // ex: 'Blog Fast Vistos - Dicas e Informações sobre Vistos Internacionais'
-            description: '', // ex: 'Artigos e dicas sobre vistos americanos, canadenses, passaportes e viagens internacionais. Atendimento para todo Brasil.'
-            themeColor: '', // ex: '#0070f3'
+            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Central de Vistos',
+            description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
+            themeColor: '#0070f3',
+            canonical: 'https://centraldevistos.com/',
             openGraph: {
-                type: 'website',
+                type: 'blog',
+                tags: [
+                    'vistos internacionais',
+                    'visto americano',
+                    'visto canadense',
+                    'passaporte brasileiro'
+                ],
             }
         },
         pagination: {
             postsPerPage: 10,
         },
+        customStyles: {
+            cssVars: {
+                '--blog-bg-color': '#4A4047',
+            },
+        },
     },
 
     blogPostConfig: {
         seo: {
-            themeColor: '', // ex: '#0070f3'
+            themeColor: '#0070f3',
             openGraph: {
                 type: 'article',
-                section: '', // ex: 'Serviços de Vistos e Documentos'
+                author: 'Fast Vistos',
+                section: 'Serviços de Vistos e Documentos',
+                tags: [
+                    'vistos internacionais',
+                    'visto americano',
+                    'visto canadense',
+                    'passaporte brasileiro'
+                ],
             }
         },
         readingTime: true, // true/false
@@ -211,12 +175,19 @@ export const siteConfig: SiteConfig = {
         relatedPosts: true, // true/false
     },
 
+    socialMedia: {
+        facebook: 'https://facebook.com/fastvistos',
+        twitter: '@fastvistos',
+        instagram: 'https://instagram.com/fastvistos',
+        youtube: 'https://youtube.com/@fastvistos',
+    },
+
     analytics: {
-        gtmId: '', // ex: 'GTM-59SRNCQD'
+        gtmId: 'GTM-59SRNCQD',
     },
 
     verification: {
-        googleSiteVerification: '', // ex: 'abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567abc890'
+        googleSiteVerification: '',
     },
 
     features: {
