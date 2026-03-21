@@ -20,6 +20,15 @@ No Tailwind v4, o arquivo `tailwind.config.js` foi **abandonado**. Toda a config
 
 ---
 
+## O que pode ser deletado
+
+| Arquivo | Pode deletar? |
+|---|---|
+| `tailwind.config.js` | ✅ Sim |
+| `tailwind.*.config.js` | ✅ Sim |
+
+---
+
 ## Configuração no astro.config.mjs
 
 O plugin é o `@tailwindcss/vite`, sem nenhum parâmetro:
@@ -40,7 +49,58 @@ export default defineConfig({
 
 ---
 
-## As 4 camadas do CSS (`global.css`)
+## Estrutura de arquivos CSS
+
+Este projeto usa dois arquivos CSS com responsabilidades distintas:
+
+```
+multi-sites/core/styles/global.css                    → 🚨 AUTO-GENERATED. NÃO EDITAR.
+                                                         Reset, @layer base e componentes
+                                                         compartilhados entre todos os sites.
+                                                         Alterações serão sobrescritas pelo script.
+
+multi-sites/sites/{seu-site}/styles/theme.css         → Customizações deste site específico.
+                                                         Cores da marca, fontes, componentes
+                                                         e utilities específicos do projeto.
+                                                         ESTE é o arquivo para editar.
+```
+
+**Regra geral:**
+- Mudança vale para **todos os sites** → `global.css` (mas lembre que é AUTO-GENERATED)
+- Mudança é **específica deste site** → `theme.css`
+
+---
+
+## Layouts e imports obrigatórios
+
+O projeto tem 3 layouts base em `multi-sites/core/layouts/`:
+
+```
+SharedBlogLayout.astro
+SharedGenericLayout.astro
+SharedHomeLayout.astro
+```
+
+Todos os layouts devem importar os dois arquivos CSS, **sempre nesta ordem** — `global.css` primeiro, `theme.css` depois:
+
+```astro
+// Design system global: reset de elementos HTML via @layer base, e componentes
+// compartilhados via @layer components. NÃO EDITAR — é AUTO-GENERATED.
+import '../styles/global.css';
+
+// Customizações deste site: sobrescreve ou estende o global.css com cores da marca,
+// fontes, componentes e utilities específicos deste projeto.
+// Edite este arquivo para personalizar a identidade visual do site.
+import '../styles/theme.css';
+```
+
+> ⚠️ Se criar um novo layout, lembre de adicionar esses dois imports. Sem eles o Tailwind e as variáveis da marca não funcionam.
+
+> ⚠️ A ordem importa — `global.css` sempre antes do `theme.css`, pois o `theme.css` sobrescreve variáveis do `global.css`.
+
+---
+
+## As 4 camadas do CSS
 
 ### Como funciona o `@layer`
 
@@ -60,15 +120,18 @@ Resultado prático: imagine que `.gradient` define `color: blue` e você adicion
 
 `text-white` sempre ganha — não porque é do Tailwind, mas porque está no grupo `utilities`, que tem prioridade sobre `components`. Não importa a ordem no arquivo.
 
+> ⚠️ Cuidado ao definir `background-color` ou `color` no `@layer base` — qualquer classe Tailwind no elemento (como `bg-gray-50` no `body`) vai sobrescrever, porque utilities sempre ganham de base.
+
 ---
 
 ### `@theme` — cores e fontes da marca
 
 Use `@theme` para criar cores que não existem no Tailwind por padrão. O caso mais comum é definir as cores da marca do projeto. Cada variável `--color-*` vira automaticamente uma classe utilitária (`bg-*`, `text-*`, `border-*`, `ring-*` etc.).
 
-```css
-@import 'tailwindcss';
+No `global.css` o `@theme` tem apenas defaults genéricos. As cores da marca ficam no `theme.css` de cada site:
 
+```css
+/* theme.css */
 @theme {
   /* Cores da marca — não existem no Tailwind por padrão */
   --color-primary-500: #3b95fa;    /* vira bg-primary-500, text-primary-500, etc. */
@@ -81,6 +144,8 @@ Use `@theme` para criar cores que não existem no Tailwind por padrão. O caso m
   --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
 }
 ```
+
+Você pode ter múltiplos blocos `@theme` em arquivos diferentes — o Tailwind junta tudo. O que estiver no `theme.css` tem prioridade sobre o `global.css`.
 
 **Regras do `@theme`:**
 - Declare quando quiser **criar** algo que não existe no Tailwind (`primary`, `secondary`, `custom-dark`)
@@ -193,7 +258,7 @@ Por padrão, o `<style>` no Astro faz scoping automático — o CSS fica isolado
 </style>
 ```
 
-O `is:global` remove esse scoping — o CSS vaza para fora e afeta o projeto todo, como se estivesse no `global.css`, porem a partir do nivel que está.
+O `is:global` remove esse scoping — o CSS vaza para fora e afeta o projeto todo a partir do nível em que está.
 
 ```astro
 <style is:global>
@@ -210,6 +275,7 @@ O `is:global` remove esse scoping — o CSS vaza para fora e afeta o projeto tod
 |---|---|
 | `<style>` | Só o componente atual |
 | `<style is:global>` | Todo o projeto, incluindo filhos |
+| `import 'arquivo.css'` no frontmatter | Sempre global — nunca tem scoping |
 | `global.css` | Todo o projeto |
 
 ---
@@ -250,11 +316,43 @@ Assim, se você mudar a cor no `@theme`, muda em todo o projeto de uma vez.
 
 ---
 
+## `markdown-blog.css` — estilos do conteúdo gerado a partir de `.md`
+
+Este arquivo é **AUTO-GENERATED** e copiado para cada site pelo script. Ele contém as classes
+específicas para estilizar o conteúdo gerado pelo pipeline de artigos a partir de arquivos `.md`.
+
+> ⚠️ Não edite este arquivo — as alterações serão sobrescritas pelo script.
+
+As classes seguem o padrão `.blog-content *` para evitar conflito com o resto do site:
+```css
+.blog-content h2 { ... }
+.blog-content p { ... }
+.blog-content ul { ... }
+```
+
+É importado diretamente no frontmatter do template de post:
+```astro
+import '../../styles/markdown-blog.css';
+```
+
+Para customizar o estilo dos artigos de um site específico, sobrescreva as classes
+no `theme.css` do site:
+```css
+/* theme.css */
+@layer components {
+    .blog-content p {
+        font-size: 1.2rem; /* sobrescreve o markdown-blog.css */
+    }
+}
+```
+
 ## Checklist rápido
 
 - [ ] `@import 'tailwindcss'` no topo do `global.css`
-- [ ] `@theme { }` logo abaixo com as cores/fontes da marca
+- [ ] Cores e fontes da marca declaradas no `theme.css` do site via `@theme`
 - [ ] `tailwindcss()` no `vite.plugins` do `astro.config.mjs` (sem parâmetros)
-- [ ] `tailwind.config.js` deletado, não é necessári mais em v4
+- [ ] `tailwind.config.js` deletado — não é necessário no v4
+- [ ] `global.css` e `theme.css` importados em todos os layouts (nessa ordem)
+- [ ] Novos layouts criados com os dois imports obrigatórios
 - [ ] Cores hardcoded no CSS substituídas por `var(--color-*)`
 - [ ] Usar classes normalmente: `bg-primary-500`, `text-custom-dark`, etc.
