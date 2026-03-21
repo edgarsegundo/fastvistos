@@ -406,15 +406,15 @@ async function syncBlogToSite(siteId) {
         console.log(`⚠️  Warning: Could not copy theme.css (file may not exist yet)`);
     }
 
-    // Copiar SEMPRE o global.css para public/[site]/, sobrescrevendo se já existir
+    // Copiar SEMPRE o global.css para multi-sites/sites/[site]/styles/, sobrescrevendo se já existir
     try {
         const globalCSSPath = join(__dirname, 'multi-sites/core/styles/global.css');
-        const sitePublicDir = join(__dirname, `public/${siteId}`);
-        await ensureDir(sitePublicDir);
-        const siteGlobalCSSPath = join(sitePublicDir, 'global.css');
+        const siteThemeDir = join(__dirname, `multi-sites/sites/${siteId}/styles`);
+        await ensureDir(siteThemeDir);
+        const siteGlobalCSSPath = join(siteThemeDir, 'global.css');
         const globalCSS = await fs.readFile(globalCSSPath, 'utf-8');
         await fs.writeFile(siteGlobalCSSPath, globalCSS);
-        console.log(`✅ Copied (and overwrote) global.css to public/${siteId}/`);
+        console.log(`✅ Copied (and overwrote) global.css to multi-sites/sites/${siteId}/styles/`);
     } catch (globalCSSErr) {
         console.log(`⚠️  Warning: Could not copy global.css (file may not exist yet)`);
     }
