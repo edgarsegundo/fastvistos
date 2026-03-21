@@ -18,9 +18,159 @@
   --color-primary-500 → bg-primary-500, text-primary-500, border-primary-500, etc.
 */
 @theme {
-  --color-primary-500: #3b95fa;
-  --color-secondary-500: #ff7900;
-  --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
+
+  /* =====================
+     CORES DA MARCA
+     ===================== */
+
+  /* Cor principal — botões, links, destaques */
+  --color-primary-50:  ;
+  --color-primary-100: ;
+  --color-primary-200: ;
+  --color-primary-300: ;
+  --color-primary-400: ;
+  --color-primary-500: ; /* tom base → bg-primary-500, text-primary-500, etc. */
+  --color-primary-600: ;
+  --color-primary-700: ;
+  --color-primary-800: ;
+  --color-primary-900: ;
+  --color-primary-950: ;
+
+  /* Cor secundária — CTAs, badges, elementos de apoio */
+  --color-secondary-50:  ;
+  --color-secondary-100: ;
+  --color-secondary-200: ;
+  --color-secondary-300: ;
+  --color-secondary-400: ;
+  --color-secondary-500: ; /* tom base */
+  --color-secondary-600: ;
+  --color-secondary-700: ;
+  --color-secondary-800: ;
+  --color-secondary-900: ;
+  --color-secondary-950: ;
+
+  /* =====================
+     CORES SEMÂNTICAS
+     ===================== */
+
+  /* Texto */
+  --color-text:         ; /* corpo principal */
+  --color-text-muted:   ; /* secundário, legendas, metadados */
+  --color-text-inverse: ; /* texto sobre fundo escuro */
+
+  /* Backgrounds */
+  --color-bg:           ; /* fundo padrão do site */
+  --color-bg-alt:       ; /* seções alternadas (zebra pattern) */
+  --color-bg-dark:      ; /* seções escuras, hero */
+
+  /* Bordas */
+  --color-border:       ; /* divisores, bordas de cards */
+
+  /* Estados */
+  --color-success:      ;
+  --color-warning:      ;
+  --color-error:        ;
+
+  /* =====================
+     TIPOGRAFIA — FAMÍLIAS
+     ===================== */
+
+  --font-sans:    ; /* corpo, parágrafos — sobrescreve o padrão do Tailwind */
+  --font-heading: ; /* títulos h1-h4 */
+  --font-mono:    ; /* código */
+
+  /* =====================
+     TIPOGRAFIA — TAMANHOS
+     ===================== */
+
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg:   1.125rem;
+  --font-size-xl:   1.25rem;
+  --font-size-2xl:  1.5rem;
+  --font-size-3xl:  1.875rem;
+  --font-size-4xl:  2.25rem;
+
+  /* =====================
+     TIPOGRAFIA — PESOS
+     ===================== */
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* =====================
+     TIPOGRAFIA — LINE HEIGHT
+     ===================== */
+
+  --line-height-tight:  1.25;
+  --line-height-base:   1.6;
+  --line-height-loose:  1.8;
+
+  /* =====================
+     ESPAÇAMENTO
+     ===================== */
+
+  --spacing-section: ; /* padding entre seções da página */
+
+  /* =====================
+     BORDAS — RAIOS
+     ===================== */
+
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   1rem;
+  --radius-full: 9999px;
+
+  /* =====================
+     SOMBRAS
+     ===================== */
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg:  0 10px 25px -5px rgba(0,0,0,0.15);
+
+  /* =====================
+     TRANSIÇÕES
+     ===================== */
+
+  --transition-fast:   150ms ease;
+  --transition-base:   300ms ease;
+  --transition-slow:   500ms ease;
+
+  /* =====================
+     Z-INDEX
+     ===================== */
+
+  --z-base:    0;
+  --z-above:   10;
+  --z-sticky:  100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
+
+  /* =====================
+     CONTAINER / LAYOUT
+     ===================== */
+
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1280px;
+  --container-2xl: 1536px;
+
+  /* =====================
+     BREAKPOINTS
+     ===================== */
+
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  1024px;
+  --breakpoint-xl:  1280px;
+  --breakpoint-2xl: 1536px;
+
 }
 
 /*
