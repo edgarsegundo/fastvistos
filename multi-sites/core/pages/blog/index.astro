@@ -19,8 +19,6 @@ const blogConfigFromDb = await BlogService.getBlogConfigFromDb();
 const blogBgColor =
   siteConfig.blogPageConfig?.customStyles?.cssVars?.['--blog-bg-color'] || '#000'; // fallback para preto
 
-  console.log('xxxx blogBgColor:', blogBgColor);
-
 // Create correct breadcrumb structure
 const breadcrumbList = [
     {
@@ -108,5 +106,4 @@ const breadcrumbList = [
 </SharedBlogLayout>
 
 <style is:global>
-    @import '/shared.css';
 </style>

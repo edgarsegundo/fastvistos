@@ -5,14 +5,24 @@
  * To customize, edit the template.
  */
 
-// Shared Blog Layout - Used across all sites
+// Design system global: define as cores da marca e fontes via @theme (que gera automaticamente
+// as classes Tailwind como bg-primary-500, text-secondary-500 etc), reset de elementos HTML
+// via @layer base, e componentes compartilhados via @layer components.
+// Deve ser importado em todos os layouts.
 import '../styles/global.css';
+
+// Customizações deste site: sobrescreve ou estende o global.css com cores da marca,
+// fontes, componentes e utilities específicos deste projeto.
+// Edite este arquivo para personalizar a identidade visual do site.
+import '../styles/theme.css';
+
+import { siteConfig } from '../site-config.ts';
+
 import HeadBasics from '../components/HeadBasics.astro';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
 import BlogPageHeader from '../components/BlogPageHeader.astro';
 import BlogPageFooter from '../components/BlogPageFooter.astro';
-import { siteConfig } from '../site-config.ts';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
 const htmlLang = siteConfig.site.useFullLanguageTag
@@ -74,8 +84,13 @@ const {
 
         <slot name="head" />
     </head>
+
+    <!-- Cuidado, isso pode sobrescrever estilos globais nos arquivos global.css e theme.css
     <body
-        class={`bg-gray-50 leading-normal tracking-normal text-white`}
+        class={`leading-normal tracking-normal`} -->
+
+    <body
+        class=""
         style=""
     >
         <!-- font-family: 'Source Sans Pro', sans-serif; -->
