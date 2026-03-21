@@ -1,55 +1,37 @@
 /*
   arquivo de customização deste site — estende e sobrescreve o global.css.
-  
-  Use este arquivo para:
-  - Adicionar cores e fontes da marca via @theme
-  - Sobrescrever variáveis do global.css via @theme
-  - Adicionar componentes específicos deste site via @layer components
-  - Adicionar utilities específicas deste site via @layer utilities
-  - Sobrescrever o reset do global.css via @layer base (só se necessário)
-
-  O Tailwind e o CSS juntam este arquivo com o global.css automaticamente.
-  O que estiver aqui tem prioridade sobre o global.css.
 */
 
-/*
-  @theme — cores e fontes da marca deste site.
-  Cada variável --color-* gera automaticamente classes Tailwind:
-  --color-primary-500 → bg-primary-500, text-primary-500, border-primary-500, etc.
-*/
 @theme {
 
   /* =====================
      CORES DA MARCA
      ===================== */
 
-  /* Verde sábio — cor primária do hero e nav */
   --color-primary-50:  #f4f8f4;
   --color-primary-100: #e3ede3;
   --color-primary-200: #c6dbc7;
   --color-primary-300: #9fc3a1;
   --color-primary-400: #72a575;
-  --color-primary-500: #86a5a8; /* theme-color do site */
+  --color-primary-500: #86a5a8;
   --color-primary-600: #4d7c50;
   --color-primary-700: #3d6340;
   --color-primary-800: #344f36;
   --color-primary-900: #2b412e;
   --color-primary-950: #162318;
 
-  /* Verde escuro teal — cor dos botões de destaque (Express Painting, Waterproofing) */
-  --color-secondary-50:  #eef5f5;
-  --color-secondary-100: #d4e8e8;
-  --color-secondary-200: #add3d3;
-  --color-secondary-300: #7ab8b8;
-  --color-secondary-400: #4e9d9e;
-  --color-secondary-500: #3d8485; /* tom base dos cards de menu */
-  --color-secondary-600: #316a6b;
-  --color-secondary-700: #2b5758;
-  --color-secondary-800: #264748;
-  --color-secondary-900: #233c3d;
-  --color-secondary-950: #112121;
+  --color-secondary-50:  #f7fbfc;
+  --color-secondary-100: #e7f1f4;
+  --color-secondary-200: #cfe2e8;
+  --color-secondary-300: #b0cfd8;
+  --color-secondary-400: #8fb9c6;
+  --color-secondary-500: #74a5b5;
+  --color-secondary-600: #5f8d9c;
+  --color-secondary-700: #4f7480;
+  --color-secondary-800: #435f68;
+  --color-secondary-900: #394f56;
+  --color-secondary-950: #1f2c31;
 
-  /* Accent — sem terceira cor definida para este site, usando primary como fallback */
   --color-accent-50:  #f4f8f4;
   --color-accent-100: #e3ede3;
   --color-accent-200: #c6dbc7;
@@ -63,170 +45,154 @@
   --color-accent-950: #162318;
 
   /* =====================
-     CORES SEMÂNTICAS — TEXTO
+     TEXTO
      ===================== */
 
-  --color-text:          #1a1a1a; /* corpo do texto, parágrafos */
-  --color-text-muted:    #6b7280; /* legendas, metadados, placeholders */
-  --color-text-inverse:  #ffffff; /* texto sobre fundos escuros */
-  --color-text-disabled: #9ca3af; /* texto em elementos desabilitados */
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b7280;
+  --color-text-inverse: #ffffff;
+  --color-text-disabled: #9ca3af;
 
   /* =====================
-     CORES SEMÂNTICAS — BACKGROUNDS
+     SURFACES
      ===================== */
 
-  --color-bg:              #ffffff; /* fundo padrão da página */
-  --color-bg-alt:          #f9fafb; /* seções alternadas (zebra) */
-  --color-bg-dark:         #86a5a8; /* hero — verde sábio da marca */
-  --color-surface:         #ffffff; /* fundo de cards, painéis */
-  --color-surface-raised:  #ffffff; /* modais, dropdowns elevados */
-  --color-surface-overlay: rgba(0, 0, 0, 0.4); /* backdrop semitransparente de modais */
-  --color-disabled:        #f3f4f6; /* fundo de elementos desabilitados */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f9fafb;
+  --color-surface-inverse: var(--color-primary-600);
+
+  --color-surface-card: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-disabled: #f3f4f6;
+
+  --color-overlay: rgba(0, 0, 0, 0.4);
 
   /* =====================
-     CORES SEMÂNTICAS — BORDAS E INTERAÇÃO
+     BORDAS E INTERAÇÃO
      ===================== */
 
-  --color-border: #e5e7eb; /* divisores, bordas de cards e inputs */
-  --color-hover:  #f3f4f6; /* fundo ao passar o mouse em itens de menu */
-  --color-focus:  #86a5a8; /* anel de foco (acessibilidade) — usa primary */
+  --color-border: #e5e7eb;
+  --color-border-focus: #86a5a8;
+  --color-surface-hover: #f3f4f6;
 
   /* =====================
-     CORES SEMÂNTICAS — ESTADOS E FEEDBACK
+     FEEDBACK
      ===================== */
 
-  --color-success:    #4d7c50; /* ícones e textos de sucesso */
-  --color-success-bg: #f0faf0; /* fundo de alertas de sucesso */
-  --color-warning:    #f59e0b; /* ícones e textos de atenção */
-  --color-warning-bg: #fffbeb; /* fundo de alertas de atenção */
-  --color-error:      #ef4444; /* ícones e textos de erro */
-  --color-error-bg:   #fef2f2; /* fundo de alertas de erro */
-  --color-info:       #3b82f6; /* ícones e textos informativos */
-  --color-info-bg:    #eff6ff; /* fundo de alertas informativos */
+  --color-success: #4d7c50;
+  --color-success-surface: #f0faf0;
+
+  --color-warning: #f59e0b;
+  --color-warning-surface: #fffbeb;
+
+  --color-error: #ef4444;
+  --color-error-surface: #fef2f2;
+
+  --color-info: #3b82f6;
+  --color-info-surface: #eff6ff;
 
   /* =====================
-     TIPOGRAFIA — FAMÍLIAS
+     TIPOGRAFIA
      ===================== */
 
-  /* Berger usa fontes customizadas carregadas via @font-face */
-  --font-sans:    'graphik_regularregular', 'Graphik', system-ui, -apple-system, sans-serif;
+  --font-sans: 'graphik_regularregular', 'Graphik', system-ui, -apple-system, sans-serif;
   --font-heading: 'humansans_medium', 'graphiksemibold', system-ui, sans-serif;
-  --font-mono:    'SF Mono', 'Monaco', 'Menlo', monospace;
+  --font-mono: 'SF Mono', 'Monaco', 'Menlo', monospace;
 
-  /* =====================
-     TIPOGRAFIA — TAMANHOS
-     ===================== */
-
-  --font-size-xs:   0.75rem;
-  --font-size-sm:   0.875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg:   1.125rem;
-  --font-size-xl:   1.25rem;
-  --font-size-2xl:  1.5rem;
-  --font-size-3xl:  1.875rem;
-  --font-size-4xl:  2.25rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
 
-  /* =====================
-     TIPOGRAFIA — PESOS
-     ===================== */
-
-  --font-weight-normal:   400;
-  --font-weight-medium:   500;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
-  --font-weight-bold:     700;
+  --font-weight-bold: 700;
 
-  /* =====================
-     TIPOGRAFIA — LINE HEIGHT
-     ===================== */
-
-  --line-height-tight: 1.1;  /* títulos grandes como "Breathe life into your walls" */
-  --line-height-base:  1.6;
+  --line-height-tight: 1.1;
+  --line-height-base: 1.6;
   --line-height-loose: 1.8;
 
   /* =====================
      ESPAÇAMENTO
      ===================== */
 
-  --spacing-section: 5rem; /* espaço generoso entre seções */
+  --spacing-section: 5rem;
 
   /* =====================
-     BORDAS — RAIOS
+     RADIUS
      ===================== */
 
-  --radius-sm:   0.25rem;
-  --radius-md:   0.5rem;
-  --radius-lg:   1rem;
-  --radius-xl:   1.5rem;  /* cards de menu arredondados */
-  --radius-full: 9999px;  /* botão "Explore Now" é pill */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 
   /* =====================
-     SOMBRAS
+     SHADOWS
      ===================== */
 
-  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.1);
-  --shadow-lg:  0 10px 25px -5px rgba(0,0,0,0.15);
-  --shadow-nav: 0 2px 8px rgba(0,0,0,0.12); /* sombra do nav fixo */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.15);
+  --shadow-nav: 0 2px 8px rgba(0,0,0,0.12);
 
   /* =====================
-     TRANSIÇÕES
+     TRANSITIONS
      ===================== */
 
-  --transition-fast: 150ms ease; /* feedback imediato, hovers rápidos */
-  --transition-base: 300ms ease; /* padrão, a maioria das animações */
-  --transition-slow: 500ms ease; /* modais, sidebars, transições de página */
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
 
   /* =====================
      Z-INDEX
      ===================== */
 
-  --z-base:    0;   /* fluxo normal do documento */
-  --z-above:   10;  /* elementos que sobrepõem o conteúdo */
-  --z-sticky:  100; /* nav e headers fixos (sticky) */
-  --z-overlay: 200; /* backdrops e overlays semitransparentes */
-  --z-modal:   300; /* modais, drawers, sidebars */
-  --z-toast:   400; /* toasts e notificações sempre no topo */
+  --z-base: 0;
+  --z-above: 10;
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
 
   /* =====================
-     CONTAINER / LAYOUT
+     CONTAINERS
      ===================== */
 
-  --container-sm:  640px;
-  --container-md:  768px;
-  --container-lg:  1024px;
-  --container-xl:  1280px;
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
   --container-2xl: 1536px;
 
   /* =====================
      BREAKPOINTS
      ===================== */
 
-  --breakpoint-sm:  640px;
-  --breakpoint-md:  768px;
-  --breakpoint-lg:  1024px;
-  --breakpoint-xl:  1280px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
-
 }
 
-/*
-  @layer base — use apenas para sobrescrever o reset do global.css.
-*/
 @layer base {
   body {
     color: var(--color-text);
-    background-color: var(--color-bg);
+    background-color: var(--color-surface);
   }
 }
 
-/*
-  @layer components — classes reutilizáveis específicas deste site.
-*/
 @layer components {
 
-  /* Botão principal — pill branco como "Explore Now" */
   .btn-primary {
-    background-color: #ffffff;
+    background-color: var(--color-surface);
     color: var(--color-text);
     padding: 0.875rem 2.5rem;
     border-radius: var(--radius-full);
@@ -238,7 +204,6 @@
     gap: 0.5rem;
   }
 
-  /* Card de menu — estilo teal arredondado */
   .card-menu {
     background-color: var(--color-secondary-500);
     color: var(--color-text-inverse);
@@ -254,15 +219,10 @@
     background-color: var(--color-secondary-600);
   }
 
-  /* Hero com fundo verde sábio */
-  .hero-bg {
-    background-color: var(--color-bg-dark);
+  .section-shell {
+    padding-block: var(--spacing-section);
   }
-
 }
 
-/*
-  @layer utilities — classes atômicas específicas deste site.
-*/
 @layer utilities {
 }
