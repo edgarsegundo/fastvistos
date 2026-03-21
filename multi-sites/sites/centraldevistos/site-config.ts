@@ -3,10 +3,10 @@ export const siteConfig = {
     site: {
         business_id: '3cfe8493907c488480f55c9ee10f8c05',
         id: 'centraldevistos',
-        siteName: 'Central de Vistos 2',
+        siteName: 'Central de Vistos',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: 'centraldevistos22.com', // ex: 'fastvistos.com.br'
+        domain: 'centraldevistos.com', // ex: 'fastvistos.com.br'
         canonical: 'https://centraldevistos.com/',
         authorName: 'Especialistas da Fast Vistos', 
         primaryImage: {
