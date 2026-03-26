@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piloto 3D — Controle Manual</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a2e; overflow: hidden; font-family: monospace; }
+    canvas { display: block; }
+
+    #ui {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+      max-width: 260px;
+    }
+
+    #status {
+      background: rgba(0,0,0,0.6);
+      color: #00ff88;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    #vel-bar-wrap {
+      background: rgba(0,0,0,0.6);
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+    #vel-bar-label {
+      color: #f39c12;
+      font-size: 11px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    #vel-bar-track {
+      height: 8px;
+      background: #333;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    #vel-bar-fill {
+      height: 100%;
+      width: 50%;
+      background: #f1c40f;
+      border-radius: 4px;
+      transition: width 0.2s, background 0.2s;
+    }
+
+    #controls-hint {
+      background: rgba(0,0,0,0.5);
+      color: #aaa;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 10px;
+      line-height: 1.9;
+    }
+    #controls-hint b { color: #fff; }
+
+    #buttons {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 7px 10px;
+      border: none;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.8; }
+
+    #btn-record  { background: #e74c3c; color: white; }
+    #btn-record.recording { background: #ff6b6b; animation: pulse 1s infinite; }
+    #btn-play    { background: #2ecc71; color: white; }
+    #btn-clear   { background: #555;    color: white; }
+    #btn-export  { background: #3498db; color: white; }
+    #btn-slower  { background: #8e44ad; color: white; }
+    #btn-faster  { background: #e67e22; color: white; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.6; }
+    }
+
+    #trajectory-count {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.6);
+      color: #f39c12;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+
+    /* Indicador de atitude (pitch + roll) */
+    #attitude {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    #attitude canvas { border-radius: 50%; }
+  </style>
+</head>
+<body>
+
+  <div id="ui">
+    <div id="status">loading...</div>
+
+    <div id="vel-bar-wrap">
+      <div id="vel-bar-label">
+        <span>velocidade</span>
+        <span id="vel-text">nível 5 / 10 — médio</span>
+      </div>
+      <div id="vel-bar-track"><div id="vel-bar-fill"></div></div>
+    </div>
+
+    <div id="controls-hint">
+      <b>TRANSLAÇÃO</b><br>
+      ↑↓←→ mover X/Y &nbsp;|&nbsp; I/K eixo Z<br>
+      W/S subir/descer &nbsp;|&nbsp; A/D lateral<br><br>
+      <b>ROTAÇÃO</b><br>
+      Q/E — pitch (nariz ↑↓)<br>
+      Z/X — roll (asas ←→)<br>
+      C/V — yaw (girar ←→)<br>
+      O — yaw acumulado<br><br>
+      <b>SISTEMA</b><br>
+      SPACE — resetar posição<br>
+      R — resetar rotação<br>
+    </div>
+
+    <div id="buttons">
+      <button id="btn-record">⏺ REC</button>
+      <button id="btn-play">▶ PLAY</button>
+      <button id="btn-clear">✕</button>
+      <button id="btn-export">↓ JSON</button>
+      <button id="btn-slower">🐢 -VEL</button>
+      <button id="btn-faster">🚀 +VEL</button>
+    </div>
+  </div>
+
+  <div id="trajectory-count">trajetória: 0 pts</div>
+  <div id="attitude"><canvas id="attitude-canvas" width="90" height="90"></canvas></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CENA
+  // ═══════════════════════════════════════════════════════════════════════════
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87CEEB);
+
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, 12);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.body.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  const sun = new THREE.DirectionalLight(0xffffff, 1);
+  sun.position.set(5, 10, 7);
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+  fill.position.set(-5, -3, -5);
+  scene.add(fill);
+
+  const material = new THREE.MeshPhongMaterial({ color: 0xcc2200, specular: 0x666666, shininess: 50 });
+  let airplane = null, baseScale = 1;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TECLADO
+  // ═══════════════════════════════════════════════════════════════════════════
+  const Keys = {
+    pressed: {},
+    init() {
+      window.addEventListener('keydown', e => {
+        this.pressed[e.key] = true;
+        if (e.key === ' ')  { e.preventDefault(); Physics.resetPos(); }
+        if (e.key === 'r' || e.key === 'R') Physics.resetRot();
+      });
+      window.addEventListener('keyup', e => { this.pressed[e.key] = false; });
+    },
+    is(k) { return !!this.pressed[k]; }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // NÍVEIS DE VELOCIDADE
+  // ═══════════════════════════════════════════════════════════════════════════
+  const VEL_LEVELS = [
+    { acc: 0.001, fine: 0.0005, max: 0.010, rot: 0.005 },
+    { acc: 0.002, fine: 0.001,  max: 0.020, rot: 0.008 },
+    { acc: 0.004, fine: 0.002,  max: 0.035, rot: 0.012 },
+    { acc: 0.006, fine: 0.003,  max: 0.055, rot: 0.018 },
+    { acc: 0.008, fine: 0.004,  max: 0.080, rot: 0.025 }, // padrão (idx 4)
+    { acc: 0.012, fine: 0.006,  max: 0.110, rot: 0.032 },
+    { acc: 0.018, fine: 0.009,  max: 0.150, rot: 0.042 },
+    { acc: 0.025, fine: 0.012,  max: 0.200, rot: 0.055 },
+    { acc: 0.035, fine: 0.017,  max: 0.260, rot: 0.070 },
+    { acc: 0.050, fine: 0.025,  max: 0.350, rot: 0.090 },
+  ];
+  const VEL_LABELS  = ['ultra lento','muito lento','lento','médio-lento','médio','médio-rápido','rápido','muito rápido','veloz','MÁXIMO'];
+  const VEL_COLORS  = ['#3498db','#2980b9','#2ecc71','#27ae60','#f1c40f','#e67e22','#e74c3c','#c0392b','#9b59b6','#ff0055'];
+  let velLevel = 4;
+
+  function applyVelLevel() {
+    const v = VEL_LEVELS[velLevel];
+    Physics.ACC       = v.acc;
+    Physics.FINE_ACC  = v.fine;
+    Physics.MAX_VEL   = v.max;
+    Physics.ROT_SPEED = v.rot;
+    updateVelUI();
+  }
+
+  function updateVelUI() {
+    const pct   = ((velLevel + 1) / 10) * 100;
+    const color = VEL_COLORS[velLevel];
+    document.getElementById('vel-bar-fill').style.width      = pct + '%';
+    document.getElementById('vel-bar-fill').style.background = color;
+    document.getElementById('vel-text').textContent = `nível ${velLevel + 1} / 10 — ${VEL_LABELS[velLevel]}`;
+    document.getElementById('vel-text').style.color = color;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FÍSICA — 6 graus de liberdade
+  // ═══════════════════════════════════════════════════════════════════════════
+  const Physics = {
+    // Posição
+    x: 0, y: 0, z: 0,
+    vx: 0, vy: 0, vz: 0,
+
+    // Rotação acumulada (euler)
+    pitch: 0,  // X — nariz sobe/desce
+    yaw:   0,  // Y — nariz esquerda/direita
+    roll:  0,  // Z — asas inclinam
+
+    // Velocidades angulares
+    vpitch: 0, vyaw: 0, vroll: 0,
+
+    ACC:       VEL_LEVELS[4].acc,
+    FINE_ACC:  VEL_LEVELS[4].fine,
+    MAX_VEL:   VEL_LEVELS[4].max,
+    ROT_SPEED: VEL_LEVELS[4].rot,
+    FRICTION:  0.88,
+    ROT_FRIC:  0.85,
+    BOUNDS:    { x: 6.5, y: 3.8, z: 5 },
+
+    resetPos() {
+      this.x = this.y = this.z = 0;
+      this.vx = this.vy = this.vz = 0;
+    },
+
+    resetRot() {
+      this.pitch = this.yaw = this.roll = 0;
+      this.vpitch = this.vyaw = this.vroll = 0;
+    },
+
+    update() {
+      const RS = this.ROT_SPEED;
+
+      // ── Translação ────────────────────────────────────────────────────────
+      let ax = 0, ay = 0, az = 0;
+      if (Keys.is('ArrowRight'))            ax += this.ACC;
+      if (Keys.is('ArrowLeft'))             ax -= this.ACC;
+      if (Keys.is('ArrowUp'))               ay += this.ACC * 0.7;
+      if (Keys.is('ArrowDown'))             ay -= this.ACC * 0.7;
+      if (Keys.is('w') || Keys.is('W'))     ay += this.ACC;
+      if (Keys.is('s') || Keys.is('S'))     ay -= this.ACC;
+      if (Keys.is('d') || Keys.is('D'))     ax += this.FINE_ACC;
+      if (Keys.is('a') || Keys.is('A'))     ax -= this.FINE_ACC;
+      if (Keys.is('i') || Keys.is('I'))     az += this.ACC;   // avança Z (vem para câmera)
+      if (Keys.is('k') || Keys.is('K'))     az -= this.ACC;   // recua Z
+
+      this.vx = Math.max(-this.MAX_VEL, Math.min(this.MAX_VEL, this.vx + ax)) * this.FRICTION;
+      this.vy = Math.max(-this.MAX_VEL, Math.min(this.MAX_VEL, this.vy + ay)) * this.FRICTION;
+      this.vz = Math.max(-this.MAX_VEL, Math.min(this.MAX_VEL, this.vz + az)) * this.FRICTION;
+
+      this.x = Math.max(-this.BOUNDS.x, Math.min(this.BOUNDS.x, this.x + this.vx));
+      this.y = Math.max(-this.BOUNDS.y, Math.min(this.BOUNDS.y, this.y + this.vy));
+      this.z = Math.max(-this.BOUNDS.z, Math.min(this.BOUNDS.z, this.z + this.vz));
+
+      // ── Rotação manual ────────────────────────────────────────────────────
+      let apitch = 0, ayaw = 0, aroll = 0;
+
+      if (Keys.is('q') || Keys.is('Q'))    apitch += RS;   // nariz sobe
+      if (Keys.is('e') || Keys.is('E'))    apitch -= RS;   // nariz desce
+      if (Keys.is('z') || Keys.is('Z'))    aroll  += RS;   // roll esquerda
+      if (Keys.is('x') || Keys.is('X'))    aroll  -= RS;   // roll direita
+      if (Keys.is('c') || Keys.is('C'))    ayaw   += RS;   // yaw esquerda
+      if (Keys.is('v') || Keys.is('V'))    ayaw   -= RS;   // yaw direita
+      if (Keys.is('o') || Keys.is('O'))    ayaw   += RS;   // O = yaw acumulado (mantido)
+
+      this.vpitch = (this.vpitch + apitch) * this.ROT_FRIC;
+      this.vyaw   = (this.vyaw   + ayaw)   * this.ROT_FRIC;
+      this.vroll  = (this.vroll  + aroll)  * this.ROT_FRIC;
+
+      this.pitch += this.vpitch;
+      this.yaw   += this.vyaw;
+      this.roll  += this.vroll;
+
+      // ── Auto-inclinação visual pelo movimento (se não há controle manual) ─
+      if (!Keys.is('z') && !Keys.is('Z') && !Keys.is('x') && !Keys.is('X')) {
+        const autoRoll = -this.vx * 20;
+        this.roll = THREE.MathUtils.lerp(this.roll, this.roll * 0.95 + autoRoll * 0.05, 0.08);
+      }
+      if (!Keys.is('q') && !Keys.is('Q') && !Keys.is('e') && !Keys.is('E')) {
+        const autoPitch = this.vy * 15;
+        this.pitch = THREE.MathUtils.lerp(this.pitch, this.pitch * 0.95 + autoPitch * 0.05, 0.08);
+      }
+      if (!Keys.is('c') && !Keys.is('C') && !Keys.is('v') && !Keys.is('V') && !Keys.is('o') && !Keys.is('O')) {
+        const autoYaw = this.vx * 5;
+        this.yaw += autoYaw * 0.02;
+      }
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // INDICADOR DE ATITUDE (mini HUD)
+  // ═══════════════════════════════════════════════════════════════════════════
+  const attCtx = document.getElementById('attitude-canvas').getContext('2d');
+
+  function drawAttitude(pitch, roll) {
+    const cx = 45, cy = 45, r = 40;
+    attCtx.clearRect(0, 0, 90, 90);
+
+    attCtx.save();
+    attCtx.beginPath();
+    attCtx.arc(cx, cy, r, 0, Math.PI * 2);
+    attCtx.clip();
+
+    // Horizonte rotacionado pelo roll
+    attCtx.save();
+    attCtx.translate(cx, cy);
+    attCtx.rotate(-roll);
+    const pitchOffset = pitch * 60;
+    // Céu
+    attCtx.fillStyle = '#5ba3e8';
+    attCtx.fillRect(-r, -r * 2, r * 2, r * 2 + pitchOffset);
+    // Terra
+    attCtx.fillStyle = '#8B6914';
+    attCtx.fillRect(-r, pitchOffset, r * 2, r * 2);
+    // Linha de horizonte
+    attCtx.strokeStyle = 'white';
+    attCtx.lineWidth = 1.5;
+    attCtx.beginPath();
+    attCtx.moveTo(-r, pitchOffset);
+    attCtx.lineTo(r, pitchOffset);
+    attCtx.stroke();
+    attCtx.restore();
+
+    // Aviãozinho fixo no centro
+    attCtx.strokeStyle = '#ffcc00';
+    attCtx.lineWidth = 2;
+    attCtx.beginPath();
+    attCtx.moveTo(cx - 14, cy); attCtx.lineTo(cx - 5, cy);
+    attCtx.moveTo(cx + 5, cy);  attCtx.lineTo(cx + 14, cy);
+    attCtx.moveTo(cx, cy - 1);  attCtx.lineTo(cx, cy + 1);
+    attCtx.stroke();
+
+    attCtx.restore();
+
+    // Borda
+    attCtx.strokeStyle = 'rgba(255,255,255,0.3)';
+    attCtx.lineWidth = 1;
+    attCtx.beginPath();
+    attCtx.arc(cx, cy, r, 0, Math.PI * 2);
+    attCtx.stroke();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GRAVAÇÃO
+  // ═══════════════════════════════════════════════════════════════════════════
+  const Recorder = {
+    trajectory: [], isRecording: false, startTime: 0, lastPoint: null,
+    MIN_DELTA: 0.003,
+
+    start() {
+      this.trajectory = []; this.isRecording = true;
+      this.startTime = performance.now(); this.lastPoint = null;
+      document.getElementById('btn-record').classList.add('recording');
+      document.getElementById('btn-record').textContent = '⏹ STOP';
+    },
+    stop() {
+      this.isRecording = false;
+      document.getElementById('btn-record').classList.remove('recording');
+      document.getElementById('btn-record').textContent = '⏺ REC';
+    },
+    toggle() { this.isRecording ? this.stop() : this.start(); },
+
+    record(p) {
+      if (!this.isRecording) return;
+      const pt = {
+        x: p.x, y: p.y, z: p.z,
+        pitch: p.pitch, yaw: p.yaw, roll: p.roll,
+        time: (performance.now() - this.startTime) / 1000
+      };
+      if (this.lastPoint) {
+        const d = Math.abs(pt.x - this.lastPoint.x) + Math.abs(pt.y - this.lastPoint.y) +
+                  Math.abs(pt.z - this.lastPoint.z) + Math.abs(pt.pitch - this.lastPoint.pitch) +
+                  Math.abs(pt.yaw - this.lastPoint.yaw) + Math.abs(pt.roll - this.lastPoint.roll);
+        if (d < this.MIN_DELTA) return;
+      }
+      this.trajectory.push(pt);
+      this.lastPoint = pt;
+      document.getElementById('trajectory-count').textContent = `trajetória: ${this.trajectory.length} pts`;
+    },
+
+    clear() {
+      this.stop(); this.trajectory = []; this.lastPoint = null;
+      document.getElementById('trajectory-count').textContent = 'trajetória: 0 pts';
+    },
+
+    exportJSON() {
+      if (!this.trajectory.length) { alert('Nenhuma trajetória gravada.'); return; }
+      const blob = new Blob([JSON.stringify(this.trajectory, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'trajectory.json'; a.click();
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REPLAY
+  // ═══════════════════════════════════════════════════════════════════════════
+  const Replay = {
+    isPlaying: false, startTime: 0, duration: 0,
+
+    play() {
+      if (Recorder.trajectory.length < 2) { alert('Grave uma trajetória primeiro.'); return; }
+      this.isPlaying = true; this.startTime = performance.now();
+      this.duration = Recorder.trajectory[Recorder.trajectory.length - 1].time;
+      document.getElementById('btn-play').textContent = '⏹ STOP';
+    },
+    stop() { this.isPlaying = false; document.getElementById('btn-play').textContent = '▶ PLAY'; },
+    toggle() { this.isPlaying ? this.stop() : this.play(); },
+
+    update() {
+      if (!this.isPlaying || !airplane) return;
+      const elapsed = (performance.now() - this.startTime) / 1000;
+      const traj = Recorder.trajectory;
+      if (elapsed >= this.duration) { this.startTime = performance.now(); return; }
+
+      let i = 0;
+      while (i < traj.length - 1 && traj[i + 1].time < elapsed) i++;
+      const a = traj[i], b = traj[Math.min(i + 1, traj.length - 1)];
+      const seg = b.time - a.time;
+      const t   = seg > 0 ? Math.min((elapsed - a.time) / seg, 1) : 1;
+      const et  = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const L   = THREE.MathUtils.lerp;
+
+      airplane.position.set(L(a.x, b.x, et), L(a.y, b.y, et), L(a.z, b.z, et));
+      airplane.rotation.set(L(a.pitch, b.pitch, et), L(a.yaw, b.yaw, et), L(a.roll, b.roll, et));
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BOTÕES
+  // ═══════════════════════════════════════════════════════════════════════════
+  document.getElementById('btn-record').addEventListener('click', () => Recorder.toggle());
+  document.getElementById('btn-play').addEventListener('click',   () => Replay.toggle());
+  document.getElementById('btn-clear').addEventListener('click',  () => { Recorder.clear(); Replay.stop(); });
+  document.getElementById('btn-export').addEventListener('click', () => Recorder.exportJSON());
+  document.getElementById('btn-slower').addEventListener('click', () => { if (velLevel > 0) { velLevel--; applyVelLevel(); } });
+  document.getElementById('btn-faster').addEventListener('click', () => { if (velLevel < 9) { velLevel++; applyVelLevel(); } });
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODELO
+  // ═══════════════════════════════════════════════════════════════════════════
+  const loader = new THREE.OBJLoader();
+  loader.load('./3d/uploads_files_2532780_Gamecock.obj', function(obj) {
+    obj.traverse(c => { if (c.isMesh) c.material = material; });
+    const box = new THREE.Box3().setFromObject(obj);
+    const center = box.getCenter(new THREE.Vector3());
+    const maxDim = Math.max(...box.getSize(new THREE.Vector3()).toArray());
+    baseScale = 0.5 / maxDim;
+    obj.position.sub(center.multiplyScalar(baseScale));
+    obj.scale.setScalar(baseScale);
+    airplane = obj;
+    scene.add(airplane);
+  }, null, e => console.error(e));
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LOOP
+  // ═══════════════════════════════════════════════════════════════════════════
+  Keys.init();
+  updateVelUI();
+
+  const statusEl = document.getElementById('status');
+
+  function loop() {
+    requestAnimationFrame(loop);
+    if (!airplane) { renderer.render(scene, camera); return; }
+
+    if (Replay.isPlaying) {
+      Replay.update();
+    } else {
+      Physics.update();
+      airplane.position.set(Physics.x, Physics.y, Physics.z);
+      airplane.rotation.set(Physics.pitch, Physics.yaw, Physics.roll);
+      Recorder.record(Physics);
+
+      const p = Physics;
+      statusEl.innerHTML =
+        `<span style="color:#aaa">POS</span> &nbsp;x:${p.x.toFixed(2)} y:${p.y.toFixed(2)} z:${p.z.toFixed(2)}<br>` +
+        `<span style="color:#aaa">VEL</span> &nbsp;vx:${p.vx.toFixed(3)} vy:${p.vy.toFixed(3)}<br>` +
+        `<span style="color:#aaa">ROT</span> &nbsp;pitch:${p.pitch.toFixed(2)} roll:${p.roll.toFixed(2)}<br>` +
+        `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yaw:${p.yaw.toFixed(2)}<br>` +
+        `<span style="color:#aaa">MODO</span> ${Recorder.isRecording ? '<span style="color:#ff4444">🔴 GRAVANDO</span>' : '<span style="color:#00ff88">PILOTANDO</span>'}`;
+
+      drawAttitude(p.pitch, p.roll);
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  loop();
+  </script>
+</body>
+</html>

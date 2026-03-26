@@ -217,3 +217,9 @@ multi-sites/sites/*/lib/updatable-editor.js
 public/**/assets/images-responsive-base/resized/
 multi-sites/sites/**/generated-image-map.json
 public/**/assets/images/blog/resized/
+
+
+*.gltf
+*.mtl
+*.obj
+*.zip

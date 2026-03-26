@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Flight Path Editor</title>
+<style>
+body { margin:0; overflow:hidden; background:#0a0a2a; font-family:monospace; }
+
+#ui{
+  position:absolute;
+  top:15px;
+  left:15px;
+  z-index:10;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#info{
+  position:absolute;
+  right:15px;
+  top:15px;
+  color:#fff;
+  background:rgba(0,0,0,.5);
+  padding:10px;
+  border-radius:8px;
+}
+</style>
+</head>
+<body>
+
+<div id="ui">
+<button id="play">▶ PLAY</button>
+<button id="stop">⏹ STOP</button>
+<button id="clear">🗑 CLEAR</button>
+<button id="save">💾 SAVE</button>
+<button id="record">🎬 RECORD</button>
+</div>
+
+<div id="info">
+Clique = waypoint<br>
+Arraste = editar ponto<br>
+Scroll = profundidade Z
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+
+<script>
+const scene = new THREE.Scene();
+scene.background = null;
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 1000);
+camera.position.set(0, 2, 12);
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: true
+});
+
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(0x000000, 0);
+
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+
+const sun = new THREE.DirectionalLight(0xffcc88, 1);
+sun.position.set(5, 10, 7);
+scene.add(sun);
+
+const grid = new THREE.GridHelper(20, 20, 0x222222, 0x888888);
+scene.add(grid);
+
+const raycaster = new THREE.Raycaster();
+const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+let airplane = null;
+let baseScale = 1;
+
+// Posição e target fixos da câmera durante RECORD
+const CAM_RECORD_POS    = new THREE.Vector3(0, 2, 12);
+const CAM_RECORD_TARGET = new THREE.Vector3(0, 0, 0);
+
+const material = new THREE.MeshPhongMaterial({
+  color: 0x222222,
+  shininess: 80
+});
+
+const Editor = {
+  points: [],
+  markers: [],
+  curve: null,
+  line: null,
+  selected: null,
+  dragging: false,
+  playing: false,
+  recording: false,
+  t: 0,
+  speed: 0.003,
+  roll: 0,
+
+  mouseToWorld(x, y){
+    raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+    const p = new THREE.Vector3();
+    raycaster.ray.intersectPlane(plane, p);
+    return p;
+  },
+
+  addPoint(x, y){
+    const p = this.mouseToWorld(x, y);
+    this.points.push(p);
+
+    const marker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.12, 12, 12),
+      new THREE.MeshStandardMaterial({ color: 0xffaa44 })
+    );
+
+    marker.position.copy(p);
+    scene.add(marker);
+    this.markers.push(marker);
+
+    if(this.points.length >= 3) this.buildCurve();
+  },
+
+  buildCurve(){
+    this.curve = new THREE.CatmullRomCurve3(this.points);
+    this.curve.curveType = 'centripetal';
+
+    if(this.line) scene.remove(this.line);
+
+    const pts = this.curve.getPoints(300);
+    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+
+    this.line = new THREE.Line(
+      geo,
+      new THREE.LineBasicMaterial({ color: 0x44ffaa })
+    );
+
+    scene.add(this.line);
+  },
+
+  pickMarker(x, y){
+    raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+    const hits = raycaster.intersectObjects(this.markers);
+
+    if(hits.length){
+      this.selected = this.markers.indexOf(hits[0].object);
+      this.dragging = true;
+    }
+  },
+
+  dragPoint(x, y){
+    if(this.selected === null) return;
+
+    const p = this.mouseToWorld(x, y);
+
+    this.points[this.selected].x = p.x;
+    this.points[this.selected].y = p.y;
+
+    this.markers[this.selected].position.copy(this.points[this.selected]);
+
+    this.buildCurve();
+  },
+
+  changeDepth(delta){
+    if(this.selected === null) return;
+
+    this.points[this.selected].z += delta * 0.002;
+
+    this.markers[this.selected].position.copy(this.points[this.selected]);
+
+    this.buildCurve();
+  },
+
+  startFlight(){
+    if(!this.curve) return;
+    this.recording = false;
+    this.playing   = true;
+    this.t         = 0;
+  },
+
+  stopFlight(){
+    this.playing   = false;
+    this.recording = false;
+  },
+
+  updateFlight(){
+    if(!this.playing || !this.curve || !airplane) return;
+
+
+
+this.t += this.speed;
+
+if(this.t >= 1){
+
+  if(this.recording && this.recorder){
+    this.recorder.stop();
+  }
+
+  this.t = 0;
+
+  if(!this.recording){
+    this.t = 0;
+  }
+
+  return;
+}
+
+
+
+    const pos     = this.curve.getPoint(this.t);
+    const tangent = this.curve.getTangent(this.t);
+
+    airplane.position.copy(pos);
+
+    const yaw   = Math.atan2(tangent.x, tangent.z);
+    const pitch = -Math.atan2(
+      tangent.y,
+      Math.sqrt(tangent.x * tangent.x + tangent.z * tangent.z)
+    );
+
+    const t2    = Math.min(1, this.t + 0.01);
+    const tan2  = this.curve.getTangent(t2);
+    const force = tangent.clone().cross(tan2).y;
+
+    this.roll = THREE.MathUtils.lerp(this.roll, force * 4, 0.08);
+
+    airplane.rotation.set(pitch, yaw, this.roll);
+
+    if(this.recording){
+      // ── RECORD: câmera fixa, sem scaleBoost ──────────────────
+      airplane.scale.setScalar(baseScale);
+      camera.position.copy(CAM_RECORD_POS);
+      camera.lookAt(CAM_RECORD_TARGET);
+
+    } else {
+      // ── PLAY: câmera segue o avião suavemente ────────────────
+      const scaleBoost = 1 + THREE.MathUtils.clamp(pos.z * 0.08, -0.2, 1);
+      airplane.scale.setScalar(baseScale * scaleBoost);
+
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, pos.x * 0.2,       0.03);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, pos.y * 0.15 + 1,  0.03);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 12 - pos.z * 0.12, 0.03);
+
+      camera.lookAt(pos);
+    }
+  },
+
+  save(){
+    if(!this.curve) return;
+
+    const frames = [];
+
+    for(let i = 0; i <= 300; i++){
+      const t       = i / 300;
+      const pos     = this.curve.getPoint(t);
+      const tangent = this.curve.getTangent(t);
+
+      frames.push({
+        x:     pos.x,
+        y:     pos.y,
+        z:     pos.z,
+        yaw:   Math.atan2(tangent.x, tangent.z),
+        pitch: -Math.atan2(
+          tangent.y,
+          Math.sqrt(tangent.x * tangent.x + tangent.z * tangent.z)
+        ),
+        roll:  tangent.clone().cross(
+          this.curve.getTangent(Math.min(1, t + 0.01))
+        ).y * 4,
+        scale: 1 + THREE.MathUtils.clamp(pos.z * 0.08, -0.2, 1)
+      });
+    }
+
+    const blob = new Blob(
+      [JSON.stringify(frames, null, 2)],
+      { type: 'application/json' }
+    );
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'flight_keyframes.json';
+    a.click();
+  },
+
+  record(){
+    if(!this.curve) return;
+
+    // Esconde helpers
+    grid.visible = false;
+    this.markers.forEach(m => m.visible = false);
+    if(this.line) this.line.visible = false;
+
+    scene.background = null;
+
+    // Câmera já na posição fixa antes de iniciar
+    camera.position.copy(CAM_RECORD_POS);
+    camera.lookAt(CAM_RECORD_TARGET);
+
+    const stream   = renderer.domElement.captureStream(60);
+
+
+    const recorder = new MediaRecorder(stream,{
+      mimeType:'video/webm; codecs=vp9'
+    });
+
+    this.recorder = recorder;
+
+
+
+
+    const chunks = [];
+
+    recorder.ondataavailable = e => {
+      if(e.data.size > 0) chunks.push(e.data);
+    };
+
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'video/webm' });
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'plane-loop.webm';
+      a.click();
+
+      // Restaura helpers
+      grid.visible = true;
+      this.markers.forEach(m => m.visible = true);
+      if(this.line) this.line.visible = true;
+
+      this.recording = false;
+      this.playing   = false;
+    };
+
+    this.t         = 0;
+    this.roll      = 0;
+    this.recording = true;
+    this.playing   = true;
+
+    recorder.start();
+
+    const duration = (1 / this.speed) * 16.7;
+    // setTimeout(() => recorder.stop(), duration);
+  },
+
+  clear(){
+    this.points = [];
+    this.markers.forEach(m => scene.remove(m));
+    this.markers = [];
+
+    if(this.line) scene.remove(this.line);
+
+    this.curve    = null;
+    this.selected = null;
+  }
+};
+
+renderer.domElement.addEventListener('click', e => {
+  if(Editor.dragging) return;
+
+  Editor.addPoint(
+    (e.clientX / innerWidth)  * 2 - 1,
+    -(e.clientY / innerHeight) * 2 + 1
+  );
+});
+
+renderer.domElement.addEventListener('mousedown', e => {
+  Editor.pickMarker(
+    (e.clientX / innerWidth)  * 2 - 1,
+    -(e.clientY / innerHeight) * 2 + 1
+  );
+});
+
+renderer.domElement.addEventListener('mousemove', e => {
+  if(!Editor.dragging) return;
+
+  Editor.dragPoint(
+    (e.clientX / innerWidth)  * 2 - 1,
+    -(e.clientY / innerHeight) * 2 + 1
+  );
+});
+
+renderer.domElement.addEventListener('mouseup', () => {
+  Editor.dragging = false;
+});
+
+renderer.domElement.addEventListener('wheel', e => {
+  Editor.changeDepth(-e.deltaY);
+});
+
+document.getElementById('play').onclick   = () => Editor.startFlight();
+document.getElementById('stop').onclick   = () => Editor.stopFlight();
+document.getElementById('clear').onclick  = () => Editor.clear();
+document.getElementById('save').onclick   = () => Editor.save();
+document.getElementById('record').onclick = () => Editor.record();
+
+const loader = new THREE.OBJLoader();
+
+loader.load('./3d/uploads_files_2532780_Gamecock.obj', obj => {
+
+  obj.traverse(c => {
+    if(c.isMesh) c.material = material;
+  });
+
+  const box    = new THREE.Box3().setFromObject(obj);
+  const maxDim = Math.max(...box.getSize(new THREE.Vector3()).toArray());
+
+  baseScale = 0.5 / maxDim;
+  obj.scale.setScalar(baseScale);
+
+  airplane = obj;
+  scene.add(airplane);
+});
+
+function animate(){
+  requestAnimationFrame(animate);
+  Editor.updateFlight();
+  renderer.render(scene, camera);
+}
+
+animate();
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    
+    @font-face {
+      font-family: 'Agrandir';
+      src: url('./PPAgrandir-GrandHeavy.otf') format('opentype');
+      font-weight: 800;
+      font-style: normal;
+      letter-spacing: -0.02em;
+    }
+
+    .font-agrandir {
+      font-family: 'Agrandir', sans-serif;
+    }
+    .font-inter {
+      font-family: 'Inter', sans-serif;
+    }    
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('./inter/Inter-ExtraLight-BETA.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    letter-spacing: -0.02em;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('./inter/Inter-ExtraLightItalic-BETA.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+  }  
+
+  .font-inter-light {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .font-inter-italic {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+  }  
+
+
+  </style>
+</head>
+<body class="bg-black">
+
+  <section class="relative h-screen w-full overflow-hidden">
+
+
+    <div id="plane-layer" class="absolute inset-0 z-20 pointer-events-none"></div>
+
+    
+
+    <!-- Background -->
+
+    <!-- <img 
+      src="./images/sky-images/kamonahira-paper-plane-7336536_1920-2.png" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+    <!-- <img 
+      src="./images/sky-images/jarmoluk-clouds-428165.jpg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+    <!-- <img 
+      src="./images/sky-images/pexels-sharrrrrk-13054274.jpg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+    <!-- <img 
+      src="./images/sky-images/yourialka-clouds-7613361_1920.png" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+
+    <!-- <img 
+      src="./images/sky-images/pexels-francesco-ungaro-281260.jpg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    >     -->
+
+
+
+    <!-- <img 
+      src="./images/hero/chosen/sky_painted_original_trabalhando.jpg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+    <!-- <img 
+      src="./images/hero/chosen/sky_clouds_trabalhando.svg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    >     -->
+
+    <img 
+      src="./Dreamy pastel sky with glowing clouds.webp" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    >
+
+
+    <!-- Imagem decorativa posicionável -->
+    <!-- <img
+      src="./images/hero/chosen/biplane.png"
+      alt=""
+      class="absolute top-40 right-16 z-20 w-12 pointer-events-none"
+    > -->
+
+
+
+    
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/10"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+
+      <!-- Redes sociais — top centralizado -->
+      <div class="absolute top-6 left-0 right-0 z-10 flex justify-center items-center gap-6">
+
+        <!-- Facebook -->
+        <a href="#" class="text-white/70 hover:text-white transition-colors">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="#" class="text-white/70 hover:text-white transition-colors">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+
+        <!-- YouTube -->
+        <a href="#" class="text-white/70 hover:text-white transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"/>
+          </svg>
+        </a>
+
+
+
+      </div>
+
+      <!-- Avatar com glow suave -->
+      <!-- <img
+        src="./fred-com-uniforme.jpeg"
+        alt="Fred, piloto campeão"
+        class="w-48 h-48 md:w-36 md:h-36 rounded-full object-cover object-top border-3 border-white ring-[8px] ring-white/20 mb-8"
+      /> -->
+
+      <img
+        src="./images/hero/chosen/fred_com_uniforme_painted_trabalhando.png"
+        alt="Fred, piloto campeão"
+        class="w-48 h-48 md:w-36 md:h-36 rounded-full object-cover object-top border-3 border-white ring-[3px] ring-white/20 mb-8"
+      />
+
+
+
+
+
+      <h1 class="font-agrandir text-white text-5xl md:text-8xl leading-none font-extrabold">
+        Voa <br> Fred!
+      </h1>
+
+      <p class="mt-6 max-w-xl text-white text-lg md:text-2xl leading-relaxed">
+        "Eu ainda sou pequeno, mas o meu sonho de me tornar piloto é grande.
+        Quem sonha alto, um dia decola."
+      </p>
+
+      <!-- Avião decorativo -->
+      <!-- <img
+        src="./images/hero/chosen/airplane_trabalhando.svg"
+        alt=""
+        class="absolute bottom-28 left-1/2 -translate-x-1/2 w-40 md:w-56 opacity-80"
+      > -->
+
+    </div>
+
+  </section>
+
+  <!-- About Section -->
+  <section class="relative bg-white overflow-hidden px-6 py-20 md:py-28">
+
+    <!-- Marca d'água: céu com nuvens no fundo -->
+    <img
+      src="./images/details/sky_clouds_trabalhando.svg"
+      class="absolute bottom-0 left-0 w-full h-64 object-cover object-top opacity-20 pointer-events-none"
+      alt=""
+    >
+
+    <!-- Conteúdo -->
+    <div class="relative z-10 max-w-2xl mx-auto">
+
+      <h2 class="font-agrandir text-black text-4xl md:text-6xl leading-tight font-extrabold mb-6" style="word-spacing: -0.1em;">
+        Oi, eu sou o Frederico!
+      </h2>
+
+      <p class="font-inter-italic text-black/70 text-md md:text-xl italic leading-relaxed mb-6">
+        Mas muita gente me conhece como <strong class="not-italic text-black">Fly Fred</strong>.
+      </p>
+
+      <div class="font-inter-light space-y-5 text-black text-base md:text-lg leading-relaxed">
+        <p>
+          Eu tenho 13 anos e o meu maior sonho é ser piloto de avião. Desde pequeno eu sou apaixonado por aviões, e hoje eu faço tudo o que posso pra chegar lá um dia.
+        </p>
+        <p>
+          Eu estudo bastante, leio livros sobre aviação e também treino em simulador, como se eu já estivesse pilotando de verdade. Eu gosto muito de aprender como tudo funciona dentro de um avião e como os pilotos se preparam.
+        </p>
+        <p>
+          Uma coisa muito legal que já aconteceu comigo foi ter sido convidado pra conhecer o CT de treinamento da Azul! Também já tive a oportunidade de fazer voo de acrobacia, e foi uma das experiências mais incríveis da minha vida!
+        </p>
+        <p>
+          Eu também estudo inglês, porque sei que é muito importante pra quem quer ser piloto. E nas minhas redes sociais, onde já tenho mais de <strong>35.000 seguidores</strong>, eu compartilho a minha rotina, meus estudos e tudo que eu aprendo nesse caminho.
+        </p>
+        <p>
+          Eu ainda tenho muito pra aprender, mas eu nunca vou desistir do meu sonho. Um dia eu vou estar lá em cima, pilotando um avião de verdade.
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12">
+        <a href="#" class="inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-lg px-8 py-4 rounded-full hover:bg-[#f0cc20] transition-colors">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>          
+          Acompanhe essa jornada
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script> -->
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+
+
+<script>
+const container = document.getElementById('plane-layer');
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  45,
+  window.innerWidth/window.innerHeight,
+  0.1,
+  1000
+);
+
+camera.position.set(0,1,6);
+
+const renderer = new THREE.WebGLRenderer({
+  alpha:true,
+  antialias:true
+});
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+container.appendChild(renderer.domElement);
+
+const light = new THREE.AmbientLight(0xffffff,1);
+scene.add(light);
+
+let airplane;
+let trajectory = [];
+let frame = 0;
+let next = 1;
+let alpha = 0;
+const baseScale = 0.0045;
+const skipFramesBy = 3;
+
+const loader = new THREE.GLTFLoader();
+
+let baseModelScale = 1;
+
+
+const velocidade = 0.12; // ajuste fino da velocidade do voo, multiplicando a alpha pra acelerar ou desacelerar a animação
+const modelSize = 1; // ajuste fino do tamanho do modelo, multiplicando a escala final pra deixar o avião maior ou menor na cena
+
+
+const textureLoader = new THREE.TextureLoader();
+
+
+const spec1 = textureLoader.load('./3d/textures/Bits-Spec.jpg');
+const spec2 = textureLoader.load('./3d/textures/Main-Spec.jpg');
+
+spec1.flipY = false;
+spec2.flipY = false;
+
+
+const diffuse = textureLoader.load('./3d/textures/Color.jpg');
+
+diffuse.flipY = false;
+diffuse.encoding = THREE.sRGBEncoding;
+
+const bump = textureLoader.load('./3d/textures/Bump.jpg');
+
+bump.flipY = false;
+
+
+
+
+loader.load('./3d/uploads_files_2532780_Gamecock.gltf', gltf => {
+
+  airplane = gltf.scene;
+
+
+// airplane.traverse(c => {
+//   if (c.isMesh) {
+//     c.material = new THREE.MeshPhongMaterial({
+//       map: diffuse,
+//       bumpMap: bump,
+//       bumpScale: 0.02,
+//       specularMap: spec2,
+//       shininess: 40
+//     });
+//   }
+// });
+
+
+airplane.traverse(c => {
+  if (c.isMesh) {
+    c.material = new THREE.MeshStandardMaterial({
+      color: 0x1f1f1f,
+      roughness: 0.5,
+      metalness: 0.25
+    });
+  }
+});
+
+
+
+
+
+
+
+
+  const box = new THREE.Box3().setFromObject(airplane);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+
+  const maxDim = Math.max(size.x, size.y, size.z);
+
+  const targetSize = 0.45;
+
+  const scale = targetSize / maxDim;
+
+  airplane.scale.setScalar(scale);
+
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+
+  airplane.children[0].position.sub(center);
+
+  baseModelScale = scale;
+
+  scene.add(airplane);
+});
+
+
+
+
+fetch('./flight_keyframes.json')
+.then(r=>r.json())
+.then(data=>{
+  trajectory = data;
+});
+
+function lerpAngle(a,b,t){
+  let diff = b - a;
+
+  while(diff < -Math.PI) diff += Math.PI * 2;
+  while(diff > Math.PI) diff -= Math.PI * 2;
+
+  return a + diff * t;
+}
+
+function animate(){
+
+  requestAnimationFrame(animate);
+
+  if(airplane && trajectory.length){
+
+    alpha += velocidade; // Velocidade do voo = alpha
+
+    if(alpha>=1){
+      alpha=0;
+      frame = (frame + skipFramesBy) % trajectory.length;
+      next = (frame + skipFramesBy) % trajectory.length;
+    }
+
+    const a = trajectory[frame];
+    const b = trajectory[next];
+
+    airplane.position.x = THREE.MathUtils.lerp(a.x,b.x,alpha);
+    airplane.position.y = THREE.MathUtils.lerp(a.y,b.y,alpha);
+    airplane.position.z = THREE.MathUtils.lerp(a.z,b.z,alpha);
+
+    const pitch = THREE.MathUtils.lerp(a.pitch,b.pitch,alpha);
+    const yaw = lerpAngle(a.yaw,b.yaw,alpha);
+    const roll = lerpAngle(a.roll,b.roll,alpha);
+
+    airplane.rotation.x = pitch;
+    airplane.rotation.y = yaw;
+    airplane.rotation.z = roll;
+
+    const scale = THREE.MathUtils.lerp(a.scale,b.scale,alpha);
+
+    airplane.scale.setScalar(baseModelScale * scale * modelSize); // tamanho do modelo * escala do voo * fator de ajuste pra ficar no tamanho certo
+
+
+  } 
+
+  renderer.render(scene,camera); 
+} 
+
+animate(); 
+
+window.addEventListener('resize',()=>{ 
+  camera.aspect = window.innerWidth/window.innerHeight; 
+  camera.updateProjectionMatrix(); 
+  renderer.setSize(window.innerWidth,window.innerHeight); 
+}); 
+</script>
+
+
+</body>
+</html>     
