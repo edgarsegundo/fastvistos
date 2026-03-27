@@ -34,8 +34,8 @@
     }
 
     .font-inter-light  { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; }
+    .font-dark-shadow { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #000; text-shadow: 0 0.5px 0 #111; }
     .font-inter-italic { font-family: 'Inter', sans-serif; font-weight: 300; font-style: italic; }
-
     .font-agrandir-quote { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #0395D7; font-size: 2.4rem; line-height: 1.1; }
 
 
@@ -309,8 +309,9 @@
     </div>
   </section>
 
+
   <!-- ═══════════ ABOUT ═══════════ -->
-  <section class="relative bg-white overflow-hidden px-6 py-20 md:py-28">
+  <section class="relative bg-white overflow-hidden px-6 md:px-20 py-20 md:py-28">
 
     <img
       src="./images/details/sky_clouds_trabalhando.svg"
@@ -318,37 +319,68 @@
       alt=""
     >
 
-    <div class="relative z-10 max-w-2xl mx-auto">
+    <div class="relative z-10 w-full flex flex-col">
 
-      <h2 class="font-agrandir text-black text-4xl md:text-6xl leading-tight font-extrabold mb-6" style="word-spacing: -0.1em;">
-        Oi, eu sou o Frederico!
-      </h2>
+      <!-- H2 — row própria, full width -->
+      <div class="w-full flex items-start justify-between gap-4 mb-8 md:mb-20">
+        <h2 class="w-full min-w-0  font-agrandir text-black text-4xl md:text-5xl leading-tight font-extrabold" style="word-spacing: -0.1em;">
+          Oi, eu sou o Frederico!
+        </h2>
 
-      <p class="font-inter-italic text-black/70 text-md md:text-xl italic leading-relaxed mb-6">
-        Mas muita gente me conhece como <strong class="not-italic text-black">Fly Fred</strong>.
-      </p>
-
-      <div class="font-inter-light space-y-5 text-black text-base md:text-lg leading-relaxed">
-        <p>Eu tenho 13 anos e o meu maior sonho é ser piloto de avião. Desde pequeno eu sou apaixonado por aviões, e hoje eu faço tudo o que posso pra chegar lá um dia.</p>
-        <p>Eu estudo bastante, leio livros sobre aviação e também treino em simulador, como se eu já estivesse pilotando de verdade. Eu gosto muito de aprender como tudo funciona dentro de um avião e como os pilotos se preparam.</p>
-        <p>Uma coisa muito legal que já aconteceu comigo foi ter sido convidado pra conhecer o CT de treinamento da Azul! Também já tive a oportunidade de fazer voo de acrobacia, e foi uma das experiências mais incríveis da minha vida!</p>
-        <p>Eu também estudo inglês, porque sei que é muito importante pra quem quer ser piloto. E nas minhas redes sociais, onde já tenho mais de <strong>35.000 seguidores</strong>, eu compartilho a minha rotina, meus estudos e tudo que eu aprendo nesse caminho.</p>
-        <p>Eu ainda tenho muito pra aprender, mas eu nunca vou desistir do meu sonho. Um dia eu vou estar lá em cima, pilotando um avião de verdade.</p>
+        <!-- Foto pequena — só aparece no mobile, ao lado do título -->
+        <img
+          src="./images/1/helicopero_trabalhando.jpeg"
+          alt="Frederico"
+          class="block md:hidden w-24 h-28 object-cover object-top flex-shrink-0"
+          style="box-shadow: 0 4px 16px rgba(0,0,0,0.15);"
+        >
       </div>
 
-      <div class="mt-12">
-        <a href="#" class="inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-lg px-8 py-4 rounded-full hover:bg-[#f0cc20] transition-colors">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-            <polyline points="15 3 21 3 21 9"/>
-            <line x1="10" y1="14" x2="21" y2="3"/>
-          </svg>          
-          Acompanhe essa jornada
-        </a>
-      </div>
+      <!-- Grid 3 colunas — abaixo do h2 -->
+      <div class="flex flex-col md:grid md:grid-cols-3 md:gap-8 md:items-stretch">
 
-    </div>
-  </section>
+        <!-- COLUNA 1: textos -->
+        <div class="flex flex-col">
+          <p class="font-inter-italic text-black/70 text-md md:text-xl italic leading-relaxed mb-4">
+            Mas muita gente me conhece como <strong class="not-italic text-black">Fly Fred</strong>.
+          </p>
+
+          <div class="font-dark-shadow space-y-4 text-black text-base md:text-xl leading-relaxed">
+            <p>Eu tenho 13 anos e o meu maior sonho é ser piloto de avião. Desde pequeno eu sou apaixonado por aviões, e hoje eu faço tudo o que posso pra chegar lá um dia.</p>
+            <p>Eu estudo bastante, leio livros sobre aviação e também treino em simulador, como se eu já estivesse pilotando de verdade. Eu gosto muito de aprender como tudo funciona dentro de um avião e como os pilotos se preparam.</p>
+            <p>Uma coisa muito legal que já aconteceu comigo foi ter sido convidado pra conhecer o CT de treinamento da Azul! Também já tive a oportunidade de fazer voo de acrobacia, e foi uma das experiências mais incríveis da minha vida!</p>
+            <p>Eu também estudo inglês, porque sei que é muito importante pra quem quer ser piloto. E nas minhas redes sociais, onde já tenho mais de <strong>35.000 seguidores</strong>, eu compartilho a minha rotina, meus estudos e tudo que eu aprendo nesse caminho.</p>
+            <p>Eu ainda tenho muito pra aprender, mas eu nunca vou desistir do meu sonho. Um dia eu vou estar lá em cima, pilotando um avião de verdade.</p>
+          </div>
+        </div>
+
+        <!-- COLUNA 2: Foto grande — só desktop -->
+        <div class="hidden md:block">
+          <img
+            src="./images/1/helicopero_trabalhando.jpeg"
+            alt="Frederico"
+            class="w-full h-full object-cover object-top"
+            style="box-shadow: 0 8px 32px rgba(0,0,0,0.15);"
+          >
+        </div>
+
+        <!-- COLUNA 3: Botão alinhado ao fundo -->
+        <div class="flex flex-col justify-end mt-10 md:mt-0">
+          <a href="#" class="inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-lg px-8 py-4 rounded-full hover:bg-[#f0cc20] transition-colors self-start md:self-auto">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Acompanhe essa jornada
+          </a>
+        </div>
+
+      </div><!-- fecha grid 3 colunas -->
+
+    </div><!-- fecha flex col wrapper -->
+  </section>  
+
 
   <!-- ═══════════ STORY CARDS ═══════════ -->
 
