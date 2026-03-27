@@ -385,15 +385,15 @@
   <!-- ═══════════ STORY CARDS ═══════════ -->
 
   <!-- ── CARD 1 ── -->
-  <section class="story-section relative">
-    <article class="story-card relative card-sky overflow-hidden mb-6 p-7 pb-0" data-chapter="1"
+  <section class="relative w-full">
+    <article class="story-card relative card-sky overflow-hidden mb-6 px-6 md:px-20 py-0" data-chapter="1"
         style="height: 1300px;">
 
       <!-- Camadas de imagem -->
       <div class="img-nuvem"></div>
       <div class="img-aviao"></div>
 
-      <!-- Avião decorativo — ancorado no article, fora do fluxo -->
+      <!-- Avião decorativo -->
       <img
         src="./images/sky-images/biplane-deco.png"
         alt=""
@@ -401,107 +401,97 @@
         style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
       >
 
-      <!-- Ícone do capítulo -->
+      <!-- Wrapper flex col — mesmo padrão do about -->
+      <div class="relative z-10 w-full flex flex-col">
 
-      <svg class="mt-24" width="42" height="42" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <mask id="number-cut">
-            <rect width="40" height="40" fill="white"/>
-            <text
-              x="20"
-              y="27"
-              text-anchor="middle"
-              font-size="20"
-              font-family="Agrandir, sans-serif"
-              font-weight="bold"
-              fill="black"
-            >
-              1
-            </text>
-          </mask>
-        </defs>
+        <!-- Ícone do capítulo -->
+        <svg class="mt-24 mb-6" width="42" height="42" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="number-cut">
+              <rect width="40" height="40" fill="white"/>
+              <text x="20" y="27" text-anchor="middle" font-size="20" font-family="Agrandir, sans-serif" font-weight="bold" fill="black">1</text>
+            </mask>
+          </defs>
+          <circle cx="20" cy="20" r="20" fill="white" mask="url(#number-cut)"/>
+        </svg>
 
-        <circle cx="20" cy="20" r="20" fill="white" mask="url(#number-cut)"/>
-      </svg>
-
-
-
-      <h2 class="font-agrandir text-white text-4xl leading-[0.95] font-extrabold mb-8 mt-6"
-          style="text-shadow: 0 2px 12px rgba(80,140,200,0.18);">
-        Conhecendo o CT <br>da Azul
-      </h2>
-
-      <div class="flex items-end gap-4 mb-0">
-        <p class="card-text text-[1rem] leading-[1.2] flex-1 mb-6 pr-2 mt-12">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-          Proin mattis faucibus mattis. 
-        </p>
-      </div>
-
-      <div class="relative w-full" style="max-height: 500px;">
-        <video 
-          id="ct-azul-video"
-          src="./images/1/experienia_ct_azul.mp4"
-          class="w-full block"
-          style="max-height: 500px; object-fit: cover;"
-          playsinline
-        ></video>
-        <div id="ct-azul-play-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
-          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
-            <polygon points="28,22 54,36 28,50" fill="#fff"/>
-          </svg>
+        <!-- H2 — row própria, full width -->
+        <div class="w-full mb-8">
+          <h2 class="font-agrandir text-white text-4xl leading-[0.95] font-extrabold"
+              style="text-shadow: 0 2px 12px rgba(80,140,200,0.18);">
+            Conhecendo o CT <br>da Azul
+          </h2>
         </div>
-      </div>
 
-      <!-- <div class="flex items-end gap-4 mb-0">
-        <div class="img-nuvem"></div>
-        <p class="font-agrandir-quote text-[1.3rem] leading-[1.2] flex-1 mb-6 pr-2 mt-12">
-          "Sou muito grato à equipe do CT pela oportunidade e pela experiência inesquecível, que fortaleceu ainda mais meu sonho de me tornar piloto."
-        </p>
-      </div> -->
+        <!-- Grid 3 colunas — parágrafo 1, vídeo, parágrafo 2 -->
+        <div class="flex flex-col md:grid md:grid-cols-3 md:gap-8 md:items-stretch">
+
+          <!-- COLUNA 1: vídeo -->
+          
+
+          <div>
+
+          <div class="flex flex-col justify-center">
+            <p class="card-text text-[1rem] leading-[1.4]">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+              Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
+              Proin mattis faucibus mattis. 
+            </p>
+          </div>
+
+            <div class="relative mt-8 md:mt-0" style="min-height: 300px;">
+              
+              <video 
+                id="ct-azul-video"
+                src="./images/1/experienia_ct_azul.mp4"
+                class="w-full h-full block"
+                style="object-fit: cover;"
+                playsinline
+              ></video>
+              <div id="ct-azul-play-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
+                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
+                  <polygon points="28,22 54,36 28,50" fill="#fff"/>
+                </svg>
+              </div>
+            </div>
+
+          </div>
+          
+          <!-- COLUNA 2: parágrafo 1 -->
+          <div class="flex flex-col justify-center">
+            <p class="card-text text-[1rem] leading-[1.4]">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+              Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
+              Proin mattis faucibus mattis. 
+            </p>
+          </div>
+
+          
 
 
-<div class="relative mt-12 -mx-7 pb-20">
+          <!-- COLUNA 3: parágrafo 2 com bg fade -->
+          <div class="relative mt-8 md:mt-0 flex flex-col justify-end -mx-7 md:mx-0 pb-8 px-7">
+            <div style="
+              position: absolute;
+              top: 0; left: 0; right: 0; bottom: 0;
+              background: url('./images/1/sky_clould_real_trabalhando.jpg') center center/cover no-repeat;
+              mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
+              -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
+              z-index: 0;
+            "></div>
+            <p class="font-agrandir-quote relative text-[1.3rem] leading-[1.2] pt-6" style="z-index: 1;">
+              "Sou muito grato à equipe do CT pela oportunidade e pela experiência inesquecível, que fortaleceu ainda mais meu sonho de me tornar piloto."
+            </p>
+          </div>
 
-  <!-- Background com fade de cima para baixo -->
-<div style="
-  position: absolute;
-  top: 80px;
-  left: 0;
-  right: 0;
-  bottom: 0;  
-  background: url('./images/1/sky_clould_real_trabalhando.jpg') center center/cover no-repeat;
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0)   0%,
-    rgba(0,0,0,0.1) 25%,
-    rgba(0,0,0,0.3) 50%,
-    rgba(0,0,0,0.7) 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0)   0%,
-    rgba(0,0,0,0.1) 25%,
-    rgba(0,0,0,0.3) 50%,
-    rgba(0,0,0,0.7) 100%
-  );
-  z-index: 0;
-"></div>
+        </div><!-- fecha grid 3 colunas -->
 
-  <!-- Texto com padding interno para compensar -->
-  <p class="font-agrandir-quote relative text-[1.3rem] leading-[1.2] px-7 pt-6" style="z-index: 1;">
-    "Sou muito grato à equipe do CT pela oportunidade e pela experiência inesquecível, que fortaleceu ainda mais meu sonho de me tornar piloto."
-  </p>
-
-</div>
-
-  
-
+      </div><!-- fecha flex col wrapper -->
 
     </article>
   </section>
+
 
   <!-- ── CARD 2 ── -->
   <section class="story-section relative">
