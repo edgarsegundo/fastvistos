@@ -22,7 +22,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
     imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
 >
-    <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
         <JsonLdHomePageBase
@@ -33,683 +32,514 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         />
     </Fragment>
 
-    <!-- Body content -->
-
     <div class="bg-white" style="margin: 6px;">
-
-        <video id="plane-bg" autoplay muted loop playsinline>
+        <video id="plane-bg" autoplay muted loop playsinline class="absolute left-0 right-0 -top-[130px] xl:-top-[200px] w-full [height:calc(100%_+_40px)] object-cover pointer-events-none z-20">
             <source src="assets/videos/plane-loop.webm" type="video/webm">
         </video>
 
         <script>
             const planeBgVideo = document.getElementById('plane-bg');
-                planeBgVideo.playbackRate = 0.9;
-                planeBgVideo.style.transition = 'opacity 1s';
-                planeBgVideo.addEventListener('timeupdate', function() {
+            planeBgVideo.playbackRate = 0.9;
+            planeBgVideo.style.transition = 'opacity 1s';
+            planeBgVideo.addEventListener('timeupdate', function() {
                 planeBgVideo.style.opacity = (planeBgVideo.duration - planeBgVideo.currentTime < 2) ? 0 : 1;
             });
         </script>
 
-        <!-- ═══════════ HERO ═══════════ -->
-        <section class="relative h-[98vh] w-full overflow-hidden">
+        <!-- ═══════════ HERO — Híbrido Nav + Identidade ═══════════ -->
+        <section class="relative w-full overflow-hidden min-h-[400px] xl:min-h-[380px]">
+            <!-- BG: céu -->
+            <img
+                src="assets/images/hero/imagem-ceu-principal-background-hero.jpg"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="Sky background"
+            >
+            <!-- <div class="absolute inset-0 bg-black/15"></div> -->
 
+            <!-- Plano de animação -->
             <div id="plane-layer" class="absolute inset-0 z-20 pointer-events-none"></div>
 
-            <img 
-            src="assets/images/hero/imagem-ceu-principal-background-hero.jpg" 
-            class="absolute inset-0 w-full h-full object-cover"
-            alt="Sky background"
-            >
+            <!-- ── NAV TOPO ── -->
+            <nav class="relative z-30 flex items-center justify-between px-6 xl:px-20 pt-6 pb-2">
+                <span class="font-agrandir text-white text-xl font-extrabold tracking-tight opacity-90">Fly Fred</span>
+                <div class="flex items-center gap-5">
+                    <a href="#" aria-label="Facebook" class="text-white/70 hover:text-white transition-colors">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Instagram" class="text-white/70 hover:text-white transition-colors">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="YouTube" class="text-white/70 hover:text-white transition-colors">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="TikTok" class="text-white/70 hover:text-white transition-colors">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z"/>
+                        </svg>
+                    </a>
+                </div>
+            </nav>
 
-            <div class="absolute inset-0 bg-black/10"></div>
+            <!-- ── CONTEÚDO HERO ── -->
+            <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-6 xl:pt-8 pb-10 xl:pb-14 gap-6 xl:gap-0">
+                <!-- Esquerda: avatar pequeno + badge -->
+                <div class="flex flex-row xl:flex-col items-center xl:items-start gap-4">
+                    <img
+                        src="assets/images/hero/fred_com_uniforme_painted_trabalhando.png"
+                        alt="Fred, piloto campeão"
+                        class="hero-avatar w-20 h-20 xl:w-36 xl:h-36 rounded-full object-cover object-top border-2 border-white ring-[2px] ring-white/20 flex-shrink-0"
+                    />
+                    <div class="relative">
+                        <div class="relative p-2">
+                            <p class="text-white text-sm xl:text-base uppercase tracking-widest opacity-80 mb-1">
+                                · Piloto em formação
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-
-            <div class="absolute top-6 left-0 right-0 z-10 flex justify-center items-center gap-6">
-                <a href="#" class="text-white/70 hover:text-white transition-colors">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                </svg>
-                </a>
-                <a href="#" class="text-white/70 hover:text-white transition-colors">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                    <circle cx="12" cy="12" r="4"/>
-                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-                </svg>
-                </a>
-                <a href="#" class="text-white/70 hover:text-white transition-colors">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
-                    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"/>
-                </svg>
-                </a>
+                <!-- Direita: título + frase + CTA -->
+                <div class="flex flex-col items-start xl:items-end text-left xl:text-right xl:max-w-2xl">
+                    <h1 class="font-agrandir text-white hero-title leading-none font-extrabold">
+                        Voa Fred!
+                    </h1>
+                    <p class="font-dark-shadow-white mt-4 max-w-lg text-white text-base xl:text-xl leading-relaxed">
+                        "Eu ainda sou pequeno, mas o meu sonho de me tornar piloto é grande.
+                        Quem sonha alto, um dia decola."
+                    </p>
+                    <!-- <a href="#sobre" class="mt-6 inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-sm xl:text-base px-6 py-2.5 rounded-full hover:bg-[#f0cc20] transition-colors">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                        Conhece minha história
+                    </a> -->
+                </div>
             </div>
 
-            <img
-                src="assets/images/hero/fred_com_uniforme_painted_trabalhando.png"
-                alt="Fred, piloto campeão"
-                class="w-48 h-48 md:w-56 md:h-56 lg:w-72 lg:h-72 rounded-full object-cover object-top border-3 border-white ring-[3px] ring-white/20 mb-8"
-            />
+            <!-- Fundo fade para o branco -->
+            <div class="hero-fade-bottom absolute bottom-0 left-0 right-0 h-16 xl:h-20 pointer-events-none"></div>
+        </section>
 
-                
-            <h1 class="font-agrandir text-white text-5xl md:text-7xl lg:text-8xl leading-none font-extrabold">
-                Voa <br> Fred!
-            </h1>
+        <!-- ═══════════ SOBRE ═══════════ -->
+        <section id="sobre" class="relative bg-white overflow-hidden px-6 xl:px-20 py-16 xl:py-12">
 
-            <p class="font-dark-shadow-white mt-6 max-w-xl text-white text-lg md:text-2xl leading-relaxed">
-                "Eu ainda sou pequeno, mas o meu sonho de me tornar piloto é grande.
-                Quem sonha alto, um dia decola."
-            </p>
+            <!-- <img
+                src="./images/details/sky_clouds_trabalhando.svg"
+                class="absolute bottom-0 left-0 w-full h-64 object-cover object-top opacity-20 pointer-events-none"
+                alt=""
+            > -->
 
+
+<div class="absolute bottom-0 left-0 w-full h-64 pointer-events-none" style="
+    background: url('./images/details/sky_clouds_trabalhando.svg') center top / cover no-repeat;
+    opacity: 0.2;
+    mask-image: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0) 18%,
+        rgba(0,0,0,0.01) 28%,
+        rgba(0,0,0,0.03) 38%,
+        rgba(0,0,0,0.07) 48%,
+        rgba(0,0,0,0.14) 58%,
+        rgba(0,0,0,0.26) 68%,
+        rgba(0,0,0,0.45) 78%,
+        rgba(0,0,0,0.68) 88%,
+        rgba(0,0,0,0.88) 95%,
+        rgba(0,0,0,1) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0) 18%,
+        rgba(0,0,0,0.01) 28%,
+        rgba(0,0,0,0.03) 38%,
+        rgba(0,0,0,0.07) 48%,
+        rgba(0,0,0,0.14) 58%,
+        rgba(0,0,0,0.26) 68%,
+        rgba(0,0,0,0.45) 78%,
+        rgba(0,0,0,0.68) 88%,
+        rgba(0,0,0,0.88) 95%,
+        rgba(0,0,0,1) 100%
+    );
+"></div>
+
+
+
+
+            <div class="relative z-10 w-full">
+
+                <!-- Topo: título full-width -->
+                <div class="flex items-start justify-between gap-4 mb-10 xl:mb-16">
+                    <h2 class="font-agrandir text-black text-3xl xl:text-5xl leading-tight font-extrabold" style="word-spacing: -0.1em;">
+                        Oi, eu sou o Frederico!
+                    </h2>
+                    <!-- Foto só mobile -->
+                    <img
+                        src="assets/images/articles/helicopero-fred-voo.jpeg"
+                        alt="Frederico no helicóptero"
+                        class="block xl:hidden w-24 h-28 object-cover object-top flex-shrink-0"
+                        style="box-shadow: 0 4px 16px rgba(0,0,0,0.15);"
+                    >
+                </div>
+
+                <!-- Grid 12 colunas desktop -->
+                <div class="flex flex-col xl:grid xl:grid-cols-12 xl:gap-10 xl:items-start">
+
+                    <!-- Col 1-4: bloco texto esquerdo -->
+                    <div class="xl:col-span-4 flex flex-col gap-5">
+                        <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                            Mas muita gente me conhece como <strong class="text-black">Fly Fred</strong>.
+                        </p>
+                        <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                            Tenho 13 anos e o maior sonho da minha vida é ser piloto de avião. Desde muito pequeno eu sou apaixonado por aviões — não só pela beleza deles, mas pela liberdade que eles representam.
+                        </p>
+                        <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                            Estudo bastante, leio livros sobre aviação e treino em simulador como se já estivesse pilotando de verdade. Quero entender cada botão, cada instrumento, cada fase de voo.
+                        </p>
+                    </div>
+
+                    <!-- Col 5-8: foto grande — só desktop -->
+                    <div class="hidden xl:block xl:col-span-4">
+                        <img
+                            src="assets/images/articles/helicopero-fred-voo.jpeg"
+                            alt="Frederico no helicóptero"
+                            class="w-full h-full object-cover object-top"
+                            style="box-shadow: 0 8px 32px rgba(0,0,0,0.15); max-height: 520px;"
+                        >
+                    </div>
+
+                    <!-- Col 9-12: bloco texto direito -->
+                    <div class="xl:col-span-4 flex flex-col gap-5 mt-8 xl:mt-0">
+                        <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                            Uma das coisas mais incríveis que já me aconteceu foi ser convidado para conhecer o CT de treinamento da Azul. Também já fiz voo de acrobacia — uma experiência que nunca vou esquecer.
+                        </p>
+                        <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                            Estudo inglês todo dia, porque sei que é essencial pra quem quer ser piloto. Nas minhas redes sociais, onde já tenho mais de <strong>35.000 seguidores</strong>, compartilho minha rotina, meus estudos e tudo que aprendo nesse caminho.
+                        </p>
+                        <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                            Ainda tenho muito pela frente. Mas nunca vou desistir. Um dia eu vou estar lá em cima, pilotando de verdade.
+                        </p>
+                    </div>
+
+                </div>
             </div>
         </section>
 
 
-        <!-- ═══════════ ABOUT ═══════════ -->
-        <section class="relative bg-white overflow-hidden px-6 xl:px-20 py-20 xl:py-28">
-
-            <img
-            src="./images/details/sky_clouds_trabalhando.svg"
-            class="absolute bottom-0 left-0 w-full h-64 object-cover object-top opacity-20 pointer-events-none"
-            alt=""
-            >
-
-            <div class="relative z-10 w-full flex flex-col">
-
-            <!-- H2 — row própria, full width -->
-            <div class="w-full flex items-start justify-between gap-4 mb-8 xl:mb-20">
-                <h2 class="w-full min-w-0 font-agrandir text-black text-3xl xl:text-5xl leading-tight font-extrabold" style="word-spacing: -0.1em;">
-                Oi, eu sou o Frederico!
-                </h2>
-
-                <!-- Foto pequena — só aparece no mobile, ao lado do título -->
-                <img
-                src="assets/images/articles/helicopero-fred-voo.jpeg"
-                alt="Frederico"
-                class="block xl:hidden w-24 h-28 object-cover object-top flex-shrink-0"
-                style="box-shadow: 0 4px 16px rgba(0,0,0,0.15);"
-                >
-            </div>
-
-            <!-- Grid 3 colunas — abaixo do h2 -->
-            <div class="flex flex-col xl:grid xl:grid-cols-3 xl:gap-8 xl:items-stretch">
-
-                <!-- COLUNA 1: textos -->
-                <div class="flex flex-col">
-                    <div class="font-dark-shadow space-y-4 text-black text-xl lg:text-2xl leading-relaxed">
-                        <p>Mas muita gente me conhece como <strong class="not-italic text-black">Fly Fred</strong>.</p>
-                        <p>Eu tenho 13 anos e o meu maior sonho é ser piloto de avião. Desde pequeno eu sou apaixonado por aviões, e hoje eu faço tudo o que posso pra chegar lá um dia.</p>
-                        <p>Eu estudo bastante, leio livros sobre aviação e também treino em simulador, como se eu já estivesse pilotando de verdade. Eu gosto muito de aprender como tudo funciona dentro de um avião e como os pilotos se preparam.</p>
-                    </div>
-                </div>
-
-                <!-- COLUNA 2: Foto grande — só desktop -->
-                <div class="hidden xl:block xl:mt-12">
-                <img
-                    src="assets/images/articles/helicopero-fred-voo.jpeg"
-                    alt="Frederico"
-                    class="w-full h-full object-cover object-top"
-                    style="box-shadow: 0 8px 32px rgba(0,0,0,0.15);"
-                >
-                </div>
-
-                <!-- COLUNA 3: Botão alinhado ao fundo -->
-                <div class="flex flex-col justify-center mt-10 xl:mt-6">
-                <!-- <a href="#" class="inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-lg px-8 py-4 rounded-full hover:bg-[#f0cc20] transition-colors self-start xl:self-auto">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                    Acompanhe essa jornada
-                </a> -->
-
-
-
-                <div class="font-dark-shadow space-y-4 text-black text-xl lg:text-2xl leading-relaxed -mt-4 lg:mt-0">
-                    <p>Uma coisa muito legal que já aconteceu comigo foi ter sido convidado pra conhecer o CT de treinamento da Azul! Também já tive a oportunidade de fazer voo de acrobacia, e foi uma das experiências mais incríveis da minha vida!</p>
-                    <p>Eu também estudo inglês, porque sei que é muito importante pra quem quer ser piloto. E nas minhas redes sociais, onde já tenho mais de <strong>35.000 seguidores</strong>, eu compartilho a minha rotina, meus estudos e tudo que eu aprendo nesse caminho.</p>
-                    <p>Eu ainda tenho muito pra aprender, mas eu nunca vou desistir do meu sonho. Um dia eu vou estar lá em cima, pilotando um avião de verdade.</p>
-                </div>
-
-
-                </div>
-
-            </div><!-- fecha grid 3 colunas -->
-
-            </div><!-- fecha flex col wrapper -->
-        </section>  
-
-
-        <!-- ═══════════ STORY CARDS ═══════════ -->
-
-        <!-- ── CARD 1 ── -->
+        <!-- ═══════════ CARD 1 — Como tudo começa ═══════════ -->
         <section class="relative w-full">
-            <article class="story-card relative card-sky overflow-hidden mb-6 px-6 lg:px-20 py-0" data-chapter="1"
-                >
+            <article class="story-card relative card-sky overflow-hidden mb-6 px-6 xl:px-20 py-0" data-chapter="1">
 
-            <!-- Wrapper flex col — mesmo padrão do about -->
-            <div class="relative z-10 w-full flex flex-col">
+                <div class="relative z-10 w-full flex flex-col">
 
-                <!-- H2 com imagens de fundo apenas nessa row -->
-                <div class="relative overflow-hidden flex flex-col justify-end px-6 lg:px-20 -mx-6 lg:-mx-20 mb-8 min-h-[220px] lg:min-h-[360px] lg:min-h-[560px]">
-                    <!-- Camada 1: nuvem — só aqui -->
-                    <div style="
-                        position: absolute;
-                        top: 0; left: 0;
-                        width: 100%; height: 100%;
-                        background: url('assets/images/articles/ceu-e-nuvens-reais.jpg') center/cover no-repeat;
-                        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%);
-                        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%);
-                        z-index: 0;
-                    "></div>
+                    <!-- Header com background sky -->
+                    <div class="relative overflow-hidden flex flex-col justify-end px-6 xl:px-20 -mx-6 xl:-mx-20 mb-10 min-h-[220px] xl:min-h-[420px]">
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:url('assets/images/articles/ceu-e-nuvens-reais.jpg') center/cover no-repeat;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);z-index:0;"></div>
+                        <div style="position:absolute;top:0;left:0;width:100%;height:50%;background:url('assets/images/articles/biplane_transparent.png') center/cover no-repeat;opacity:0.85;mix-blend-mode:multiply;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);z-index:1;"></div>
 
-                    <!-- Camada 2: avião — só aqui -->
-                    <div style="
-                        position: absolute;
-                        top: 0; left: 0;
-                        width: 100%; height: 50%;
-                        background: url('assets/images/articles/biplane_transparent.png') center/cover no-repeat;
-                        opacity: 0.85;
-                        mix-blend-mode: multiply;
-                        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
-                        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
-                        z-index: 1;
-                    "></div>
-
-                    <!-- Avião decorativo -->
-                    <!-- <img
-                        src="assets/images/articles/biplane-deco.png"
-                        alt=""
-                        style="position: absolute; top: -1.5rem; right: -1rem; width: 10rem; pointer-events: none; z-index: 15; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
-                    > -->
-
-                    <!-- Ícone do capítulo + H2 — sobre as imagens -->
-                    <div class="relative" style="z-index: 10;">
-                        <svg class="mb-4 lg:mb-12" width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <mask id="number-cut">
-                            <rect width="40" height="40" fill="white"/>
-                            <text x="20" y="27" text-anchor="middle" font-size="20" font-family="Agrandir, sans-serif" font-weight="bold" fill="black">1</text>
-                            </mask>
-                        </defs>
-                        <circle cx="20" cy="20" r="20" fill="white" mask="url(#number-cut)"/>
-                        </svg>
-
-                        <h2 class="font-agrandir-white-shadow text-4xl lg:text-8xl leading-[0.95] font-extrabold pb-8"
-                            style="text-shadow: 0 2px 12px rgba(80,140,200,0.18);">
-                        Como tudo <br>começa
-                        </h2>
+                        <div class="relative" style="z-index:10;">
+                            <svg class="mb-4 xl:mb-10" width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <defs><mask id="number-cut"><rect width="40" height="40" fill="white"/><text x="20" y="27" text-anchor="middle" font-size="20" font-family="Agrandir, sans-serif" font-weight="bold" fill="black">1</text></mask></defs>
+                                <circle cx="20" cy="20" r="20" fill="white" mask="url(#number-cut)"/>
+                            </svg>
+                            <h2 class="font-agrandir-white-shadow text-4xl xl:text-7xl leading-[0.95] font-extrabold pb-8">
+                                Como tudo <br>começa
+                            </h2>
+                        </div>
                     </div>
 
-                </div>
+                    <!-- Row única: imagem1 | texto | imagem2 -->
+                    <div class="flex flex-col xl:flex-row xl:gap-10 xl:items-start pb-0 xl:pb-20">
 
-                <!-- Grid 3 colunas — parágrafo 1, vídeo, parágrafo 2 -->
-                <div class="flex flex-col lg:grid lg:grid-cols-3 lg:gap-8 lg:items-stretch lg:mt-4">
-                
-                    <!-- COLUNA 1: parágrafo 1 -->
-                    <div class="flex flex-col justify-end xl:justify-start">
-                        <p class="font-dark-shadow text-xl lg:text-2xl leading-[1.4]">
-                            Enquanto a maioria das crianças pedia fantasias de super-herói, 
-                            eu só queria uma coisa: um uniforme de piloto.”
-                        </p>
-                    </div>
-
-                    <!-- COLUNA 2: imagem -->
-                    <div>
-
-                        <div class="relative mt-8 lg:mt-24" style="min-height: 300px;">
-
-                        <div class="flex flex-col justify-center mt-8 lg:mt-0">
+                        <!-- Imagem 1 -->
+                        <div class="xl:w-1/4 flex-shrink-0 mt-0 xl:mt-0">
                             <img
-                            src="assets/images/articles/fred-com-uniforme.jpeg"
-                            alt=""
-                            class="w-full block"
-                            style="height: auto; object-fit: contain;"
+                                src="assets/images/articles/fred-com-uniforme.jpeg"
+                                alt="Fred com uniforme de piloto"
+                                class="w-full block"
+                                style="height:auto;object-fit:cover;"
                             >
-                        </div>              
-                        
                         </div>
 
-                    </div>
-
-                    <!-- COLUNA 3: parágrafo 2 com bg fade -->
-                    <div class="relative mt-8 lg:-mt-0 flex flex-col justify-end xl:justify-center -mx-7 lg:mx-0 pb-8 px-7">
-                        <div class="hidden" style="
-                        position: absolute;
-                        top: 0; left: 0; right: 0; bottom: 0;
-                        background: url('assets/images/articles/ceu-e-nuvens-reais.jpg') center center/cover no-repeat;
-                        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
-                        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
-                        z-index: 0;
-                        "></div>
-                        <!-- <p class="font-agrandir-quote relative text-[1.3rem] leading-[1.2] pt-6 lg:hidden" style="z-index: 1;">
-                        "Sou muito grato à equipe do CT pela oportunidade e pela experiência inesquecível, que fortaleceu ainda mais meu sonho de me tornar piloto."
-                        </p> -->
-
-
-                        <div class="lg:-mt-24" style="max-width: 460px;">
-                            <p class="font-dark-shadow text-xl lg:text-2xl leading-[1.4]">
-                                Com o tempo, percebi que não era apenas admiração de infância; 
-                                era um interesse que voltava sempre, 
-                                como se desde cedo alguma parte de mim já reconhecesse esse caminho.
+                        <!-- Texto central -->
+                        <div class="xl:flex-1 flex flex-col gap-6 mt-8 xl:mt-0">
+                            <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                                Enquanto a maioria das crianças pedia fantasias de super-herói, eu só queria uma coisa: um uniforme de piloto. Era meu de todo jeito — no Carnaval, no aniversário, no dia-a-dia. Minha mãe ainda guarda a foto.
+                            </p>
+                            <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                                Com o tempo, percebi que não era admiração de infância passageira. Era um interesse que voltava sempre — como se desde cedo alguma parte de mim já soubesse qual caminho queria seguir.
+                            </p>
+                            <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
+                                Aos 7 anos ganhei meu primeiro livro sobre aviação — e li do começo ao fim sem parar. Meu pai disse que foi a primeira vez que me viu quieto por tanto tempo. A paixão estava ali, esperando só crescer junto comigo.
                             </p>
                         </div>
 
-
-                    </div>
-                </div><!-- fecha grid 3 colunas -->
-
-                <!-- Grid 2 colunas — texto e vídeo -->
-                <div class="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8 lg:items-stretch lg:mt-24">
-
-                    <!-- COLUNA 1: texto -->
-                    <div class="flex flex-col justify-center">
-                        <p class="font-dark-shadow text-xl lg:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis. 
-                        </p>
-                    </div>
-
-
-                    <!-- COLUNA 1: imagem -->
-                    <div class="flex flex-col justify-center mt-8 lg:mt-0">
-                        <img
-                        src="assets/images/articles/cockpit_junto_comandante.jpeg"
-                        alt=""
-                        class="w-full block"
-                        style="height: auto; object-fit: contain;"
-                        >
-                    </div>
-
-                </div><!-- fecha grid 2 colunas -->
-
-            </div><!-- fecha flex col wrapper -->
-
-            </article>
-        </section>
-
-
-        <!-- ── CARD 2 ── -->
-        <section class="relative w-full">
-            <article class="story-card relative card-sky-white-bg overflow-hidden mt-6 md:mt-24 mb-6 md:mb-12 px-6 md:px-20 py-0" data-chapter="2"
-                >
-
-            <!-- Wrapper flex col -->
-            <div class="relative z-10 w-full flex flex-col">
-                <!-- H2 com nuvem à direita -->
-                <div class="relative flex flex-col justify-end px-6 md:px-20 -mx-6 md:-mx-20 mb-8 min-h-[300px] lg:min-h-[560px]">
-                    <!-- Nuvem — lado direito, com fade nas bordas -->
-                    <div style="
-                        position: absolute;
-                        top: 0; right: -2rem;
-                        width: 55%; height: 100%;
-                        background: url('assets/images/articles/ceu_nuvem_separada.png') center/contain no-repeat;
-                        mask-image: linear-gradient(
-                            to right,
-                            rgba(0,0,0,1)    0%,
-                            rgba(0,0,0,0.95) 20%,
-                            rgba(0,0,0,0.85) 40%,
-                            rgba(0,0,0,0.6)  55%,
-                            rgba(0,0,0,0.3)  70%,
-                            rgba(0,0,0,0.1)  85%,
-                            rgba(0,0,0,0)    100%
-                        ), linear-gradient(
-                            to bottom,
-                            rgba(0,0,0,0.9) 0%,
-                            rgba(0,0,0,0.9) 60%,
-                            rgba(0,0,0,0)   100%
-                        );
-                        -webkit-mask-image: linear-gradient(
-                            to right,
-                            rgba(0,0,0,1)    0%,
-                            rgba(0,0,0,0.95) 20%,
-                            rgba(0,0,0,0.85) 40%,
-                            rgba(0,0,0,0.6)  55%,
-                            rgba(0,0,0,0.3)  70%,
-                            rgba(0,0,0,0.1)  85%,
-                            rgba(0,0,0,0)    100%
-                        );
-                        mask-composite: intersect;
-                        -webkit-mask-composite: destination-in;
-                        z-index: 0;
-                    "></div>
-
-                    <!-- Ícone do capítulo + H2 — sobre as imagens -->
-                    <div class="relative" style="z-index: 10;">
-                        <svg class="mb-6 md:mb-12" width="56" height="56" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="20" cy="20" r="20" fill="black"/>
-                        <text x="20" y="27" text-anchor="middle" font-size="20" fill="white" font-family="Agrandir, sans-serif" font-weight="bold">2</text>
-                        </svg>
-
-                        <h2 class="font-agrandir text-black text-4xl md:text-6xl lg:text-8xl leading-[0.95] font-extrabold pb-8">
-                        Comece a<br>Sonhar Alto!
-                        </h2>
-                    </div>
-                </div>
-
-                <!-- Grid 3 colunas — texto, vídeo, texto -->
-                <div class="flex flex-col md:grid md:grid-cols-3 md:gap-8 md:items-stretch -mt-24 md:mt-4">
-
-                    <!-- COLUNA 1: texto -->
-                    <div class="flex flex-col justify-start mt-24">
-                        <p class="font-dark-shadow text-xl lg:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis. 
-                        </p>
-                    </div>
-
-                    <!-- COLUNA 2: texto -->
-                    <div class="flex flex-col justify-center mt-8 md:mt-0">
-                        <p class="font-dark-shadow text-xl lg:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis. 
-                        </p>
-                    </div>
-
-                    <!-- COLUNA 3: vídeo -->
-                    <div class="relative mt-8 md:mt-0">
-                        <video
-                        src="assets/videos/primeiro_voo.mp4"
-                        class="w-full block custom-video"
-                        style="height: auto; object-fit: contain;"
-                        playsinline
-                        ></video>
-                        <div class="custom-overlay absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
-                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
-                            <polygon points="28,22 54,36 28,50" fill="#fff"/>
-                        </svg>
+                        <!-- Imagem 2 -->
+                        <div class="xl:w-1/4 flex-shrink-0 mt-8 xl:mt-0">
+                            <img
+                                src="assets/images/articles/cockpit_junto_comandante.jpeg"
+                                alt="Fred no cockpit com o comandante"
+                                class="w-full block"
+                                style="height:auto;object-fit:cover;"
+                            >
                         </div>
                     </div>
 
-                    <!-- Nuvem — lado esquerdo, com fade nas bordas -->
-                    <div 
-                    style="position: absolute; 
-                        bottom: -50px; 
-                        md:left:-80px;
-                        width: 40%; 
-                        height: 50%;
-                        background: url('assets/images/articles/ceu_nuvem_esquerda.png') center/contain no-repeat;
-                        mask-image: linear-gradient(
-                            to left,
-                            rgba(0,0,0,1)    0%,
-                            rgba(0,0,0,0.95) 20%,
-                            rgba(0,0,0,0.85) 40%,
-                            rgba(0,0,0,0.6)  55%,
-                            rgba(0,0,0,0.3)  70%,
-                            rgba(0,0,0,0.1)  85%,
-                            rgba(0,0,0,0)    100%
-                        ), linear-gradient(
-                            to bottom,
-                            rgba(0,0,0,0.9) 0%,
-                            rgba(0,0,0,0.3) 60%,
-                            rgba(0,0,0,0.1) 90%,
-                            rgba(0,0,0,0)   100%
-                        );
-                        -webkit-mask-image: linear-gradient(
-                            to left,
-                            rgba(0,0,0,1)    0%,
-                            rgba(0,0,0,0.95) 20%,
-                            rgba(0,0,0,0.85) 40%,
-                            rgba(0,0,0,0.6)  55%,
-                            rgba(0,0,0,0.3)  70%,
-                            rgba(0,0,0,0.1)  85%,
-                            rgba(0,0,0,0)    100%
-                        ), linear-gradient(
-                            to bottom,
-                            rgba(0,0,0,0.9) 0%,
-                            rgba(0,0,0,0.3) 60%,
-                            rgba(0,0,0,0.1) 90%,
-                            rgba(0,0,0,0)   100%
-                        );
-                        mask-composite: intersect;
-                        -webkit-mask-composite: destination-in;
-                        z-index: 0;
-                    "></div>
-
-                </div><!-- fecha grid 3 colunas -->        
-
-
-                
-            </div><!-- fecha flex col wrapper -->
-
+                </div>
             </article>
-
-            <!-- IMAGEM OVERLAY -->
-
-            <img
-                src="assets/images/articles/ceu_nuvem_esquerda.png"
-                alt=""
-                class="absolute left-15 -translate-x-1/2 bottom-[-130px] md:hidden md:bottom-[-160px] w-48 md:w-52 lg:w-64 z-30 pointer-events-none rotate-[-6deg]"
-                style="
-                    mask-image: linear-gradient(
-                        to left,
-                        rgba(0,0,0,1) 0%,
-                        rgba(0,0,0,0.95) 20%,
-                        rgba(0,0,0,0.9) 50%,
-                        rgba(0,0,0,0.6) 60%,
-                        rgba(0,0,0,0.3) 70%,
-                        rgba(0,0,0,0.1) 85%,
-                        rgba(0,0,0,0) 100%
-                    ),
-                    linear-gradient(
-                        to bottom,
-                        rgba(0,0,0,0.9) 0%,
-                        rgba(0,0,0,0.3) 60%,
-                        rgba(0,0,0,0.1) 90%,
-                        rgba(0,0,0,0) 100%
-                    );
-
-                    -webkit-mask-image: linear-gradient(
-                        to left,
-                        rgba(0,0,0,1) 0%,
-                        rgba(0,0,0,0.95) 20%,
-                        rgba(0,0,0,0.9) 50%,
-                        rgba(0,0,0,0.6) 60%,
-                        rgba(0,0,0,0.3) 70%,
-                        rgba(0,0,0,0.1) 85%,
-                        rgba(0,0,0,0) 100%
-                    ),
-                    linear-gradient(
-                        to bottom,
-                        rgba(0,0,0,0.9) 0%,
-                        rgba(0,0,0,0.3) 60%,
-                        rgba(0,0,0,0.1) 90%,
-                        rgba(0,0,0,0) 100%
-                    );
-
-                    mask-composite: intersect;
-                    -webkit-mask-composite: destination-in;
-
-                    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.22));
-                "
-            >
-
         </section>
 
 
-        <!-- ── CARD 3 ── -->
+        <!-- ═══════════ CARD 2 — Comece a Sonhar Alto ═══════════ -->
         <section class="relative w-full">
-            <article class="story-card relative mt-36 xl:mt-36 card-sky overflow-hidden mb-6 px-6 md:px-20 py-0 bg-[#0395D6]" data-chapter="3"
-                >
+            <article class="story-card relative card-sky-white-bg overflow-hidden -mt-24 xl:-mt-46 mb-6 xl:mb-12 px-6 xl:px-20 py-0" data-chapter="2">
 
-            <!-- Wrapper flex col -->
-            <div class="relative z-10 w-full flex flex-col">
+                <div class="relative z-10 w-full flex flex-col">
 
-                <!-- H2 com imagens de fundo apenas nessa row -->
-                 <!-- style="min-height: 560px;" -->
-                <div class="relative overflow-hidden flex flex-col justify-end px-6 md:px-20 -mx-6 md:-mx-20 mb-8 min-h-[260px] md:min-h-[560px]">
+                    <!-- Header -->
+                    <div class="relative flex flex-col justify-end px-6 xl:px-20 -mx-6 xl:-mx-20 mb-10 min-h-[280px] xl:min-h-[420px]">
+                        <div style="position:absolute;top:0;right:-2rem;width:55%;height:100%;background:url('assets/images/articles/ceu_nuvem_separada.png') center/contain no-repeat;mask-image:linear-gradient(to right,rgba(0,0,0,1) 0%,rgba(0,0,0,0.95) 20%,rgba(0,0,0,0.85) 40%,rgba(0,0,0,0.6) 55%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0.1) 85%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,1) 0%,rgba(0,0,0,0.95) 20%,rgba(0,0,0,0.85) 40%,rgba(0,0,0,0.6) 55%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0.1) 85%,rgba(0,0,0,0) 100%);mask-composite:intersect;-webkit-mask-composite:destination-in;z-index:0;"></div>
 
-                <!-- Camada 1: nuvem — só aqui -->
-                <div style="
-                    position: absolute;
-                    top: 0; left: 0;
-                    width: 100%; height: 100%;
-                    background: url('assets/images/articles/ceu_nuvens_fundo.jpg') center/cover no-repeat;
-                    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%);
-                    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%);
-                    z-index: 0;
-                "></div>
+                        <div class="relative" style="z-index:10;">
+                            <svg class="mb-6 xl:mb-10" width="56" height="56" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="20" fill="black"/>
+                                <text x="20" y="27" text-anchor="middle" font-size="20" fill="white" font-family="Agrandir, sans-serif" font-weight="bold">2</text>
+                            </svg>
+                            <h2 class="font-agrandir text-black text-4xl xl:text-7xl leading-[0.95] font-extrabold pb-8">
+                                Comece a<br>Sonhar Alto!
+                            </h2>
+                        </div>
+                    </div>
 
+                    <!-- Row única: texto | imagem | vídeo -->
+                    <div class="flex flex-col xl:flex-row xl:gap-10 xl:items-stretch mb-12 xl:mb-20">
 
-                <!-- Camada 2: avião — só aqui -->
-                <div class="h-[90%] md:h-[90%] -top-15 md:top-0 left-0"
-                style="
-                    position: absolute;
-                    width: 100%;                     
-                    background: url('assets/images/articles/embraer-195-azul.webp') center/cover no-repeat;
-                    opacity: 0.85;
-                    mix-blend-mode: multiply;
-                    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
-                    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
-                    z-index: 1;
-                "></div>
+                        <!-- Coluna 1: texto -->
+                        <div class="xl:w-1/3 flex-shrink-0 flex flex-col gap-4 -mt-4 xl:mt-0">
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                Sonhar alto não é só uma frase bonita. É acordar cedo pra estudar antes da escola. É assistir a documentários sobre aviação quando todo mundo tá vendo outra coisa. É treinar no simulador mesmo quando cansa.
+                            </p>
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                O meu primeiro voo sozinho no simulador foi um momento que nunca vou esquecer. Tremi um pouco na decolagem — mas quando o nariz subiu, eu senti que era isso. Era exatamente isso que eu queria fazer pelo resto da vida.
+                            </p>
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                Hoje eu entendo que o sonho não espera você estar pronto. Ele cresce junto com você — a cada livro lido, a cada hora de inglês, a cada voo no simulador. O segredo é não parar.
+                            </p>
+                        </div>
 
-                <!-- Avião decorativo -->
-                <img
-                    src="./images/sky-images/biplane-deco.png"
-                    alt=""
-                    style="position: absolute; top: -1.5rem; right: -1rem; width: 10rem; pointer-events: none; z-index: 15; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
-                >
+                        <!-- Coluna 2: imagem -->
+                        <div class="xl:w-1/3 flex-shrink-0 mt-8 xl:mt-0">
+                            <img
+                                src="assets/images/articles/helicopetero.jpeg"
+                                alt="Fred no helicóptero"
+                                class="w-full block h-full object-cover"
+                                style="aspect-ratio: 4/3;"
+                            >
+                        </div>
 
-                <!-- Ícone do capítulo + H2 — sobre as imagens -->
-                <div class="relative" style="z-index: 10;">
-                    <svg class="mb-4 md:mb-12" width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <mask id="number-cut-3">
-                        <rect width="40" height="40" fill="white"/>
-                        <text x="20" y="27" text-anchor="middle" font-size="20" font-family="Agrandir, sans-serif" font-weight="bold" fill="black">3</text>
-                        </mask>
-                    </defs>
-                    <circle cx="20" cy="20" r="20" fill="white" mask="url(#number-cut-3)"/>
-                    </svg>
+                        <!-- Coluna 3: vídeo -->
+                        <div class="xl:w-1/3 flex-shrink-0 mt-8 xl:mt-0 relative">
+                            <video
+                                src="assets/videos/primeiro_voo.mp4"
+                                class="w-full block h-full custom-video"
+                                style="object-fit: cover;"
+                                playsinline
+                            ></video>
+                            <div class="custom-overlay absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
+                                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
+                                    <polygon points="28,22 54,36 28,50" fill="#fff"/>
+                                </svg>
+                            </div>
+                        </div>
 
-                    <h2 class="font-agrandir text-white text-4xl md:text-8xl leading-[0.95] font-extrabold pb-8"
-                        style="text-shadow: 0 2px 12px rgba(80,140,200,0.18);">
-                    Conhecendo o CT <br>da Azul
-                    </h2>
+                    </div>
+
                 </div>
-
-                </div>
-
-                <!-- Grid 2 colunas — texto e vídeo -->
-                <div class="flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-stretch md:mt-4">
-                    <!-- COLUNA 1: imagem -->
-                    <div class="flex flex-col justify-center mt-8 md:mt-0">
-                        <img
-                        src="assets/images/articles/conhecendo_o_ct_1.jpeg"
-                        alt=""
-                        class="w-full block"
-                        style="height: auto; object-fit: contain;"
-                        >
-                    </div>
-
-                    <!-- COLUNA 1: texto -->
-                    <div class="flex flex-col justify-center mt-8 md:mt-0">
-                        <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis. 
-                        </p>
-                    </div>
-                </div><!-- fecha grid 2 colunas -->
-
-
-                <!-- Grid 2 colunas — texto e vídeo -->
-                <div class="flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-stretch md:mt-4">
-
-                    <!-- COLUNA 1: texto -->
-                    <div class="flex flex-col justify-center  mt-8 md:mt-0">
-                        <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis. 
-                        </p>
-                    </div>
-
-
-                    <!-- COLUNA 1: imagem -->
-                    <div class="flex flex-col justify-center mt-8 md:mt-0">
-                        <img
-                        src="assets/images/articles/conhecendo_o_ct_2.jpeg"
-                        alt=""
-                        class="w-full block"
-                        style="height: auto; object-fit: contain;"
-                        >
-                    </div>
-
-                </div><!-- fecha grid 2 colunas -->
-
-
-                <!-- Grid 3 colunas — parágrafo 1, vídeo, parágrafo 2 -->
-                <div class="flex flex-col md:grid md:grid-cols-3 md:gap-8 md:items-stretch md:mt-4">
-                <!-- COLUNA 1: parágrafo 1 -->
-                <div class="flex flex-col justify-start mt-8 md:mt-0">
-                    <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis.
-                    </p>
-                </div>
-
-                <!-- COLUNA 2: vídeo -->
-                <div>
-                    <div class="relative mt-8 md:mt-24" style="min-height: 300px;">
-                    <video 
-                        src="assets/videos/experienia_ct_azul.mp4"
-                        class="w-full h-full block custom-video"
-                        style="object-fit: cover;"
-                        playsinline
-                    ></video>
-                    <div class="custom-overlay absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
-                        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
-                        <polygon points="28,22 54,36 28,50" fill="#fff"/>
-                        </svg>
-                    </div>
-                    </div>
-                </div>
-
-                <!-- COLUNA 3: parágrafo 2 com bg fade -->
-                <div class="relative mt-8 md:-mt-0 flex flex-col justify-center -mx-7 md:mx-0 pb-8 px-7">
-                    <div class="md:hidden" style="
-                    position: absolute;
-                    top: 0; left: 0; right: 0; bottom: 0;
-                    background: url('./images/1/sky_clould_real_trabalhando.jpg') center center/cover no-repeat;
-                    mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
-                    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
-                    z-index: 0;
-                    "></div>
-                    <!-- <p class="font-agrandir-quote relative text-[1.3rem] leading-[1.2] pt-6 md:hidden" style="z-index: 1;">
-                    "Sou muito grato à equipe do CT pela oportunidade e pela experiência inesquecível, que fortaleceu ainda mais meu sonho de me tornar piloto."
-                    </p> -->
-
-
-                    <div class="md:-mt-24" style="max-width: 460px;">
-                    <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                        Proin mattis faucibus mattis.
-                    </p>
-                    </div>
-                </div>
-                </div><!-- fecha grid 3 colunas -->
-
-
-
-            </div><!-- fecha flex col wrapper -->
-
             </article>
-        </section>  
+
+            <!-- <img
+                src="assets/images/articles/ceu_nuvem_esquerda.png"
+                alt=""
+                class="absolute left-15 -translate-x-1/2 bottom-[-130px] xl:hidden w-48 z-30 pointer-events-none rotate-[-6deg]"
+                style="mask-image:linear-gradient(to left,rgba(0,0,0,1) 0%,rgba(0,0,0,0.95) 20%,rgba(0,0,0,0.9) 50%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0.1) 85%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.3) 60%,rgba(0,0,0,0.1) 90%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,1) 0%,rgba(0,0,0,0.95) 20%,rgba(0,0,0,0.9) 50%,rgba(0,0,0,0.6) 60%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0.1) 85%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.3) 60%,rgba(0,0,0,0.1) 90%,rgba(0,0,0,0) 100%);mask-composite:intersect;-webkit-mask-composite:destination-in;filter:drop-shadow(0 12px 28px rgba(0,0,0,0.22));"
+            > -->
+        </section>
+
+
+
+        <!-- ═══════════ CARD 3 — CT da Azul ═══════════ -->
+        <section class="relative w-full">
+            <article class="story-card relative mt-0 xl:mt-0 card-sky overflow-hidden mb-6 px-6 xl:px-20 py-0 bg-[#0395D6]" data-chapter="3">
+
+                <div class="relative z-10 w-full flex flex-col">
+
+                    <!-- Header -->
+                    <div class="relative overflow-hidden flex flex-col justify-end px-6 xl:px-20 -mx-6 xl:-mx-20 mb-10 min-h-[260px] xl:min-h-[420px]">
+                        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:url('assets/images/articles/ceu_nuvens_fundo.jpg') center/cover no-repeat;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);z-index:0;"></div>
+                        <div class="h-[90%] xl:h-[90%] -top-15 xl:top-0 left-0" style="position:absolute;width:100%;background:url('assets/images/articles/embraer-195-azul.webp') center/cover no-repeat;opacity:0.85;mix-blend-mode:multiply;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);z-index:1;"></div>
+                        <img src="./images/sky-images/biplane-deco.png" alt="" style="position:absolute;top:-1.5rem;right:-1rem;width:10rem;pointer-events:none;z-index:15;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));">
+
+                        <div class="relative" style="z-index:10;">
+                            <svg class="mb-4 xl:mb-10" width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <defs><mask id="number-cut-3"><rect width="40" height="40" fill="white"/><text x="20" y="27" text-anchor="middle" font-size="20" font-family="Agrandir, sans-serif" font-weight="bold" fill="black">3</text></mask></defs>
+                                <circle cx="20" cy="20" r="20" fill="white" mask="url(#number-cut-3)"/>
+                            </svg>
+                            <h2 class="font-agrandir text-white text-4xl xl:text-7xl leading-[0.95] font-extrabold pb-8" style="text-shadow:0 2px 12px rgba(80,140,200,0.18);">
+                                Conhecendo o CT <br>da Azul
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- Row única: [img1 + img2] | vídeo | texto -->
+                    <div class="flex flex-col xl:flex-row xl:gap-10 xl:items-stretch pb-12 xl:pb-20">
+
+                        <!-- Coluna 1: duas imagens empilhadas -->
+                        <div class="xl:w-1/3 flex-shrink-0 flex flex-col gap-4 mt-8 xl:mt-0">
+                            <img
+                                src="assets/images/articles/conhecendo_o_ct_1.jpeg"
+                                alt="Visitando o CT da Azul"
+                                class="w-full block object-cover flex-1"
+                                style="aspect-ratio: 4/3;"
+                            >
+                            <img
+                                src="assets/images/articles/conhecendo_o_ct_2.jpeg"
+                                alt="Dentro do simulador"
+                                class="w-full block object-cover flex-1"
+                                style="aspect-ratio: 4/3;"
+                            >
+                        </div>
+
+                        <!-- Coluna 2: vídeo -->
+                        <div class="xl:w-1/3 flex-shrink-0 mt-8 xl:mt-0 relative">
+                            <video
+                                src="assets/videos/experienia_ct_azul.mp4"
+                                class="w-full block h-full custom-video"
+                                style="object-fit: cover;"
+                                playsinline
+                            ></video>
+                            <div class="custom-overlay absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
+                                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
+                                    <polygon points="28,22 54,36 28,50" fill="#fff"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 3: texto -->
+                        <div class="xl:w-1/3 flex-shrink-0 flex flex-col gap-4 mt-8 xl:mt-0">
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                Quando recebi o convite para visitar o Centro de Treinamento da Azul, mal consegui dormir na noite anterior. Era o lugar onde pilotos reais se preparam — e eu ia estar lá dentro.
+                            </p>
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                A equipe da Azul me recebeu com muito carinho. Conheci simuladores de voo profissionais, entrei no cockpit de treinamento e conversei com pilotos que vivem exatamente o que eu sonho viver.
+                            </p>
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                Sou muito grato à equipe do CT pela oportunidade e pela experiência inesquecível. Aquele dia fortaleceu ainda mais o meu sonho de me tornar piloto.
+                            </p>
+                            <p class="font-dark-shadow text-2xl xl:text-3xl leading-[1.35]">
+                                Aquele dia me mostrou que o caminho é real, é possível — e que eu estou na direção certa. Cada estudo, cada hora no simulador, cada livro faz parte disso. O sonho não é só um sonho — é um plano.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </article>
+        </section>        
+
+
+
+        <!-- ═══════════ SOCIAL CTA FINAL ═══════════ -->
+        <section class="relative w-full overflow-hidden social-cta-section px-6 xl:px-20 py-20 xl:py-28">
+
+            <!-- BG: degradê de céu -->
+            <div class="absolute inset-0 social-bg pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col items-center text-center">
+
+                <h2 class="font-agrandir text-white text-3xl xl:text-6xl leading-tight font-extrabold mb-4">
+                    Acompanhe essa jornada
+                </h2>
+                <p class="font-dark-shadow-white text-lg xl:text-2xl max-w-xl mb-12 opacity-90">
+                    Mais de 35.000 pessoas já estão junto comigo. Entra nessa também — cada passo rumo ao cockpit acontece aqui.
+                </p>
+
+                <!-- Cards das redes sociais -->
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 xl:gap-6 w-full max-w-4xl">
+
+                    <!-- Instagram -->
+                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                        <div class="social-icon-wrap rounded-full p-3 bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <circle cx="12" cy="12" r="4"/>
+                                <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+                            </svg>
+                        </div>
+                        <span class="font-agrandir text-white font-extrabold text-lg">Instagram</span>
+                        <span class="text-white/60 text-sm">@flyfred</span>
+                    </a>
+
+                    <!-- YouTube -->
+                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                        <div class="social-icon-wrap rounded-full p-3 bg-[#FF0000]">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/>
+                            </svg>
+                        </div>
+                        <span class="font-agrandir text-white font-extrabold text-lg">YouTube</span>
+                        <span class="text-white/60 text-sm">@flyfred</span>
+                    </a>
+
+                    <!-- TikTok -->
+                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                        <div class="social-icon-wrap rounded-full p-3 bg-black">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z"/>
+                            </svg>
+                        </div>
+                        <span class="font-agrandir text-white font-extrabold text-lg">TikTok</span>
+                        <span class="text-white/60 text-sm">@flyfred</span>
+                    </a>
+
+                    <!-- Facebook -->
+                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                        <div class="social-icon-wrap rounded-full p-3 bg-[#1877F2]">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </div>
+                        <span class="font-agrandir text-white font-extrabold text-lg">Facebook</span>
+                        <span class="text-white/60 text-sm">/flyfred</span>
+                    </a>
+
+                </div>
+
+                <!-- Quote final -->
+                <p class="font-agrandir-quote mt-16 max-w-2xl text-white text-2xl xl:text-4xl leading-tight opacity-90">
+                    "Quem sonha alto, um dia decola."
+                </p>
+                <p class="font-dark-shadow-white text-white/60 mt-3 text-base">— Frederico, Fly Fred</p>
+
+            </div>
+        </section>
+
     </div>
 
-    
+
 </SharedHomeLayout>
+
 
 <script>
 document.querySelectorAll('.custom-video').forEach((video, i) => {
@@ -721,10 +551,10 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
             video.play();
         });
         video.addEventListener('pause', function() {
-        if (video.currentTime < video.duration) {
-            overlay.style.display = 'flex';
-            setTimeout(() => overlay.style.opacity = '1', 10);
-        }
+            if (video.currentTime < video.duration) {
+                overlay.style.display = 'flex';
+                setTimeout(() => overlay.style.opacity = '1', 10);
+            }
         });
         video.addEventListener('ended', function() {
             overlay.style.display = 'flex';
@@ -735,8 +565,10 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
 });
 </script>
 
+
 <style>
 
+/* ── Fontes ── */
 @font-face {
     font-family: 'Agrandir';
     src: url('/assets/fonts/PPAgrandir-GrandHeavy.otf') format('opentype');
@@ -744,27 +576,18 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     font-style: normal;
     letter-spacing: -0.02em;
 }
-
-.font-agrandir { font-family: 'Agrandir', sans-serif; }
-.font-agrandir-white-shadow { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #fff; text-shadow: 0 0.5px 0 #aaa !important; }
-
-
 @font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('/assets/fonts/bricolage.ttf') format('truetype');
-  font-weight: 100 900; /* ESSENCIAL */
-  font-display: swap;
+    font-family: 'Bricolage Grotesque';
+    src: url('/assets/fonts/bricolage.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
 }
-
-.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 900; font-size: 80px; }
-
 @font-face {
     font-family: 'Inter';
     src: url('/assets/fonts/Inter-ExtraLight-BETA.otf') format('opentype');
     font-weight: 300;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'Inter';
     src: url('/assets/fonts/Inter-ExtraLightItalic-BETA.otf') format('opentype');
@@ -772,21 +595,22 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     font-style: italic;
 }
 
+/* ── Utility classes ── */
+.font-agrandir               { font-family: 'Agrandir', sans-serif; }
+.font-agrandir-white-shadow  { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #fff; text-shadow: 0 0.5px 0 #aaa !important; }
+.font-bricolage              { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 900; font-size: 80px; }
+.font-inter                  { font-family: 'Inter', sans-serif; }
+.font-inter-light            { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; }
+.font-dark-shadow            { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #000; text-shadow: 0 0.5px 0 #111; }
+.font-inter-italic           { font-family: 'Inter', sans-serif; font-weight: 300; font-style: italic; }
+.font-agrandir-quote         { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #fff; }
+.font-dark-shadow-white      { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #fff !important; text-shadow: 0 0.5px 0 #fff !important; }
+.font-dark-shadow-blue       { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #0395D7 !important; text-shadow: 0 0.5px 0 #0395D7 !important; }
 
-
-
-.font-inter    { font-family: 'Inter', sans-serif; }
-.font-inter-light  { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; }
-.font-dark-shadow { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #000; text-shadow: 0 0.5px 0 #111; }
-.font-inter-italic { font-family: 'Inter', sans-serif; font-weight: 300; font-style: italic; }
-.font-agrandir-quote { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #0395D7; font-size: 2.4rem; line-height: 1.1; }
-.font-dark-shadow-white { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #fff !important; text-shadow: 0 0.5px 0 #fff !important; }
-.font-dark-shadow-blue { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #0395D7 !important; text-shadow: 0 0.5px 0 #0395D7 !important; }
-
-/* ── video bg ── */
-#plane-bg {
+/* ── Video BG ── */
+#plane-bg-DISBALED {
     position: absolute;
-    left: 0; right: 0; top: -40px;
+    left: 0; right: 0; top: -100px;
     width: 100%;
     height: calc(100% + 40px);
     object-fit: cover;
@@ -794,161 +618,72 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     z-index: 2;
 }
 
-/* ══════════════════════════════════════
-    CARD-SKY — base
-══════════════════════════════════════ */
+/* ── Hero ── */
+.hero-section {
+    min-height: clamp(280px, 44vh, 420px);
+    display: flex;
+    flex-direction: column;
+}
+.hero-title {
+    font-size: clamp(3rem, 8vw, 7rem);
+}
+.hero-avatar {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+}
+.hero-fade-bottom {
+    background: linear-gradient(to bottom, transparent, white);
+}
+
+/* ── Card Sky (dark) ── */
 .card-sky {
     position: relative;
     background: white;
     overflow: hidden;
 }
-
-/* Camada 1: nuvem */
-.card-sky .img-nuvem {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 95%;
-    background: url('./images/1/sky_clould_real_trabalhando.jpg') center/cover no-repeat;
-    mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1)   0%,
-    rgba(0,0,0,0.9) 35%,
-    rgba(0,0,0,0.4) 55%,
-    rgba(0,0,0,0.6) 75%,
-    rgba(0,0,0,0)   100%
-    );
-    -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1)   0%,
-    rgba(0,0,0,0.9) 35%,
-    rgba(0,0,0,0.4) 55%,
-    rgba(0,0,0,0.6) 75%,
-    rgba(0,0,0,0)   100%
-    );
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Camada 2: avião */
-.card-sky .img-aviao {
-    position: absolute;
-    top: 0; 
-    left: 0;
-    width: 100%;
-    height: 20%;
-    background: url('./images/1/embraer-195-azul.webp') center/cover no-repeat;
-    opacity: 0.85;
-    mix-blend-mode: multiply;
-    mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1)   0%,
-    rgba(0,0,0,0.9) 45%,
-    rgba(0,0,0,0.8) 65%,
-    rgba(0,0,0,0.5) 75%,
-    rgba(0,0,0,0)   100%
-    );
-    -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1)   0%,
-    rgba(0,0,0,0.9) 45%,
-    rgba(0,0,0,0.8) 65%,
-    rgba(0,0,0,0.5) 75%,
-    rgba(0,0,0,0)   100%
-    );
-    z-index: 2;
-    pointer-events: none;
-}
-
-/* Conteúdo do card — acima das imagens */
 .card-sky > *:not(.img-nuvem):not(.img-aviao) {
     position: relative;
     z-index: 10;
 }
-
-/* Avião decorativo — ancorado no article via absolute */
+.card-sky .img-nuvem {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 95%;
+    background: url('./images/1/sky_clould_real_trabalhando.jpg') center/cover no-repeat;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.6) 75%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.6) 75%, rgba(0,0,0,0) 100%);
+    z-index: 1; pointer-events: none;
+}
 .card-sky .biplane-deco {
-    position: absolute;
-    top: -1.5rem;
-    right: -1rem;
-    width: 10rem;
-    pointer-events: none;
-    select: none;
-    z-index: 15;
+    position: absolute; top: -1.5rem; right: -1rem;
+    width: 10rem; pointer-events: none; z-index: 15;
 }
 
-
-/* ══════════════════════════════════════
-    CARD-SKY — white background
-══════════════════════════════════════ */
+/* ── Card Sky White BG ── */
 .card-sky-white-bg {
     position: relative;
     background: white;
     overflow: hidden;
 }
-
-/* Camada 1: nuvem */
 .card-sky-white-bg .img-nuvem {
-    position: absolute;
-    top: 20px; 
-    left: 0;
-    width: 100%;
-    height: 80%;
+    position: absolute; top: 20px; left: 0;
+    width: 100%; height: 80%;
     background: url('./images/1/atsadawut-chaiseeha-Mv3mEpWDhSM-unsplash.png') center/cover no-repeat;
-    mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1)   0%,
-    rgba(0,0,0,0.9) 35%,
-    rgba(0,0,0,0.4) 55%,
-    rgba(0,0,0,0.6) 75%,
-    rgba(0,0,0,0)   100%
-    );
-    -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1)   0%,
-    rgba(0,0,0,0.9) 35%,
-    rgba(0,0,0,0.4) 55%,
-    rgba(0,0,0,0.6) 75%,
-    rgba(0,0,0,0)   100%
-    );
-    z-index: 1;
-    pointer-events: none;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.6) 75%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.6) 75%, rgba(0,0,0,0) 100%);
+    z-index: 1; pointer-events: none;
 }
 
-/* ── Pagination dots ── */
-.pagination-dots {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex; flex-direction: column; gap: 0.45rem;
-    z-index: 20;
+/* ── Social CTA ── */
+.social-cta-section {
+    background: #0395D6;
 }
-.dot {
-    width: 0.7rem; height: 0.7rem;
-    border-radius: 9999px;
-    background: #1a1a1a;
-    flex-shrink: 0;
-    transition: transform 0.2s;
+.social-bg {
+    background: linear-gradient(160deg, #0a2a5e 0%, #0395D6 45%, #5bc8f5 100%);
 }
-.dot.active {
-    width: 1.6rem; height: 1.6rem;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 0.65rem; font-weight: 700;
+.social-card {
+    backdrop-filter: blur(8px);
 }
 
-/* ── Número do capítulo ── */
-.chapter-dot {
-    width: 2.1rem; height: 2.1rem;
-    background: #fff; color: #000;
-    border-radius: 9999px;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700; font-size: 0.85rem;
-    flex-shrink: 0;
-}
-
-/* ── Foto vintage ── */
+/* ── Helpers ── */
 .photo-frame {
     border-radius: 0.5rem;
     overflow: hidden;
@@ -959,25 +694,9 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     object-fit: cover; display: block;
 }
 
-/* ── Texto ── */
-.card-text {
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-    font-style: normal;
-    color: #000;
-    text-shadow: 0 0.5px 0 #111;
-}
-
-/* ── Seção wrapper ── */
-.story-section {
-    max-width: 430px;
-    margin: 0 auto;
-}
-
 h1 {
-  font-variation-settings: "wght" 700, "wdth" 110;
+    font-variation-settings: "wght" 700, "wdth" 110;
 }
-
 </style>
 
 <style is:global>
