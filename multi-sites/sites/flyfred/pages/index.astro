@@ -24,6 +24,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
+        <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
         <JsonLdHomePageBase
             faqList={[]}
             servicesList={[]}
@@ -91,6 +92,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 class="w-48 h-48 md:w-56 md:h-56 lg:w-72 lg:h-72 rounded-full object-cover object-top border-3 border-white ring-[3px] ring-white/20 mb-8"
             />
 
+                
             <h1 class="font-agrandir text-white text-5xl md:text-7xl lg:text-8xl leading-none font-extrabold">
                 Voa <br> Fred!
             </h1>
@@ -746,6 +748,16 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
 .font-agrandir { font-family: 'Agrandir', sans-serif; }
 .font-agrandir-white-shadow { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #fff; text-shadow: 0 0.5px 0 #aaa !important; }
 
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('/assets/fonts/bricolage.ttf') format('truetype');
+  font-weight: 100 900; /* ESSENCIAL */
+  font-display: swap;
+}
+
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 900; font-size: 80px; }
+
 @font-face {
     font-family: 'Inter';
     src: url('/assets/fonts/Inter-ExtraLight-BETA.otf') format('opentype');
@@ -759,6 +771,9 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     font-weight: 300;
     font-style: italic;
 }
+
+
+
 
 .font-inter    { font-family: 'Inter', sans-serif; }
 .font-inter-light  { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; }
@@ -957,6 +972,10 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
 .story-section {
     max-width: 430px;
     margin: 0 auto;
+}
+
+h1 {
+  font-variation-settings: "wght" 700, "wdth" 110;
 }
 
 </style>
