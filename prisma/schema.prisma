@@ -308,6 +308,7 @@ model business {
   status_3                       status_3[]
   status_4                       status_4[]
   status_5                       status_5[]
+  transactions                   transactions[]
   web_page                       web_page[]
   web_page_faq                   web_page_faq[]
   web_page_section               web_page_section[]
@@ -415,6 +416,7 @@ model customer {
   is_robot_created      Boolean?
   whatsapp              BigInt?
   whats_image_uuid      String?             @db.Char(32)
+  name_metaphone        String?             @db.VarChar(255)
   business              business            @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_business_id_9c8f4e32_fk_business_id")
   customer_origin       customer_origin?    @relation(fields: [customer_origin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_customer_origin_id_6bc96641_fk_customer_origin_id")
   customer_status       customer_status?    @relation(fields: [customer_status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_customer_status_id_a38837dc_fk_customer_status_id")
@@ -431,6 +433,7 @@ model customer {
   @@index([sales_funnel_stage_id], map: "customer_sales_funnel_stage_id_4029c80e_fk_sales_funnel_stage_id")
   @@index([wa_timestamp], map: "customer_wa_timestamp_43b702b1")
   @@index([whatsapp], map: "customer_whatsapp_05a2f19d")
+  @@index([name_metaphone], map: "customer_name_metaphone_48d3deb5")
 }
 
 model customer_order {
@@ -488,6 +491,7 @@ model customer_order {
   customer_order_catalog_item    customer_order_catalog_item[]
   customer_order_ofx_transaction customer_order_ofx_transaction[]
   finance_budgetevidence         finance_budgetevidence?
+  transactions                   transactions[]
 
   @@index([appointment_date_1], map: "customer_order_appointment_date_1_38f7d1b9")
   @@index([appointment_date_2], map: "customer_order_appointment_date_2_cf3516f5")
@@ -1312,4 +1316,30 @@ model blog_article_related_articles {
 
   @@unique([from_blogarticle_id, to_blogarticle_id], map: "blog_article_related_art_from_blogarticle_id_to_b_f04f4c5d_uniq")
   @@index([to_blogarticle_id], map: "blog_article_related_to_blogarticle_id_dea33c17_fk_blog_arti")
+}
+
+model transactions {
+  created           DateTime        @db.DateTime(6)
+  modified          DateTime        @db.DateTime(6)
+  is_removed        Boolean
+  id                String          @id @db.Char(32)
+  imap_uid          Int?            @unique(map: "imap_uid")
+  cnpj              String?         @db.VarChar(32)
+  operation         String          @db.VarChar(3)
+  name              String          @db.VarChar(255)
+  type              String          @db.VarChar(10)
+  person_name       String          @db.VarChar(255)
+  amount            Float
+  transaction_date  DateTime        @db.DateTime(6)
+  parse_sources     String?         @db.LongText
+  body              String?         @db.LongText
+  status            String          @db.VarChar(20)
+  description       String?         @db.LongText
+  business_id       String          @db.Char(32)
+  customer_order_id String?         @db.Char(32)
+  business          business        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_business_id_b6e92cd9_fk_business_id")
+  customer_order    customer_order? @relation(fields: [customer_order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_customer_order_id_0b88110e_fk_customer_order_id")
+
+  @@index([business_id], map: "transactions_business_id_b6e92cd9_fk_business_id")
+  @@index([customer_order_id], map: "transactions_customer_order_id_0b88110e_fk_customer_order_id")
 }
