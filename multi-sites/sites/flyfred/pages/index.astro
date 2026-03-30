@@ -339,7 +339,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             <div class="relative z-10 w-full flex flex-col">
                 <!-- H2 com nuvem à direita -->
                 <div class="relative flex flex-col justify-end px-6 md:px-20 -mx-6 md:-mx-20 mb-8 min-h-[300px] lg:min-h-[560px]">
-
                     <!-- Nuvem — lado direito, com fade nas bordas -->
                     <div style="
                         position: absolute;
@@ -387,9 +386,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                         Comece a<br>Sonhar Alto!
                         </h2>
                     </div>
-
                 </div>
-
 
                 <!-- Grid 3 colunas — texto, vídeo, texto -->
                 <div class="flex flex-col md:grid md:grid-cols-3 md:gap-8 md:items-stretch -mt-24 md:mt-4">
@@ -412,17 +409,15 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                         </p>
                     </div>
 
-
                     <!-- COLUNA 3: vídeo -->
                     <div class="relative mt-8 md:mt-0">
                         <video
-                        id="video-2"
                         src="assets/videos/primeiro_voo.mp4"
-                        class="w-full block"
+                        class="w-full block custom-video"
                         style="height: auto; object-fit: contain;"
                         playsinline
                         ></video>
-                        <div id="video-2-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
+                        <div class="custom-overlay absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
                         <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
                             <polygon points="28,22 54,36 28,50" fill="#fff"/>
@@ -545,7 +540,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             <div class="relative z-10 w-full flex flex-col">
 
                 <!-- H2 com imagens de fundo apenas nessa row -->
-                <div class="relative overflow-hidden flex flex-col justify-end px-6 md:px-20 -mx-6 md:-mx-20 mb-8" style="min-height: 560px;">
+                 <!-- style="min-height: 560px;" -->
+                <div class="relative overflow-hidden flex flex-col justify-end px-6 md:px-20 -mx-6 md:-mx-20 mb-8 min-h-[260px] md:min-h-[560px]">
 
                 <!-- Camada 1: nuvem — só aqui -->
                 <div style="
@@ -560,10 +556,10 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
 
                 <!-- Camada 2: avião — só aqui -->
-                <div style="
+                <div class="h-[90%] md:h-[90%] -top-15 md:top-0 left-0"
+                style="
                     position: absolute;
-                    top: 0; left: 0;
-                    width: 100%; height: 50%;
+                    width: 100%;                     
                     background: url('assets/images/articles/embraer-195-azul.webp') center/cover no-repeat;
                     opacity: 0.85;
                     mix-blend-mode: multiply;
@@ -612,7 +608,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     </div>
 
                     <!-- COLUNA 1: texto -->
-                    <div class="flex flex-col justify-center">
+                    <div class="flex flex-col justify-center mt-8 md:mt-0">
                         <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                         Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
@@ -626,7 +622,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 <div class="flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-stretch md:mt-4">
 
                     <!-- COLUNA 1: texto -->
-                    <div class="flex flex-col justify-center">
+                    <div class="flex flex-col justify-center  mt-8 md:mt-0">
                         <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                         Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
@@ -651,7 +647,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 <!-- Grid 3 colunas — parágrafo 1, vídeo, parágrafo 2 -->
                 <div class="flex flex-col md:grid md:grid-cols-3 md:gap-8 md:items-stretch md:mt-4">
                 <!-- COLUNA 1: parágrafo 1 -->
-                <div class="flex flex-col justify-start">
+                <div class="flex flex-col justify-start mt-8 md:mt-0">
                     <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                         Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
@@ -661,24 +657,20 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
                 <!-- COLUNA 2: vídeo -->
                 <div>
-
                     <div class="relative mt-8 md:mt-24" style="min-height: 300px;">
-                    
                     <video 
-                        id="ct-azul-video"
                         src="assets/videos/experienia_ct_azul.mp4"
-                        class="w-full h-full block"
+                        class="w-full h-full block custom-video"
                         style="object-fit: cover;"
                         playsinline
                     ></video>
-                    <div id="ct-azul-play-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
+                    <div class="custom-overlay absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-200 z-20">
                         <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.55)"/>
                         <polygon points="28,22 54,36 28,50" fill="#fff"/>
                         </svg>
                     </div>
                     </div>
-
                 </div>
 
                 <!-- COLUNA 3: parágrafo 2 com bg fade -->
@@ -712,47 +704,36 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
             </article>
         </section>  
-
-        <h2>Importância de estudar inglês</h2>
-        
-        <h2>Uso as redes sociais para compartilhar minha 
-            jornada e inspirar outras crianças e 
-            jovens a seguirem seus sonhos</h2>
-
-        <h2>A experiencia com o Helicóptero</h2>
-
-        <!-- <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-        -->
-        <script>
-            // Play overlay logic for CT Azul video
-            const video = document.getElementById('ct-azul-video');
-            const overlay = document.getElementById('ct-azul-play-overlay');
-            if (video && overlay) {
-            overlay.addEventListener('click', function() {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.style.display = 'none', 200);
-                video.play();
-            });
-            video.addEventListener('pause', function() {
-                if (video.currentTime < video.duration) {
-                overlay.style.display = 'flex';
-                setTimeout(() => overlay.style.opacity = '1', 10);
-                }
-            });
-            video.addEventListener('ended', function() {
-                overlay.style.display = 'flex';
-                setTimeout(() => overlay.style.opacity = '1', 10);
-                video.currentTime = 0;
-            });
-            }
-        </script>
-
-
     </div>
 
     
 </SharedHomeLayout>
+
+<script>
+document.querySelectorAll('.custom-video').forEach((video, i) => {
+    const overlay = document.querySelectorAll('.custom-overlay')[i];
+    if (video && overlay) {
+        overlay.addEventListener('click', function() {
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 200);
+            video.play();
+        });
+        video.addEventListener('pause', function() {
+        if (video.currentTime < video.duration) {
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.opacity = '1', 10);
+        }
+        });
+        video.addEventListener('ended', function() {
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.opacity = '1', 10);
+            video.currentTime = 0;
+        });
+    }
+});
+</script>
+
+
 
 
 <style>
@@ -784,11 +765,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 .font-inter    { font-family: 'Inter', sans-serif; }
 .font-inter-light  { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; }
 .font-dark-shadow { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #000; text-shadow: 0 0.5px 0 #111; }
-
 .font-inter-italic { font-family: 'Inter', sans-serif; font-weight: 300; font-style: italic; }
 .font-agrandir-quote { font-family: 'Agrandir', sans-serif; font-weight: 800; color: #0395D7; font-size: 2.4rem; line-height: 1.1; }
-
-
 .font-dark-shadow-white { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #fff !important; text-shadow: 0 0.5px 0 #fff !important; }
 .font-dark-shadow-blue { font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; color: #0395D7 !important; text-shadow: 0 0.5px 0 #0395D7 !important; }
 
@@ -887,9 +865,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 }
 
 
-
-
-
 /* ══════════════════════════════════════
     CARD-SKY — white background
 ══════════════════════════════════════ */
@@ -926,9 +901,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     z-index: 1;
     pointer-events: none;
 }
-
-
-
 
 /* ── Pagination dots ── */
 .pagination-dots {
@@ -991,17 +963,5 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
 </style>
 
-
 <style is:global>
-    .home-layout p,
-    .home-layout h3,
-    .home-layout ul,
-    .home-layout a,
-    .home-layout span {
-        color: #1b375c !important;
-    }
-
-    .home-main {
-        min-height: 100vh;
-    }
 </style>
