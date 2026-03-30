@@ -54,34 +54,34 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 class="absolute inset-0 w-full h-full object-cover"
                 alt="Sky background"
             >
-            <!-- <div class="absolute inset-0 bg-black/15"></div> -->
 
             <!-- Plano de animação -->
             <div id="plane-layer" class="absolute inset-0 z-20 pointer-events-none"></div>
 
             <!-- ── NAV TOPO ── -->
             <nav class="relative z-30 flex items-center justify-between px-6 xl:px-20 pt-6 pb-2">
-                <span class="font-agrandir text-white text-xl font-extrabold tracking-tight opacity-90">Fly Fred</span>
+                <span class="font-agrandir text-black text-xl font-extrabold tracking-tight opacity-90">Fly Fred</span>
                 <div class="flex items-center gap-5">
-                    <a href="#" aria-label="Facebook" class="text-white/70 hover:text-white transition-colors">
+                    <!-- Ícones redes sociais em preto -->
+                    <a href="#" aria-label="Facebook" class="text-black/70 hover:text-black transition-colors">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                         </svg>
                     </a>
-                    <a href="#" aria-label="Instagram" class="text-white/70 hover:text-white transition-colors">
+                    <a href="#" aria-label="Instagram" class="text-black/70 hover:text-black transition-colors">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                             <circle cx="12" cy="12" r="4"/>
                             <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
                         </svg>
                     </a>
-                    <a href="#" aria-label="YouTube" class="text-white/70 hover:text-white transition-colors">
+                    <a href="#" aria-label="YouTube" class="text-black/70 hover:text-black transition-colors">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
                             <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"/>
                         </svg>
                     </a>
-                    <a href="#" aria-label="TikTok" class="text-white/70 hover:text-white transition-colors">
+                    <a href="#" aria-label="TikTok" class="text-black/70 hover:text-black transition-colors">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z"/>
                         </svg>
@@ -96,11 +96,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     <img
                         src="assets/images/hero/fred_com_uniforme_painted_trabalhando.png"
                         alt="Fred, piloto campeão"
-                        class="hero-avatar w-20 h-20 xl:w-36 xl:h-36 rounded-full object-cover object-top border-2 border-white ring-[2px] ring-white/20 flex-shrink-0"
+                        class="hero-avatar w-20 h-20 xl:w-36 xl:h-36 rounded-full object-cover object-top border-2 border-black ring-[2px] ring-black/20 flex-shrink-0"
                     />
                     <div class="relative">
                         <div class="relative p-2">
-                            <p class="text-white text-sm xl:text-base uppercase tracking-widest opacity-80 mb-1">
+                            <p class="text-black text-sm xl:text-base uppercase tracking-widest opacity-90 mb-1" style="text-shadow: 1px 1px 3px rgba(255,255,255,0.5);">
                                 · Piloto em formação
                             </p>
                         </div>
@@ -109,19 +109,13 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
                 <!-- Direita: título + frase + CTA -->
                 <div class="flex flex-col items-start xl:items-end text-left xl:text-right xl:max-w-2xl">
-                    <h1 class="font-agrandir text-white hero-title leading-none font-extrabold">
+                    <h1 class="font-agrandir text-black hero-title leading-none font-extrabold" style="text-shadow: 2px 2px 4px rgba(255,255,255,0.5);">
                         Voa Fred!
                     </h1>
-                    <p class="font-dark-shadow-white mt-4 max-w-lg text-white text-base xl:text-xl leading-relaxed">
+                    <p class="mt-4 max-w-lg text-black text-base xl:text-xl leading-relaxed" style="text-shadow: 1px 1px 3px rgba(255,255,255,0.5);">
                         "Eu ainda sou pequeno, mas o meu sonho de me tornar piloto é grande.
                         Quem sonha alto, um dia decola."
                     </p>
-                    <!-- <a href="#sobre" class="mt-6 inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-sm xl:text-base px-6 py-2.5 rounded-full hover:bg-[#f0cc20] transition-colors">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                        Conhece minha história
-                    </a> -->
                 </div>
             </div>
 
@@ -139,40 +133,38 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             > -->
 
 
-<div class="absolute bottom-0 left-0 w-full h-64 pointer-events-none" style="
-    background: url('./images/details/sky_clouds_trabalhando.svg') center top / cover no-repeat;
-    opacity: 0.2;
-    mask-image: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,0) 18%,
-        rgba(0,0,0,0.01) 28%,
-        rgba(0,0,0,0.03) 38%,
-        rgba(0,0,0,0.07) 48%,
-        rgba(0,0,0,0.14) 58%,
-        rgba(0,0,0,0.26) 68%,
-        rgba(0,0,0,0.45) 78%,
-        rgba(0,0,0,0.68) 88%,
-        rgba(0,0,0,0.88) 95%,
-        rgba(0,0,0,1) 100%
-    );
-    -webkit-mask-image: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,0) 18%,
-        rgba(0,0,0,0.01) 28%,
-        rgba(0,0,0,0.03) 38%,
-        rgba(0,0,0,0.07) 48%,
-        rgba(0,0,0,0.14) 58%,
-        rgba(0,0,0,0.26) 68%,
-        rgba(0,0,0,0.45) 78%,
-        rgba(0,0,0,0.68) 88%,
-        rgba(0,0,0,0.88) 95%,
-        rgba(0,0,0,1) 100%
-    );
-"></div>
-
-
+            <div class="absolute bottom-0 left-0 w-full h-64 pointer-events-none" style="
+                background: url('./images/details/sky_clouds_trabalhando.svg') center top / cover no-repeat;
+                opacity: 0.2;
+                mask-image: linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0) 18%,
+                    rgba(0,0,0,0.01) 28%,
+                    rgba(0,0,0,0.03) 38%,
+                    rgba(0,0,0,0.07) 48%,
+                    rgba(0,0,0,0.14) 58%,
+                    rgba(0,0,0,0.26) 68%,
+                    rgba(0,0,0,0.45) 78%,
+                    rgba(0,0,0,0.68) 88%,
+                    rgba(0,0,0,0.88) 95%,
+                    rgba(0,0,0,1) 100%
+                );
+                -webkit-mask-image: linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0) 18%,
+                    rgba(0,0,0,0.01) 28%,
+                    rgba(0,0,0,0.03) 38%,
+                    rgba(0,0,0,0.07) 48%,
+                    rgba(0,0,0,0.14) 58%,
+                    rgba(0,0,0,0.26) 68%,
+                    rgba(0,0,0,0.45) 78%,
+                    rgba(0,0,0,0.68) 88%,
+                    rgba(0,0,0,0.88) 95%,
+                    rgba(0,0,0,1) 100%
+                );
+            "></div>
 
 
             <div class="relative z-10 w-full">
