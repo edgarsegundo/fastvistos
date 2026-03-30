@@ -430,9 +430,12 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                         </div>
                     </div>
 
-                    <!-- Nuvem — lado direito, com fade nas bordas -->
-                    <div style="position: absolute; bottom: -50px; left: -300px;
-                        width: 55%; 
+                    <!-- Nuvem — lado esquerdo, com fade nas bordas -->
+                    <div 
+                    style="position: absolute; 
+                        bottom: -50px; 
+                        md:left:-80px;
+                        width: 40%; 
                         height: 50%;
                         background: url('assets/images/articles/ceu_nuvem_esquerda.png') center/contain no-repeat;
                         mask-image: linear-gradient(
@@ -479,11 +482,63 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             </div><!-- fecha flex col wrapper -->
 
             </article>
+
+            <!-- IMAGEM OVERLAY -->
+
+            <img
+                src="assets/images/articles/ceu_nuvem_esquerda.png"
+                alt=""
+                class="absolute left-15 -translate-x-1/2 bottom-[-130px] md:hidden md:bottom-[-160px] w-48 md:w-52 lg:w-64 z-30 pointer-events-none rotate-[-6deg]"
+                style="
+                    mask-image: linear-gradient(
+                        to left,
+                        rgba(0,0,0,1) 0%,
+                        rgba(0,0,0,0.95) 20%,
+                        rgba(0,0,0,0.9) 50%,
+                        rgba(0,0,0,0.6) 60%,
+                        rgba(0,0,0,0.3) 70%,
+                        rgba(0,0,0,0.1) 85%,
+                        rgba(0,0,0,0) 100%
+                    ),
+                    linear-gradient(
+                        to bottom,
+                        rgba(0,0,0,0.9) 0%,
+                        rgba(0,0,0,0.3) 60%,
+                        rgba(0,0,0,0.1) 90%,
+                        rgba(0,0,0,0) 100%
+                    );
+
+                    -webkit-mask-image: linear-gradient(
+                        to left,
+                        rgba(0,0,0,1) 0%,
+                        rgba(0,0,0,0.95) 20%,
+                        rgba(0,0,0,0.9) 50%,
+                        rgba(0,0,0,0.6) 60%,
+                        rgba(0,0,0,0.3) 70%,
+                        rgba(0,0,0,0.1) 85%,
+                        rgba(0,0,0,0) 100%
+                    ),
+                    linear-gradient(
+                        to bottom,
+                        rgba(0,0,0,0.9) 0%,
+                        rgba(0,0,0,0.3) 60%,
+                        rgba(0,0,0,0.1) 90%,
+                        rgba(0,0,0,0) 100%
+                    );
+
+                    mask-composite: intersect;
+                    -webkit-mask-composite: destination-in;
+
+                    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.22));
+                "
+            >
+
         </section>
+
 
         <!-- ── CARD 3 ── -->
         <section class="relative w-full">
-            <article class="story-card relative mt-24 xl:mt-36 card-sky overflow-hidden mb-6 px-6 md:px-20 py-0 bg-[#0395D6]" data-chapter="3"
+            <article class="story-card relative mt-36 xl:mt-36 card-sky overflow-hidden mb-6 px-6 md:px-20 py-0 bg-[#0395D6]" data-chapter="3"
                 >
 
             <!-- Wrapper flex col -->
@@ -502,6 +557,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%);
                     z-index: 0;
                 "></div>
+
 
                 <!-- Camada 2: avião — só aqui -->
                 <div style="
@@ -545,57 +601,49 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
                 <!-- Grid 2 colunas — texto e vídeo -->
                 <div class="flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-stretch md:mt-4">
+                    <!-- COLUNA 1: imagem -->
+                    <div class="flex flex-col justify-center mt-8 md:mt-0">
+                        <img
+                        src="assets/images/articles/conhecendo_o_ct_1.jpeg"
+                        alt=""
+                        class="w-full block"
+                        style="height: auto; object-fit: contain;"
+                        >
+                    </div>
 
-
-                <!-- COLUNA 1: imagem -->
-                <div class="flex flex-col justify-center mt-8 md:mt-0">
-                    <img
-                    src="./images/1/conhecendo_o_ct_1.jpeg"
-                    alt=""
-                    class="w-full block"
-                    style="height: auto; object-fit: contain;"
-                    >
-                </div>
-
-                <!-- COLUNA 1: texto -->
-                <div class="flex flex-col justify-center">
-                    <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                    Proin mattis faucibus mattis. 
-                    </p>
-                </div>
-
-
-
+                    <!-- COLUNA 1: texto -->
+                    <div class="flex flex-col justify-center">
+                        <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
+                        Proin mattis faucibus mattis. 
+                        </p>
+                    </div>
                 </div><!-- fecha grid 2 colunas -->
 
 
                 <!-- Grid 2 colunas — texto e vídeo -->
                 <div class="flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-stretch md:mt-4">
 
-                <!-- COLUNA 1: texto -->
-                <div class="flex flex-col justify-center">
-                    <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
-                    Proin mattis faucibus mattis. 
-                    </p>
-                </div>
+                    <!-- COLUNA 1: texto -->
+                    <div class="flex flex-col justify-center">
+                        <p class="font-dark-shadow text-xl md:text-2xl leading-[1.4]">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Nullam nibh enim, molestie tempor fringilla eget, dapibus id erat. 
+                        Proin mattis faucibus mattis. 
+                        </p>
+                    </div>
 
 
-                <!-- COLUNA 1: imagem -->
-                <div class="flex flex-col justify-center mt-8 md:mt-0">
-                    <img
-                    src="./images/1/conhecendo_o_ct_2.jpeg"
-                    alt=""
-                    class="w-full block"
-                    style="height: auto; object-fit: contain;"
-                    >
-                </div>
-
-
-
+                    <!-- COLUNA 1: imagem -->
+                    <div class="flex flex-col justify-center mt-8 md:mt-0">
+                        <img
+                        src="assets/images/articles/conhecendo_o_ct_2.jpeg"
+                        alt=""
+                        class="w-full block"
+                        style="height: auto; object-fit: contain;"
+                        >
+                    </div>
 
                 </div><!-- fecha grid 2 colunas -->
 
@@ -618,7 +666,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     
                     <video 
                         id="ct-azul-video"
-                        src="./images/1/experienia_ct_azul.mp4"
+                        src="assets/videos/experienia_ct_azul.mp4"
                         class="w-full h-full block"
                         style="object-fit: cover;"
                         playsinline
