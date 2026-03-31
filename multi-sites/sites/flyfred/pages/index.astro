@@ -627,7 +627,7 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     // Carrega keyframes e sprite sheet JSON
     Promise.all([
         fetch('assets/videos/plane-keyframes-reduced.json').then(r => r.json()),
-        fetch('assets/videos/plane-sprite.json').then(r => r.json())
+        fetch('assets/videos/plane-sprite-optimized.json').then(r => r.json())
     ]).then(([keyframesData, spriteData]) => {
         keyframes = keyframesData;
         TOTAL_FRAMES = spriteData.frames.length;
@@ -637,7 +637,7 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     let spriteImg, spriteFrames;
     function loadSprite(spriteData) {
         spriteImg = new Image();
-        spriteImg.src = 'assets/videos/plane-sprite.png';
+        spriteImg.src = 'assets/videos/plane-sprite-optimized.png';
         spriteFrames = spriteData.frames;
         spriteImg.onload = () => startAnimation();
     }
