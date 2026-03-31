@@ -248,6 +248,9 @@ const Editor = {
     const keyframes = this._buildKeyframes();
     const TOTAL_FRAMES = keyframes.length;
 
+    // Serializa keyframes para JSON
+    const keyframesJson = JSON.stringify(keyframes, null, 2);
+
     // ── Modo export: transparente, sem grid, sem markers, sem linha
     scene.background = null;
     renderer.setClearColor(0x000000, 0);
@@ -293,8 +296,12 @@ const Editor = {
     document.head.appendChild(script);
     await new Promise(r => script.onload = r);
 
+
     const zip = new JSZip();
+    // Adiciona PNGs
     frames.forEach(({ name, blob }) => zip.file(name, blob));
+    // Adiciona keyframes.json
+    zip.file('plane-keyframes.json', keyframesJson);
 
     const zipBlob = await zip.generateAsync({ type: 'blob' }, (meta) => {
       progress.textContent = `Comprimindo... ${meta.percent.toFixed(0)}%`;

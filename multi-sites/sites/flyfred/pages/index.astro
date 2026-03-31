@@ -602,18 +602,19 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
 
 
 <script>
+// Animação do avião com deslocamento real usando keyframes
 (function() {
     const canvas = document.getElementById('plane-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    const TOTAL_FRAMES = 300;
-    const FPS = 30;
+    const FPS = 15;
     const images = [];
+    let keyframes = [];
     let loaded = 0;
     let currentFrame = 0;
+    let TOTAL_FRAMES = 0;
 
-    // Ajusta tamanho do canvas ao container
     function resize() {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
@@ -621,24 +622,90 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     resize();
     window.addEventListener('resize', resize);
 
+    // Carrega keyframes JSON primeiro
+    fetch('assets/videos/plane-frames/plane-keyframes.json')
+        .then(r => r.json())
+        .then(json => {
+            keyframes = json;
+            TOTAL_FRAMES = keyframes.length;
+            preloadImages();
+        });
+
+
+    function preloadImages() {
+        for (let i = 1; i <= TOTAL_FRAMES; i++) {
+            const img = new Image();
+            img.src = `assets/videos/plane-frames/plane-${String(i).padStart(4, '0')}.png`;
+            img.onload = () => {
+                loaded++;
+                if (loaded === TOTAL_FRAMES) startAnimation();
+            };
+            images.push(img);
+        }
+    }        
+
     // Pré-carrega todos os PNGs
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
         const img = new Image();
         img.src = `assets/videos/plane-frames/plane-${String(i).padStart(4, '0')}.png`;
         img.onload = () => {
             loaded++;
-            if (loaded === TOTAL_FRAMES) startAnimation();
+            checkReady();
         };
         images.push(img);
     }
 
+
+    function checkReady() {
+        if (loaded === TOTAL_FRAMES && keyframes.length === TOTAL_FRAMES) {
+            ready = true;
+            startAnimation();
+        }
+    }
+
     function startAnimation() {
+        // Calcula bounding box dos keyframes para centralizar a trajetória
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        for (const kf of keyframes) {
+            if (kf.x < minX) minX = kf.x;
+            if (kf.x > maxX) maxX = kf.x;
+            if (kf.y < minY) minY = kf.y;
+            if (kf.y > maxY) maxY = kf.y;
+        }
+        // Fator de zoom: ajuste conforme necessário para caber bem no canvas
+        const ZOOM = 60; // pixels por unidade 3D (ajuste para mais/menos zoom)
+        // Centro da trajetória no mundo 3D
+        const trajCenterX = (minX + maxX) / 2;
+        const trajCenterY = (minY + maxY) / 2;
+
         setInterval(() => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(images[currentFrame], 0, 0, canvas.width, canvas.height);
+            const kf = keyframes[currentFrame];
+            const img = images[currentFrame];
+
+            // Posição do avião no canvas (centralizando a trajetória)
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const px = centerX + (kf.x - trajCenterX) * ZOOM;
+            const py = centerY + (kf.y - trajCenterY) * ZOOM;
+
+            // Usa o scale exportado do keyframe
+            const baseSize = canvas.height * 0.28; // tamanho base (ajuste se quiser)
+            const imgW = baseSize * (kf.scale || 1);
+            const imgH = baseSize * (kf.scale || 1);
+
+            ctx.drawImage(
+                img,
+                px - imgW / 2,
+                py - imgH / 2,
+                imgW,
+                imgH
+            );
             currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
         }, 1000 / FPS);
     }
+
+
 })();
 </script>
 
