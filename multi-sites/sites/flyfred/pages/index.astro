@@ -614,6 +614,7 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     let loaded = 0;
     let currentFrame = 0;
     let TOTAL_FRAMES = 0;
+    let animating = false;
 
     function resize() {
         canvas.width = canvas.offsetWidth;
@@ -622,7 +623,6 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     resize();
     window.addEventListener('resize', resize);
 
-    // Carrega keyframes JSON primeiro
     fetch('assets/videos/plane-frames/plane-keyframes.json')
         .then(r => r.json())
         .then(json => {
@@ -630,7 +630,6 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
             TOTAL_FRAMES = keyframes.length;
             preloadImages();
         });
-
 
     function preloadImages() {
         for (let i = 1; i <= TOTAL_FRAMES; i++) {
@@ -642,29 +641,14 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
             };
             images.push(img);
         }
-    }        
-
-    // Pré-carrega todos os PNGs
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
-        const img = new Image();
-        img.src = `assets/videos/plane-frames/plane-${String(i).padStart(4, '0')}.png`;
-        img.onload = () => {
-            loaded++;
-            checkReady();
-        };
-        images.push(img);
-    }
-
-
-    function checkReady() {
-        if (loaded === TOTAL_FRAMES && keyframes.length === TOTAL_FRAMES) {
-            ready = true;
-            startAnimation();
-        }
     }
 
     function startAnimation() {
-        // Calcula bounding box dos keyframes para centralizar a trajetória
+        animating = true;
+        let lastTime = 0;
+        const interval = 1000 / FPS;
+
+        // Bounding box para centralizar
         let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
         for (const kf of keyframes) {
             if (kf.x < minX) minX = kf.x;
@@ -672,43 +656,35 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
             if (kf.y < minY) minY = kf.y;
             if (kf.y > maxY) maxY = kf.y;
         }
-        // Fator de zoom: ajuste conforme necessário para caber bem no canvas
-        const ZOOM = 60; // pixels por unidade 3D (ajuste para mais/menos zoom)
-        // Centro da trajetória no mundo 3D
+        const ZOOM = 60;
         const trajCenterX = (minX + maxX) / 2;
         const trajCenterY = (minY + maxY) / 2;
 
-        setInterval(() => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const kf = keyframes[currentFrame];
-            const img = images[currentFrame];
-
-            // Posição do avião no canvas (centralizando a trajetória)
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const px = centerX + (kf.x - trajCenterX) * ZOOM;
-            const py = centerY + (kf.y - trajCenterY) * ZOOM;
-
-
-            // Usa o scale exportado do keyframe, multiplicado por um fator de correção
-            const SCALE_FIX = 4; // ajuste conforme necessário
-            const baseSize = canvas.height * 0.28; // tamanho base (ajuste se quiser)
-            const imgW = baseSize * (kf.scale || 1) * SCALE_FIX;
-            const imgH = baseSize * (kf.scale || 1) * SCALE_FIX;
-
-            ctx.drawImage(
-                img,
-                px - imgW / 2,
-                py - imgH / 2,
-                imgW,
-                imgH
-            );
-            currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
-        }, 1000 / FPS);
+        function animate(now) {
+            if (!animating) return;
+            if (!lastTime) lastTime = now;
+            if (now - lastTime >= interval) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const kf = keyframes[currentFrame];
+                const img = images[currentFrame];
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const px = centerX + (kf.x - trajCenterX) * ZOOM;
+                const py = centerY + (kf.y - trajCenterY) * ZOOM;
+                const SCALE_FIX = 4;
+                const baseSize = canvas.height * 0.28;
+                const imgW = baseSize * (kf.scale || 1) * SCALE_FIX;
+                const imgH = baseSize * (kf.scale || 1) * SCALE_FIX;
+                ctx.drawImage(img, px - imgW / 2, py - imgH / 2, imgW, imgH);
+                currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
+                lastTime = now;
+            }
+            requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
     }
-
-
 })();
+
 </script>
 
 
