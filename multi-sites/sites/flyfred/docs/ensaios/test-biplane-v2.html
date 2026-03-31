@@ -125,6 +125,8 @@ const Editor = {
     scene.add(this.line);
   },
 
+  
+
   pickMarker(x,y){
     raycaster.setFromCamera(new THREE.Vector2(x,y),camera);
     const hits = raycaster.intersectObjects(this.markers);
@@ -305,7 +307,7 @@ document.getElementById('save').onclick=()=>Editor.save();
 
 const loader = new THREE.OBJLoader();
 
-loader.load('./3d/uploads_files_2532780_Gamecock.obj', obj=>{
+loader.load('./uploads_files_2532780_Gamecock.obj', obj=>{
   obj.traverse(c=>{
     if(c.isMesh) c.material = material;
   });
