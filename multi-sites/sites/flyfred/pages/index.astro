@@ -46,8 +46,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             <!-- Substitui o <video> por canvas -->
             <canvas
                 id="plane-canvas"
-                class="absolute inset-0 pointer-events-none z-20"
-                style="width:100%;height:100%;"
+                style="position:fixed; left:0; top:0; width:300px; height:300px; z-index:999; pointer-events:none;"
             ></canvas>
 
 
@@ -114,14 +113,14 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
             
 
-
-            <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-6 xl:pt-8 pb-10 xl:pb-14 gap-6 xl:gap-0">
+            <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-2 xl:pt-4 pb-10 xl:pb-14 gap-6 xl:gap-0 -mt-8">
+            <!-- <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-6 xl:pt-8 pb-10 xl:pb-14 gap-6 xl:gap-0"> -->
                 <!-- Esquerda: avatar pequeno + badge -->
                 <div class="flex flex-row xl:flex-col items-center xl:items-start gap-4">
                     <img
                         src="assets/images/hero/c57b9b7c-7a74-459c-b070-f3b0041a1bed.png"
                         alt="Fred, piloto campeão"
-                        class="w-20 h-20 xl:w-36 xl:h-36 flex-shrink-0"
+                        class="w-38 h-38 lg:w-56 lg:h-56 flex-shrink-0"
                     />
                     <div class="relative">
                         <div class="relative p-2">
@@ -667,23 +666,51 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const kf = keyframes[currentFrame];
                 const frame = spriteFrames[currentFrame];
+                // Trajetória real, avião se move para a direita
+                const ZOOM = 60;
+                const trajCenterX = (minX + maxX) / 2;
+                const trajCenterY = (minY + maxY) / 2;
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
-                const px = centerX + (kf.x - trajCenterX) * ZOOM;
-                const py = centerY + (kf.y - trajCenterY) * ZOOM;
+                const px = centerX + (kf.x - trajCenterX) * ZOOM + 100;
+                const py = centerY + (kf.y - trajCenterY) * ZOOM + 30;
                 const SCALE_FIX = 4;
                 const baseSize = canvas.height * 0.28;
                 const imgW = baseSize * (kf.scale || 1) * SCALE_FIX;
                 const imgH = baseSize * (kf.scale || 1) * SCALE_FIX;
+
+                // Fade out nos últimos 20 frames
+                let alpha = 1;
+                const FADE_FRAMES = 20;
+                if (currentFrame >= TOTAL_FRAMES - FADE_FRAMES) {
+                    alpha = 1 - (currentFrame - (TOTAL_FRAMES - FADE_FRAMES)) / FADE_FRAMES;
+                }
+                ctx.save();
+                ctx.globalAlpha = alpha;
                 ctx.drawImage(
                     spriteImg,
                     frame.x, frame.y, frame.width, frame.height, // src
                     px - imgW / 2, py - imgH / 2, imgW, imgH      // dest
                 );
-                currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
-                lastTime = now;
+                ctx.restore();
+
+                // Pausa de 1s antes de recomeçar
+                if (currentFrame === TOTAL_FRAMES - 1) {
+                    animating = false;
+                    setTimeout(() => {
+                        currentFrame = 0;
+                        animating = true;
+                        lastTime = 0;
+                        requestAnimationFrame(animate);
+                    }, 1000);
+                } else {
+                    currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
+                    lastTime = now;
+                    requestAnimationFrame(animate);
+                }
+            } else {
+                requestAnimationFrame(animate);
             }
-            requestAnimationFrame(animate);
         }
         requestAnimationFrame(animate);
     }
