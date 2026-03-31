@@ -623,25 +623,25 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     resize();
     window.addEventListener('resize', resize);
 
-    fetch('assets/videos/plane-frames/plane-keyframes.json')
-        .then(r => r.json())
-        .then(json => {
-            keyframes = json;
-            TOTAL_FRAMES = keyframes.length;
-            preloadImages();
-        });
 
-    function preloadImages() {
-        for (let i = 1; i <= TOTAL_FRAMES; i++) {
-            const img = new Image();
-            img.src = `assets/videos/plane-frames/plane-${String(i).padStart(4, '0')}.png`;
-            img.onload = () => {
-                loaded++;
-                if (loaded === TOTAL_FRAMES) startAnimation();
-            };
-            images.push(img);
-        }
+    // Carrega keyframes e sprite sheet JSON
+    Promise.all([
+        fetch('assets/videos/plane-keyframes-reduced.json').then(r => r.json()),
+        fetch('assets/videos/plane-sprite.json').then(r => r.json())
+    ]).then(([keyframesData, spriteData]) => {
+        keyframes = keyframesData;
+        TOTAL_FRAMES = spriteData.frames.length;
+        loadSprite(spriteData);
+    });
+
+    let spriteImg, spriteFrames;
+    function loadSprite(spriteData) {
+        spriteImg = new Image();
+        spriteImg.src = 'assets/videos/plane-sprite.png';
+        spriteFrames = spriteData.frames;
+        spriteImg.onload = () => startAnimation();
     }
+
 
     function startAnimation() {
         animating = true;
@@ -666,7 +666,7 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
             if (now - lastTime >= interval) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const kf = keyframes[currentFrame];
-                const img = images[currentFrame];
+                const frame = spriteFrames[currentFrame];
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 const px = centerX + (kf.x - trajCenterX) * ZOOM;
@@ -675,7 +675,11 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
                 const baseSize = canvas.height * 0.28;
                 const imgW = baseSize * (kf.scale || 1) * SCALE_FIX;
                 const imgH = baseSize * (kf.scale || 1) * SCALE_FIX;
-                ctx.drawImage(img, px - imgW / 2, py - imgH / 2, imgW, imgH);
+                ctx.drawImage(
+                    spriteImg,
+                    frame.x, frame.y, frame.width, frame.height, // src
+                    px - imgW / 2, py - imgH / 2, imgW, imgH      // dest
+                );
                 currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
                 lastTime = now;
             }

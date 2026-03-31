@@ -1,0 +1,716 @@
+{
+  "frames": [
+    {
+      "filename": "plane-0001.png",
+      "x": 0,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0004.png",
+      "x": 1720,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0007.png",
+      "x": 3440,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0010.png",
+      "x": 5160,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0013.png",
+      "x": 6880,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0016.png",
+      "x": 8600,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0019.png",
+      "x": 10320,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0022.png",
+      "x": 12040,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0025.png",
+      "x": 13760,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0028.png",
+      "x": 15480,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0031.png",
+      "x": 17200,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0034.png",
+      "x": 18920,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0037.png",
+      "x": 20640,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0040.png",
+      "x": 22360,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0043.png",
+      "x": 24080,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0046.png",
+      "x": 25800,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0049.png",
+      "x": 27520,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0052.png",
+      "x": 29240,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0055.png",
+      "x": 30960,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0058.png",
+      "x": 32680,
+      "y": 0,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0061.png",
+      "x": 0,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0064.png",
+      "x": 1720,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0067.png",
+      "x": 3440,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0070.png",
+      "x": 5160,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0073.png",
+      "x": 6880,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0076.png",
+      "x": 8600,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0079.png",
+      "x": 10320,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0082.png",
+      "x": 12040,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0085.png",
+      "x": 13760,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0088.png",
+      "x": 15480,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0091.png",
+      "x": 17200,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0094.png",
+      "x": 18920,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0097.png",
+      "x": 20640,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0100.png",
+      "x": 22360,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0103.png",
+      "x": 24080,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0106.png",
+      "x": 25800,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0109.png",
+      "x": 27520,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0112.png",
+      "x": 29240,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0115.png",
+      "x": 30960,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0118.png",
+      "x": 32680,
+      "y": 980,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0121.png",
+      "x": 0,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0124.png",
+      "x": 1720,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0127.png",
+      "x": 3440,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0130.png",
+      "x": 5160,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0133.png",
+      "x": 6880,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0136.png",
+      "x": 8600,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0139.png",
+      "x": 10320,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0142.png",
+      "x": 12040,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0145.png",
+      "x": 13760,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0148.png",
+      "x": 15480,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0151.png",
+      "x": 17200,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0154.png",
+      "x": 18920,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0157.png",
+      "x": 20640,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0160.png",
+      "x": 22360,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0163.png",
+      "x": 24080,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0166.png",
+      "x": 25800,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0169.png",
+      "x": 27520,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0172.png",
+      "x": 29240,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0175.png",
+      "x": 30960,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0178.png",
+      "x": 32680,
+      "y": 1960,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0181.png",
+      "x": 0,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0184.png",
+      "x": 1720,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0187.png",
+      "x": 3440,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0190.png",
+      "x": 5160,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0193.png",
+      "x": 6880,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0196.png",
+      "x": 8600,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0199.png",
+      "x": 10320,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0202.png",
+      "x": 12040,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0205.png",
+      "x": 13760,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0208.png",
+      "x": 15480,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0211.png",
+      "x": 17200,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0214.png",
+      "x": 18920,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0217.png",
+      "x": 20640,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0220.png",
+      "x": 22360,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0223.png",
+      "x": 24080,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0226.png",
+      "x": 25800,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0229.png",
+      "x": 27520,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0232.png",
+      "x": 29240,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0235.png",
+      "x": 30960,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0238.png",
+      "x": 32680,
+      "y": 2940,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0241.png",
+      "x": 0,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0244.png",
+      "x": 1720,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0247.png",
+      "x": 3440,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0250.png",
+      "x": 5160,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0253.png",
+      "x": 6880,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0256.png",
+      "x": 8600,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0259.png",
+      "x": 10320,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0262.png",
+      "x": 12040,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0265.png",
+      "x": 13760,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0268.png",
+      "x": 15480,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0271.png",
+      "x": 17200,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0274.png",
+      "x": 18920,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0277.png",
+      "x": 20640,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0280.png",
+      "x": 22360,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0283.png",
+      "x": 24080,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0286.png",
+      "x": 25800,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0289.png",
+      "x": 27520,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0292.png",
+      "x": 29240,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0295.png",
+      "x": 30960,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0298.png",
+      "x": 32680,
+      "y": 3920,
+      "width": 1720,
+      "height": 980
+    },
+    {
+      "filename": "plane-0301.png",
+      "x": 0,
+      "y": 4900,
+      "width": 1720,
+      "height": 980
+    }
+  ],
+  "width": 1720,
+  "height": 980,
+  "columns": 20,
+  "rows": 6,
+  "count": 101
+}
