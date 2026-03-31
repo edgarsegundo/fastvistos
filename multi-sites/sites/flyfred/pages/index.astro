@@ -608,7 +608,7 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    const FPS = 15;
+    const FPS = 25;
     const images = [];
     let keyframes = [];
     let loaded = 0;
@@ -689,10 +689,12 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
             const px = centerX + (kf.x - trajCenterX) * ZOOM;
             const py = centerY + (kf.y - trajCenterY) * ZOOM;
 
-            // Usa o scale exportado do keyframe
+
+            // Usa o scale exportado do keyframe, multiplicado por um fator de correção
+            const SCALE_FIX = 4; // ajuste conforme necessário
             const baseSize = canvas.height * 0.28; // tamanho base (ajuste se quiser)
-            const imgW = baseSize * (kf.scale || 1);
-            const imgH = baseSize * (kf.scale || 1);
+            const imgW = baseSize * (kf.scale || 1) * SCALE_FIX;
+            const imgH = baseSize * (kf.scale || 1) * SCALE_FIX;
 
             ctx.drawImage(
                 img,
