@@ -223,3 +223,5 @@ public/**/assets/images/blog/resized/
 *.mtl
 *.obj
 *.zip
+
+plane-frames/

@@ -33,21 +33,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     </Fragment>
 
     <div class="bg-white" style="margin: 6px;">
-        <video id="plane-bg" autoplay muted loop playsinline class="absolute left-0 right-0 -top-[130px] xl:-top-[200px] w-full [height:calc(100%_+_40px)] object-cover pointer-events-none z-20">
-            <source src="assets/videos/plane-loop.webm" type="video/webm">
-        </video>
-
-        <script>
-            const planeBgVideo = document.getElementById('plane-bg');
-            planeBgVideo.playbackRate = 0.9;
-            planeBgVideo.style.transition = 'opacity 1s';
-            planeBgVideo.addEventListener('timeupdate', function() {
-                planeBgVideo.style.opacity = (planeBgVideo.duration - planeBgVideo.currentTime < 2) ? 0 : 1;
-            });
-        </script>
-
-        <!-- ═══════════ HERO — Híbrido Nav + Identidade ═══════════ -->
+        <!-- ═══════════ HERO ═══════════ -->
         <section class="relative w-full overflow-hidden min-h-[400px] xl:min-h-[380px]">
+
             <!-- BG: céu -->
             <img
                 src="assets/images/hero/imagem-ceu-principal-background-hero.jpg"
@@ -55,33 +43,40 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 alt="Sky background"
             >
 
-            <!-- Plano de animação -->
+            <!-- Substitui o <video> por canvas -->
+            <canvas
+                id="plane-canvas"
+                style="position:fixed; left:0; top:0; width:300px; height:300px; z-index:999; pointer-events:none;"
+            ></canvas>
+
+
+            <!-- Plano de animação (mantido caso precise) -->
             <div id="plane-layer" class="absolute inset-0 z-20 pointer-events-none"></div>
 
             <!-- ── NAV TOPO ── -->
             <nav class="relative z-30 flex items-center justify-between px-6 xl:px-20 pt-6 pb-2">
-                <span class="font-agrandir text-black text-xl font-extrabold tracking-tight opacity-90">Fly Fred</span>
+                <span class="font-agrandir text-black text-xl font-extrabold tracking-tight opacity-90">&nbsp;</span>
                 <div class="flex items-center gap-5">
                     <!-- Ícones redes sociais em preto -->
-                    <a href="#" aria-label="Facebook" class="text-black/70 hover:text-black transition-colors">
+                    <a href="#" aria-label="Facebook" class="hidden text-black/70 hover:text-black transition-colors">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                         </svg>
                     </a>
-                    <a href="#" aria-label="Instagram" class="text-black/70 hover:text-black transition-colors">
+                    <a href="https://www.instagram.com/fly_fred1" aria-label="Instagram" class="text-black/70 hover:text-black transition-colors">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                             <circle cx="12" cy="12" r="4"/>
                             <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
                         </svg>
                     </a>
-                    <a href="#" aria-label="YouTube" class="text-black/70 hover:text-black transition-colors">
+                    <a href="https://www.youtube.com/@flyfred-u9n" aria-label="YouTube" class="text-black/70 hover:text-black transition-colors">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
                             <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"/>
                         </svg>
                     </a>
-                    <a href="#" aria-label="TikTok" class="text-black/70 hover:text-black transition-colors">
+                    <a href="https://www.tiktok.com/@flyfred3d" aria-label="TikTok" class="text-black/70 hover:text-black transition-colors">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z"/>
                         </svg>
@@ -90,13 +85,42 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             </nav>
 
             <!-- ── CONTEÚDO HERO ── -->
-            <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-6 xl:pt-8 pb-10 xl:pb-14 gap-6 xl:gap-0">
-                <!-- Esquerda: avatar pequeno + badge -->
+            <!-- <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-6 xl:pt-8 pb-10 xl:pb-14 gap-6 xl:gap-0">
                 <div class="flex flex-row xl:flex-col items-center xl:items-start gap-4">
                     <img
                         src="assets/images/hero/fred_com_uniforme_painted_trabalhando.png"
                         alt="Fred, piloto campeão"
                         class="hero-avatar w-20 h-20 xl:w-36 xl:h-36 rounded-full object-cover object-top border-2 border-black ring-[2px] ring-black/20 flex-shrink-0"
+                    />
+                    <div class="relative">
+                        <div class="relative p-2">
+                            <p class="text-black text-sm xl:text-base uppercase tracking-widest opacity-90 mb-1" style="text-shadow: 1px 1px 3px rgba(255,255,255,0.5);">
+                                · Piloto em formação
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-start xl:items-end text-left xl:text-right xl:max-w-2xl">
+                    <h1 class="font-agrandir text-black hero-title leading-none font-extrabold" style="text-shadow: 2px 2px 4px rgba(255,255,255,0.5);">
+                        Voa Fred!
+                    </h1>
+                    <p class="mt-4 max-w-lg text-black text-base xl:text-xl leading-relaxed" style="text-shadow: 1px 1px 3px rgba(255,255,255,0.5);">
+                        "Eu ainda sou pequeno, mas o meu sonho de me tornar piloto é grande.
+                        Quem sonha alto, um dia decola."
+                    </p>
+                </div>
+            </div> -->
+
+            
+
+            <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-2 xl:pt-4 pb-10 xl:pb-14 gap-6 xl:gap-0 -mt-8">
+            <!-- <div class="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between px-6 xl:px-20 pt-6 xl:pt-8 pb-10 xl:pb-14 gap-6 xl:gap-0"> -->
+                <!-- Esquerda: avatar pequeno + badge -->
+                <div class="flex flex-row xl:flex-col items-center xl:items-start gap-4">
+                    <img
+                        src="assets/images/hero/c57b9b7c-7a74-459c-b070-f3b0041a1bed.png"
+                        alt="Fred, piloto campeão"
+                        class="w-38 h-38 lg:w-56 lg:h-56 flex-shrink-0"
                     />
                     <div class="relative">
                         <div class="relative p-2">
@@ -118,6 +142,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     </p>
                 </div>
             </div>
+
+
 
             <!-- Fundo fade para o branco -->
             <div class="hero-fade-bottom absolute bottom-0 left-0 right-0 h-16 xl:h-20 pointer-events-none"></div>
@@ -226,7 +252,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             </div>
         </section>
 
-
         <!-- ═══════════ CARD 1 — Como tudo começa ═══════════ -->
         <section class="relative w-full">
             <article class="story-card relative card-sky overflow-hidden mb-6 px-6 xl:px-20 py-0" data-chapter="1">
@@ -273,27 +298,45 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                             <p class="font-dark-shadow text-xl xl:text-2xl leading-[1.45]">
                                 Aos 7 anos ganhei meu primeiro livro sobre aviação — e li do começo ao fim sem parar. Meu pai disse que foi a primeira vez que me viu quieto por tanto tempo. A paixão estava ali, esperando só crescer junto comigo.
                             </p>
+
+                        <!-- <img
+                            src="assets/images/articles/cockpit_junto_comandante.jpeg"
+                            alt="Fred no cockpit com o comandante"
+                            class="w-full block"
+                            style="height:auto;object-fit:cover;"
+                        > -->
+
                         </div>
 
                         <!-- Imagem 2 -->
-                        <div class="xl:w-1/4 flex-shrink-0 mt-8 xl:mt-0">
+                        <!-- <div class="xl:w-1/4 flex-shrink-0 mt-8 xl:mt-0">
                             <img
                                 src="assets/images/articles/cockpit_junto_comandante.jpeg"
                                 alt="Fred no cockpit com o comandante"
                                 class="w-full block"
                                 style="height:auto;object-fit:cover;"
                             >
+                        </div> -->
+
+
+                        <!-- Imagem 2 -->
+                        <div class="xl:w-1/4 flex-shrink-0 mt-8 xl:mt-0 flex flex-col">
+                            <!-- Segunda imagem abaixo -->
+                            <img
+                                src="assets/images/articles/cockpit2.jpeg"
+                                alt="Fred preparando voo" 
+                                class="w-full block mt-6"
+                                style="height:auto;object-fit:cover;"
+                            >
                         </div>
                     </div>
-
                 </div>
             </article>
         </section>
 
-
         <!-- ═══════════ CARD 2 — Comece a Sonhar Alto ═══════════ -->
         <section class="relative w-full">
-            <article class="story-card relative card-sky-white-bg overflow-hidden -mt-24 xl:-mt-46 mb-6 xl:mb-12 px-6 xl:px-20 py-0" data-chapter="2">
+            <article class="story-card relative card-sky-white-bg overflow-hidden -mt-22 xl:-mt-84 mb-6 xl:mb-12 px-6 xl:px-20 py-0" data-chapter="2">
 
                 <div class="relative z-10 w-full flex flex-col">
 
@@ -367,18 +410,16 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             > -->
         </section>
 
-
-
         <!-- ═══════════ CARD 3 — CT da Azul ═══════════ -->
         <section class="relative w-full">
-            <article class="story-card relative mt-0 xl:mt-0 card-sky overflow-hidden mb-6 px-6 xl:px-20 py-0 bg-[#0395D6]" data-chapter="3">
+            <article class="story-card relative mt-0 xl:-mt-12 card-sky overflow-hidden mb-6 px-6 xl:px-20 py-0 bg-[#0395D6]" data-chapter="3">
 
                 <div class="relative z-10 w-full flex flex-col">
 
                     <!-- Header -->
                     <div class="relative overflow-hidden flex flex-col justify-end px-6 xl:px-20 -mx-6 xl:-mx-20 mb-10 min-h-[260px] xl:min-h-[420px]">
                         <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:url('assets/images/articles/ceu_nuvens_fundo.jpg') center/cover no-repeat;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.9) 60%,rgba(0,0,0,0) 100%);z-index:0;"></div>
-                        <div class="h-[90%] xl:h-[90%] -top-15 xl:top-0 left-0" style="position:absolute;width:100%;background:url('assets/images/articles/embraer-195-azul.webp') center/cover no-repeat;opacity:0.85;mix-blend-mode:multiply;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);z-index:1;"></div>
+                        <div class="h-[90%] xl:h-[100%] -top-15 xl:top-0 left-0" style="position:absolute;width:100%;background:url('assets/images/articles/embraer-195-azul.webp') center/cover no-repeat;opacity:0.85;mix-blend-mode:multiply;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.8) 60%,rgba(0,0,0,0) 100%);z-index:1;"></div>
                         <img src="./images/sky-images/biplane-deco.png" alt="" style="position:absolute;top:-1.5rem;right:-1rem;width:10rem;pointer-events:none;z-index:15;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));">
 
                         <div class="relative" style="z-index:10;">
@@ -449,8 +490,6 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             </article>
         </section>        
 
-
-
         <!-- ═══════════ SOCIAL CTA FINAL ═══════════ -->
         <section class="relative w-full overflow-hidden social-cta-section px-6 xl:px-20 py-20 xl:py-28">
 
@@ -467,10 +506,10 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                 </p>
 
                 <!-- Cards das redes sociais -->
-                <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 xl:gap-6 w-full max-w-4xl">
+                <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 w-full max-w-4xl">
 
                     <!-- Instagram -->
-                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                    <a href="https://www.instagram.com/fly_fred1" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                         <div class="social-icon-wrap rounded-full p-3 bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -483,7 +522,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     </a>
 
                     <!-- YouTube -->
-                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                    <a href="https://www.youtube.com/@flyfred-u9n" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                         <div class="social-icon-wrap rounded-full p-3 bg-[#FF0000]">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
@@ -495,7 +534,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     </a>
 
                     <!-- TikTok -->
-                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                    <a href="https://www.tiktok.com/@flyfred3d" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                         <div class="social-icon-wrap rounded-full p-3 bg-black">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
                                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z"/>
@@ -506,7 +545,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     </a>
 
                     <!-- Facebook -->
-                    <a href="#" class="social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                    <!-- <a href="#" class="hidden social-card group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 xl:p-8 bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                         <div class="social-icon-wrap rounded-full p-3 bg-[#1877F2]">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
                                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
@@ -514,7 +553,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                         </div>
                         <span class="font-agrandir text-white font-extrabold text-lg">Facebook</span>
                         <span class="text-white/60 text-sm">/flyfred</span>
-                    </a>
+                    </a> -->
 
                 </div>
 
@@ -529,11 +568,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
     </div>
 
-
 </SharedHomeLayout>
 
 
 <script>
+// custom-video overlay (existente)
 document.querySelectorAll('.custom-video').forEach((video, i) => {
     const overlay = document.querySelectorAll('.custom-overlay')[i];
     if (video && overlay) {
@@ -555,6 +594,128 @@ document.querySelectorAll('.custom-video').forEach((video, i) => {
         });
     }
 });
+
+
+
+</script>
+
+
+<script>
+// Animação do avião com deslocamento real usando keyframes
+(function() {
+    const canvas = document.getElementById('plane-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const FPS = 25;
+    const images = [];
+    let keyframes = [];
+    let loaded = 0;
+    let currentFrame = 0;
+    let TOTAL_FRAMES = 0;
+    let animating = false;
+
+    function resize() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+
+    // Carrega keyframes e sprite sheet JSON
+    Promise.all([
+        fetch('assets/videos/plane-keyframes-reduced.json').then(r => r.json()),
+        fetch('assets/videos/plane-sprite-optimized.json').then(r => r.json())
+    ]).then(([keyframesData, spriteData]) => {
+        keyframes = keyframesData;
+        TOTAL_FRAMES = spriteData.frames.length;
+        loadSprite(spriteData);
+    });
+
+    let spriteImg, spriteFrames;
+    function loadSprite(spriteData) {
+        spriteImg = new Image();
+        spriteImg.src = 'assets/videos/plane-sprite-optimized.png';
+        spriteFrames = spriteData.frames;
+        spriteImg.onload = () => startAnimation();
+    }
+
+
+    function startAnimation() {
+        animating = true;
+        let lastTime = 0;
+        const interval = 1000 / FPS;
+
+        // Bounding box para centralizar
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        for (const kf of keyframes) {
+            if (kf.x < minX) minX = kf.x;
+            if (kf.x > maxX) maxX = kf.x;
+            if (kf.y < minY) minY = kf.y;
+            if (kf.y > maxY) maxY = kf.y;
+        }
+        const ZOOM = 60;
+        const trajCenterX = (minX + maxX) / 2;
+        const trajCenterY = (minY + maxY) / 2;
+
+        function animate(now) {
+            if (!animating) return;
+            if (!lastTime) lastTime = now;
+            if (now - lastTime >= interval) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const kf = keyframes[currentFrame];
+                const frame = spriteFrames[currentFrame];
+                // Trajetória real, avião se move para a direita
+                const ZOOM = 60;
+                const trajCenterX = (minX + maxX) / 2;
+                const trajCenterY = (minY + maxY) / 2;
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const px = centerX + (kf.x - trajCenterX) * ZOOM + 100;
+                const py = centerY + (kf.y - trajCenterY) * ZOOM + 30;
+                const SCALE_FIX = 4;
+                const baseSize = canvas.height * 0.28;
+                const imgW = baseSize * (kf.scale || 1) * SCALE_FIX;
+                const imgH = baseSize * (kf.scale || 1) * SCALE_FIX;
+
+                // Fade out nos últimos 20 frames
+                let alpha = 1;
+                const FADE_FRAMES = 20;
+                if (currentFrame >= TOTAL_FRAMES - FADE_FRAMES) {
+                    alpha = 1 - (currentFrame - (TOTAL_FRAMES - FADE_FRAMES)) / FADE_FRAMES;
+                }
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.drawImage(
+                    spriteImg,
+                    frame.x, frame.y, frame.width, frame.height, // src
+                    px - imgW / 2, py - imgH / 2, imgW, imgH      // dest
+                );
+                ctx.restore();
+
+                // Pausa de 1s antes de recomeçar
+                if (currentFrame === TOTAL_FRAMES - 1) {
+                    animating = false;
+                    setTimeout(() => {
+                        currentFrame = 0;
+                        animating = true;
+                        lastTime = 0;
+                        requestAnimationFrame(animate);
+                    }, 1000);
+                } else {
+                    currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
+                    lastTime = now;
+                    requestAnimationFrame(animate);
+                }
+            } else {
+                requestAnimationFrame(animate);
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+})();
+
 </script>
 
 

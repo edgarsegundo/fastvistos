@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    
+    @font-face {
+      font-family: 'Agrandir';
+      src: url('./PPAgrandir-GrandHeavy.otf') format('opentype');
+      font-weight: 800;
+      font-style: normal;
+      letter-spacing: -0.02em;
+    }
+
+    .font-agrandir {
+      font-family: 'Agrandir', sans-serif;
+    }
+    .font-inter {
+      font-family: 'Inter', sans-serif;
+    }    
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('./inter/Inter-ExtraLight-BETA.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    letter-spacing: -0.02em;
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    src: url('./inter/Inter-ExtraLightItalic-BETA.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+  }  
+
+  .font-inter-light {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .font-inter-italic {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-style: italic;
+  }  
+
+
+
+/* #plane-bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  z-index:2;
+} */
+
+#plane-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -40px; /* valor negativo sobe o elemento */
+  width: 100%;
+  height: calc(100% + 40px); /* aumenta a altura para cobrir o espaço extra */
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 2;
+}
+
+
+
+
+
+
+
+
+
+    /* ── Card sky gradient ── */
+    /* .card-sky {
+      background: linear-gradient(
+        160deg,
+        #b8d9f0 0%,
+        #c9e4f5 18%,
+        #daeef8 38%,
+        #eaf5fb 58%,
+        #f4fafd 75%,
+        #ffffff 100%
+      );
+    } */
+
+
+
+
+/* .card-sky {
+  background:
+    linear-gradient(to bottom, rgba(255,255,255,0), rgba(120,180,240,.25)) 0 0 / 100% 180px no-repeat,
+
+    url('./images/1/aviao.jpeg') center top / contain no-repeat,
+
+    linear-gradient(to bottom, rgba(180,220,255,.95), rgba(150,210,255,.15)) 0 0 / 100% 300px no-repeat,
+
+    url('./images/1/nuvem.jpeg') center top / auto 220px no-repeat;
+
+  background-color: #8fd2ff;
+} */
+
+
+
+.card-sky {
+  position: relative;
+  background: white;
+  overflow: hidden;
+}
+
+
+
+
+
+.card-sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: 320px;
+
+  background:
+    url('./images/1/aviao.jpeg') center top / contain no-repeat,
+    url('./images/1/nuvem.jpeg') center top / cover no-repeat;
+
+  /* fade nas imagens diretamente, sem afetar o conteúdo */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 65%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 65%,
+    transparent 100%
+  );
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card-sky > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+    /* ── Número do capítulo ── */
+    .chapter-dot {
+      width: 2.1rem;
+      height: 2.1rem;
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Pagination dots (direita) ── */
+    .pagination-dots {
+      position: absolute;
+      right: -1.1rem;        /* cola na borda direita do card */
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      z-index: 20;
+    }
+    .dot {
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 9999px;
+      background: #1a1a1a;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .dot.active {
+      width: 1.6rem;
+      height: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    /* ── Foto vintage ── */
+    .photo-frame {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Texto ── */
+    .card-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: #1a1a1a;
+      line-height: 1.65;
+    }
+
+    /* ── Seção wrapper ── */
+    .story-section {
+      max-width: 430px;   /* largura mobile tipo story */
+      margin: 0 auto;
+    }
+  
+
+
+  </style>
+</head>
+<body class="bg-white" style="margin: 6px;">
+
+  <video id="plane-bg" autoplay muted loop playsinline>
+    <source src="./plane-loop copy.webm" type="video/webm">
+  </video>
+
+  <script>
+    const video = document.getElementById('plane-bg');
+    video.playbackRate = 0.9; // se quiser manter o vídeo mais lento
+
+    video.style.transition = 'opacity 1s';
+
+    video.addEventListener('timeupdate', function() {
+      // Fading nos últimos 2 segundos
+      if (video.duration - video.currentTime < 2) {
+        video.style.opacity = 0;
+      } else {
+        video.style.opacity = 1;
+      }
+    });
+  </script>
+
+  <section class="relative h-[98vh] w-full overflow-hidden">
+  <!-- <section class="relative h-screen w-full overflow-hidden"> -->
+
+
+    <div id="plane-layer" class="absolute inset-0 z-20 pointer-events-none"></div>
+    <!-- Background -->
+    <!-- <img 
+      src="./Dreamy pastel sky with glowing clouds.webp" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+    <!-- <img 
+      src="./images/sky-images/kamonahira-paper-plane-7336536_1920-2.png" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+    
+
+    <img 
+      src="./images/sky-images/pexels-sharrrrrk-13054274.jpg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    >
+
+    
+    <!-- <img 
+      src="./Dreamy pastel sky with glowing clouds.webp" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+
+
+    <!-- <img 
+      src="./images/hero/chosen/sky_painted_original_trabalhando.jpg" 
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Sky background"
+    > -->
+
+
+
+
+    <!-- Imagem decorativa posicionável -->
+    <!-- <img
+      src="./images/hero/chosen/biplane.png"
+      alt=""
+      class="absolute top-40 right-16 z-20 w-12 pointer-events-none"
+    > -->
+
+
+
+
+    
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/10"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+
+      <!-- Redes sociais — top centralizado -->
+      <div class="absolute top-6 left-0 right-0 z-10 flex justify-center items-center gap-6">
+
+        <!-- Facebook -->
+        <a href="#" class="text-white/70 hover:text-white transition-colors">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="#" class="text-white/70 hover:text-white transition-colors">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+
+        <!-- YouTube -->
+        <a href="#" class="text-white/70 hover:text-white transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58a2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"/>
+          </svg>
+        </a>
+
+
+
+      </div>
+
+      <!-- Avatar com glow suave -->
+      <!-- <img
+        src="./fred-com-uniforme.jpeg"
+        alt="Fred, piloto campeão"
+        class="w-48 h-48 md:w-36 md:h-36 rounded-full object-cover object-top border-3 border-white ring-[8px] ring-white/20 mb-8"
+      /> -->
+
+      <img
+        src="./images/hero/chosen/fred_com_uniforme_painted_trabalhando.png"
+        alt="Fred, piloto campeão"
+        class="w-48 h-48 md:w-36 md:h-36 rounded-full object-cover object-top border-3 border-white ring-[3px] ring-white/20 mb-8"
+      />
+
+
+
+
+
+      <h1 class="font-agrandir text-white text-5xl md:text-8xl leading-none font-extrabold">
+        Voa <br> Fred!
+      </h1>
+
+      <p class="mt-6 max-w-xl text-white text-lg md:text-2xl leading-relaxed">
+        "Eu ainda sou pequeno, mas o meu sonho de me tornar piloto é grande.
+        Quem sonha alto, um dia decola."
+      </p>
+
+      <!-- Avião decorativo -->
+      <!-- <img
+        src="./images/hero/chosen/airplane_trabalhando.svg"
+        alt=""
+        class="absolute bottom-28 left-1/2 -translate-x-1/2 w-40 md:w-56 opacity-80"
+      > -->
+
+    </div>
+
+  </section>
+
+  <!-- About Section -->
+  <section class="relative bg-white overflow-hidden px-6 py-20 md:py-28">
+
+    <!-- Marca d'água: céu com nuvens no fundo -->
+    <img
+      src="./images/details/sky_clouds_trabalhando.svg"
+      class="absolute bottom-0 left-0 w-full h-64 object-cover object-top opacity-20 pointer-events-none"
+      alt=""
+    >
+
+    <!-- Conteúdo -->
+    <div class="relative z-10 max-w-2xl mx-auto">
+
+      <h2 class="font-agrandir text-black text-4xl md:text-6xl leading-tight font-extrabold mb-6" style="word-spacing: -0.1em;">
+        Oi, eu sou o Frederico!
+      </h2>
+
+      <p class="font-inter-italic text-black/70 text-md md:text-xl italic leading-relaxed mb-6">
+        Mas muita gente me conhece como <strong class="not-italic text-black">Fly Fred</strong>.
+      </p>
+
+      <div class="font-inter-light space-y-5 text-black text-base md:text-lg leading-relaxed">
+        <p>
+          Eu tenho 13 anos e o meu maior sonho é ser piloto de avião. Desde pequeno eu sou apaixonado por aviões, e hoje eu faço tudo o que posso pra chegar lá um dia.
+        </p>
+        <p>
+          Eu estudo bastante, leio livros sobre aviação e também treino em simulador, como se eu já estivesse pilotando de verdade. Eu gosto muito de aprender como tudo funciona dentro de um avião e como os pilotos se preparam.
+        </p>
+        <p>
+          Uma coisa muito legal que já aconteceu comigo foi ter sido convidado pra conhecer o CT de treinamento da Azul! Também já tive a oportunidade de fazer voo de acrobacia, e foi uma das experiências mais incríveis da minha vida!
+        </p>
+        <p>
+          Eu também estudo inglês, porque sei que é muito importante pra quem quer ser piloto. E nas minhas redes sociais, onde já tenho mais de <strong>35.000 seguidores</strong>, eu compartilho a minha rotina, meus estudos e tudo que eu aprendo nesse caminho.
+        </p>
+        <p>
+          Eu ainda tenho muito pra aprender, mas eu nunca vou desistir do meu sonho. Um dia eu vou estar lá em cima, pilotando um avião de verdade.
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12">
+        <a href="#" class="inline-flex items-center gap-3 bg-[#f5d842] text-black font-bold text-lg px-8 py-4 rounded-full hover:bg-[#f0cc20] transition-colors">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>          
+          Acompanhe essa jornada
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ════════════════════════════════════════════
+       SEÇÃO: CARDS DE HISTÓRIA
+       Para replicar: copie um bloco <article class="story-card …">
+       e troque: data-chapter, título, texto, src da foto
+  ════════════════════════════════════════════ -->
+  <section class="story-section relative">
+
+    <!-- ────────────── CARD 1 ────────────── -->
+    <article class="story-card relative card-sky overflow-hidden mb-6 p-7 pb-0" data-chapter="1">
+
+      <!-- Pagination dots — colados na borda direita -->
+      <div class="pagination-dots">
+        <div class="dot active">1</div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <!-- Topo: número + imagem decorativa (avião) -->
+      <div class="flex items-start justify-between mb-2">
+        <span class="chapter-dot">1</span>
+        <!-- Imagem decorativa de avião — flutua no canto superior direito -->
+        <img
+          src="./images/sky-images/biplane-deco.png"
+          alt=""
+          class="w-40 -mt-6 -mr-4 pointer-events-none select-none"
+          style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
+        >
+      </div>
+
+      <!-- Título grande -->
+      <h2 class="font-agrandir text-white text-6xl leading-[0.95] font-extrabold mt-2 mb-6"
+          style="text-shadow: 0 2px 12px rgba(80,140,200,0.18);">
+        Looking<br>Up
+      </h2>
+
+      <!-- Texto + menino (sobreposição) -->
+      <div class="relative flex items-end gap-4 mb-0">
+
+        <!-- Texto -->
+        <p class="card-text text-[0.97rem] flex-1 mb-6 pr-2">
+          When I was little, I was captivated by the airplanes flying overhead
+          in my town. I watched as they flew low to the ground, performing
+          agricultural tasks like spraying crops.
+        </p>
+
+        <!-- Menino / personagem decorativo -->
+        <img
+          src="./images/hero/chosen/fred_com_uniforme_painted_trabalhando.png"
+          alt=""
+          class="w-32 flex-shrink-0 -mb-0 self-end pointer-events-none select-none"
+          style="filter: drop-shadow(0 4px 16px rgba(100,160,220,0.25));"
+        >
+
+      </div>
+
+      <!-- Foto vintage — fica abaixo, saindo do card levemente -->
+      <!-- <div class="photo-frame h-60 mx-0 -mx-7 rounded-none rounded-b-3xl opacity-70">
+        <img
+          src="./images/1/sky_feathered_v3.jpg"
+          alt="Foto de infância"
+          class="grayscale-[20%]"
+        >
+      </div> -->
+
+    </article>
+
+
+    <!-- ────────────── CARD 2 (exemplo replicado) ────────────── -->
+    <article class="story-card relative card-sky rounded-3xl overflow-visible mb-6 p-7 pb-0" data-chapter="2">
+
+      <div class="pagination-dots">
+        <div class="dot"></div>
+        <div class="dot active">2</div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="flex items-start justify-between mb-2">
+        <span class="chapter-dot">2</span>
+        <img
+          src="./images/sky-images/biplane-deco.png"
+          alt=""
+          class="w-40 -mt-6 -mr-4 pointer-events-none select-none"
+          style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
+        >
+      </div>
+
+      <h2 class="font-agrandir text-white text-6xl leading-[0.95] font-extrabold mt-2 mb-6">
+        First<br>Flight
+      </h2>
+
+      <div class="relative flex items-end gap-4 mb-0">
+        <p class="card-text text-[0.97rem] flex-1 mb-6 pr-2">
+          The day I sat inside a real cockpit for the first time, everything
+          changed. The instruments, the smell of aviation fuel, the silence
+          before the engine roars — I knew this was my world.
+        </p>
+        <img
+          src="./images/hero/chosen/fred_com_uniforme_painted_trabalhando.png"
+          alt=""
+          class="w-32 flex-shrink-0 self-end pointer-events-none select-none"
+          style="filter: drop-shadow(0 4px 16px rgba(100,160,220,0.25));"
+        >
+      </div>
+
+      <div class="photo-frame h-60 mx-0 -mx-7 rounded-none rounded-b-3xl">
+        <img
+          src="./images/sky-images/pexels-sharrrrrk-13054274.jpg"
+          alt="Foto do primeiro voo"
+        >
+      </div>
+
+    </article>
+
+
+    <!-- ────────────── CARD 3 (exemplo replicado) ────────────── -->
+    <article class="story-card relative card-sky rounded-3xl overflow-visible mb-6 p-7 pb-0" data-chapter="3">
+
+      <div class="pagination-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot active">3</div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="flex items-start justify-between mb-2">
+        <span class="chapter-dot">3</span>
+        <img
+          src="./images/sky-images/biplane-deco.png"
+          alt=""
+          class="w-40 -mt-6 -mr-4 pointer-events-none select-none"
+          style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));"
+        >
+      </div>
+
+      <h2 class="font-agrandir text-white text-6xl leading-[0.95] font-extrabold mt-2 mb-6">
+        Always<br>Training
+      </h2>
+
+      <div class="relative flex items-end gap-4 mb-0">
+        <p class="card-text text-[0.97rem] flex-1 mb-6 pr-2">
+          Every day I study: meteorology, aerodynamics, navigation. The simulator
+          is my classroom. I log every hour because I know that discipline
+          separates dreamers from pilots.
+        </p>
+        <img
+          src="./images/hero/chosen/fred_com_uniforme_painted_trabalhando.png"
+          alt=""
+          class="w-32 flex-shrink-0 self-end pointer-events-none select-none"
+          style="filter: drop-shadow(0 4px 16px rgba(100,160,220,0.25));"
+        >
+      </div>
+
+      <div class="photo-frame h-60 mx-0 -mx-7 rounded-none rounded-b-3xl">
+        <img
+          src="./images/sky-images/pexels-sharrrrrk-13054274.jpg"
+          alt="Treinamento"
+        >
+      </div>
+
+    </article>
+
+  </section>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script> -->
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+</body>
+</html>
