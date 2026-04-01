@@ -61,147 +61,144 @@ const badgeClass = {
 <!-- HERO RESPONSIVO COM BUSCA E LISTA -->
 
 <section class="relative min-h-[57vh]">
+    <div class="page-shell">
+        <!-- Background -->
+        <div class="absolute inset-0">
+            <img
+                src="assets/images/hero/ellena-mcguinness-n1qekSkjhXQ-unsplash.jpg"
+                class="w-full h-full object-cover"
 
-    <!-- Background -->
-    <div class="absolute inset-0">
-        <img
-            src="assets/images/hero/ellena-mcguinness-n1qekSkjhXQ-unsplash.jpg"
-            class="w-full h-full object-cover"
-
-            alt=""
-        >
-        <!-- w-full h-full object-cover -->
-        <div class="absolute inset-0 bg-black/50"></div>
-    </div>
-
-    <!-- Navbar -->
-    <header class="relative z-20 px-6 md:px-12 py-1 flex justify-between items-center text-white">
-        <div class="font-bold uppercase tracking-wider" style="font-family: 'PT Sans', sans-serif; font-size: 0.8125rem;">
-            Central de Vistos
+                alt=""
+            >
+            <!-- w-full h-full object-cover -->
+            <div class="absolute inset-0 bg-black/50"></div>
         </div>
-        <!-- Desktop Menu -->
-        <nav class="hidden md:flex gap-8 text-sm font-medium">
-            <a href="#">Países</a>
-            <a href="#">Vistos</a>
-            <a href="#">Contato</a>
-        </nav>
-        <!-- Mobile Hamburger -->
-        <button id="nav-toggle" aria-label="Abrir menu" class="md:hidden flex items-center p-2 focus:outline-none">
-            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-    </header>
 
-    <!-- Overlay e Menu Lateral -->
-    <div id="mobile-overlay" class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
-
-    <aside id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white text-black z-50 transform -translate-x-full transition-transform duration-300 shadow-lg flex flex-col">
-        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200">
-            <span class="text-xl font-bold">Menu</span>
-            <button id="nav-close" aria-label="Fechar menu" class="p-2">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        <!-- Navbar -->
+        <header class="relative z-20 py-0 md:py-4 flex justify-between items-center text-white">
+            <div class="font-bold uppercase tracking-wider" style="font-family: 'PT Sans', sans-serif; font-size: 0.8125rem;">
+                Central de Vistos
+            </div>
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex gap-8 text-sm font-medium">
+                <a href="#">Países</a>
+                <a href="#">Vistos</a>
+                <a href="#">Contato</a>
+            </nav>
+            <!-- Mobile Hamburger -->
+            <button id="nav-toggle" aria-label="Abrir menu" class="md:hidden flex items-center p-2 focus:outline-none">
+                <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
-        </div>
-        <nav class="flex flex-col gap-4 px-6 py-6 text-base font-medium">
-            <a href="#" class="py-2">Países</a>
-            <a href="#" class="py-2">Vistos</a>
-            <a href="#" class="py-2">Contato</a>
-            <a href="/blog/" class="py-2">Blog</a>
-            <a href="https://fastvistos.com.br/formularios/" class="py-2">Formulários</a>
-            <a href="#" class="py-2">☎ (11) 5028-3044</a>
-        </nav>
-    </aside>
+        </header>
 
-    <!-- Hero Text -->
-    <div class="relative z-10 text-center px-6 pt-10 md:pt-16 text-white">
-        <h1 class="text-4xl md:text-5xl font-bold max-w-4xl mx-auto">
-            Descubra, <br class="block md:hidden">organize e <br class="block md:hidden">viaje
-        </h1>
-        <p class="mt-4 text-white/90 uppercase" style="font-family: 'PT Sans', sans-serif; font-size: 0.8125rem;">
-            Informações sobre vistos em um só lugar
-        </p>
-    </div>
+        <!-- Overlay e Menu Lateral -->
+        <div id="mobile-overlay" class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
 
-    <!-- SEARCH SECTION -->
-    <div class="relative z-10 px-6 md:px-12 mt-8 pb-20">
-        <div class="max-w-md mx-auto">
-
-            <!-- Search Bar -->
-            <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 transition-all focus-within:border-blue-400/60 focus-within:bg-white/15"
-            style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
-            >
-                <svg class="w-4 h-4 text-white/35 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
-                </svg>
-                <input
-                    id="vg-input"
-                    type="text"
-                    placeholder="Buscar país..."
-                    autocomplete="off"
-                    aria-label="Buscar país"
-                    class="bg-transparent border-none outline-none text-[15px] text-white placeholder-white/30 w-full"
-                />
-            </div>
-
-            <!-- Filters -->
-            <div class="flex gap-2 justify-center mt-5 flex-wrap" id="vg-filters">
-                <button
-                    class="vg-filter px-4 py-1.5 rounded-full text-xs font-semibold border border-white/25 text-white/60 bg-white/10 hover:bg-white/18 hover:text-white/70 transition-all whitespace-nowrap cursor-pointer"
-                    style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
-                    data-filter="all"
-                >Todos</button>
-                <button
-                    class="vg-filter active px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap cursor-pointer"
-                    data-filter="popular"
-                >⭐ Populares</button>
-            </div>
-
-            <!-- Country Cards -->
-            <!-- Pills/Chips de Países -->
-            <div class="flex flex-wrap gap-3 mt-5 justify-start min-h-[90px] content-start" id="vg-grid">
-                {countries.map((c, i) => (
-                    <a
-                        href={`/vistos/${c.slug}`}
-                        class="vg-card flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-2 py-0 no-underline transition-all hover:bg-white/20 hover:border-white/40 cursor-pointer shadow-sm"
-                        data-name={c.name.toLowerCase()}
-                        data-type={c.typeCode}
-                        data-popular={c.popular ? "true" : "false"}
-                        style={`backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation-delay: ${i * 0.03}s`}
-                    >
-                        <span class="text-lg md:text-xl flex-shrink-0">{c.flag}</span>
-                        <span class="font-semibold text-white text-sm md:text-base truncate">{c.name}</span>
-                    </a>
-                ))}
-            </div>
-
-            <!-- Empty State -->
-            <div class="text-center py-10 text-white/35" id="vg-empty" style="display:none;">
-                <span class="text-4xl block mb-3">🔍</span>
-                <p class="text-sm leading-relaxed mb-5">Nenhum país encontrado.<br/>Fale com nossos especialistas!</p>
-                <a href="#whatsapp" class="inline-block bg-white text-blue-600 font-bold text-sm px-6 py-3 rounded-full no-underline">
-                    💬 Consultar no WhatsApp
-                </a>
-            </div>
-
-            <!-- Footer CTA -->
-            <!-- <div class="text-center mt-10">
-                <p class="text-sm text-white/40 mb-3.5">Não encontrou seu destino ou ficou com dúvidas?</p>
-                <button
-                    class="wpp_button_link cta-button-wiggle inline-flex items-center gap-2.5 bg-transparent border border-white/25 rounded-2xl px-7 py-4 text-white font-bold cursor-pointer transition-all hover:border-white/45 hover:bg-white/5"
-                    data-linkcode="%231"
-                    style="font-family: 'Sora', sans-serif; font-size: 16px;"
-                >
-                    <span class="hidden sm:inline">Atendimento pelo <strong>WhatsApp!</strong></span>
-                    <span class="inline sm:hidden">Estamos no WhatsApp!</span>
+        <aside id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white text-black z-50 transform -translate-x-full transition-transform duration-300 shadow-lg flex flex-col">
+            <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200">
+                <span class="text-xl font-bold">Menu</span>
+                <button id="nav-close" aria-label="Fechar menu" class="p-2">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
-            </div> -->
+            </div>
+            <nav class="flex flex-col gap-4 px-6 py-6 text-base font-medium">
+                <a href="#" class="py-2">Países</a>
+                <a href="#" class="py-2">Vistos</a>
+                <a href="#" class="py-2">Contato</a>
+                <a href="/blog/" class="py-2">Blog</a>
+                <a href="https://fastvistos.com.br/formularios/" class="py-2">Formulários</a>
+                <a href="#" class="py-2">☎ (11) 5028-3044</a>
+            </nav>
+        </aside>
 
+        <!-- Hero Text -->
+        <div class="relative z-10 text-center px-6 pt-10 md:pt-26 text-white">
+            <h1 class="text-4xl md:text-5xl font-bold max-w-4xl mx-auto">
+                Descubra, <br class="block md:hidden">organize e <br class="block md:hidden">viaje
+            </h1>
+            <p class="mt-4 text-white/90 uppercase" style="font-family: 'PT Sans', sans-serif; font-size: 0.8125rem;">
+                Informações sobre vistos em um só lugar
+            </p>
+        </div>
+
+        <!-- SEARCH SECTION -->
+        <div class="relative z-10 px-6 md:px-12 mt-8 md:mt-12 pb-20">
+            <div class="max-w-md mx-auto">
+
+                <!-- Search Bar -->
+                <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 transition-all focus-within:border-blue-400/60 focus-within:bg-white/15"
+                style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
+                >
+                    <svg class="w-4 h-4 text-white/35 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+                    </svg>
+                    <input
+                        id="vg-input"
+                        type="text"
+                        placeholder="Buscar país..."
+                        autocomplete="off"
+                        aria-label="Buscar país"
+                        class="bg-transparent border-none outline-none text-[15px] text-white placeholder-white/30 w-full"
+                    />
+                </div>
+
+                <!-- Filters -->
+                <div class="flex gap-2 justify-center mt-5 flex-wrap" id="vg-filters">
+                    <button
+                        class="vg-filter px-4 py-1.5 rounded-full text-xs font-semibold border border-white/25 text-white/60 bg-white/10 hover:bg-white/18 hover:text-white/70 transition-all whitespace-nowrap cursor-pointer"
+                        style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
+                        data-filter="all"
+                    >Todos</button>
+                    <button
+                        class="vg-filter active px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap cursor-pointer"
+                        data-filter="popular"
+                    >⭐ Populares</button>
+                </div>
+
+                <!-- Country Cards -->
+                <!-- Pills/Chips de Países -->
+                <div class="flex flex-wrap gap-3 mt-5 justify-start min-h-[90px] content-start" id="vg-grid">
+                    {countries.map((c, i) => (
+                        <a
+                            href={`/vistos/${c.slug}`}
+                            class="vg-card flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-2 py-0 no-underline transition-all hover:bg-white/20 hover:border-white/40 cursor-pointer shadow-sm"
+                            data-name={c.name.toLowerCase()}
+                            data-type={c.typeCode}
+                            data-popular={c.popular ? "true" : "false"}
+                            style={`backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation-delay: ${i * 0.03}s`}
+                        >
+                            <span class="text-lg md:text-xl flex-shrink-0">{c.flag}</span>
+                            <span class="font-semibold text-white text-sm md:text-base truncate">{c.name}</span>
+                        </a>
+                    ))}
+                </div>
+
+                <!-- Empty State -->
+                <div class="text-center pt-10 text-white/60" id="vg-empty" style="display:none;">
+                    <span class="text-4xl block mb-3">🔍</span>
+                    <p class="text-sm leading-relaxed mb-5">Nenhum país encontrado.</p>
+                </div>
+
+                <!-- Footer CTA -->
+                <!-- <div class="text-center mt-10">
+                    <p class="text-sm text-white/40 mb-3.5">Não encontrou seu destino ou ficou com dúvidas?</p>
+                    <button
+                        class="wpp_button_link cta-button-wiggle inline-flex items-center gap-2.5 bg-transparent border border-white/25 rounded-2xl px-7 py-4 text-white font-bold cursor-pointer transition-all hover:border-white/45 hover:bg-white/5"
+                        data-linkcode="%231"
+                        style="font-family: 'Sora', sans-serif; font-size: 16px;"
+                    >
+                        <span class="hidden sm:inline">Atendimento pelo <strong>WhatsApp!</strong></span>
+                        <span class="inline sm:hidden">Estamos no WhatsApp!</span>
+                    </button>
+                </div> -->
+
+            </div>
         </div>
     </div>
-
 </section>
 
 <script>
@@ -287,7 +284,7 @@ const badgeClass = {
             }
         });
         vgEmpty.style.display = visible === 0 ? 'block' : 'none';
-        vgGrid.style.display = visible === 0 ? 'none' : 'grid';
+        vgGrid.style.display = visible === 0 ? 'none' : 'flex';
     }
 
     if (vgInput) {
