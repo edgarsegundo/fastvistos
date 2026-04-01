@@ -35,6 +35,29 @@ const badgeClass = {
 };
 ---
 
+<!-- MODAL: Bottom sheet com todos os países -->
+<div id="countries-modal" class="fixed inset-0 z-50 hidden">
+    <div id="modal-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div id="modal-content"
+        class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto shadow-2xl transform translate-y-full transition-transform duration-300">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">Todos os países</h3>
+            <button id="modal-close" class="text-gray-500 text-xl leading-none">✕</button>
+        </div>
+        <div class="flex flex-wrap gap-3">
+            {countries.map((c) => (
+                <a
+                    href={`/vistos/${c.slug}`}
+                    class="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-200 no-underline"
+                >
+                    <span>{c.flag}</span>
+                    <span>{c.name}</span>
+                </a>
+            ))}
+        </div>
+    </div>
+</div>
+
 <!-- HERO RESPONSIVO COM BUSCA E LISTA -->
 
 <section class="relative min-h-[57vh]">
@@ -208,6 +231,30 @@ const badgeClass = {
 </script>
 
 <script is:inline>
+    // Modal
+    const modal        = document.getElementById('countries-modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalClose   = document.getElementById('modal-close');
+    const modalOverlay = document.getElementById('modal-overlay');
+
+    function openModal() {
+        document.body.style.overflow = 'hidden';
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            modalContent.classList.remove('translate-y-full');
+        });
+    }
+
+    function closeModal() {
+        document.body.style.overflow = '';
+        modalContent.classList.add('translate-y-full');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    if (modalClose)   modalClose.addEventListener('click', closeModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
     // Search and filter
     const vgInput   = document.getElementById('vg-input');
     const vgEmpty   = document.getElementById('vg-empty');
@@ -228,7 +275,6 @@ const badgeClass = {
 
             const matchSearch = name.includes(searchQuery);
             const matchFilter =
-                activeFilter === 'all'     ? true :
                 activeFilter === 'popular' ? popular :
                 type === activeFilter;
 
@@ -251,15 +297,40 @@ const badgeClass = {
 
     vgFilters.forEach(btn => {
         btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+            if (filter === 'all') {
+                openModal();
+                return;
+            }
             vgFilters.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            activeFilter = btn.dataset.filter ?? 'all';
+            activeFilter = filter;
             applyFilters();
         });
     });
 </script>
 
 <style>
+    .vg-filter {
+        padding: 6px 16px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.10);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: rgba(255,255,255,0.60);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.18s;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .vg-filter:hover {
+        background: rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.80);
+    }
+
     .vg-filter.active {
         background: rgba(0, 119, 182, 0.55);
         border-color: rgba(0, 150, 220, 0.4);
