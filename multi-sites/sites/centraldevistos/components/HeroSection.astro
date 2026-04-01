@@ -104,7 +104,9 @@ const badgeClass = {
         <div class="max-w-md mx-auto">
 
             <!-- Search Bar -->
-            <div class="flex items-center gap-3 bg-white/10 border border-white/15 rounded-2xl px-4 py-3.5 transition-all focus-within:border-blue-400/60 focus-within:bg-white/15">
+            <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 transition-all focus-within:border-blue-400/60 focus-within:bg-white/15"
+            style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
+            >
                 <svg class="w-4 h-4 text-white/35 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                 </svg>
@@ -121,7 +123,8 @@ const badgeClass = {
             <!-- Filters -->
             <div class="flex gap-2 justify-center mt-5 flex-wrap" id="vg-filters">
                 <button
-                    class="vg-filter px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/45 bg-white/5 hover:bg-white/10 hover:text-white/70 transition-all whitespace-nowrap cursor-pointer"
+                    class="vg-filter px-4 py-1.5 rounded-full text-xs font-semibold border border-white/25 text-white/60 bg-white/10 hover:bg-white/18 hover:text-white/70 transition-all whitespace-nowrap cursor-pointer"
+                    style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
                     data-filter="all"
                 >Todos</button>
                 <button
@@ -135,11 +138,11 @@ const badgeClass = {
                 {countries.map((c, i) => (
                     <a
                         href={`/vistos/${c.slug}`}
-                        class="vg-card flex items-center gap-3.5 bg-white/[0.06] border border-white/[0.09] rounded-2xl px-4 py-3.5 no-underline transition-all hover:bg-white/[0.11] hover:border-white/[0.18] hover:translate-x-0.5 cursor-pointer"
+                        class="vg-card flex items-center gap-3.5 bg-white/[0.12] border border-white/[0.18] rounded-2xl px-4 py-3.5 no-underline transition-all hover:bg-white/[0.18] hover:border-white/[0.30] hover:translate-x-0.5 cursor-pointer"
                         data-name={c.name.toLowerCase()}
                         data-type={c.typeCode}
                         data-popular={c.popular ? "true" : "false"}
-                        style={`animation-delay: ${i * 0.05}s`}
+                        style={`backdrop-filter: blur(10px); -webkit-backdrop-serif: blur(10px); animation-delay: ${i * 0.05}s`}
                     >
                         <span class="text-2xl flex-shrink-0">{c.flag}</span>
                         <div class="flex-1 min-w-0">
@@ -263,9 +266,11 @@ const badgeClass = {
 
 <style>
     .vg-filter.active {
-        background: linear-gradient(270deg, #0077b6 0%, #2a5e90 100%);
-        border-color: transparent;
+        background: rgba(0, 119, 182, 0.55);
+        border-color: rgba(0, 150, 220, 0.4);
         color: white;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 
     .vg-card {
