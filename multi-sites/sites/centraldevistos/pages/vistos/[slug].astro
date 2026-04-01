@@ -4,7 +4,6 @@
 
 import SharedGenericLayout from '../../layouts/SharedGenericLayout.astro';
 import JsonLdVisaPage from '../../components/JsonLdVisaPage.astro';
-import Navigation from '../../components/Navigation.astro';
 import FooterSection from '../../components/FooterSection.astro';
 import Whatsapp from '../../components/Whatsapp.astro';
 import { siteConfig } from '../../site-config.ts';
@@ -124,7 +123,7 @@ const breadcrumbList = [
       description: metaDescription,
     }
   }}
-  bodyClass="gradient text-white bg-surface-inverse"
+  bodyClass="bg-white"
   >
 
   <Fragment slot="head">
@@ -145,48 +144,96 @@ const breadcrumbList = [
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   </Fragment>
-  <Navigation />
+  <!-- NAVBAR -->
+  <header class="cp-nav">
+    <div class="cp-nav-inner">
+      <a href="/" class="cp-nav-logo">Central de Vistos</a>
+      <nav class="cp-nav-links">
+        <a href="/">Países</a>
+        <a href="/">Vistos</a>
+        <a href="/">Contato</a>
+      </nav>
+      <button id="nav-toggle" aria-label="Abrir menu" class="cp-nav-hamburger">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="26" height="26">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile overlay & drawer -->
+  <div id="mobile-overlay" class="cp-overlay"></div>
+  <aside id="mobile-menu" class="cp-drawer">
+    <div class="cp-drawer-header">
+      <span>Menu</span>
+      <button id="nav-close" aria-label="Fechar menu">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="22" height="22">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <nav class="cp-drawer-nav">
+      <a href="/">Países</a>
+      <a href="/">Vistos</a>
+      <a href="/">Contato</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://fastvistos.com.br/formularios/">Formulários</a>
+      <a href="#">☎ (11) 5028-3044</a>
+    </nav>
+  </aside>
 
 <div class="country-page">
   <div class="cp-container">
-  <div class="cp-card">
-    <!-- Hero do país -->
-    <div class="cp-hero">
-      <div class="cp-hero-inner">
-        <a href="/#visa-guide" class="cp-back">← Voltar ao guia</a>
-        <div class="cp-flag">{flag}</div>
-        <h1 class="cp-title">Visto para {nome}</h1>
-        <p class="cp-summary">{summary}</p>
-        <div class={`cp-type-badge cp-type--${typeCode}`}>{typeLabel}</div>
-        {confiabilidade && (
-          <div class={`cp-conf-badge cp-conf--${confiabilidade}`}>
-            Confiabilidade: {confiabilidade}
-          </div>
-        )}
+
+    <!-- MINI HEADER -->
+    <div class="cp-mini-header">
+      <nav class="cp-breadcrumb" aria-label="breadcrumb">
+        <a href="/">Início</a>
+        <span>›</span>
+        <span>Visto para {nome}</span>
+      </nav>
+      <div class="cp-mini-title">
+        <span class="cp-mini-flag">{flag}</span>
+        <div>
+          <h1 class="cp-title">Visto para {nome}</h1>
+          {summary && <p class="cp-summary">{summary}</p>}
+        </div>
+        <div class="cp-badges">
+          <span class={`cp-type-badge cp-type--${typeCode}`}>{typeLabel}</span>
+          {confiabilidade && (
+            <span class={`cp-conf-badge cp-conf--${confiabilidade}`}>
+              Confiabilidade: {confiabilidade}
+            </span>
+          )}
+        </div>
       </div>
     </div>
+
+  <div class="cp-card">
 
     <div class="cp-body">
 
     <!-- Info rápida -->
-    <div class="cp-quick">
-      <div class="cp-quick-item">
-        <span class="cp-quick-label">Prazo de emissão</span>
-        <span class="cp-quick-value">{prazo}</span>
-      </div>
-      <div class="cp-quick-item">
-        <span class="cp-quick-label">Validade</span>
-        <span class="cp-quick-value">{validade}</span>
-      </div>
-      <div class="cp-quick-item">
-        <span class="cp-quick-label">Entrevista</span>
-        <span class="cp-quick-value">{entrevista ? "Obrigatória" : "Não exige"}</span>
-      </div>
-      <div class="cp-quick-item">
-        <span class="cp-quick-label">Taxa consular</span>
-        <span class="cp-quick-value">{custo}</span>
-      </div>
-    </div>
+    <table class="cp-quick-table">
+      <tbody>
+        <tr>
+          <td class="cp-qt-label">Prazo de emissão</td>
+          <td class="cp-qt-value">{prazo}</td>
+        </tr>
+        <tr>
+          <td class="cp-qt-label">Validade / Estadia</td>
+          <td class="cp-qt-value">{validade}</td>
+        </tr>
+        <tr>
+          <td class="cp-qt-label">Entrevista</td>
+          <td class="cp-qt-value">{entrevista ? 'Obrigatória' : 'Não exige'}</td>
+        </tr>
+        <tr>
+          <td class="cp-qt-label">Taxa consular</td>
+          <td class="cp-qt-value">{custo}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <!-- Alertas -->
     {seguroSaude && (
@@ -325,138 +372,211 @@ const breadcrumbList = [
 </SharedGenericLayout>
 
 <style>
+  /* ── Navbar ── */
+  .cp-nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .cp-nav-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cp-nav-logo {
+    font-family: 'PT Sans', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #111;
+    text-decoration: none;
+  }
+  .cp-nav-links {
+    display: none;
+    gap: 28px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  .cp-nav-links a { color: #374151; text-decoration: none; transition: color 0.15s; }
+  .cp-nav-links a:hover { color: #0077b6; }
+  @media (min-width: 768px) { .cp-nav-links { display: flex; } }
+  .cp-nav-hamburger {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #374151;
+  }
+  @media (min-width: 768px) { .cp-nav-hamburger { display: none; } }
+
+  /* Mobile drawer */
+  .cp-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 40;
+  }
+  .cp-overlay.open { display: block; }
+  .cp-drawer {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%;
+    width: 260px;
+    background: #fff;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.10);
+  }
+  .cp-drawer.open { transform: translateX(0); }
+  .cp-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .cp-drawer-header button { background: none; border: none; cursor: pointer; color: #6b7280; }
+  .cp-drawer-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 24px;
+    gap: 4px;
+  }
+  .cp-drawer-nav a {
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  /* ── Page layout ── */
   .country-page {
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
-    padding: 0 16px 64px;
+    background: #fff;
+    padding: 0 16px 80px;
   }
 
   .cp-container {
-    max-width: 860px;
+    max-width: 680px;
     margin: 0 auto;
-    padding-top: 32px;
+    padding-top: 28px;
   }
 
   .cp-card {
-    border-top-right-radius: 34px;
-    border-bottom-right-radius: 34px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    margin-bottom: 32px;
   }
 
-  /* Hero */
-  .cp-hero {
-    background: var(--color-secondary-500);
-    padding: 40px 24px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .cp-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
-  }
-
-  .cp-hero-inner {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    text-align: center;
-  }
-
-  .cp-back {
-    display: inline-block;
-    font-size: 13px;
-    color: rgba(255,255,255,0.4);
-    text-decoration: none;
+  /* ── Mini header ── */
+  .cp-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #9ca3af;
     margin-bottom: 20px;
-    transition: color 0.2s;
+  }
+  .cp-breadcrumb a { color: #9ca3af; text-decoration: none; }
+  .cp-breadcrumb a:hover { color: #0077b6; }
+
+  .cp-mini-header { margin-bottom: 28px; }
+
+  .cp-mini-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
-  .cp-back:hover { color: rgba(255,255,255,0.75); }
-
-  .cp-flag { font-size: 72px; line-height: 1; margin-bottom: 12px; }
+  .cp-mini-flag { font-size: 52px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
 
   .cp-title {
     font-family: 'Sora', sans-serif;
-    font-size: clamp(24px, 6vw, 40px);
+    font-size: clamp(22px, 5vw, 32px);
     font-weight: 800;
-    color: #fff;
-    margin-bottom: 12px;
+    color: #111;
     letter-spacing: -0.02em;
+    margin: 0 0 4px;
   }
 
   .cp-summary {
-    font-size: 15px;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.6;
-    margin-bottom: 16px;
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
   }
+
+  .cp-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 
   .cp-type-badge {
     display: inline-block;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 5px 14px;
+    padding: 4px 12px;
     border-radius: 100px;
     font-family: 'Inter', sans-serif;
   }
 
-  .cp-type--free     { background: rgba(37,162,68,0.2);  color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-  .cp-type--eta      { background: #a0d2f4; color: #0077b6; border: 1px solid #60bfff; }
-  .cp-type--required { background: rgba(234,179,8,0.2);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+  .cp-type--free     { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+  .cp-type--eta      { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .cp-type--required { background: #fef9c3; color: #a16207; border: 1px solid #fde68a; }
 
   /* Body */
   .cp-body {
     background: #fff;
-    padding: 28px 20px 40px;
+    padding: 24px 20px 36px;
   }
 
   @media (min-width: 640px) {
-    .cp-body { padding: 36px 40px 48px; }
+    .cp-body { padding: 32px 36px 44px; }
   }
 
-  /* Quick info */
-  .cp-quick {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+  /* Quick info table */
+  .cp-quick-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-bottom: 28px;
+    font-size: 14px;
   }
-
-  @media (min-width: 640px) {
-    .cp-quick { grid-template-columns: repeat(4, 1fr); }
+  .cp-quick-table tr {
+    border-bottom: 1px solid #f3f4f6;
   }
-
-  .cp-quick-item {
-    background: #fff;
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .cp-quick-label {
-    font-size: 10px;
-    font-weight: 600;
+  .cp-quick-table tr:last-child { border-bottom: none; }
+  .cp-qt-label {
+    padding: 12px 0;
     color: #9ca3af;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    width: 45%;
+    vertical-align: top;
   }
-
-  .cp-quick-value {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1f2937;
+  .cp-qt-value {
+    padding: 12px 0;
+    color: #111;
+    font-weight: 600;
     font-family: 'Sora', sans-serif;
+    font-size: 14px;
   }
 
   /* Sections */
@@ -583,25 +703,24 @@ const breadcrumbList = [
     display: inline-block;
     font-size: 11px;
     font-weight: 600;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 100px;
-    margin-top: 8px;
     font-family: 'Inter', sans-serif;
   }
-  .cp-conf--alta    { background: rgba(37,162,68,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
-  .cp-conf--media   { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
-  .cp-conf--baixa   { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+  .cp-conf--alta    { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+  .cp-conf--media   { background: #fef9c3; color: #a16207; border: 1px solid #fde68a; }
+  .cp-conf--baixa   { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
 
   /* Alertas */
   .cp-alert {
-    border-radius: 12px;
-    padding: 14px 18px;
+    border-radius: 10px;
+    padding: 13px 16px;
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 20px;
   }
-  .cp-alert--info { background: rgba(0,119,182,0.08); border: 1px solid rgba(0,119,182,0.2); color: #0077b6; }
-  .cp-alert--warn { background: rgba(234,179,8,0.07); border: 1px solid rgba(234,179,8,0.25); color: #92400e; }
+  .cp-alert--info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+  .cp-alert--warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
 
   /* Recursos */
   .cp-recursos { list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -673,5 +792,25 @@ const breadcrumbList = [
 
 </style>
 
+<script>
+  const navToggle = document.getElementById('nav-toggle');
+  const navClose = document.getElementById('nav-close');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileOverlay = document.getElementById('mobile-overlay');
 
+  function openMenu() {
+    mobileMenu?.classList.add('open');
+    mobileOverlay?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 
+  function closeMenu() {
+    mobileMenu?.classList.remove('open');
+    mobileOverlay?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  navToggle?.addEventListener('click', openMenu);
+  navClose?.addEventListener('click', closeMenu);
+  mobileOverlay?.addEventListener('click', closeMenu);
+</script>

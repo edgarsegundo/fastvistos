@@ -126,8 +126,8 @@ const badgeClass = {
         </div>
 
         <!-- SEARCH SECTION -->
-        <div class="relative z-10 px-6 md:px-12 mt-8 md:mt-12 pb-20">
-            <div class="max-w-md mx-auto">
+        <div class="relative z-10 px-6 md:px-12 mt-8 md:mt-12 pb-20 min-h-[380px] ">
+            <div class="max-w-[400px] mx-auto">
 
                 <!-- Search Bar -->
                 <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 transition-all focus-within:border-blue-400/60 focus-within:bg-white/15"
@@ -161,7 +161,7 @@ const badgeClass = {
 
                 <!-- Country Cards -->
                 <!-- Pills/Chips de Países -->
-                <div class="flex flex-wrap gap-3 mt-5 justify-start min-h-[90px] content-start" id="vg-grid">
+                <div class="flex flex-wrap gap-3 mt-5 justify-start content-start" id="vg-grid">
                     {countries.map((c, i) => (
                         <a
                             href={`/vistos/${c.slug}`}
