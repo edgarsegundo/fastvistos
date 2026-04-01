@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informações Sobre Vistos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#5f8b5f] text-white min-h-screen">
+
+  <!-- Background -->
+  <div class="fixed inset-0 bg-cover bg-center opacity-10"
+       style="background-image: url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1');">
+  </div>
+
+  <!-- Navbar -->
+  <header class="relative z-10 px-6 md:px-12 py-6 flex justify-between items-center">
+    <div class="text-2xl font-bold">VisaInfo</div>
+
+    <nav class="hidden md:flex gap-8 text-sm font-medium">
+      <a href="#" class="hover:text-gray-200">Início</a>
+      <a href="#" class="hover:text-gray-200">Países</a>
+      <a href="#" class="hover:text-gray-200">Tipos de visto</a>
+      <a href="#" class="hover:text-gray-200">Contato</a>
+    </nav>
+
+    <button class="border border-white px-5 py-2 rounded-full hover:bg-white hover:text-[#5f8b5f] transition">
+      Consultar visto
+    </button>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative z-10 px-6 md:px-12 pt-10 md:pt-20 pb-12">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+
+      <div>
+        <h1 class="text-5xl md:text-7xl font-bold leading-tight">
+          Informações Sobre Vistos Internacionais
+        </h1>
+
+        <p class="mt-6 text-xl text-white/80 max-w-xl">
+          Saiba exatamente o que você precisa antes de viajar.
+        </p>
+      </div>
+
+      <div class="text-white/90 text-lg leading-relaxed">
+        Oferecemos informações claras sobre exigências de vistos,
+        documentação necessária, custos e prazos médios para diferentes destinos internacionais.
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Search -->
+  <section class="relative z-10 px-6 md:px-12">
+    <div class="max-w-4xl mx-auto">
+
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-5 flex items-center gap-4 border border-white/20">
+        <span class="text-2xl">🔍</span>
+        <input
+          type="text"
+          placeholder="Buscar país..."
+          class="bg-transparent outline-none text-white placeholder-white/60 w-full text-lg"
+        >
+      </div>
+
+      <!-- Filters -->
+      <div class="flex gap-4 mt-8 justify-center flex-wrap">
+        <button class="px-6 py-3 rounded-full border border-white/20 bg-white/10">
+          Todos
+        </button>
+
+        <button class="px-6 py-3 rounded-full bg-blue-600 font-semibold">
+          ⭐ Populares
+        </button>
+
+        <button class="px-6 py-3 rounded-full border border-white/20 bg-white/10">
+          Turismo
+        </button>
+
+        <button class="px-6 py-3 rounded-full border border-white/20 bg-white/10">
+          Estudo
+        </button>
+
+        <button class="px-6 py-3 rounded-full border border-white/20 bg-white/10">
+          Trabalho
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Country List -->
+  <section class="relative z-10 px-6 md:px-12 py-12">
+    <div class="max-w-4xl mx-auto space-y-5">
+
+      <div class="bg-white/10 rounded-2xl px-6 py-6 flex justify-between items-center hover:bg-white/20 transition cursor-pointer">
+        <div class="flex items-center gap-4 text-xl font-semibold">
+          🇦🇺 Austrália
+        </div>
+        <span>›</span>
+      </div>
+
+      <div class="bg-white/10 rounded-2xl px-6 py-6 flex justify-between items-center hover:bg-white/20 transition cursor-pointer">
+        <div class="flex items-center gap-4 text-xl font-semibold">
+          🇨🇦 Canadá
+        </div>
+        <span>›</span>
+      </div>
+
+      <div class="bg-white/10 rounded-2xl px-6 py-6 flex justify-between items-center hover:bg-white/20 transition cursor-pointer">
+        <div class="flex items-center gap-4 text-xl font-semibold">
+          🇺🇸 Estados Unidos
+        </div>
+        <span>›</span>
+      </div>
+
+      <div class="bg-white/10 rounded-2xl px-6 py-6 flex justify-between items-center hover:bg-white/20 transition cursor-pointer">
+        <div class="flex items-center gap-4 text-xl font-semibold">
+          🇵🇹 Portugal
+        </div>
+        <span>›</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Info Section -->
+  <section class="relative z-10 px-6 md:px-12 pb-20">
+    <div class="max-w-4xl mx-auto bg-white/10 rounded-3xl p-8 backdrop-blur-md border border-white/20">
+
+      <h2 class="text-2xl font-bold mb-6">Estados Unidos — Visto de Turismo</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <div>
+          <h3 class="font-semibold mb-2">Documentos necessários</h3>
+          <ul class="text-white/80 space-y-2">
+            <li>• Passaporte válido</li>
+            <li>• Formulário DS-160</li>
+            <li>• Foto recente</li>
+            <li>• Comprovante financeiro</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold mb-2">Informações</h3>
+          <ul class="text-white/80 space-y-2">
+            <li>• Prazo médio: 15 a 45 dias</li>
+            <li>• Custo estimado: USD 185</li>
+            <li>• Entrevista obrigatória</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,120 +1,369 @@
 ---
 // Hero component
+
+const POPULAR = ["US", "PT", "CA", "GB", "AU"];
+
+function flagFromIso(iso) {
+    if (!iso || iso.length !== 2) return "🌍";
+    return [...iso.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join("");
+}
+
+function typeCodeFromLabel(label) {
+    const l = (label ?? '').toLowerCase();
+    if (l.includes('isento') || l.includes('livre')) return 'free';
+    if (l.includes('eta') || l.includes('visitor') || l.includes('nzeta') || l.includes('eletrôn')) return 'eta';
+    return 'required';
+}
+
+const API_BASE = import.meta.env.VISA_API_BASE || 'http://localhost:3001';
+let countries = await fetch(`${API_BASE}/api/visa-countries`).then(r => r.json());
+
+countries = countries.map(c => ({
+    slug: c.slug,
+    name: c.nome,
+    flag: flagFromIso(c.codigo_iso),
+    typeLabel: c.type_label ?? '',
+    typeCode: c.type_code ?? typeCodeFromLabel(c.type_label),
+    visaName: c.visa_name ?? c.type_label ?? '',
+    popular: POPULAR.includes(c.codigo_iso) || false,
+}));
+
+const badgeClass = {
+    free:     'bg-green-500/20 text-green-400 border border-green-400/25',
+    eta:      'bg-blue-400/20 text-blue-300 border border-blue-300/25',
+    required: 'bg-yellow-400/20 text-yellow-300 border border-yellow-300/25',
+};
 ---
-<section class="pt-6 md:pt-2 bg-surface-inverse">
-    <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-        <!-- Left Col -->
-        <div
-            class="flex flex-col w-full md:w-1/2 justify-center items-start text-center md:text-left"
-        >
-            <h1 class="font-heading font-normal text-[42px] md:text-[72px] leading-[1.15] tracking-[-0.03em] text-white">
-                A maior central de informações sobre vistos do Brasil
-            </h1>
 
-            <p class="opacity-85 leading-normal text-lg text-text-inverse mt-6 mb-4">
-                Tire dúvidas, entenda os requisitos e peça seu visto com quem entende</p>            
-            </p>
-            <!-- <p class="text-base md:text-lg text-gray-200 mb-2 w-full">
-                Serviço realizado pela equipe da <a href="https://fastvistos.com.br" target="_blank" rel="noopener" class="font-semibold opacity-70 hover:opacity-100 transition-opacity underline decoration-dotted">fastvistos.com.br</a>
-            </p> -->
-
-            <button
-                class="wpp_button_link cta-button-wiggle bg-surface-card mx-auto lg:mx-0 hover:underline 
-                text-text 
-                font-semibold
-                rounded-2xl my-6 py-4 px-10 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out flex items-center gap-2"
-                data-linkcode="%231"
-            >
-                <span style="font-size: 1.5rem;">💬</span>
-                <span class="hidden sm:inline"
-                    >Fale com com um especialista</span
-                >
-                <span class="inline sm:hidden" 
-                    >Fale com com um especialista</span
-                >
-            </button>
-            
+<!-- MODAL: Bottom sheet com todos os países -->
+<div id="countries-modal" class="fixed inset-0 z-50 hidden">
+    <div id="modal-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div id="modal-content"
+        class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto shadow-2xl transform translate-y-full transition-transform duration-300">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">Todos os países</h3>
+            <button id="modal-close" class="text-gray-500 text-xl leading-none">✕</button>
         </div>
-        <!-- Right Col -->
-        <div class="w-full md:w-1/2 text-center relative">
-            <div style="position: relative; ">
-                <picture>
-                    <source srcset="assets/images/cover/casal-feliz-pulando-de-alegria-passaportes-para-viajar.avif" type="image/avif" />
-                    <source srcset="assets/images/cover/casal-feliz-pulando-de-alegria-passaportes-para-viajar.webp" type="image/webp" />
-                    <img
-                        class="w-full drop-shadow-lg brightness-110 contrast-105 rounded-xl"
-                        src="assets/images/cover/casal-feliz-pulando-de-alegria-passaportes-para-viajar.webp"
-                        loading="lazy"
-                        alt="Casal feliz segurando passaportes indo viajar"
-                        style="z-index: 0; position: relative;"
-                    />
-                </picture>
-            </div>
+        <div class="flex flex-wrap gap-3">
+            {countries.map((c) => (
+                <a
+                    href={`/vistos/${c.slug}`}
+                    class="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-200 no-underline"
+                >
+                    <span>{c.flag}</span>
+                    <span>{c.name}</span>
+                </a>
+            ))}
         </div>
     </div>
+</div>
+
+<!-- HERO RESPONSIVO COM BUSCA E LISTA -->
+
+<section class="relative min-h-[57vh]">
+
+    <!-- Background -->
+    <div class="absolute inset-0">
+        <img
+            src="assets/images/hero/ellena-mcguinness-n1qekSkjhXQ-unsplash.jpg"
+            class="w-full h-full object-cover"
+
+            alt=""
+        >
+        <!-- w-full h-full object-cover -->
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="relative z-20 px-6 md:px-12 py-1 flex justify-between items-center text-white">
+        <div class="font-bold uppercase tracking-wider" style="font-family: 'PT Sans', sans-serif; font-size: 0.8125rem;">
+            Central de Vistos
+        </div>
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#">Países</a>
+            <a href="#">Vistos</a>
+            <a href="#">Contato</a>
+        </nav>
+        <!-- Mobile Hamburger -->
+        <button id="nav-toggle" aria-label="Abrir menu" class="md:hidden flex items-center p-2 focus:outline-none">
+            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Overlay e Menu Lateral -->
+    <div id="mobile-overlay" class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+    <aside id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white text-black z-50 transform -translate-x-full transition-transform duration-300 shadow-lg flex flex-col">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200">
+            <span class="text-xl font-bold">Menu</span>
+            <button id="nav-close" aria-label="Fechar menu" class="p-2">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-4 px-6 py-6 text-base font-medium">
+            <a href="#" class="py-2">Países</a>
+            <a href="#" class="py-2">Vistos</a>
+            <a href="#" class="py-2">Contato</a>
+            <a href="/blog/" class="py-2">Blog</a>
+            <a href="https://fastvistos.com.br/formularios/" class="py-2">Formulários</a>
+            <a href="#" class="py-2">☎ (11) 5028-3044</a>
+        </nav>
+    </aside>
+
+    <!-- Hero Text -->
+    <div class="relative z-10 text-center px-6 pt-10 md:pt-16 text-white">
+        <h1 class="text-4xl md:text-5xl font-bold max-w-4xl mx-auto">
+            Descubra, <br class="block md:hidden">organize e <br class="block md:hidden">viaje
+        </h1>
+        <p class="mt-4 text-white/90 uppercase" style="font-family: 'PT Sans', sans-serif; font-size: 0.8125rem;">
+            Informações sobre vistos em um só lugar
+        </p>
+    </div>
+
+    <!-- SEARCH SECTION -->
+    <div class="relative z-10 px-6 md:px-12 mt-8 pb-20">
+        <div class="max-w-md mx-auto">
+
+            <!-- Search Bar -->
+            <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-4 py-3.5 transition-all focus-within:border-blue-400/60 focus-within:bg-white/15"
+            style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
+            >
+                <svg class="w-4 h-4 text-white/35 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+                </svg>
+                <input
+                    id="vg-input"
+                    type="text"
+                    placeholder="Buscar país..."
+                    autocomplete="off"
+                    aria-label="Buscar país"
+                    class="bg-transparent border-none outline-none text-[15px] text-white placeholder-white/30 w-full"
+                />
+            </div>
+
+            <!-- Filters -->
+            <div class="flex gap-2 justify-center mt-5 flex-wrap" id="vg-filters">
+                <button
+                    class="vg-filter px-4 py-1.5 rounded-full text-xs font-semibold border border-white/25 text-white/60 bg-white/10 hover:bg-white/18 hover:text-white/70 transition-all whitespace-nowrap cursor-pointer"
+                    style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);"
+                    data-filter="all"
+                >Todos</button>
+                <button
+                    class="vg-filter active px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap cursor-pointer"
+                    data-filter="popular"
+                >⭐ Populares</button>
+            </div>
+
+            <!-- Country Cards -->
+            <!-- Pills/Chips de Países -->
+            <div class="flex flex-wrap gap-3 mt-5 justify-start min-h-[90px] content-start" id="vg-grid">
+                {countries.map((c, i) => (
+                    <a
+                        href={`/vistos/${c.slug}`}
+                        class="vg-card flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-2 py-0 no-underline transition-all hover:bg-white/20 hover:border-white/40 cursor-pointer shadow-sm"
+                        data-name={c.name.toLowerCase()}
+                        data-type={c.typeCode}
+                        data-popular={c.popular ? "true" : "false"}
+                        style={`backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation-delay: ${i * 0.03}s`}
+                    >
+                        <span class="text-lg md:text-xl flex-shrink-0">{c.flag}</span>
+                        <span class="font-semibold text-white text-sm md:text-base truncate">{c.name}</span>
+                    </a>
+                ))}
+            </div>
+
+            <!-- Empty State -->
+            <div class="text-center py-10 text-white/35" id="vg-empty" style="display:none;">
+                <span class="text-4xl block mb-3">🔍</span>
+                <p class="text-sm leading-relaxed mb-5">Nenhum país encontrado.<br/>Fale com nossos especialistas!</p>
+                <a href="#whatsapp" class="inline-block bg-white text-blue-600 font-bold text-sm px-6 py-3 rounded-full no-underline">
+                    💬 Consultar no WhatsApp
+                </a>
+            </div>
+
+            <!-- Footer CTA -->
+            <!-- <div class="text-center mt-10">
+                <p class="text-sm text-white/40 mb-3.5">Não encontrou seu destino ou ficou com dúvidas?</p>
+                <button
+                    class="wpp_button_link cta-button-wiggle inline-flex items-center gap-2.5 bg-transparent border border-white/25 rounded-2xl px-7 py-4 text-white font-bold cursor-pointer transition-all hover:border-white/45 hover:bg-white/5"
+                    data-linkcode="%231"
+                    style="font-family: 'Sora', sans-serif; font-size: 16px;"
+                >
+                    <span class="hidden sm:inline">Atendimento pelo <strong>WhatsApp!</strong></span>
+                    <span class="inline sm:hidden">Estamos no WhatsApp!</span>
+                </button>
+            </div> -->
+
+        </div>
+    </div>
+
 </section>
 
-<!-- <div class="relative -mt-12 lg:-mt-24">
-    <svg
-        viewBox="0 0 1428 174"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        style="display: block;"
-    >
-        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g transform="translate(-2.000000, 44.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                <path
-                    d="M0,0 C90.7283404,0.927527913 147.912752,27.187927 291.910178,59.9119003 C387.908462,81.7278826 543.605069,89.334785 759,82.7326078 C469.336065,156.254352 216.336065,153.6679 0,74.9732496"
-                    opacity="0.100000001"></path>
-                <path
-                    d="M100,104.708498 C277.413333,72.2345949 426.147877,52.5246657 546.203633,45.5787101 C666.259389,38.6327546 810.524845,41.7979068 979,55.0741668 C931.069965,56.122511 810.303266,74.8455141 616.699903,111.243176 C423.096539,147.640838 250.863238,145.462612 100,104.708498 Z"
-                    opacity="0.100000001"></path>
-                <path
-                    d="M1046,51.6521276 C1130.83045,29.328812 1279.08318,17.607883 1439,40.1656806 L1439,120 C1271.17211,77.9435312 1140.17211,55.1609071 1046,51.6521276 Z"
-                    id="Path-4"
-                    opacity="0.200000003"></path>
-            </g>
-            <g transform="translate(-4.000000, 76.000000)" fill="#5D535F" fill-rule="nonzero">
-                <path
-                    d="M0.457,34.035 C57.086,53.198 98.208,65.809 123.822,71.865 C181.454,85.495 234.295,90.29 272.033,93.459 C311.355,96.759 396.635,95.801 461.025,91.663 C486.76,90.01 518.727,86.372 556.926,80.752 C595.747,74.596 622.372,70.008 636.799,66.991 C663.913,61.324 712.501,49.503 727.605,46.128 C780.47,34.317 818.839,22.532 856.324,15.904 C922.689,4.169 955.676,2.522 1011.185,0.432 C1060.705,1.477 1097.39,3.129 1121.236,5.387 C1161.703,9.219 1208.621,17.821 1235.4,22.304 C1285.855,30.748 1354.351,47.432 1440.886,72.354 L1441.191,104.352 L1.121,104.031 L0.457,34.035 Z"
-                >
-                </path>
-            </g>
-        </g>
-    </svg>
-</div> -->
+<script>
+    if (typeof window !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu
+            const navToggle = document.getElementById('nav-toggle');
+            const navClose = document.getElementById('nav-close');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-overlay');
+
+            function openMenu() {
+                mobileMenu.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100');
+            }
+            function closeMenu() {
+                mobileMenu.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                overlay.classList.remove('opacity-100');
+            }
+            if (navToggle) navToggle.addEventListener('click', openMenu);
+            if (navClose) navClose.addEventListener('click', closeMenu);
+            if (overlay) overlay.addEventListener('click', closeMenu);
+        });
+    }
+</script>
+
+<script is:inline>
+    // Modal
+    const modal        = document.getElementById('countries-modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalClose   = document.getElementById('modal-close');
+    const modalOverlay = document.getElementById('modal-overlay');
+
+    function openModal() {
+        document.body.style.overflow = 'hidden';
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            modalContent.classList.remove('translate-y-full');
+        });
+    }
+
+    function closeModal() {
+        document.body.style.overflow = '';
+        modalContent.classList.add('translate-y-full');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    if (modalClose)   modalClose.addEventListener('click', closeModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // Search and filter
+    const vgInput   = document.getElementById('vg-input');
+    const vgEmpty   = document.getElementById('vg-empty');
+    const vgFilters = document.querySelectorAll('.vg-filter');
+    const vgCards   = document.querySelectorAll('.vg-card');
+
+    let activeFilter = 'popular';
+    let searchQuery  = '';
+
+    applyFilters();
+
+    function applyFilters() {
+        let visible = 0;
+        vgCards.forEach(card => {
+            const name    = card.dataset.name ?? '';
+            const type    = card.dataset.type ?? '';
+            const popular = card.dataset.popular === 'true';
+
+            const matchSearch = name.includes(searchQuery);
+            const matchFilter =
+                activeFilter === 'popular' ? popular :
+                type === activeFilter;
+
+            if (matchSearch && matchFilter) {
+                card.classList.remove('hidden');
+                visible++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+        vgEmpty.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    if (vgInput) {
+        vgInput.addEventListener('input', () => {
+            searchQuery = vgInput.value.toLowerCase().trim();
+            applyFilters();
+        });
+    }
+
+    vgFilters.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+            if (filter === 'all') {
+                openModal();
+                return;
+            }
+            vgFilters.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = filter;
+            applyFilters();
+        });
+    });
+</script>
 
 <style>
+    .vg-filter {
+        padding: 6px 16px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.10);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: rgba(255,255,255,0.60);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.18s;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .vg-filter:hover {
+        background: rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.80);
+    }
+
+    .vg-filter.active {
+        background: rgba(0, 119, 182, 0.55);
+        border-color: rgba(0, 150, 220, 0.4);
+        color: white;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .vg-card {
+        animation: fadeUp 0.4s ease both;
+    }
+
+    .vg-card.hidden {
+        display: none;
+    }
+
     .cta-button-wiggle {
         animation: wiggle 4s 2s infinite;
     }
 
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
     @keyframes wiggle {
-        5%,
-        50% {
-            transform: scale(1);
-        }
-        10% {
-            transform: scale(0.9);
-        }
-        15% {
-            transform: scale(1.15);
-        }
-        20% {
-            transform: scale(1.15) rotate(-5deg);
-        }
-        25% {
-            transform: scale(1.15) rotate(5deg);
-        }
-        30% {
-            transform: scale(1.15) rotate(-3deg);
-        }
-        35% {
-            transform: scale(1.15) rotate(2deg);
-        }
-        40% {
-            transform: scale(1.15) rotate(0);
-        }
+        5%,  50% { transform: scale(1); }
+        10%      { transform: scale(0.9); }
+        15%      { transform: scale(1.15); }
+        20%      { transform: scale(1.15) rotate(-5deg); }
+        25%      { transform: scale(1.15) rotate(5deg); }
+        30%      { transform: scale(1.15) rotate(-3deg); }
+        35%      { transform: scale(1.15) rotate(2deg); }
+        40%      { transform: scale(1.15) rotate(0); }
     }
 </style>

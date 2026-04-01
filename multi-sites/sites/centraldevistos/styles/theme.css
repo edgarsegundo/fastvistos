@@ -3,12 +3,11 @@
 */
 
 @theme {
-
   /* =====================
      CORES DA MARCA
      ===================== */
 
-  --color-primary-50:  #f4f8f4;
+  --color-primary-50: #f4f8f4;
   --color-primary-100: #e3ede3;
   --color-primary-200: #c6dbc7;
   --color-primary-300: #9fc3a1;
@@ -20,7 +19,7 @@
   --color-primary-900: #2b412e;
   --color-primary-950: #162318;
 
-  --color-secondary-50:  #f7fbfc;
+  --color-secondary-50: #f7fbfc;
   --color-secondary-100: #e7f1f4;
   --color-secondary-200: #cfe2e8;
   --color-secondary-300: #b0cfd8;
@@ -32,7 +31,7 @@
   --color-secondary-900: #394f56;
   --color-secondary-950: #1f2c31;
 
-  --color-accent-50:  #f4f8f4;
+  --color-accent-50: #f4f8f4;
   --color-accent-100: #e3ede3;
   --color-accent-200: #c6dbc7;
   --color-accent-300: #9fc3a1;
@@ -96,18 +95,20 @@
      ===================== */
 
   --font-sans: 'graphik_regularregular', 'Graphik', system-ui, -apple-system, sans-serif;
-  --font-heading: 'humansans_medium', 'graphiksemibold', system-ui, sans-serif;
+  --font-heading: 'Montserrat', system-ui, sans-serif;
   --font-mono: 'SF Mono', 'Monaco', 'Menlo', monospace;
 
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.563rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+  --text-4xl: 3.063rem;
+  --text-5xl: 3.815rem;
+  --text-6xl: 4.768rem;
+  
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -137,10 +138,10 @@
      SHADOWS
      ===================== */
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.15);
-  --shadow-nav: 0 2px 8px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  --shadow-nav: 0 2px 8px rgba(0, 0, 0, 0.12);
 
   /* =====================
      TRANSITIONS
@@ -182,22 +183,110 @@
   --breakpoint-2xl: 1536px;
 }
 
+/* =========================================================
+:root = tokens semânticos do projeto
+
+Use aqui variáveis que NÃO precisam virar classes Tailwind.
+
+Tudo que está em @theme e segue namespaces oficiais
+(--color-*, --font-*, --radius-*, etc.) gera utilities
+automáticas como:
+
+bg-primary-500
+text-primary-500
+border-primary-500
+
+Já variáveis em :root NÃO geram classes Tailwind.
+
+Elas existem apenas para consumo manual via var(...):
+
+color: var(--color-text);
+background: var(--color-surface);
+
+Use cases típicos:
+
+* cores semânticas internas (texto, surface, border)
+* espaçamentos reutilizáveis
+* durações de transição
+* tokens que não fazem sentido como utility
+
+Regra prática:
+utility Tailwind → @theme
+token semântico interno → :root
+========================================================= */
+
+:root {
+  /* =====================
+     SEMANTIC TOKENS
+     ===================== */
+
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b7280;
+  --color-text-inverse: #ffffff;
+  --color-text-disabled: #9ca3af;
+
+  --color-surface: #ffffff;
+  --color-surface-alt: #f9fafb;
+  --color-surface-card: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-disabled: #f3f4f6;
+
+  --color-border: #e5e7eb;
+  --color-border-focus: var(--color-primary-500);
+
+  --color-success: #4d7c50;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  --section-space: 5rem;
+
+  --transition-fast: 150ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  --shadow-nav: 0 2px 8px rgb(0 0 0 / 0.12);
+}
+
 @layer base {
   body {
     color: var(--color-text);
     background-color: var(--color-surface);
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+  }
+
+  h1 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  h2 {
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.15;
+  }
+
+  h3 {
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+  }
 }
 
 @layer components {
-
   .btn-primary {
     background-color: var(--color-surface);
     color: var(--color-text);
     padding: 0.875rem 2.5rem;
     border-radius: var(--radius-full);
     font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-base);
+    font-size: var(--text-base);
     transition: all var(--transition-base);
     display: inline-flex;
     align-items: center;
