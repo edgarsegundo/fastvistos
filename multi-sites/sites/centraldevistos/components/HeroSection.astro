@@ -3,49 +3,101 @@
 ---
 
 <!-- HERO RESPONSIVO -->
-<section class="relative h-[45vh] sm:h-[50vh] md:h-[55vh] lg:h-[60vh]">
+<section class="relative h-[75vh] sm:h-[50vh] md:h-[55vh] lg:h-[60vh]">
 
-<!-- Background -->
-<div class="absolute inset-0">
-    <img
-    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-    class="w-full h-full object-cover"
-    alt=""
-    >
-    <div class="absolute inset-0 bg-black/35"></div>
-</div>
-
-<!-- Navbar -->
-<header class="relative z-10 px-6 md:px-12 py-6 flex justify-between items-center text-white">
-
-    <div class="text-2xl font-bold">
-    VisaInfo
+    <!-- Background -->
+    <div class="absolute inset-0">
+        <img
+        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+        class="w-full h-full object-cover"
+        alt=""
+        >
+        <div class="absolute inset-0 bg-black/35"></div>
     </div>
 
-    <nav class="hidden md:flex gap-8 text-sm font-medium">
-    <a href="#">Países</a>
-    <a href="#">Vistos</a>
-    <a href="#">Contato</a>
-    </nav>
 
-</header>
+    <!-- Navbar -->
+    <header class="relative z-20 px-6 md:px-12 py-6 flex justify-between items-center text-white">
+        <div class="text-2xl font-bold">
+            Central de Vistos
+        </div>
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#">Países</a>
+            <a href="#">Vistos</a>
+            <a href="#">Contato</a>
+        </nav>
+        <!-- Mobile Hamburger -->
+        <button id="nav-toggle" aria-label="Abrir menu" class="md:hidden flex items-center p-2 focus:outline-none">
+            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </header>
 
-<!-- Hero Text -->
-<div class="relative z-10 flex flex-col justify-center items-center h-full text-center px-6 text-white">
+    <!-- Overlay e Menu Lateral -->
+    <div id="mobile-overlay" class="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
 
-    <h1 class="text-4xl md:text-6xl font-bold max-w-4xl">
-    Descubra, <br class="block md:hidden">organize e <br class="block md:hidden">viaje
-    <!-- Informe-se, <br class="block md:hidden">organize e <br class="block md:hidden">viaje -->
-    <!-- Informe-se, <br class="block md:hidden">prepare-se e <br class="block md:hidden">viaje -->
-    </h1>
+    <aside id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white text-black z-50 transform -translate-x-full transition-transform duration-300 shadow-lg flex flex-col">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200">
+            <span class="text-xl font-bold">Menu</span>
+            <button id="nav-close" aria-label="Fechar menu" class="p-2">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-4 px-6 py-6 text-base font-medium">
+            <a href="#" class="py-2">Países</a>
+            <a href="#" class="py-2">Vistos</a>
+            <a href="#" class="py-2">Contato</a>
+            <a href="/blog/" class="py-2">Blog</a>
+            <a href="https://fastvistos.com.br/formularios/" class="py-2">Formulários</a>
+            <a href="#" class="py-2">☎ (11) 5028-3044</a>
+        </nav>
+    </aside>
 
-    <p class="mt-4 text-lg md:text-2xl text-white/90 uppercase">
-    Informações sobre vistos em um só lugar
-    </p>
+    <!-- Hero Text -->
+    <div class="relative z-10 flex flex-col justify-center items-center h-full text-center px-6 text-white">
 
-</div>
+        <h1 class="text-5xl md:text-5xl font-bold max-w-4xl">
+        Descubra, <br class="block md:hidden">organize e <br class="block md:hidden">viaje
+        <!-- Informe-se, <br class="block md:hidden">organize e <br class="block md:hidden">viaje -->
+        <!-- Informe-se, <br class="block md:hidden">prepare-se e <br class="block md:hidden">viaje -->
+        </h1>
+
+        <p class="mt-4 text-lg md:text-2xl text-white/90 uppercase">
+        Informações sobre vistos em um só lugar
+        </p>
+
+    </div>
 
 </section>
+
+<script>
+    if (typeof window !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', function () {
+            const navToggle = document.getElementById('nav-toggle');
+            const navClose = document.getElementById('nav-close');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-overlay');
+
+            function openMenu() {
+                mobileMenu.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100');
+            }
+            function closeMenu() {
+                mobileMenu.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                overlay.classList.remove('opacity-100');
+            }
+            if (navToggle) navToggle.addEventListener('click', openMenu);
+            if (navClose) navClose.addEventListener('click', closeMenu);
+            if (overlay) overlay.addEventListener('click', closeMenu);
+        });
+    }
+</script>
 
 <!-- SEARCH SECTION -->
 <section class="relative z-20 -mt-10 px-6 md:px-12">

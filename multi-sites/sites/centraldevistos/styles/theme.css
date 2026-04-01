@@ -3,12 +3,11 @@
 */
 
 @theme {
-
   /* =====================
      CORES DA MARCA
      ===================== */
 
-  --color-primary-50:  #f4f8f4;
+  --color-primary-50: #f4f8f4;
   --color-primary-100: #e3ede3;
   --color-primary-200: #c6dbc7;
   --color-primary-300: #9fc3a1;
@@ -20,7 +19,7 @@
   --color-primary-900: #2b412e;
   --color-primary-950: #162318;
 
-  --color-secondary-50:  #f7fbfc;
+  --color-secondary-50: #f7fbfc;
   --color-secondary-100: #e7f1f4;
   --color-secondary-200: #cfe2e8;
   --color-secondary-300: #b0cfd8;
@@ -32,7 +31,7 @@
   --color-secondary-900: #394f56;
   --color-secondary-950: #1f2c31;
 
-  --color-accent-50:  #f4f8f4;
+  --color-accent-50: #f4f8f4;
   --color-accent-100: #e3ede3;
   --color-accent-200: #c6dbc7;
   --color-accent-300: #9fc3a1;
@@ -96,18 +95,19 @@
      ===================== */
 
   --font-sans: 'graphik_regularregular', 'Graphik', system-ui, -apple-system, sans-serif;
-  --font-heading: 'humansans_medium', 'graphiksemibold', system-ui, sans-serif;
+  --font-heading: 'Montserrat', system-ui, sans-serif;
   --font-mono: 'SF Mono', 'Monaco', 'Menlo', monospace;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.563rem;
+  --font-size-2xl: 1.953rem;
+  --font-size-3xl: 2.441rem;
+  --font-size-4xl: 3.063rem;
+  --font-size-5xl: 10.815rem;
+  
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -137,10 +137,10 @@
      SHADOWS
      ===================== */
 
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.15);
-  --shadow-nav: 0 2px 8px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  --shadow-nav: 0 2px 8px rgba(0, 0, 0, 0.12);
 
   /* =====================
      TRANSITIONS
@@ -187,10 +187,33 @@
     color: var(--color-text);
     background-color: var(--color-surface);
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  h1 {
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  h3 {
+    font-weight: 500;
+    line-height: 1.2;
+  }
 }
 
 @layer components {
-
   .btn-primary {
     background-color: var(--color-surface);
     color: var(--color-text);
