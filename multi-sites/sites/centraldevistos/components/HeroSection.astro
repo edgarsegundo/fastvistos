@@ -36,15 +36,18 @@ const badgeClass = {
 ---
 
 <!-- HERO RESPONSIVO COM BUSCA E LISTA -->
-<section class="relative">
+
+<section class="relative min-h-[57vh]">
 
     <!-- Background -->
     <div class="absolute inset-0">
         <img
-            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+            src="assets/images/hero/ellena-mcguinness-n1qekSkjhXQ-unsplash.jpg"
             class="w-full h-full object-cover"
+
             alt=""
         >
+        <!-- w-full h-full object-cover -->
         <div class="absolute inset-0 bg-black/50"></div>
     </div>
 
@@ -134,27 +137,19 @@ const badgeClass = {
             </div>
 
             <!-- Country Cards -->
-            <div class="flex flex-col gap-2.5 mt-5" id="vg-grid">
+            <!-- Pills/Chips de Países -->
+            <div class="flex flex-wrap gap-3 mt-5 justify-start" id="vg-grid">
                 {countries.map((c, i) => (
                     <a
                         href={`/vistos/${c.slug}`}
-                        class="vg-card flex items-center gap-3.5 bg-white/[0.12] border border-white/[0.18] rounded-2xl px-4 py-3.5 no-underline transition-all hover:bg-white/[0.18] hover:border-white/[0.30] hover:translate-x-0.5 cursor-pointer"
+                        class="vg-card flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-2 py-0 no-underline transition-all hover:bg-white/20 hover:border-white/40 cursor-pointer shadow-sm"
                         data-name={c.name.toLowerCase()}
                         data-type={c.typeCode}
                         data-popular={c.popular ? "true" : "false"}
-                        style={`backdrop-filter: blur(10px); -webkit-backdrop-serif: blur(10px); animation-delay: ${i * 0.05}s`}
+                        style={`backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation-delay: ${i * 0.03}s`}
                     >
-                        <span class="text-2xl flex-shrink-0">{c.flag}</span>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-[15px] font-bold text-white mb-0.5" style="font-family: 'Sora', sans-serif;">{c.name}</div>
-                            <div class="text-xs text-white/40">{c.typeLabel}</div>
-                        </div>
-                        {c.typeCode && c.visaName ? (
-                            <span class={`flex-shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide ${badgeClass[c.typeCode] ?? badgeClass.required}`}>
-                                {c.visaName}
-                            </span>
-                        ) : null}
-                        <span class="text-lg text-white/20 flex-shrink-0">›</span>
+                        <span class="text-lg md:text-xl flex-shrink-0">{c.flag}</span>
+                        <span class="font-semibold text-white text-sm md:text-base truncate">{c.name}</span>
                     </a>
                 ))}
             </div>
@@ -169,7 +164,7 @@ const badgeClass = {
             </div>
 
             <!-- Footer CTA -->
-            <div class="text-center mt-10">
+            <!-- <div class="text-center mt-10">
                 <p class="text-sm text-white/40 mb-3.5">Não encontrou seu destino ou ficou com dúvidas?</p>
                 <button
                     class="wpp_button_link cta-button-wiggle inline-flex items-center gap-2.5 bg-transparent border border-white/25 rounded-2xl px-7 py-4 text-white font-bold cursor-pointer transition-all hover:border-white/45 hover:bg-white/5"
@@ -179,7 +174,7 @@ const badgeClass = {
                     <span class="hidden sm:inline">Atendimento pelo <strong>WhatsApp!</strong></span>
                     <span class="inline sm:hidden">Estamos no WhatsApp!</span>
                 </button>
-            </div>
+            </div> -->
 
         </div>
     </div>
