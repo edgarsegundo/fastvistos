@@ -258,6 +258,7 @@ const badgeClass = {
     // Search and filter
     const vgInput   = document.getElementById('vg-input');
     const vgEmpty   = document.getElementById('vg-empty');
+    const vgGrid    = document.getElementById('vg-grid');
     const vgFilters = document.querySelectorAll('.vg-filter');
     const vgCards   = document.querySelectorAll('.vg-card');
 
@@ -286,6 +287,7 @@ const badgeClass = {
             }
         });
         vgEmpty.style.display = visible === 0 ? 'block' : 'none';
+        vgGrid.style.display = visible === 0 ? 'none' : 'grid';
     }
 
     if (vgInput) {
