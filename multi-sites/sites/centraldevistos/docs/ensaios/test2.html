@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisaInfo — Informações Sobre Vistos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0f0f0f;
+      --gray-dark: #6b6b6b;
+      --gray-mid: #a8a8a8;
+      --gray-light: #e8e8e8;
+      --white: #ffffff;
+      --accent: #c9562a;
+      --accent-light: #f0ebe7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── WORLD MAP SVG BACKGROUND ─────────────────────── */
+    .map-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .map-bg svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.07;
+    }
+
+    /* ─── NAVBAR ────────────────────────────────────────── */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 64px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 40px;
+    }
+
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--gray-dark);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--black); }
+
+    .btn-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 10px 22px;
+      border-radius: 100px;
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-cta:hover {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      z-index: 10;
+      padding: 80px 64px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+    }
+
+    .hero-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--black);
+    }
+
+    .hero-title span {
+      color: var(--gray-mid);
+      font-weight: 300;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 8px;
+      gap: 32px;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--gray-dark);
+      max-width: 420px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--black);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── DIVIDER ───────────────────────────────────────── */
+    .divider {
+      position: relative;
+      z-index: 10;
+      border: none;
+      border-top: 1px solid var(--gray-light);
+      margin: 0 64px;
+    }
+
+    /* ─── SEARCH ────────────────────────────────────────── */
+    .search-section {
+      position: relative;
+      z-index: 10;
+      padding: 48px 64px 36px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 14px;
+      padding: 18px 24px;
+      background: var(--white);
+      transition: border-color 0.2s;
+      max-width: 680px;
+    }
+
+    .search-bar:focus-within {
+      border-color: var(--black);
+    }
+
+    .search-icon {
+      color: var(--gray-mid);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--black);
+      background: transparent;
+      width: 100%;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--gray-mid);
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1.5px solid var(--gray-light);
+      background: transparent;
+      color: var(--gray-dark);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--black);
+      color: var(--black);
+    }
+
+    .filter-btn.active {
+      background: var(--black);
+      border-color: var(--black);
+      color: var(--white);
+    }
+
+    /* ─── MAIN CONTENT ──────────────────────────────────── */
+    .content {
+      position: relative;
+      z-index: 10;
+      padding: 0 64px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* Country list */
+    .country-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .country-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s;
+      border: 1.5px solid transparent;
+    }
+
+    .country-item:hover {
+      background: var(--accent-light);
+    }
+
+    .country-item.active {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .country-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .country-flag {
+      font-size: 1.2rem;
+    }
+
+    .country-arrow {
+      font-size: 0.75rem;
+      color: var(--gray-mid);
+      transition: transform 0.2s;
+    }
+
+    .country-item.active .country-arrow {
+      color: var(--white);
+      transform: translateX(3px);
+    }
+
+    /* Info panel */
+    .info-panel {
+      border: 1.5px solid var(--gray-light);
+      border-radius: 20px;
+      padding: 48px;
+      background: var(--white);
+    }
+
+    .panel-header {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .panel-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .panel-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      line-height: 1.1;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .panel-section h3 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-mid);
+      margin-bottom: 20px;
+    }
+
+    .doc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doc-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--gray-dark);
+      line-height: 1.4;
+    }
+
+    .doc-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .info-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: #f7f7f7;
+      border-radius: 12px;
+    }
+
+    .info-card-label {
+      font-size: 0.8rem;
+      color: var(--gray-mid);
+      font-weight: 400;
+    }
+
+    .info-card-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--black);
+      font-family: 'Sora', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    /* ─── SECTION LABEL ─────────────────────────────────── */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-mid);
+      padding: 0 64px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ─── ANIMATIONS ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title { animation: fadeUp 0.7s ease both; }
+    .hero-right  { animation: fadeUp 0.7s 0.15s ease both; }
+    .search-section { animation: fadeUp 0.7s 0.25s ease both; }
+    .content { animation: fadeUp 0.7s 0.35s ease both; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 900px) {
+      header { padding: 20px 24px; }
+      nav { display: none; }
+      .hero { padding: 48px 24px 40px; grid-template-columns: 1fr; gap: 32px; }
+      .divider { margin: 0 24px; }
+      .search-section { padding: 32px 24px 24px; }
+      .content { padding: 0 24px 60px; grid-template-columns: 1fr; }
+      .section-label { padding: 0 24px; }
+      .panel-grid { grid-template-columns: 1fr; gap: 28px; }
+      .info-panel { padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- World map SVG background -->
+  <div class="map-bg">
+    <svg viewBox="0 0 2000 1000" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <!-- Simplified world map paths -->
+      <g fill="#000" stroke="none">
+        <!-- North America -->
+        <path d="M180,140 L260,120 L310,130 L340,160 L360,155 L380,165 L400,180 L410,200 L395,220 L380,240 L360,260 L340,280 L320,300 L300,320 L280,340 L260,355 L240,365 L220,360 L200,345 L185,320 L170,290 L160,260 L155,230 L158,200 L165,170 Z"/>
+        <path d="M310,130 L380,110 L440,100 L490,95 L520,105 L540,125 L545,150 L530,175 L510,195 L490,210 L465,220 L440,225 L415,215 L400,200 L395,180 L390,165 L370,158 L345,158 Z"/>
+        <!-- Greenland -->
+        <path d="M520,60 L590,45 L650,50 L680,70 L670,95 L640,110 L600,115 L560,108 L530,90 L515,75 Z"/>
+        <!-- Central America -->
+        <path d="M280,340 L295,360 L305,380 L295,400 L280,410 L265,400 L255,380 L260,360 Z"/>
+        <!-- South America -->
+        <path d="M290,420 L340,410 L390,415 L430,425 L460,445 L475,475 L480,510 L475,545 L460,580 L440,610 L415,635 L385,650 L355,655 L325,645 L300,625 L278,600 L262,570 L252,535 L248,500 L250,465 L258,440 L270,428 Z"/>
+        <!-- Europe -->
+        <path d="M870,100 L910,90 L950,85 L990,90 L1020,105 L1030,125 L1020,145 L1000,160 L975,168 L950,170 L925,165 L900,150 L882,130 L872,115 Z"/>
+        <path d="M920,165 L960,160 L1000,155 L1030,165 L1045,185 L1040,205 L1020,220 L995,228 L965,225 L940,215 L920,200 L910,182 Z"/>
+        <path d="M860,135 L880,130 L895,145 L890,162 L875,170 L858,163 L848,148 Z"/>
+        <path d="M950,225 L990,220 L1025,228 L1045,248 L1040,268 L1018,280 L990,282 L962,272 L945,255 L942,238 Z"/>
+        <!-- Scandinavia -->
+        <path d="M930,55 L960,45 L985,48 L1000,65 L995,85 L975,98 L950,100 L928,90 L918,72 Z"/>
+        <path d="M965,45 L995,38 L1015,42 L1022,58 L1010,75 L990,82 L970,78 L958,62 Z"/>
+        <!-- UK -->
+        <path d="M840,118 L858,112 L868,124 L862,138 L848,142 L836,132 L834,120 Z"/>
+        <!-- Africa -->
+        <path d="M910,285 L960,278 L1010,280 L1055,295 L1080,320 L1090,355 L1085,390 L1070,425 L1050,458 L1025,488 L995,512 L960,528 L925,535 L890,528 L860,510 L835,485 L815,455 L800,420 L793,382 L792,345 L798,310 L812,282 L838,270 L870,268 L898,272 Z"/>
+        <!-- Madagascar -->
+        <path d="M1060,440 L1075,435 L1085,450 L1082,470 L1068,478 L1055,470 L1050,455 Z"/>
+        <!-- Middle East -->
+        <path d="M1050,220 L1100,215 L1140,225 L1160,245 L1155,268 L1130,282 L1100,285 L1068,275 L1048,255 L1045,236 Z"/>
+        <!-- Central Asia -->
+        <path d="M1100,145 L1175,130 L1250,128 L1310,140 L1340,165 L1330,190 L1300,205 L1260,210 L1215,205 L1170,195 L1135,180 L1105,165 Z"/>
+        <!-- India -->
+        <path d="M1160,255 L1210,245 L1248,258 L1268,280 L1272,308 L1260,335 L1240,358 L1212,368 L1183,360 L1162,338 L1150,310 L1148,280 Z"/>
+        <!-- Southeast Asia -->
+        <path d="M1280,250 L1330,240 L1375,248 L1400,268 L1405,295 L1388,315 L1358,320 L1325,310 L1298,292 L1278,270 Z"/>
+        <!-- China/East Asia -->
+        <path d="M1280,140 L1370,125 L1450,128 L1510,148 L1535,175 L1525,205 L1495,225 L1455,232 L1408,225 L1365,210 L1328,192 L1300,172 L1278,158 Z"/>
+        <!-- Japan -->
+        <path d="M1525,165 L1545,160 L1558,172 L1552,188 L1535,193 L1520,183 Z"/>
+        <path d="M1548,145 L1562,140 L1572,152 L1566,166 L1550,170 L1540,158 Z"/>
+        <!-- Australia -->
+        <path d="M1430,520 L1520,508 L1598,515 L1655,538 L1680,572 L1675,610 L1650,642 L1610,660 L1560,665 L1510,655 L1462,635 L1425,605 L1405,570 L1402,535 L1416,518 Z"/>
+        <!-- New Zealand -->
+        <path d="M1710,638 L1728,630 L1740,645 L1735,662 L1718,668 L1705,655 Z"/>
+        <path d="M1720,605 L1735,598 L1745,610 L1740,625 L1722,628 L1712,616 Z"/>
+        <!-- Indonesia archipelago -->
+        <path d="M1380,370 L1420,362 L1455,368 L1470,382 L1462,396 L1430,400 L1395,394 L1375,382 Z"/>
+        <path d="M1460,378 L1498,372 L1530,378 L1545,392 L1535,406 L1505,410 L1470,403 L1452,390 Z"/>
+        <!-- Philippines -->
+        <path d="M1480,295 L1500,288 L1515,298 L1510,315 L1493,320 L1478,310 Z"/>
+        <!-- Sri Lanka -->
+        <path d="M1225,340 L1235,335 L1243,344 L1238,355 L1225,357 L1218,347 Z"/>
+        <!-- Caribbean -->
+        <path d="M360,275 L372,272 L380,278 L375,286 L362,287 L355,281 Z"/>
+        <path d="M380,270 L392,266 L400,273 L396,281 L382,282 Z"/>
+        <!-- Iceland -->
+        <path d="M768,70 L800,62 L830,65 L845,78 L838,94 L812,100 L782,96 L765,82 Z"/>
+      </g>
+
+      <!-- Thin connecting lines (routes) -->
+      <g stroke="#000" stroke-width="0.5" fill="none" opacity="0.4">
+        <line x1="400" y1="190" x2="950" y2="140"/>
+        <line x1="950" y1="140" x2="1300" y2="155"/>
+        <line x1="1300" y1="155" x2="1530" y2="180"/>
+        <line x1="400" y1="190" x2="360" y2="430"/>
+        <line x1="950" y1="140" x2="970" y2="400"/>
+        <line x1="1150" y1="180" x2="1200" y2="290"/>
+        <line x1="1300" y1="155" x2="1450" y2="560"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Navbar -->
+  <header>
+    <a href="#" class="logo">VisaInfo</a>
+
+    <nav>
+      <a href="#">Início</a>
+      <a href="#">Países</a>
+      <a href="#">Tipos de visto</a>
+      <a href="#">Contato</a>
+    </nav>
+
+    <button class="btn-cta">Consultar visto</button>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div>
+      <h1 class="hero-title">
+        Informações<br>
+        <span>sobre vistos</span><br>
+        internacionais
+      </h1>
+    </div>
+
+    <div class="hero-right">
+      <p class="hero-desc">
+        Saiba exatamente o que você precisa antes de viajar. Exigências, documentação, custos e prazos para diferentes destinos internacionais — tudo em um só lugar.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">180+</span>
+          <span class="stat-label">Países</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">12</span>
+          <span class="stat-label">Tipos de visto</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">24h</span>
+          <span class="stat-label">Atualização</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Search -->
+  <div class="search-section">
+    <div class="search-bar">
+      <span class="search-icon">↗</span>
+      <input type="text" placeholder="Buscar país ou destino...">
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn">Todos</button>
+      <button class="filter-btn active">Populares</button>
+      <button class="filter-btn">Turismo</button>
+      <button class="filter-btn">Estudo</button>
+      <button class="filter-btn">Trabalho</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Country list -->
+    <div class="country-list">
+      <div class="country-item" onclick="selectCountry(this, 'au')">
+        <div class="country-name">
+          <span class="country-flag">🇦🇺</span> Austrália
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+      <div class="country-item" onclick="selectCountry(this, 'ca')">
+        <div class="country-name">
+          <span class="country-flag">🇨🇦</span> Canadá
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+      <div class="country-item active" onclick="selectCountry(this, 'us')">
+        <div class="country-name">
+          <span class="country-flag">🇺🇸</span> Estados Unidos
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+      <div class="country-item" onclick="selectCountry(this, 'pt')">
+        <div class="country-name">
+          <span class="country-flag">🇵🇹</span> Portugal
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+      <div class="country-item" onclick="selectCountry(this, 'uk')">
+        <div class="country-name">
+          <span class="country-flag">🇬🇧</span> Reino Unido
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+      <div class="country-item" onclick="selectCountry(this, 'de')">
+        <div class="country-name">
+          <span class="country-flag">🇩🇪</span> Alemanha
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+      <div class="country-item" onclick="selectCountry(this, 'jp')">
+        <div class="country-name">
+          <span class="country-flag">🇯🇵</span> Japão
+        </div>
+        <span class="country-arrow">›</span>
+      </div>
+    </div>
+
+    <!-- Info panel -->
+    <div class="info-panel" id="info-panel">
+      <div class="panel-header">
+        <div class="panel-tag" id="panel-tag">Turismo · B1/B2</div>
+        <h2 class="panel-title" id="panel-title">Estados Unidos</h2>
+      </div>
+
+      <div class="panel-grid">
+        <div class="panel-section">
+          <h3>Documentos necessários</h3>
+          <ul class="doc-list" id="doc-list">
+            <li>Passaporte válido por no mínimo 6 meses</li>
+            <li>Formulário DS-160 preenchido online</li>
+            <li>Foto recente (5×5 cm, fundo branco)</li>
+            <li>Comprovante financeiro</li>
+            <li>Comprovante de vínculo com o Brasil</li>
+          </ul>
+        </div>
+
+        <div class="panel-section">
+          <h3>Detalhes do visto</h3>
+          <div class="info-cards" id="info-cards">
+            <div class="info-card">
+              <span class="info-card-label">Prazo médio</span>
+              <span class="info-card-value">15 – 45 dias</span>
+            </div>
+            <div class="info-card">
+              <span class="info-card-label">Custo estimado</span>
+              <span class="info-card-value">USD 185</span>
+            </div>
+            <div class="info-card">
+              <span class="info-card-label">Entrevista</span>
+              <span class="info-card-value">Obrigatória</span>
+            </div>
+            <div class="info-card">
+              <span class="info-card-label">Validade</span>
+              <span class="info-card-value">Até 10 anos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const data = {
+      us: {
+        tag: 'Turismo · B1/B2',
+        title: 'Estados Unidos',
+        docs: ['Passaporte válido por no mínimo 6 meses','Formulário DS-160 preenchido online','Foto recente (5×5 cm, fundo branco)','Comprovante financeiro','Comprovante de vínculo com o Brasil'],
+        cards: [['Prazo médio','15 – 45 dias'],['Custo estimado','USD 185'],['Entrevista','Obrigatória'],['Validade','Até 10 anos']]
+      },
+      au: {
+        tag: 'Turismo · ETA / eVisitor',
+        title: 'Austrália',
+        docs: ['Passaporte válido','Solicitação online via immiAccount','Foto digital recente','Comprovante financeiro','Seguro viagem recomendado'],
+        cards: [['Prazo médio','1 – 14 dias'],['Custo estimado','AUD 20'],['Entrevista','Não obrigatória'],['Validade','12 meses']]
+      },
+      ca: {
+        tag: 'Turismo · Visitor Visa',
+        title: 'Canadá',
+        docs: ['Passaporte válido','Formulário IMM 5257','Foto recente (35×45 mm)','Comprovante financeiro','Carta de apresentação'],
+        cards: [['Prazo médio','14 – 60 dias'],['Custo estimado','CAD 100'],['Entrevista','Ocasional'],['Validade','Até 10 anos']]
+      },
+      pt: {
+        tag: 'Turismo · Schengen',
+        title: 'Portugal',
+        docs: ['Passaporte válido com 3 meses além da estadia','Formulário de solicitação Schengen','Seguro viagem (mín. €30.000)','Reserva de voo e hospedagem','Comprovante financeiro'],
+        cards: [['Prazo médio','10 – 30 dias'],['Custo estimado','EUR 80'],['Entrevista','Obrigatória'],['Validade','Até 5 anos']]
+      },
+      uk: {
+        tag: 'Turismo · Standard Visitor',
+        title: 'Reino Unido',
+        docs: ['Passaporte válido','Formulário online GOV.UK','Foto recente digital','Comprovante financeiro','Histórico de viagens'],
+        cards: [['Prazo médio','21 dias',''],['Custo estimado','GBP 115'],['Entrevista','Rara'],['Validade','Até 10 anos']]
+      },
+      de: {
+        tag: 'Turismo · Schengen',
+        title: 'Alemanha',
+        docs: ['Passaporte válido com 3 meses além da estadia','Formulário de solicitação Schengen','Seguro viagem (mín. €30.000)','Itinerário de viagem detalhado','Comprovante de hospedagem'],
+        cards: [['Prazo médio','15 – 30 dias'],['Custo estimado','EUR 80'],['Entrevista','Obrigatória'],['Validade','Até 5 anos']]
+      },
+      jp: {
+        tag: 'Turismo · Tanki Taizai',
+        title: 'Japão',
+        docs: ['Passaporte válido','Formulário de solicitação de visto','Foto recente (45×45 mm)','Comprovante de emprego ou renda','Itinerário de viagem'],
+        cards: [['Prazo médio','5 – 10 dias'],['Custo estimado','JPY 3.000'],['Entrevista','Não obrigatória'],['Validade','90 dias']]
+      }
+    };
+
+    function selectCountry(el, key) {
+      document.querySelectorAll('.country-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+
+      const d = data[key];
+      document.getElementById('panel-tag').textContent = d.tag;
+      document.getElementById('panel-title').textContent = d.title;
+
+      const docList = document.getElementById('doc-list');
+      docList.innerHTML = d.docs.map(doc => `<li>${doc}</li>`).join('');
+
+      const infoCards = document.getElementById('info-cards');
+      infoCards.innerHTML = d.cards.map(([label, value]) =>
+        `<div class="info-card"><span class="info-card-label">${label}</span><span class="info-card-value">${value}</span></div>`
+      ).join('');
+
+      document.getElementById('info-panel').style.animation = 'none';
+      document.getElementById('info-panel').offsetHeight;
+      document.getElementById('info-panel').style.animation = 'fadeUp 0.3s ease both';
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
