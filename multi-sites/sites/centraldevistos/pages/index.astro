@@ -15,6 +15,7 @@ import Whatsapp from '../components/Whatsapp.astro';
 // import VideosSection from '../components/VideosSection.astro';
 import CallToActionSection from '../components/CallToActionSection.astro';
 import GoogleReviewsSection from '../components/GoogleReviewsSection.astro';
+import CarouselSection from '../components/CarouselSection.astro';
 // import HowItWorks from '../components/HowItWorks.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
@@ -51,6 +52,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <!-- <Navigation /> -->
     <HeroSection />
     <!-- <VisaGuide /> -->
+     <CarouselSection />
     <FaqSection
         relativePath="multi-sites/sites/fastvistos/components/FaqSection.astro"
         siteId={siteConfig.site.id}
