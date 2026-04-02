@@ -144,15 +144,19 @@ const breadcrumbList = [
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   </Fragment>
+
   <!-- NAVBAR -->
   <header class="cp-nav">
     <div class="page-shell cp-nav-inner">
       <a href="/" class="cp-nav-logo">Central de Vistos</a>
       <nav class="cp-nav-links">
-        <a href="/">Países</a>
-        <a href="/">Vistos</a>
-        <a href="/">Contato</a>
+          <a href="/">Vistos</a>
+          <a href="/#section_blog">Notícias</a>
+          <a href="#" class="wpp_button_link"
+              data-linkcode="%232"
+          >Contato</a>
       </nav>
+
       <button id="nav-toggle" aria-label="Abrir menu" class="cp-nav-hamburger">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="26" height="26">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -773,19 +777,6 @@ const breadcrumbList = [
     margin-bottom: 8px;
     line-height: 1.6;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>
 
 <script>
