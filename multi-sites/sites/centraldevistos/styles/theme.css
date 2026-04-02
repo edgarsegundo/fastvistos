@@ -250,7 +250,12 @@ token semântico interno → :root
   --shadow-nav: 0 2px 8px rgb(0 0 0 / 0.12);
 
   /* faq */
-  --faq-answer-accent: #327094;
+  --faq-answer-accent: #555;
+  --faq-title-color: #000;
+  --faq-question-color: #000;
+  --faq-answer-text-color: #000;
+  --faq-divider-color: #555;
+  --faq-focus-ring: #555;
 }
 
 @layer base {
