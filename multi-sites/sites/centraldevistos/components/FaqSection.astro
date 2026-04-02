@@ -33,30 +33,19 @@ function formatAnswerForDisplay(answer: string) {
 
 <section class="bg-white border-b py-16" id="faq">
     <div class="container max-w-5xl mx-auto m-8">
-        <h2
-            class="w-full my-2 text-4xl md:text-5xl text-center text-[#1B375C]"
-        >
+        <h2 class="faq-title w-full my-2 text-center">
             Perguntas Frequentes
         </h2>
         <div class="w-full mb-4">
-            <div
-                class="h-1 mx-auto w-64 opacity-25 my-0 py-0 rounded-t bg-[#0c59be]"
-            >
-            </div>
+            <div class="faq-divider h-1 mx-auto w-64 opacity-25 my-0 py-0 rounded-t"></div>
         </div>
 
         <div class="max-w-4xl mx-auto mt-12">
             {
                 faqData.map((faq, index) => (
-                    <div class="faq-item aria-expanded:bg-[#e9ecef] aria-expanded:rounded-b-none 
-                        border-b border-gray-200 mb-4">
-                        <button class="faq-question hover:bg-[#f8f9fa] w-full text-left py-4 px-6 bg-gray-50 
-                            hover:bg-gray-100 transition-colors duration-200 rounded-lg mb-2 
-                            flex justify-between items-center focus:outline-none focus:ring-2 
-                            focus:ring-blue-500">
-                            <h3
-                                class="text-lg font-semibold text-[#1B375C]"
-                            >
+                    <div class="faq-item border-b border-gray-200 mb-4">
+                        <button class="faq-question w-full text-left py-4 px-6 transition-colors duration-200 rounded-lg mb-2 flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <h3 class="faq-question-text">
                                 {faq.question}
                             </h3>
                             <svg
@@ -65,18 +54,12 @@ function formatAnswerForDisplay(answer: string) {
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M19 9l-7 7-7-7"
-                                />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
-
-                        <div class="faq-answer hidden px-6 pb-4 bg-[#f8f9fa] border-l-4 border-l-[#ff8700] rounded-b-lg -mt-[2px]">
+                        <div class="faq-answer hidden px-6 pb-4 rounded-b-lg -mt-[2px] border-l-4">
                             <p
-                                class="text-gray-600 leading-relaxed"
+                                class="faq-answer-text leading-relaxed"
                                 set:html={formatAnswerForDisplay(faq.answer)}
                             />
                         </div>
@@ -88,8 +71,51 @@ function formatAnswerForDisplay(answer: string) {
 </section>
 
 <style>
+    /* ── Tokens com fallback — sobrescreva no theme.css do site ── */
+
+    /* h2 */
+    .faq-title {
+        color: var(--faq-title-color, #1B375C);
+        font-size: var(--faq-title-size, 2.5rem);
+        font-weight: var(--faq-title-weight, 700);
+        line-height: 1.2;
+    }
+
+    /* divisor */
+    .faq-divider {
+        background-color: var(--faq-divider-color, #0c59be);
+    }
+
+    /* botão da pergunta */
+    .faq-question {
+        background-color: var(--faq-question-bg, #f9fafb);
+    }
+    .faq-question:hover {
+        background-color: var(--faq-question-hover-bg, #f3f4f6);
+    }
+    .faq-question[aria-expanded='true'] {
+        background-color: var(--faq-question-active-bg, #e9ecef);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
     .faq-question[aria-expanded='true'] .faq-icon {
         transform: rotate(180deg);
+    }
+
+    /* texto h3 */
+    .faq-question-text {
+        color: var(--faq-question-color, #1B375C);
+        font-size: var(--faq-question-size, 1.125rem);
+        font-weight: var(--faq-question-weight, 600);
+    }
+
+    /* resposta */
+    .faq-answer {
+        background-color: var(--faq-answer-bg, #f8f9fa);
+        border-left-color: var(--faq-answer-accent, #ff8700);
+    }
+    .faq-answer-text {
+        color: var(--faq-answer-text-color, #4b5563);
     }
 
     .faq-answer.show {
@@ -98,14 +124,8 @@ function formatAnswerForDisplay(answer: string) {
     }
 
     @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(-10px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 </style>
 
