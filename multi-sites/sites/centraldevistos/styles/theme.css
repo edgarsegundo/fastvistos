@@ -7,41 +7,43 @@
      CORES DA MARCA
      ===================== */
 
-  --color-primary-50: #f4f8f4;
-  --color-primary-100: #e3ede3;
-  --color-primary-200: #c6dbc7;
-  --color-primary-300: #9fc3a1;
-  --color-primary-400: #72a575;
-  --color-primary-500: #86a5a8;
-  --color-primary-600: #4d7c50;
-  --color-primary-700: #3d6340;
-  --color-primary-800: #344f36;
-  --color-primary-900: #2b412e;
-  --color-primary-950: #162318;
 
-  --color-secondary-50: #f7fbfc;
-  --color-secondary-100: #e7f1f4;
-  --color-secondary-200: #cfe2e8;
-  --color-secondary-300: #b0cfd8;
-  --color-secondary-400: #8fb9c6;
-  --color-secondary-500: #74a5b5;
-  --color-secondary-600: #5f8d9c;
-  --color-secondary-700: #4f7480;
-  --color-secondary-800: #435f68;
-  --color-secondary-900: #394f56;
-  --color-secondary-950: #1f2c31;
+  --color-primary-50: #f2f7f8;
+  --color-primary-100: #dfecee;
+  --color-primary-200: #c2d9dc;
+  --color-primary-300: #9cbec3;
+  --color-primary-400: #729ea6;
+  --color-primary-500: #2F5D62;
+  --color-primary-600: #274f53;
+  --color-primary-700: #214246;
+  --color-primary-800: #1c3639;
+  --color-primary-900: #172c2e;
+  --color-primary-950: #0d1718;
 
-  --color-accent-50: #f4f8f4;
-  --color-accent-100: #e3ede3;
-  --color-accent-200: #c6dbc7;
-  --color-accent-300: #9fc3a1;
-  --color-accent-400: #72a575;
-  --color-accent-500: #86a5a8;
-  --color-accent-600: #4d7c50;
-  --color-accent-700: #3d6340;
-  --color-accent-800: #344f36;
-  --color-accent-900: #2b412e;
-  --color-accent-950: #162318;
+  --color-secondary-50: #f7f9fa;
+  --color-secondary-100: #edf2f4;
+  --color-secondary-200: #d9e3e7;
+  --color-secondary-300: #bccdd3;
+  --color-secondary-400: #99b1b9;
+  --color-secondary-500: #748f98;
+  --color-secondary-600: #5e767e;
+  --color-secondary-700: #4e6269;
+  --color-secondary-800: #425257;
+  --color-secondary-900: #38464a;
+  --color-secondary-950: #1f272a;
+
+  --color-accent-50: #fff7ed;
+  --color-accent-100: #ffedd5;
+  --color-accent-200: #fed7aa;
+  --color-accent-300: #fdba74;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #F59E0B;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+  --color-accent-950: #451a03;
+
 
   /* =====================
      TEXTO

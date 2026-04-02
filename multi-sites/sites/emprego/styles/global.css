@@ -6,12 +6,6 @@
 
     @import 'tailwindcss';
 
-    /* 
-    Customizações deste site: sobrescreve ou estende o global.css com cores da marca,
-    fontes, componentes e utilities específicos deste projeto.
-    Edite este arquivo para personalizar a identidade visual do site. */
-    @import '../styles/theme.css';
-
     /*
     @theme define as variáveis de design deste site específico.
     Para customizar, edite o arquivo theme.css na pasta do seu site
@@ -53,6 +47,8 @@
             padding: 0;
             line-height: 1.6;
             color: var(--color-text-main);
+            font-family: var(--font-sans);
+            background-color: var(--color-bg-dark);
         }
     }
 
@@ -76,3 +72,11 @@
     */
     @layer utilities {
     }
+
+    /* 
+    Customizações deste site: sobrescreve ou estende o global.css com cores da marca,
+    fontes, componentes e utilities específicos deste projeto.
+    Edite este arquivo para personalizar a identidade visual do site. */
+    @import '../styles/theme.css';
+    /* Importado no final para garantir que o theme.css do site sobrescreva o global.css 
+    quando necessário. */

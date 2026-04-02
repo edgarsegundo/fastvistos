@@ -194,14 +194,14 @@ export const siteConfig = {
         },
         customStyles: {
             cssVars: {
-                '--blog-bg-color': '#4d7c50',
+                '--blog-bg-color': '#5f8b92',
             },
         },
     },
 
     blogPostConfig: {
         seo: {
-            themeColor: '#0070f3',
+            themeColor: '#5f8b92',
             openGraph: {
                 type: 'article',
                 author: 'Central de Vistos',
