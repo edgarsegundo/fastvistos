@@ -248,6 +248,9 @@ token semântico interno → :root
   --transition-slow: 500ms ease;
 
   --shadow-nav: 0 2px 8px rgb(0 0 0 / 0.12);
+
+  /* faq */
+  --faq-answer-accent: #327094;
 }
 
 @layer base {
