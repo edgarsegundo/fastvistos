@@ -194,7 +194,7 @@ export const siteConfig = {
         },
         customStyles: {
             cssVars: {
-                '--blog-bg-color': '#5f8b92',
+                '--blog-bg-color': '#000',
             },
         },
     },
