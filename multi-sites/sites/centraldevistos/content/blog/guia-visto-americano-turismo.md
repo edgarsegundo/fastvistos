@@ -2,377 +2,432 @@
 title: "Guia Completo para Obter o Visto Americano de Turismo (B2)"
 description: ""
 pubDate: "2026-04-03T23:35:13.000Z"
-updatedDate: "2026-04-04T15:17:43.169Z"
+updatedDate: "2026-04-04T19:03:39.323Z"
 slug: "guia-visto-americano-turismo"
 topic: "Dicas"
 topicSlug: "dicas"
 image: "/assets/images/blog/centraldevistos__pexels-daniel-erlandson-2150649940-31350291.jpg"
 type: "public"
 published: true
-wordCount: "740"
+wordCount: "1709"
 ---
 
-<style>
-/* ── Citações inline com tooltip ── */
-.cite-ref {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-}
-.cite-ref sup {
-  color: #1d4ed8;
-  font-size: 0.72em;
-  font-weight: 700;
-  padding: 0 2px;
-  border-bottom: 1.5px dotted #1d4ed8;
-  cursor: pointer;
-  line-height: 1;
-}
-.cite-ref::after {
-  content: attr(data-title);
-  position: absolute;
-  bottom: calc(100% + 7px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #0f172a;
-  color: #f1f5f9;
-  font-size: 0.76rem;
-  line-height: 1.45;
-  padding: 6px 11px;
-  border-radius: 7px;
-  white-space: nowrap;
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.28);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.14s ease;
-  z-index: 50;
-}
-.cite-ref::before {
-  content: "";
-  position: absolute;
-  bottom: calc(100% + 2px);
-  left: 50%;
-  transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: #0f172a;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.14s ease;
-  z-index: 50;
-}
-.cite-ref:hover::after,
-.cite-ref:hover::before { opacity: 1; }
-
-/* ── Badge de frescor ── */
-.article-freshness {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  background: #f0f9ff;
-  border-left: 4px solid #0ea5e9;
-  border-radius: 0 8px 8px 0;
-  padding: 10px 16px;
-  font-size: 0.82rem;
-  color: #0369a1;
-  margin: 12px 0 28px;
-}
-.article-freshness span { white-space: nowrap; }
-
-/* ── Bloco "Saiba mais" ── */
-.learn-more {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 0.85rem;
-  margin: 20px 0 4px;
-  color: #334155;
-  line-height: 1.6;
-}
-.learn-more strong { color: #1e293b; }
-.learn-more a { color: #1d4ed8; text-decoration: none; margin: 0 2px; }
-.learn-more a:hover { text-decoration: underline; }
-
-/* ── Seção de fontes ── */
-.sources-section {
-  margin-top: 48px;
-  border-top: 2px solid #e2e8f0;
-  padding-top: 24px;
-}
-.sources-section h2 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #475569;
-  margin-bottom: 18px;
-  letter-spacing: 0.01em;
-}
-.source-card {
-  display: flex;
-  gap: 14px;
-  padding: 13px 16px;
-  background: #f8fafc;
-  border-left: 3px solid #3b82f6;
-  border-radius: 0 8px 8px 0;
-  margin-bottom: 10px;
-  font-size: 0.84rem;
-  scroll-margin-top: 80px;
-}
-.source-num {
-  font-weight: 800;
-  color: #94a3b8;
-  min-width: 28px;
-  padding-top: 2px;
-  font-size: 0.8rem;
-}
-.source-body { flex: 1; min-width: 0; }
-.source-title { font-weight: 600; color: #1e293b; margin-bottom: 4px; }
-.source-title a {
-  color: #1d4ed8;
-  text-decoration: none;
-  word-break: break-word;
-}
-.source-title a:hover { text-decoration: underline; }
-.source-badge {
-  display: inline-block;
-  font-size: 0.67rem;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 4px;
-  margin-left: 7px;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-.source-badge.oficial    { background: #dcfce7; color: #166534; }
-.source-badge.academico  { background: #fef9c3; color: #854d0e; }
-.source-badge.jornal     { background: #fce7f3; color: #9d174d; }
-.source-badge.web        { background: #f1f5f9; color: #475569; }
-.source-date { font-size: 0.76rem; color: #94a3b8; margin-bottom: 5px; }
-.source-snippet {
-  color: #64748b;
-  font-style: italic;
-  line-height: 1.55;
-  font-size: 0.83rem;
-}
-</style>
-
-# Guia Completo para Obter o Visto Americano de Turismo (B2)
+# Guia Completo para Obter o Visto Americano de Turismo
 
 <div class="article-freshness">
   <span>📅 Gerado em: <strong>2026-04-04</strong></span>
-  <span>🔄 Fonte mais recente: <strong>02 de abr. de 2026</strong></span>
-  <span>🔍 Fontes: <strong>7</strong></span>
+  <span>🔄 Fonte mais recente: <strong>03 de abr. de 2026</strong></span>
+  <span>🔍 Fontes: <strong>10</strong></span>
 </div>
 
-## Resumo Rápido
+## 📋 Resumo Rápido
 
-- **Tempo total estimado**: 2 a 4 meses (dependendo da disponibilidade de agendamento).
-- **Custo médio**: R$ 1.200 (taxa MRV de US$ 185 + taxa reciprocity, sujeita a variações).
-- **Nível de dificuldade**: Médio (exige preparação de documentos e entrevista).
-- **Principais etapas**: Preencher DS-160, pagar taxa, agendar entrevista, comparecer ao CASV e retirar passaporte.
+| Aspecto | Informação |
+|--------|------------|
+| **Tempo total** | 2 a 4 semanas (depende da disponibilidade de agendamento) |
+| **Custo** | US$ 160 (aproximadamente R$ 800–900) |
+| **Nível de dificuldade** | Médio |
+| **Validade** | Até 10 anos |
+| **Cidades com consulado** | São Paulo, Rio de Janeiro, Brasília, Porto Alegre, Recife |
 
-<!-- INSERIR IMAGEM: passaporte aberto com visto B2 americano -->
+---
 
-Imagine planejar sua viagem dos sonhos para Nova York, Los Angeles ou qualquer canto dos Estados Unidos. O **visto americano de turismo**, conhecido como **B2**, é a chave para estadias de até 6 meses por prazer, visitas a familiares ou tratamentos médicos. Diferente do ESTA (para estadias curtas de até 90 dias e apenas para cidadãos de certos países), o B2 é obrigatório para brasileiros e permite maior flexibilidade.<a class="cite-ref" href="#fonte-1" data-title="Visto turistico USA, ESTA: come fare?"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-2" data-title="Cosa serve per andare negli Stati Uniti: la guida a tutti i documenti necessari"><sup>[2]</sup></a>
+## Introdução: Por Que o Visto de Turismo?
 
-Este guia te leva do zero ao visto aprovado, como um amigo experiente te guiando pela burocracia. Lembre-se: regras podem mudar, sempre verifique o site oficial da Embaixada dos EUA no Brasil (br.usembassy.gov).
+O **visto de turismo americano**, oficialmente chamado de **visto B-2**, é o documento que autoriza brasileiros a entrar nos Estados Unidos para lazer, visitação de familiares ou atividades recreativas.<a class="cite-ref" href="#fonte-10" data-title="Portuguese - Embaixada e Consulados dos EUA no Brasil"><sup>[10]</sup></a> Diferente do ESTA (programa de isenção de visto para certos países), o Brasil não está incluído nessa lista, então qualquer brasileiro que deseje viajar para os EUA precisa solicitar um visto tradicional.
 
-<div class="learn-more"><strong>📖 Saiba mais:</strong> <a href="https://travelholicsouls.com/visto-turistico-usa-guida/" target="_blank" rel="noopener noreferrer">Visto turistico USA, ESTA: come fare?</a> · <a href="https://www.turisanda.it/blog/cosa-serve-per-andare-negli-stati-uniti-documenti" target="_blank" rel="noopener noreferrer">Cosa serve per andare negli Stati Uniti: la guida a tutti i documenti necessari</a></div>
-## 1. Entenda se Você Precisa do Visto B2
+Este guia foi desenvolvido para conduzir você por cada etapa do processo, desde o preenchimento do formulário até a entrevista no consulado. Se você está planejando uma viagem aos Estados Unidos, este é o caminho que você precisará seguir.
 
-O **visto de turismo B2** é para quem quer **turismo, visitas a amigos/família ou turismo médico**. Não serve para trabalho, estudo ou imigração.<a class="cite-ref" href="#fonte-5" data-title="USA-Modulo-DS160-1.pdf - Milano - Proexport"><sup>[5]</sup></a>
+---
 
-- **Duração**: Até 6 meses por entrada (o oficial de imigração decide na chegada).
-- **Validade**: Geralmente 10 anos para brasileiros, mas depende do perfil.
-- **Para quem é indicado**: Brasileiros e cidadãos de países sem Visa Waiver Program (como o Brasil não participa).<a class="cite-ref" href="#fonte-1" data-title="Visto turistico USA, ESTA: come fare?"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-3" data-title="Visto Turistico per gli USA - Assicurazione Viaggio"><sup>[3]</sup></a>
+## Etapa 1: Prepare-se Antes de Começar
 
-Se seu plano for menos de 90 dias e você se enquadrar em exceções (raro para BR), cheque ESTA – mas foque no B2 para segurança.<a class="cite-ref" href="#fonte-4" data-title="Cosa serve per andare in America? Documenti necessari e consigli utili."><sup>[4]</sup></a>
+Antes de preencher qualquer formulário, reúna os documentos básicos que você precisará:
 
-<!-- INTERVENCAO FUTURA: pesquisa adicional — atualizar lista de países VWP -->
+- **Passaporte válido** com validade mínima de seis meses além da data prevista para sua entrada nos Estados Unidos<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a>
+- Itinerário de viagem (datas e cidades que pretende visitar)
+- Histórico de viagens internacionais dos últimos 5 anos
+- Informações sobre educação e histórico profissional
+- Comprovantes financeiros (extratos bancários, contracheques)
 
-<div class="learn-more"><strong>📖 Saiba mais:</strong> <a href="https://travelholicsouls.com/visto-turistico-usa-guida/" target="_blank" rel="noopener noreferrer">Visto turistico USA, ESTA: come fare?</a> · <a href="https://www.assicurazione-viaggio.axa-assistance.it/visto-usa" target="_blank" rel="noopener noreferrer">Visto Turistico per gli USA - Assicurazione Viaggio</a> · <a href="https://www.ilviaggiochetimanca.com/blog/andare-in-america" target="_blank" rel="noopener noreferrer">Cosa serve per andare in America? Documenti necessari e consigli utili.</a> · <a href="https://www.proexport.it/proexport/wp-content/uploads/2020/02/USA-Modulo-DS160-1.pdf" target="_blank" rel="noopener noreferrer">USA-Modulo-DS160-1.pdf - Milano - Proexport</a></div>
-## 2. Reúna Documentos Essenciais Antes de Começar
+<!-- INSERIR IMAGEM: documentos necessários para visto americano em mesa -->
 
-Comece organizando tudo. Sem pressa, pois erros no DS-160 atrasam tudo.
+Ter esses documentos em mãos facilitará o preenchimento do formulário e evitará interrupções durante o processo.
 
-**Checklist de documentos básicos**:
-- Passaporte válido (com pelo menos 6 meses de validade além da viagem).
-- Foto 5x5 cm recente (fundo branco, sem óculos).<a class="cite-ref" href="#fonte-2" data-title="Cosa serve per andare negli Stati Uniti: la guida a tutti i documenti necessari"><sup>[2]</sup></a>
-- Comprovantes financeiros: extratos bancários, declaração de IR, holerites.
-- Laços com o Brasil: emprego, imóvel, família (prova que você volta).
-- Itinerário: reservas de hotel, voos, carta-convite se aplicável.
+---
 
-Tenha tudo digitalizado. Isso facilita o preenchimento online.
+## Etapa 2: Preencha o Formulário DS-160
 
-<!-- INSERIR IMAGEM: pilha de documentos para visto com passaporte em destaque -->
+O **formulário DS-160** é o primeiro passo obrigatório para solicitar seu visto.<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a> Este formulário online coleta informações pessoais, detalhes da viagem e histórico do solicitante.
 
-<div class="learn-more"><strong>📖 Saiba mais:</strong> <a href="https://www.turisanda.it/blog/cosa-serve-per-andare-negli-stati-uniti-documenti" target="_blank" rel="noopener noreferrer">Cosa serve per andare negli Stati Uniti: la guida a tutti i documenti necessari</a></div>
-## 3. Passo 1: Preencha o Formulário DS-160 Online
+### Como Acessar o Formulário
 
-Acesse ceac.state.gov, selecione Brasil e inicie o **DS-160** (formulário eletrônico gratuito).
+Acesse o site oficial do Departamento de Estado dos EUA e selecione a cidade onde você fará o processo:<a class="cite-ref" href="#fonte-2" data-title="Como tirar o visto americano: passo a passo - Viagem e Turismo"><sup>[2]</sup></a>
 
-- Responda com honestidade: histórico de viagens, emprego, família, viagens anteriores.
-- Escolha **B2** como categoria (turismo).<a class="cite-ref" href="#fonte-5" data-title="USA-Modulo-DS160-1.pdf - Milano - Proexport"><sup>[5]</sup></a>
-- Salve o código de confirmação – essencial para o próximo passo.[cluster.allSlugs: salvar-imprimir-confirmacao-ds-160]
+- São Paulo
+- Rio de Janeiro
+- Brasília
+- Porto Alegre
+- Recife
 
-Dica: Faça em sessões curtas (expira em 20 min de inatividade). Imprima a página de confirmação com código de barras.
+Depois de selecionar sua localidade, clique em "Start an Application". O sistema gerará um **ID de solicitação** — anote este número com cuidado, pois você precisará dele para acessar o formulário novamente se precisar fazer alterações.
 
-Tempo: 1-2 horas. Erros comuns? Mentir ou omitir infos – pode levar a recusa permanente.
+### O Que o Formulário Solicita
 
-<div class="learn-more"><strong>📖 Saiba mais:</strong> <a href="https://www.proexport.it/proexport/wp-content/uploads/2020/02/USA-Modulo-DS160-1.pdf" target="_blank" rel="noopener noreferrer">USA-Modulo-DS160-1.pdf - Milano - Proexport</a></div>
-## 4. Passo 2: Pague a Taxa MRV e Reciprocity
+O DS-160 é dividido em seções:<a class="cite-ref" href="#fonte-2" data-title="Como tirar o visto americano: passo a passo - Viagem e Turismo"><sup>[2]</sup></a>
 
-Após o DS-160, gere o boleto no site do CASV (cisbrasil.com.br).
+1. **Dados pessoais**: nome completo, nomes anteriores (se houver), sexo, estado civil, data e local de nascimento, nacionalidade, RG e CPF
+2. **Informações sobre a viagem**: tipo de visto (turismo = B-2), data prevista de chegada, tempo de permanência, endereço nos EUA, quem será responsável pelos custos
+3. **Histórico profissional e educacional**: empregos anteriores, educação, referências
+4. **Histórico de viagens**: viagens internacionais dos últimos 5 anos
 
-- **Taxa MRV**: US$ 185 (não reembolsável).
-- **Reciprocity Fee**: Para B2, cerca de US$ 200 (pago após aprovação, varia por nacionalidade).
+### Dicas Importantes
 
-Pague em banco ou online. Guarde o recibo – sem ele, não agenda entrevista.
+- **Preencha com precisão**: qualquer erro pode atrasar ou comprometer a aprovação do visto<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a>
+- **Use a ferramenta de tradução**: o site oferece tradução em português ao passar o cursor sobre as perguntas<a class="cite-ref" href="#fonte-2" data-title="Como tirar o visto americano: passo a passo - Viagem e Turismo"><sup>[2]</sup></a>
+- **Salve frequentemente**: não deixe o navegador aberto por muito tempo sem salvar suas respostas
+- **Não deixe campos em branco**: se uma pergunta não se aplica a você, indique "não aplicável" ou "N/A"
 
-## 5. Passo 3: Agende a Entrevista no CASV
+Ao finalizar o preenchimento, você receberá uma **página de confirmação com código de barras**. Imprima esta página — você precisará dela para os próximos passos.
 
-Com DS-160 e pagamento, acesse o portal CASV para [[LINK: agendar-visto-americano-2026 | agendar a entrevista]]. Escolha posto (SP, RJ, Recife, Brasília, Porto Alegre ou Belo Horizonte).
+---
 
-- Prioridade para idosos, menores ou emergências.
-- Aguardes podem ser longos em 2026 – planeje com antecedência.[cluster.allSlugs: agendar-visto-americano-2026]
+## Etapa 3: Pague a Taxa de Solicitação (MRV)
 
-Chegue 15 min antes com:
-- Passaporte.
-- Confirmação DS-160.
-- Recibo taxa.
-- Foto extra.
+Após preencher o DS-160, você deve pagar a **taxa de solicitação do visto**, conhecida como **MRV** (Machine Readable Visa).<a class="cite-ref" href="#fonte-3" data-title="Como tirar o visto americano passo a passo: guia em 5 etapas"><sup>[3]</sup></a>
 
-<!-- INSERIR IMAGEM: fila no CASV com pessoas aguardando entrevista -->
+### Valor e Forma de Pagamento
 
-## 6. Passo 4: A Entrevista – O Momento Decisivo
+O custo do visto de turismo é **US$ 160**.<a class="cite-ref" href="#fonte-4" data-title="Visto para os Estados Unidos - American Airlines"><sup>[4]</sup></a> Você pode pagar com:
 
-Duração: 2-5 minutos. Consular pergunta sobre laços no Brasil, finanças e planos.
+- Cartão de crédito
+- Transferência bancária
+- Boleto bancário (em alguns casos)
 
-**Perguntas comuns**:
-- Qual o propósito da viagem?
-- Quanto tempo fica? Onde?
-- Como vai pagar?
-- Tem família nos EUA?
+### Como Pagar
 
-Seja conciso e honesto. Leve originais e cópias dos docs.<a class="cite-ref" href="#fonte-6" data-title="Ottenere un Visto per gli Stati Uniti: Guida Completa"><sup>[6]</sup></a>
+Acesse o site oficial do governo dos EUA, crie uma conta e selecione a categoria de visto (turismo = B-2).<a class="cite-ref" href="#fonte-3" data-title="Como tirar o visto americano passo a passo: guia em 5 etapas"><sup>[3]</sup></a> O sistema o direcionará para a página de pagamento. Após confirmar o pagamento, você receberá um **comprovante de pagamento** — guarde este documento com segurança.
 
-Resultado imediato: aprovado, recusado ou administrativo (mais docs).
+<!-- INTERVENCAO FUTURA: pesquisa adicional — confirmar métodos de pagamento atualizados em 2026 -->
 
-**Documentos para entrevista e retirada**:
+---
 
-| Documento | Obrigatório? | Dica |
-|-----------|--------------|------|
-| Passaporte | Sim | Válido |
-| DS-160 | Sim | Impresso |
-| Taxa paga | Sim | Recibo |
-| Foto 5x5 | Sim | Uma extra |
-| Comprovantes | Recomendado | Finanças e laços |
+## Etapa 4: Agende Sua Visita ao CASV
 
-<div class="learn-more"><strong>📖 Saiba mais:</strong> <a href="https://www.avvocatomazzotta.com/pubblicazioni/come-ottenere-visto-per-stati-uniti" target="_blank" rel="noopener noreferrer">Ottenere un Visto per gli Stati Uniti: Guida Completa</a></div>
-## 7. Passo 5: Retire o Passaporte e Consulte Status
+O **CASV** (Centro de Atendimento ao Solicitante de Visto) é onde você fornecerá seus dados biométricos (impressões digitais e foto).<a class="cite-ref" href="#fonte-3" data-title="Como tirar o visto americano passo a passo: guia em 5 etapas"><sup>[3]</sup></a>
 
-Aprovado? Siga instruções para [[LINK: documentos-entrevista-retirada-passaporte-casv | retirar no CASV ou Correios]]. Tempo: 1-2 semanas.[cluster.allSlugs: documentos-entrevista-retirada-passaporte-casv]
+### Como Agendar
 
-Acompanhe em [[LINK: consultar-status-visto-americano | consultar-status-visto-americano]]. Código do DS-160 ajuda.[cluster.allSlugs: consultar-status-visto-americano]
+No mesmo site onde você pagou a taxa, agende sua visita ao CASV mais próximo de sua residência. Você receberá uma **página de confirmação com código de barras** — imprima-a.
 
-## 8. E se For Negado? Próximos Passos
+### O Que Levar ao CASV
 
-Recusa comum por falta de laços ou finanças insuficientes. Não desista: corrija e reaplique após 6 meses. Saiba [[LINK: reverter-negativa-visto-americano | como reverter negativa de visto]].[cluster.allSlugs: reverter-negativa-visto-americano]
+Na primeira ida ao CASV, leve:<a class="cite-ref" href="#fonte-6" data-title="Como tirar visto americano 2026 - Mundo dos Vistos"><sup>[6]</sup></a>
 
-<!-- INTERVENCAO FUTURA: estatísticas — inserir taxas de aprovação recentes -->
+- Confirmação do agendamento (impressa)
+- Comprovante de pagamento da taxa MRV
+- Passaporte válido
+- Uma foto 5x7 cm com fundo branco (caso não tenha sido tirada digitalmente)
 
-## Checklist Final Antes da Viagem
+### O Que Acontece no CASV
 
-- [ ] Visto colado no passaporte.
-- [ ] ESTA não aplica (use B2).
-- [ ] Seguro viagem (recomendado).
-- [ ] Comprovante de hospedagem e volta.
+O atendimento é rápido: você fornecerá suas impressões digitais e uma foto será tirada no local. Não há entrevista nesta etapa — é apenas coleta de dados biométricos.
 
-Na chegada aos EUA, oficial decide permanência. Boa viagem!
+---
 
-<!-- INTERVENCAO FUTURA: atualização regras — checar mudanças pós-2026 -->
+## Etapa 5: Agende Sua Entrevista no Consulado
+
+Após a visita ao CASV, você agendará a **entrevista no consulado ou embaixada**.<a class="cite-ref" href="#fonte-3" data-title="Como tirar o visto americano passo a passo: guia em 5 etapas"><sup>[3]</sup></a> Esta é a etapa mais importante do processo, pois um oficial de imigração avaliará sua solicitação.
+
+### Como Agendar
+
+O agendamento também é feito no site oficial. Você pode escolher entre os consulados em:<a class="cite-ref" href="#fonte-4" data-title="Visto para os Estados Unidos - American Airlines"><sup>[4]</sup></a>
+
+- São Paulo
+- Rio de Janeiro
+- Brasília
+- Porto Alegre
+- Recife
+
+Escolha uma data e horário que funcione para você. Você receberá uma **página de confirmação** — imprima-a.
+
+### Quanto Tempo Leva?
+
+O tempo entre o pagamento da taxa e a entrevista varia conforme a demanda. Geralmente, você consegue agendar uma entrevista em 2 a 4 semanas, mas em períodos de alta demanda pode levar mais tempo.
+
+<!--[[LINK: agendar-visto-americano-2026 | Como agendar sua entrevista de visto americano]]-->
+
+---
+
+## Etapa 6: Reúna Todos os Documentos para a Entrevista
+
+A entrevista é o momento em que o oficial de imigração decide se você receberá o visto. Ter todos os documentos organizados aumenta suas chances de aprovação.
+
+### Documentos Obrigatórios
+
+- **Passaporte válido** (atual e anteriores, se houver)<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a>
+- **Página de confirmação do formulário DS-160 impressa**<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a>
+- **Página de confirmação do agendamento impressa**<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a>
+- **Comprovante de pagamento da taxa MRV**<a class="cite-ref" href="#fonte-6" data-title="Como tirar visto americano 2026 - Mundo dos Vistos"><sup>[6]</sup></a>
+- **Foto recente** 5x5 cm ou 5x7 cm com fundo branco (caso necessário)<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a>
+
+### Documentos de Apoio (Altamente Recomendados)
+
+Além dos documentos obrigatórios, leve comprovantes que demonstrem seus vínculos com o Brasil e sua capacidade financeira:<a class="cite-ref" href="#fonte-5" data-title="Visto Americano: Guia Completo para Brasileiros - Airalo"><sup>[5]</sup></a><a class="cite-ref" href="#fonte-6" data-title="Como tirar visto americano 2026 - Mundo dos Vistos"><sup>[6]</sup></a>
+
+- **Comprovantes de vínculo com o Brasil**: contracheques, declaração de emprego, comprovante de estudo, comprovante de propriedade (imóvel, carro)
+- **Comprovantes financeiros**: extratos bancários dos últimos 3 meses, comprovante de renda, declaração de imposto de renda
+- **Comprovante de acomodação**: reserva de hotel ou carta de convite de quem o hospedará nos EUA
+- **Itinerário de viagem**: passagens aéreas, roteiro de cidades que visitará
+
+<!-- INSERIR IMAGEM: documentos organizados em pasta para entrevista de visto -->
+
+### Por Que Esses Documentos Importam
+
+O oficial quer ter certeza de que você:
+
+1. Tem vínculos suficientes com o Brasil para retornar após a viagem
+2. Tem recursos financeiros para custear a viagem
+3. Tem um plano claro de viagem (não está tentando imigrar ilegalmente)
+
+---
+
+## Etapa 7: Prepare-se para a Entrevista
+
+A entrevista é breve (geralmente 2 a 5 minutos), mas decisiva. Aqui estão dicas para se preparar:
+
+### Antes da Entrevista
+
+- **Durma bem**: chegue descansado e focado
+- **Vista-se adequadamente**: roupas limpas e profissionais (não é necessário terno, mas evite roupas muito casuais)
+- **Chegue cedo**: chegue com pelo menos 15 minutos de antecedência
+- **Organize seus documentos**: coloque-os em uma pasta, em ordem lógica
+- **Revise suas respostas do DS-160**: o oficial pode fazer perguntas sobre o que você respondeu
+
+### Durante a Entrevista
+
+- **Responda com honestidade**: qualquer inconsistência pode resultar em negação
+- **Fale com clareza**: se não entender uma pergunta, peça para repetir
+- **Mantenha contato visual**: demonstra confiança e sinceridade
+- **Seja conciso**: responda o que é perguntado, sem adicionar informações desnecessárias
+- **Não minta ou exagere**: os oficiais têm experiência em detectar inconsistências
+
+### Perguntas Comuns
+
+Espere ser perguntado sobre:
+
+- Motivo da viagem
+- Quanto tempo pretende ficar
+- Quem pagará a viagem
+- Seu trabalho ou estudo no Brasil
+- Se tem familiares nos EUA
+- Viagens anteriores aos EUA ou outros países
+
+<!--[[LINK: documentos-entrevista-retirada-passaporte-casv | Documentos necessários para a entrevista e retirada do passaporte]]-->
+
+---
+
+## Etapa 8: Receba Seu Visto
+
+Após a entrevista, existem três possibilidades:
+
+### Aprovação Imediata
+
+Se aprovado, o oficial dirá que seu visto foi aprovado. Você receberá instruções sobre como e quando retirar seu passaporte com o visto colado.
+
+### Caso Pendente
+
+Em alguns casos, o oficial pode dizer que precisa de documentação adicional. Você receberá instruções sobre o que enviar e para onde.
+
+### Negação
+
+Se negado, o oficial explicará o motivo. Em alguns casos, é possível solicitar reconsideração ou tentar novamente em uma data futura.
+
+<!--[[LINK: reverter-negativa-visto-americano | Como lidar com a negação do visto americano]]-->
+
+### Retirada do Passaporte
+
+Seu passaporte com o visto será entregue em um local indicado pelo consulado. Geralmente, você pode:
+
+- Retirar pessoalmente
+- Receber por correio
+- Retirar em um centro de atendimento
+
+Verifique as opções disponíveis no seu consulado.
+
+---
+
+## Checklist Final: Não Esqueça de Nada
+
+Antes de sair de casa para a entrevista, verifique se tem:
+
+- [ ] Passaporte válido (atual e anteriores, se houver)
+- [ ] Página de confirmação do DS-160 impressa
+- [ ] Página de confirmação do agendamento impressa
+- [ ] Comprovante de pagamento da taxa MRV
+- [ ] Foto 5x5 cm ou 5x7 cm (se necessário)
+- [ ] Contracheques ou comprovante de renda
+- [ ] Extratos bancários dos últimos 3 meses
+- [ ] Comprovante de propriedade ou aluguel
+- [ ] Reserva de hotel ou carta de convite
+- [ ] Itinerário de viagem
+- [ ] Documentos de viagens anteriores (se aplicável)
+- [ ] Carteira de identidade (RG)
+
+<!-- INTERVENCAO FUTURA: design — criar versão interativa do checklist -->
+
+---
+
+## Informações Importantes
+
+### Validade do Visto
+
+O visto de turismo americano é válido por **até 10 anos** (para brasileiros). Isso significa que você pode usá-lo múltiplas vezes durante esse período, desde que seu passaporte não expire.
+
+### Mudanças nas Regras
+
+As regras e processos de visto podem mudar. Sempre consulte o site oficial da embaixada ou consulado americano no Brasil antes de iniciar o processo para garantir que você tem as informações mais atualizadas.
+
+### Suporte Oficial
+
+Para dúvidas, visite:
+
+- Site oficial da Embaixada dos EUA no Brasil
+- Números de telefone dos consulados (disponíveis no site)
+- Serviço de chat online (quando disponível)
+
+---
+
+## Próximos Passos
+
+Depois de receber seu visto, você está pronto para planejar sua viagem! Lembre-se de:
+
+- Verificar requisitos de entrada nos EUA (documentação adicional, vacinações)
+- Reservar voos e hospedagem
+- Notificar seu banco sobre a viagem (para evitar bloqueio de cartão)
+- Contratar seguro viagem (recomendado)
+- Fazer cópias de seus documentos importantes
+
+<!--[[LINK: consultar-status-visto-americano | Como consultar o status do seu visto americano]]-->
+
+---
+
+## Conclusão
+
+Obter o visto americano de turismo é um processo estruturado e previsível. Seguindo este guia passo a passo, preenchendo corretamente os formulários, reunindo os documentos necessários e se preparando bem para a entrevista, você aumenta significativamente suas chances de aprovação. Boa sorte em sua viagem!
 
 ---
 
 <div class="sources-section">
 <h2>📚 Fontes</h2>
-<div class="source-card" id="fonte-3">
-  <div class="source-num">[3]</div>
+<div class="source-card" id="fonte-6">
+  <div class="source-num">[6]</div>
   <div class="source-body">
     <div class="source-title">
-      <a href="https://www.assicurazione-viaggio.axa-assistance.it/visto-usa" target="_blank" rel="noopener noreferrer">Visto Turistico per gli USA - Assicurazione Viaggio</a>
+      <a href="https://www4.mundodosvistos.com.br/p/como-tirar-visto-americano/" target="_blank" rel="noopener noreferrer">Como tirar visto americano 2026 - Mundo dos Vistos</a>
       <span class="source-badge web">🌐 Web</span>
     </div>
-    <div class="source-date">🗓 02 de abr. de 2026</div>
-    <div class="source-snippet">Visto per Stati Uniti, per turismo: chi ne ha bisogno e chi invece può farne a meno. Trova tutte le spiegazioni per preparare il tuo viaggio negli States!</div>
-  </div>
-</div>
-<div class="source-card" id="fonte-4">
-  <div class="source-num">[4]</div>
-  <div class="source-body">
-    <div class="source-title">
-      <a href="https://www.ilviaggiochetimanca.com/blog/andare-in-america" target="_blank" rel="noopener noreferrer">Cosa serve per andare in America? Documenti necessari e consigli utili.</a>
-      <span class="source-badge web">🌐 Web</span>
-    </div>
-    <div class="source-date">🗓 30 de mar. de 2026</div>
-    <div class="source-snippet">IL VISTO. Che differenza c'è tra ESTA e Visto? L'ESTA è valido solo se ti stai recando negli Stati Uniti per turismo e non superi i 90 giorni di permanenza.</div>
-  </div>
-</div>
-<div class="source-card" id="fonte-2">
-  <div class="source-num">[2]</div>
-  <div class="source-body">
-    <div class="source-title">
-      <a href="https://www.turisanda.it/blog/cosa-serve-per-andare-negli-stati-uniti-documenti" target="_blank" rel="noopener noreferrer">Cosa serve per andare negli Stati Uniti: la guida a tutti i documenti necessari</a>
-      <span class="source-badge web">🌐 Web</span>
-    </div>
-    <div class="source-date">🗓 19 de mar. de 2026</div>
-    <div class="source-snippet">Per andare negli Stati Uniti serve il visto? · Visto Turistico (B-2): per chi visita gli Stati Uniti per turismo, vacanze, visite a familiari o amici. · Visto per ...</div>
-  </div>
-</div>
-<div class="source-card" id="fonte-7">
-  <div class="source-num">[7]</div>
-  <div class="source-body">
-    <div class="source-title">
-      <a href="https://www.usvisa.it" target="_blank" rel="noopener noreferrer">usvisa</a>
-      <span class="source-badge web">🌐 Web</span>
-    </div>
-    <div class="source-date">🗓 06 de mar. de 2026</div>
-    <div class="source-snippet">I viaggiatori che hanno visitato o soggiornato a Cuba o in uno dei Paesi considerati sponsor di terrorismo, non possono più viaggiare con l'autorizzazione ESTA, ...</div>
-  </div>
-</div>
-<div class="source-card" id="fonte-5">
-  <div class="source-num">[5]</div>
-  <div class="source-body">
-    <div class="source-title">
-      <a href="https://www.proexport.it/proexport/wp-content/uploads/2020/02/USA-Modulo-DS160-1.pdf" target="_blank" rel="noopener noreferrer">USA-Modulo-DS160-1.pdf - Milano - Proexport</a>
-      <span class="source-badge web">🌐 Web</span>
-    </div>
-    <div class="source-date">🗓 17 de out. de 2025</div>
-    <div class="source-snippet">INFORMAZIONI DI VIAGGIO. Scopo del viaggio negli Stati Uniti: Specificare la categoria del visto: □ B1/B2 (Incontri di Affari e Turismo).</div>
+    <div class="source-date">🗓 03 de abr. de 2026</div>
+    <div class="source-snippet">Certifique-se de levar comprovantes de vínculos com o Brasil, como contracheques, declaração de emprego, comprovantes de estudo, entre outros. Apresentar um ...</div>
   </div>
 </div>
 <div class="source-card" id="fonte-1">
   <div class="source-num">[1]</div>
   <div class="source-body">
     <div class="source-title">
-      <a href="https://travelholicsouls.com/visto-turistico-usa-guida/" target="_blank" rel="noopener noreferrer">Visto turistico USA, ESTA: come fare?</a>
+      <a href="https://www.c6bank.com.br/blog/como-tirar-visto-americano" target="_blank" rel="noopener noreferrer">Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista</a>
       <span class="source-badge web">🌐 Web</span>
     </div>
-    <div class="source-date">🗓 03 de fev. de 2025</div>
-    <div class="source-snippet">La migliore guida su come fare il visto turistico USA (ESTA): ogni fase è spiegata passo passo in modo chiaro e sintetico con un tutorial.</div>
+    <div class="source-date">🗓 02 de abr. de 2026</div>
+    <div class="source-snippet">Neste guia, você encontrará todas as informações necessárias para solicitar o visto, desde o preenchimento do formulário até a entrevista no ...</div>
   </div>
 </div>
-<div class="source-card" id="fonte-6">
-  <div class="source-num">[6]</div>
+<div class="source-card" id="fonte-9">
+  <div class="source-num">[9]</div>
   <div class="source-body">
     <div class="source-title">
-      <a href="https://www.avvocatomazzotta.com/pubblicazioni/come-ottenere-visto-per-stati-uniti" target="_blank" rel="noopener noreferrer">Ottenere un Visto per gli Stati Uniti: Guida Completa</a>
+      <a href="https://www.youtube.com/watch?v=MgGFcDXEVUk" target="_blank" rel="noopener noreferrer">O PROCESSO COMPLETO PARA TIRAR O VISTO AMERICANO 2026</a>
       <span class="source-badge web">🌐 Web</span>
     </div>
+    <div class="source-date">🗓 02 de abr. de 2026</div>
+    <div class="source-snippet">LINK PARA A ASSESSORIA PREMIUM DA MOOVE VISTOS Estudante F1 e F1 Professional: https://bit.ly/3OE2Lci Turismo e Negócios B1/B2: ...</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-7">
+  <div class="source-num">[7]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://www.egali.com.br/blog/tudo-sobre-e-como-tirar-o-visto-americano/" target="_blank" rel="noopener noreferrer">Como tirar o visto americano | o Guia completo - Egali Intercâmbio</a>
+      <span class="source-badge web">🌐 Web</span>
+    </div>
+    <div class="source-date">🗓 30 de mar. de 2026</div>
+    <div class="source-snippet">Vamos abordar os diferentes tipos de vistos, os serviços oferecidos pela Egali, o custo envolvido, como agendar a entrevista, as diferenças no ...</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-3">
+  <div class="source-num">[3]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://www.melhoresdestinos.com.br/visto-estados-unidos-3.html" target="_blank" rel="noopener noreferrer">Como tirar o visto americano passo a passo: guia em 5 etapas</a>
+      <span class="source-badge web">🌐 Web</span>
+    </div>
+    <div class="source-date">🗓 29 de mar. de 2026</div>
+    <div class="source-snippet">Um guia para tirar todas as dúvidas sobre como tirar o visto para os Estados Unidos, com informações sobre taxas, formulários e entrevistas.</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-2">
+  <div class="source-num">[2]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://viagemeturismo.abril.com.br/manual-do-viajante/como-tirar-o-visto-para-os-estados-unidos-passo-a-passo/" target="_blank" rel="noopener noreferrer">Como tirar o visto americano: passo a passo - Viagem e Turismo</a>
+      <span class="source-badge web">🌐 Web</span>
+    </div>
+    <div class="source-date">🗓 16 de mar. de 2026</div>
+    <div class="source-snippet">Veja como funciona o visto dos Estados Unidos e acompanhe o passo a passo para preencher formulários, pagar taxas e agendar a entrevista.</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-5">
+  <div class="source-num">[5]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://www.airalo.com/pt-BR/blog/visto-americano" target="_blank" rel="noopener noreferrer">Visto Americano: Guia Completo para Brasileiros - Airalo</a>
+      <span class="source-badge web">🌐 Web</span>
+    </div>
+    <div class="source-date">🗓 02 de nov. de 2025</div>
+    <div class="source-snippet">Descubra como tirar o visto americano: tipos, documentos necessários, valores e passo a passo completo. Guia completo para viajantes ...</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-8">
+  <div class="source-num">[8]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://br.usembassy.gov/pt/visas-pt/" target="_blank" rel="noopener noreferrer">Serviços de vistos dos EUA - Use our new U.S. Visa Wizard!</a>
+      <span class="source-badge oficial">🏛️ Oficial</span>
+    </div>
+    <div class="source-date">🗓 15 de jun. de 2025</div>
+    <div class="source-snippet">O Visa Navigator fornece informações abrangentes do processo de solicitação de visto, incluindo informações sobre a entrega de passaporte, denúncias de fraudes ...</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-4">
+  <div class="source-num">[4]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://www.aa.com/i18n/travel-info/international-travel/us-visa.jsp?locale=pt_BR" target="_blank" rel="noopener noreferrer">Visto para os Estados Unidos - American Airlines</a>
+      <span class="source-badge web">🌐 Web</span>
+    </div>
+    <div class="source-date">🗓 10 de fev. de 2025</div>
+    <div class="source-snippet">Cada solicitação de visto de turismo custa US$ 160*, incluindo a entrevista e a entrega do passaporte. Você pode pagar com cartão de crédito ou transferência ...</div>
+  </div>
+</div>
+<div class="source-card" id="fonte-10">
+  <div class="source-num">[10]</div>
+  <div class="source-body">
+    <div class="source-title">
+      <a href="https://br.usembassy.gov/pt/non-immigrant-visas-overview-portuguese/" target="_blank" rel="noopener noreferrer">Portuguese - Embaixada e Consulados dos EUA no Brasil</a>
+      <span class="source-badge oficial">🏛️ Oficial</span>
+    </div>
     
-    <div class="source-snippet">Programmare e partecipare a un'intervista presso l'ambasciata o il consolato americano nel tuo paese. Documenti di supporto che dimostrino il motivo del viaggio ...</div>
+    <div class="source-snippet">Vistos de não imigrante são necessários para viagens temporárias aos Estados Unidos que incluem turismo, trabalho temporário, estudo e intercâmbio.</div>
   </div>
 </div>
 </div>

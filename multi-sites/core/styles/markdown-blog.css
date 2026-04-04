@@ -199,7 +199,7 @@
 }
 
 .blog-content blockquote::before {
-    content: "“";
+    content: "\201C";
     position: absolute;
     top: -1.5rem;
     left: 0;
@@ -1046,4 +1046,368 @@
   .related-article-card {
     border-right: none;
   }
+}
+
+
+/* =============================================================================
+   Enricher Components — Citações, Frescor, Fontes
+   Injetados pelo article-enricher.js no .md gerado pelo Sonar.
+   Harmonizados com o design system do blog (cores, tipografia, espaçamentos).
+
+   Variáveis CSS para customização por tema:
+     --enrich-accent        cor de destaque (default: roxo #820ad1, igual blockquote)
+     --enrich-blue          cor dos links de citação (default: azul #3182ce, igual bullets)
+     --enrich-border        cor de borda padrão (default: #e2e8f0, igual h2)
+     --enrich-bg-subtle     fundo suave de cards (default: #f8fafc, igual author-card)
+     --enrich-text-muted    texto secundário (default: #64748b, igual author-label)
+     --enrich-text-body     texto principal dos cards (default: #374151, igual p)
+   ============================================================================= */
+
+/* ── Citações inline com tooltip ─────────────────────────────────────────── */
+
+/*
+ * Âncora invisível que envolve o superscript [N].
+ * Sem sublinhado para não poluir o texto — o sup azul já é o sinal visual.
+ * position: relative é o contexto do tooltip ::after.
+ */
+.cite-ref {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+/*
+ * O número em superscript. Usa o azul dos bullets (#3182ce) para consistência,
+ * com dotted underline como convenção de "citação clicável" (padrão Wikipedia).
+ */
+.cite-ref sup {
+    color: var(--enrich-blue, #3182ce);
+    font-size: 0.72em;
+    font-weight: 700;
+    padding: 0 2px;
+    border-bottom: 1.5px dotted var(--enrich-blue, #3182ce);
+    cursor: pointer;
+    line-height: 1;
+}
+
+/*
+ * Tooltip — aparece ao hover via opacity transition (zero JS).
+ * data-title é preenchido pelo enricher com o título da fonte.
+ * max-width: 300px + text-overflow garantem que títulos longos não quebram o layout.
+ */
+.cite-ref::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b; /* mesmo tom do author-name */
+    color: #f8fafc;      /* mesmo fundo do author-card */
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.45;
+    padding: 6px 11px;
+    border-radius: 8px;  /* mesmo raio do faq-item */
+    white-space: nowrap;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* mesmo do .blog-content pre */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease; /* mesmo timing dos links */
+    z-index: 50;
+}
+
+/* Setinha do tooltip — mesma cor do fundo do tooltip */
+.cite-ref::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1e293b;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 50;
+}
+
+.cite-ref:hover::after,
+.cite-ref:hover::before {
+    opacity: 1;
+}
+
+/* ── Badge de frescor ─────────────────────────────────────────────────────── */
+
+/*
+ * Inserido logo após o H1. Informa ao leitor a data de geração, fonte mais
+ * recente e número de buscas feitas pelo Sonar.
+ * Usa border-left de 3px como o disclaimer-card, mas em azul informativo.
+ * flex-wrap garante quebra limpa em mobile.
+ */
+.article-freshness {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    background: #f8fafc; /* mesmo do author-card */
+    border-left: 3px solid var(--enrich-blue, #3182ce);
+    padding: 10px 16px;
+    font-size: 0.875rem; /* mesmo do author-label e disclaimer */
+    color: var(--enrich-text-muted, #64748b);
+    margin: 1rem 0 2.5rem;
+    line-height: 1.6;
+}
+
+.article-freshness span {
+    white-space: nowrap;
+}
+
+.article-freshness strong {
+    color: #475569; /* um tom acima do muted, abaixo do body */
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* ── Bloco "Saiba mais" por seção ─────────────────────────────────────────── */
+
+/*
+ * Injetado ao final de cada seção H2 com links para as fontes citadas ali.
+ * Segue o mesmo padrão visual do disclaimer-card: border-left 3px + fundo sutil.
+ * Sem border-radius, mantendo consistência com disclaimer e author-card.
+ */
+.learn-more {
+    background: #f8fafc;
+    border-left: 3px solid var(--enrich-border, #e2e8f0);
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    color: var(--enrich-text-muted, #64748b);
+    margin: 2rem 0 1rem;
+    line-height: 1.6;
+}
+
+.learn-more strong {
+    color: var(--enrich-text-body, #374151);
+    font-weight: 600;
+    letter-spacing: 0.02em; /* mesmo do .blog-content strong */
+}
+
+/*
+ * Links do "Saiba mais" — herdam o padrão de links do blog-content:
+ * underline fino, hover com opacity, active com roxo #820ad1.
+ */
+.learn-more a {
+    color: var(--enrich-text-body, #374151);
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.045em;
+    text-underline-offset: 0.01em;
+    text-decoration-color: currentColor;
+    transition: opacity 0.15s ease;
+    margin: 0 2px;
+}
+
+.learn-more a:hover {
+    opacity: 0.8;
+}
+
+.learn-more a:active {
+    text-decoration-color: #820ad1; /* roxo Nubank, mesmo do blog-content a:active */
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+}
+
+/* ── Seção de fontes ──────────────────────────────────────────────────────── */
+
+/*
+ * Container da seção ## Fontes, adicionada ao final do artigo.
+ * Separação visual via border-top, mesmo padrão da faq-divider mas mais pesado
+ * (2px) para marcar bem o fim do conteúdo editorial.
+ */
+.sources-section {
+    margin-top: 4rem; /* mesmo do faq-section e author-section */
+    margin-bottom: 2rem;
+}
+
+/*
+ * Título da seção. Tom e peso iguais ao faq-title mas menor — é conteúdo
+ * de suporte, não uma seção principal do artigo.
+ */
+.sources-section h2 {
+    font-size: 1.25rem !important;  /* override do .blog-content h2 */
+    font-weight: 600 !important;
+    color: #475569 !important;
+    margin: 0 0 1.5rem 0 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    letter-spacing: 0 !important;
+}
+
+/*
+ * Card individual de fonte. Mesmo padrão estrutural do author-card:
+ * display flex, gap, background #f8fafc, border #e2e8f0.
+ * border-left azul (mesma cor dos bullets) indica "fonte externa verificada".
+ * scroll-margin-top permite que os links #fonte-N ancorem abaixo do header fixo.
+ */
+.source-card {
+    display: flex;
+    gap: 12px;
+    padding: 1rem 1.25rem;    /* mesmo do faq-question */
+    background: #f8fafc;      /* mesmo do author-card */
+    border-left: 3px solid var(--enrich-blue, #3182ce);
+    border-top: 1px solid var(--enrich-border, #e2e8f0);
+    border-bottom: 1px solid var(--enrich-border, #e2e8f0);
+    border-right: 1px solid var(--enrich-border, #e2e8f0);
+    margin-bottom: 0.75rem;   /* mesmo gap do faq-list */
+    font-size: 0.875rem;      /* mesmo do author-label, disclaimer */
+    transition: all 0.2s ease; /* mesmo do faq-item */
+    scroll-margin-top: 80px;
+}
+
+.source-card:hover {
+    border-color: #cbd5e1;     /* mesmo do faq-item:hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* mesmo do faq-item:hover */
+}
+
+/* Número [N] — muted, fixo, não cresce */
+.source-num {
+    font-weight: 700;
+    color: var(--enrich-text-muted, #64748b);
+    min-width: 28px;
+    padding-top: 2px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+/* Corpo do card — flexível, min-width: 0 evita overflow em títulos longos */
+.source-body {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Título + badge numa linha */
+.source-title {
+    font-weight: 600;
+    color: #1e293b; /* mesmo do author-name e faq-title */
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+/*
+ * Link do título — abre em nova aba. Segue padrão do blog-content a
+ * mas sem o underline default (o título em bold já comunica clicabilidade).
+ */
+.source-title a {
+    color: var(--enrich-blue, #3182ce);
+    text-decoration: none;
+    word-break: break-word;
+    transition: opacity 0.15s ease;
+}
+
+.source-title a:hover {
+    opacity: 0.8;
+}
+
+/*
+ * Badge de tipo de fonte. Mesma estrutura do related-article-topic:
+ * inline-flex, font-size 0.75rem, border-radius 6px.
+ * Cada tipo tem cor própria mas todos usam tons já presentes no blog.
+ */
+.source-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 6px;    /* mesmo do related-article-topic */
+    margin-left: 7px;
+    vertical-align: middle;
+    white-space: nowrap;
+    letter-spacing: 0.025em; /* mesmo do author-label */
+}
+
+/* 🏛️ Oficial — verde, transmite autoridade */
+.source-badge.oficial {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* 🎓 Acadêmico — âmbar, transmite rigor */
+.source-badge.academico {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+/* 📰 Jornalístico — rosa, transmite atualidade */
+.source-badge.jornal {
+    background: #fce7f3;
+    color: #9d174d;
+}
+
+/* 🌐 Web — cinza neutro, mesmo do related-article-topic */
+.source-badge.web {
+    background: var(--ra-tag-bg, #f1f5f9);
+    color: var(--ra-tag-color, #334155);
+}
+
+/* Data da fonte — mesmo estilo do related-article-date */
+.source-date {
+    font-size: 0.8rem;
+    color: var(--enrich-text-muted, #64748b);
+    margin-bottom: 5px;
+}
+
+/* Snippet — itálico e muted, igual ao disclaimer-content p */
+.source-snippet {
+    color: var(--enrich-text-muted, #64748b);
+    font-style: italic;
+    line-height: 1.55;
+    font-size: 0.84rem;
+}
+
+/* ── Responsive — Enricher Components ────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    /* Badge de frescor empilha verticalmente em telas pequenas */
+    .article-freshness {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+        margin-bottom: 2rem;
+    }
+
+    /* Bloco "Saiba mais" — padding reduzido, igual ao faq-answer mobile */
+    .learn-more {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    /* Card de fonte — padding reduzido, igual ao faq-question mobile */
+    .source-card {
+        padding: 0.875rem 1rem;
+        gap: 10px;
+    }
+
+    .source-num {
+        min-width: 24px;
+    }
+
+    /* Título do card menor em mobile */
+    .source-title {
+        font-size: 0.875rem;
+    }
+
+    /* Badge menor em mobile para não quebrar linha */
+    .source-badge {
+        font-size: 0.65rem;
+        padding: 1px 5px;
+        margin-left: 4px;
+    }
+
+    /* Tooltip desativado em mobile — não há hover em touch */
+    .cite-ref::after,
+    .cite-ref::before {
+        display: none;
+    }
 }
