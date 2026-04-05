@@ -1,9 +1,10 @@
 ---
 const {
-  phone = "5511999999999",
+  phone = "551150283044",
   message = "Olá! Gostaria de falar com um especialista.",
-  avatar = "/fale-conosco2.png",
-  logo = "/logo-fast-orange.png"
+  avatar = "/assets/images/cta/fale-conosco.png",
+  logo = "/assets/images/cta/logo-fast-orange.png"
+  
 } = Astro.props;
 
 const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
@@ -12,9 +13,7 @@ const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}
 <div class="cta">
   <div class="cta-box">
     <strong class="cta-title">
-      <svg viewBox="0 0 32 32" class="cta-whatsapp">
-        <path d="M16 3C9.4 3 4 8.4 4 15c0 2.6.8 5 2.2 7l-1.5 5.5 5.6-1.5c1.9 1.1 4 1.7 6.2 1.7 6.6 0 12-5.4 12-12S22.6 3 16 3z"/>
-      </svg>
+      <svg width="14" height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" fill="CurrentColor"><path d="M1113 974q13 0 97.5 44t89.5 53q2 5 2 15 0 33-17 76-16 39-71 65.5t-102 26.5q-57 0-190-62-98-45-170-118t-148-185q-72-107-71-194v-8q3-91 74-158 24-22 52-22 6 0 18 1.5t19 1.5q19 0 26.5 6.5t15.5 27.5q8 20 33 88t25 75q0 21-34.5 57.5t-34.5 46.5q0 7 5 15 34 73 102 137 56 53 151 101 12 7 22 7 15 0 54-48.5t52-48.5zm-203 530q127 0 243.5-50t200.5-134 134-200.5 50-243.5-50-243.5-134-200.5-200.5-134-243.5-50-243.5 50-200.5 134-134 200.5-50 243.5q0 203 120 368l-79 233 242-77q158 104 345 104zm0-1382q153 0 292.5 60t240.5 161 161 240.5 60 292.5-60 292.5-161 240.5-240.5 161-292.5 60q-195 0-365-94l-417 134 136-405q-108-178-108-389 0-153 60-292.5t161-240.5 240.5-161 292.5-60z"/></svg>      
       Fale com especialista
     </strong>
 
@@ -43,7 +42,7 @@ const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}
 
 /* BOX */
 .cta-box {
-  width: 11.25rem; /* 180px */
+  width: 16.25rem;
   background: white;
   border-radius: 0.75rem;
   padding: 0.75rem 1rem 0.75rem 1.25rem;
@@ -67,16 +66,16 @@ const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.2;
 }
 
 /* ICON */
 .cta-whatsapp {
-  width: 0.875rem;
-  height: 0.875rem;
-  fill: #999;
+  width: 0.975rem;
+  height: 0.975rem;
+  fill: #25D366;
 }
 
 /* POWERED */
@@ -99,8 +98,8 @@ const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}
 
 /* AVATAR */
 .cta-avatar {
-  width: 8.5rem;  /* 136px */
-  height: 8.5rem;
+  width: 7.5rem;  /* 136px */
+  height: 7.5rem;
   border-radius: 50%;
   background: white;
   padding: 2px;
@@ -134,12 +133,20 @@ const whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}
   }
 
   .cta-box {
-    width: 10rem;
+    width: 13.4rem;
     padding: 0.625rem 0.875rem 0.625rem 1rem;
   }
 
   .cta-powered span {
-    display: none;
+    /* display: none; */
   }
+
+
+  .cta-title {
+    font-size: .85rem;
+  }  
+.cta-whatsapp {
+  color: #25D366;
+}  
 }
 </style>
