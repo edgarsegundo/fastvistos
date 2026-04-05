@@ -2,17 +2,15 @@
 title: "Guia Completo para Obter o Visto Americano de Turismo (B2)"
 description: ""
 pubDate: "2026-04-03T23:35:13.000Z"
-updatedDate: "2026-04-04T19:03:39.323Z"
+updatedDate: "2026-04-04T19:30:41.586Z"
 slug: "guia-visto-americano-turismo"
 topic: "Dicas"
 topicSlug: "dicas"
 image: "/assets/images/blog/centraldevistos__pexels-daniel-erlandson-2150649940-31350291.jpg"
 type: "public"
 published: true
-wordCount: "1709"
+wordCount: "1700"
 ---
-
-# Guia Completo para Obter o Visto Americano de Turismo
 
 <div class="article-freshness">
   <span>📅 Gerado em: <strong>2026-04-04</strong></span>
@@ -426,7 +424,6 @@ Obter o visto americano de turismo é um processo estruturado e previsível. Seg
       <a href="https://br.usembassy.gov/pt/non-immigrant-visas-overview-portuguese/" target="_blank" rel="noopener noreferrer">Portuguese - Embaixada e Consulados dos EUA no Brasil</a>
       <span class="source-badge oficial">🏛️ Oficial</span>
     </div>
-    
     <div class="source-snippet">Vistos de não imigrante são necessários para viagens temporárias aos Estados Unidos que incluem turismo, trabalho temporário, estudo e intercâmbio.</div>
   </div>
 </div>

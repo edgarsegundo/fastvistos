@@ -96,15 +96,30 @@ function sanitizeFilename(filename) {
         .toLowerCase();
 }
 
+// Função para remover H1 Markdown do início do conteúdo
+function removeLeadingH1(markdown) {
+    if (!markdown) return '';
+    const lines = markdown.split('\n');
+    // Remove a primeira linha que começa com "# "
+    if (lines[0].trim().startsWith('# ')) {
+        lines.shift();
+        // Remove linhas em branco logo após o H1
+        while (lines[0] && lines[0].trim() === '') {
+            lines.shift();
+        }
+    }
+    return lines.join('\n');
+}
+
 // Function to generate frontmatter and content
 function generateMarkdownContent(article) {
-    // const publishedDate = new Date(article.published).toISOString().split('T')[0];
-    // const modifiedDate = new Date(article.modified).toISOString().split('T')[0];
-    const publishedDate = new Date(article.published).toISOString(); // e.g., "2025-09-09T00:00:00.000Z"
+    const publishedDate = new Date(article.published).toISOString();
     const modifiedDate = new Date(article.modified).toISOString();
 
-    // Add the markdown content
-    const content = article.content_md || article.content_html || '';
+    // Remove H1 se vier em content_md
+    let content = article.content_md
+        ? removeLeadingH1(article.content_md)
+        : (article.content_html || '');
 
     // Count words using remark
     const tree = remark().use(remarkParse).parse(content);
@@ -115,12 +130,12 @@ function generateMarkdownContent(article) {
 
     // Create frontmatter
     const frontmatter = `---
-title: "${(article.title || '').replace(/"/g, '\\"')}"
-description: "${(article.description || '').replace(/"/g, '\\"')}"
+title: "${(article.title || '').replace(/"/g, '\"')}"
+description: "${(article.description || '').replace(/"/g, '\"')}"
 pubDate: "${publishedDate}"
 updatedDate: "${modifiedDate}"
 slug: "${article.slug}"
-topic: "${(article.blog_topic?.title || '').replace(/"/g, '\\"')}"
+topic: "${(article.blog_topic?.title || '').replace(/"/g, '\"')}"
 topicSlug: "${article.blog_topic?.slug || ''}"
 image: "/assets/images/blog/${article.image && typeof article.image === 'string' ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
