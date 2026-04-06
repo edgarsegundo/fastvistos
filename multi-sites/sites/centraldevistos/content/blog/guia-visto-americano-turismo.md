@@ -2,14 +2,14 @@
 title: "Guia Completo para Obter o Visto Americano de Turismo (B2)"
 description: ""
 pubDate: "2026-04-03T23:35:13.000Z"
-updatedDate: "2026-04-04T19:30:41.586Z"
+updatedDate: "2026-04-06T22:29:06.186Z"
 slug: "guia-visto-americano-turismo"
 topic: "Dicas"
 topicSlug: "dicas"
 image: "/assets/images/blog/centraldevistos__pexels-daniel-erlandson-2150649940-31350291.jpg"
 type: "public"
 published: true
-wordCount: "1700"
+wordCount: "1732"
 ---
 
 <div class="article-freshness">
@@ -153,7 +153,7 @@ Escolha uma data e horário que funcione para você. Você receberá uma **pági
 
 O tempo entre o pagamento da taxa e a entrevista varia conforme a demanda. Geralmente, você consegue agendar uma entrevista em 2 a 4 semanas, mas em períodos de alta demanda pode levar mais tempo.
 
-<!--[[LINK: agendar-visto-americano-2026 | Como agendar sua entrevista de visto americano]]-->
+[Como agendar sua entrevista de visto americano](/blog/agendar-visto-americano-2026)
 
 ---
 
@@ -221,7 +221,7 @@ Espere ser perguntado sobre:
 - Se tem familiares nos EUA
 - Viagens anteriores aos EUA ou outros países
 
-<!--[[LINK: documentos-entrevista-retirada-passaporte-casv | Documentos necessários para a entrevista e retirada do passaporte]]-->
+[Documentos necessários para a entrevista e retirada do passaporte](/blog/documentos-entrevista-retirada-passaporte-casv)
 
 ---
 
@@ -241,7 +241,7 @@ Em alguns casos, o oficial pode dizer que precisa de documentação adicional. V
 
 Se negado, o oficial explicará o motivo. Em alguns casos, é possível solicitar reconsideração ou tentar novamente em uma data futura.
 
-<!--[[LINK: reverter-negativa-visto-americano | Como lidar com a negação do visto americano]]-->
+[Como lidar com a negação do visto americano](/blog/reverter-negativa-visto-americano)
 
 ### Retirada do Passaporte
 
@@ -306,7 +306,7 @@ Depois de receber seu visto, você está pronto para planejar sua viagem! Lembre
 - Contratar seguro viagem (recomendado)
 - Fazer cópias de seus documentos importantes
 
-<!--[[LINK: consultar-status-visto-americano | Como consultar o status do seu visto americano]]-->
+[Como consultar o status do seu visto americano](/blog/consultar-status-visto-americano)
 
 ---
 
@@ -424,6 +424,7 @@ Obter o visto americano de turismo é um processo estruturado e previsível. Seg
       <a href="https://br.usembassy.gov/pt/non-immigrant-visas-overview-portuguese/" target="_blank" rel="noopener noreferrer">Portuguese - Embaixada e Consulados dos EUA no Brasil</a>
       <span class="source-badge oficial">🏛️ Oficial</span>
     </div>
+    
     <div class="source-snippet">Vistos de não imigrante são necessários para viagens temporárias aos Estados Unidos que incluem turismo, trabalho temporário, estudo e intercâmbio.</div>
   </div>
 </div>
