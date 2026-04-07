@@ -132,6 +132,79 @@
       }
       #img-insert-fab:hover { background: #1976d2; }
 
+      /* ── Step 2: adjust panel ── */
+      #img-insert-modal .step2 { display: none; }
+      #img-insert-modal .step2.active { display: block; }
+      #img-insert-modal .step1.hidden { display: none; }
+
+      #img-insert-modal .adjust-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px;
+        margin-bottom: 14px;
+      }
+      #img-insert-modal .adjust-row { display: flex; flex-direction: column; gap: 3px; }
+      #img-insert-modal .adjust-row label { font-size: 12px; color: #555; }
+      #img-insert-modal .adjust-row input[type=range] { width: 100%; accent-color: #1976d2; }
+      #img-insert-modal .adjust-row .range-val {
+        font-size: 11px; color: #888; text-align: right;
+      }
+      #img-insert-modal .size-row {
+        display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+      }
+      #img-insert-modal .size-row input[type=number] {
+        width: 70px; padding: 5px 7px; border: 1px solid #ccc;
+        border-radius: 6px; font-size: 13px;
+      }
+      #img-insert-modal .lock-btn {
+        padding: 4px 8px; border: 1px solid #ccc; border-radius: 6px;
+        background: #f5f5f5; cursor: pointer; font-size: 14px;
+      }
+      #img-insert-modal .lock-btn.locked { background: #e3f2fd; border-color: #1976d2; }
+
+      #img-insert-modal .layout-grid {
+        display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
+      }
+      #img-insert-modal .layout-opt {
+        border: 2px solid #ddd; border-radius: 8px; padding: 6px 10px;
+        cursor: pointer; font-size: 12px; background: #fafafa;
+        display: flex; flex-direction: column; align-items: center; gap: 3px;
+        min-width: 60px; transition: border-color .15s;
+      }
+      #img-insert-modal .layout-opt:hover { border-color: #90caf9; }
+      #img-insert-modal .layout-opt.selected { border-color: #1976d2; background: #e3f2fd; }
+      #img-insert-modal .layout-opt .layout-icon { font-size: 20px; }
+
+      #img-insert-modal .adjust-preview {
+        background: #f5f5f5; border-radius: 8px; min-height: 100px;
+        display: flex; align-items: center; justify-content: center;
+        overflow: hidden; margin-bottom: 12px; position: relative;
+      }
+      #img-insert-modal .adjust-preview img { max-width: 100%; max-height: 200px; }
+      #img-insert-modal .adjust-preview .preview-loading {
+        position: absolute; inset: 0; background: rgba(255,255,255,.7);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; color: #555;
+      }
+      #img-insert-modal .toggle-row {
+        display: flex; gap: 12px; margin-bottom: 10px;
+      }
+      #img-insert-modal .toggle-row label {
+        display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer;
+      }
+      #img-insert-modal .step2-actions {
+        display: flex; justify-content: space-between; align-items: center; margin-top: 8px;
+      }
+
+      /* ── crop overlay ── */
+      #img-insert-modal .crop-wrap {
+        position: relative; display: inline-block;
+        cursor: crosshair; user-select: none;
+      }
+      #img-insert-modal .crop-wrap img { display: block; max-width: 100%; max-height: 220px; }
+      #img-insert-modal .crop-rect {
+        position: absolute; border: 2px solid #1976d2;
+        background: rgba(25,118,210,.12); pointer-events: none;
+      }
+
       #md-editor-fab {
         position: fixed; bottom: 80px; left: 20px; z-index: 8900;
         padding: 10px 18px; border: none; border-radius: 8px;
@@ -260,9 +333,7 @@
 
   // ─── Modal ─────────────────────────────────────────────────────────────────
   function openModal(opts) {
-    // Close any existing modal
     closeModal();
-
     const overlay = document.createElement('div');
     overlay.id = 'img-insert-modal';
 
@@ -274,68 +345,164 @@
     overlay.innerHTML = `
       <div class="modal-box">
         <h2>📷 Inserir imagem</h2>
-        <div class="tabs">
-          <button class="tab ${initialTab === 'clipboard' ? 'active' : ''}" data-tab="clipboard">Clipboard</button>
-          <button class="tab ${initialTab === 'upload' ? 'active' : ''}" data-tab="upload">Upload</button>
-          <button class="tab ${initialTab === 'url' ? 'active' : ''}" data-tab="url">URL externa</button>
-        </div>
 
-        <!-- Clipboard tab -->
-        <div class="tab-panel ${initialTab === 'clipboard' ? 'active' : ''}" data-panel="clipboard">
-          <div class="preview-wrap" id="modal-preview-clipboard">
-            <span style="color:#999;font-size:13px">Sem imagem no clipboard</span>
+        <!-- ── STEP 1: choose source ── -->
+        <div class="step1" id="modal-step1">
+          <div class="tabs">
+            <button class="tab ${initialTab === 'clipboard' ? 'active' : ''}" data-tab="clipboard">Clipboard</button>
+            <button class="tab ${initialTab === 'upload'    ? 'active' : ''}" data-tab="upload">Upload</button>
+            <button class="tab ${initialTab === 'url'       ? 'active' : ''}" data-tab="url">URL externa</button>
+          </div>
+
+          <div class="tab-panel ${initialTab === 'clipboard' ? 'active' : ''}" data-panel="clipboard">
+            <div class="preview-wrap" id="modal-preview-clipboard">
+              <span style="color:#999;font-size:13px">Sem imagem no clipboard</span>
+            </div>
+          </div>
+          <div class="tab-panel ${initialTab === 'upload' ? 'active' : ''}" data-panel="upload">
+            <input type="file" id="modal-file-input" accept="image/*" />
+            <div class="preview-wrap" id="modal-preview-upload">
+              <span style="color:#999;font-size:13px">Selecione um arquivo</span>
+            </div>
+          </div>
+          <div class="tab-panel ${initialTab === 'url' ? 'active' : ''}" data-panel="url">
+            <label>URL da imagem</label>
+            <input type="url" id="modal-url-input" placeholder="https://exemplo.com/imagem.jpg" />
+            <div class="preview-wrap" id="modal-preview-url">
+              <span style="color:#999;font-size:13px">Cole uma URL acima</span>
+            </div>
+          </div>
+
+          <label>Alt text</label>
+          <input type="text" id="modal-alt-input" value="${escHtml(opts.altText || '')}" placeholder="Descrição da imagem" />
+
+          <div class="modal-actions">
+            <button class="btn-cancel" id="modal-btn-cancel">Cancelar</button>
+            <button class="btn-insert" id="modal-btn-next" disabled>Ajustar →</button>
           </div>
         </div>
 
-        <!-- Upload tab -->
-        <div class="tab-panel ${initialTab === 'upload' ? 'active' : ''}" data-panel="upload">
-          <input type="file" id="modal-file-input" accept="image/*" />
-          <div class="preview-wrap" id="modal-preview-upload">
-            <span style="color:#999;font-size:13px">Selecione um arquivo</span>
+        <!-- ── STEP 2: adjust ── -->
+        <div class="step2" id="modal-step2">
+          <div class="adjust-preview" id="adjust-preview-wrap">
+            <span style="color:#999;font-size:13px">Preview</span>
           </div>
-        </div>
 
-        <!-- URL tab -->
-        <div class="tab-panel ${initialTab === 'url' ? 'active' : ''}" data-panel="url">
-          <label>URL da imagem</label>
-          <input type="url" id="modal-url-input" placeholder="https://exemplo.com/imagem.jpg" />
-          <div class="preview-wrap" id="modal-preview-url">
-            <span style="color:#999;font-size:13px">Cole uma URL acima</span>
+          <!-- Crop -->
+          <div style="margin-bottom:10px">
+            <label style="font-size:12px;color:#555;display:flex;align-items:center;gap:6px">
+              <input type="checkbox" id="crop-enable" /> Recortar (arraste na imagem abaixo)
+            </label>
+            <div id="crop-container" style="display:none;margin-top:6px">
+              <div class="crop-wrap" id="crop-wrap">
+                <img id="crop-img" src="" alt="crop preview" />
+                <div class="crop-rect" id="crop-rect" style="display:none"></div>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:4px" id="crop-coords">Arraste para selecionar área</div>
+            </div>
           </div>
-        </div>
 
-        <label>Alt text</label>
-        <input type="text" id="modal-alt-input" value="${escHtml(opts.altText || '')}" placeholder="Descrição da imagem" />
+          <!-- Resize -->
+          <div class="size-row">
+            <span style="font-size:12px;color:#555">Tamanho:</span>
+            <input type="number" id="adj-w" placeholder="W" min="1" max="3000" />
+            <span style="color:#999">×</span>
+            <input type="number" id="adj-h" placeholder="H" min="1" max="3000" />
+            <button class="lock-btn locked" id="lock-ratio" title="Bloquear proporção">🔒</button>
+            <span style="font-size:11px;color:#aaa" id="orig-dims"></span>
+          </div>
 
-        <div class="modal-actions">
-          <button class="btn-cancel" id="modal-btn-cancel">Cancelar</button>
-          <button class="btn-insert" id="modal-btn-insert" disabled>Inserir imagem</button>
+          <!-- Sliders -->
+          <div class="adjust-grid">
+            <div class="adjust-row">
+              <label>Brilho <span class="range-val" id="val-brightness">0</span></label>
+              <input type="range" id="adj-brightness" min="-100" max="100" value="0" />
+            </div>
+            <div class="adjust-row">
+              <label>Contraste <span class="range-val" id="val-contrast">0</span></label>
+              <input type="range" id="adj-contrast" min="-100" max="100" value="0" />
+            </div>
+            <div class="adjust-row">
+              <label>Saturação <span class="range-val" id="val-saturation">0</span></label>
+              <input type="range" id="adj-saturation" min="-100" max="100" value="0" />
+            </div>
+            <div class="adjust-row">
+              <label>Qualidade WebP <span class="range-val" id="val-quality">82</span></label>
+              <input type="range" id="adj-quality" min="30" max="100" value="82" />
+            </div>
+          </div>
+          <div class="toggle-row">
+            <label><input type="checkbox" id="adj-sharpen" /> Nitidez</label>
+            <label><input type="checkbox" id="adj-grayscale" /> Escala de cinza</label>
+          </div>
+
+          <!-- Layout -->
+          <div style="font-size:12px;color:#555;margin-bottom:6px">Layout:</div>
+          <div class="layout-grid">
+            <div class="layout-opt selected" data-layout="alone">
+              <span class="layout-icon">🖼️</span><span>Sozinha</span>
+            </div>
+            <div class="layout-opt" data-layout="figure">
+              <span class="layout-icon">📝</span><span>Legenda</span>
+            </div>
+            <div class="layout-opt" data-layout="float-left">
+              <span class="layout-icon">⬅️🖼️</span><span>Float esq.</span>
+            </div>
+            <div class="layout-opt" data-layout="float-right">
+              <span class="layout-icon">🖼️➡️</span><span>Float dir.</span>
+            </div>
+            <div class="layout-opt" data-layout="hero">
+              <span class="layout-icon">🌅</span><span>Hero</span>
+            </div>
+            <div class="layout-opt" data-layout="grid2">
+              <span class="layout-icon">⬜⬜</span><span>Grid 2</span>
+            </div>
+          </div>
+          <div id="caption-row" style="display:none;margin-bottom:10px">
+            <label style="font-size:12px;color:#555">Legenda</label>
+            <input type="text" id="adj-caption" placeholder="Texto da legenda…" style="width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px" />
+          </div>
+
+          <div class="step2-actions">
+            <button class="btn-cancel" id="adj-btn-back">← Voltar</button>
+            <div style="display:flex;gap:8px">
+              <button class="btn-cancel" id="adj-btn-preview-refresh">↺ Preview</button>
+              <button class="btn-insert" id="adj-btn-insert">Inserir imagem</button>
+            </div>
+          </div>
         </div>
       </div>
     `;
 
     document.body.appendChild(overlay);
 
-    // State
+    // ── State ──
     let currentFile = opts.file || null;
-    let currentUrl = '';
-    let activeTab = initialTab;
+    let currentUrl  = '';
+    let activeTab   = initialTab;
+    let selectedLayout = 'alone';
+    let origW = 0, origH = 0;
+    let ratioLocked = true;
+    let cropData = null; // { left, top, width, height } in natural image px
 
-    const insertBtn = overlay.querySelector('#modal-btn-insert');
+    const step1 = overlay.querySelector('#modal-step1');
+    const step2 = overlay.querySelector('#modal-step2');
+    const nextBtn   = overlay.querySelector('#modal-btn-next');
+    const insertBtn = overlay.querySelector('#adj-btn-insert');
 
-    function refreshInsertBtn() {
+    function refreshNextBtn() {
       if (activeTab === 'clipboard' || activeTab === 'upload') {
-        insertBtn.disabled = !currentFile;
+        nextBtn.disabled = !currentFile;
       } else {
-        insertBtn.disabled = !currentUrl.trim();
+        nextBtn.disabled = !currentUrl.trim();
       }
     }
 
-    // Show clipboard preview if we have a file
+    // Show clipboard preview
     if (opts.file) {
       showFilePreview(opts.file, overlay.querySelector('#modal-preview-clipboard'));
       currentFile = opts.file;
-      refreshInsertBtn();
+      refreshNextBtn();
     }
 
     // Tab switching
@@ -346,10 +513,7 @@
         overlay.querySelectorAll('.tab-panel').forEach((p) => p.classList.remove('active'));
         btn.classList.add('active');
         overlay.querySelector(`[data-panel="${activeTab}"]`).classList.add('active');
-        if (activeTab !== 'url') {
-          // Reset file when switching away from url
-        }
-        refreshInsertBtn();
+        refreshNextBtn();
       });
     });
 
@@ -359,46 +523,142 @@
       if (!file) return;
       currentFile = file;
       showFilePreview(file, overlay.querySelector('#modal-preview-upload'));
-      refreshInsertBtn();
+      refreshNextBtn();
     });
 
     // URL input
     overlay.querySelector('#modal-url-input').addEventListener('input', (e) => {
       currentUrl = e.target.value.trim();
-      refreshInsertBtn();
+      refreshNextBtn();
     });
     overlay.querySelector('#modal-url-input').addEventListener('blur', (e) => {
       const url = e.target.value.trim();
       if (url) {
         const wrap = overlay.querySelector('#modal-preview-url');
-        wrap.innerHTML = `<img src="${escHtml(url)}" alt="preview" onerror="this.parentNode.innerHTML='<span style=color:#c62828;font-size:13px>Imagem não carregada</span>'" />`;
+        wrap.innerHTML = `<img src="${escHtml(url)}" alt="preview" onerror="this.parentNode.innerHTML='<span style=color:#c62828;font-size:13px>Não carregou</span>'" />`;
       }
     });
 
-    // Cancel
+    // Cancel / close
     overlay.querySelector('#modal-btn-cancel').addEventListener('click', closeModal);
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
 
-    // Insert
+    // ── Step 1 → Step 2 ──
+    nextBtn.addEventListener('click', () => {
+      step1.classList.add('hidden');
+      step2.classList.add('active');
+      initStep2();
+    });
+
+    overlay.querySelector('#adj-btn-back').addEventListener('click', () => {
+      step2.classList.remove('active');
+      step1.classList.remove('hidden');
+    });
+
+    // ── Step 2 init ──
+    function initStep2() {
+      // Show initial preview
+      if (activeTab === 'url') {
+        const wrap = overlay.querySelector('#adjust-preview-wrap');
+        wrap.innerHTML = `<img src="${escHtml(currentUrl)}" alt="preview" style="max-width:100%;max-height:200px" />`;
+        loadOrigDims(currentUrl);
+      } else if (currentFile) {
+        loadPreviewFromFile(currentFile);
+        getFileDims(currentFile).then(({ w, h }) => {
+          origW = w; origH = h;
+          overlay.querySelector('#orig-dims').textContent = `(${w}×${h})`;
+          overlay.querySelector('#adj-w').placeholder = w;
+          overlay.querySelector('#adj-h').placeholder = h;
+        });
+      }
+      setupCrop();
+    }
+
+    function loadOrigDims(url) {
+      const img = new Image();
+      img.onload = () => {
+        origW = img.naturalWidth; origH = img.naturalHeight;
+        overlay.querySelector('#orig-dims').textContent = `(${origW}×${origH})`;
+        overlay.querySelector('#adj-w').placeholder = origW;
+        overlay.querySelector('#adj-h').placeholder = origH;
+      };
+      img.src = url;
+    }
+
+    // Sliders → update value labels
+    ['brightness','contrast','saturation'].forEach((key) => {
+      const el = overlay.querySelector(`#adj-${key}`);
+      const lbl = overlay.querySelector(`#val-${key}`);
+      el.addEventListener('input', () => { lbl.textContent = el.value; });
+    });
+    const qEl = overlay.querySelector('#adj-quality');
+    qEl.addEventListener('input', () => { overlay.querySelector('#val-quality').textContent = qEl.value; });
+
+    // Aspect ratio lock
+    const lockBtn = overlay.querySelector('#lock-ratio');
+    lockBtn.addEventListener('click', () => {
+      ratioLocked = !ratioLocked;
+      lockBtn.classList.toggle('locked', ratioLocked);
+      lockBtn.textContent = ratioLocked ? '🔒' : '🔓';
+    });
+    overlay.querySelector('#adj-w').addEventListener('input', (e) => {
+      if (ratioLocked && origW && origH) {
+        const w = parseInt(e.target.value, 10);
+        if (w) overlay.querySelector('#adj-h').value = Math.round(w * origH / origW);
+      }
+    });
+    overlay.querySelector('#adj-h').addEventListener('input', (e) => {
+      if (ratioLocked && origW && origH) {
+        const h = parseInt(e.target.value, 10);
+        if (h) overlay.querySelector('#adj-w').value = Math.round(h * origW / origH);
+      }
+    });
+
+    // Layout selector
+    overlay.querySelectorAll('.layout-opt').forEach((opt) => {
+      opt.addEventListener('click', () => {
+        overlay.querySelectorAll('.layout-opt').forEach((o) => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedLayout = opt.dataset.layout;
+        overlay.querySelector('#caption-row').style.display =
+          selectedLayout === 'figure' ? '' : 'none';
+      });
+    });
+
+    // Crop toggle
+    overlay.querySelector('#crop-enable').addEventListener('change', (e) => {
+      overlay.querySelector('#crop-container').style.display = e.target.checked ? '' : 'none';
+      if (!e.target.checked) cropData = null;
+    });
+
+    // Preview refresh button
+    overlay.querySelector('#adj-btn-preview-refresh').addEventListener('click', () => {
+      if (activeTab !== 'url' && currentFile) loadPreviewFromFile(currentFile, true);
+    });
+
+    // ── Insert ──
     insertBtn.addEventListener('click', async () => {
       const altText = overlay.querySelector('#modal-alt-input').value.trim() || SLUG;
       insertBtn.disabled = true;
       insertBtn.textContent = 'Processando…';
 
       try {
+        const transforms = collectTransforms();
         let imageUrl;
         if (activeTab === 'clipboard' || activeTab === 'upload') {
           if (!currentFile) throw new Error('Nenhum arquivo selecionado');
-          const res = await uploadImage(currentFile);
+          const res = await uploadImage(currentFile, transforms);
           imageUrl = res.url;
         } else {
           imageUrl = currentUrl;
         }
 
+        const caption = overlay.querySelector('#adj-caption').value.trim();
         await handleInsert(
           imageUrl, altText, opts.mode,
           opts.placeholderText || null,
-          lastClickedTarget
+          lastClickedTarget,
+          selectedLayout, caption
         );
         closeModal();
         showToast('Imagem inserida e salva ✓', 'success');
@@ -409,6 +669,132 @@
         showToast(`Erro: ${err.message}`, 'error');
       }
     });
+
+    // ── Helpers ──
+    function collectTransforms() {
+      const t = {};
+      const w = parseInt(overlay.querySelector('#adj-w').value, 10);
+      const h = parseInt(overlay.querySelector('#adj-h').value, 10);
+      if (w > 0) t.width = w;
+      if (h > 0) t.height = h;
+      t.brightness = parseInt(overlay.querySelector('#adj-brightness').value, 10);
+      t.contrast   = parseInt(overlay.querySelector('#adj-contrast').value, 10);
+      t.saturation = parseInt(overlay.querySelector('#adj-saturation').value, 10);
+      t.quality    = parseInt(overlay.querySelector('#adj-quality').value, 10);
+      t.sharpen    = overlay.querySelector('#adj-sharpen').checked;
+      t.grayscale  = overlay.querySelector('#adj-grayscale').checked;
+      if (cropData) {
+        t.cropLeft   = cropData.left;
+        t.cropTop    = cropData.top;
+        t.cropWidth  = cropData.width;
+        t.cropHeight = cropData.height;
+      }
+      return t;
+    }
+
+    function loadPreviewFromFile(file, withTransforms) {
+      const wrap = overlay.querySelector('#adjust-preview-wrap');
+      wrap.innerHTML = '<div class="preview-loading">Carregando…</div>';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Show quick local preview first, then update if transforms needed
+        wrap.innerHTML = `<img src="${e.target.result}" alt="preview" style="max-width:100%;max-height:200px" />`;
+        if (withTransforms) {
+          // Send to /preview endpoint for server-side transform
+          const t = collectTransforms();
+          const hasAdjustments = t.brightness !== 0 || t.contrast !== 0 || t.saturation !== 0 || t.sharpen || t.grayscale || t.width || t.height || cropData;
+          if (!hasAdjustments) return;
+          const form = new FormData();
+          form.append('file', file);
+          Object.entries(t).forEach(([k, v]) => { if (v !== undefined && v !== null) form.append(k, v); });
+          wrap.innerHTML += '<div class="preview-loading">Processando…</div>';
+          fetch(`${PROXY}/image-upload/preview`, { method: 'POST', body: form })
+            .then((r) => {
+              if (!r.ok) throw new Error('Preview falhou');
+              return r.blob();
+            })
+            .then((blob) => {
+              const url = URL.createObjectURL(blob);
+              wrap.innerHTML = `<img src="${url}" alt="preview" style="max-width:100%;max-height:200px" />`;
+            })
+            .catch(() => {});
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function getFileDims(file) {
+      return new Promise((resolve) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => { resolve({ w: img.naturalWidth, h: img.naturalHeight }); URL.revokeObjectURL(url); };
+        img.onerror = () => resolve({ w: 0, h: 0 });
+        img.src = url;
+      });
+    }
+
+    // ── Crop ──
+    function setupCrop() {
+      const cropImg = overlay.querySelector('#crop-img');
+      const cropWrap = overlay.querySelector('#crop-wrap');
+      const cropRect = overlay.querySelector('#crop-rect');
+      const cropCoords = overlay.querySelector('#crop-coords');
+
+      // Load image into crop canvas
+      if (activeTab === 'url') {
+        cropImg.src = currentUrl;
+      } else if (currentFile) {
+        cropImg.src = URL.createObjectURL(currentFile);
+      }
+
+      let dragging = false, startX = 0, startY = 0, rect = {};
+
+      cropWrap.addEventListener('mousedown', (e) => {
+        dragging = true;
+        const br = cropWrap.getBoundingClientRect();
+        startX = e.clientX - br.left;
+        startY = e.clientY - br.top;
+        cropRect.style.display = 'block';
+        cropRect.style.left = startX + 'px';
+        cropRect.style.top  = startY + 'px';
+        cropRect.style.width  = '0';
+        cropRect.style.height = '0';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        const br = cropWrap.getBoundingClientRect();
+        const x = Math.max(0, Math.min(e.clientX - br.left, cropImg.offsetWidth));
+        const y = Math.max(0, Math.min(e.clientY - br.top,  cropImg.offsetHeight));
+        rect = {
+          left:   Math.min(x, startX),
+          top:    Math.min(y, startY),
+          width:  Math.abs(x - startX),
+          height: Math.abs(y - startY),
+        };
+        cropRect.style.left   = rect.left   + 'px';
+        cropRect.style.top    = rect.top    + 'px';
+        cropRect.style.width  = rect.width  + 'px';
+        cropRect.style.height = rect.height + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false;
+        if (rect.width < 4 || rect.height < 4) { cropData = null; cropCoords.textContent = 'Arraste para selecionar área'; return; }
+        // Convert display px → natural image px
+        const scaleX = cropImg.naturalWidth  / cropImg.offsetWidth;
+        const scaleY = cropImg.naturalHeight / cropImg.offsetHeight;
+        cropData = {
+          left:   Math.round(rect.left   * scaleX),
+          top:    Math.round(rect.top    * scaleY),
+          width:  Math.round(rect.width  * scaleX),
+          height: Math.round(rect.height * scaleY),
+        };
+        cropCoords.textContent = `Crop: ${cropData.left},${cropData.top} — ${cropData.width}×${cropData.height}px`;
+      });
+    }
   }
 
   function closeModal() {
@@ -425,18 +811,17 @@
   }
 
   // ─── Insert orchestration ──────────────────────────────────────────────────
-  async function handleInsert(imageUrl, altText, mode, placeholderText, targetEl) {
-    // For clipboard/upload mode, require a clicked target
-    if ((mode === 'clipboard' || mode === 'upload') && !targetEl) {
+  async function handleInsert(imageUrl, altText, mode, placeholderText, targetEl, layout, caption) {
+    if ((mode === 'clipboard' || mode === 'upload' || mode === 'free') && !targetEl) {
       throw new Error('Clique em um parágrafo do artigo primeiro, depois cole a imagem.');
     }
 
     const contentMd = await fetchContentMd();
-    if (!contentMd && contentMd !== '') {
+    if (contentMd === undefined || contentMd === null) {
       throw new Error('Artigo não tem content_md no banco de dados');
     }
 
-    const imgTag = buildImgTag(imageUrl, altText);
+    const imgTag = buildImgTag(imageUrl, altText, layout || 'alone', caption || '');
     const { lineIndex, isPlaceholder } = findInsertionLine(
       contentMd, targetEl, mode, placeholderText
     );
@@ -448,12 +833,17 @@
   }
 
   // ─── API calls ─────────────────────────────────────────────────────────────
-  async function uploadImage(file) {
+  async function uploadImage(file, transforms) {
     const form = new FormData();
     form.append('file', file);
     form.append('siteId', SITE_ID);
     form.append('slug', SLUG);
     form.append('businessId', BUSINESS_ID);
+    if (transforms) {
+      Object.entries(transforms).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== false) form.append(k, v);
+      });
+    }
 
     const res = await fetch(UPLOAD_URL(), { method: 'POST', body: form });
     const data = await res.json();
@@ -561,8 +951,24 @@
   }
 
   // ─── Helpers ───────────────────────────────────────────────────────────────
-  function buildImgTag(url, altText) {
-    return `<img src="${escHtml(url)}" alt="${escHtml(altText)}" />`;
+  function buildImgTag(url, altText, layout, caption) {
+    const u = escHtml(url);
+    const a = escHtml(altText);
+    const c = escHtml(caption || '');
+    switch (layout) {
+      case 'figure':
+        return `<figure class="blog-figure">\n  <img src="${u}" alt="${a}" />\n  ${c ? `<figcaption>${c}</figcaption>` : ''}\n</figure>`;
+      case 'float-left':
+        return `<div class="blog-float-left">\n  <img src="${u}" alt="${a}" />\n</div>`;
+      case 'float-right':
+        return `<div class="blog-float-right">\n  <img src="${u}" alt="${a}" />\n</div>`;
+      case 'hero':
+        return `<div class="blog-hero-img">\n  <img src="${u}" alt="${a}" />\n  ${c ? `<span class="blog-hero-caption">${c}</span>` : ''}\n</div>`;
+      case 'grid2':
+        return `<div class="blog-img-grid2">\n  <img src="${u}" alt="${a}" />\n  <img src="${u}" alt="${a} (2)" />\n</div>`;
+      default: // 'alone'
+        return `![${a}](${url})`;
+    }
   }
 
   function escHtml(str) {
