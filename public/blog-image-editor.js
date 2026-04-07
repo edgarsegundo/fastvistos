@@ -102,7 +102,37 @@
         padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px;
         font-size: 14px; margin-bottom: 12px;
       }
-      #img-insert-modal input[type=file] { margin-bottom: 12px; font-size: 13px; }
+      #img-insert-modal input[type=file] {
+        margin-bottom: 12px;
+        font-size: 13px;
+        display: none;
+      }
+      #img-insert-modal .custom-file-label {
+        display: inline-block;
+        padding: 8px 18px;
+        background: #1976d2;
+        color: #fff;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: inherit;
+        margin-bottom: 12px;
+        border: none;
+        transition: background .15s;
+      }
+      #img-insert-modal .custom-file-label:hover {
+        background: #1565c0;
+      }
+      #img-insert-modal .file-chosen-name {
+        display: inline-block;
+        margin-left: 10px;
+        font-size: 13px;
+        color: #555;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+      }
       #img-insert-modal .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
       #img-insert-modal .btn-cancel {
         padding: 8px 18px; border: 1px solid #ccc; border-radius: 6px;
@@ -380,7 +410,9 @@
             </div>
           </div>
           <div class="tab-panel ${initialTab === 'upload' ? 'active' : ''}" data-panel="upload">
+            <label class="custom-file-label" for="modal-file-input">Escolher arquivo</label>
             <input type="file" id="modal-file-input" accept="image/*" />
+            <span class="file-chosen-name" id="file-chosen-name">Nenhum arquivo</span>
             <div class="preview-wrap" id="modal-preview-upload">
               <span style="color:#999;font-size:13px">Selecione um arquivo</span>
             </div>
@@ -571,7 +603,12 @@
     // File input
     overlay.querySelector('#modal-file-input').addEventListener('change', (e) => {
       const file = e.target.files[0];
-      if (!file) return;
+      const fileNameEl = overlay.querySelector('#file-chosen-name');
+      if (!file) {
+        fileNameEl.textContent = 'Nenhum arquivo';
+        return;
+      }
+      fileNameEl.textContent = file.name;
       currentFile = file;
       showFilePreview(file, overlay.querySelector('#modal-preview-upload'));
       refreshNextBtn();
