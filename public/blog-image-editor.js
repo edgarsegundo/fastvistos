@@ -976,8 +976,8 @@
 
     await saveContentMd(newMd);
 
-    // Injeta imagem diretamente no DOM (rápido, sem round-trip ao servidor)
-    injectImageInDOM(targetEl, imgTag, mode, placeholderText);
+    // Hot reload via /render-md — atualiza .blog-content com HTML processado
+    await hotReloadArticle(newMd);
   }
 
   // ─── API calls ─────────────────────────────────────────────────────────────

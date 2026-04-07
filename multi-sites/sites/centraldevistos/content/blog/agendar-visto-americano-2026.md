@@ -2,11 +2,11 @@
 title: "Agendar Visto Americano: Passo a Passo Completo para 2026"
 description: ""
 pubDate: "2026-04-06T13:28:20.000Z"
-updatedDate: "2026-04-07T19:57:18.182Z"
+updatedDate: "2026-04-07T22:26:08.569Z"
 slug: "agendar-visto-americano-2026"
 topic: "Dicas"
 topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__freepik__a-photorealistic-young-smiling-couple-in-premium-c__51105.png"
+image: "/assets/images/blog/centraldevistos__agendar-visto-americano-2026-1775600742774.webp"
 type: "public"
 published: true
 wordCount: "778"
@@ -25,8 +25,6 @@ wordCount: "778"
 - **Nível de dificuldade**: Médio (exige atenção aos detalhes e paciência com filas).
 - **Principais etapas**: Preencher DS-160, pagar taxa, agendar CASV e entrevista, comparecer e aguardar passaporte.<a class="cite-ref" href="#fonte-1" data-title="EUA: 7 passos para tirar o visto em 2026"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-2" data-title="Como tirar visto americano em 2026: guia definitivo com passo a ..."><sup>[2]</sup></a>
 
-![calendário de agendamento de visto com passaporte brasileiro](/assets/images/blog/agendar-visto-americano-2026/agendar-visto-americano-2026-1775591767819.webp)
-
 Imagine que você sonha com uma viagem aos EUA em 2026: Nova York, Disney ou negócios em Miami. Para brasileiros, o **visto americano** é obrigatório e o processo começa com o agendamento correto. Este guia leva você do zero à aprovação, focando no que realmente importa para quem está no Brasil. Lembre-se: regras podem mudar, sempre confira sites oficiais como o da [Embaixada dos EUA no Brasil](https://br.usembassy.gov/pt/visas-pt/).<a class="cite-ref" href="#fonte-7" data-title="Serviços de vistos dos EUA - Use our new U.S. Visa Wizard!"><sup>[7]</sup></a><a class="cite-ref" href="#fonte-9" data-title="Portuguese - Embaixada e Consulados dos EUA no Brasil"><sup>[9]</sup></a>
 
 Para quem é esse guia? Ideal para turistas (B1/B2), estudantes ou quem precisa de visto temporário. Se você tem laços fortes no Brasil (trabalho, família, bens), suas chances aumentam.<a class="cite-ref" href="#fonte-1" data-title="EUA: 7 passos para tirar o visto em 2026"><sup>[1]</sup></a>
@@ -34,9 +32,6 @@ Para quem é esse guia? Ideal para turistas (B1/B2), estudantes ou quem precisa 
 ## Passo 1: Escolha o Tipo de Visto Certo
 
 Antes de tudo, defina o **tipo de visto**. O mais comum para brasileiros é o **B1/B2** (negócios/turismo), válido por até 10 anos. Use o Visa Wizard oficial para confirmar.<a class="cite-ref" href="#fonte-7" data-title="Serviços de vistos dos EUA - Use our new U.S. Visa Wizard!"><sup>[7]</sup></a>
-
-![agendar-visto-americano-2026](/assets/images/blog/agendar-visto-americano-2026/agendar-visto-americano-2026-1775591837139.webp)
-
 
 - Verifique se não se enquadra em exceções (como renovações sem entrevista para alguns casos a partir de 2025).<a class="cite-ref" href="#fonte-9" data-title="Portuguese - Embaixada e Consulados dos EUA no Brasil"><sup>[9]</sup></a>
 - Consulte nosso [guia-visto-americano-turismo](/blog/guia-visto-americano-turismo) para detalhes específicos.
