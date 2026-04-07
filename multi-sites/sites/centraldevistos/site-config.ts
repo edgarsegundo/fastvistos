@@ -229,7 +229,7 @@ export const siteConfig = {
     },    
 
     analytics: {
-        gtmId: '', // ex: 'GTM-59SRNCQD'
+        gtmId: 'GTM-NZ7TTSV8',
     },
 
     verification: {

@@ -2,14 +2,14 @@
 title: "Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"
 description: ""
 pubDate: "2026-04-06T13:22:39.000Z"
-updatedDate: "2026-04-07T22:32:29.602Z"
+updatedDate: "2026-04-07T23:15:59.353Z"
 slug: "salvar-imprimir-confirmacao-ds-160"
 topic: "Dicas"
 topicSlug: "dicas"
 image: "/assets/images/blog/centraldevistos__salvar-imprimir-confirmacao-ds-160-1775601149280.webp"
 type: "public"
 published: true
-wordCount: "710"
+wordCount: "809"
 ---
 
 <div class="article-freshness">
@@ -70,6 +70,9 @@ Siga essa sequência exata após clicar em "Submit" no DS-160. Você estará na 
 
 **Por quê?** É o único momento para acessar tudo detalhado. Depois, some.<a class="cite-ref" href="#fonte-1" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[1]</sup></a>
 
+![salvar-imprimir-confirmacao-ds-160](/assets/images/blog/salvar-imprimir-confirmacao-ds-160/salvar-imprimir-confirmacao-ds-160-1775603275759.webp)
+
+
 ### Passo 2: Volte e Gere a Confirmação Oficial
 - Clique **"Back to Confirmation"** ou "Voltar para Confirmação".<a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a>
 - Agora, clique em **"Print Confirmation"** ou "Imprimir Confirmação".<a class="cite-ref" href="#fonte-1" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a>
@@ -77,7 +80,15 @@ Siga essa sequência exata após clicar em "Submit" no DS-160. Você estará na 
 - Nomeie: "[SeuNome]_ConfirmacaoOficial_DS160.pdf".
 - Verifique: sem botões, com código de barras e número de confirmação.<a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a>
 
-<!--[[INSERIR IMAGEM: comparação das duas páginas de confirmação DS-160]]-->
+A imagem abaixo destaca exatamente onde clicar em “Print Confirmation” na página de confirmação do formulário.
+
+![salvar-imprimir-print-application-ds-160](/assets/images/blog/salvar-imprimir-confirmacao-ds-160/salvar-imprimir-confirmacao-ds-160-1775603230875.webp)
+
+
+Veja na imagem abaixo que o documento aberto é visualmente diferente: ele não terá os botões na parte inferior.
+
+![salvar-imprimir-confirmacao-nao-tem-botoes-ds-160](/assets/images/blog/salvar-imprimir-confirmacao-ds-160/salvar-imprimir-confirmacao-ds-160-1775603534283.webp)
+
 
 ### Passo 3: Imprima a Confirmação Oficial
 - Abra o PDF salvo.
@@ -95,7 +106,8 @@ Siga essa sequência exata após clicar em "Submit" no DS-160. Você estará na 
 - [ ] Imprimi em A4 limpo, legível e sem danos.
 - [ ] Guardei PDFs em pasta digital e física.<a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a>
 
-[como agendar sua entrevista no consulado](/blog/agendar-visto-americano-2026)
+
+Após salvar os documentos corretamente, vale revisar também [como agendar sua entrevista no consulado](/blog/agendar-visto-americano-2026).
 
 ## Organização de Documentos: Pasta Prática
 
@@ -107,7 +119,7 @@ Crie **pasta digital** (Google Drive ou PC): "Visto_[SeuNome]_2026".
 
 **Pasta física**: Transparente com divisórias. Ordem: DS-160 primeiro.<a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a>
 
-[documentos para entrevista e CASV](/blog/documentos-entrevista-retirada-passaporte-casv)
+Se quiser revisar todos os itens exigidos, confira também a lista completa de [documentos para entrevista e CASV](/blog/documentos-entrevista-retirada-passaporte-casv).
 
 ## Solução de Problemas Comuns
 
@@ -120,13 +132,13 @@ Crie **pasta digital** (Google Drive ou PC): "Visto_[SeuNome]_2026".
 
 ## Próximos Passos Após a Confirmação
 
-1. Pague a taxa MRV.
-2. Agende CASV e consulado.
-3. Prepare entrevista.
+1. Pague a taxa MRV.  
+2. Agende o atendimento no CASV e a entrevista no consulado.  
+3. Organize os documentos e prepare-se para a entrevista.
 
-Consulte status sempre.<a class="cite-ref" href="#fonte-1" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a> Regras mudam; cheque ceac.state.gov e br.usembassy.gov.
+Depois dessas etapas, acompanhe o andamento do processo em nosso guia sobre [como consultar o status do seu visto americano](/blog/consultar-status-visto-americano).<a class="cite-ref" href="#fonte-1" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-2" data-title="Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"><sup>[2]</sup></a>
 
-[consultar status do seu visto americano](/blog/consultar-status-visto-americano)
+Também vale verificar periodicamente os canais oficiais, como CEAC e Embaixada dos EUA no Brasil, já que procedimentos e prazos podem ser atualizados.
 
 <!--[[INSERIR IMAGEM: pasta organizada com documentos de visto]]-->
 

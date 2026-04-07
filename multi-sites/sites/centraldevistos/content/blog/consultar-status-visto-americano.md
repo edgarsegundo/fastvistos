@@ -2,14 +2,14 @@
 title: "Como Consultar e Acompanhar o Status do Visto Americano"
 description: ""
 pubDate: "2026-04-06T12:29:27.000Z"
-updatedDate: "2026-04-07T22:39:04.135Z"
+updatedDate: "2026-04-07T23:01:09.950Z"
 slug: "consultar-status-visto-americano"
 topic: "Dicas"
 topicSlug: "dicas"
 image: "/assets/images/blog/centraldevistos__consultar-status-visto-americano-1775601543851.webp"
 type: "public"
 published: true
-wordCount: "861"
+wordCount: "966"
 ---
 
 <div class="article-freshness">
@@ -104,6 +104,21 @@ Se atrasar além de 10 dias úteis após "Issued", ligue para o CASV ou consulte
 - **Visto recusado?** Entenda o motivo (geralmente 214(b) - laços insuficientes com o Brasil). Aguarde e prepare nova aplicação. Veja como [reverter negativa de visto americano](/blog/reverter-negativa-visto-americano).<a class="cite-ref" href="#fonte-1" data-title="Como consultar o status do visto americano? Veja os passos"><sup>[1]</sup></a>
 
 Para vistos já emitidos, cheque validade no **I-94** (cbp.gov/I94) para entradas/saídas e evitar overstay.<a class="cite-ref" href="#fonte-2" data-title="Como Consultar O Status Do Visto Americano Antes De Viajar Aos ..."><sup>[2]</sup></a>
+
+⚠️ Um detalhe simples costuma causar muita confusão: a página do CEAC geralmente carrega primeiro na opção **“IMMIGRANT”**.
+
+Como a maioria das pessoas faz a consulta rapidamente, esse campo passa despercebido e a busca acaba sendo feita na categoria errada.
+
+Quando isso acontece, o sistema pode retornar erro ou simplesmente não localizar o processo, o que leva muitos solicitantes a pensar que houve problema no formulário, atraso no sistema ou até negativa do visto.
+
+Para vistos de turismo, negócios, estudo e outras categorias temporárias, a opção correta é **“NONIMMIGRANT”**.
+
+Na imagem abaixo, mostramos exatamente onde alterar esse campo antes de iniciar a consulta.
+
+![erro-comum-ao-consultar-status-visto-americano](/assets/images/blog/consultar-status-visto-americano/consultar-status-visto-americano-1775602869592.webp)
+
+
+
 
 ## Dicas Finais para Brasileiros
 
