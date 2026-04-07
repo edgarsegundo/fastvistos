@@ -2,11 +2,11 @@
 title: "Guia Completo para Obter o Visto Americano de Turismo (B2)"
 description: ""
 pubDate: "2026-04-03T23:35:13.000Z"
-updatedDate: "2026-04-06T22:29:06.186Z"
+updatedDate: "2026-04-07T21:23:23.057Z"
 slug: "guia-visto-americano-turismo"
 topic: "Dicas"
 topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__pexels-daniel-erlandson-2150649940-31350291.jpg"
+image: "/assets/images/blog/centraldevistos__guia-visto-americano-turismo-1775596541240.webp"
 type: "public"
 published: true
 wordCount: "1732"
@@ -57,6 +57,9 @@ Ter esses documentos em mãos facilitará o preenchimento do formulário e evita
 ## Etapa 2: Preencha o Formulário DS-160
 
 O **formulário DS-160** é o primeiro passo obrigatório para solicitar seu visto.<a class="cite-ref" href="#fonte-1" data-title="Como Tirar o Visto Americano: Passo a Passo, Custos e Entrevista"><sup>[1]</sup></a> Este formulário online coleta informações pessoais, detalhes da viagem e histórico do solicitante.
+
+![pagina-inicial-do-formulario-ds-160](/assets/images/blog/guia-visto-americano-turismo/guia-visto-americano-turismo-1775597002412.webp)
+
 
 ### Como Acessar o Formulário
 

@@ -413,6 +413,7 @@
             <label class="custom-file-label" for="modal-file-input">Escolher arquivo</label>
             <input type="file" id="modal-file-input" accept="image/*" />
             <span class="file-chosen-name" id="file-chosen-name">Nenhum arquivo</span>
+            <input type="text" id="custom-filename-input" placeholder="Nome do arquivo (opcional)" style="margin-left:10px;max-width:180px;font-size:13px;padding:5px 8px;border:1px solid #ccc;border-radius:5px;vertical-align:middle;display:inline-block" />
             <div class="preview-wrap" id="modal-preview-upload">
               <span style="color:#999;font-size:13px">Selecione um arquivo</span>
             </div>
@@ -604,11 +605,14 @@
     overlay.querySelector('#modal-file-input').addEventListener('change', (e) => {
       const file = e.target.files[0];
       const fileNameEl = overlay.querySelector('#file-chosen-name');
+      const customNameInput = overlay.querySelector('#custom-filename-input');
       if (!file) {
         fileNameEl.textContent = 'Nenhum arquivo';
+        customNameInput.value = '';
         return;
       }
       fileNameEl.textContent = file.name;
+      customNameInput.value = file.name;
       currentFile = file;
       showFilePreview(file, overlay.querySelector('#modal-preview-upload'));
       refreshNextBtn();
@@ -736,7 +740,19 @@
         let uploadRes;
         if (activeTab === 'clipboard' || activeTab === 'upload') {
           if (!currentFile) throw new Error('Nenhum arquivo selecionado');
-          uploadRes = await uploadImage(currentFile, transforms);
+          let fileToSend = currentFile;
+          // Se custom filename preenchido, cria novo File
+          const customNameInput = overlay.querySelector('#custom-filename-input');
+          const customName = customNameInput && customNameInput.value.trim();
+          if (customName && customName !== currentFile.name) {
+            try {
+              fileToSend = new File([currentFile], customName, { type: currentFile.type });
+            } catch (e) {
+              // Safari não suporta File constructor, fallback
+              fileToSend = currentFile;
+            }
+          }
+          uploadRes = await uploadImage(fileToSend, transforms);
           imageUrl = uploadRes.url;
         } else {
           imageUrl = currentUrl;
