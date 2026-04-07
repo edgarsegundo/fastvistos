@@ -441,25 +441,27 @@
           </div>
 
           <!-- Layout -->
-          <div style="font-size:12px;color:#555;margin-bottom:6px">Layout:</div>
-          <div class="layout-grid">
-            <div class="layout-opt selected" data-layout="alone">
-              <span class="layout-icon">🖼️</span><span>Sozinha</span>
-            </div>
-            <div class="layout-opt" data-layout="figure">
-              <span class="layout-icon">📝</span><span>Legenda</span>
-            </div>
-            <div class="layout-opt" data-layout="float-left">
-              <span class="layout-icon">⬅️🖼️</span><span>Float esq.</span>
-            </div>
-            <div class="layout-opt" data-layout="float-right">
-              <span class="layout-icon">🖼️➡️</span><span>Float dir.</span>
-            </div>
-            <div class="layout-opt" data-layout="hero">
-              <span class="layout-icon">🌅</span><span>Hero</span>
-            </div>
-            <div class="layout-opt" data-layout="grid2">
-              <span class="layout-icon">⬜⬜</span><span>Grid 2</span>
+          <div style="${isHeroImageMode ? 'display:none' : ''}">
+            <div style="font-size:12px;color:#555;margin-bottom:6px">Layout:</div>
+            <div class="layout-grid">
+              <div class="layout-opt ${!isHeroImageMode ? 'selected' : ''}" data-layout="alone">
+                <span class="layout-icon">🖼️</span><span>Sozinha</span>
+              </div>
+              <div class="layout-opt" data-layout="figure">
+                <span class="layout-icon">📝</span><span>Legenda</span>
+              </div>
+              <div class="layout-opt" data-layout="float-left">
+                <span class="layout-icon">⬅️🖼️</span><span>Float esq.</span>
+              </div>
+              <div class="layout-opt" data-layout="float-right">
+                <span class="layout-icon">🖼️➡️</span><span>Float dir.</span>
+              </div>
+              <div class="layout-opt ${isHeroImageMode ? 'selected' : ''}" data-layout="hero">
+                <span class="layout-icon">🌅</span><span>Hero</span>
+              </div>
+              <div class="layout-opt" data-layout="grid2">
+                <span class="layout-icon">⬜⬜</span><span>Grid 2</span>
+              </div>
             </div>
           </div>
           <div id="caption-row" style="display:none;margin-bottom:10px">
@@ -484,7 +486,7 @@
     let currentFile = opts.file || null;
     let currentUrl  = '';
     let activeTab   = initialTab;
-    let selectedLayout = 'alone';
+    let selectedLayout = isHeroImageMode ? 'hero' : 'alone';
     let origW = 0, origH = 0;
     let ratioLocked = true;
     let cropData = null; // { left, top, width, height } in natural image px
