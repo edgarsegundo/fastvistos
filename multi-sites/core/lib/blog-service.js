@@ -153,5 +153,32 @@ export class BlogService {
             console.error('Error fetching show_in_hero article:', error);
             return null;
         }
-    }    
+    }
+
+    /**
+     * Update image-related fields on a blog article (local dev only).
+     * @param {string} businessId
+     * @param {string} slug
+     * @param {Object} data - Any subset of: image, seo_image_url, seo_image_caption, seo_image_width, seo_image_height
+     * @returns {Promise<{count: number}>}
+     */
+    static async updateArticleImage(businessId, slug, data) {
+        try {
+            const updateData = { modified: new Date() };
+            if (data.image !== undefined)             updateData.image = data.image;
+            if (data.seo_image_url !== undefined)     updateData.seo_image_url = data.seo_image_url;
+            if (data.seo_image_caption !== undefined) updateData.seo_image_caption = data.seo_image_caption;
+            if (data.seo_image_width !== undefined)   updateData.seo_image_width = data.seo_image_width;
+            if (data.seo_image_height !== undefined)  updateData.seo_image_height = data.seo_image_height;
+
+            const result = await prisma.blog_article.updateMany({
+                where: { slug, business_id: businessId, is_removed: false },
+                data: updateData,
+            });
+            return result; // { count: number }
+        } catch (error) {
+            console.error('Error updating article image:', error);
+            throw error;
+        }
+    }
 }

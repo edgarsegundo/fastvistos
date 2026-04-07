@@ -609,5 +609,26 @@ app.get('/next-articles', async (req, res) => {
     }
 });
 
+// POST /article-image — save hero image fields on blog_article (local dev only)
+app.post('/article-image', async (req, res) => {
+    const { businessId, slug, image, seo_image_url, seo_image_caption, seo_image_width, seo_image_height } = req.body;
+    if (!businessId || !slug) {
+        return res.status(400).json({ error: 'businessId e slug são obrigatórios' });
+    }
+    try {
+        const result = await BlogService.updateArticleImage(businessId, slug, {
+            image,
+            seo_image_url,
+            seo_image_caption: seo_image_caption || null,
+            seo_image_width:  seo_image_width  ? Number(seo_image_width)  : undefined,
+            seo_image_height: seo_image_height ? Number(seo_image_height) : undefined,
+        });
+        res.json({ ok: true, count: result.count });
+    } catch (err) {
+        console.error('[/article-image]', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 export default app;
 
