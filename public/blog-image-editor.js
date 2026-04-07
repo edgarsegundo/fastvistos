@@ -263,17 +263,6 @@
       }
       #md-editor-modal .btn-md-save:disabled { opacity: .5; cursor: default; }
 
-      #md-editor-banner {
-        position: fixed; top: 0; left: 0; right: 0; z-index: 9200;
-        background: #f57f17; color: #fff;
-        padding: 10px 20px; font-size: 14px; font-family: system-ui, sans-serif;
-        display: flex; align-items: center; justify-content: space-between;
-        box-shadow: 0 2px 8px rgba(0,0,0,.2);
-      }
-      #md-editor-banner button {
-        background: none; border: none; color: #fff;
-        font-size: 18px; cursor: pointer; padding: 0 4px;
-      }
     `;
     document.head.appendChild(style);
   }
@@ -835,6 +824,30 @@
     reader.readAsDataURL(file);
   }
 
+  // ─── Hot-reload article content (Opção B) ──────────────────────────────────
+  // Envia o content_md para o image-service /render-md, recebe HTML processado
+  // e substitui .blog-content no DOM. O fetch(location.href) NÃO funciona porque
+  // o Astro renderiza a partir dos arquivos .md em disco (content collections),
+  // não do content_md salvo no Django, então a página seria sempre a mesma.
+  async function hotReloadArticle(contentMd) {
+    try {
+      const res = await fetch(`${PROXY}/image-upload/render-md`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content_md: contentMd }),
+      });
+      if (!res.ok) throw new Error(`render-md ${res.status}`);
+      const { html } = await res.json();
+      const current = document.querySelector('.blog-content');
+      if (current && html) {
+        current.innerHTML = html;
+        renderImagePlaceholders();
+      }
+    } catch (err) {
+      console.warn('[blog-image-editor] hotReloadArticle falhou:', err.message);
+    }
+  }
+
   // ─── Insert orchestration ──────────────────────────────────────────────────
   async function handleInsert(imageUrl, altText, mode, placeholderText, targetEl, layout, caption) {
     if ((mode === 'clipboard' || mode === 'upload' || mode === 'free') && !targetEl) {
@@ -854,6 +867,7 @@
 
     await saveContentMd(newMd);
 
+    // Injeta imagem diretamente no DOM (rápido, sem round-trip ao servidor)
     injectImageInDOM(targetEl, imgTag, mode, placeholderText);
   }
 
@@ -990,7 +1004,13 @@
   // ─── DOM preview ───────────────────────────────────────────────────────────
   function injectImageInDOM(targetEl, imgTag, mode, placeholderText) {
     const tmp = document.createElement('div');
-    tmp.innerHTML = imgTag;
+    // buildImgTag retorna Markdown `![alt](url)` para layout 'alone' — converter para <img>
+    const mdMatch = imgTag.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (mdMatch) {
+      tmp.innerHTML = `<img src="${escHtml(mdMatch[2])}" alt="${escHtml(mdMatch[1])}" />`;
+    } else {
+      tmp.innerHTML = imgTag;
+    }
     const imgEl = tmp.firstElementChild;
     if (!imgEl) return;
 
@@ -1181,22 +1201,12 @@
       await saveContentMd(newContentMd);
       closeMdEditor();
       showToast('content_md salvo ✓', 'success');
-      showReloadBanner();
+      // Opção B para MD editor: renderiza o MD no image-service e troca .blog-content
+      await hotReloadArticle(newContentMd);
     } catch (err) {
       // keep modal open
       showToast(`Erro ao salvar: ${err.message}`, 'error');
     }
-  }
-
-  function showReloadBanner() {
-    if (document.getElementById('md-editor-banner')) return;
-    const banner = document.createElement('div');
-    banner.id = 'md-editor-banner';
-    banner.innerHTML = `
-      <span>📝 content_md atualizado no DB. Recarregue a página ou rode <code>pubpre</code> para ver as mudanças.</span>
-      <button onclick="this.parentNode.remove()" title="Fechar">✕</button>
-    `;
-    document.body.prepend(banner);
   }
 
   // ─── Boot ──────────────────────────────────────────────────────────────────

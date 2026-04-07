@@ -13,6 +13,7 @@ import express from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
 import { promises as fs } from 'fs';
+import { marked } from 'marked';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -118,6 +119,22 @@ function applyTransforms(pipeline, t) {
 // ─── Serve processed files (used by blog-image-editor to fetch WebP before uploading to Django) ──
 // Accessible via Vite proxy: /image-upload/files/{siteId}/assets/images/blog/{slug}/{file}
 app.use('/files', express.static(OUTPUT_BASE_DIR));
+
+// ─── POST /render-md ─────────────────────────────────────────────────────────
+// Recebe { content_md } e retorna { html } — usado pelo blog-image-editor para
+// hot-reload do .blog-content após salvar no MD editor.
+app.post('/render-md', express.json(), async (req, res) => {
+  const { content_md } = req.body || {};
+  if (typeof content_md !== 'string') {
+    return res.status(400).json({ error: 'Campo "content_md" ausente ou inválido' });
+  }
+  try {
+    const html = await marked(content_md, { gfm: true, breaks: true });
+    res.json({ html });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ─── POST /upload ─────────────────────────────────────────────────────────────
 app.post('/upload', upload.single('file'), async (req, res) => {
