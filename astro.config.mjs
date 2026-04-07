@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { config as loadDotenv } from 'dotenv';
+loadDotenv();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -178,6 +180,26 @@ export default defineConfig({
     ],
 
     vite: {
+        server: {
+            proxy: {
+                // Proxy para o Django no VPS (GET/POST content-md) — somente em dev
+                '/image-editor': {
+                    target: process.env.DJANGO_API_BASE_URL || 'https://sys.fastvistos.com.br',
+                    changeOrigin: true,
+                    secure: false,
+                    rewrite: (path) => path.replace(/^\/image-editor/, ''),
+                    headers: {
+                        'X-API-Key': process.env.DJANGO_MICROSERVICESADM_KEY || '',
+                    },
+                },
+                // Proxy para o Image Service local
+                '/image-upload': {
+                    target: process.env.IMAGE_SERVICE_URL || 'http://localhost:8091',
+                    changeOrigin: true,
+                    rewrite: (path) => path.replace(/^\/image-upload/, ''),
+                },
+            },
+        },
         plugins: [
             tailwindcss(),
             {
@@ -186,6 +208,26 @@ export default defineConfig({
                     server.middlewares.use((req, res, next) => {
                         if (req.url && req.url.startsWith('/sitemap.')) {
                             res.setHeader('Content-Type', 'application/xml');
+                        }
+                        next();
+                    });
+                },
+            },
+            {
+                // Serve shared dev-only scripts from root public/ regardless of per-site publicDir.
+                // Needed because publicDir is set to ./public/{CURRENT_SITE} per site.
+                name: 'shared-dev-scripts',
+                configureServer(server) {
+                    server.middlewares.use((req, res, next) => {
+                        if (req.url === '/blog-image-editor.js') {
+                            const filePath = join(__dirname, 'public', 'blog-image-editor.js');
+                            res.setHeader('Content-Type', 'application/javascript');
+                            import('fs').then(({ createReadStream }) => {
+                                const stream = createReadStream(filePath);
+                                stream.on('error', () => next());
+                                stream.pipe(res);
+                            });
+                            return;
                         }
                         next();
                     });
