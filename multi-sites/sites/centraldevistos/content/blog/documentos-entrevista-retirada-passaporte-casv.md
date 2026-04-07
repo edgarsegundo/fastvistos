@@ -2,14 +2,14 @@
 title: "Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo"
 description: ""
 pubDate: "2026-04-06T13:46:07.000Z"
-updatedDate: "2026-04-06T22:28:49.666Z"
+updatedDate: "2026-04-07T14:29:38.697Z"
 slug: "documentos-entrevista-retirada-passaporte-casv"
 topic: "Dicas"
 topicSlug: "dicas"
 image: "/assets/images/blog/centraldevistos__Monosnap_App.vue__openclaw_2026-02-27_06-53-17.png"
 type: "public"
 published: true
-wordCount: "900"
+wordCount: "907"
 ---
 
 <div class="article-freshness">
@@ -33,9 +33,9 @@ Imagine que você já preencheu o DS-160 e pagou a taxa MRV. Agora, vem a parte 
 
 Para brasileiros solicitando **visto americano de turismo (B1/B2)** ou negócios, o **Centro de Atendimento ao Solicitante de Visto (CASV)** é o primeiro grande passo após o agendamento. Lá, você entrega **documentos obrigatórios** e faz a **coleta de biometria** (digitais e foto oficial para o visto). Não é a entrevista – essa rola no consulado depois.<a class="cite-ref" href="#fonte-1" data-title="Documentos, Entrevista e Retirada de Passaporte no CASV"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-7" data-title="CASV - https ://ais.usvisa-info.com"><sup>[7]</sup></a>
 
-Esse guia é para você, cidadão brasileiro, que mora no Brasil e quer viajar pros EUA sem dor de cabeça. Se for renovação ou primeira vez, o fluxo é parecido, mas verifique isenção de entrevista no seu caso.<a class="cite-ref" href="#fonte-8" data-title="Portuguese - Embaixada e Consulados dos EUA no Brasil"><sup>[8]</sup></a>
+Esse guia é para você, cidadão brasileiro, que mora no Brasil e quer viajar pros EUA sem dor de cabeça. Se for renovação ou primeira vez, o fluxo é parecido, mas verifique isenção de entrevista no seu caso.<a class="cite-ref" href="#fonte-8" data-title="Portuguese - Embaixada e Consulados dos EUA no Brasil"><sup>[8]</sup></a> Para um guia mais completo, [veja esse outro artigo sobre o visto americano de turismo](/blog/guia-visto-americano-turismo).
 
-[Veja o guia completo do visto americano de turismo](/blog/guia-visto-americano-turismo)
+
 
 ## Etapa 1: Preparando os Documentos Obrigatórios para o CASV
 
