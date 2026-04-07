@@ -115,6 +115,33 @@
       }
       #img-insert-modal .btn-insert:disabled { opacity: .5; cursor: default; }
 
+      #img-insert-modal details#img-banks-panel { margin-bottom: 12px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+      #img-insert-modal details#img-banks-panel summary {
+        padding: 8px 12px; cursor: pointer; font-size: 13px; color: #555;
+        background: #f9f9f9; display: flex; align-items: center; gap: 6px;
+        user-select: none; list-style: none;
+      }
+      #img-insert-modal details#img-banks-panel summary::-webkit-details-marker { display: none; }
+      #img-insert-modal details#img-banks-panel summary::marker { display: none; }
+      #img-insert-modal details#img-banks-panel summary:hover { background: #f0f0f0; }
+      #img-insert-modal details#img-banks-panel[open] summary .img-bank-chevron { transform: rotate(180deg); }
+      #img-insert-modal .img-bank-chevron { transition: transform .15s; display: inline-block; font-style: normal; }
+      #img-insert-modal .img-banks-body { padding: 10px 12px; }
+      #img-insert-modal .img-bank-cat {
+        font-size: 10px; color: #999; font-weight: 700;
+        text-transform: uppercase; letter-spacing: .6px; margin-bottom: 5px;
+      }
+      #img-insert-modal .img-bank-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+      #img-insert-modal .img-bank-chips:last-child { margin-bottom: 0; }
+      #img-insert-modal .img-bank-link {
+        padding: 4px 9px; border-radius: 5px; border: 1px solid #ddd;
+        background: #fff; font-size: 12px; color: #1565c0;
+        text-decoration: none; white-space: nowrap; display: inline-block;
+      }
+      #img-insert-modal .img-bank-link:hover { background: #e3f2fd; border-color: #90caf9; }
+      #img-insert-modal .img-bank-link.vec { color: #6a1b9a; }
+      #img-insert-modal .img-bank-link.vec:hover { background: #f3e5f5; border-color: #ce93d8; }
+
       .img-toast {
         position: fixed; bottom: 24px; right: 24px; z-index: 9999;
         padding: 12px 20px; border-radius: 8px;
@@ -365,6 +392,35 @@
               <span style="color:#999;font-size:13px">Cole uma URL acima</span>
             </div>
           </div>
+
+          <details id="img-banks-panel">
+            <summary>
+              🔗 Bancos de imagens gratuitos
+              <span class="img-bank-chevron" style="margin-left:auto;font-size:11px;color:#aaa">▾</span>
+            </summary>
+            <div class="img-banks-body">
+              <div class="img-bank-cat">Fotos</div>
+              <div class="img-bank-chips">
+                <a href="https://pixabay.com/" target="_blank" rel="noopener" class="img-bank-link">Pixabay</a>
+                <a href="https://www.pexels.com/" target="_blank" rel="noopener" class="img-bank-link">Pexels</a>
+                <a href="https://unsplash.com/" target="_blank" rel="noopener" class="img-bank-link">Unsplash</a>
+                <a href="https://www.freepik.com/" target="_blank" rel="noopener" class="img-bank-link">Freepik</a>
+                <a href="https://stocksnap.io/" target="_blank" rel="noopener" class="img-bank-link">StockSnap</a>
+                <a href="https://burst.shopify.com/" target="_blank" rel="noopener" class="img-bank-link">Burst</a>
+                <a href="https://www.lifeofpix.com/" target="_blank" rel="noopener" class="img-bank-link">Life of Pix</a>
+                <a href="https://gratisography.com/" target="_blank" rel="noopener" class="img-bank-link">Gratisography</a>
+                <a href="https://www.foodiesfeed.com/" target="_blank" rel="noopener" class="img-bank-link">Foodiesfeed</a>
+              </div>
+              <div class="img-bank-cat">Vetores / Ícones</div>
+              <div class="img-bank-chips">
+                <a href="https://www.vecteezy.com/" target="_blank" rel="noopener" class="img-bank-link vec">Vecteezy</a>
+                <a href="https://www.flaticon.com/" target="_blank" rel="noopener" class="img-bank-link vec">Flaticon</a>
+                <a href="https://undraw.co/" target="_blank" rel="noopener" class="img-bank-link vec">unDraw</a>
+                <a href="https://www.svgrepo.com/" target="_blank" rel="noopener" class="img-bank-link vec">SVG Repo</a>
+                <a href="https://www.rawpixel.com/" target="_blank" rel="noopener" class="img-bank-link vec">Rawpixel</a>
+              </div>
+            </div>
+          </details>
 
           <label>Alt text</label>
           <input type="text" id="modal-alt-input" value="${escHtml(opts.altText || '')}" placeholder="Descrição da imagem" />
