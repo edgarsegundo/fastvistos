@@ -198,9 +198,9 @@ export default defineConfig({
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/image-upload/, ''),
                 },
-                // Proxy para o msitesapp (API local) — save article image fields
+                // Proxy para o msitesapp no VPS — save article image fields (dev only)
                 '/article-image': {
-                    target: process.env.MSITESAPP_URL || 'http://localhost:3000',
+                    target: process.env.API_BASE_URL || 'http://localhost:3000',
                     changeOrigin: true,
                 },
             },

@@ -39,6 +39,7 @@
     setupClickTracking();
     setupPasteHandler();
     setupInsertImageButton();
+    setupHeroImageButton();
     setupMdEditorButton();
   }
 
@@ -123,15 +124,20 @@
       .img-toast.error   { background: #c62828; color: #fff; }
       @keyframes toastIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 
-      #img-insert-fab {
-        position: fixed; bottom: 24px; left: 20px; z-index: 8900;
-        padding: 10px 18px; border: none; border-radius: 8px;
-        background: #1565c0; color: #fff;
-        font-size: 14px; font-family: system-ui, sans-serif;
-        cursor: pointer; box-shadow: 0 2px 12px rgba(0,0,0,.3);
-        transition: background .15s;
+      #editor-fab-container {
+        position: fixed; bottom: 20px; left: 16px; z-index: 8900;
+        display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
       }
-      #img-insert-fab:hover { background: #1976d2; }
+      .editor-fab {
+        padding: 9px 16px; border: none; border-radius: 8px; color: #fff;
+        font-size: 13px; font-family: system-ui, sans-serif;
+        cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,.3);
+        transition: opacity .15s; white-space: nowrap;
+      }
+      .editor-fab:hover { opacity: .87; }
+      #img-insert-fab  { background: #1565c0; }
+      #hero-image-fab  { background: #6a1b9a; }
+      #md-editor-fab   { background: #263238; }
 
       /* ── Step 2: adjust panel ── */
       #img-insert-modal .step2 { display: none; }
@@ -206,14 +212,8 @@
         background: rgba(25,118,210,.12); pointer-events: none;
       }
 
-      #md-editor-fab {
-        position: fixed; bottom: 80px; left: 20px; z-index: 8900;
-        padding: 10px 18px; border: none; border-radius: 8px;
-        background: #263238; color: #fff;
-        font-size: 14px; font-family: system-ui, sans-serif;
-        cursor: pointer; box-shadow: 0 2px 12px rgba(0,0,0,.3);
-        transition: background .15s;
-      }
+      #hero-image-fab:hover { background: #7b1fa2; }
+
       #md-editor-fab:hover { background: #37474f; }
 
       #md-editor-modal {
@@ -338,6 +338,7 @@
     const overlay = document.createElement('div');
     overlay.id = 'img-insert-modal';
 
+    const isHeroImageMode = opts.mode === 'hero-image';
     const isPlaceholder = opts.mode === 'placeholder';
     const initialTab = opts.mode === 'url' ? 'url'
       : (opts.mode === 'upload' || opts.mode === 'free') ? 'upload'
@@ -345,7 +346,7 @@
 
     overlay.innerHTML = `
       <div class="modal-box">
-        <h2>📷 Inserir imagem</h2>
+        <h2>${isHeroImageMode ? '📷 Imagem principal' : '📷 Inserir imagem'}</h2>
 
         <!-- ── STEP 1: choose source ── -->
         <div class="step1" id="modal-step1">
@@ -468,7 +469,7 @@
             <button class="btn-cancel" id="adj-btn-back">← Voltar</button>
             <div style="display:flex;gap:8px">
               <button class="btn-cancel" id="adj-btn-preview-refresh">↺ Preview</button>
-              <button class="btn-insert" id="adj-btn-insert">Inserir imagem</button>
+              <button class="btn-insert" id="adj-btn-insert">${isHeroImageMode ? 'Salvar imagem principal' : 'Inserir imagem'}</button>
             </div>
           </div>
         </div>
@@ -657,29 +658,41 @@
 
         const caption = overlay.querySelector('#adj-caption').value.trim();
 
-        // Hero layout: save image fields to blog_article in the DB
-        if (selectedLayout === 'hero') {
+        if (isHeroImageMode) {
+          // Hero image mode: only save to DB, no markdown insertion
           await saveArticleImage({
-            image: imageUrl.replace(/^\//, ''), // strip leading slash for DB path
+            image: imageUrl.replace(/^\//, ''),
             seo_image_url: imageUrl,
             seo_image_caption: caption || null,
             seo_image_width:  uploadRes?.width  || null,
             seo_image_height: uploadRes?.height || null,
           });
+          closeModal();
+          showToast('Imagem principal salva ✓', 'success');
+        } else {
+          // Normal mode: optionally save DB fields when layout is hero, then insert into MD
+          if (selectedLayout === 'hero') {
+            await saveArticleImage({
+              image: imageUrl.replace(/^\//, ''),
+              seo_image_url: imageUrl,
+              seo_image_caption: caption || null,
+              seo_image_width:  uploadRes?.width  || null,
+              seo_image_height: uploadRes?.height || null,
+            });
+          }
+          await handleInsert(
+            imageUrl, altText, opts.mode,
+            opts.placeholderText || null,
+            lastClickedTarget,
+            selectedLayout, caption
+          );
+          closeModal();
+          showToast('Imagem inserida e salva ✓', 'success');
         }
-
-        await handleInsert(
-          imageUrl, altText, opts.mode,
-          opts.placeholderText || null,
-          lastClickedTarget,
-          selectedLayout, caption
-        );
-        closeModal();
-        showToast('Imagem inserida e salva ✓', 'success');
       } catch (err) {
         console.error('[blog-image-editor]', err);
         insertBtn.disabled = false;
-        insertBtn.textContent = 'Inserir imagem';
+        insertBtn.textContent = isHeroImageMode ? 'Salvar imagem principal' : 'Inserir imagem';
         showToast(`Erro: ${err.message}`, 'error');
       }
     });
@@ -1019,11 +1032,35 @@
     setTimeout(() => toast.remove(), 3500);
   }
 
+  // ─── FAB container ──────────────────────────────────────────────────────────
+  function getOrCreateFabContainer() {
+    let c = document.getElementById('editor-fab-container');
+    if (!c) {
+      c = document.createElement('div');
+      c.id = 'editor-fab-container';
+      document.body.appendChild(c);
+    }
+    return c;
+  }
+
+  // ─── Hero Image FAB ────────────────────────────────────────────────────────
+  function setupHeroImageButton() {
+    const fab = document.createElement('button');
+    fab.id = 'hero-image-fab';
+    fab.className = 'editor-fab';
+    fab.textContent = '📷 Imagem principal';
+    fab.addEventListener('click', () => {
+      openModal({ mode: 'hero-image', altText: SLUG });
+    });
+    getOrCreateFabContainer().appendChild(fab);
+  }
+
   // ─── Insert Image FAB ──────────────────────────────────────────────────────
   function setupInsertImageButton() {
     const fab = document.createElement('button');
     fab.id = 'img-insert-fab';
-    fab.textContent = '🖼️ Inserir imagem';
+    fab.className = 'editor-fab';
+    fab.textContent = '🖼️ Inserir imagem no artigo';
     fab.addEventListener('click', () => {
       if (!lastClickedTarget) {
         showToast('Clique em um parágrafo do artigo primeiro', 'error');
@@ -1031,16 +1068,17 @@
       }
       openModal({ mode: 'free', altText: SLUG });
     });
-    document.body.appendChild(fab);
+    getOrCreateFabContainer().appendChild(fab);
   }
 
   // ─── MD Editor FAB ────────────────────────────────────────────────────────
   function setupMdEditorButton() {
     const fab = document.createElement('button');
     fab.id = 'md-editor-fab';
+    fab.className = 'editor-fab';
     fab.textContent = '✏️ Editar MD';
     fab.addEventListener('click', openMdEditor);
-    document.body.appendChild(fab);
+    getOrCreateFabContainer().appendChild(fab);
   }
 
   async function openMdEditor() {
