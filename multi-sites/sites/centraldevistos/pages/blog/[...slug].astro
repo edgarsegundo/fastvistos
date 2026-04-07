@@ -473,3 +473,24 @@ const showUpdatedDate = updatedDate && updatedDate > pubDate;
         });
     });
 </script>
+
+{import.meta.env.DEV && (
+  <Fragment>
+    <script define:vars={{
+      BLOG_EDITOR_CONFIG: {
+        slug: entry.slug,
+        siteId: (import.meta.env.SITE_ID || 'unknown'),
+        businessId: (() => {
+          const raw = siteConfig.site.business_id;
+          return raw && raw.length === 32
+            ? `${raw.slice(0,8)}-${raw.slice(8,12)}-${raw.slice(12,16)}-${raw.slice(16,20)}-${raw.slice(20)}`
+            : (raw || '');
+        })(),
+        proxyBase: '',
+      }
+    }}>
+      window.__BLOG_EDITOR_CONFIG__ = BLOG_EDITOR_CONFIG;
+    </script>
+    <script is:inline src="/blog-image-editor.js"></script>
+  </Fragment>
+)}

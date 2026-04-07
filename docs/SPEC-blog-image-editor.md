@@ -27,7 +27,7 @@ Em todos os casos, o `content_md` é lido do Django no VPS, modificado localment
 | Preview visual imediato | Sim (DOM manipulation, sem rebuild Astro) |
 | Autenticação | Nenhuma (local only) |
 | Sites suportados | Todos que usam o template core (`multi-sites/core/`) |
-| Processamento de imagem | Resize + conversão para WebP via FFmpeg no VPS |
+| Processamento de imagem | Resize + conversão para WebP via FFmpeg local (Mac) |
 | Editor raw de `content_md` | Sim — textarea completa, salva no DB |
 
 ---
@@ -78,13 +78,12 @@ Em todos os casos, o `content_md` é lido do Django no VPS, modificado localment
 
 ### 3.2. Por que Vite proxy (sem servidor local extra)
 
-O Astro dev server é um servidor Vite. O Vite tem suporte nativo a `server.proxy` no `astro.config.mjs`. Isso significa:
+A feature roda **exclusivamente na sua máquina local**. O Astro dev server é Vite e tem suporte nativo a `server.proxy` no `astro.config.mjs`. Isso significa:
 
-- Sem nova porta para gerenciar localmente
-- Sem novo processo para iniciar
 - O browser chama URLs **relativas** (sem CORS)
-- Todos os requests passam pelo Vite como proxy reverso para o VPS
-- Funciona apenas em `vite dev` (não em build de produção)
+- Para o Django (GET/POST content-md): Vite repassa para o VPS — sem processo local extra
+- Para o image service: Vite repassa para `localhost:IMAGE_SERVICE_PORT` — **este sim é um novo processo local**, mas mínimo (node image-service/server.js)
+- Funciona apenas em `vite dev` (não em build de produção — a feature não existe em produção)
 
 ---
 
@@ -271,16 +270,21 @@ vite: {
     proxy: {
       // Proxy para o Django no VPS (GET/POST content-md)
       '/image-editor': {
-        target: process.env.DJANGO_API_BASE_URL,  // ex: https://72.60.57.150:8000
+        target: process.env.DJANGO_API_BASE_URL,  // https://sys.fastvistos.com.br
         changeOrigin: true,
+        secure: false,  // aceitar self-signed certs em dev
         rewrite: (path) => path.replace(/^\/image-editor/, ''),
-        // GET  /image-editor/content-md?slug=X  →  GET  /api/articles/X/content-md/
-        // POST /image-editor/save-md            →  POST /api/articles/{slug}/save-content-md/
-        // (o slug vai no body do POST, não na URL do path — ver Seção 7)
+        headers: {
+          'X-API-Key': process.env.DJANGO_MICROSERVICESADM_KEY || '',
+        },
+        // GET  /image-editor/api/articles/{businessId}/{slug}/content-md/
+        //   →  GET  /api/articles/{businessId}/{slug}/content-md/
+        // POST /image-editor/api/articles/{businessId}/{slug}/save-content-md/
+        //   →  POST /api/articles/{businessId}/{slug}/save-content-md/
       },
-      // Proxy para o Image Service no VPS (upload)
+      // Proxy para o Image Service local
       '/image-upload': {
-        target: process.env.IMAGE_SERVICE_URL,    // ex: http://72.60.57.150:8091
+        target: process.env.IMAGE_SERVICE_URL || 'http://localhost:8091',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/image-upload/, ''),
         // POST /image-upload/upload  →  POST /upload
@@ -307,6 +311,13 @@ Adicionar ao final do template, antes ou depois do `<script>` do `toggleFaq`:
       BLOG_EDITOR_CONFIG: {
         slug: entry.slug,
         siteId: (import.meta.env.SITE_ID || 'unknown'),
+        // businessId formatado como UUID com hífens
+        businessId: (() => {
+          const raw = siteConfig.site.business_id;
+          return raw.length === 32
+            ? `${raw.slice(0,8)}-${raw.slice(8,12)}-${raw.slice(12,16)}-${raw.slice(16,20)}-${raw.slice(20)}`
+            : raw;
+        })(),
         proxyBase: '',
       }
     }}>
@@ -410,9 +421,9 @@ path('api/articles/<slug:slug>/save-content-md/', views.save_content_md),
 
 ---
 
-### 5.5. [VPS] `image-service/` — Serviço de processamento de imagens
+### 5.5. [LOCAL] `image-service/` — Serviço de processamento de imagens
 
-**Novo serviço Node.js a criar no repositório e deploiar no VPS.**
+**Novo serviço Node.js a criar no repositório e rodar localmente (Mac).**
 
 **Caminho:** `image-service/` (raiz do repo)
 
@@ -444,7 +455,8 @@ Processamento:
   3. Diretório de destino:
      {OUTPUT_BASE_DIR}/{siteId}/assets/images/blog/{slug}/
      (OUTPUT_BASE_DIR = process.env.OUTPUT_BASE_DIR
-                      || '/home/edgar/Repos/fastvistos/public')
+                      || path.resolve('./public'))
+     // path relativo à raiz do repo onde node é iniciado
      Criar diretório se não existir (mkdir -p)
   4. FFmpeg: converter para WebP, max-width 1200px, qualidade 82
      ffmpeg -i input -vf "scale='min(1200,iw)':-2" -c:v libwebp -q:v 82 output.webp
@@ -482,21 +494,23 @@ Limit de tamanho: 20MB (multer limits)
 }
 ```
 
-#### Deploy no VPS
+#### Iniciar localmente
 
 ```sh
-# 1. No VPS, instalar FFmpeg se não tiver:
-sudo apt-get install -y ffmpeg
+# 1. Instalar FFmpeg na Mac se não tiver:
+brew install ffmpeg
 
-# 2. Instalar dependências do serviço:
-cd /home/edgar/Repos/fastvistos/image-service && npm install
+# 2. Instalar dependências:
+cd image-service && npm install
 
-# 3. Iniciar com PM2:
-pm2 start image-service/server.js --name image-service
-
-# 4. Salvar para sobreviver a reboot:
-pm2 save
+# 3. Iniciar (em terminal separado, junto com pubpre):
+node server.js
+# ou adicionar ao pubpre como processo paralelo
 ```
+
+> **Imagens salvas localmente** em `./public/{siteId}/assets/images/blog/{slug}/`.  
+> O Astro dev server já serve `public/` na raiz, então a imagem fica **disponível imediatamente** em `http://localhost:3000/assets/images/blog/{slug}/img.webp`.  
+> Para sincronizar com o VPS depois: `./sync-site-images.sh {siteId}` (script já existente).
 
 ---
 
@@ -581,17 +595,17 @@ Passo 5 — Reconstituir:
 
 ## 7. Contratos de API Completos
 
-### 7.1. `GET /image-editor/content-md?slug={slug}`
+### 7.1. `GET /image-editor/api/articles/{businessId}/{slug}/content-md/`
 
-Via Vite proxy → Django.
+Via Vite proxy → Django (header `X-API-Key` adicionado pelo proxy).
 
 ```
-Request:
-  GET /image-editor/api/articles/{slug}/content-md/
-  
-  (o Vite proxy rewrite transforma:
-   /image-editor/api/articles/X/content-md/
-   → /api/articles/X/content-md/  no Django)
+Request (browser → Vite proxy):
+  GET /image-editor/api/articles/{businessId}/{slug}/content-md/
+
+Rewrite (Vite proxy → Django):
+  GET /api/articles/{businessId}/{slug}/content-md/
+  Header: X-API-Key: {DJANGO_MICROSERVICESADM_KEY}
 
 Response 200 JSON:
 {
@@ -600,16 +614,13 @@ Response 200 JSON:
 }
 ```
 
-> **Nota de implementação no client:** A URL que o browser chama é:  
-> `GET /image-editor/api/articles/${slug}/content-md/`
+### 7.2. `POST /image-editor/api/articles/{businessId}/{slug}/save-content-md/`
 
-### 7.2. `POST /image-editor/save-md`
-
-Via Vite proxy → Django.
+Via Vite proxy → Django (header `X-API-Key` adicionado pelo proxy).
 
 ```
-Request:
-  POST /image-editor/api/articles/{slug}/save-content-md/
+Request (browser → Vite proxy):
+  POST /image-editor/api/articles/{businessId}/{slug}/save-content-md/
   Content-Type: application/json
   Body:
   {
@@ -617,6 +628,10 @@ Request:
     "siteId": "centraldevistos",
     "content_md": "...markdown modificado..."
   }
+
+Rewrite (Vite proxy → Django):
+  POST /api/articles/{businessId}/{slug}/save-content-md/
+  Header: X-API-Key: {DJANGO_MICROSERVICESADM_KEY}
 
 Response 200 JSON:
 {
@@ -627,16 +642,17 @@ Response 200 JSON:
 
 ### 7.3. `POST /image-upload/upload`
 
-Via Vite proxy → Image Service no VPS.
+Via Vite proxy → Image Service local (localhost).
 
 ```
 Request:
   POST /image-upload/upload
   Content-Type: multipart/form-data
   Fields:
-    file   — Blob/File da imagem
-    siteId — string (ex: "centraldevistos")
-    slug   — string (ex: "reverter-negativa-visto-americano")
+    file       — Blob/File da imagem
+    siteId     — string (ex: "centraldevistos")
+    slug       — string (ex: "reverter-negativa-visto-americano")
+    businessId — string (ex: "3cfe8493-907c-4884-80f5-5c9ee10f8c05")
 
 Response 200 JSON:
 {
@@ -658,21 +674,20 @@ Response 4xx/5xx JSON:
 Adicionar ao `.env` local (e garantir no VPS se necessário):
 
 ```dotenv
-# Já existe — URL base do Django no VPS
-# API_BASE_URL=https://72.60.57.150:8000  ← exemplo
+# NOVO — URL base do Django (base, sem path)
+DJANGO_API_BASE_URL=https://sys.fastvistos.com.br
 
-# NOVO — URL base do Django para o Vite proxy
-# Deve ser o mesmo valor de API_BASE_URL (base URL sem path)
-DJANGO_API_BASE_URL=https://72.60.57.150:8000
+# NOVO — Chave de API do Django microservices (gerada no admin)
+DJANGO_MICROSERVICESADM_KEY=649dba57b904fcab2b82b0cd871cac32dcc084e0bb07c9cfb276db5209a82daf
 
-# NOVO — URL do image service no VPS
-IMAGE_SERVICE_URL=http://72.60.57.150:8091
+# NOVO — URL do image service local
+IMAGE_SERVICE_URL=http://localhost:8091
 
 # Já existe — usado pelo dev-with-sync.js e passado para Astro
 SITE_ID=centraldevistos
 ```
 
-> **Atenção:** Se `API_BASE_URL` já aponta para a base correta do Django, pode usar a mesma variável: `DJANGO_API_BASE_URL=${API_BASE_URL}`. Confirmar o valor exato antes de codificar.
+> **Segurança:** O `DJANGO_MICROSERVICESADM_KEY` é injetado pelo Vite proxy server-side (nunca exposto ao browser). O client script não envia a chave diretamente — o Vite intercepta e adiciona o header `X-API-Key` automaticamente.
 
 ---
 
@@ -680,11 +695,11 @@ SITE_ID=centraldevistos
 
 | Item | Caminho |
 |------|---------|
-| Client script (fonte) | `multi-sites/core/lib/blog-image-editor.js` |
-| Client script (servido) | `multi-sites/core/public/blog-image-editor.js` (symlink ou copy) |
+| Client script | `public/blog-image-editor.js` (servido em `/blog-image-editor.js`) |
 | Image service | `image-service/server.js` |
 | Template Astro (fonte) | `multi-sites/core/pages/blog/[...slug].astro` |
-| Imagens salvas no VPS | `/home/edgar/Repos/fastvistos/public/{siteId}/assets/images/blog/{slug}/` |
+| Imagens salvas localmente | `./public/{siteId}/assets/images/blog/{slug}/` |
+| Sync para VPS | `./sync-site-images.sh {siteId}` (script existente, executar manualmente) |
 | URL pública da imagem | `/assets/images/blog/{slug}/{filename}.webp` |
 | Formato de arquivo gerado | `{slug}-{unix-timestamp}.webp` |
 
@@ -695,9 +710,9 @@ SITE_ID=centraldevistos
 | # | Decisão | Opções | Impacto |
 |---|---------|--------|---------|
 | D1 | Valor exato de `DJANGO_API_BASE_URL` | Usar `API_BASE_URL` existente ou criar novo? | Config .env |
-| D2 | Porta do image service no VPS (8091) | Qualquer porta livre | Config .env e PM2 |
+| D2 | Porta do image service local (8091) | Qualquer porta livre não usada localmente | Config .env |
 | D3 | Dimensões máximas FFmpeg | 1200px width? 800px? | Qualidade/tamanho |
-| D4 | Salvar no VPS `public/` ou path diferente? | Confirmar `/home/edgar/Repos/fastvistos/public/` | image-service.js |
+| D4 | `OUTPUT_BASE_DIR` local correto? | Confirmar que `./public` resolve para a raiz do repo quando `node server.js` é iniciado de dentro de `image-service/` | image-service.js |
 | D5 | Quando `lastClickedTarget` é null, bloquear paste ou inserir no fim? | Bloquear (mostrar aviso) ou fallback silencioso | UX |
 | D6 | O `siteId` no BLOG_EDITOR_CONFIG vem de `import.meta.env.SITE_ID` (passado pelo dev script). Confirmar que `SITE_ID` é passado corretamente pelo `dev-with-sync.js` | Ver arquivo `dev-with-sync.js` linha ~40 | Injeção do script |
 | D7 | Destino do `blog-image-editor.js` para Astro servir: lugar em `public/` correto? | `multi-sites/core/public/` ou `public/` raiz | Path do `src` no Astro |
@@ -707,15 +722,16 @@ SITE_ID=centraldevistos
 ## 11. Ordem de Implementação Recomendada
 
 ```
-Fase 1 — Backend VPS
+Fase 1 — Backend VPS (Django)
   1. Django: implementar GET /api/articles/{slug}/content-md/
   2. Django: implementar POST /api/articles/{slug}/save-content-md/
-  3. image-service: criar server.js, testar com curl
 
-Fase 2 — Plumbing local
+Fase 2 — Serviços locais + plumbing
+  3. image-service: criar server.js, npm install, testar com:
+     curl -F file=@test.png -F siteId=centraldevistos -F slug=test localhost:8091/upload
   4. astro.config.mjs: adicionar vite.server.proxy
-  5. Testar proxy: curl localhost:3000/image-editor/api/articles/{slug}/content-md/
-  6. Testar proxy upload: curl -F file=@test.png localhost:3000/image-upload/upload
+  5. Testar proxy Django: curl localhost:3000/image-editor/api/articles/{slug}/content-md/
+  6. Testar proxy image: curl -F file=@test.png localhost:3000/image-upload/upload
 
 Fase 3 — Client script
   7. [...]slug].astro core template: injetar script condicional
@@ -740,8 +756,8 @@ Fase 4 — Polish
 ## 12. Resumo dos Arquivos por Ação
 
 ### Criar (novos)
-- `multi-sites/core/lib/blog-image-editor.js`
-- `image-service/server.js`
+- `public/blog-image-editor.js`
+- `image-service/server.js` (roda localmente)
 - `image-service/package.json`
 
 ### Modificar (existentes)
