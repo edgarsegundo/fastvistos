@@ -8,6 +8,7 @@
  * Requires: npm i sharp  (no ffmpeg needed)
  */
 
+import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
@@ -113,6 +114,10 @@ function applyTransforms(pipeline, t) {
   }
   return pipeline;
 }
+
+// ─── Serve processed files (used by blog-image-editor to fetch WebP before uploading to Django) ──
+// Accessible via Vite proxy: /image-upload/files/{siteId}/assets/images/blog/{slug}/{file}
+app.use('/files', express.static(OUTPUT_BASE_DIR));
 
 // ─── POST /upload ─────────────────────────────────────────────────────────────
 app.post('/upload', upload.single('file'), async (req, res) => {

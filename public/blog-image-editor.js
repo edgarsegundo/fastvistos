@@ -22,6 +22,8 @@
     `${PROXY}/image-editor/api/articles/${BUSINESS_ID}/${SLUG}/content-md/`;
   const SAVE_MD_URL = () =>
     `${PROXY}/image-editor/api/articles/${BUSINESS_ID}/${SLUG}/save-content-md/`;
+  const UPLOAD_IMAGE_URL = () =>
+    `${PROXY}/image-editor/api/articles/${BUSINESS_ID}/${SLUG}/upload-image/`;
   const UPLOAD_URL = () => `${PROXY}/image-upload/upload`;
   const ARTICLE_IMAGE_URL = () => `${PROXY}/article-image`;
 
@@ -659,14 +661,8 @@
         const caption = overlay.querySelector('#adj-caption').value.trim();
 
         if (isHeroImageMode) {
-          // Hero image mode: only save to DB, no markdown insertion
-          await saveArticleImage({
-            image: imageUrl.replace(/^\//, ''),
-            seo_image_url: imageUrl,
-            seo_image_caption: caption || null,
-            seo_image_width:  uploadRes?.width  || null,
-            seo_image_height: uploadRes?.height || null,
-          });
+          // Hero image mode: POST processed WebP to Django via Vite proxy (adds X-API-Key)
+          await uploadImageToDjango(imageUrl);
           closeModal();
           showToast('Imagem principal salva ✓', 'success');
         } else {
@@ -874,6 +870,24 @@
     if (!res.ok) throw new Error(json.error || `Erro ${res.status} ao salvar imagem do artigo`);
     console.log('[blog-image-editor] article image saved:', json);
     return json;
+  }
+
+  async function uploadImageToDjango(localImageUrl) {
+    // localImageUrl é relativa, ex: /assets/images/blog/slug/slug-ts.webp
+    // image-service salva em public/{siteId}/assets/... Buscamos via /image-upload/files/{siteId}/...
+    // para não depender do Vite servir arquivos novos durante o dev.
+    const fetchUrl = `${PROXY}/image-upload/files/${SITE_ID}${localImageUrl}`;
+    const fileRes = await fetch(fetchUrl);
+    if (!fileRes.ok) throw new Error(`Não encontrou imagem local: ${fetchUrl}`);
+    const blob = await fileRes.blob();
+    const filename = localImageUrl.split('/').pop();
+    const form = new FormData();
+    form.append('image', blob, filename);
+    const res = await fetch(UPLOAD_IMAGE_URL(), { method: 'POST', body: form });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao salvar imagem no Django`);
+    console.log('[blog-image-editor] Django image saved:', data.image_url);
+    return data;
   }
 
   async function uploadImage(file, transforms) {
