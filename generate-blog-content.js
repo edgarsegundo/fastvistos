@@ -96,16 +96,14 @@ function sanitizeFilename(filename) {
         .toLowerCase();
 }
 
-// Sanitize a string for use inside a YAML double-quoted scalar.
-// - Escapes backslashes first (must be first to avoid double-escaping)
-// - Escapes double quotes so YAML parser doesn't terminate the string early
-// - Collapses newlines/carriage returns to a single space
+// Sanitize a string for use inside a YAML single-quoted scalar.
+// In YAML single-quoted scalars the ONLY escape is '' (two single quotes) → '
+// Double quotes, colons, and backslashes are all safe — no escaping needed.
 function sanitizeYamlString(value) {
     if (!value) return '';
     return String(value)
-        .replace(/\\/g, '\\\\')  // \ → \\
-        .replace(/"/g, '\\"')    // " → \"
-        .replace(/\r?\n/g, ' ')  // newlines → space
+        .replace(/'/g, "''")     // ' → '' (YAML single-quote escape)
+        .replace(/\r?\n/g, ' ') // newlines → space
         .trim();
 }
 
@@ -143,17 +141,17 @@ function generateMarkdownContent(article) {
 
     // Create frontmatter
     const frontmatter = `---
-title: "${sanitizeYamlString(article.title)}"
-description: "${sanitizeYamlString(article.description)}"
-pubDate: "${publishedDate}"
-updatedDate: "${modifiedDate}"
-slug: "${article.slug}"
-topic: "${sanitizeYamlString(article.blog_topic?.title)}"
-topicSlug: "${article.blog_topic?.slug || ''}"
-image: "/assets/images/blog/${article.image && typeof article.image === 'string' ? article.image.replace(/^.*\//, '') : ''}"
-type: "${article.type}"
+title: '${sanitizeYamlString(article.title)}'
+description: '${sanitizeYamlString(article.description)}'
+pubDate: '${publishedDate}'
+updatedDate: '${modifiedDate}'
+slug: '${article.slug}'
+topic: '${sanitizeYamlString(article.blog_topic?.title)}'
+topicSlug: '${article.blog_topic?.slug || ''}'
+image: '/assets/images/blog/${article.image && typeof article.image === 'string' ? article.image.replace(/^.*\//, '') : ''}'
+type: '${article.type}'
 published: true
-wordCount: "${wordCount}"
+wordCount: '${wordCount}'
 ---
 
 `;

@@ -233,7 +233,7 @@ export const siteConfig = {
     },
 
     verification: {
-        googleSiteVerification: '', // ex: 'abc123def456ghi789jkl012mno345pqr678stu901vwx234yz567abc890'
+        googleSiteVerification: 'oeOHclcLj3XHEl3bt5vhv3ZAGb0E3bV7o3rVAFIEz9I',
     },
 
     features: {
