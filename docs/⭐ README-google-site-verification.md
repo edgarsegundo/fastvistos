@@ -47,6 +47,8 @@ Mesmo com o domínio verificado via DNS, pode ser necessário adicionar a meta t
 
 Clique novamente na seta no canto superior esquerdo → **"Adicionar propriedade"** → escolha **"Prefixo do URL"** → digite `https://centraldevistos.com` → clique em **Continuar**.
 
+![Página Exemplo de Prefixo do URL ](prefixo-do-url.png)
+
 ### Passo 2: Localizar o código da Tag HTML
 
 Vá em **Configurações** no menu lateral → **Verificação de propriedade** → role até a seção **"Tag HTML"**.

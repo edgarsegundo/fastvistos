@@ -240,7 +240,7 @@ export const siteConfig = {
     },
 
     verification: {
-        googleSiteVerification: '',
+        googleSiteVerification: 'LVicsaj-O1i58mCptE9MVKLYechPukSqbYPQNS-Kh3g',
     },
 
     features: {
