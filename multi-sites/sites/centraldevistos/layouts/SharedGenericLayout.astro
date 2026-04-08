@@ -18,9 +18,10 @@ import AnalyticsHead from '../components/AnalyticsHead.astro';
 import AnalyticsBody from '../components/AnalyticsBody.astro';
 
 
+const lang = siteConfig.site.language || siteConfig.site.locale || 'pt-BR';
 const htmlLang = siteConfig.site.useFullLanguageTag
-    ? siteConfig.site.language
-    : siteConfig.site.language.split('-')[0];
+    ? lang
+    : lang.split('-')[0];
 
 const {
     bodyClass = 'bg-white',

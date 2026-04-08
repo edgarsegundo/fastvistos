@@ -19,9 +19,10 @@ import AnalyticsBody from '../components/AnalyticsBody.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 
 // Use full language tag (pt-BR) or just language (pt) based on site config
+const lang = siteConfig.site.language || siteConfig.site.locale || 'pt-BR';
 const htmlLang = siteConfig.site.useFullLanguageTag
-    ? siteConfig.site.language
-    : siteConfig.site.language.split('-')[0];
+    ? lang
+    : lang.split('-')[0];
 
 const {
     bodyClass = '',
