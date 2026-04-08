@@ -69,16 +69,26 @@ async function loadSiteConfigurations() {
                     }
 
                     // Extract the needed information for Astro config
+                    // site-config.ts uses nested structure: siteConfig.site.domain
+                    // Fallback regex parsing produces flat structure: siteConfig.domain
+                    const domain =
+                        siteConfig.site?.domain || siteConfig.domain;
+                    const siteName =
+                        siteConfig.site?.siteName ||
+                        siteConfig.site?.name ||
+                        siteConfig.name;
+                    const canonical = siteConfig.site?.canonical?.replace(/\/$/, '');
+
                     sites[siteId] = {
-                        domain: siteConfig.domain,
-                        url: `https://${siteConfig.domain}`,
-                        name: siteConfig.name,
+                        domain: domain,
+                        url: canonical || `https://${domain}`,
+                        name: siteName,
                         // Store full config for potential future use
                         fullConfig: siteConfig,
                     };
 
                     console.log(
-                        `✅ Loaded configuration for site: ${siteId} (${siteConfig.domain})`
+                        `✅ Loaded configuration for site: ${siteId} (${domain})`
                     );
                 } catch (error) {
                     console.warn(
