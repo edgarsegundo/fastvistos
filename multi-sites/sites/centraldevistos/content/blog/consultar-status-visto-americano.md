@@ -1,15 +1,15 @@
 ---
-title: "Como Consultar e Acompanhar o Status do Visto Americano"
-description: ""
-pubDate: "2026-04-06T12:29:27.000Z"
-updatedDate: "2026-04-07T23:01:09.950Z"
-slug: "consultar-status-visto-americano"
-topic: "Dicas"
-topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__consultar-status-visto-americano-1775601543851.webp"
-type: "public"
+title: 'Como Consultar e Acompanhar o Status do Visto Americano'
+description: ''
+pubDate: '2026-04-06T12:29:27.000Z'
+updatedDate: '2026-04-07T23:01:09.950Z'
+slug: 'consultar-status-visto-americano'
+topic: 'Dicas'
+topicSlug: 'dicas'
+image: '/assets/images/blog/centraldevistos__consultar-status-visto-americano-1775601543851.webp'
+type: 'public'
 published: true
-wordCount: "966"
+wordCount: '966'
 ---
 
 <div class="article-freshness">

@@ -1,15 +1,15 @@
 ---
-title: "Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo"
-description: ""
-pubDate: "2026-04-06T13:46:07.000Z"
-updatedDate: "2026-04-07T22:23:30.183Z"
-slug: "documentos-entrevista-retirada-passaporte-casv"
-topic: "Dicas"
-topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__documentos-entrevista-retirada-passaporte-casv-1775599951020.webp"
-type: "public"
+title: 'Documentos, Entrevista e Retirada de Passaporte no CASV: Guia Completo'
+description: ''
+pubDate: '2026-04-06T13:46:07.000Z'
+updatedDate: '2026-04-07T22:23:30.183Z'
+slug: 'documentos-entrevista-retirada-passaporte-casv'
+topic: 'Dicas'
+topicSlug: 'dicas'
+image: '/assets/images/blog/centraldevistos__documentos-entrevista-retirada-passaporte-casv-1775599951020.webp'
+type: 'public'
 published: true
-wordCount: "995"
+wordCount: '995'
 ---
 
 <div class="article-freshness">

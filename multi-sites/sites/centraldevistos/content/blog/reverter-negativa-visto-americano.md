@@ -1,15 +1,15 @@
 ---
-title: "Revertendo a Negativa do Visto Americano: Estratégias e Casos Reais de Sucesso"
-description: ""
-pubDate: "2026-04-06T22:09:06.000Z"
-updatedDate: "2026-04-07T22:07:33.981Z"
-slug: "reverter-negativa-visto-americano"
-topic: "Dicas"
-topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__reverter-negativa-visto-americano-1775599653486.webp"
-type: "public"
+title: 'Revertendo a Negativa do Visto Americano: Estratégias e Casos Reais de Sucesso'
+description: ''
+pubDate: '2026-04-06T22:09:06.000Z'
+updatedDate: '2026-04-07T22:07:33.981Z'
+slug: 'reverter-negativa-visto-americano'
+topic: 'Dicas'
+topicSlug: 'dicas'
+image: '/assets/images/blog/centraldevistos__reverter-negativa-visto-americano-1775599653486.webp'
+type: 'public'
 published: true
-wordCount: "867"
+wordCount: '867'
 ---
 
 <div class="article-freshness">

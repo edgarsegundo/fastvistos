@@ -1,15 +1,15 @@
 ---
-title: "Guia Completo para Obter o Visto Americano de Turismo (B2)"
-description: ""
-pubDate: "2026-04-03T23:35:13.000Z"
-updatedDate: "2026-04-07T21:34:02.835Z"
-slug: "guia-visto-americano-turismo"
-topic: "Dicas"
-topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__guia-visto-americano-turismo-1775596541240.webp"
-type: "public"
+title: 'Guia Completo para Obter o Visto Americano de Turismo (B2)'
+description: ''
+pubDate: '2026-04-03T23:35:13.000Z'
+updatedDate: '2026-04-07T21:34:02.835Z'
+slug: 'guia-visto-americano-turismo'
+topic: 'Dicas'
+topicSlug: 'dicas'
+image: '/assets/images/blog/centraldevistos__guia-visto-americano-turismo-1775596541240.webp'
+type: 'public'
 published: true
-wordCount: "1760"
+wordCount: '1760'
 ---
 
 

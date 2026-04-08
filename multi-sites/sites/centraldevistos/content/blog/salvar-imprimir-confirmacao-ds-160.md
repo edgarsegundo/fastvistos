@@ -1,15 +1,15 @@
 ---
-title: "Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"
-description: ""
-pubDate: "2026-04-06T13:22:39.000Z"
-updatedDate: "2026-04-07T23:15:59.353Z"
-slug: "salvar-imprimir-confirmacao-ds-160"
-topic: "Dicas"
-topicSlug: "dicas"
-image: "/assets/images/blog/centraldevistos__salvar-imprimir-confirmacao-ds-160-1775601149280.webp"
-type: "public"
+title: 'Como Salvar e Imprimir a Confirmação do DS-160 Corretamente'
+description: ''
+pubDate: '2026-04-06T13:22:39.000Z'
+updatedDate: '2026-04-07T23:15:59.353Z'
+slug: 'salvar-imprimir-confirmacao-ds-160'
+topic: 'Dicas'
+topicSlug: 'dicas'
+image: '/assets/images/blog/centraldevistos__salvar-imprimir-confirmacao-ds-160-1775601149280.webp'
+type: 'public'
 published: true
-wordCount: "809"
+wordCount: '809'
 ---
 
 <div class="article-freshness">
