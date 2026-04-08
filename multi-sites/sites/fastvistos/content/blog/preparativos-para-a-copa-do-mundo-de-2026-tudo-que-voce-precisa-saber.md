@@ -1,15 +1,15 @@
 ---
-title: "Preparativos para a Copa do Mundo de 2026: Tudo Que Você Precisa Saber"
-description: ""
-pubDate: "2026-01-22T17:27:28.000Z"
-updatedDate: "2026-01-22T17:51:05.135Z"
-slug: "preparativos-para-a-copa-do-mundo-de-2026-tudo-que-voce-precisa-saber"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117_jceWdzy.png"
-type: "public"
+title: 'Preparativos para a Copa do Mundo de 2026: Tudo Que Você Precisa Saber'
+description: ''
+pubDate: '2026-01-22T17:27:28.000Z'
+updatedDate: '2026-01-22T17:51:05.135Z'
+slug: 'preparativos-para-a-copa-do-mundo-de-2026-tudo-que-voce-precisa-saber'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117_jceWdzy.png'
+type: 'public'
 published: true
-wordCount: "620"
+wordCount: '620'
 ---
 
 A Copa do Mundo de Futebol de 2026 promete ser um evento histórico, já que será realizado em três países simultaneamente: Estados Unidos, Canadá e México. Essa mudança significativa atrai a atenção de torcedores de todo o mundo, especialmente brasileiros que planejam assistir aos jogos. Neste cenário, é essencial entender os requisitos de viagem e como se preparar adequadamente.

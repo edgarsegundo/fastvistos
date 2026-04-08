@@ -1,15 +1,15 @@
 ---
-title: "Seu Visto Americano: O que \"Issued\" e \"Nenhum Dado\" Significam no CEAC"
-description: ""
-pubDate: "2025-11-24T22:25:56.000Z"
-updatedDate: "2025-11-24T22:38:47.615Z"
-slug: "seu-visto-americano-o-que-issued-e-nenhum-dado-significam-no-ceac"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__48174.jpg"
-type: "public"
+title: 'Seu Visto Americano: O que "Issued" e "Nenhum Dado" Significam no CEAC'
+description: ''
+pubDate: '2025-11-24T22:25:56.000Z'
+updatedDate: '2025-11-24T22:38:47.615Z'
+slug: 'seu-visto-americano-o-que-issued-e-nenhum-dado-significam-no-ceac'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__48174.jpg'
+type: 'public'
 published: true
-wordCount: "1013"
+wordCount: '1013'
 ---
 
 <!--# Seu Visto Americano: O que "Issued" e "Nenhum Dado" Significam no CEAC-->

@@ -1,15 +1,15 @@
 ---
-title: "Isenção de Visto para Turistas: O Impacto da Nova Proposta na Indústria do Turismo Brasileiro"
-description: ""
-pubDate: "2025-11-07T12:48:30.000Z"
-updatedDate: "2025-11-07T13:07:34.310Z"
-slug: "isen-o-de-visto-para-turistas-o-impacto-da-nova-proposta-na-ind-stria-do-turismo-brasileiro"
-topic: "Dicas Sobre Viagem"
-topicSlug: "dicas-sobre-viagem"
-image: "/assets/images/blog/fastvistos__viagens-selos-aventuras.webp"
-type: "public"
+title: 'Isenção de Visto para Turistas: O Impacto da Nova Proposta na Indústria do Turismo Brasileiro'
+description: ''
+pubDate: '2025-11-07T12:48:30.000Z'
+updatedDate: '2025-11-07T13:07:34.310Z'
+slug: 'isen-o-de-visto-para-turistas-o-impacto-da-nova-proposta-na-ind-stria-do-turismo-brasileiro'
+topic: 'Dicas Sobre Viagem'
+topicSlug: 'dicas-sobre-viagem'
+image: '/assets/images/blog/fastvistos__viagens-selos-aventuras.webp'
+type: 'public'
 published: true
-wordCount: "513"
+wordCount: '513'
 ---
 
 Recentemente, a Comissão de Relações Exteriores e de Defesa Nacional da Câmara dos Deputados do Brasil aprovou o Projeto de Decreto Legislativo 20623, que propõe a isenção de visto para turistas da Austrália, Canadá e Estados Unidos. Esta iniciativa visa revogar a exigência de vistos que foi reintroduzida nos últimos anos, buscando revitalizar o turismo no país e impulsionar a economia.

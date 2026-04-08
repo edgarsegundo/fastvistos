@@ -1,15 +1,15 @@
 ---
-title: "Coleta de Dados Biométricos: Novas Diretrizes para Estrangeiros nos EUA"
-description: ""
-pubDate: "2025-11-04T12:48:36.892Z"
-updatedDate: "2025-11-04T12:48:36.893Z"
-slug: "coleta-de-dados-biom-tricos-novas-diretrizes-para-estrangeiros-nos-eua"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__homem-coleta-biometria-consulado.webp"
-type: "public"
+title: 'Coleta de Dados Biométricos: Novas Diretrizes para Estrangeiros nos EUA'
+description: ''
+pubDate: '2025-11-04T12:48:36.892Z'
+updatedDate: '2025-11-04T12:48:36.893Z'
+slug: 'coleta-de-dados-biom-tricos-novas-diretrizes-para-estrangeiros-nos-eua'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__homem-coleta-biometria-consulado.webp'
+type: 'public'
 published: true
-wordCount: "551"
+wordCount: '551'
 ---
 
 

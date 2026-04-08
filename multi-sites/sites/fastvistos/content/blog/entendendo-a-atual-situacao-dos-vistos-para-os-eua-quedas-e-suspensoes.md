@@ -1,15 +1,15 @@
 ---
-title: "Entendendo a Atual Situação dos Vistos para os EUA: Quedas e Suspensões"
-description: ""
-pubDate: "2026-02-02T12:58:27.570Z"
-updatedDate: "2026-02-02T12:58:27.571Z"
-slug: "entendendo-a-atual-situacao-dos-vistos-para-os-eua-quedas-e-suspensoes"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Entendendo a Atual Situação dos Vistos para os EUA: Quedas e Suspensões'
+description: ''
+pubDate: '2026-02-02T12:58:27.570Z'
+updatedDate: '2026-02-02T12:58:27.571Z'
+slug: 'entendendo-a-atual-situacao-dos-vistos-para-os-eua-quedas-e-suspensoes'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "480"
+wordCount: '480'
 ---
 
 

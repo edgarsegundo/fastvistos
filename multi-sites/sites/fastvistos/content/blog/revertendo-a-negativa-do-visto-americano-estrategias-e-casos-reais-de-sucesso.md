@@ -1,15 +1,15 @@
 ---
-title: "Revertendo a Negativa do Visto Americano: Estratégias e Casos Reais de Sucesso"
-description: ""
-pubDate: "2026-01-28T12:00:50.675Z"
-updatedDate: "2026-01-28T12:00:50.676Z"
-slug: "revertendo-a-negativa-do-visto-americano-estrategias-e-casos-reais-de-sucesso"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__upload.webp"
-type: "public"
+title: 'Revertendo a Negativa do Visto Americano: Estratégias e Casos Reais de Sucesso'
+description: ''
+pubDate: '2026-01-28T12:00:50.675Z'
+updatedDate: '2026-01-28T12:00:50.676Z'
+slug: 'revertendo-a-negativa-do-visto-americano-estrategias-e-casos-reais-de-sucesso'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__upload.webp'
+type: 'public'
 published: true
-wordCount: "739"
+wordCount: '739'
 ---
 
 

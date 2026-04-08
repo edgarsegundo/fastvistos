@@ -1,15 +1,15 @@
 ---
-title: "Oportunidades de Imigração para Profissionais de Saúde na Flórida: O Impacto da Senate Bill 7016"
-description: ""
-pubDate: "2025-11-03T17:17:47.000Z"
-updatedDate: "2026-01-22T17:53:35.072Z"
-slug: "oportunidades-de-imigra-o-para-profissionais-de-sa-de-na-fl-rida-o-impacto-da-senate-bill-7016"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__psychologist-9988009_1280.jpg"
-type: "public"
+title: 'Oportunidades de Imigração para Profissionais de Saúde na Flórida: O Impacto da Senate Bill 7016'
+description: ''
+pubDate: '2025-11-03T17:17:47.000Z'
+updatedDate: '2026-01-22T17:53:35.072Z'
+slug: 'oportunidades-de-imigra-o-para-profissionais-de-sa-de-na-fl-rida-o-impacto-da-senate-bill-7016'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__psychologist-9988009_1280.jpg'
+type: 'public'
 published: true
-wordCount: "642"
+wordCount: '642'
 ---
 
 A recente aprovação da **Senate Bill 7016** na Flórida, parte da iniciativa **Live Healthy**, representa um avanço significativo na imigração de profissionais de saúde formados no exterior, incluindo brasileiros. A nova legislação busca atender à crescente demanda por esses especialistas no estado, ao mesmo tempo em que oferece uma via mais simplificada para a obtenção de licenças profissionais. Neste artigo, vamos explorar os principais requisitos dessa lei e o que ela pode significar para os médicos e profissionais da saúde no Brasil.

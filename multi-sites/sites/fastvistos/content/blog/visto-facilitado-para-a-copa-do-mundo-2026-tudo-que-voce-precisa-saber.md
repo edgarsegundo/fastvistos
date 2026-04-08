@@ -1,15 +1,15 @@
 ---
-title: "Visto Facilitado para a Copa do Mundo 2026: Tudo que você Precisa Saber"
-description: ""
-pubDate: "2026-01-22T17:27:44.000Z"
-updatedDate: "2026-01-22T17:27:46.151Z"
-slug: "visto-facilitado-para-a-copa-do-mundo-2026-tudo-que-voce-precisa-saber"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__pessoas-de-diversos-paises-assistindo-a-copa-do-mundo.webp"
-type: "public"
+title: 'Visto Facilitado para a Copa do Mundo 2026: Tudo que você Precisa Saber'
+description: ''
+pubDate: '2026-01-22T17:27:44.000Z'
+updatedDate: '2026-01-22T17:27:46.151Z'
+slug: 'visto-facilitado-para-a-copa-do-mundo-2026-tudo-que-voce-precisa-saber'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__pessoas-de-diversos-paises-assistindo-a-copa-do-mundo.webp'
+type: 'public'
 published: true
-wordCount: "466"
+wordCount: '466'
 ---
 
 ## O Que Mudou?

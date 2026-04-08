@@ -1,15 +1,15 @@
 ---
-title: "Tudo que Você Precisa Saber sobre Seguro Viagem: Dicas Práticas"
-description: ""
-pubDate: "2025-10-17T22:05:17.000Z"
-updatedDate: "2025-10-22T18:05:05.983Z"
-slug: "tudo-que-voce-precisa-saber-sobre-seguro-viagem-dicas-praticas"
-topic: "Dicas Sobre Viagem"
-topicSlug: "dicas-sobre-viagem"
-image: "/assets/images/blog/fastvistos__seguro-viagem-com-a-comparar-viaje-com-tranquilidade.jpg"
-type: "public"
+title: 'Tudo que Você Precisa Saber sobre Seguro Viagem: Dicas Práticas'
+description: ''
+pubDate: '2025-10-17T22:05:17.000Z'
+updatedDate: '2025-10-22T18:05:05.983Z'
+slug: 'tudo-que-voce-precisa-saber-sobre-seguro-viagem-dicas-praticas'
+topic: 'Dicas Sobre Viagem'
+topicSlug: 'dicas-sobre-viagem'
+image: '/assets/images/blog/fastvistos__seguro-viagem-com-a-comparar-viaje-com-tranquilidade.jpg'
+type: 'public'
 published: true
-wordCount: "1572"
+wordCount: '1572'
 ---
 
 <!-- Tudo que Você Precisa Saber sobre Seguro Viagem: Dicas Práticas -->

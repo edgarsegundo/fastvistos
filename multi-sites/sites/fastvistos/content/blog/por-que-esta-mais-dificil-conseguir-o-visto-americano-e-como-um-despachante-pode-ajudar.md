@@ -1,15 +1,15 @@
 ---
-title: "Por Que Está Mais Difícil Conseguir o Visto Americano — e Como um Despachante Pode Ajudar"
-description: ""
-pubDate: "2025-10-22T18:38:10.000Z"
-updatedDate: "2025-10-24T13:27:36.069Z"
-slug: "por-que-esta-mais-dificil-conseguir-o-visto-americano-e-como-um-despachante-pode-ajudar"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__48211.jpg"
-type: "public"
+title: 'Por Que Está Mais Difícil Conseguir o Visto Americano — e Como um Despachante Pode Ajudar'
+description: ''
+pubDate: '2025-10-22T18:38:10.000Z'
+updatedDate: '2025-10-24T13:27:36.069Z'
+slug: 'por-que-esta-mais-dificil-conseguir-o-visto-americano-e-como-um-despachante-pode-ajudar'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__48211.jpg'
+type: 'public'
 published: true
-wordCount: "1372"
+wordCount: '1372'
 ---
 
 <!--Por Que Está Mais Difícil Conseguir o Visto Americano — e Como um Despachante Pode Ajudar-->

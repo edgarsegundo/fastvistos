@@ -1,15 +1,15 @@
 ---
-title: "Fast Vistos: Assessoria de Vistos que Você Pode Confiar"
-description: ""
-pubDate: "2025-11-12T12:23:00.000Z"
-updatedDate: "2025-11-12T14:31:08.383Z"
-slug: "fast-vistos-assessoria-de-vistos-que-voce-pode-confiar"
-topic: "Dicas Sobre Viagem"
-topicSlug: "dicas-sobre-viagem"
-image: "/assets/images/blog/fastvistos__2147626534.jpg"
-type: "public"
+title: 'Fast Vistos: Assessoria de Vistos que Você Pode Confiar'
+description: ''
+pubDate: '2025-11-12T12:23:00.000Z'
+updatedDate: '2025-11-12T14:31:08.383Z'
+slug: 'fast-vistos-assessoria-de-vistos-que-voce-pode-confiar'
+topic: 'Dicas Sobre Viagem'
+topicSlug: 'dicas-sobre-viagem'
+image: '/assets/images/blog/fastvistos__2147626534.jpg'
+type: 'public'
 published: true
-wordCount: "826"
+wordCount: '826'
 ---
 
 ## Introdução

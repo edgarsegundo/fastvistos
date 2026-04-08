@@ -1,15 +1,15 @@
 ---
-title: "Como Viajar para os Estados Unidos sem Visto: O Visa Waiver Program"
-description: ""
-pubDate: "2025-12-05T20:44:59.902Z"
-updatedDate: "2025-12-05T20:44:59.902Z"
-slug: "como-viajar-para-os-estados-unidos-sem-visto-o-visa-waiver-program"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__aplicacao-etias-para-entrar-na-europa.webp"
-type: "public"
+title: 'Como Viajar para os Estados Unidos sem Visto: O Visa Waiver Program'
+description: ''
+pubDate: '2025-12-05T20:44:59.902Z'
+updatedDate: '2025-12-05T20:44:59.902Z'
+slug: 'como-viajar-para-os-estados-unidos-sem-visto-o-visa-waiver-program'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__aplicacao-etias-para-entrar-na-europa.webp'
+type: 'public'
 published: true
-wordCount: "620"
+wordCount: '620'
 ---
 
 

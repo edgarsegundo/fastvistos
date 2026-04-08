@@ -1,15 +1,15 @@
 ---
-title: "Impactos das Novas Políticas de Visto dos EUA na Economia e Imigração"
-description: ""
-pubDate: "2025-11-18T00:23:29.824Z"
-updatedDate: "2025-11-18T00:23:29.825Z"
-slug: "impactos-das-novas-politicas-de-visto-dos-eua-na-economia-e-imigracao"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__passaporte-com-passagens-em-um-fundo-azul.webp"
-type: "public"
+title: 'Impactos das Novas Políticas de Visto dos EUA na Economia e Imigração'
+description: ''
+pubDate: '2025-11-18T00:23:29.824Z'
+updatedDate: '2025-11-18T00:23:29.825Z'
+slug: 'impactos-das-novas-politicas-de-visto-dos-eua-na-economia-e-imigracao'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__passaporte-com-passagens-em-um-fundo-azul.webp'
+type: 'public'
 published: true
-wordCount: "656"
+wordCount: '656'
 ---
 
 

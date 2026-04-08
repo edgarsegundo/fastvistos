@@ -1,15 +1,15 @@
 ---
-title: "Impactos do Shutdown nos Serviços Consulares dos EUA: O Que Você Precisa Saber"
-description: ""
-pubDate: "2025-11-14T19:01:46.224Z"
-updatedDate: "2025-11-14T19:01:46.224Z"
-slug: "impactos-do-shutdown-nos-servicos-consulares-dos-eua-o-que-voce-precisa-saber"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Impactos do Shutdown nos Serviços Consulares dos EUA: O Que Você Precisa Saber'
+description: ''
+pubDate: '2025-11-14T19:01:46.224Z'
+updatedDate: '2025-11-14T19:01:46.224Z'
+slug: 'impactos-do-shutdown-nos-servicos-consulares-dos-eua-o-que-voce-precisa-saber'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "625"
+wordCount: '625'
 ---
 
 

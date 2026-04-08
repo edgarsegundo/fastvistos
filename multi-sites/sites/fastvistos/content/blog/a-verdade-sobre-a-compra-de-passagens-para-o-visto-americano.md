@@ -1,15 +1,15 @@
 ---
-title: "A Verdade sobre a Compra de Passagens para o Visto Americano"
-description: ""
-pubDate: "2025-12-10T12:52:06.268Z"
-updatedDate: "2025-12-10T12:52:06.269Z"
-slug: "a-verdade-sobre-a-compra-de-passagens-para-o-visto-americano"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__passaporte-com-passagens-em-um-fundo-azul.webp"
-type: "public"
+title: 'A Verdade sobre a Compra de Passagens para o Visto Americano'
+description: ''
+pubDate: '2025-12-10T12:52:06.268Z'
+updatedDate: '2025-12-10T12:52:06.269Z'
+slug: 'a-verdade-sobre-a-compra-de-passagens-para-o-visto-americano'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__passaporte-com-passagens-em-um-fundo-azul.webp'
+type: 'public'
 published: true
-wordCount: "502"
+wordCount: '502'
 ---
 
 

@@ -1,15 +1,15 @@
 ---
-title: "Mudanças Propostas nas Entradas de Turistas nos EUA"
-description: ""
-pubDate: "2025-12-10T12:53:55.109Z"
-updatedDate: "2025-12-10T12:53:55.109Z"
-slug: "mudancas-propostas-nas-entradas-de-turistas-nos-eua"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__nova-diretriz-dos-eua-pode-restringir-vistos-a-estrangeiros.webp"
-type: "public"
+title: 'Mudanças Propostas nas Entradas de Turistas nos EUA'
+description: ''
+pubDate: '2025-12-10T12:53:55.109Z'
+updatedDate: '2025-12-10T12:53:55.109Z'
+slug: 'mudancas-propostas-nas-entradas-de-turistas-nos-eua'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__nova-diretriz-dos-eua-pode-restringir-vistos-a-estrangeiros.webp'
+type: 'public'
 published: true
-wordCount: "514"
+wordCount: '514'
 ---
 
 

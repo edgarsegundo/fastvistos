@@ -1,15 +1,15 @@
 ---
-title: "Guia Completo para Obter o Visto Americano"
-description: ""
-pubDate: "2026-01-22T18:20:07.000Z"
-updatedDate: "2026-02-05T23:49:56.533Z"
-slug: "guia-completo-para-obter-o-visto-americano"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__lasvegas.webp"
-type: "public"
+title: 'Guia Completo para Obter o Visto Americano'
+description: ''
+pubDate: '2026-01-22T18:20:07.000Z'
+updatedDate: '2026-02-05T23:49:56.533Z'
+slug: 'guia-completo-para-obter-o-visto-americano'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__lasvegas.webp'
+type: 'public'
 published: true
-wordCount: "647"
+wordCount: '647'
 ---
 
 Viajar para os Estados Unidos é um sonho para muitos brasileiros. Porém, um passo essencial para tornar esse desejo realidade é a obtenção do visto americano. Este artigo apresenta um guia abrangente, desde o que é o visto até passos práticos para a solicitação, passando pelos principais tipos disponíveis e dicas essenciais para o sucesso da sua aplicação.

@@ -1,15 +1,15 @@
 ---
-title: "Mudanças Importantes nas Regras de Imigração nos EUA: O Que Você Precisa Saber"
-description: ""
-pubDate: "2025-11-01T17:49:28.000Z"
-updatedDate: "2025-11-03T11:23:17.398Z"
-slug: "mudancas-importantes-nas-regras-de-imigracao-nos-eua-o-que-voce-precisa-saber"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Mudanças Importantes nas Regras de Imigração nos EUA: O Que Você Precisa Saber'
+description: ''
+pubDate: '2025-11-01T17:49:28.000Z'
+updatedDate: '2025-11-03T11:23:17.398Z'
+slug: 'mudancas-importantes-nas-regras-de-imigracao-nos-eua-o-que-voce-precisa-saber'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "601"
+wordCount: '601'
 ---
 
 Recentemente, o governo dos Estados Unidos anunciou alterações significativas nas regras de imigração que afetam a entrada e a saída de estrangeiros do país. Essas medidas visam aumentar a segurança e a eficiência na fiscalização de fronteiras, implicando mudanças que exigem atenção especial por parte dos viajantes. Vamos explorar essas novas diretrizes e seu impacto, especialmente para brasileiros.

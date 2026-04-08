@@ -1,15 +1,15 @@
 ---
-title: "Impactos da Nova Taxa do Visto H1B: Desafios para o Mercado de Trabalho e a Saúde nos EUA"
-description: ""
-pubDate: "2025-11-10T13:45:43.605Z"
-updatedDate: "2025-11-10T13:45:43.605Z"
-slug: "impactos-da-nova-taxa-do-visto-h1b-desafios-para-o-mercado-de-trabalho-e-a-saude-nos-eua"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Impactos da Nova Taxa do Visto H1B: Desafios para o Mercado de Trabalho e a Saúde nos EUA'
+description: ''
+pubDate: '2025-11-10T13:45:43.605Z'
+updatedDate: '2025-11-10T13:45:43.605Z'
+slug: 'impactos-da-nova-taxa-do-visto-h1b-desafios-para-o-mercado-de-trabalho-e-a-saude-nos-eua'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "563"
+wordCount: '563'
 ---
 
 

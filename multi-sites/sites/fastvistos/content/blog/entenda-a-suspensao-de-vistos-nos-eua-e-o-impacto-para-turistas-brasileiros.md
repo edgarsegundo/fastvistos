@@ -1,15 +1,15 @@
 ---
-title: "Entenda a Suspensão de Vistos nos EUA e o Impacto para Turistas Brasileiros"
-description: ""
-pubDate: "2026-01-22T18:23:54.402Z"
-updatedDate: "2026-01-22T18:23:54.402Z"
-slug: "entenda-a-suspensao-de-vistos-nos-eua-e-o-impacto-para-turistas-brasileiros"
-topic: "Dicas Sobre Viagem"
-topicSlug: "dicas-sobre-viagem"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Entenda a Suspensão de Vistos nos EUA e o Impacto para Turistas Brasileiros'
+description: ''
+pubDate: '2026-01-22T18:23:54.402Z'
+updatedDate: '2026-01-22T18:23:54.402Z'
+slug: 'entenda-a-suspensao-de-vistos-nos-eua-e-o-impacto-para-turistas-brasileiros'
+topic: 'Dicas Sobre Viagem'
+topicSlug: 'dicas-sobre-viagem'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "570"
+wordCount: '570'
 ---
 
 

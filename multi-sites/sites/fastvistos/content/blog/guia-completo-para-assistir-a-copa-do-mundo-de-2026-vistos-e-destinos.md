@@ -1,15 +1,15 @@
 ---
-title: "Como Assistir à Copa do Mundo de 2026: Vistos e Destinos"
-description: ""
-pubDate: "2026-01-22T17:28:17.000Z"
-updatedDate: "2026-01-22T17:49:47.571Z"
-slug: "guia-completo-para-assistir-a-copa-do-mundo-de-2026-vistos-e-destinos"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117.png"
-type: "public"
+title: 'Como Assistir à Copa do Mundo de 2026: Vistos e Destinos'
+description: ''
+pubDate: '2026-01-22T17:28:17.000Z'
+updatedDate: '2026-01-22T17:49:47.571Z'
+slug: 'guia-completo-para-assistir-a-copa-do-mundo-de-2026-vistos-e-destinos'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117.png'
+type: 'public'
 published: true
-wordCount: "586"
+wordCount: '586'
 ---
 
 A Copa do Mundo de 2026 está prestes a acontecer e promete ser uma edição memorável, sendo a primeira a ser disputada em três países: Estados Unidos, Canadá e México. Com jogos marcados para o período de 11 de junho a 19 de julho, os torcedores já se preparam para essa grandiosa celebração do futebol. Este guia irá ajudá-lo a entender como obter os vistos necessários e quais cidades explorar.

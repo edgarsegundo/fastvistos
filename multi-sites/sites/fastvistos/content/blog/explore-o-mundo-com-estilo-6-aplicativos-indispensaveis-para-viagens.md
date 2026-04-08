@@ -1,15 +1,15 @@
 ---
-title: "Explore o Mundo com Estilo: 6 Aplicativos Indispensáveis para Viagens"
-description: ""
-pubDate: "2025-11-18T21:28:08.390Z"
-updatedDate: "2025-11-18T21:28:08.391Z"
-slug: "explore-o-mundo-com-estilo-6-aplicativos-indispensaveis-para-viagens"
-topic: "Dicas Sobre Viagem"
-topicSlug: "dicas-sobre-viagem"
-image: "/assets/images/blog/fastvistos__desenho-reprentando-pessoas-viajando-pelo-mundo.webp"
-type: "public"
+title: 'Explore o Mundo com Estilo: 6 Aplicativos Indispensáveis para Viagens'
+description: ''
+pubDate: '2025-11-18T21:28:08.390Z'
+updatedDate: '2025-11-18T21:28:08.391Z'
+slug: 'explore-o-mundo-com-estilo-6-aplicativos-indispensaveis-para-viagens'
+topic: 'Dicas Sobre Viagem'
+topicSlug: 'dicas-sobre-viagem'
+image: '/assets/images/blog/fastvistos__desenho-reprentando-pessoas-viajando-pelo-mundo.webp'
+type: 'public'
 published: true
-wordCount: "559"
+wordCount: '559'
 ---
 
 

@@ -1,15 +1,15 @@
 ---
-title: "Precisa solicitar visto para o México? Saiba como!"
-description: ""
-pubDate: "2025-09-30T23:10:51.000Z"
-updatedDate: "2025-11-20T17:20:45.518Z"
-slug: "como-tirar-o-visto-mexicano"
-topic: "Dicas Sobre o Visto Mexicano"
-topicSlug: "dicas-sobre-o-visto-mexicano"
-image: "/assets/images/blog/fastvistos__visa-3109800_1280_mexico.jpg"
-type: "public"
+title: 'Precisa solicitar visto para o México? Saiba como!'
+description: ''
+pubDate: '2025-09-30T23:10:51.000Z'
+updatedDate: '2025-11-20T17:20:45.518Z'
+slug: 'como-tirar-o-visto-mexicano'
+topic: 'Dicas Sobre o Visto Mexicano'
+topicSlug: 'dicas-sobre-o-visto-mexicano'
+image: '/assets/images/blog/fastvistos__visa-3109800_1280_mexico.jpg'
+type: 'public'
 published: true
-wordCount: "834"
+wordCount: '834'
 ---
 
 <!--# Precisa solicitar visto para o México? Saiba como!-->

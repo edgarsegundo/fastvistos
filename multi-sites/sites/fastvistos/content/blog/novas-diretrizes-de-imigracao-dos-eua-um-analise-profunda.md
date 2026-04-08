@@ -1,15 +1,15 @@
 ---
-title: "Novas Diretrizes de Imigração dos EUA: Um Análise Profunda"
-description: ""
-pubDate: "2025-11-12T15:05:27.000Z"
-updatedDate: "2025-11-12T15:08:41.801Z"
-slug: "novas-diretrizes-de-imigracao-dos-eua-um-analise-profunda"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__nova-diretriz-dos-eua-pode-restringir-vistos-a-estrangeiros.webp"
-type: "public"
+title: 'Novas Diretrizes de Imigração dos EUA: Um Análise Profunda'
+description: ''
+pubDate: '2025-11-12T15:05:27.000Z'
+updatedDate: '2025-11-12T15:08:41.801Z'
+slug: 'novas-diretrizes-de-imigracao-dos-eua-um-analise-profunda'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__nova-diretriz-dos-eua-pode-restringir-vistos-a-estrangeiros.webp'
+type: 'public'
 published: true
-wordCount: "588"
+wordCount: '588'
 ---
 
 Recentemente, o governo dos Estados Unidos divulgou novas diretrizes que introduzem mudanças significativas nas políticas de imigração, especialmente no que diz respeito à entrada de estrangeiros. As orientações visam garantir que os imigrantes não dependam de benefícios públicos, o que pode resultar em um endurecimento das regras de concessão de vistos.

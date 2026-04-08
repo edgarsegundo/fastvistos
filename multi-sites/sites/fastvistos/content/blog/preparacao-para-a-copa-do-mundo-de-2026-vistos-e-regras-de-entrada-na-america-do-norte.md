@@ -1,15 +1,15 @@
 ---
-title: "Preparação para a Copa do Mundo de 2026: Vistos e Regras de Entrada na América do Norte"
-description: ""
-pubDate: "2026-01-22T17:28:38.000Z"
-updatedDate: "2026-01-22T17:50:44.849Z"
-slug: "preparacao-para-a-copa-do-mundo-de-2026-vistos-e-regras-de-entrada-na-america-do-norte"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117_jHJ6aV7.png"
-type: "public"
+title: 'Preparação para a Copa do Mundo de 2026: Vistos e Regras de Entrada na América do Norte'
+description: ''
+pubDate: '2026-01-22T17:28:38.000Z'
+updatedDate: '2026-01-22T17:50:44.849Z'
+slug: 'preparacao-para-a-copa-do-mundo-de-2026-vistos-e-regras-de-entrada-na-america-do-norte'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117_jHJ6aV7.png'
+type: 'public'
 published: true
-wordCount: "603"
+wordCount: '603'
 ---
 
 A Copa do Mundo de 2026 será um evento singular, co-sediado pelos Estados Unidos, México e Canadá, e atrairá milhões de torcedores ansiosos por experiências inesquecíveis. No entanto, é crucial que os viajantes estejam cientes das diferentes exigências de visto e regras de entrada de cada país para prevenir contratempos durante a viagem.

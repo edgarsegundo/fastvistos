@@ -1,15 +1,15 @@
 ---
-title: "Como Salvar e Imprimir a Confirmação do DS-160 Corretamente"
-description: ""
-pubDate: "2025-10-29T19:31:19.000Z"
-updatedDate: "2025-10-29T19:41:23.621Z"
-slug: "como-salvar-e-imprimir-a-confirmacao-do-ds-160-corretamente"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__2148377684.jpg"
-type: "public"
+title: 'Como Salvar e Imprimir a Confirmação do DS-160 Corretamente'
+description: ''
+pubDate: '2025-10-29T19:31:19.000Z'
+updatedDate: '2025-10-29T19:41:23.621Z'
+slug: 'como-salvar-e-imprimir-a-confirmacao-do-ds-160-corretamente'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__2148377684.jpg'
+type: 'public'
 published: true
-wordCount: "1479"
+wordCount: '1479'
 ---
 
 <!--

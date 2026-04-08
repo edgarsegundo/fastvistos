@@ -1,15 +1,15 @@
 ---
-title: "Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2026"
-description: ""
-pubDate: "2026-01-22T17:24:27.000Z"
-updatedDate: "2026-01-22T17:24:29.422Z"
-slug: "como-consultar-o-status-do-visto-americano-no-site"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__consultar-status-visto-americano.webp"
-type: "public"
+title: 'Como Consultar e Acompanhar o Status do Visto Americano: Guia Completo 2026'
+description: ''
+pubDate: '2026-01-22T17:24:27.000Z'
+updatedDate: '2026-01-22T17:24:29.422Z'
+slug: 'como-consultar-o-status-do-visto-americano-no-site'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__consultar-status-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "1735"
+wordCount: '1735'
 ---
 
 <!-- # Como consultar o status do visto americano no site oficial (guia atualizado 2026)-->

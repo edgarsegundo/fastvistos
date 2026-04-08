@@ -1,15 +1,15 @@
 ---
-title: "Mudanças nas Políticas de Imigração dos EUA"
-description: ""
-pubDate: "2025-12-05T20:42:12.355Z"
-updatedDate: "2025-12-05T20:42:12.356Z"
-slug: "mudancas-nas-politicas-de-imigracao-dos-eua"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Mudanças nas Políticas de Imigração dos EUA'
+description: ''
+pubDate: '2025-12-05T20:42:12.355Z'
+updatedDate: '2025-12-05T20:42:12.356Z'
+slug: 'mudancas-nas-politicas-de-imigracao-dos-eua'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "505"
+wordCount: '505'
 ---
 
 

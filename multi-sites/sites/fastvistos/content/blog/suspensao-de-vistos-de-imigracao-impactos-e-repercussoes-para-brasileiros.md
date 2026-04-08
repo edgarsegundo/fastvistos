@@ -1,15 +1,15 @@
 ---
-title: "Suspensão de Vistos de Imigração: Impactos e Repercussões para Brasileiros"
-description: ""
-pubDate: "2026-01-22T18:07:00.926Z"
-updatedDate: "2026-01-22T18:07:00.926Z"
-slug: "suspensao-de-vistos-de-imigracao-impactos-e-repercussoes-para-brasileiros"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__upload.webp"
-type: "public"
+title: 'Suspensão de Vistos de Imigração: Impactos e Repercussões para Brasileiros'
+description: ''
+pubDate: '2026-01-22T18:07:00.926Z'
+updatedDate: '2026-01-22T18:07:00.926Z'
+slug: 'suspensao-de-vistos-de-imigracao-impactos-e-repercussoes-para-brasileiros'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__upload.webp'
+type: 'public'
 published: true
-wordCount: "578"
+wordCount: '578'
 ---
 
 

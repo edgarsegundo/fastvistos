@@ -1,15 +1,15 @@
 ---
-title: "Trump Gold Card: Um Novo Caminho para a Imigração nos EUA"
-description: ""
-pubDate: "2025-12-12T13:54:21.000Z"
-updatedDate: "2026-01-22T17:39:33.100Z"
-slug: "trump-gold-card-um-novo-caminho-para-a-imigracao-nos-eua"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__freepik__trump-gold-card-promises-to-speed-up-the-visa-proc__89115.png"
-type: "public"
+title: 'Trump Gold Card: Um Novo Caminho para a Imigração nos EUA'
+description: ''
+pubDate: '2025-12-12T13:54:21.000Z'
+updatedDate: '2026-01-22T17:39:33.100Z'
+slug: 'trump-gold-card-um-novo-caminho-para-a-imigracao-nos-eua'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__freepik__trump-gold-card-promises-to-speed-up-the-visa-proc__89115.png'
+type: 'public'
 published: true
-wordCount: "533"
+wordCount: '533'
 ---
 
 Recentemente, o governo dos Estados Unidos lançou um novo programa de imigração intitulado **Trump Gold Card**, destinado a acelerar a concessão de vistos para cidadãos estrangeiros que desejam residir e trabalhar no país. Com um custo elevado, essa iniciativa propõe um método diferenciado para a obtenção de permissão de residência nos EUA.

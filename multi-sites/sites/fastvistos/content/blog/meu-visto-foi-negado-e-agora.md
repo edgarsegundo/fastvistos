@@ -1,15 +1,15 @@
 ---
-title: "Meu visto foi negado, e agora?"
-description: ""
-pubDate: "2025-10-24T18:26:31.000Z"
-updatedDate: "2025-10-24T19:43:57.820Z"
-slug: "meu-visto-foi-negado-e-agora"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__22455.jpg"
-type: "public"
+title: 'Meu visto foi negado, e agora?'
+description: ''
+pubDate: '2025-10-24T18:26:31.000Z'
+updatedDate: '2025-10-24T19:43:57.820Z'
+slug: 'meu-visto-foi-negado-e-agora'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__22455.jpg'
+type: 'public'
 published: true
-wordCount: "2126"
+wordCount: '2126'
 ---
 
 <!--Meu visto foi negado, e agora?-->

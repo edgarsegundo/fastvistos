@@ -1,15 +1,15 @@
 ---
-title: "Cancelamento de Vistos por Comemorações nas Redes Sociais: Entenda os Limites da Liberdade de Expressão"
-description: ""
-pubDate: "2025-12-15T17:35:55.323Z"
-updatedDate: "2025-12-15T17:35:55.324Z"
-slug: "cancelamento-de-vistos-por-comemoracoes-nas-redes-sociais-entenda-os-limites-da-liberdade-de-expressao"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__upload.webp"
-type: "public"
+title: 'Cancelamento de Vistos por Comemorações nas Redes Sociais: Entenda os Limites da Liberdade de Expressão'
+description: ''
+pubDate: '2025-12-15T17:35:55.323Z'
+updatedDate: '2025-12-15T17:35:55.324Z'
+slug: 'cancelamento-de-vistos-por-comemoracoes-nas-redes-sociais-entenda-os-limites-da-liberdade-de-expressao'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__upload.webp'
+type: 'public'
 published: true
-wordCount: "506"
+wordCount: '506'
 ---
 
 

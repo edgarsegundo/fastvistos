@@ -1,15 +1,15 @@
 ---
-title: "Suspensão da Emissão de Vistos de Imigração pelos EUA: O Que Você Precisa Saber"
-description: ""
-pubDate: "2026-01-22T18:12:41.188Z"
-updatedDate: "2026-01-22T18:12:41.189Z"
-slug: "suspensao-da-emissao-de-vistos-de-imigracao-pelos-eua-o-que-voce-precisa-saber"
-topic: "Notícias"
-topicSlug: "noticias"
-image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
-type: "public"
+title: 'Suspensão da Emissão de Vistos de Imigração pelos EUA: O Que Você Precisa Saber'
+description: ''
+pubDate: '2026-01-22T18:12:41.188Z'
+updatedDate: '2026-01-22T18:12:41.189Z'
+slug: 'suspensao-da-emissao-de-vistos-de-imigracao-pelos-eua-o-que-voce-precisa-saber'
+topic: 'Notícias'
+topicSlug: 'noticias'
+image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
+type: 'public'
 published: true
-wordCount: "478"
+wordCount: '478'
 ---
 
 

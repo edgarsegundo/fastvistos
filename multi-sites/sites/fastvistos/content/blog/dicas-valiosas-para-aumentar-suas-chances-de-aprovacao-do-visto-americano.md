@@ -1,15 +1,15 @@
 ---
-title: "Dicas Valiosas para Aumentar suas Chances de Aprovação do Visto Americano"
-description: ""
-pubDate: "2025-10-07T23:10:51.000Z"
-updatedDate: "2025-10-25T11:55:54.836Z"
-slug: "dicas-valiosas-para-aumentar-suas-chances-de-aprovacao-do-visto-americano"
-topic: "Dicas Sobre o Visto Americano"
-topicSlug: "dicas-sobre-o-visto-americano"
-image: "/assets/images/blog/fastvistos__banner-3354565_1280.jpg"
-type: "public"
+title: 'Dicas Valiosas para Aumentar suas Chances de Aprovação do Visto Americano'
+description: ''
+pubDate: '2025-10-07T23:10:51.000Z'
+updatedDate: '2025-10-25T11:55:54.836Z'
+slug: 'dicas-valiosas-para-aumentar-suas-chances-de-aprovacao-do-visto-americano'
+topic: 'Dicas Sobre o Visto Americano'
+topicSlug: 'dicas-sobre-o-visto-americano'
+image: '/assets/images/blog/fastvistos__banner-3354565_1280.jpg'
+type: 'public'
 published: true
-wordCount: "1224"
+wordCount: '1224'
 ---
 
 <!--# Dicas Valiosas para Aumentar suas Chances de Aprovação do Visto Americano-->
