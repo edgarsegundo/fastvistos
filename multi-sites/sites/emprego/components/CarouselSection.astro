@@ -202,14 +202,17 @@ function buildSources(filename, breakpoints, scales, imageBase) {
     // Configurable batch size
     const BATCH_SIZE = 6;
 
-    // Real endpoint: returns next articles for a topic
+    // Real endpoint: returns next articles for a topic.
+    // Returns an array on success (possibly empty = end of data),
+    // or null on network/server error (so loadMore can retry later).
     async function fetchNextArticles(topicId, offset, limit) {
         const businessId = window.__BUSINESS_ID__;
-        const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
+        // Use same-origin URL — each site's nginx proxies /msitesapp/api/ → msitesapp Node server.
+        // This avoids CORS issues entirely.
+        const url = `${window.location.origin}/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
         try {
             const res = await fetch(url);
-
-            if (!res.ok) return [];
+            if (!res.ok) return null; // server error — allow retry
             const data = await res.json();
             // Map to expected card fields
             return (data.articles || []).map((a) => ({
@@ -220,7 +223,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                 blurDataURL: a.blur_base64 || ''
             }));
         } catch (err) {
-            return [];
+            return null; // network error — allow retry
         }
     }
 
@@ -309,11 +312,11 @@ function buildSources(filename, breakpoints, scales, imageBase) {
         return picture;
     }
 
-    document.querySelectorAll('.carousel-container').forEach((carousel, topicIdx) => {
+    document.querySelectorAll('.carousel-container').forEach((carousel) => {
         const topicId = carousel.id.replace('carousel-', '');
         topicStates[topicId] = {
             loading: false,
-            offset: carousel.children.length - 1, // initial loaded
+            offset: carousel.children.length, // articles loaded server-side (before sentinel is added)
             done: false,
             topicId: carousel.getAttribute('data-topic-id'),
         };
@@ -321,10 +324,10 @@ function buildSources(filename, breakpoints, scales, imageBase) {
         const fade = carousel.parentElement.querySelector('.carousel-fade-right');
         function updateFade() {
             const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-            if (carousel.scrollLeft >= maxScroll - 2) {
-                if (fade) fade.classList.remove('hide'); // show at end
+            if (maxScroll <= 0 || carousel.scrollLeft >= maxScroll - 4) {
+                if (fade) fade.classList.remove('hide');
             } else {
-                if (fade) fade.classList.add('hide'); // hide otherwise
+                if (fade) fade.classList.add('hide');
             }
         }
         carousel.addEventListener('scroll', updateFade);
@@ -338,7 +341,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                 const maxScroll = carousel.scrollWidth - carousel.clientWidth;
                 if (
                     (carousel.scrollLeft === 0 && event.deltaX < 0) ||
-                    (carousel.scrollLeft === maxScroll && event.deltaX > 0)
+                    (carousel.scrollLeft >= maxScroll && event.deltaX > 0)
                 ) {
                     event.preventDefault();
                 }
@@ -346,87 +349,90 @@ function buildSources(filename, breakpoints, scales, imageBase) {
             { passive: false }
         );
 
-        // Load more articles when scrolled to end
-        carousel.addEventListener('scroll', async () => {
-            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-            if (
-                carousel.scrollLeft >= maxScroll - 2 &&
-                !topicStates[topicId].loading &&
-                !topicStates[topicId].done
-            ) {
-                topicStates[topicId].loading = true;
-                // Add spinner cards
-                for (let i = 0; i < BATCH_SIZE; i++) {
-                    const spinnerCard = document.createElement('a');
-                    spinnerCard.className =
+        async function loadMore() {
+            if (topicStates[topicId].loading || topicStates[topicId].done) return;
+            topicStates[topicId].loading = true;
+
+            // Add spinner cards
+            const spinners: HTMLElement[] = [];
+            for (let i = 0; i < BATCH_SIZE; i++) {
+                const spinnerCard = document.createElement('div');
+                spinnerCard.className = 'bg-white flex-shrink-0 w-80';
+                spinnerCard.innerHTML = `<div style='height:192px;width:100%;display:flex;align-items:center;justify-content:center;'>${spinnerSVG}</div><div class='p-6'></div>`;
+                carousel.appendChild(spinnerCard);
+                spinners.push(spinnerCard);
+            }
+
+            await new Promise((r) => setTimeout(r, 300));
+
+            const nextArticles = await fetchNextArticles(
+                topicStates[topicId].topicId,
+                topicStates[topicId].offset,
+                BATCH_SIZE
+            );
+
+            // Remove spinners
+            spinners.forEach((s) => s.remove());
+
+            if (nextArticles === null) {
+                // Network/server error — don't set done, just release the lock so scroll can retry
+            } else if (nextArticles.length === 0) {
+                topicStates[topicId].done = true;
+            } else {
+                nextArticles.forEach((article) => {
+                    const card = document.createElement('a');
+                    card.href = `/blog/${article.slug}`;
+                    card.className =
                         'bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block';
-                    spinnerCard.style.textDecoration = 'none';
-                    spinnerCard.innerHTML = `<div style='height:192px;width:100%;display:flex;align-items:center;justify-content:center;'>${spinnerSVG}</div><div class='p-6'></div>`;
-                    carousel.appendChild(spinnerCard);
-                }
-                // Spinner delay flag (default true)
-                const SHOW_SPINNER_DELAY = true;
-                if (SHOW_SPINNER_DELAY) {
-                    await new Promise((r) => setTimeout(r, 300));
-                }
-                // Fetch next articles
-                const nextArticles = await fetchNextArticles(
-                    topicStates[topicId].topicId,
-                    topicStates[topicId].offset + 1,
-                    BATCH_SIZE
-                );
+                    card.style.textDecoration = 'none';
 
-                // Remove spinner cards
-                for (let i = 0; i < BATCH_SIZE; i++) {
-                    carousel.removeChild(carousel.lastChild);
-                }
+                    const imgSrc = article.image
+                        ? `/assets/images/blog/resized/${
+                            article.image
+                                .replace(/^.*\//, '')
+                                .replace(/\.[^.]+$/, '')
+                        }`
+                        : '';
 
-                if (nextArticles.length === 0) {
-                    topicStates[topicId].done = true;
-                } else {
-                    nextArticles.forEach((article) => {
-                        const card = document.createElement('a');
-                        card.href = `/blog/${article.slug}`;
-                        card.className =
-                            'bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block';
-                        card.style.textDecoration = 'none';
-
-                        const imgSrc = article.image
-                            ? `/assets/images/blog/resized/${
-                                article.image
-                                    .replace(/^.*\//, '')      // remove path anterior
-                                    .replace(/\.[^.]+$/, '')    // remove a extensão
-                            }`
-                            : 'https://via.placeholder.com/400x250';
-
-                        const img = createResponsiveImageMinimal({
-                            imagePath: imgSrc,
-                            breakpoints: [608, 320],
-                            scales: [1, 2],
-                            types: ['jpeg', 'webp'],
-                            alt: article.slug,
-                            className: 'w-full aspect-[1.67] object-cover',
-                            priority: false,
-                            sizes: "(max-width: 1023px) 320px, 608px",
-                            width: null,
-                            height: null,
-                            blurDataURL: article.blurDataURL || '',
-                        });
-
-                        card.appendChild(img);
-                        const infoDiv = document.createElement('div');
-                        infoDiv.className = 'p-6';
-                        infoDiv.innerHTML = `
-                            <h3 class='text-xl font-semibold mb-2'>${article.title}</h3>
-                            <p class='text-gray-600 mb-4'>${article.content_html}</p>
-                        `;
-                        card.appendChild(infoDiv);
-                        carousel.appendChild(card);
+                    const img = createResponsiveImageMinimal({
+                        imagePath: imgSrc,
+                        breakpoints: [608, 320],
+                        scales: [1, 2],
+                        types: ['jpeg', 'webp'],
+                        alt: article.slug,
+                        className: 'w-full aspect-[1.67] object-cover',
+                        priority: false,
+                        sizes: '(max-width: 1023px) 320px, 608px',
+                        width: null,
+                        height: null,
+                        blurDataURL: article.blurDataURL || '',
                     });
-                    topicStates[topicId].offset += nextArticles.length;
-                    // showSpinners();
-                }
-                topicStates[topicId].loading = false;
+
+                    card.appendChild(img);
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'p-6';
+                    infoDiv.innerHTML = `
+                        <h3 class='text-xl font-semibold mb-2'>${article.title}</h3>
+                        <p class='text-gray-600 mb-4'>${article.content_html}</p>
+                    `;
+                    card.appendChild(infoDiv);
+                    carousel.appendChild(card);
+                });
+
+                topicStates[topicId].offset += nextArticles.length;
+            }
+
+            topicStates[topicId].loading = false;
+        }
+
+        // Scroll-based trigger: fires when within 2 card-widths (640px) of the end.
+        // This is more reliable than IntersectionObserver with a horizontal root,
+        // which does not support horizontal rootMargin in browsers.
+        carousel.addEventListener('scroll', () => {
+            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+            const threshold = 640; // ~2 cards ahead
+            if (maxScroll > 0 && carousel.scrollLeft >= maxScroll - threshold) {
+                loadMore();
             }
         });
     });
