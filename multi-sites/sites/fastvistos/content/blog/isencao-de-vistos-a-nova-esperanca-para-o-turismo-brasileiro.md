@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__viagens-selos-aventuras.webp"
 type: "public"
 published: true
-wordCount: "583"
+wordCount: "573"
 ---
 
-# Isenção de Vistos: A Nova Esperança para o Turismo Brasileiro
 
 A Comissão de Relações Exteriores e de Defesa Nacional da Câmara dos Deputados está movimentando o cenário turístico brasileiro ao aprovar a isenção de vistos para turistas dos Estados Unidos, Canadá e Austrália. A medida representa uma tentativa estratégica de retomar o fluxo de visitantes internacionais, que sofreu um impacto significativo com a reintrodução de vistos a partir de 2023.
 

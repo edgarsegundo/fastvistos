@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "489"
+wordCount: "480"
 ---
 
-# Entendendo a Atual Situação dos Vistos para os EUA
 
 ## Cenário Atual dos Vistos para Brasileiros
 

@@ -9,10 +9,9 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__homem-coleta-biometria-consulado.webp"
 type: "public"
 published: true
-wordCount: "561"
+wordCount: "551"
 ---
 
-# Coleta de Dados Biométricos: Novas Diretrizes para Estrangeiros nos EUA
 
 A partir de 26 de dezembro de 2025, as regras de imigração dos Estados Unidos passarão por uma significativa atualização, resultando na coleta sistemática de dados biométricos de todos os estrangeiros que adentram ou saem do país. Esta medida abrange tanto os visitantes quanto os residentes permanentes, visando reforçar a segurança nacional e aprimorar o controle fronteiriço.
 

@@ -9,10 +9,9 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__passaporte-com-passagens-em-um-fundo-azul.webp"
 type: "public"
 published: true
-wordCount: "513"
+wordCount: "502"
 ---
 
-# A Verdade sobre a Compra de Passagens para o Visto Americano
 
 ## A Importância do Planejamento
 

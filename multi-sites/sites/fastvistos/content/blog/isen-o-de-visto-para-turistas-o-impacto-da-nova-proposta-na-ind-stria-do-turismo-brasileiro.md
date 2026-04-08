@@ -9,10 +9,8 @@ topicSlug: "dicas-sobre-viagem"
 image: "/assets/images/blog/fastvistos__viagens-selos-aventuras.webp"
 type: "public"
 published: true
-wordCount: "528"
+wordCount: "513"
 ---
-
-# Isenção de Visto para Turistas: O Impacto da Nova Proposta na Indústria do Turismo Brasileiro
 
 Recentemente, a Comissão de Relações Exteriores e de Defesa Nacional da Câmara dos Deputados do Brasil aprovou o Projeto de Decreto Legislativo 20623, que propõe a isenção de visto para turistas da Austrália, Canadá e Estados Unidos. Esta iniciativa visa revogar a exigência de vistos que foi reintroduzida nos últimos anos, buscando revitalizar o turismo no país e impulsionar a economia.
 

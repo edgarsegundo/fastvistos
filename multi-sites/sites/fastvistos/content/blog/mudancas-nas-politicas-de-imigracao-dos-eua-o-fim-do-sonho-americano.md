@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__pessoa-consultando-aplicacao-visto-americano-com-formulario-de-aplicacao.webp"
 type: "public"
 published: true
-wordCount: "607"
+wordCount: "595"
 ---
 
-# Mudanças nas Políticas de Imigração dos EUA: O Fim do Sonho Americano?
 
 ## O Fascínio pelo Sonho Americano
 

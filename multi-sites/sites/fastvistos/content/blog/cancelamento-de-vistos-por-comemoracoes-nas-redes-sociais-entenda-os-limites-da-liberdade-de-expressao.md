@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__upload.webp"
 type: "public"
 published: true
-wordCount: "521"
+wordCount: "506"
 ---
 
-# Cancelamento de Vistos por Comemorações nas Redes Sociais: Entenda os Limites da Liberdade de Expressão
 
 Recentemente, o governo dos Estados Unidos tomou a controversa decisão de revogar vistos de cidadãos de diversos países que comemoraram a morte de um ativista conservador nas redes sociais. Este acontecimento trouxe à tona questões importantes sobre liberdade de expressão e as políticas de imigração norte-americanas.
 

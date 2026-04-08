@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__aplicacao-etias-para-entrar-na-europa.webp"
 type: "public"
 published: true
-wordCount: "614"
+wordCount: "603"
 ---
 
-# ETIAS: O Novo Sistema de Autorização de Viagem para a Europa
 
 Viajar para a Europa está prestes a se tornar um pouco mais complexo com a implementação do ETIAS, um sistema de autorização de viagem que será exigido de brasileiros e cidadãos de outros países que não necessitam de visto.
 

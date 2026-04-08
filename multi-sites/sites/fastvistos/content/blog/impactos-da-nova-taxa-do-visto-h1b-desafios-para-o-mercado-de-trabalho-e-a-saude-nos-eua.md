@@ -9,10 +9,9 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "581"
+wordCount: "563"
 ---
 
-# Impactos da Nova Taxa do Visto H1B: Desafios para o Mercado de Trabalho e a Saúde nos EUA
 
 Nos últimos meses, uma nova medida relacionada ao visto H1B tem gerado polêmica e preocupação entre empregadores e instituições dependentes de mão de obra especializada nos Estados Unidos. A nova taxa única de US$ 100 mil estabelecida pelo governo federal, aplicável apenas a novas inscrições, está prevista para afetar a maneira como empresas e organizações, especialmente em áreas críticas como a saúde, operam.
 

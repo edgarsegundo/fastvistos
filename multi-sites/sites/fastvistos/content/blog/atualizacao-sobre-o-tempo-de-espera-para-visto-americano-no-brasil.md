@@ -9,10 +9,8 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__revistadoturismo__2147838893.jpg"
 type: "public"
 published: true
-wordCount: "408"
+wordCount: "397"
 ---
-
-# Atualização sobre o Tempo de Espera para Visto Americano no Brasil
 
 ## Cenário Atual
 

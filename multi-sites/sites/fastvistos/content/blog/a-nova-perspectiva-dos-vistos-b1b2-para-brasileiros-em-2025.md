@@ -9,10 +9,8 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__mulher-com-um-passaporte-festejando-a-conquista-do-visto.webp"
 type: "public"
 published: true
-wordCount: "458"
+wordCount: "448"
 ---
-
-# A Nova Perspectiva dos Vistos B1B2 para Brasileiros em 2026
 
 ## Contexto Atual
 

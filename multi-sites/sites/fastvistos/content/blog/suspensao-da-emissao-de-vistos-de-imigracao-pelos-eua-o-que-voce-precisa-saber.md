@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "492"
+wordCount: "478"
 ---
 
-# Suspensão da Emissão de Vistos de Imigração pelos EUA: O Que Você Precisa Saber
 
 ## Contexto da Medida
 

@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "421"
+wordCount: "412"
 ---
 
-# Restrições de Entrada nos EUA: Novas Medidas e Implicações
 
 ## Introdução às Novas Restrições de Entrada
 

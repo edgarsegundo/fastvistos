@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__nova-diretriz-dos-eua-pode-restringir-vistos-a-estrangeiros.webp"
 type: "public"
 published: true
-wordCount: "522"
+wordCount: "514"
 ---
 
-# Mudanças Propostas nas Entradas de Turistas nos EUA
 
 ## Nova Proposta de Verificação de Redes Sociais
 Recentemente, a Alfândega e Proteção de Fronteiras dos Estados Unidos (CBP) apresentou uma proposta que pode alterar significativamente o processo de entrada de turistas no país. O plano sugere que todos os visitantes estrangeiros, independentemente da necessidade de visto, sejam obrigados a compartilhar informações sobre suas contas em redes sociais, abrangendo um período de cinco anos.

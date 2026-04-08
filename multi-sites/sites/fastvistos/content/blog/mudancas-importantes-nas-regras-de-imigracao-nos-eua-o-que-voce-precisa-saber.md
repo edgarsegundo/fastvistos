@@ -9,10 +9,8 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "614"
+wordCount: "601"
 ---
-
-# Mudanças Importantes nas Regras de Imigração nos EUA: O Que Você Precisa Saber
 
 Recentemente, o governo dos Estados Unidos anunciou alterações significativas nas regras de imigração que afetam a entrada e a saída de estrangeiros do país. Essas medidas visam aumentar a segurança e a eficiência na fiscalização de fronteiras, implicando mudanças que exigem atenção especial por parte dos viajantes. Vamos explorar essas novas diretrizes e seu impacto, especialmente para brasileiros.
 

@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__mulher-olhando-o-celular-e-segurando-um-passaporte.webp"
 type: "public"
 published: true
-wordCount: "628"
+wordCount: "618"
 ---
 
-# Overstay nos EUA: Entenda as Consequências e Como se Proteger
 
 ## O que é Overstay?
 

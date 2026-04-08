@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__aplicacao-etias-para-entrar-na-europa.webp"
 type: "public"
 published: true
-wordCount: "632"
+wordCount: "620"
 ---
 
-# Como Viajar para os Estados Unidos sem Visto: O Visa Waiver Program
 
 Viajar para os Estados Unidos pode ser um desejo de muitos, seja para turismo, negócios ou até tratamentos médicos. Para facilitar o acesso, o governo americano criou o Visa Waiver Program (VWP), um programa que permite a entrada de cidadãos de certos países sem a necessidade de um visto tradicional. Neste artigo, vamos explorar como funciona esse programa, quem pode se beneficiar e quais são os requisitos a serem cumpridos.
 

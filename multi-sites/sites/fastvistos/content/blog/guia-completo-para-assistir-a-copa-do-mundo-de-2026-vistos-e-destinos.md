@@ -9,10 +9,8 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117.png"
 type: "public"
 published: true
-wordCount: "599"
+wordCount: "586"
 ---
-
-# Guia Completo para Assistir à Copa do Mundo de 2026: Vistos e Destinos
 
 A Copa do Mundo de 2026 está prestes a acontecer e promete ser uma edição memorável, sendo a primeira a ser disputada em três países: Estados Unidos, Canadá e México. Com jogos marcados para o período de 11 de junho a 19 de julho, os torcedores já se preparam para essa grandiosa celebração do futebol. Este guia irá ajudá-lo a entender como obter os vistos necessários e quais cidades explorar.
 

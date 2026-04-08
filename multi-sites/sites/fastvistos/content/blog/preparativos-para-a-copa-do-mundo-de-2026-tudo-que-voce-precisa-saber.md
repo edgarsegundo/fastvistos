@@ -9,10 +9,8 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117_jceWdzy.png"
 type: "public"
 published: true
-wordCount: "633"
+wordCount: "620"
 ---
-
-# Preparativos para a Copa do Mundo de 2026: Tudo Que Você Precisa Saber
 
 A Copa do Mundo de Futebol de 2026 promete ser um evento histórico, já que será realizado em três países simultaneamente: Estados Unidos, Canadá e México. Essa mudança significativa atrai a atenção de torcedores de todo o mundo, especialmente brasileiros que planejam assistir aos jogos. Neste cenário, é essencial entender os requisitos de viagem e como se preparar adequadamente.
 

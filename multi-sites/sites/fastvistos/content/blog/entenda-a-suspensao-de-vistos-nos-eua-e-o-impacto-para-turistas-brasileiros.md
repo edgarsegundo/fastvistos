@@ -9,10 +9,9 @@ topicSlug: "dicas-sobre-viagem"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "583"
+wordCount: "570"
 ---
 
-# Entenda a Suspensão de Vistos nos EUA e o Impacto para Turistas Brasileiros
 
 Nos últimos dias, a decisão do governo dos Estados Unidos em suspender, por tempo indeterminado, a emissão de vistos de imigrante para 75 países, incluindo o Brasil, gerou um aumento significativo na procura por informações por parte dos viajantes. Embora essa medida tenha gerado incertezas, as agências de viagem e especialistas ressaltam que a emissão de vistos temporários para turismo, negócios e estudos continua a ocorrer normalmente.
 

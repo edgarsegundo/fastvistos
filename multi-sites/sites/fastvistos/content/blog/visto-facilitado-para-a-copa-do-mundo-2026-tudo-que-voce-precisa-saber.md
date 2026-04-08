@@ -9,10 +9,8 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__pessoas-de-diversos-paises-assistindo-a-copa-do-mundo.webp"
 type: "public"
 published: true
-wordCount: "474"
+wordCount: "466"
 ---
-
-# Visto Facilitado para a Copa do Mundo 2026
 
 ## O Que Mudou?
 

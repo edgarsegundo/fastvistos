@@ -9,10 +9,8 @@ topicSlug: "dicas-sobre-viagem"
 image: "/assets/images/blog/fastvistos__homem-sentado-na-area-de-embarque-no-aeroporto-esperando-voo.webp"
 type: "public"
 published: true
-wordCount: "615"
+wordCount: "606"
 ---
-
-# Direitos dos Passageiros Aéreos no Brasil: Como Se Proteger
 
 Viajar de avião é uma experiência que, embora emocionante, pode trazer surpresas indesejadas, como atrasos e cancelamentos. Neste artigo, vamos explorar os direitos dos passageiros aéreos no Brasil e como você pode agir para garantir que seus direitos sejam respeitados.
 

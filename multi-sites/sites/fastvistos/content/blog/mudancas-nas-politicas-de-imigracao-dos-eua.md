@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "512"
+wordCount: "505"
 ---
 
-# Mudanças nas Políticas de Imigração dos EUA
 
 ## Uma Nova Era de Restrições
 

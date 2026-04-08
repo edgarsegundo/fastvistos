@@ -9,10 +9,9 @@ topicSlug: "dicas-sobre-o-visto-americano"
 image: "/assets/images/blog/fastvistos__passaporte-com-passagens-em-um-fundo-azul.webp"
 type: "public"
 published: true
-wordCount: "668"
+wordCount: "656"
 ---
 
-# Impactos das Novas Políticas de Visto dos EUA na Economia e Imigração
 
 As recentes alterações nas política de vistos dos Estados Unidos, introduzidas pela administração Trump, levantam preocupações profundas sobre as suas repercussões econômicas e sociais. Desde o anúncio em agosto que propõe a revisão de vistos já concedidos e a implementação de novas regras até 2025, os efeitos começam a ser sentidos de maneira significativa.
 

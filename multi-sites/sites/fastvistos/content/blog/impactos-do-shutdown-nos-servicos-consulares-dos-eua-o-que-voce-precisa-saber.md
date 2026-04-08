@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__documento-visto-americano.webp"
 type: "public"
 published: true
-wordCount: "638"
+wordCount: "625"
 ---
 
-# Impactos do Shutdown nos Serviços Consulares dos EUA: O Que Você Precisa Saber
 
 Após 43 dias de paralisação, o governo dos Estados Unidos reabriu suas atividades, encerrando um dos shutdowns mais longos da história. Essa situação gerou muitas dúvidas entre aqueles que estão no processo de solicitação de vistos ou com viagens programadas. Mas o que realmente mudou com o fim dessa interrupção?
 

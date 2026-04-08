@@ -9,10 +9,9 @@ topicSlug: "noticias"
 image: "/assets/images/blog/fastvistos__upload.webp"
 type: "public"
 published: true
-wordCount: "588"
+wordCount: "578"
 ---
 
-# Suspensão de Vistos de Imigração: Impactos e Repercussões para Brasileiros
 
 ## Um Golpe Para Quem Busca Novos Horizontes
 
