@@ -196,12 +196,12 @@ app.post('/publish-section', async (req, res) => {
         //     console.warn('No matching section found for updatableUuid:', updatableUuid);
         // }
 
-        // Now run `npm run build:p2digital` to regenerate the site
+        // Now run `npm run build:fastvistos` to regenerate the site
         const { exec } = await import('child_process');
         function runBuild() {
             return new Promise((resolve, reject) => {
                 exec(
-                    'npm run build:p2digital',
+                    'npm run build:fastvistos',
                     {
                         cwd: process.cwd(),
                         env: process.env,

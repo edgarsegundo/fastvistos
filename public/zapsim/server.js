@@ -33,7 +33,7 @@ app.post('/send-message', (req, res) => {
 // Proxy endpoint for WhatsApp webhook
 app.post('/proxy-whatsapp', async (req, res) => {
   try {
-    let url = 'https://emprego.p2digital.com.br/api/candidateprofile/whatsapp-webhook/'
+    let url = 'https://emprego.fastvistos.com.br/api/candidateprofile/whatsapp-webhook/'
     url = 'http://127.0.0.1:8000/api/candidateprofile/whatsapp-webhook/'
     const response = await fetch(url, {
       method: 'POST',

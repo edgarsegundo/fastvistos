@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://zapsim.p2digital.com.br/sitemap-index.xml
+Sitemap: https://zapsim.fastvistos.com.br/sitemap-index.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1

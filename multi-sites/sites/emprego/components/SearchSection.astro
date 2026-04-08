@@ -69,7 +69,7 @@
     // Fetch posts from API
     async function fetchCandidates(query: string, offset: number = 0, limit: number = pageSize) {
         try {
-            const url = `https://emprego.p2digital.com.br/api/posts/search/?q=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`;
+            const url = `https://emprego.fastvistos.com.br/api/posts/search/?q=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`;
             const response = await fetch(url);
             
             if (!response.ok) {

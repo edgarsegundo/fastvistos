@@ -11,8 +11,6 @@ def create_app():
         "https://www.fastvistos.tur.br",
         "https://fastvistos.com.br",
         "https://www.fastvistos.com.br",
-        "https://ideas.p2digital.com.br",
-        "https://adm.p2digital.com.br"
     ])    
 
     @app.before_serving

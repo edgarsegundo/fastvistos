@@ -97,7 +97,7 @@ show_usage() {
     echo ""
     echo "Examples:"
     echo "  $0 fastvistos"
-    echo "  $0 p2digital"
+    echo "  $0 centraldevistos"
     echo "  $0  (interactive mode)"
     echo ""
 }

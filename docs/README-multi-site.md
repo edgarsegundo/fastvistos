@@ -121,7 +121,7 @@ node deploy-site.js
 
 # Direct deployment by site name
 node deploy-site.js fastvistos
-./deploy-site.sh p2digital
+./deploy-site.sh fastvistos
 
 # Build and deploy workflow
 npm run build:fastvistos
@@ -153,7 +153,6 @@ node deploy-site.js --help
 Sites are **automatically detected** from your `./dist/` folder. Any site you build will be available for deployment:
 
 - `fastvistos` → `fastvistos.com` (`/var/www/fastvistos`)
-- `p2digital` → `p2digital.com` (`/var/www/p2digital`)
 - Any new site you create → `sitename.com` (`/var/www/sitename`)
 
 > **Note:** No configuration needed! Sites are discovered automatically when you build them.
@@ -173,8 +172,8 @@ rsync: [Receiver] mkdir "/var/www/sitename" failed: Permission denied (13)
 ssh edgar@72.60.57.150
 
 # Create the directory with proper permissions
-sudo mkdir -p /var/www/p2digital
-sudo chown edgar:edgar /var/www/p2digital
+sudo mkdir -p /var/www/fastvistos
+sudo chown edgar:edgar /var/www/fastvistos
 
 # Or for FastVistos
 sudo mkdir -p /var/www/fastvistos

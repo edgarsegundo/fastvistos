@@ -21,7 +21,7 @@ show_usage() {
     echo -e "${YELLOW}Usage: $0 <siteid>${NC}"
     echo ""
     echo "Example: $0 fastvistos"
-    echo "         $0 p2digital"
+    echo "         $0 centraldevistos"
     echo ""
 }
 

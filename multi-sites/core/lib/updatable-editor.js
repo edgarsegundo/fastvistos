@@ -368,7 +368,7 @@
             });
 
             async function deleteSelectedVersion(id) {
-                const url = `https://p2digital.com.br/msitesapp/api/page-section-version?id=${encodeURIComponent(id)}`;
+                const url = `https://fastvistos.com.br/msitesapp/api/page-section-version?id=${encodeURIComponent(id)}`;
                 const resp = await fetch(url, { method: 'DELETE' });
                 const data = await resp.json();
                 return data;
@@ -508,7 +508,7 @@
                 state.sectionAttributes.businessId
             ) {
                 try {
-                    const url = `https://p2digital.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(state.sectionAttributes.updatableSectionUuid)}&business-id=${encodeURIComponent(state.sectionAttributes.businessId)}`;
+                    const url = `https://fastvistos.com.br/msitesapp/api/page-section-versions?updatable-section-uuid=${encodeURIComponent(state.sectionAttributes.updatableSectionUuid)}&business-id=${encodeURIComponent(state.sectionAttributes.businessId)}`;
                     const resp = await fetch(url);
                     const data = await resp.json();
                     // Expecting { list: [...], active_version: { id, file_content } }
@@ -588,7 +588,7 @@
 
                         async function updateTextarea() {
                             const selected = selectElement.options[selectElement.selectedIndex];
-                            const url = `https://p2digital.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(state.sectionAttributes.siteId)}&id=${encodeURIComponent(selected.value)}`;
+                            const url = `https://fastvistos.com.br/msitesapp/api/page-section-version?site-id=${encodeURIComponent(state.sectionAttributes.siteId)}&id=${encodeURIComponent(selected.value)}`;
                             const resp = await fetch(url);
                             const data = await resp.json();
                             if (data && data.version.file_content) {
@@ -659,7 +659,7 @@
                     });
                     return;
                 }
-                fetch('https://p2digital.com.br/msitesapp/api/webpage-section', {
+                fetch('https://fastvistos.com.br/msitesapp/api/webpage-section', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -721,7 +721,7 @@
                 toggleScreenOverlay(true, 'Salvando...');
                 try {
                     const resp = await fetch(
-                        'https://p2digital.com.br/msitesapp/api/update-section-file-version',
+                        'https://fastvistos.com.br/msitesapp/api/update-section-file-version',
                         {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -781,7 +781,7 @@
                     });
                     return;
                 }
-                fetch('https://p2digital.com.br/msitesapp/api/publish-section', {
+                fetch('https://fastvistos.com.br/msitesapp/api/publish-section', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

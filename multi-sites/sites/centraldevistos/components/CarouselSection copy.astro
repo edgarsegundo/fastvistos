@@ -205,7 +205,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
     // Real endpoint: returns next articles for a topic
     async function fetchNextArticles(topicId, offset, limit) {
         const businessId = window.__BUSINESS_ID__;
-        const url = `https://p2digital.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
+        const url = `https://fastvistos.com.br/msitesapp/api/next-articles?business_id=${encodeURIComponent(businessId)}&blog_topic_id=${encodeURIComponent(topicId)}&offset=${offset}&limit=${limit}`;
         try {
             const res = await fetch(url);
 

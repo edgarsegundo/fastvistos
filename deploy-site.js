@@ -93,7 +93,7 @@ function showUsage() {
     });
     console.log('\nExamples:');
     console.log('  node deploy-site.js fastvistos');
-    console.log('  node deploy-site.js p2digital');
+    console.log('  node deploy-site.js centraldevistos');
     console.log('  node deploy-site.js  (interactive mode)');
     console.log('');
 }
