@@ -96,6 +96,19 @@ function sanitizeFilename(filename) {
         .toLowerCase();
 }
 
+// Sanitize a string for use inside a YAML double-quoted scalar.
+// - Escapes backslashes first (must be first to avoid double-escaping)
+// - Escapes double quotes so YAML parser doesn't terminate the string early
+// - Collapses newlines/carriage returns to a single space
+function sanitizeYamlString(value) {
+    if (!value) return '';
+    return String(value)
+        .replace(/\\/g, '\\\\')  // \ → \\
+        .replace(/"/g, '\\"')    // " → \"
+        .replace(/\r?\n/g, ' ')  // newlines → space
+        .trim();
+}
+
 // Função para remover H1 Markdown do início do conteúdo
 function removeLeadingH1(markdown) {
     if (!markdown) return '';
@@ -130,12 +143,12 @@ function generateMarkdownContent(article) {
 
     // Create frontmatter
     const frontmatter = `---
-title: "${(article.title || '').replace(/"/g, '\"')}"
-description: "${(article.description || '').replace(/"/g, '\"')}"
+title: "${sanitizeYamlString(article.title)}"
+description: "${sanitizeYamlString(article.description)}"
 pubDate: "${publishedDate}"
 updatedDate: "${modifiedDate}"
 slug: "${article.slug}"
-topic: "${(article.blog_topic?.title || '').replace(/"/g, '\"')}"
+topic: "${sanitizeYamlString(article.blog_topic?.title)}"
 topicSlug: "${article.blog_topic?.slug || ''}"
 image: "/assets/images/blog/${article.image && typeof article.image === 'string' ? article.image.replace(/^.*\//, '') : ''}"
 type: "${article.type}"
