@@ -33,19 +33,20 @@ const {
 // console.log('[ResponsiveImage] <img> fallback src:', blurDataURL);
 
 // Fallback = blur (1 só vez, muito leve)
-const fallbackSrc = blurDataURL;
+// Guard: blurDataURL can be undefined/null when DB field is empty — prevents url('undefined') request to /undefined
+const fallbackSrc = blurDataURL || null;
 ---
 
 <picture
     class={`relative block ${className}`}
-    style={`background-image:url('${blurDataURL}'); background-size:cover; background-position:center;`}
+    style={fallbackSrc ? `background-image:url('${fallbackSrc}'); background-size:cover; background-position:center;` : `background-size:cover; background-position:center;`}
 >
     {sources.webp && <source type="image/webp" srcset={sources.webp} sizes={sizes} />}
 
     {sources.jpeg && <source type="image/jpeg" srcset={sources.jpeg} sizes={sizes} />}
 
     <img
-        src={fallbackSrc}
+        src={fallbackSrc ?? undefined}
         alt={alt}
         width={width}
         height={height}

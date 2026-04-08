@@ -24,7 +24,7 @@ export class WebPageService {
      * Create a WebPageSection and a new WebPageSectionVersion atomically.
      * - If the WebPageSection (by webpage, title, updatable_uuid) exists, use it; otherwise, create it.
      * - Then, create a new WebPageSectionVersion with file_path = `${updatableUuid}_${count}`
-     * @param {string} webpageRelativePath - e.g. 'p2digital/pages/index.astro'
+     * @param {string} webpageRelativePath - e.g. 'fastvistos/pages/index.astro'
      * @param {string} title
      * @param {string} updatableUuid
      * @param {string} businessId
