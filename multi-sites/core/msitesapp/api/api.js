@@ -331,6 +331,10 @@ app.delete('/page-section-version', async (req, res) => {
     }
 });
 
+app.get("/test-hello", async (req, res) => {
+    res.json({ message: "Hello, world!" });
+});
+
 app.post('/publish-article', async (req, res) => {
     try {
         const {

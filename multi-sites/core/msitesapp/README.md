@@ -57,3 +57,12 @@ pm2 stop msitesapp
 pm2 delete msitesapp
 pm2 logs msitesapp
 ```
+
+## How to test msitesapp locally to debug
+
+```bash
+npm run build:msitesapp   # só precisa repetir se mudar arquivos em core/lib/
+npm run msitesapp-dev
+
+curl http://localhost:3900/test-hello
+```
