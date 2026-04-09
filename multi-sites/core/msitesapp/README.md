@@ -66,3 +66,18 @@ npm run msitesapp-dev
 
 curl http://localhost:3900/test-hello
 ```
+
+## How to publish in production
+
+```bash
+vedgar
+fast
+./help.sh 
+#==== Main Menu ====
+#1) Publish msitesapp
+#2) Run test-findUnique.js
+#3) Git commit and push
+#...
+#Choose an option: 1
+#Publishing msitesapp...
+```
