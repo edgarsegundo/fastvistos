@@ -1,3 +1,7 @@
+
+// Carrega variáveis de ambiente do arquivo .env
+import dotenv from 'dotenv';
+dotenv.config();
 // To add a new lib, always import fom dist like for example: `../../dist/lib/libname.js`
 
 import rateLimit from 'express-rate-limit';
@@ -12,6 +16,17 @@ const { BlogService } = await import('../../dist/lib/blog-service.js');
 
 import express from 'express';
 import bodyParser from 'body-parser';
+
+// Middleware para autenticação por chave de API
+function apiKeyAuth(req, res, next) {
+    // A chave pode ser passada via header x-api-key ou query param api_key
+    const apiKey = req.header('x-api-key') || req.query.api_key;
+    const validKey = process.env.MYSITESAPP_API_KEY || 'minha-chave-secreta';
+    if (apiKey !== validKey) {
+        return res.status(403).json({ error: 'Acesso negado: chave de API inválida.' });
+    }
+    next();
+}
 
 const app = express();
 
@@ -331,7 +346,8 @@ app.delete('/page-section-version', async (req, res) => {
     }
 });
 
-app.get("/test-hello", async (req, res) => {
+// Endpoint protegido por chave de API
+app.get("/test-hello", apiKeyAuth, async (req, res) => {
     res.json({ message: "Hello, world!" });
 });
 
