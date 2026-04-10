@@ -181,4 +181,27 @@ export class BlogService {
             throw error;
         }
     }
+
+    /**
+     * Busca um blog_topic pelo slug e business_id
+     * @param {string} slug
+     * @param {string} businessId
+     * @returns {Promise<Object|null>} O tópico encontrado ou null
+     */
+    static async getBlogTopicBySlug(slug, businessId) {
+        try {
+            const topic = await prisma.blog_topic.findFirst({
+                where: {
+                    slug,
+                    business_id: businessId,
+                    is_removed: false
+                }
+            });
+            return topic || null;
+        } catch (error) {
+            console.error('Erro ao buscar blog_topic por slug:', error);
+            return null;
+        }
+    }
+
 }

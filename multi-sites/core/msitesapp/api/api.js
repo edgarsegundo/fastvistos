@@ -1,4 +1,3 @@
-
 // Carrega variáveis de ambiente do arquivo .env
 import dotenv from 'dotenv';
 dotenv.config();
@@ -349,6 +348,76 @@ app.delete('/page-section-version', async (req, res) => {
 // Endpoint protegido por chave de API
 app.get("/test-hello", apiKeyAuth, async (req, res) => {
     res.json({ message: "Hello, world!" });
+});
+
+// Endpoint para criar um novo artigo de blog
+app.post('/blog-article', apiKeyAuth, async (req, res) => {
+    try {
+        const {
+            business_id,
+            blog_topic_slug,
+            title,
+            seo_description,
+            show_in_hero,
+            content_md,
+            faq_json,
+            type = 'internal',
+            slug,
+            published,
+            image
+        } = req.body;
+
+        // Validação básica
+        if (!business_id || !blog_topic_slug || !title) {
+            return res.status(400).json({ error: 'business_id, blog_topic_slug e title são obrigatórios.' });
+        }
+
+        // Buscar o id do blog_topic pelo slug
+        let blog_topic_id;
+        try {
+            // Ajuste conforme seu BlogService: deve haver um método para buscar topic por slug
+            const topic = await BlogService.getBlogTopicBySlug(blog_topic_slug, business_id);
+            if (!topic || !topic.id) {
+                return res.status(404).json({ error: 'Blog topic não encontrado para o slug informado.' });
+            }
+            blog_topic_id = topic.id;
+        } catch (err) {
+            return res.status(500).json({ error: 'Erro ao buscar blog topic.', details: err.message });
+        }
+
+        // Validação de type
+        const TYPE_CHOICES = ['internal', 'public', 'restricted'];
+        if (type && !TYPE_CHOICES.includes(type)) {
+            return res.status(400).json({ error: `type deve ser um dos: ${TYPE_CHOICES.join(', ')}` });
+        }
+
+        // Monta objeto para criação
+        const articleData = {
+            business_id,
+            blog_topic_id,
+            title,
+            seo_description,
+            show_in_hero: !!show_in_hero,
+            content_md,
+            faq_json: faq_json || [],
+            type,
+            slug,
+            published: published ? new Date(published) : null,
+            image
+        };
+
+        // Chama o serviço de criação (ajuste conforme seu BlogService)
+        let created;
+        try {
+            created = await BlogService.createBlogArticle(articleData);
+        } catch (err) {
+            return res.status(500).json({ error: 'Erro ao criar artigo.', details: err.message });
+        }
+
+        res.status(201).json({ success: true, article: created });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
 });
 
 app.post('/publish-article', async (req, res) => {
