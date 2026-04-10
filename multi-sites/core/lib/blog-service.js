@@ -59,29 +59,36 @@ export class BlogService {
         try {
             const now = new Date();
             const businessId = data.business_id || this.getBusinessId();
-            const article = await prisma.blog_article.create({
-                data: {
-                    id: data.id,
-                    created: now,
-                    modified: now,
-                    is_removed: false,
-                    title: data.title,
-                    content_md: data.content_md,
-                    type: data.type,
-                    slug: data.slug,
-                    published: data.published,
-                    image: data.image,
-                    business_id: businessId,
-                    blog_topic_id: data.blog_topic_id,
-                    seo_description: data.seo_description,
-                    seo_image_caption: data.seo_image_caption,
-                    seo_image_height: data.seo_image_height,
-                    seo_image_width: data.seo_image_width,
-                    faq_json: [],
-                    most_read: data.most_read ?? false,
-                    show_in_hero: data.show_in_hero ?? false,
-                }
-            });
+            // Garante id válido
+            let id = data.id;
+            if (!id || typeof id !== 'string' || id === 'String') {
+                const crypto = await import('crypto');
+                id = crypto.randomUUID().replace(/-/g, '');
+            }
+            const articleData = {
+                id,
+                created: now,
+                modified: now,
+                is_removed: false,
+                title: data.title,
+                content_md: data.content_md,
+                type: data.type,
+                slug: data.slug,
+                published: data.published,
+                image: data.image,
+                business_id: businessId,
+                blog_topic_id: data.blog_topic_id,
+                seo_description: data.seo_description ?? null,
+                seo_image_caption: data.seo_image_caption ?? null,
+                seo_image_height: data.seo_image_height ?? null,
+                seo_image_width: data.seo_image_width ?? null,
+                faq_json: Array.isArray(data.faq_json) ? data.faq_json : [],
+                most_read: data.most_read ?? false,
+                show_in_hero: data.show_in_hero ?? false,
+            };
+            // Log para debug
+            console.log('[DEBUG] Dados enviados para prisma.blog_article.create:', JSON.stringify(articleData, null, 2));
+            const article = await prisma.blog_article.create({ data: articleData });
             return article;
         } catch (error) {
             console.error('Error creating blog article:', error);
