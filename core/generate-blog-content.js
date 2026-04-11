@@ -53,7 +53,7 @@ function getAvailableSites() {
 
 // Function to ensure content directory exists for a site
 function ensureContentDirectory(siteId) {
-    const contentBlogDir = path.join(__dirname, 'multi-sites', 'sites', siteId, 'content', 'blog');
+    const contentBlogDir = path.join(__dirname, '..', 'multi-sites', 'sites', siteId, 'content', 'blog');
 
     if (!fs.existsSync(contentBlogDir)) {
         fs.mkdirSync(contentBlogDir, { recursive: true });
@@ -67,12 +67,13 @@ function ensureContentDirectory(siteId) {
 function ensureContentConfig(siteId) {
     const srcConfigPath = path.join(
         __dirname,
+        '..',
         'multi-sites',
         'core',
         'lib',
         'content-config-template.ts'
     );
-    const destConfigDir = path.join(__dirname, 'multi-sites', 'sites', siteId, 'content');
+    const destConfigDir = path.join(__dirname, '..', 'multi-sites', 'sites', siteId, 'content');
     const destConfigPath = path.join(destConfigDir, 'config.ts');
 
     if (!fs.existsSync(destConfigDir)) {
