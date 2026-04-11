@@ -9,7 +9,7 @@ fi
 
 # Run these commands locally to generate blog content and download images
 # Generate blog content and download images
-node generate-blog-content.js "$SITEID"
+node core/generate-blog-content.js "$SITEID"
 
 # Download images
 npm run download-images:"$SITEID"

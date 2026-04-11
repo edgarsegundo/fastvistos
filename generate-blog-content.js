@@ -271,10 +271,10 @@ async function main() {
             const availableSites = getAvailableSites();
             console.log('📋 Available sites:', availableSites.join(', '));
             console.log('\n💡 Usage:');
-            console.log('  node generate-blog-content.js <site-id> [--watch]');
-            console.log('  node generate-blog-content.js fastvistos');
-            console.log('  node generate-blog-content.js fastvistos --watch');
-            console.log('  node generate-blog-content.js all  # Generate for all sites');
+            console.log('  node core/generate-blog-content.js <site-id> [--watch]');
+            console.log('  node core/generate-blog-content.js fastvistos');
+            console.log('  node core/generate-blog-content.js fastvistos --watch');
+            console.log('  node core/generate-blog-content.js all  # Generate for all sites');
 
             process.exit(1);
         }

@@ -204,8 +204,7 @@ Generate blog post/articles
 Script to create/generate blog post/articles
 
 ```bash
-node generate-blog-content.js fastvistos     # Generate blog content for specific site
-node generate-blog-advanced.js all           # Generate for all sites with HTML conversion
+node core/generate-blog-content.js fastvistos     # Generate blog content for specific site
 npm run generate-blog                         # Alternative command for content generation
 ```
 
@@ -296,30 +295,15 @@ Generates markdown files from database articles with basic content processing:
 
 ```bash
 # Generate content for specific site
-node generate-blog-content.js fastvistos
-node generate-blog-content.js conceptvistos
-node generate-blog-content.js vibecode
+node core/generate-blog-content.js fastvistos
+node core/generate-blog-content.js conceptvistos
+node core/generate-blog-content.js vibecode
 
 # Generate content for all sites
-node generate-blog-content.js all
+node core/generate-blog-content.js all
 
 # Show help
-node generate-blog-content.js --help
-```
-
-#### **2. Advanced Content Generator** (`generate-blog-advanced.js`)
-
-Enhanced version with HTML-to-Markdown conversion and content prioritization:
-
-```bash
-# Generate content for specific site with HTML conversion
-node generate-blog-advanced.js fastvistos
-
-# Generate content for all sites with advanced processing
-node generate-blog-advanced.js all
-
-# Show help and features
-node generate-blog-advanced.js --help
+node core/generate-blog-content.js --help
 ```
 
 ### **Key Features**
@@ -571,12 +555,6 @@ rm -rf node_modules package-lock.json .astro node_modules/.vite && npm install
 - **Solution**: Verify business_id in site-config.ts matches database records
 - **Debug**: Use `npm run test:blog` to test database connectivity
 
-#### HTML Not Converting to Markdown
-
-- **Symptoms**: Raw HTML appearing in generated markdown
-- **Cause**: Using basic script instead of advanced conversion
-- **Solution**: Use `node generate-blog-advanced.js` for HTML-to-Markdown conversion
-
 ### **Build Issues**
 
 #### Build Fails with Missing Files
@@ -598,7 +576,7 @@ npm run sync-blog
 npm run test:blog
 
 # Regenerate content
-node generate-blog-advanced.js siteid
+node core/generate-blog-content.js siteid
 
 # Create new site properly
 node create-site.js

@@ -23,7 +23,7 @@ echo "===== START DEPLOY: $SITEID at $(date) =====" | tee -a "$LOG_FILE"
 # -------------------------
 
 echo "Generating blog content..." | tee -a "$LOG_FILE"
-if ! node generate-blog-content.js "$SITEID" 2>&1 | tee -a "$LOG_FILE"; then
+if ! node core/generate-blog-content.js "$SITEID" 2>&1 | tee -a "$LOG_FILE"; then
 echo "ERROR: Failed to generate blog content." | tee -a "$LOG_FILE"
 exit 1
 fi
