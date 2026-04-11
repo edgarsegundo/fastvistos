@@ -363,8 +363,15 @@
   // ─── Paste handler ─────────────────────────────────────────────────────────
   function setupPasteHandler() {
     document.addEventListener('paste', (e) => {
-      // Ignore paste inside inputs/textareas (e.g. the MD editor)
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      // Se modal já aberto, só processa o paste se a aba ativa for 'clipboard'
+      const existingModal = document.getElementById('img-insert-modal');
+      if (existingModal) {
+        const activeTab = existingModal.querySelector('.tab.active');
+        if (!activeTab || activeTab.dataset.tab !== 'clipboard') return;
+      }
+
       const items = e.clipboardData && e.clipboardData.items;
       if (!items) return;
       let imageFile = null;
@@ -376,17 +383,28 @@
       }
       if (!imageFile) return;
       e.preventDefault();
+
+      if (existingModal) {
+        // Modal já aberto na aba clipboard: atualiza o preview sem reabrir
+        const wrap = existingModal.querySelector('#modal-preview-clipboard');
+        if (wrap) showFilePreview(imageFile, wrap);
+        // Atualiza currentFile via evento sintético não é possível,
+        // então reabrir o modal é o caminho mais simples
+      }
+
       openModal({ mode: 'clipboard', file: imageFile, altText: SLUG });
     });
   }
 
   // ─── Modal ─────────────────────────────────────────────────────────────────
   function openModal(opts) {
+    console.log('[blog-image-editor] openModal opts:', opts); // ← adicione isso
     closeModal();
     const overlay = document.createElement('div');
     overlay.id = 'img-insert-modal';
 
     const isHeroImageMode = opts.mode === 'hero-image';
+    console.log('[blog-image-editor] isHeroImageMode:', isHeroImageMode); 
     const isPlaceholder = opts.mode === 'placeholder';
     const initialTab = opts.mode === 'url' ? 'url'
       : (opts.mode === 'upload' || opts.mode === 'free') ? 'upload'
@@ -518,8 +536,8 @@
             <label><input type="checkbox" id="adj-grayscale" /> Escala de cinza</label>
           </div>
 
-          <!-- Layout -->
-          <div style="${isHeroImageMode ? 'display:none' : ''}">
+          <!-- Layout (removido do DOM se hero-image) -->
+          <div class="layout-block" style="${isHeroImageMode ? 'display:none' : ''}">
             <div style="font-size:12px;color:#555;margin-bottom:6px">Layout:</div>
             <div class="layout-grid">
               <div class="layout-opt ${!isHeroImageMode ? 'selected' : ''}" data-layout="alone">
@@ -558,6 +576,12 @@
       </div>
     `;
 
+    // Se for hero-image, remova o bloco de layouts do DOM completamente
+    if (isHeroImageMode) {
+      const layoutBlock = overlay.querySelector('.layout-block');
+      if (layoutBlock) layoutBlock.remove();
+      // NÃO precisa reatribuir — a declaração abaixo já cuida disso
+    }
     document.body.appendChild(overlay);
 
     // ── State ──
@@ -709,6 +733,7 @@
     // Layout selector
     overlay.querySelectorAll('.layout-opt').forEach((opt) => {
       opt.addEventListener('click', () => {
+        if (isHeroImageMode) return; // Bloqueia alteração no modo hero
         overlay.querySelectorAll('.layout-opt').forEach((o) => o.classList.remove('selected'));
         opt.classList.add('selected');
         selectedLayout = opt.dataset.layout;
