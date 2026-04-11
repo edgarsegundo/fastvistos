@@ -2,11 +2,11 @@
 title: 'Aprovação de visto americano não assegura mais a entrada: novas regras nos pontos de imigração'
 description: ''
 pubDate: '2026-04-10T17:36:47.000Z'
-updatedDate: '2026-04-11T14:44:53.849Z'
+updatedDate: '2026-04-11T15:29:31.136Z'
 slug: 'visto-americano-nao-garante-entrada-novas-regras-imigracao-eua'
 topic: 'Notícias'
 topicSlug: 'noticias-central'
-image: '/assets/images/blog/'
+image: '/assets/images/blog/centraldevistos__visto-americano-nao-garante-entrada-novas-regras-imigracao-eua-_LIPgaWY.webp'
 type: 'public'
 published: true
 wordCount: '229'
@@ -34,7 +34,7 @@ Brasileiros devem preparar comprovantes de **vínculos fortes** com o país de o
 
 Casos de recusa aumentaram com políticas de controle migratório pós-pandemia, priorizando segurança de fronteiras. Consulte o Visa Navigator da Embaixada para atualizações antes de viajar<a class="cite-ref" href="#fonte-6" data-title="Serviços de vistos dos EUA - Use our new U.S. Visa Wizard!"><sup>[6]</sup></a>.
 
-<!--[[INSERIR IMAGEM: passaporte brasileiro com visto americano carimbado]]-->
+![visto-americano-nao-garante-entrada-novas-regras-imigracao-eua](/assets/images/blog/visto-americano-nao-garante-entrada-novas-regras-imigracao-eua/visto-americano-nao-garante-entrada-novas-regras-imigracao-eua-1775921370379.webp)
 
 ---
 <div class="sources-section">

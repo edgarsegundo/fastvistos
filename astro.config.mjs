@@ -129,7 +129,7 @@ async function loadSiteConfigurations() {
         process.exit(1);
     }
 
-    console.log(`🎯 Loaded ${Object.keys(sites).length} site configurations`);
+    console.log(`🚀 Loaded ${Object.keys(sites).length} site configurations`);
     return sites;
 }
 
@@ -140,7 +140,7 @@ const SITES = await loadSiteConfigurations();
 const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
 const siteConfig = SITES[CURRENT_SITE] || SITES.fastvistos;
 
-console.log('🛑 Astro site URL:', siteConfig.url);
+console.log('🟢 Astro site URL:', siteConfig.url);
 
 // Helper function
 function formatDate(dateString) {
