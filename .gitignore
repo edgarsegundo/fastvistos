@@ -225,3 +225,4 @@ public/**/assets/images/blog/resized/
 *.zip
 
 plane-frames/
+core/.last-run-*.json
