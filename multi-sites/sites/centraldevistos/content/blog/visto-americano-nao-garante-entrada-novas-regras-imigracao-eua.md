@@ -2,7 +2,7 @@
 title: 'Aprovação de visto americano não assegura mais a entrada: novas regras nos pontos de imigração'
 description: ''
 pubDate: '2026-04-10T17:36:47.000Z'
-updatedDate: '2026-04-11T14:07:29.314Z'
+updatedDate: '2026-04-11T14:44:53.849Z'
 slug: 'visto-americano-nao-garante-entrada-novas-regras-imigracao-eua'
 topic: 'Notícias'
 topicSlug: 'noticias-central'
@@ -20,7 +20,7 @@ wordCount: '229'
 
 Brasileiros com **visto americano** válido enfrentam maior risco de recusa na entrada aos Estados Unidos. Oficial de imigração da CBP (Customs and Border Protection) têm autoridade final para decidir a admissão, independentemente da aprovação prévia no consulado<a class="cite-ref" href="#fonte-1" data-title="Visto Americano: como tirar, taxas e curiosidades 2026"><sup>[1]</sup></a><a class="cite-ref" href="#fonte-6" data-title="Serviços de vistos dos EUA - Use our new U.S. Visa Wizard!"><sup>[6]</sup></a>.
 
-Essa prática ganhou destaque com relatos recentes de viajantes barrados em aeroportos como Miami e Nova York, mesmo apresentando vistos B1/B2 recentes. A decisão ocorre na inspeção secundária, onde agentes analisam intenções de viagem em tempo real<a class="cite-ref" href="#fonte-2" data-title="Como tirar o visto americano: taxas e curiosidades – Guia 2024"><sup>[2]</sup></a>.
+Essa prática ganhou destaque com relatos recentes de viajantes barrados em aeroportos como Miami e Nova York, mesmo portando vistos B1/B2 recentes. A decisão ocorre na inspeção secundária, onde agentes analisam intenções de viagem em tempo real<a class="cite-ref" href="#fonte-2" data-title="Como tirar o visto americano: taxas e curiosidades – Guia 2024"><sup>[2]</sup></a>.
 
 <!--[[INSERIR IMAGEM: oficial CBP entrevistando passageiro em aeroporto dos EUA]]-->
 
