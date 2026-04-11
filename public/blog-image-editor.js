@@ -1,5 +1,7 @@
 /**
  * blog-image-editor.js
+ * Developed by Edgar Segundo with the help of Claude AI. 
+ * Claude thread: https://claude.ai/chat/de3b90af-4fe6-460e-91f3-fea34eddaf1a
  * Ferramenta de inserção/edição de imagens em artigos — somente dev local.
  * Injetado condicionalmente pelo [...slug].astro quando import.meta.env.DEV === true.
  *
