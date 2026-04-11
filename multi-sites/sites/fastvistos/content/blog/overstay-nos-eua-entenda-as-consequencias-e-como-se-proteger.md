@@ -5,7 +5,7 @@ pubDate: '2025-11-22T14:26:43.932Z'
 updatedDate: '2025-11-22T14:26:43.932Z'
 slug: 'overstay-nos-eua-entenda-as-consequencias-e-como-se-proteger'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__mulher-olhando-o-celular-e-segurando-um-passaporte.webp'
 type: 'public'
 published: true

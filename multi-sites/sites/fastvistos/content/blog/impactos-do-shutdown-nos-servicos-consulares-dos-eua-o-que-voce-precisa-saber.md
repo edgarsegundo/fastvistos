@@ -5,7 +5,7 @@ pubDate: '2025-11-14T19:01:46.224Z'
 updatedDate: '2025-11-14T19:01:46.224Z'
 slug: 'impactos-do-shutdown-nos-servicos-consulares-dos-eua-o-que-voce-precisa-saber'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
 type: 'public'
 published: true

@@ -5,7 +5,7 @@ pubDate: '2025-11-12T15:07:33.091Z'
 updatedDate: '2025-11-12T15:07:33.092Z'
 slug: 'isencao-de-vistos-a-nova-esperanca-para-o-turismo-brasileiro'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__viagens-selos-aventuras.webp'
 type: 'public'
 published: true

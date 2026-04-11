@@ -5,7 +5,7 @@ pubDate: '2026-01-22T18:07:00.926Z'
 updatedDate: '2026-01-22T18:07:00.926Z'
 slug: 'suspensao-de-vistos-de-imigracao-impactos-e-repercussoes-para-brasileiros'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__upload.webp'
 type: 'public'
 published: true

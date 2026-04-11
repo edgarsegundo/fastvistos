@@ -5,7 +5,7 @@ pubDate: '2026-01-22T17:28:17.000Z'
 updatedDate: '2026-01-22T17:49:47.571Z'
 slug: 'guia-completo-para-assistir-a-copa-do-mundo-de-2026-vistos-e-destinos'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__freepik__the-style-is-candid-image-photography-with-natural__89117.png'
 type: 'public'
 published: true

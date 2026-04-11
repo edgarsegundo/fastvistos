@@ -5,7 +5,7 @@ pubDate: '2025-11-27T16:39:42.000Z'
 updatedDate: '2025-11-28T14:28:06.837Z'
 slug: 'preparacao-eficiente-para-entrevistas-de-visto-americano-como-maximizar-suas-chances-de-aprovacao'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__Cartoon_man_and_robot_sitting_at_laptops_in_workplace_together.jpg'
 type: 'public'
 published: true

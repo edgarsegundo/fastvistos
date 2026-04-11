@@ -5,7 +5,7 @@ pubDate: '2025-12-18T23:11:11.587Z'
 updatedDate: '2025-12-18T23:11:11.587Z'
 slug: 'restricoes-de-entrada-nos-eua-novas-medidas-e-implicacoes'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__documento-visto-americano.webp'
 type: 'public'
 published: true

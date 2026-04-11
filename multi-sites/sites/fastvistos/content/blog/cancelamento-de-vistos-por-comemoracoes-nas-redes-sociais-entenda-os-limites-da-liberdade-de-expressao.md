@@ -5,7 +5,7 @@ pubDate: '2025-12-15T17:35:55.323Z'
 updatedDate: '2025-12-15T17:35:55.324Z'
 slug: 'cancelamento-de-vistos-por-comemoracoes-nas-redes-sociais-entenda-os-limites-da-liberdade-de-expressao'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__upload.webp'
 type: 'public'
 published: true

@@ -5,7 +5,7 @@ pubDate: '2025-11-15T11:07:32.347Z'
 updatedDate: '2025-11-15T11:07:32.347Z'
 slug: 'etias-o-novo-sistema-de-autorizacao-de-viagem-para-a-europa'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__aplicacao-etias-para-entrar-na-europa.webp'
 type: 'public'
 published: true

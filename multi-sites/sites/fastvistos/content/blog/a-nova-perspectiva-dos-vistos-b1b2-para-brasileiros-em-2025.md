@@ -5,7 +5,7 @@ pubDate: '2026-02-04T18:33:03.000Z'
 updatedDate: '2026-03-14T00:07:44.374Z'
 slug: 'a-nova-perspectiva-dos-vistos-b1b2-para-brasileiros-em-2025'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__mulher-com-um-passaporte-festejando-a-conquista-do-visto.webp'
 type: 'public'
 published: true

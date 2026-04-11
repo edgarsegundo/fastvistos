@@ -5,7 +5,7 @@ pubDate: '2025-11-12T15:05:27.000Z'
 updatedDate: '2025-11-12T15:08:41.801Z'
 slug: 'novas-diretrizes-de-imigracao-dos-eua-um-analise-profunda'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__nova-diretriz-dos-eua-pode-restringir-vistos-a-estrangeiros.webp'
 type: 'public'
 published: true

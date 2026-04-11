@@ -5,7 +5,7 @@ pubDate: '2026-01-29T12:42:51.933Z'
 updatedDate: '2026-01-29T12:42:51.933Z'
 slug: 'mudancas-nas-politicas-de-imigracao-dos-eua-o-fim-do-sonho-americano'
 topic: 'Notícias'
-topicSlug: 'noticias'
+topicSlug: 'noticias-fast'
 image: '/assets/images/blog/fastvistos__pessoa-consultando-aplicacao-visto-americano-com-formulario-de-aplicacao.webp'
 type: 'public'
 published: true
