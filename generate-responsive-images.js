@@ -57,6 +57,7 @@ export class ResponsiveImageProcessor {
         this.types.forEach((t) => (this.index[baseName][t] = []));
 
 
+
         for (const bp of this.breakpoints) {
             for (const scale of this.scales) {
                 const width = bp * scale;
@@ -80,6 +81,7 @@ export class ResponsiveImageProcessor {
                             if (baseStat.mtime <= outStat.mtime) {
                                 // Responsiva está atualizada, registra no index e pula
                                 this.index[baseName][type].push(`${outName} ${width}w`);
+                                console.log(`SKIPPED: ${outName} (${type}, ${width}w) - up-to-date`);
                                 shouldProcess = false;
                             }
                         } catch (err) {
@@ -92,6 +94,7 @@ export class ResponsiveImageProcessor {
 
                     await this.processors[type](image, width, outPath);
                     this.index[baseName][type].push(`${outName} ${width}w`);
+                    console.log(`GENERATED: ${outName} (${type}, ${width}w)`);
                 }
             }
         }
