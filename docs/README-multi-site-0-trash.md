@@ -72,7 +72,6 @@ npm run build:all               # Build all sites
 - **🆕 Site Configuration Helpers**: Split `SiteConfigHelper` utilities into separate file for better organization
 - **🆕 Blog Content Generation**: Two powerful scripts for database-to-markdown content automation:
     - `generate-blog-content.js` - Basic content generation with multi-site support
-    - `generate-blog-advanced.js` - Advanced generation with HTML-to-Markdown conversion
 - **🔧 Business ID Integration**: Proper UUID format handling and site-specific content filtering
 - **✅ Tested & Working**: All scripts tested with real data (5 articles for FastVistos, proper filtering for all sites)
 
@@ -167,9 +166,9 @@ This project implements a **Multi-Site Architecture** using Astro v5.13.5 with c
 
 ```
 fastvistos/
-├── multi-sites/                    # Multi-site architecture root
-│   ├── core/                      # Shared core components and services
-│   │   ├── components/            # Shared JSON-LD SEO components
+├── multi-sites/                        # Multi-site architecture root
+│   ├── core/                           # Shared core logic and services
+│   │   ├── components/                 # Shared JSON-LD SEO components (Schema.org)
 │   │   │   ├── JsonLdArticle.astro
 │   │   │   ├── JsonLdBreadcrumb.astro
 │   │   │   ├── JsonLdLocalBusiness.astro
@@ -177,66 +176,57 @@ fastvistos/
 │   │   │   ├── JsonLdReview.astro
 │   │   │   ├── JsonLdService.astro
 │   │   │   └── JsonLdWebPage.astro
-│   │   ├── layouts/               # Shared layouts
+│   │   ├── layouts/                    # Shared layouts
 │   │   │   └── SharedBlogLayout.astro
-│   │   ├── lib/                   # Core business logic & configuration
-│   │   │   ├── site-config.ts           # 🆕 Site config interface & helpers
-│   │   │   ├── site-config-helper.ts    # 🆕 Site configuration utility functions
-│   │   │   ├── blog-service.ts          # 🆕 Multi-site blog service with business_id filtering
-│   │   │   └── blog-service-integration.test.js # 🆕 Blog service integration tests
-│   │   └── pages/                 # Shared page templates
-│   │       └── blog/              # Blog templates (synced to sites)
-│   │           ├── index.astro    # Blog listing template
-│   │           └── [slug].astro   # Blog article template
-│   └── sites/                     # Site-specific implementations
-│       ├── fastvistos/            # FastVistos site
-│       │   ├── site-config.ts     # 🆕 FastVistos configuration
-│       │   ├── components/        # FastVistos-specific components
-│       │   ├── content/           # Site-specific content
-│       │   │   ├── config.ts      # Content collection schema
-│       │   │   └── blog/          # Markdown articles for FastVistos
-│       │   ├── layouts/           # FastVistos BaseLayout
-│       │   ├── pages/             # FastVistos pages (auto-synced from core)
-│       │   └── content.config.ts  # Astro content configuration
-│       ├── conceptvistos/         # ConceptVistos site
-│       │   ├── site-config.ts     # 🆕 ConceptVistos configuration
-│       │   ├── content/           # Site-specific content
-│       │   │   ├── config.ts      # Content collection schema
-│       │   │   └── blog/          # Markdown articles for ConceptVistos
-│       │   └── ...                # Similar structure
-│       └── vibecode/              # VibeCode site
-│           ├── site-config.ts     # 🆕 VibeCode configuration
-│           └── ...                # Similar structure
-├── public/                  # Site-specific public assets
-│   ├── fastvistos/               # FastVistos assets
-│   ├── conceptvistos/            # ConceptVistos assets
-│   └── vibecode/                 # VibeCode assets
-├── dev-with-sync.js              # 🆕 Development environment with auto-sync
-├── watch-and-sync.js             # 🆕 File watcher for auto-sync
-├── sync-blog.js                  # Template synchronization script
-├── generate-blog-content.js      # 🆕 Basic blog content generator (database → markdown)
-├── generate-blog-advanced.js     # 🆕 Advanced blog content generator with HTML conversion
-└── multi-sites.config.mjs        # Astro multi-site configuration
-```
-
-│ │ ├── layouts/ # ConceptVistos BaseLayout
-│ │ ├── pages/ # ConceptVistos pages
-│ │ └── content.config.ts # Astro content configuration
-│ └── vibecode/ # VibeCode site
-│ ├── content/ # 🆕 Site-specific content
-│ │ ├── config.ts # Content collection schema
-│ │ └── blog/ # Markdown articles for VibeCode
-│ ├── layouts/ # VibeCode BaseLayout
-│ ├── pages/ # VibeCode pages
-│ └── content.config.ts # Astro content configuration
-├── public/ # 🆕 Site-specific public assets
-│ ├── fastvistos/ # FastVistos assets (favicons, images, etc.)
-│ ├── conceptvistos/ # ConceptVistos assets
-│ └── vibecode/ # VibeCode assets
-├── sync-blog.js # 🆕 Blog template synchronization script
-├── multi-sites.config.mjs # Multi-site Astro configuration
-└── package.json # Project dependencies
-
+│   │   ├── lib/                        # Core business logic & config helpers
+│   │   │   ├── site-config.ts
+│   │   │   ├── site-config-helper.ts
+│   │   │   ├── blog-service.ts
+│   │   │   └── blog-service-integration.test.js
+│   │   └── pages/                      # Shared page templates
+│   │       └── blog/
+│   │           ├── index.astro
+│   │           └── [slug].astro
+│   └── sites/                          # Site-specific implementations
+│       ├── fastvistos/
+│       │   ├── site-config.ts
+│       │   ├── components/
+│       │   ├── content/
+│       │   │   ├── config.ts
+│       │   │   └── blog/               # Markdown articles for FastVistos
+│       │   ├── layouts/
+│       │   ├── pages/
+│       │   └── content.config.ts
+│       ├── conceptvistos/
+│       │   ├── site-config.ts
+│       │   ├── content/
+│       │   │   ├── config.ts
+│       │   │   └── blog/
+│       │   └── ...                     # Similar structure
+│       └── vibecode/
+│           ├── site-config.ts
+│           ├── content/
+│           │   ├── config.ts
+│           │   └── blog/
+│           └── ...                     # Similar structure
+├── public/                             # Site-specific public assets
+│   ├── fastvistos/
+│   ├── conceptvistos/
+│   └── vibecode/
+├── dev-with-sync.js                    # Development environment with auto-sync
+├── watch-and-sync.js                   # File watcher for auto-sync
+├── sync-blog.js                        # Template synchronization script
+├── generate-blog-content.js            # Blog content generator (DB → markdown)
+├── multi-sites.config.mjs              # Multi-site Astro configuration
+├── package.json                        # Project dependencies
+├── scripts/                            # Automation and deployment scripts
+├── seo/                                # SEO and structured data tools/prompts
+├── docs/                               # Documentation and guides
+├── image-service/                      # Image processing microservice
+├── test/                               # Test utilities
+├── utils/                              # Utility scripts
+├── prisma/                             # Prisma schema and DB config
+└── public/                             # Shared and site-specific assets
 ````
 
 ## 🌐 Supported Websites

@@ -22,7 +22,7 @@ https://fastvistos.com.br/blog/search?q={search_term_string}/
  npx prisma db pull
  npx prisma generate
 
- node generate-blog-content.js fastvistos
+ node core/generate-blog-content.js fastvistos
  npm run download-images:fastvistos
  npm run build:fastvistos
  node deploy-site.js fastvistos
@@ -32,7 +32,7 @@ https://fastvistos.com.br/blog/search?q={search_term_string}/
 
 - tentar resolver o problemas que lighthouse aponta
 
-- run node generate-blog-content.js fastvistos when running npm run build:fastvistos to avoid errors
+- run node core/generate-blog-content.js fastvistos when running npm run build:fastvistos to avoid errors
 
 - colocar author e foto no final de cada artigo
 
@@ -50,7 +50,7 @@ https://fastvistos.com.br/blog/search?q={search_term_string}/
  ./helper.sh (option 1)
  npx prisma db pull
  npx prisma generate
- node generate-blog-content.js fastvistos
+ node core/generate-blog-content.js fastvistos
  npm run download-images:fastvistos
  npm run build:fastvistos
  node deploy-site.js fastvistos

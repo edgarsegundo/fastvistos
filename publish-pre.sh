@@ -8,7 +8,7 @@ if [ -z "$SITEID" ]; then
 fi
 
 node generate-responsive-images.js "$SITEID"
-node generate-blog-content.js "$SITEID"
+node core/generate-blog-content.js "$SITEID"
 npm run download-images:"$SITEID"
 
 ## Sync site images on VPS
