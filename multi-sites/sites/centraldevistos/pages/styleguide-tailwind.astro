@@ -1,4 +1,7 @@
 ---
+if (import.meta.env.PROD) {
+    throw new Error("Styleguide não deve ser gerado em produção.");
+}
 import PrototypeLayout from '../layouts/PrototypeLayout.astro';
 ---
 <PrototypeLayout>
