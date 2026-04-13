@@ -11,92 +11,89 @@ loadDotenv();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Constants for sitemap
-const DEFAULT_CHANGEFREQ = 'yearly';
-const BLOG_PRIORITY = 0.7;
-const STANDARD_PRIORITY = 1.0;
+// ================================================================
+// Sitemap constants — por tipo de página
+// ================================================================
+const HOME_CHANGEFREQ    = 'weekly';   // home muda com frequência
+const BLOG_CHANGEFREQ    = 'monthly';  // posts ficam estáveis mas podem ser atualizados
+const VISTOS_CHANGEFREQ  = 'monthly';  // regras de visto mudam ocasionalmente
+const DEFAULT_CHANGEFREQ = 'monthly';  // fallback para outras páginas
 
-// Dynamically discover and load site configurations
+const HOME_PRIORITY     = 1.0;
+const STANDARD_PRIORITY = 1.0;
+const BLOG_PRIORITY     = 0.7;
+
+// ================================================================
+// Páginas que nunca devem aparecer no sitemap
+// ================================================================
+const SITEMAP_BLOCKLIST = [
+    'styleguide-tailwind',
+    // adicione outras rotas de dev/admin aqui se necessário
+];
+
+// ================================================================
+// Carrega configurações dos sites dinamicamente
+// ================================================================
 async function loadSiteConfigurations() {
     const sitesDir = join(__dirname, 'multi-sites/sites');
     const sites = {};
 
     try {
-        // Check if sites directory exists
         await fs.access(sitesDir);
         const entries = await fs.readdir(sitesDir, { withFileTypes: true });
 
         for (const entry of entries) {
-            if (entry.isDirectory()) {
-                const siteId = entry.name;
-                const siteConfigPath = join(sitesDir, siteId, 'site-config.ts');
+            if (!entry.isDirectory()) continue;
 
+            const siteId = entry.name;
+            const siteConfigPath = join(sitesDir, siteId, 'site-config.ts');
+
+            try {
+                await fs.access(siteConfigPath);
+
+                let siteConfig;
                 try {
-                    // Check if site-config.ts exists
-                    await fs.access(siteConfigPath);
+                    const siteConfigModule = await import(
+                        `./multi-sites/sites/${siteId}/site-config.ts`
+                    );
+                    siteConfig = siteConfigModule.siteConfig;
+                } catch (importError) {
+                    if (importError.message.includes('Unknown file extension ".ts"')) {
+                        console.log(`⚠️  Using fallback parsing for ${siteId} site config`);
+                        const content = await fs.readFile(siteConfigPath, 'utf-8');
 
-                    let siteConfig;
-                    try {
-                        // Try to import the site configuration
-                        const siteConfigModule = await import(
-                            `./multi-sites/sites/${siteId}/site-config.ts`
-                        );
-                        siteConfig = siteConfigModule.siteConfig;
-                    } catch (importError) {
-                        if (importError.message.includes('Unknown file extension ".ts"')) {
-                            // Fallback: read the file and extract basic info using regex
-                            console.log(`� Using fallback parsing for ${siteId} site config`);
-                            const content = await fs.readFile(siteConfigPath, 'utf-8');
+                        const domainMatch = content.match(/domain:\s*['"`]([^'"`]+)['"`]/);
+                        const nameMatch   = content.match(/(?:name|siteName):\s*['"`]([^'"`]+)['"`]/);
 
-                            // Extract domain and site name using regex
-                            const domainMatch = content.match(/domain:\s*['"`]([^'"`]+)['"`]/);
-                            const nameMatch = content.match(/(?:name|siteName):\s*['"`]([^'"`]+)['"`]/);
-
-                            if (domainMatch && nameMatch) {
-                                siteConfig = {
-                                    domain: domainMatch[1],
-                                    name: nameMatch[1],
-                                    id: siteId,
-                                };
-                            } else {
-                                throw new Error(
-                                    'Could not parse domain and name from site config file'
-                                );
-                            }
+                        if (domainMatch && nameMatch) {
+                            siteConfig = {
+                                domain: domainMatch[1],
+                                name:   nameMatch[1],
+                                id:     siteId,
+                            };
                         } else {
-                            throw importError;
+                            throw new Error('Could not parse domain and name from site config file');
                         }
+                    } else {
+                        throw importError;
                     }
-
-                    // Extract the needed information for Astro config
-                    // site-config.ts uses nested structure: siteConfig.site.domain
-                    // Fallback regex parsing produces flat structure: siteConfig.domain
-                    const domain =
-                        siteConfig.site?.domain || siteConfig.domain;
-                    const siteName =
-                        siteConfig.site?.siteName ||
-                        siteConfig.site?.name ||
-                        siteConfig.name;
-                    const canonical = siteConfig.site?.canonical?.replace(/\/$/, '');
-
-                    sites[siteId] = {
-                        domain: domain,
-                        url: canonical || `https://${domain}`,
-                        name: siteName,
-                        // Store full config for potential future use
-                        fullConfig: siteConfig,
-                    };
-
-                    console.log(
-                        `✅ Loaded configuration for site: ${siteId} (${domain})`
-                    );
-                } catch (error) {
-                    console.warn(
-                        `⚠️  Could not load configuration for site ${siteId}:`,
-                        error.message
-                    );
-                    console.warn(`    Site config path: ${siteConfigPath}`);
                 }
+
+                const domain    = siteConfig.site?.domain   || siteConfig.domain;
+                const siteName  = siteConfig.site?.siteName || siteConfig.site?.name || siteConfig.name;
+                const canonical = siteConfig.site?.canonical?.replace(/\/$/, '');
+
+                sites[siteId] = {
+                    domain,
+                    url: canonical || `https://${domain}`,
+                    name: siteName,
+                    fullConfig: siteConfig,
+                };
+
+                console.log(`✅ Loaded configuration for site: ${siteId} (${domain})`);
+            } catch (error) {
+                console.warn(`⚠️  Could not load configuration for site ${siteId}:`, error.message);
+                console.warn(`    Site config path: ${siteConfigPath}`);
             }
         }
     } catch (error) {
@@ -110,20 +107,16 @@ async function loadSiteConfigurations() {
         process.exit(1);
     }
 
-    // Ensure we found at least one site
     if (Object.keys(sites).length === 0) {
         console.error('❌ No valid site configurations found!');
         console.error('💥 Please ensure sites have valid site-config.ts files');
         console.error(`   Searched in: ${sitesDir}`);
-        console.error('   Available directories:');
         try {
             const entries = await fs.readdir(sitesDir, { withFileTypes: true });
-            entries.forEach((entry) => {
-                console.error(
-                    `     - ${entry.name} (${entry.isDirectory() ? 'directory' : 'file'})`
-                );
+            entries.forEach((e) => {
+                console.error(`     - ${e.name} (${e.isDirectory() ? 'directory' : 'file'})`);
             });
-        } catch (e) {
+        } catch {
             console.error('     Could not list directory contents');
         }
         process.exit(1);
@@ -133,32 +126,66 @@ async function loadSiteConfigurations() {
     return sites;
 }
 
-// Load site configurations
-const SITES = await loadSiteConfigurations();
-
-// Get current site from environment variable or default to fastvistos
+// ================================================================
+// Inicialização
+// ================================================================
+const SITES        = await loadSiteConfigurations();
 const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
-const siteConfig = SITES[CURRENT_SITE] || SITES.fastvistos;
+const siteConfig   = SITES[CURRENT_SITE] || SITES.fastvistos;
 
 console.log('🟢 Astro site URL:', siteConfig.url);
 
-// Helper function
+// ================================================================
+// Helpers
+// ================================================================
+
+/**
+ * Formata uma data para o formato YYYY-MM-DD exigido pelo sitemap.
+ * Se não houver data, retorna null para evitar lastmod falso (data do build).
+ */
 function formatDate(dateString) {
-    return dateString
-        ? new Date(dateString).toISOString().split('T')[0]
-        : new Date().toISOString().split('T')[0];
+    if (!dateString) return null;
+    const d = new Date(dateString);
+    return isNaN(d.getTime()) ? null : d.toISOString().split('T')[0];
 }
 
-// https://astro.build/config
+/**
+ * Determina o changefreq com base no tipo de página.
+ */
+function resolveChangefreq(url, override) {
+    if (override) return override;
+    if (url === siteConfig.url || url === siteConfig.url + '/') return HOME_CHANGEFREQ;
+    if (url.includes('/blog/'))   return BLOG_CHANGEFREQ;
+    if (url.includes('/vistos/')) return VISTOS_CHANGEFREQ;
+    return DEFAULT_CHANGEFREQ;
+}
+
+/**
+ * Determina a priority com base no tipo de página.
+ */
+function resolvePriority(url, override) {
+    if (override !== undefined) return override;
+    if (url === siteConfig.url || url === siteConfig.url + '/') return HOME_PRIORITY;
+    if (url.includes('/blog/')) return BLOG_PRIORITY;
+    return STANDARD_PRIORITY;
+}
+
+/**
+ * Retorna true se a URL deve ser excluída do sitemap.
+ */
+function isBlocked(url) {
+    return SITEMAP_BLOCKLIST.some((blocked) => url.includes(blocked));
+}
+
+// ================================================================
+// Astro config
+// ================================================================
 export default defineConfig({
     site: siteConfig.url,
 
-    // Multi-site configuration - each site has its own source directory
-    srcDir: `./multi-sites/sites/${CURRENT_SITE}`,
+    srcDir:    `./multi-sites/sites/${CURRENT_SITE}`,
     publicDir: `./public/${CURRENT_SITE}`,
-
-    // Multi-site output configuration
-    outDir: `./dist/${CURRENT_SITE}`,
+    outDir:    `./dist/${CURRENT_SITE}`,
 
     integrations: [
         mdx({
@@ -168,23 +195,28 @@ export default defineConfig({
             rehypePlugins: [],
         }),
         sitemap({
+            // Exclui páginas de dev/admin e páginas de outros sites
             filter: (page) => {
-                // Only include pages for current site
+                if (isBlocked(page)) return false;
                 return page.includes(siteConfig.domain) || !page.includes('://');
             },
-            // Serialize each route with custom fields like `lastmod`
-            serialize: ({ url, data }) => {
-                const lastModified = data?.lastModified || data?.frontmatter?.dateModified;
-                const sitemapMeta = data?.frontmatter?.sitemap;
 
-                return {
+            serialize: ({ url, data }) => {
+                const lastModified  = data?.lastModified || data?.frontmatter?.dateModified;
+                const sitemapMeta   = data?.frontmatter?.sitemap;
+                const lastmod       = formatDate(lastModified); // null se não houver data real
+
+                const entry = {
                     url,
-                    lastmod: formatDate(lastModified),
-                    changefreq: sitemapMeta?.changefreq || DEFAULT_CHANGEFREQ,
-                    priority:
-                        sitemapMeta?.priority ||
-                        (url.includes('/blog/') ? BLOG_PRIORITY : STANDARD_PRIORITY),
+                    changefreq: resolveChangefreq(url, sitemapMeta?.changefreq),
+                    priority:   resolvePriority(url, sitemapMeta?.priority),
                 };
+
+                // Só inclui lastmod se houver uma data real — evita enganar o Google
+                // com a data do build em todas as páginas
+                if (lastmod) entry.lastmod = lastmod;
+
+                return entry;
             },
         }),
     ],
@@ -192,25 +224,22 @@ export default defineConfig({
     vite: {
         server: {
             proxy: {
-                // Proxy para o Django no VPS (GET/POST content-md) — somente em dev
                 '/image-editor': {
-                    target: process.env.DJANGO_API_BASE_URL || 'https://sys.fastvistos.com.br',
+                    target:       process.env.DJANGO_API_BASE_URL || 'https://sys.fastvistos.com.br',
                     changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/image-editor/, ''),
+                    secure:       false,
+                    rewrite:      (path) => path.replace(/^\/image-editor/, ''),
                     headers: {
                         'X-API-Key': process.env.DJANGO_MICROSERVICESADM_KEY || '',
                     },
                 },
-                // Proxy para o Image Service local
                 '/image-upload': {
-                    target: process.env.IMAGE_SERVICE_URL || 'http://localhost:8091',
+                    target:       process.env.IMAGE_SERVICE_URL || 'http://localhost:8091',
                     changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/image-upload/, ''),
+                    rewrite:      (path) => path.replace(/^\/image-upload/, ''),
                 },
-                // Proxy para o msitesapp no VPS — save article image fields (dev only)
                 '/article-image': {
-                    target: process.env.API_BASE_URL || 'http://localhost:3000',
+                    target:       process.env.API_BASE_URL || 'http://localhost:3000',
                     changeOrigin: true,
                 },
             },
@@ -221,7 +250,7 @@ export default defineConfig({
                 name: 'sitemap-xml-header',
                 configureServer(server) {
                     server.middlewares.use((req, res, next) => {
-                        if (req.url && req.url.startsWith('/sitemap.')) {
+                        if (req.url?.startsWith('/sitemap.')) {
                             res.setHeader('Content-Type', 'application/xml');
                         }
                         next();
@@ -229,8 +258,6 @@ export default defineConfig({
                 },
             },
             {
-                // Serve shared dev-only scripts from root public/ regardless of per-site publicDir.
-                // Needed because publicDir is set to ./public/{CURRENT_SITE} per site.
                 name: 'shared-dev-scripts',
                 configureServer(server) {
                     server.middlewares.use((req, res, next) => {
@@ -250,47 +277,34 @@ export default defineConfig({
             },
         ],
         define: {
-            // Make site configuration available to client-side code
-            __SITE_CONFIG__: JSON.stringify(siteConfig),
+            __SITE_CONFIG__:  JSON.stringify(siteConfig),
             __CURRENT_SITE__: JSON.stringify(CURRENT_SITE),
         },
         resolve: {
             alias: {
                 '@core': '/multi-sites/core',
                 '@site': `/multi-sites/sites/${CURRENT_SITE}`,
-                '@': `/multi-sites/sites/${CURRENT_SITE}`,
+                '@':     `/multi-sites/sites/${CURRENT_SITE}`,
             },
         },
     },
 
-    // Build configuration for static generation
     output: 'static',
     build: {
-        format: 'directory',
+        format:           'directory',
         inlineStylesheets: 'auto',
     },
 
-    // Server configuration for development
     server: {
         host: true,
-        port: 3000,
+        port: parseInt(process.env.PORT || '3000'),
     },
 
-    // Markdown configuration
     markdown: {
         syntaxHighlight: 'shiki',
         shikiConfig: {
             theme: 'github-dark',
-            wrap: true,
+            wrap:  true,
         },
     },
-
-    // Environment-specific configuration
-    ...(process.env.NODE_ENV === 'development' && {
-        // Development-specific settings
-        server: {
-            host: true,
-            port: parseInt(process.env.PORT || '3000'),
-        },
-    }),
 });
