@@ -168,7 +168,7 @@ function saveLastRunTime(siteId) {
 }
 
 // Main function to generate blog articles for a specific site
-async function generateBlogArticles(siteId, { forceFullRegen = false } = {}) {
+async function generateBlogArticles(siteId, { forceFullRegen = false, slug = null } = {}) {
     try {
         console.log(`🔍 Generating blog content for site: ${siteId}`);
 
@@ -181,6 +181,29 @@ async function generateBlogArticles(siteId, { forceFullRegen = false } = {}) {
 
         const businessIdCleaned = siteConfig.business_id.replace(/-/g, '');
         const now = new Date();
+
+        // Se slug informado, gera apenas um artigo
+        if (slug) {
+            const article = await prisma.blog_article.findFirst({
+                where: {
+                    business_id: businessIdCleaned,
+                    is_removed: false,
+                    published: { lte: now },
+                    slug: slug,
+                },
+                include: { blog_topic: true },
+            });
+            if (!article) {
+                console.log(`❌ Article with slug '${slug}' not found for site '${siteId}'.`);
+                return;
+            }
+            const filename = `${sanitizeFilename(article.slug)}.md`;
+            const filePath = path.join(contentBlogDir, filename);
+            const markdownContent = generateMarkdownContent(article);
+            fs.writeFileSync(filePath, markdownContent, 'utf8');
+            console.log('✅ Generated single article:', filename);
+            return;
+        }
 
         // Melhoria 2: query auxiliar de slugs ativos para diff de disco
         const activeSlugs = await prisma.blog_article.findMany({
