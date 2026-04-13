@@ -47,7 +47,7 @@ const badgeClass = {
         <div class="flex flex-wrap gap-3">
             {countries.map((c) => (
                 <a
-                    href={`/vistos/${c.slug}`}
+                    href={`/vistos/${c.slug}/`}
                     class="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5 text-sm font-medium hover:bg-gray-200 no-underline"
                 >
                     <span>{c.flag}</span>
@@ -174,7 +174,7 @@ const badgeClass = {
                 <div class="flex flex-wrap gap-3 mt-5 justify-start content-start" id="vg-grid">
                     {countries.map((c, i) => (
                         <a
-                            href={`/vistos/${c.slug}`}
+                            href={`/vistos/${c.slug}/`}
                             class="vg-card flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-0 no-underline transition-all hover:bg-white/20 hover:border-white/40 cursor-pointer shadow-sm"
                             data-name={c.name.toLowerCase()}
                             data-type={c.typeCode}
