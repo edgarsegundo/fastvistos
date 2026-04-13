@@ -143,7 +143,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                     >
                         {topic.blog_article.map((article, i) => (
                         <a
-                            href={`/blog/${article.slug}`}
+                            href={`/blog/${article.slug}/`}
                             class="bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block"
                             style="text-decoration: none;"
                         >
@@ -381,7 +381,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
             } else {
                 nextArticles.forEach((article) => {
                     const card = document.createElement('a');
-                    card.href = `/blog/${article.slug}`;
+                    card.href = `/blog/${article.slug}/`;
                     card.className =
                         'bg-white transition-all duration-300 flex-shrink-0 w-80 shadow-none hover:scale-105 rounded-none cursor-pointer block';
                     card.style.textDecoration = 'none';
