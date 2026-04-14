@@ -38,7 +38,7 @@ echo "Restoring and updating code on VPS..." | tee -a "$LOG_FILE"
 ssh "$VPS" "cd $REPO && git fetch origin && git reset --hard origin/main && git clean -fd" 2>&1 | tee -a "$LOG_FILE"
 
 echo "Generating blog content on VPS..." | tee -a "$LOG_FILE"
-ssh "$VPS" "$NODE && cd $REPO && node core/generate-blog-content.js $SITEID --full" 2>&1 | tee -a "$LOG_FILE"
+ssh "$VPS" "$NODE && cd $REPO && node core/generate-blog-content.js $SITEID" 2>&1 | tee -a "$LOG_FILE"
 
 echo "Downloading images on VPS..." | tee -a "$LOG_FILE"
 ssh "$VPS" "$NODE && cd $REPO && npm run download-images:$SITEID" 2>&1 | tee -a "$LOG_FILE"
