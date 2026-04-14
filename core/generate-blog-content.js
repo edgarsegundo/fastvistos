@@ -234,6 +234,7 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
         // Melhoria 3: filtro Prisma por modified via .last-run-*.json
         const lastRun = forceFullRegen ? new Date(0) : getLastRunTime(siteId);
         const isIncremental = lastRun.getTime() > 0;
+        const isFirstRun = lastRun.getTime() === 0;
 
         const articles = await prisma.blog_article.findMany({
             where: {
@@ -267,14 +268,14 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
             const filename = `${sanitizeFilename(article.slug)}.md`;
             const filePath = path.join(contentBlogDir, filename);
 
-            if (forceFullRegen) {
-                // Modo all: sempre gera
+            if (forceFullRegen || isFirstRun) {
+                // Modo full ou primeira execução: sempre gera
                 const markdownContent = generateMarkdownContent(article);
                 fs.writeFileSync(filePath, markdownContent, 'utf8');
                 console.log('✅ Generated:', filename);
                 generatedCount++;
                 continue;
-            }
+            }            
 
             // Modo incremental: só atualiza se arquivo já existe e está desatualizado
             if (fs.existsSync(filePath)) {
@@ -293,25 +294,6 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
                 console.log('🚫 Not present locally, skipping (incremental):', filename);
             }
         }
-
-
-
-
-
-        const articles_ = await prisma.blog_article.findMany({
-            where: {
-                business_id: businessIdCleaned,
-                is_removed: false,
-                slug: 'visto-americano-vencido-risco-deportacao-alexandre-ramagem-eua',
-            },
-            include: { blog_topic: true },
-            orderBy: { published: 'desc' },
-        });
-
-        for (const article of articles_) {
-            console.log(`** ${article.slug} (modified: ${article.modified.toISOString()})`);
-        }
-
 
         // Salva lastRun apenas se chegou até aqui sem exceção
         saveLastRunTime(siteId);
