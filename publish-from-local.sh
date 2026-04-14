@@ -3,9 +3,10 @@
 set -euo pipefail
 
 SITEID="$1"
+FULL_OR_SLUG="${2:-}"
 
 if [ -z "$SITEID" ]; then
-  echo "Usage: $0 <siteid>"
+  echo "Usage: $0 <siteid> [all|slug]"
   exit 1
 fi
 
@@ -38,7 +39,13 @@ echo "Restoring and updating code on VPS..." | tee -a "$LOG_FILE"
 ssh "$VPS" "cd $REPO && git fetch origin && git reset --hard origin/main && git clean -fd" 2>&1 | tee -a "$LOG_FILE"
 
 echo "Generating blog content on VPS..." | tee -a "$LOG_FILE"
-ssh "$VPS" "$NODE && cd $REPO && node core/generate-blog-content.js $SITEID" 2>&1 | tee -a "$LOG_FILE"
+if [ -z "$FULL_OR_SLUG" ]; then
+  ssh "$VPS" "$NODE && cd $REPO && node core/generate-blog-content.js $SITEID" 2>&1 | tee -a "$LOG_FILE"
+elif [ "$FULL_OR_SLUG" = "all" ]; then
+  ssh "$VPS" "$NODE && cd $REPO && node core/generate-blog-content.js $SITEID --full" 2>&1 | tee -a "$LOG_FILE"
+else
+  ssh "$VPS" "$NODE && cd $REPO && node core/generate-blog-content.js $SITEID $FULL_OR_SLUG" 2>&1 | tee -a "$LOG_FILE"
+fi
 
 echo "Downloading images on VPS..." | tee -a "$LOG_FILE"
 ssh "$VPS" "$NODE && cd $REPO && npm run download-images:$SITEID" 2>&1 | tee -a "$LOG_FILE"
