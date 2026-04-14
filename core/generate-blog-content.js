@@ -283,7 +283,7 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
 
             const markdownContent = generateMarkdownContent(article);
             fs.writeFileSync(filePath, markdownContent, 'utf8');
-            generatedCount++;            
+            generatedCount++;
 
         }
 
