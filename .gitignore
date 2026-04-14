@@ -23,6 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# Conteúdo de artigos gerado automaticamente (não versionar)
+multi-sites/sites/*/content/blog/
+
 ## Python
 
 # Byte-compiled / optimized / DLL files
@@ -225,4 +228,3 @@ public/**/assets/images/blog/resized/
 *.zip
 
 plane-frames/
-core/.last-run-*.json
