@@ -234,7 +234,6 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
         // Melhoria 3: filtro Prisma por modified via .last-run-*.json
         const lastRun = forceFullRegen ? new Date(0) : getLastRunTime(siteId);
         const isIncremental = lastRun.getTime() > 0;
-        const isFirstRun = lastRun.getTime() === 0;
 
         const articles = await prisma.blog_article.findMany({
             where: {
@@ -268,31 +267,24 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
             const filename = `${sanitizeFilename(article.slug)}.md`;
             const filePath = path.join(contentBlogDir, filename);
 
-            if (forceFullRegen || isFirstRun) {
-                // Modo full ou primeira execução: sempre gera
-                const markdownContent = generateMarkdownContent(article);
-                fs.writeFileSync(filePath, markdownContent, 'utf8');
+            if (forceFullRegen) {
                 console.log('✅ Generated:', filename);
-                generatedCount++;
-                continue;
-            }            
-
-            // Modo incremental: só atualiza se arquivo já existe e está desatualizado
-            if (fs.existsSync(filePath)) {
+            } else if (fs.existsSync(filePath)) {
                 const fileMtime = new Date(fs.statSync(filePath).mtime);
                 const articleModified = new Date(article.modified);
                 if (articleModified <= fileMtime) {
                     console.log('⏭️  Unchanged, skipping:', filename);
                     continue;
                 }
-                const markdownContent = generateMarkdownContent(article);
-                fs.writeFileSync(filePath, markdownContent, 'utf8');
                 console.log('✅ Updated:', filename);
-                generatedCount++;
             } else {
-                // Não cria arquivos novos no modo incremental
-                console.log('🚫 Not present locally, skipping (incremental):', filename);
+                console.log('✅ Created new:', filename);
             }
+
+            const markdownContent = generateMarkdownContent(article);
+            fs.writeFileSync(filePath, markdownContent, 'utf8');
+            generatedCount++;            
+
         }
 
         // Salva lastRun apenas se chegou até aqui sem exceção
