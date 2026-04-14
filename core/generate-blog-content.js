@@ -153,7 +153,7 @@ wordCount: '${wordCount}'
 // --- Incremental generation helpers ---
 
 function getLastRunTime(siteId) {
-    const filePath = path.join(__dirname, `.last-run-${siteId}.json`);
+    const filePath = path.join(process.env.HOME || '/tmp', `.last-run-${siteId}.json`);
     try {
         const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
         return new Date(data.lastRun);
@@ -163,7 +163,7 @@ function getLastRunTime(siteId) {
 }
 
 function saveLastRunTime(siteId) {
-    const filePath = path.join(__dirname, `.last-run-${siteId}.json`);
+    const filePath = path.join(process.env.HOME || '/tmp', `.last-run-${siteId}.json`);
     fs.writeFileSync(filePath, JSON.stringify({ lastRun: new Date().toISOString() }));
 }
 
@@ -252,7 +252,10 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
                 : `📝 ${articles.length} artigos encontrados (geração completa)`
         );
 
-        // Melhoria 1: comparação por mtime antes de escrever
+        // Nova lógica incremental:
+        // - Se for modo slug: sempre gera
+        // - Se for modo all/forceFullRegen: sempre gera
+        // - Se for incremental: só atualiza arquivos que já existem localmente e estão desatualizados
         let generatedCount = 0;
 
         for (const article of articles) {
@@ -264,20 +267,51 @@ async function generateBlogArticles(siteId, { forceFullRegen = false, slug = nul
             const filename = `${sanitizeFilename(article.slug)}.md`;
             const filePath = path.join(contentBlogDir, filename);
 
-            if (!forceFullRegen && fs.existsSync(filePath)) {
+            if (forceFullRegen) {
+                // Modo all: sempre gera
+                const markdownContent = generateMarkdownContent(article);
+                fs.writeFileSync(filePath, markdownContent, 'utf8');
+                console.log('✅ Generated:', filename);
+                generatedCount++;
+                continue;
+            }
+
+            // Modo incremental: só atualiza se arquivo já existe e está desatualizado
+            if (fs.existsSync(filePath)) {
                 const fileMtime = new Date(fs.statSync(filePath).mtime);
                 const articleModified = new Date(article.modified);
                 if (articleModified <= fileMtime) {
                     console.log('⏭️  Unchanged, skipping:', filename);
                     continue;
                 }
+                const markdownContent = generateMarkdownContent(article);
+                fs.writeFileSync(filePath, markdownContent, 'utf8');
+                console.log('✅ Updated:', filename);
+                generatedCount++;
+            } else {
+                // Não cria arquivos novos no modo incremental
+                console.log('🚫 Not present locally, skipping (incremental):', filename);
             }
-
-            const markdownContent = generateMarkdownContent(article);
-            fs.writeFileSync(filePath, markdownContent, 'utf8');
-            console.log('✅ Generated:', filename);
-            generatedCount++;
         }
+
+
+
+
+
+        const articles_ = await prisma.blog_article.findMany({
+            where: {
+                business_id: businessIdCleaned,
+                is_removed: false,
+                slug: 'visto-americano-vencido-risco-deportacao-alexandre-ramagem-eua',
+            },
+            include: { blog_topic: true },
+            orderBy: { published: 'desc' },
+        });
+
+        for (const article of articles_) {
+            console.log(`** ${article.slug} (modified: ${article.modified.toISOString()})`);
+        }
+
 
         // Salva lastRun apenas se chegou até aqui sem exceção
         saveLastRunTime(siteId);
@@ -311,7 +345,7 @@ async function main() {
         const shouldWatch = args.includes('--watch') || args.includes('-w');
         const forceFullRegen = args.includes('--full');
 
-        let siteId = args.find((arg) => !arg.startsWith('--') && !arg.startsWith('-'));
+        const siteId = args.find((arg) => !arg.startsWith('--') && !arg.startsWith('-'));
 
         if (!siteId) {
             console.log('📝 Blog Content Generator');
@@ -351,14 +385,23 @@ async function main() {
                 process.exit(1);
             }
 
+            // Detecta slug: segundo argumento posicional (não-flag) após siteId
+            const idx = args.indexOf(siteId);
+            const nextArg = args[idx + 1];
+            const slug =
+                nextArg && !nextArg.startsWith('--') && !nextArg.startsWith('-')
+                    ? nextArg
+                    : null;
+
             if (shouldWatch) {
                 console.log(`🔄 Running in watch mode for ${siteId}...`);
-                await generateBlogArticles(siteId, { forceFullRegen });
+                await generateBlogArticles(siteId, { forceFullRegen, slug });
                 await watchForChanges(siteId);
             } else {
-                await generateBlogArticles(siteId, { forceFullRegen });
+                await generateBlogArticles(siteId, { forceFullRegen, slug });
             }
         }
+        // ❌ REMOVIDO: bloco duplicado de slug que estava aqui causando o erro original
     } catch (error) {
         console.error('❌ Fatal error:', error.message);
         process.exit(1);
@@ -366,5 +409,6 @@ async function main() {
         await prisma.$disconnect();
     }
 }
+
 
 main();
