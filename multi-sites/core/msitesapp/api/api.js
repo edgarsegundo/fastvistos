@@ -719,5 +719,34 @@ app.post('/article-image', async (req, res) => {
     }
 });
 
+app.post('/execute-publish-script', async (req, res) => {
+    try {
+        const {
+            site_id,
+        } = req.body;
+
+        const { exec } = await import('child_process');
+        const scriptPath = '/home/edgar/Repos/fastvistos/publish.sh';
+        await new Promise((resolve, reject) => {
+            exec(`${scriptPath} ${site_id}`, {
+                cwd: '/home/edgar/Repos/fastvistos',
+                env: process.env,
+            }, (error, stdout, stderr) => {
+                console.log('[DEBUG] publish.sh stdout:', stdout);
+                if (stderr) console.warn('[DEBUG] publish.sh stderr:', stderr);
+                if (error) {
+                    console.error('[ERROR] publish.sh failed:', error);
+                    return reject(error);
+                }
+                resolve({ stdout, stderr });
+            });
+        });
+    } catch (error) {
+        console.error('❌ Error in /execute-publish-script, Error: ', error);
+        res.status(500).json({ success: false, error: 'Internal server error.' });
+    }
+});
+
+
 export default app;
 
