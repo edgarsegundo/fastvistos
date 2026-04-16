@@ -726,7 +726,7 @@ app.post('/execute-publish-script', async (req, res) => {
         } = req.body;
 
         const { exec } = await import('child_process');
-        const scriptPath = '/home/edgar/Repos/fastvistos/publish.sh';
+        const scriptPath = '/home/edgar/Repos/fastvistos/publish-from-vps-v2.sh';
         await new Promise((resolve, reject) => {
             exec(`${scriptPath} ${site_id}`, {
                 cwd: '/home/edgar/Repos/fastvistos',
