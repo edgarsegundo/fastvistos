@@ -732,10 +732,10 @@ app.post('/execute-publish-script', async (req, res) => {
                 cwd: '/home/edgar/Repos/fastvistos',
                 env: process.env,
             }, (error, stdout, stderr) => {
-                console.log('[DEBUG] publish.sh stdout:', stdout);
-                if (stderr) console.warn('[DEBUG] publish.sh stderr:', stderr);
+                console.log('[DEBUG] publish-from-vps-v2 stdout:', stdout);
+                if (stderr) console.warn('[DEBUG] publish-from-vps-v2 stderr:', stderr);
                 if (error) {
-                    console.error('[ERROR] publish.sh failed:', error);
+                    console.error('[ERROR] publish-from-vps-v2 failed:', error);
                     return reject(error);
                 }
                 resolve({ stdout, stderr });
