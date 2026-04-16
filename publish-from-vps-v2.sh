@@ -21,16 +21,6 @@ REPO="/home/edgar/Repos/fastvistos"
 echo "===== START DEPLOY: $SITEID at $(date) =====" | tee -a "$LOG_FILE"
 
 # -------------------------
-# Local Steps (push só daqui)
-# -------------------------
-
-echo "Pushing changes to repo..." | tee -a "$LOG_FILE"
-if ! ~/Repos/pu.sh 2>&1 | tee -a "$LOG_FILE"; then
-  echo "ERROR: Failed to push changes." | tee -a "$LOG_FILE"
-  exit 1
-fi
-
-# -------------------------
 # VPS helper
 # -------------------------
 
@@ -41,9 +31,6 @@ run_vps() {
 # -------------------------
 # VPS Steps
 # -------------------------
-
-echo "Restoring and updating code on VPS..." | tee -a "$LOG_FILE"
-run_vps "cd $REPO && git fetch origin && git reset --hard origin/main && git clean -fd"
 
 echo "Generating blog content on VPS..." | tee -a "$LOG_FILE"
 if [ -z "$FULL_OR_SLUG" ]; then
