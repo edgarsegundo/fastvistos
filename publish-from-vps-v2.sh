@@ -15,45 +15,34 @@ mkdir -p "$LOG_DIR"
 TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
 LOG_FILE="$LOG_DIR/deploy_${SITEID}_${TIMESTAMP}.log"
 
-VPS="edgar@72.60.57.150"
 REPO="/home/edgar/Repos/fastvistos"
 
 echo "===== START DEPLOY: $SITEID at $(date) =====" | tee -a "$LOG_FILE"
 
-# -------------------------
-# VPS helper
-# -------------------------
+cd "$REPO"
 
-run_vps() {
-  ssh "$VPS" "bash -lc '$1'" 2>&1 | tee -a "$LOG_FILE"
-}
-
-# -------------------------
-# VPS Steps
-# -------------------------
-
-echo "Generating blog content on VPS..." | tee -a "$LOG_FILE"
+echo "Generating blog content..." | tee -a "$LOG_FILE"
 if [ -z "$FULL_OR_SLUG" ]; then
-  run_vps "cd $REPO && node core/generate-blog-content.js $SITEID"
+  node core/generate-blog-content.js "$SITEID" 2>&1 | tee -a "$LOG_FILE"
 elif [ "$FULL_OR_SLUG" = "all" ]; then
-  run_vps "cd $REPO && node core/generate-blog-content.js $SITEID --full"
+  node core/generate-blog-content.js "$SITEID" --full 2>&1 | tee -a "$LOG_FILE"
 else
-  run_vps "cd $REPO && node core/generate-blog-content.js $SITEID $FULL_OR_SLUG"
+  node core/generate-blog-content.js "$SITEID" "$FULL_OR_SLUG" 2>&1 | tee -a "$LOG_FILE"
 fi
 
-echo "Downloading images on VPS..." | tee -a "$LOG_FILE"
-run_vps "cd $REPO && npm run download-images:$SITEID"
+echo "Downloading images..." | tee -a "$LOG_FILE"
+npm run "download-images:$SITEID" 2>&1 | tee -a "$LOG_FILE"
 
-echo "Generating responsive images on VPS..." | tee -a "$LOG_FILE"
-run_vps "cd $REPO && node generate-responsive-images.js $SITEID"
+echo "Generating responsive images..." | tee -a "$LOG_FILE"
+node generate-responsive-images.js "$SITEID" 2>&1 | tee -a "$LOG_FILE"
 
-echo "Building site on VPS..." | tee -a "$LOG_FILE"
-run_vps "cd $REPO && npm run build:$SITEID"
+echo "Building site..." | tee -a "$LOG_FILE"
+npm run "build:$SITEID" 2>&1 | tee -a "$LOG_FILE"
 
-echo "Deploying site on VPS..." | tee -a "$LOG_FILE"
-run_vps "cd $REPO && node deploy-site.js $SITEID"
+echo "Deploying site..." | tee -a "$LOG_FILE"
+node deploy-site.js "$SITEID" 2>&1 | tee -a "$LOG_FILE"
 
-echo "Syncing site images on VPS..." | tee -a "$LOG_FILE"
-run_vps "cd $REPO && sudo ./sync-site-images.sh $SITEID"
+echo "Syncing site images..." | tee -a "$LOG_FILE"
+sudo ./sync-site-images.sh "$SITEID" 2>&1 | tee -a "$LOG_FILE"
 
 echo "===== DEPLOY COMPLETE: $SITEID at $(date) =====" | tee -a "$LOG_FILE"
