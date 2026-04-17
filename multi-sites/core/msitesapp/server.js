@@ -25,5 +25,6 @@ const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`msitesapp api server running on 0.0.0.0:${PORT} (IPv4 + IPv6 if system supports)`);
 });
 
-// Aumenta timeout para 3 minutos (180000 ms)
-server.setTimeout(180000);
+// Aumenta timeout para processamento de imagens (ajuste conforme necessário)
+server.setTimeout(300000);
+
