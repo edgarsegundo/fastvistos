@@ -741,6 +741,7 @@ app.post('/execute-publish-script', async (req, res) => {
                 resolve({ stdout, stderr });
             });
         });
+        res.status(200).json({ success: true });
     } catch (error) {
         console.error('❌ Error in /execute-publish-script, Error: ', error);
         res.status(500).json({ success: false, error: 'Internal server error.' });
