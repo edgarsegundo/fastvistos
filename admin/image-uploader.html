@@ -37,7 +37,7 @@
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
     }
-    const slug = qs('slug') || 'geral';
+    const blogArticleId = qs('blog_article_id') || '';
     // --- State ---
     let mode = 'upload'; // 'upload' | 'clipboard'
     let imageFile = null;
@@ -58,6 +58,7 @@
     function render() {
       document.getElementById('app').innerHTML = `
         <div class="mb-4">
+          <button class="btn-outline w-full h-11 rounded-xl mb-3" onclick="onEditArticle()">📝 Editar Artigo</button>
           <div class="rounded-[16px] border border-[#e0e0e0] viewer-bg flex items-center justify-center h-[55vw] max-h-[300px] overflow-hidden mb-2 relative">
             ${saving ? '<div class="spinner absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></div>' :
               imageDataUrl ? `<img src="${imageDataUrl}" class="viewer-img w-full h-full object-contain fade" style="max-height:300px;" />` :
@@ -95,8 +96,68 @@
           </ul>
         </div>
         ${showAdjust ? renderAdjustOverlay() : ''}
+        ${showEditArticle ? renderEditArticleOverlay() : ''}
       `;
     }
+    // --- Editar Artigo ---
+    let showEditArticle = false;
+    let editArticleContent = '';
+    let editArticleSaving = false;
+    let editArticleError = '';
+    window.onEditArticle = async function() {
+      showEditArticle = true;
+      editArticleSaving = false;
+      editArticleError = '';
+      editArticleContent = '';
+      render();
+      try {
+        const res = await fetch(`/image-editor/api/articles/${blogArticleId}/content-md/`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao buscar content_md`);
+        editArticleContent = data.content_md ?? '';
+      } catch (e) {
+        editArticleError = e.message;
+      }
+      render();
+    }
+    function renderEditArticleOverlay() {
+      return `
+      <div class="overlay flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b">
+          <button onclick="onCloseEditArticle()">← Voltar</button>
+          <div class="font-bold">Editar artigo (Markdown)</div>
+          <span></span>
+        </div>
+        <div class="flex-1 flex flex-col p-4">
+          <textarea id="edit-article-textarea" class="input w-full flex-1 resize-none" style="min-height:300px;max-height:60vh;" placeholder="Markdown do artigo...">${editArticleContent||''}</textarea>
+          ${editArticleError ? `<div class='text-red-500 text-sm mt-2'>${editArticleError}</div>` : ''}
+          <button class="btn-primary w-full h-11 rounded-xl mt-4" onclick="onSaveEditArticle()" ${editArticleSaving?'disabled':''}>${editArticleSaving?'Salvando...':'Salvar'}</button>
+        </div>
+      </div>
+      `;
+    }
+    window.onCloseEditArticle = function() { showEditArticle = false; render(); }
+    window.onSaveEditArticle = async function() {
+      editArticleSaving = true;
+      editArticleError = '';
+      render();
+      try {
+        const content_md = document.getElementById('edit-article-textarea').value;
+        const res = await fetch(`/image-editor/api/articles/${blogArticleId}/save-content-md/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ blog_article_id: blogArticleId, content_md })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao salvar content_md`);
+        showEditArticle = false;
+      } catch (e) {
+        editArticleError = e.message;
+      }
+      editArticleSaving = false;
+      render();
+    }
+
     // --- Mode switching ---
     window.setMode = function(m) {
       mode = m;
