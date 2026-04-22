@@ -111,7 +111,7 @@
       editArticleContent = '';
       render();
       try {
-        const res = await fetch(`/image-editor/api/articles/${blogArticleId}/content-md/`);
+        const res = await fetch(`msitesapp/api/image-editor/api/articles/${blogArticleId}/content-md/`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao buscar content_md`);
         editArticleContent = data.content_md ?? '';
