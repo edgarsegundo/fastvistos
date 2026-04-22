@@ -4,7 +4,8 @@ const router = express.Router();
 export default (BlogService) => {
 
   // GET content_md
-  router.get('/image-editor/api/articles/:blog_article_id/content-md/', async (req, res) => {
+  // api/admin
+  router.get('/image-editor/articles/:blog_article_id/content-md/', async (req, res) => {
     const { blog_article_id } = req.params;
     if (!blog_article_id) return res.status(400).json({ error: 'blog_article_id é obrigatório.' });
     try {
@@ -17,7 +18,7 @@ export default (BlogService) => {
   });
 
   // POST content_md
-  router.post('/image-editor/api/articles/:blog_article_id/save-content-md/', async (req, res) => {
+  router.post('/image-editor/articles/:blog_article_id/save-content-md/', async (req, res) => {
     const { blog_article_id } = req.params;
     const { content_md } = req.body;
     if (!blog_article_id || typeof content_md !== 'string') {
