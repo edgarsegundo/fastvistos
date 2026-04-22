@@ -26,8 +26,10 @@ export default (BlogService) => {
     }
     try {
       const updated = await BlogService.updateBlogArticleContentMd(blog_article_id, content_md);
+      console.log(`✅ Updated content_md for article ${blog_article_id}`);
       res.json({ success: true, updated });
     } catch (err) {
+      console.error(`Error updating content_md for article ${blog_article_id}:`, err);
       res.status(500).json({ error: err.message });
     }
   });
