@@ -14,6 +14,7 @@ import bodyParser from 'body-parser';
 import sectionRoutes from './section-routes.js';
 import publishRoutes from './publish-routes.js';
 import blogArticleRoutes from './blog-article-routes.js';
+import imageRoutes from './image-routes.js';
 
 const app = express();
 app.use(bodyParser.json());
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 app.use(sectionRoutes(WebPageService));
 app.use(publishRoutes(BlogService));
 app.use(blogArticleRoutes(BlogService));
+app.use(imageRoutes(BlogService));
 
 app.get('/ping', (req, res) => {
     res.json({
