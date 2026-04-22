@@ -143,7 +143,7 @@
       render();
       try {
         const content_md = document.getElementById('edit-article-textarea').value;
-        const res = await fetch(`/image-editor/api/articles/${blogArticleId}/save-content-md/`, {
+        const res = await fetch(`https://fastvistos.com.br/msitesapp/api/image-editor/articles/${blogArticleId}/save-content-md/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ blog_article_id: blogArticleId, content_md })
