@@ -8,6 +8,47 @@
 import { prisma } from './prisma.js';
 
 export class BlogService {
+    /**
+     * Get a blog article by its ID.
+     * @param {string} id - The article ID
+     * @returns {Promise<Object|null>} The article or null if not found
+     */
+    static async getBlogArticleById(id) {
+        try {
+            const article = await prisma.blog_article.findFirst({
+                where: {
+                    id,
+                    is_removed: false,
+                },
+            });
+            return article || null;
+        } catch (error) {
+            console.error('Error fetching blog article by ID:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Update the content_md field of a blog article by its ID.
+     * @param {string} id - The article ID
+     * @param {string} content_md - The new markdown content
+     * @returns {Promise<Object>} The updated article
+     */
+    static async updateBlogArticleContentMd(id, content_md) {
+        try {
+            const updated = await prisma.blog_article.update({
+                where: { id },
+                data: {
+                    content_md,
+                    modified: new Date(),
+                },
+            });
+            return updated;
+        } catch (error) {
+            console.error('Error updating blog article content_md:', error);
+            throw error;
+        }
+    }
     // Optionally, you can implement a getBusinessId() if needed
     static getBusinessId() {
         throw new Error('getBusinessId() not implemented. Pass business_id explicitly.');
