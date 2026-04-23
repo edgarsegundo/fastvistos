@@ -14,6 +14,10 @@ export default (BlogService) => {
 
   // Middleware de autenticação para /admin
   router.use('/admin', (req, res, next) => {
+      // Libera arquivos estáticos (js, css, imagens, mapas de source, etc)
+      if (req.path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|map)$/i)) {
+          return next();
+      }
       const token = req.query.token || req.headers['x-api-key'];
       console.log(`* token received: ${token}`);
       console.log(`* expected token: ${process.env.MYSITESAPP_API_KEY}`);

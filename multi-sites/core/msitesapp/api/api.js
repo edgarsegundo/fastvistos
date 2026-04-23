@@ -1,6 +1,11 @@
 // Carrega variáveis de ambiente do arquivo .env
 import dotenv from 'dotenv';
 dotenv.config();
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 // To add a new lib, always import fom dist like for example: `../../dist/lib/libname.js`
 
 import { WebPageService } from '../../dist/lib/webpage-service.js';
@@ -29,6 +34,8 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+app.use('/admin/static', express.static(path.join(__dirname, '../admin/static')));
 
 app.use(sectionRoutes(WebPageService));
 app.use(publishRoutes(BlogService));

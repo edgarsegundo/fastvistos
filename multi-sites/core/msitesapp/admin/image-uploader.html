@@ -5,358 +5,207 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>Admin Image Uploader</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- CropperJS CDN (opcional, para crop) -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
   <style>
-    body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background: #fff; }
-    .fade { transition: opacity 0.2s; }
-    .viewer-bg { background: #f8f8f8; }
-    .viewer-img { background: #000; }
-    .btn-outline { border: 1px solid #2563eb; color: #2563eb; background: transparent; }
-    .btn-outline:active { background: #2563eb11; }
-    .btn-primary { background: #2563eb; color: #fff; }
-    .btn-primary:active { background: #1e40af; }
-    .input { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; height: 44px; }
-    .mode-btn-active { background: #2563eb; color: #fff; border: none; }
-    .mode-btn { background: #fff; color: #1f2937; border: 1px solid #e5e7eb; }
-    .clipboard-copied { color: #22c55e; }
-    .cropper-container { max-width: 100vw; max-height: 300px; }
-    .overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#fff; z-index:100; }
-    .spinner { border: 4px solid #e5e7eb; border-top: 4px solid #2563eb; border-radius: 50%; width: 32px; height: 32px; animation: spin 1s linear infinite; margin:auto; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 3px solid #e5e7eb; border-top-color: #2563eb;
+      animation: spin 0.8s linear infinite;
+    }
+    /* Overlay entra/sai com transição suave */
+    .overlay {
+      position: fixed; inset: 0; background: #fff; z-index: 100;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .overlay.open { transform: translateX(0); }
+    /* Cropper */
+    .cropper-container { max-height: 260px !important; }
   </style>
 </head>
-<body class="max-w-[480px] mx-auto p-4">
-  <div id="app"></div>
-  <script>
-    // --- Utils ---
-    function qs(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
-    const blogArticleId = qs('blog_article_id') || '';
-    // --- State ---
-    let mode = 'upload'; // 'upload' | 'clipboard'
-    let imageFile = null;
-    let imageDataUrl = '';
-    let imageName = '';
-    let imagesSaved = [];
-    let cropper = null;
-    let adjustState = {
-      width: null, height: null, origWidth: null, origHeight: null,
-      brightness: 0, contrast: 0, saturation: 0, quality: 82, sharpen: false, grayscale: false, alt: ''
-    };
-    let viewerMsg = '';
-    let clipboardMsg = '';
-    let errorMsg = '';
-    let saving = false;
-    let showAdjust = false;
-    // --- Render ---
-    function render() {
-      document.getElementById('app').innerHTML = `
-        <div class="mb-4">
-          <button class="btn-outline w-full h-11 rounded-xl mb-3" onclick="onEditArticle()">📝 Editar Artigo</button>
-          <div class="rounded-[16px] border border-[#e0e0e0] viewer-bg flex items-center justify-center h-[55vw] max-h-[300px] overflow-hidden mb-2 relative">
-            ${saving ? '<div class="spinner absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></div>' :
-              imageDataUrl ? `<img src="${imageDataUrl}" class="viewer-img w-full h-full object-contain fade" style="max-height:300px;" />` :
-              `<span class="text-gray-400 text-center w-full">${mode==='upload' ? 'Selecione um arquivo' : 'Cole uma imagem (ctrl+v / cmd+v)'}</span>`}
-          </div>
-          <div class="flex gap-2 mb-2">
-            <button class="w-1/2 h-11 rounded-2xl mode-btn ${mode==='upload'?'mode-btn-active':''}" onclick="setMode('upload')">upload</button>
-            <button class="w-1/2 h-11 rounded-2xl mode-btn ${mode==='clipboard'?'mode-btn-active':''}" onclick="setMode('clipboard')">clipboard</button>
-          </div>
-          ${mode==='upload' ? `
-            <div class="flex items-center gap-2 mb-2">
-              <label class="btn-outline px-3 py-2 rounded-lg cursor-pointer" for="file-input">Escolher arquivo</label>
-              <input id="file-input" type="file" accept="image/*" class="hidden" onchange="onFileChange(event)">
-              <span class="text-gray-500 text-sm">${imageFile ? imageFile.name : 'nenhum arquivo'}</span>
-            </div>
-            <input id="name-input" class="input w-full mb-2" type="text" placeholder="Nome do arquivo" value="${imageName||''}" oninput="onNameInput(event)">
-            ${imageDataUrl ? `<button class="btn-primary w-full h-11 rounded-xl mb-2" onclick="onSave()" ${saving?'disabled':''}>${saving?'Salvando...':'Salvar'}</button>` : ''}
-          ` : `
-            <input id="name-input" class="input w-full mb-2" type="text" placeholder="Nome do arquivo" value="${imageName||''}" oninput="onNameInput(event)">
-            ${imageDataUrl ? `<button class="btn-primary w-full h-11 rounded-xl mb-2" onclick="onSave()" ${saving?'disabled':''}>${saving?'Salvando...':'Salvar'}</button>` : ''}
-          `}
-          ${imageDataUrl ? `<button class="btn-outline w-full h-11 rounded-xl mb-2" onclick="onAdjust()">Ajustar →</button>` : ''}
-          ${errorMsg ? `<div class="text-red-500 text-sm mb-2">${errorMsg}</div>` : ''}
-        </div>
-        <hr class="mb-4">
-        <div>
-          <div class="text-gray-500 text-xs mb-2">Lista de imagens salvas</div>
-          <ul>
-            ${imagesSaved.map((img, i) => `
-              <li class="flex items-center gap-2 mb-1 cursor-pointer group" onclick="onCopyUrl(${i})">
-                <span class="${img.copied?'clipboard-copied':''}">${img.copied?'✅':'📋'}</span>
-                <span class="text-sm">${img.filename}</span>
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-        ${showAdjust ? renderAdjustOverlay() : ''}
-        ${showEditArticle ? renderEditArticleOverlay() : ''}
-      `;
-    }
-    // --- Editar Artigo ---
-    let showEditArticle = false;
-    let editArticleContent = '';
-    let editArticleSaving = false;
-    let editArticleError = '';
-    window.onEditArticle = async function() {
-      showEditArticle = true;
-      editArticleSaving = false;
-      editArticleError = '';
-      editArticleContent = '';
-      render();
-      try {
-        const res = await fetch(`https://fastvistos.com.br/msitesapp/api/image-editor/articles/${blogArticleId}/content-md/`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao buscar content_md`);
-        editArticleContent = data.content_md ?? '';
-      } catch (e) {
-        editArticleError = e.message;
-      }
-      render();
-    }
-    function renderEditArticleOverlay() {
-      return `
-      <div class="overlay flex flex-col">
-        <div class="flex items-center justify-between p-4 border-b">
-          <button onclick="onCloseEditArticle()">← Voltar</button>
-          <div class="font-bold">Editar artigo (Markdown)</div>
-          <span></span>
-        </div>
-        <div class="flex-1 flex flex-col p-4">
-          <textarea id="edit-article-textarea" class="input w-full flex-1 resize-none" style="min-height:300px;max-height:60vh;" placeholder="Markdown do artigo...">${editArticleContent||''}</textarea>
-          ${editArticleError ? `<div class='text-red-500 text-sm mt-2'>${editArticleError}</div>` : ''}
-          <button class="btn-primary w-full h-11 rounded-xl mt-4" onclick="onSaveEditArticle()" ${editArticleSaving?'disabled':''}>${editArticleSaving?'Salvando...':'Salvar'}</button>
-        </div>
-      </div>
-      `;
-    }
-    window.onCloseEditArticle = function() { showEditArticle = false; render(); }
-    window.onSaveEditArticle = async function() {
-      editArticleSaving = true;
-      editArticleError = '';
-      render();
-      try {
-        const content_md = document.getElementById('edit-article-textarea').value;
-        console.log(`** Saving content_md for article ${blogArticleId}...`);
-        console.log(`** New content_md preview: ${content_md.substring(0, 100)}...`);
-        const res = await fetch(`https://fastvistos.com.br/msitesapp/api/image-editor/articles/${blogArticleId}/save-content-md/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ blog_article_id: blogArticleId, content_md })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao salvar content_md`);
-        showEditArticle = false;
-      } catch (e) {
-        editArticleError = e.message;
-      }
-      editArticleSaving = false;
-      render();
-    }
+<body class="max-w-[480px] mx-auto bg-white min-h-screen">
 
-    // --- Mode switching ---
-    window.setMode = function(m) {
-      mode = m;
-      imageFile = null; imageDataUrl = ''; imageName = ''; errorMsg = '';
-      render();
-    }
-    // --- File input ---
-    window.onFileChange = function(e) {
-      const file = e.target.files[0];
-      if (!file || !file.type.startsWith('image/')) {
-        errorMsg = 'Selecione um arquivo de imagem válido';
-        render(); return;
-      }
-      imageFile = file;
-      imageName = file.name.replace(/\.[^.]+$/, '');
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        imageDataUrl = ev.target.result;
-        errorMsg = '';
-        render();
-      };
-      reader.readAsDataURL(file);
-    }
-    // --- Name input ---
-    window.onNameInput = function(e) {
-      imageName = e.target.value;
-    }
-    // --- Clipboard ---
-    document.addEventListener('paste', function(e) {
-      if (mode !== 'clipboard') return;
-      const items = e.clipboardData && e.clipboardData.items;
-      if (!items) return;
-      for (const item of items) {
-        if (item.type.indexOf('image') !== -1) {
-          const file = item.getAsFile();
-          imageFile = file;
-          imageName = 'imagem-'+Date.now();
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            imageDataUrl = ev.target.result;
-            errorMsg = '';
-            render();
-          };
-          reader.readAsDataURL(file);
-          return;
-        }
-      }
-      errorMsg = 'Nenhuma imagem no clipboard';
-      render();
-      setTimeout(()=>{ errorMsg=''; render(); }, 2000);
-    });
-    // --- Save ---
-    window.onSave = async function() {
-      if (!imageName) { errorMsg = 'Digite um nome para o arquivo'; render(); return; }
-      saving = true; errorMsg = '';
-      render();
-      try {
-        const form = new FormData();
-        if (imageFile) form.append('file', imageFile);
-        else if (imageDataUrl) form.append('file', dataURLtoBlob(imageDataUrl), imageName+'.webp');
-        form.append('filename', imageName);
-        form.append('slug', slug);
-        const res = await fetch('/image-upload', { method:'POST', body: form });
-        if (!res.ok) throw new Error('Erro ao salvar. Tente novamente.');
-        const data = await res.json();
-        imagesSaved.unshift({ filename: data.filename, copied: false });
-        imageFile = null; imageDataUrl = ''; imageName = '';
-      } catch (e) {
-        errorMsg = e.message;
-      }
-      saving = false;
-      render();
-    }
-    // --- Copy URL ---
-    window.onCopyUrl = function(i) {
-      const img = imagesSaved[i];
-      const url = `![${img.filename}](\/assets\/images\/blog\/${slug}\/${img.filename})`;
-      navigator.clipboard.writeText(url);
-      imagesSaved[i].copied = true;
-      render();
-      setTimeout(()=>{ imagesSaved[i].copied = false; render(); }, 1500);
-    }
-    // --- Ajuste de imagem ---
-    window.onAdjust = function() {
-      showAdjust = true;
-      setTimeout(()=>{ setupCropper(); }, 100);
-      render();
-    }
-    function renderAdjustOverlay() {
-      return `
-      <div class="overlay flex flex-col">
-        <div class="flex items-center justify-between p-4 border-b">
-          <button onclick="onCloseAdjust()">← Voltar</button>
-          <div class="font-bold">Ajustar imagem</div>
-          <button onclick="onPreviewAdjust()">Preview</button>
+  <!-- ===== PÁGINA PRINCIPAL ===== -->
+  <div id="main-page" class="p-4">
+
+    <!-- Botão Editar Artigo -->
+    <button id="btn-edit-article"
+      class="w-full h-11 rounded-xl border border-blue-600 text-blue-600 font-medium mb-4 hover:bg-blue-50 transition-colors">
+      📝 Editar Artigo
+    </button>
+
+    <!-- Preview da imagem -->
+    <div id="preview-container"
+      class="rounded-2xl border border-gray-200 bg-gray-50 flex items-center justify-center h-[55vw] max-h-[280px] overflow-hidden mb-3 relative">
+      <span id="preview-placeholder" class="text-gray-400 text-sm text-center px-4">
+        Selecione um arquivo
+      </span>
+      <img id="preview-img" src="" alt=""
+        class="w-full h-full object-contain hidden" />
+      <div id="preview-spinner" class="spinner absolute hidden"></div>
+    </div>
+
+    <!-- Tabs upload / clipboard -->
+    <div class="flex gap-2 mb-3">
+      <button id="tab-upload"
+        class="tab-btn w-1/2 h-10 rounded-2xl border border-gray-200 text-sm font-medium transition-colors">
+        upload
+      </button>
+      <button id="tab-clipboard"
+        class="tab-btn w-1/2 h-10 rounded-2xl border border-gray-200 text-sm font-medium transition-colors">
+        clipboard
+      </button>
+    </div>
+
+    <!-- Área upload -->
+    <div id="area-upload">
+      <div class="flex items-center gap-2 mb-2">
+        <label for="file-input"
+          class="border border-blue-600 text-blue-600 px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-blue-50 transition-colors shrink-0">
+          Escolher arquivo
+        </label>
+        <input id="file-input" type="file" accept="image/*" class="hidden">
+        <span id="file-label" class="text-gray-400 text-sm truncate">nenhum arquivo</span>
+      </div>
+    </div>
+
+    <!-- Área clipboard -->
+    <div id="area-clipboard" class="hidden">
+      <p class="text-gray-400 text-sm mb-2">Cole uma imagem (Ctrl+V / Cmd+V)</p>
+    </div>
+
+    <!-- Nome do arquivo -->
+    <input id="name-input" type="text" placeholder="Nome do arquivo"
+      class="w-full border border-gray-200 rounded-xl px-3 h-11 text-sm mb-2 focus:outline-none focus:border-blue-400 transition-colors">
+
+    <!-- Ações da imagem (ficam sempre no DOM, visibilidade controlada) -->
+    <div id="image-actions" class="hidden">
+      <button id="btn-save"
+        class="w-full h-11 rounded-xl bg-blue-600 text-white font-medium mb-2 hover:bg-blue-700 transition-colors disabled:opacity-50">
+        Salvar
+      </button>
+      <button id="btn-adjust"
+        class="w-full h-11 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-colors">
+        Ajustar →
+      </button>
+    </div>
+
+    <!-- Mensagem de erro -->
+    <div id="error-msg" class="text-red-500 text-sm mt-2 hidden"></div>
+
+    <hr class="my-4 border-gray-100">
+
+    <!-- Lista de imagens salvas -->
+    <div>
+      <p class="text-gray-400 text-xs mb-2">Lista de imagens salvas</p>
+      <ul id="images-list" class="space-y-1"></ul>
+    </div>
+  </div>
+
+  <!-- ===== OVERLAY: AJUSTAR IMAGEM ===== -->
+  <div id="overlay-adjust" class="overlay">
+    <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
+      <button id="btn-close-adjust" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
+      <span class="font-semibold text-sm">Ajustar imagem</span>
+      <span class="w-14"></span><!-- spacer -->
+    </div>
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+      <!-- Preview do cropper -->
+      <div class="flex justify-center bg-black rounded-xl overflow-hidden" style="max-height:260px;">
+        <img id="adjust-img" src="" alt="" style="max-height:260px; max-width:100%; object-fit:contain;">
+      </div>
+
+      <!-- Crop toggle -->
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" id="crop-check" class="w-4 h-4 accent-blue-600">
+        <span class="text-sm">Recortar (arraste na imagem acima)</span>
+      </label>
+
+      <!-- Dimensões -->
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600 shrink-0">Tamanho:</span>
+        <input id="adj-width" type="number" placeholder="W"
+          class="border border-gray-200 rounded-lg px-2 h-9 w-20 text-sm focus:outline-none focus:border-blue-400">
+        <span class="text-gray-400">×</span>
+        <input id="adj-height" type="number" placeholder="H"
+          class="border border-gray-200 rounded-lg px-2 h-9 w-20 text-sm focus:outline-none focus:border-blue-400">
+        <span class="text-xs text-gray-400" id="adj-orig-size"></span>
+      </div>
+
+      <!-- Sliders -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs text-gray-500">Brilho <span id="lbl-brightness">0</span></label>
+          <input id="adj-brightness" type="range" min="-100" max="100" value="0" class="w-full accent-blue-600">
         </div>
-        <div class="flex-1 flex flex-col items-center justify-center p-4">
-          <div class="w-full flex justify-center mb-4">
-            <img id="adjust-img" src="${imageDataUrl}" style="max-height:45vw;max-width:100%;object-fit:contain;background:#000;border-radius:12px;" />
-          </div>
-          <div class="mb-2 flex gap-2 items-center">
-            <input type="checkbox" id="crop-check" onchange="onCropToggle(this.checked)">
-            <label for="crop-check">Recortar (arraste na imagem acima)</label>
-          </div>
-          <div class="mb-2 flex gap-2 items-center">
-            <label>Tamanho:</label>
-            <input id="adj-width" type="number" class="input w-20" value="${adjustState.width||''}" onchange="onAdjDim('width',this.value)">
-            <span>×</span>
-            <input id="adj-height" type="number" class="input w-20" value="${adjustState.height||''}" onchange="onAdjDim('height',this.value)">
-            <span>🔒</span>
-            <span class="text-xs text-gray-400">(${adjustState.origWidth||''}×${adjustState.origHeight||''})</span>
-          </div>
-          <div class="mb-2 grid grid-cols-2 gap-2">
-            <div><label>Brilho ${adjustState.brightness}</label><input type="range" min="-100" max="100" value="${adjustState.brightness}" onchange="onAdjSlider('brightness',this.value)" class="w-full accent-blue-600"></div>
-            <div><label>Contraste ${adjustState.contrast}</label><input type="range" min="-100" max="100" value="${adjustState.contrast}" onchange="onAdjSlider('contrast',this.value)" class="w-full accent-blue-600"></div>
-            <div><label>Saturação ${adjustState.saturation}</label><input type="range" min="-100" max="100" value="${adjustState.saturation}" onchange="onAdjSlider('saturation',this.value)" class="w-full accent-blue-600"></div>
-            <div><label>Qualidade WebP ${adjustState.quality}</label><input type="range" min="1" max="100" value="${adjustState.quality}" onchange="onAdjSlider('quality',this.value)" class="w-full accent-blue-600"></div>
-          </div>
-          <div class="mb-2 flex gap-4 items-center">
-            <input type="checkbox" id="adj-sharpen" ${adjustState.sharpen?'checked':''} onchange="onAdjCheck('sharpen',this.checked)">
-            <label for="adj-sharpen">Nitidez</label>
-            <input type="checkbox" id="adj-gray" ${adjustState.grayscale?'checked':''} onchange="onAdjCheck('grayscale',this.checked)">
-            <label for="adj-gray">Escala de cinza</label>
-          </div>
-          <div class="mb-2">
-            <label>Alt text</label>
-            <input id="adj-alt" class="input w-full" type="text" placeholder="Alt text da imagem" value="${adjustState.alt||''}" onchange="onAdjAlt(this.value)">
-          </div>
-          <button class="btn-primary w-full h-11 rounded-xl mt-4" onclick="onApplyAdjust()">Inserir imagem</button>
+        <div>
+          <label class="text-xs text-gray-500">Contraste <span id="lbl-contrast">0</span></label>
+          <input id="adj-contrast" type="range" min="-100" max="100" value="0" class="w-full accent-blue-600">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500">Saturação <span id="lbl-saturation">0</span></label>
+          <input id="adj-saturation" type="range" min="-100" max="100" value="0" class="w-full accent-blue-600">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500">Qualidade WebP <span id="lbl-quality">82</span></label>
+          <input id="adj-quality" type="range" min="1" max="100" value="82" class="w-full accent-blue-600">
         </div>
       </div>
-      `;
-    }
-    window.onCloseAdjust = function() { showAdjust = false; render(); }
-    window.onAdjDim = function(field, val) { adjustState[field] = parseInt(val)||0; }
-    window.onAdjSlider = function(field, val) { adjustState[field] = parseInt(val)||0; render(); }
-    window.onAdjCheck = function(field, val) { adjustState[field] = val; render(); }
-    window.onAdjAlt = function(val) { adjustState.alt = val; }
-    function setupCropper() {
-      const img = document.getElementById('adjust-img');
-      if (!img) return;
-      if (cropper) { cropper.destroy(); cropper = null; }
-      cropper = new Cropper(img, { viewMode:1, autoCrop:false });
-      img.cropper = cropper;
-    }
-    window.onCropToggle = function(checked) {
-      if (!cropper) return;
-      if (checked) cropper.setDragMode('crop');
-      else cropper.setDragMode('none');
-    }
-    window.onPreviewAdjust = async function() {
-      // Envia para o backend para preview
-      // (pode ser implementado depois)
-      alert('Preview não implementado.');
-    }
-    window.onApplyAdjust = async function() {
-      // Obtém crop se ativo
-      let cropData = null;
-      if (cropper) cropData = cropper.getData();
-      // Monta payload
-      const payload = {
-        imageData: imageDataUrl,
-        width: adjustState.width,
-        height: adjustState.height,
-        brightness: adjustState.brightness,
-        contrast: adjustState.contrast,
-        saturation: adjustState.saturation,
-        quality: adjustState.quality,
-        sharpen: adjustState.sharpen,
-        grayscale: adjustState.grayscale,
-        crop: cropData
-      };
-      // Chama API
-      try {
-        const res = await fetch('/image-editor/process', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) throw new Error('Erro ao processar imagem');
-        const data = await res.json();
-        imageDataUrl = data.url || imageDataUrl;
-        showAdjust = false;
-        render();
-      } catch (e) {
-        alert(e.message);
-      }
-    }
-    // --- DataURL to Blob ---
-    function dataURLtoBlob(dataurl, name='file.webp') {
-      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      while(n--){ u8arr[n] = bstr.charCodeAt(n); }
-      return new Blob([u8arr], {type:mime});
-    }
-    // --- Inicialização ---
-    render();
-  </script>
+
+      <!-- Checkboxes -->
+      <div class="flex gap-6">
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" id="adj-sharpen" class="w-4 h-4 accent-blue-600"> Nitidez
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" id="adj-grayscale" class="w-4 h-4 accent-blue-600"> Escala de cinza
+        </label>
+      </div>
+
+      <!-- Alt text -->
+      <div>
+        <label class="text-xs text-gray-500 mb-1 block">Alt text</label>
+        <input id="adj-alt" type="text" placeholder="Descrição da imagem"
+          class="w-full border border-gray-200 rounded-xl px-3 h-11 text-sm focus:outline-none focus:border-blue-400">
+      </div>
+
+      <!-- Aplicar -->
+      <button id="btn-apply-adjust"
+        class="w-full h-11 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors">
+        Aplicar ajustes
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== OVERLAY: EDITAR ARTIGO ===== -->
+  <div id="overlay-edit-article" class="overlay">
+    <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
+      <button id="btn-close-edit-article" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
+      <span class="font-semibold text-sm">Editar artigo (Markdown)</span>
+      <span class="w-14"></span>
+    </div>
+    <div class="flex flex-col flex-1 p-4 gap-3">
+      <div id="edit-article-spinner" class="flex justify-center py-8 hidden">
+        <div class="spinner"></div>
+      </div>
+      <textarea id="edit-article-textarea"
+        class="flex-1 border border-gray-200 rounded-xl p-3 text-sm resize-none focus:outline-none focus:border-blue-400 transition-colors"
+        placeholder="Markdown do artigo..." style="min-height: 300px;"></textarea>
+      <div id="edit-article-error" class="text-red-500 text-sm hidden"></div>
+      <button id="btn-save-article"
+        class="w-full h-11 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">
+        Salvar artigo
+      </button>
+    </div>
+  </div>
+
+  <script src="static/adjust.js"></script>
+  <script src="static/editArticle.js"></script>
+  <script src="static/app.js"></script>
 </body>
 </html>
