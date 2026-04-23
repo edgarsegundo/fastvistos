@@ -143,6 +143,8 @@
       render();
       try {
         const content_md = document.getElementById('edit-article-textarea').value;
+        console.log(`** Saving content_md for article ${blogArticleId}...`);
+        console.log(`** New content_md preview: ${content_md.substring(0, 100)}...`);
         const res = await fetch(`https://fastvistos.com.br/msitesapp/api/image-editor/articles/${blogArticleId}/save-content-md/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
