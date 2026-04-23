@@ -175,16 +175,15 @@ const AdjustOverlay = (() => {
         applyConvolution(ctx, canvas, sharpenKernel());
       }
 
-      // 5. Exporta como webp com a qualidade definida
-      const resultDataUrl = canvas.toDataURL('image/webp', quality);
-
-      close();
-      if (onAppliedCallback) onAppliedCallback(resultDataUrl);
+      // 5. Exporta como webp com a qualidade definida (usa Blob, não dataURL)
+      canvas.toBlob((blob) => {
+        close();
+        if (onAppliedCallback) onAppliedCallback(blob);
+      }, 'image/webp', quality);
 
     } catch (err) {
       console.error('Erro ao aplicar ajustes:', err);
       alert('Erro ao processar a imagem: ' + err.message);
-    } finally {
       el.btnApply().disabled = false;
       el.btnApply().textContent = 'Aplicar ajustes';
     }
