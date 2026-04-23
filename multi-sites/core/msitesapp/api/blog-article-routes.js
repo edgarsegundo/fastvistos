@@ -25,6 +25,8 @@ export default (BlogService) => {
       return res.status(400).json({ error: 'blog_article_id e content_md são obrigatórios.' });
     }
     try {
+      console.log(`** Updating content_md for article ${blog_article_id}...`);
+      console.log(`** New content_md preview: ${content_md.substring(0, 100)}...`);
       const updated = await BlogService.updateBlogArticleContentMd(blog_article_id, content_md);
       console.log(`✅ Updated content_md for article ${blog_article_id}`);
       res.json({ success: true, updated });

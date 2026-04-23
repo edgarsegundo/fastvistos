@@ -36,6 +36,10 @@ export class BlogService {
      */
     static async updateBlogArticleContentMd(id, content_md) {
         try {
+            // Loga a URL do banco de dados (se disponível)
+            console.log('[DEBUG] DATABASE_URL:', process.env.DATABASE_URL);
+            // Loga o id e o novo conteúdo
+            console.log('[DEBUG] Atualizando artigo:', { id, content_md: content_md?.slice?.(0, 100) }); // Mostra só os 100 primeiros caracteres
             const updated = await prisma.blog_article.update({
                 where: { id },
                 data: {
@@ -49,6 +53,7 @@ export class BlogService {
             throw error;
         }
     }
+
     // Optionally, you can implement a getBusinessId() if needed
     static getBusinessId() {
         throw new Error('getBusinessId() not implemented. Pass business_id explicitly.');
