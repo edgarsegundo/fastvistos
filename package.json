@@ -87,6 +87,7 @@
     "html-to-text": "^9.0.5",
     "jsdom": "^21.1.2",
     "marked": "^16.4.0",
+    "multer": "^2.1.1",
     "openai": "^6.7.0",
     "prisma": "^6.15.0",
     "rehype-external-links": "^3.0.0",

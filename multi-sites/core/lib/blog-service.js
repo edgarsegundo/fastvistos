@@ -54,6 +54,28 @@ export class BlogService {
         }
     }
 
+    /**
+     * Atualiza o campo image de um artigo pelo ID.
+     * @param {string} id - O ID do artigo
+     * @param {string} imagePath - Caminho relativo da imagem (ex: images/business__slug.jpg)
+     * @returns {Promise<Object>} O artigo atualizado
+     */
+    static async updateBlogArticleImage(id, imagePath) {
+        try {
+            const updated = await prisma.blog_article.update({
+                where: { id },
+                data: {
+                    image: imagePath,
+                    modified: new Date(),
+                },
+            });
+            return updated;
+        } catch (error) {
+            console.error('Erro ao atualizar imagem do artigo:', error);
+            throw error;
+        }
+    }
+
     // Optionally, you can implement a getBusinessId() if needed
     static getBusinessId() {
         throw new Error('getBusinessId() not implemented. Pass business_id explicitly.');
