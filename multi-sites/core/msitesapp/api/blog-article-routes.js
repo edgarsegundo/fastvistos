@@ -1,11 +1,19 @@
 import express from 'express';
+import multer from 'multer';
 
 const router = express.Router();
+
+// Multer com memoryStorage: o buffer fica em memória e é repassado
+// integralmente ao Django via BlogService.uploadArticleImage.
+// Sem gravar nada em disco neste Express.
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20 MB
+});
 
 export default (BlogService) => {
 
   // GET content_md
-  // api/admin
   router.get('/image-editor/articles/:blog_article_id/content-md/', async (req, res) => {
     const { blog_article_id } = req.params;
     if (!blog_article_id) return res.status(400).json({ error: 'blog_article_id é obrigatório.' });
@@ -29,13 +37,48 @@ export default (BlogService) => {
       console.log(`** Updating content_md for article ${blog_article_id}...`);
       console.log(`** New content_md preview: ${content_md.substring(0, 100)}...`);
       const updated = await BlogService.updateBlogArticleContentMd(blog_article_id, content_md);
-      console.log(`✅ Updated content_md for article ${blog_article_id}`);
+      console.log(`Updated content_md for article ${blog_article_id}`);
       res.json({ success: true, updated });
     } catch (err) {
       console.error(`Error updating content_md for article ${blog_article_id}:`, err);
       res.status(500).json({ error: err.message });
     }
   });
+
+  /**
+   * POST /image-editor/articles/:blog_article_id/upload-image/
+   *
+   * Proxy de upload de imagem para o Django.
+   *
+   * Contexto: o image-uploader.html envia a imagem diretamente para cá
+   * (sem passar pelo pipeline de processamento do Express que o blog-image-editor.js usa).
+   * Este endpoint apenas bufferiza via multer e repassa ao Django como multipart idêntico.
+   *
+   * Fluxo:
+   *   browser -> multipart/form-data (campo "image") -> multer (memoryStorage)
+   *   -> BlogService.uploadArticleImage -> fetch Django -> { image_url }
+   */
+  router.post(
+    '/image-editor/articles/:blog_article_id/upload-image/',
+    upload.single('image'),
+    async (req, res) => {
+      const { blog_article_id } = req.params;
+      if (!blog_article_id) {
+        return res.status(400).json({ error: 'blog_article_id é obrigatório.' });
+      }
+      if (!req.file) {
+        return res.status(400).json({ error: 'Nenhuma imagem enviada (campo "image" ausente).' });
+      }
+
+      try {
+        const result = await BlogService.uploadArticleImage(blog_article_id, req.file);
+        res.json(result); // { image_url }
+      } catch (err) {
+        console.error(`Error uploading image for article ${blog_article_id}:`, err);
+        res.status(500).json({ error: err.message });
+      }
+    }
+  );
 
   return router;
 };

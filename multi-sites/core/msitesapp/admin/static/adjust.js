@@ -6,28 +6,32 @@
  *  - Inicializar e destruir o Cropper
  *  - Aplicar transformações (crop, brilho, contraste, saturação, nitidez, escala de cinza) via canvas
  *  - Notificar app.js quando a imagem ajustada estiver pronta (callback onAdjustApplied)
+ *
+ * Fluxo de saída:
+ *   canvas.toBlob() → Blob → onAppliedCallback(blob)
+ *   O app.js converte o Blob em File e gera objectURL para preview.
  */
 
 const AdjustOverlay = (() => {
   // --- Estado interno ---
   let cropper = null;
-  let onAppliedCallback = null; // chamado com o novo dataUrl após aplicar
+  let onAppliedCallback = null; // chamado com Blob após aplicar
 
-  // --- Referências ao DOM (resolvidas uma vez em init) ---
+  // --- Referências ao DOM (resolvidas sob demanda via getter) ---
   const el = {
-    overlay:    () => document.getElementById('overlay-adjust'),
-    img:        () => document.getElementById('adjust-img'),
-    cropCheck:  () => document.getElementById('crop-check'),
-    width:      () => document.getElementById('adj-width'),
-    height:     () => document.getElementById('adj-height'),
-    origSize:   () => document.getElementById('adj-orig-size'),
-    brightness: () => document.getElementById('adj-brightness'),
-    contrast:   () => document.getElementById('adj-contrast'),
-    saturation: () => document.getElementById('adj-saturation'),
-    quality:    () => document.getElementById('adj-quality'),
-    sharpen:    () => document.getElementById('adj-sharpen'),
-    grayscale:  () => document.getElementById('adj-grayscale'),
-    alt:        () => document.getElementById('adj-alt'),
+    overlay:       () => document.getElementById('overlay-adjust'),
+    img:           () => document.getElementById('adjust-img'),
+    cropCheck:     () => document.getElementById('crop-check'),
+    width:         () => document.getElementById('adj-width'),
+    height:        () => document.getElementById('adj-height'),
+    origSize:      () => document.getElementById('adj-orig-size'),
+    brightness:    () => document.getElementById('adj-brightness'),
+    contrast:      () => document.getElementById('adj-contrast'),
+    saturation:    () => document.getElementById('adj-saturation'),
+    quality:       () => document.getElementById('adj-quality'),
+    sharpen:       () => document.getElementById('adj-sharpen'),
+    grayscale:     () => document.getElementById('adj-grayscale'),
+    alt:           () => document.getElementById('adj-alt'),
     lblBrightness: () => document.getElementById('lbl-brightness'),
     lblContrast:   () => document.getElementById('lbl-contrast'),
     lblSaturation: () => document.getElementById('lbl-saturation'),
@@ -66,13 +70,13 @@ const AdjustOverlay = (() => {
   }
 
   // --- Abre o overlay com a imagem atual ---
-  function open(imageDataUrl) {
+  function open(imageUrl) {
     // Reseta controles para defaults
     resetControls();
 
     // Carrega a imagem no elemento de ajuste
     const imgEl = el.img();
-    imgEl.src = imageDataUrl;
+    imgEl.src = imageUrl;
 
     // Destrói cropper anterior se houver
     if (cropper) {
@@ -129,15 +133,15 @@ const AdjustOverlay = (() => {
     el.height().value = Math.round(newW * ratio);
   }
 
-  // --- Aplica ajustes via canvas e retorna dataUrl ---
+  // --- Aplica ajustes via canvas e entrega Blob ao callback ---
   async function applyAdjust() {
-    el.btnApply().disabled = true;
+    el.btnApply().disabled    = true;
     el.btnApply().textContent = 'Processando...';
 
     try {
-      const imgEl    = el.img();
-      const isCrop   = el.cropCheck().checked;
-      const quality  = parseInt(el.quality().value) / 100;
+      const imgEl      = el.img();
+      const isCrop     = el.cropCheck().checked;
+      const quality    = parseInt(el.quality().value) / 100;
       const brightness = parseInt(el.brightness().value); // -100..100
       const contrast   = parseInt(el.contrast().value);
       const saturation = parseInt(el.saturation().value);
@@ -151,7 +155,6 @@ const AdjustOverlay = (() => {
       if (isCrop && cropper) {
         sourceCanvas = cropper.getCroppedCanvas({ imageSmoothingQuality: 'high' });
       } else {
-        // Cria canvas com a imagem original
         sourceCanvas = document.createElement('canvas');
         sourceCanvas.width  = imgEl.naturalWidth;
         sourceCanvas.height = imgEl.naturalHeight;
@@ -175,16 +178,17 @@ const AdjustOverlay = (() => {
         applyConvolution(ctx, canvas, sharpenKernel());
       }
 
-      // 5. Exporta como webp com a qualidade definida (usa Blob, não dataURL)
+      // 5. Exporta como WebP via toBlob (menor memória vs. dataURL)
+      //    O callback recebe o Blob; app.js o converte em File.
       canvas.toBlob((blob) => {
         close();
-        if (onAppliedCallback) onAppliedCallback(blob);
+        if (blob && onAppliedCallback) onAppliedCallback(blob);
       }, 'image/webp', quality);
 
     } catch (err) {
       console.error('Erro ao aplicar ajustes:', err);
       alert('Erro ao processar a imagem: ' + err.message);
-      el.btnApply().disabled = false;
+      el.btnApply().disabled    = false;
       el.btnApply().textContent = 'Aplicar ajustes';
     }
   }
@@ -246,9 +250,9 @@ const AdjustOverlay = (() => {
   // --- Aplica convolução 3x3 ---
   function applyConvolution(ctx, canvas, kernel) {
     const w = canvas.width, h = canvas.height;
-    const src  = ctx.getImageData(0, 0, w, h);
-    const dst  = ctx.createImageData(w, h);
-    const s    = src.data, d = dst.data;
+    const src = ctx.getImageData(0, 0, w, h);
+    const dst = ctx.createImageData(w, h);
+    const s = src.data, d = dst.data;
 
     for (let y = 1; y < h - 1; y++) {
       for (let x = 1; x < w - 1; x++) {

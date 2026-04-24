@@ -16,15 +16,17 @@ function getQueryParam(name) {
 
 const blogArticleId = getQueryParam('blog_article_id');
 const slug          = getQueryParam('slug');
+const group         = getQueryParam('group');
 
 // ---------------------------------------------------------------------------
 // Estado
 // ---------------------------------------------------------------------------
 const state = {
   mode:         'upload',   // 'upload' | 'clipboard'
-  imageFile:    null,       // File
-  imageDataUrl: '',         // string (dataURL ou objectURL)
+  imageFile:    null,       // File (fonte primária — sempre preferida)
+  imageDataUrl: '',         // string (objectURL ou dataURL — só para preview)
   imageName:    '',
+  imageGroup:   group,
   saving:       false,
   imagesSaved:  [],         // [{ filename, url, copied }]
 };
@@ -88,8 +90,8 @@ function updateImageActions() {
 }
 
 function updateSaveButton() {
-  dom.btnSave.disabled      = state.saving;
-  dom.btnSave.textContent   = state.saving ? 'Salvando...' : 'Salvar';
+  dom.btnSave.disabled    = state.saving;
+  dom.btnSave.textContent = state.saving ? 'Salvando...' : 'Salvar';
 }
 
 function showPreviewSpinner(active) {
@@ -128,16 +130,89 @@ function updateCopiedIcon(index, copied) {
 }
 
 // ---------------------------------------------------------------------------
+// Utils
+// ---------------------------------------------------------------------------
+
+/**
+ * Converte dataURL (base64) em Blob.
+ * Usado apenas como fallback — o fluxo principal sempre usa File diretamente.
+ */
+function dataURLtoBlob(dataUrl) {
+  const [header, base64] = dataUrl.split(',');
+  const mime = header.match(/:(.*?);/)[1];
+  const binary = atob(base64);
+  const arr = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
+/**
+ * Sempre retorna um File pronto para upload.
+ *
+ * Fluxo de prioridade:
+ *   1. state.imageFile já é File → usa direto (upload normal, clipboard, ou pós-ajuste)
+ *   2. state.imageDataUrl é dataURL (base64) → converte via dataURLtoBlob
+ *   3. Nenhum dos dois → lança erro
+ *
+ * Nota: objectURL (blob:...) NÃO passa pelo caso 2, porque o fluxo de clipboard
+ * e pós-ajuste sempre define state.imageFile antes de setar state.imageDataUrl.
+ */
+function getFileForUpload() {
+  if (state.imageFile) return state.imageFile;
+
+  if (state.imageDataUrl && state.imageDataUrl.startsWith('data:')) {
+    const blob = dataURLtoBlob(state.imageDataUrl);
+    return new File(
+      [blob],
+      (state.imageName.trim() || 'imagem') + '.webp',
+      { type: 'image/webp' }
+    );
+  }
+
+  return null;
+}
+
+/**
+ * Envia a imagem diretamente para o Django via multipart/form-data.
+ * Retorna { image_url } em caso de sucesso.
+ */
+async function uploadImageToDjango(filename, group, alt) {
+  const file = getFileForUpload();
+  if (!file) throw new Error('Nenhuma imagem selecionada');
+
+  console.log('Uploading image to Django...', { filename, group, alt, file });
+
+  const form = new FormData();
+  form.append('image', file, file.name);
+  if (filename) form.append('filename', filename);
+  if (group) form.append('group', group);
+  if (alt) form.append('alt', alt);
+
+  const res = await fetch(`https://sys.fastvistos.com.br/api/blogimage/upload/`, {
+    method: 'POST',
+    body: form,
+    headers: {
+      'X-API-Key': '649dba57b904fcab2b82b0cd871cac32dcc084e0bb07c9cfb276db5209a82daf'
+      // Não inclua 'Content-Type' ao usar FormData, o browser define corretamente.
+    },    
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+  return data;
+}
+
+// ---------------------------------------------------------------------------
 // Handlers de evento
 // ---------------------------------------------------------------------------
 
 function setMode(newMode) {
   if (state.mode === newMode) return;
-  state.mode        = newMode;
-  state.imageFile   = null;
+  state.mode         = newMode;
+  state.imageFile    = null;
   state.imageDataUrl = '';
-  state.imageName   = '';
-  dom.nameInput.value = '';
+  state.imageName    = '';
+  dom.nameInput.value       = '';
   dom.fileLabel.textContent = 'nenhum arquivo';
 
   updateTabs();
@@ -149,21 +224,22 @@ function setMode(newMode) {
 dom.tabUpload.addEventListener('click',    () => setMode('upload'));
 dom.tabClipboard.addEventListener('click', () => setMode('clipboard'));
 
-// File input
+// File input — upload normal
 dom.fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file || !file.type.startsWith('image/')) {
     setError('Selecione um arquivo de imagem válido', true);
     return;
   }
-  state.imageFile = file;
-  state.imageName = file.name.replace(/\.[^.]+$/, '');
-  dom.nameInput.value = state.imageName;
-  dom.fileLabel.textContent = file.name;
-  showPreviewSpinner(true);
-  // Usa objectURL para preview
+
+  // File é a fonte primária; objectURL só para preview
+  state.imageFile    = file;
+  state.imageName    = file.name.replace(/\.[^.]+$/, '');
   state.imageDataUrl = URL.createObjectURL(file);
-  showPreviewSpinner(false);
+
+  dom.nameInput.value       = state.imageName;
+  dom.fileLabel.textContent = file.name;
+
   updatePreview();
   updateImageActions();
   setError('');
@@ -179,15 +255,18 @@ document.addEventListener('paste', (e) => {
   if (state.mode !== 'clipboard') return;
   const items = e.clipboardData?.items;
   if (!items) return;
+
   for (const item of items) {
     if (item.type.startsWith('image/')) {
       const file = item.getAsFile();
-      state.imageFile = file;
-      state.imageName = 'imagem-' + Date.now();
-      dom.nameInput.value = state.imageName;
-      showPreviewSpinner(true);
+
+      // File é a fonte primária; objectURL só para preview
+      state.imageFile    = file;
+      state.imageName    = 'imagem-' + Date.now();
       state.imageDataUrl = URL.createObjectURL(file);
-      showPreviewSpinner(false);
+
+      dom.nameInput.value = state.imageName;
+
       updatePreview();
       updateImageActions();
       setError('');
@@ -197,57 +276,43 @@ document.addEventListener('paste', (e) => {
   setError('Nenhuma imagem no clipboard', true);
 });
 
-// Helper: sempre retorna um File pronto para upload
-function getFileForUpload() {
-  if (state.imageFile) return state.imageFile;
-  if (state.imageDataUrl) {
-    const blob = dataURLtoBlob(state.imageDataUrl);
-    return new File([blob], state.imageName.trim() + '.webp', { type: 'image/webp' });
-  }
-  return null;
-}
-
-// Envia imagem para Django
-async function uploadImageToDjango() {
-  const file = getFileForUpload();
-  if (!file) throw new Error('Nenhuma imagem selecionada');
-  const form = new FormData();
-  form.append('image', file, file.name);
-  // Ajuste a URL conforme seu backend
-  const API_BASE = '/msitesapp/api/image-editor';
-  const res = await fetch(`${API_BASE}/articles/${blogArticleId}/upload-image/`, {
-    method: 'POST',
-    body: form
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
-  return data;
-}
-
 // Salvar imagem
 dom.btnSave.addEventListener('click', async () => {
   if (!state.imageName.trim()) {
     setError('Digite um nome para o arquivo', true);
     return;
   }
+  if (!state.imageFile && !state.imageDataUrl) {
+    setError('Nenhuma imagem selecionada', true);
+    return;
+  }
+
   state.saving = true;
   updateSaveButton();
   showPreviewSpinner(true);
   setError('');
+
   try {
-    const data = await uploadImageToDjango();
-    const filename = state.imageName.trim() + '.webp';
-    const savedImg = { filename, url: data.image_url, copied: false };
+    const imageName = state.imageName.trim() + '.webp';
+    const data = await uploadImageToDjango(imageName, state.imageGroup);
+
+    const savedImg = {
+      filename: imageName,
+      url:      data.image_url,
+      copied:   false,
+    };
     const newIndex = state.imagesSaved.length;
     state.imagesSaved.push(savedImg);
     addToImageList(savedImg, newIndex);
-    // Limpa estado da imagem
+
+    // Limpa estado da imagem após upload bem-sucedido
     state.imageFile    = null;
     state.imageDataUrl = '';
     state.imageName    = '';
-    dom.nameInput.value = '';
+    dom.nameInput.value       = '';
     dom.fileLabel.textContent = 'nenhum arquivo';
-    dom.fileInput.value = '';
+    dom.fileInput.value       = '';
+
     updatePreview();
     updateImageActions();
   } catch (err) {
@@ -259,7 +324,7 @@ dom.btnSave.addEventListener('click', async () => {
   }
 });
 
-// Copiar URL da imagem salva
+// Copiar URL da imagem salva como markdown
 function onCopyUrl(index) {
   const img = state.imagesSaved[index];
   if (!img) return;
@@ -283,7 +348,6 @@ function onCopyUrl(index) {
   }, 1500);
 }
 
-dom.btnAdjust.addEventListener('click', () => {
 // Botão Ajustar
 dom.btnAdjust.addEventListener('click', () => {
   AdjustOverlay.open(state.imageDataUrl);
@@ -295,32 +359,29 @@ dom.btnEditArticle.addEventListener('click', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Utils
-// ---------------------------------------------------------------------------
-function dataURLtoBlob(dataUrl) {
-  const [header, base64] = dataUrl.split(',');
-  const mime = header.match(/:(.*?);/)[1];
-  const binary = atob(base64);
-  const arr = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
-  return new Blob([arr], { type: mime });
-}
-
-
-// ---------------------------------------------------------------------------
 // Inicialização dos overlays
 // ---------------------------------------------------------------------------
-// Novo callback: aceita Blob ou dataURL
+
+/**
+ * Callback do AdjustOverlay.
+ *
+ * adjust.js usa canvas.toBlob() → entrega um Blob.
+ * Convertemos para File e geramos um objectURL para preview,
+ * mantendo state.imageFile como fonte primária para upload.
+ */
 AdjustOverlay.init((result) => {
   if (result instanceof Blob) {
-    const file = new File([result], state.imageName.trim() + '.webp', { type: 'image/webp' });
-    state.imageFile = file;
+    const name = (state.imageName.trim() || 'imagem') + '.webp';
+    const file  = new File([result], name, { type: 'image/webp' });
+
+    state.imageFile    = file;
     state.imageDataUrl = URL.createObjectURL(result);
   } else {
-    // fallback para dataURL
-    state.imageFile = null;
+    // Fallback para dataURL (caso futuro ou legacy)
+    state.imageFile    = null;
     state.imageDataUrl = result;
   }
+
   updatePreview();
 });
 
