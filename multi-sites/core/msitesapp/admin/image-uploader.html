@@ -32,11 +32,17 @@
   <!-- ===== PÁGINA PRINCIPAL ===== -->
   <div id="main-page" class="p-4">
 
-    <!-- Botão Editar Artigo -->
-    <button id="btn-edit-article"
-      class="w-full h-11 rounded-xl border border-blue-600 text-blue-600 font-medium mb-4 hover:bg-blue-50 transition-colors">
-      📝 Editar Artigo
-    </button>
+    <!-- Botões de topo: Galeria + Editar Artigo -->
+    <div class="flex gap-2 mb-4">
+      <button id="btn-gallery"
+        class="flex-1 h-11 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-colors text-sm">
+        🖼️ Galeria
+      </button>
+      <button id="btn-edit-article"
+        class="flex-1 h-11 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-colors text-sm">
+        📝 Editar Artigo
+      </button>
+    </div>
 
     <!-- Preview da imagem -->
     <div id="preview-container"
@@ -204,8 +210,80 @@
     </div>
   </div>
 
+  <!-- ===== OVERLAY: GALERIA ===== -->
+  <div id="overlay-gallery" class="overlay">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
+      <button id="btn-close-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
+      <span class="font-semibold text-sm">Galeria</span>
+      <!-- Toggle grade / carousel -->
+      <div class="flex rounded-lg overflow-hidden border border-gray-200 text-sm">
+        <button id="btn-gallery-grid"
+          class="px-3 h-8 transition-colors" title="Grade">⊞</button>
+        <button id="btn-gallery-carousel"
+          class="px-3 h-8 transition-colors border-l border-gray-200" title="Carousel">▶</button>
+      </div>
+    </div>
+
+    <!-- Spinner -->
+    <div id="gallery-spinner" class="hidden flex justify-center py-6 shrink-0">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Erro -->
+    <div id="gallery-error" class="hidden text-red-500 text-sm px-4 pt-3 shrink-0"></div>
+
+    <!-- MODO GRADE: scroll vertical, 3 colunas -->
+    <div id="gallery-grid"
+      class="flex-1 overflow-y-auto p-3 grid grid-cols-3 gap-2 content-start">
+    </div>
+
+    <!-- MODO CAROUSEL -->
+    <div id="gallery-carousel" class="hidden flex-1 flex flex-col items-center p-4 gap-3">
+      <!-- Imagem -->
+      <div class="w-full flex-1 flex items-center justify-center bg-gray-50 rounded-2xl overflow-hidden relative min-h-0">
+        <img id="gallery-carousel-img" src="" alt=""
+          class="max-w-full max-h-full object-contain">
+        <!-- Setas sobrepostas -->
+        <button id="btn-carousel-prev"
+          class="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow text-xl flex items-center justify-center text-gray-700 hover:bg-white transition-colors disabled:opacity-30">
+          ‹
+        </button>
+        <button id="btn-carousel-next"
+          class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow text-xl flex items-center justify-center text-gray-700 hover:bg-white transition-colors disabled:opacity-30">
+          ›
+        </button>
+      </div>
+      <!-- Info -->
+      <div class="w-full flex items-center justify-between text-sm text-gray-500 shrink-0">
+        <span id="gallery-carousel-name" class="truncate max-w-[70%]"></span>
+        <span id="gallery-carousel-count" class="shrink-0 text-xs"></span>
+      </div>
+      <!-- Botão adicionar -->
+      <button id="btn-carousel-select"
+        class="w-full h-11 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-colors shrink-0">
+        Adicionar à lista
+      </button>
+    </div>
+
+    <!-- Paginação (rodapé fixo) -->
+    <div class="shrink-0 flex items-center justify-between px-4 h-12 border-t border-gray-100">
+      <button id="btn-gallery-prev"
+        class="h-8 px-3 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30">
+        ← Anterior
+      </button>
+      <span id="gallery-page-info" class="text-xs text-gray-400">1 / 1</span>
+      <button id="btn-gallery-next"
+        class="h-8 px-3 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30">
+        Próxima →
+      </button>
+    </div>
+  </div>
+
   <script src="static/adjust.js"></script>
   <script src="static/editArticle.js"></script>
+  <script src="static/gallery.js"></script>
   <script src="static/app.js"></script>
 </body>
 </html>

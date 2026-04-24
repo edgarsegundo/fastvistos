@@ -80,5 +80,39 @@ export default (BlogService) => {
     }
   );
 
+
+  /**
+   * GET /image-editor/gallery/
+   *
+   * Lista imagens do banco filtradas por group, com paginação simples.
+   *
+   * Query params:
+   *   group  {string}  obrigatório
+   *   page   {number}  opcional, default 1
+   *   limit  {number}  opcional, default 24 (máx 100)
+   *
+   * Resposta:
+   *   { images: [...], total, page, limit, pages }
+   *
+   * O campo `image` em cada item é o path relativo do Django.
+   * O frontend monta a URL absoluta com MEDIA_BASE.
+   */
+  router.get('/image-editor/gallery/', async (req, res) => {
+    const { group } = req.query;
+    if (!group) return res.status(400).json({ error: 'O parâmetro "group" é obrigatório.' });
+ 
+    const limit  = Math.min(parseInt(req.query.limit) || 24, 100);
+    const page   = Math.max(parseInt(req.query.page)  || 1,  1);
+    const offset = (page - 1) * limit;
+ 
+    try {
+      const { images, total } = await BlogService.getBlogImagesByGroup(group, offset, limit);
+      res.json({ images, total, page, limit, pages: Math.ceil(total / limit) });
+    } catch (err) {
+      console.error('Erro ao buscar galeria:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };

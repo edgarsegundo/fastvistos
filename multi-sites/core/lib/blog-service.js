@@ -279,4 +279,46 @@ export class BlogService {
         }
     }
 
+    /**
+     * Busca imagens do blog filtradas por group, com paginação por offset/limit.
+     *
+     * @param {string} group      - O group a filtrar (obrigatório)
+     * @param {number} offset     - Quantos registros pular (default 0)
+     * @param {number} limit      - Quantos registros retornar por página (default 24)
+     * @returns {Promise<{ images: Array, total: number }>}
+     *
+     * O campo `image` é o path relativo gravado pelo Django (ex: "blog/images/foo.webp").
+     * O frontend é responsável por montar a URL absoluta prefixando com MEDIA_BASE.
+     */
+    static async getBlogImagesByGroup(group, offset = 0, limit = 24) {
+        console.log(`[DEBUG] getBlogImagesByGroup called with group="${group}", offset=${offset}, limit=${limit}`);
+        if (!group) throw new Error('group é obrigatório');
+        try {
+            const where = { group };
+            const [images, total] = await Promise.all([
+                prisma.blog_image.findMany({
+                    where,
+                    orderBy: { modified: 'desc' },
+                    skip: offset,
+                    take: limit,
+                    select: {
+                        id:       true,
+                        filename: true,
+                        image:    true,
+                        alt:      true,
+                        group:    true,
+                        slug:     true,
+                        modified: true,
+                    },
+                }),
+                prisma.blog_image.count({ where }),
+            ]);
+            return { images, total };
+        } catch (error) {
+            console.error('Erro ao buscar imagens por group:', error);
+            throw error;
+        }
+    }
+
+
 }

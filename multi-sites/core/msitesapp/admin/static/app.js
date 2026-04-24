@@ -49,6 +49,7 @@ const dom = {
   btnSave:            document.getElementById('btn-save'),
   btnAdjust:          document.getElementById('btn-adjust'),
   btnEditArticle:     document.getElementById('btn-edit-article'),
+  btnGallery:         document.getElementById('btn-gallery'),
   errorMsg:           document.getElementById('error-msg'),
   imagesList:         document.getElementById('images-list'),
 };
@@ -85,8 +86,7 @@ function updatePreview() {
 }
 
 function updateImageActions() {
-  const hasImage = !!state.imageDataUrl;
-  dom.imageActions.classList.toggle('hidden', !hasImage);
+  dom.imageActions.classList.toggle('hidden', !state.imageDataUrl);
 }
 
 function updateSaveButton() {
@@ -103,9 +103,7 @@ function showPreviewSpinner(active) {
 function setError(msg, autoClear = false) {
   dom.errorMsg.textContent = msg;
   dom.errorMsg.classList.toggle('hidden', !msg);
-  if (msg && autoClear) {
-    setTimeout(() => setError(''), 2500);
-  }
+  if (msg && autoClear) setTimeout(() => setError(''), 2500);
 }
 
 // Adiciona um item à lista de imagens (sem recriar a lista inteira)
@@ -162,11 +160,7 @@ function getFileForUpload() {
 
   if (state.imageDataUrl && state.imageDataUrl.startsWith('data:')) {
     const blob = dataURLtoBlob(state.imageDataUrl);
-    return new File(
-      [blob],
-      (state.imageName.trim() || 'imagem') + '.webp',
-      { type: 'image/webp' }
-    );
+    return new File([blob], (state.imageName.trim() || 'imagem') + '.webp', { type: 'image/webp' });
   }
 
   return null;
@@ -176,23 +170,18 @@ function getFileForUpload() {
  * Envia a imagem diretamente para o Django via multipart/form-data.
  * Retorna { image_url } em caso de sucesso.
  */
-async function uploadImageToDjango(filename, group, alt) {
+async function uploadImageToDjango(filename, grp, alt) {
   const file = getFileForUpload();
   if (!file) throw new Error('Nenhuma imagem selecionada');
 
-  console.log('Uploading image to Django...', { filename, group, alt, file });
+  console.log('Uploading image to Django...', { filename, grp, alt, file });
 
   const form = new FormData();
   form.append('image', file, file.name);
   if (filename) form.append('filename', filename);
-  if (group) form.append('group', group);
-  if (alt) form.append('alt', alt);
-
-  const res = await fetch(`https://sys.fastvistos.com.br/api/blogimage/upload/`, {
-    method: 'POST',
-    body: form,
-  });
-
+  if (grp)      form.append('group', grp);
+  if (alt)      form.append('alt', alt);
+  const res  = await fetch('https://sys.fastvistos.com.br/api/blogimage/upload/', { method: 'POST', body: form });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
   return data;
@@ -223,12 +212,7 @@ dom.tabClipboard.addEventListener('click', () => setMode('clipboard'));
 // File input — upload normal
 dom.fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
-  if (!file || !file.type.startsWith('image/')) {
-    setError('Selecione um arquivo de imagem válido', true);
-    return;
-  }
-
-  // File é a fonte primária; objectURL só para preview
+  if (!file || !file.type.startsWith('image/')) { setError('Selecione um arquivo de imagem válido', true); return; }
   state.imageFile    = file;
   state.imageName    = file.name.replace(/\.[^.]+$/, '');
   state.imageDataUrl = URL.createObjectURL(file);
@@ -241,10 +225,7 @@ dom.fileInput.addEventListener('change', (e) => {
   setError('');
 });
 
-// Name input — atualiza estado sem re-render
-dom.nameInput.addEventListener('input', (e) => {
-  state.imageName = e.target.value;
-});
+dom.nameInput.addEventListener('input', (e) => { state.imageName = e.target.value; });
 
 // Clipboard paste
 document.addEventListener('paste', (e) => {
@@ -274,15 +255,8 @@ document.addEventListener('paste', (e) => {
 
 // Salvar imagem
 dom.btnSave.addEventListener('click', async () => {
-  if (!state.imageName.trim()) {
-    setError('Digite um nome para o arquivo', true);
-    return;
-  }
-  if (!state.imageFile && !state.imageDataUrl) {
-    setError('Nenhuma imagem selecionada', true);
-    return;
-  }
-
+  if (!state.imageName.trim()) { setError('Digite um nome para o arquivo', true); return; }
+  if (!state.imageFile && !state.imageDataUrl) { setError('Nenhuma imagem selecionada', true); return; }
   state.saving = true;
   updateSaveButton();
   showPreviewSpinner(true);
@@ -290,26 +264,18 @@ dom.btnSave.addEventListener('click', async () => {
 
   try {
     const imageName = state.imageName.trim() + '.webp';
-    const altValue = document.getElementById('adj-alt')?.value || '';
-    const data = await uploadImageToDjango(imageName, state.imageGroup, altValue);
-
-    const savedImg = {
-      filename: imageName,
-      url:      data.image_url,
-      copied:   false,
-    };
-    const newIndex = state.imagesSaved.length;
+    const altValue  = document.getElementById('adj-alt')?.value || '';
+    const data      = await uploadImageToDjango(imageName, state.imageGroup, altValue);
+    const savedImg  = { filename: imageName, url: data.image_url, copied: false };
+    const newIndex  = state.imagesSaved.length;
     state.imagesSaved.push(savedImg);
     addToImageList(savedImg, newIndex);
-
-    // Limpa estado da imagem após upload bem-sucedido
-    state.imageFile    = null;
+    state.imageFile = null;
     state.imageDataUrl = '';
-    state.imageName    = '';
-    dom.nameInput.value       = '';
+    state.imageName = '';
+    dom.nameInput.value = '';
     dom.fileLabel.textContent = 'nenhum arquivo';
-    dom.fileInput.value       = '';
-
+    dom.fileInput.value = '';
     updatePreview();
     updateImageActions();
   } catch (err) {
@@ -339,20 +305,18 @@ function onCopyUrl(index) {
 
   img.copied = true;
   updateCopiedIcon(index, true);
-  setTimeout(() => {
-    img.copied = false;
-    updateCopiedIcon(index, false);
-  }, 1500);
+  setTimeout(() => { img.copied = false; updateCopiedIcon(index, false); }, 1500);
 }
 
-// Botão Ajustar
-dom.btnAdjust.addEventListener('click', () => {
-  AdjustOverlay.open(state.imageDataUrl);
-});
+dom.btnAdjust.addEventListener('click',      () => AdjustOverlay.open(state.imageDataUrl));
+dom.btnEditArticle.addEventListener('click', () => EditArticleOverlay.open());
 
-// Botão Editar Artigo
-dom.btnEditArticle.addEventListener('click', () => {
-  EditArticleOverlay.open();
+dom.btnGallery.addEventListener('click', () => {
+  if (!state.imageGroup) {
+    setError('Parâmetro "group" ausente na URL. A galeria não pode ser aberta.', true);
+    return;
+  }
+  GalleryOverlay.open(state.imageGroup);
 });
 
 // ---------------------------------------------------------------------------
@@ -369,9 +333,7 @@ dom.btnEditArticle.addEventListener('click', () => {
 AdjustOverlay.init((result) => {
   if (result instanceof Blob) {
     const name = (state.imageName.trim() || 'imagem') + '.webp';
-    const file  = new File([result], name, { type: 'image/webp' });
-
-    state.imageFile    = file;
+    state.imageFile    = new File([result], name, { type: 'image/webp' });
     state.imageDataUrl = URL.createObjectURL(result);
   } else {
     // Fallback para dataURL (caso futuro ou legacy)
@@ -384,5 +346,17 @@ AdjustOverlay.init((result) => {
 
 EditArticleOverlay.init(blogArticleId);
 
-// Estado inicial das tabs
+/**
+ * Callback da galeria.
+ * Recebe { filename, url, alt } e adiciona à lista de imagens salvas.
+ * Não toca no preview nem no estado de upload — fluxos independentes.
+ */
+GalleryOverlay.init((selected) => {
+  const savedImg = { filename: selected.filename, url: selected.url, copied: false };
+  const newIndex = state.imagesSaved.length;
+  state.imagesSaved.push(savedImg);
+  addToImageList(savedImg, newIndex);
+});
+
+// Estado inicial
 updateTabs();
