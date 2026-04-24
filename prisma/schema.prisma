@@ -277,6 +277,7 @@ model business {
   blog_article                   blog_article[]
   blog_asset                     blog_asset[]
   blog_config                    blog_config[]
+  blog_image                     blog_image[]
   blog_topic                     blog_topic[]
   catalog_item                   catalog_item[]
   chatbot                        chatbot[]
@@ -1342,4 +1343,20 @@ model transactions {
 
   @@index([business_id], map: "transactions_business_id_b6e92cd9_fk_business_id")
   @@index([customer_order_id], map: "transactions_customer_order_id_0b88110e_fk_customer_order_id")
+}
+
+model blog_image {
+  created     DateTime  @db.DateTime(6)
+  modified    DateTime  @db.DateTime(6)
+  id          String    @id @db.Char(32)
+  image       String?   @db.VarChar(100)
+  alt         String?   @db.VarChar(255)
+  business_id String?   @db.Char(32)
+  group       String?   @db.VarChar(255)
+  slug        String?   @db.VarChar(255)
+  filename    String?   @db.VarChar(255)
+  business    business? @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_image_business_id_5de59e7b_fk_business_id")
+
+  @@index([business_id], map: "blog_image_business_id_5de59e7b_fk_business_id")
+  @@index([slug], map: "blog_image_slug_bbc78326")
 }
