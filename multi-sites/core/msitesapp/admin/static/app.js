@@ -191,10 +191,6 @@ async function uploadImageToDjango(filename, group, alt) {
   const res = await fetch(`https://sys.fastvistos.com.br/api/blogimage/upload/`, {
     method: 'POST',
     body: form,
-    headers: {
-      'X-API-Key': '649dba57b904fcab2b82b0cd871cac32dcc084e0bb07c9cfb276db5209a82daf'
-      // Não inclua 'Content-Type' ao usar FormData, o browser define corretamente.
-    },    
   });
 
   const data = await res.json();
@@ -294,7 +290,8 @@ dom.btnSave.addEventListener('click', async () => {
 
   try {
     const imageName = state.imageName.trim() + '.webp';
-    const data = await uploadImageToDjango(imageName, state.imageGroup);
+    const altValue = document.getElementById('adj-alt')?.value || '';
+    const data = await uploadImageToDjango(imageName, state.imageGroup, altValue);
 
     const savedImg = {
       filename: imageName,
