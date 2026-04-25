@@ -71,12 +71,14 @@ const GalleryOverlay = (() => {
     el.btnCarouselSel().addEventListener('click', () => {
       if (images.length === 0) return;
       onImageClick(images[carouselIndex]);
+      flashCarouselCheck();
     });
 
     // Clique na imagem do carousel também seleciona
     el.carouselImg().addEventListener('click', () => {
       if (images.length === 0) return;
       onImageClick(images[carouselIndex]);
+      flashCarouselCheck();
     });
   }
 
@@ -173,7 +175,7 @@ const GalleryOverlay = (() => {
       // Tamanho fixo via style, sem aspect-square do Tailwind (evita sobreposição)
       // Cantos retos: sem rounded
       div.className = 'relative group cursor-pointer overflow-hidden bg-gray-100';
-      div.style.cssText = 'width: 100%; height: 100px; flex-shrink: 0;';
+      div.style.cssText = 'width: 100%; height: 100px; flex-shrink: 0; overflow: hidden;';
       div.innerHTML = `
         <img
           src="${imgUrl}"
@@ -220,6 +222,13 @@ const GalleryOverlay = (() => {
 
   function navigateCarousel(delta) {
     showCarouselImage(carouselIndex + delta);
+  }
+
+  function flashCarouselCheck() {
+    const check = document.getElementById('gallery-carousel-check');
+    if (!check) return;
+    check.style.opacity = '1';
+    setTimeout(() => { check.style.opacity = '0'; }, 900);
   }
 
   // ---------------------------------------------------------------------------
