@@ -29,14 +29,17 @@ export default (BlogService) => {
   // POST content_md
   router.post('/image-editor/articles/:blog_article_id/save-content-md/', async (req, res) => {
     const { blog_article_id } = req.params;
-    const { content_md } = req.body;
+    const { content_md, main_image_url } = req.body;
+    
+    // body: JSON.stringify({ blog_article_id: articleId, content_md, main_image_url: mainImageUrl }),
+
     if (!blog_article_id || typeof content_md !== 'string') {
       return res.status(400).json({ error: 'blog_article_id e content_md são obrigatórios.' });
     }
     try {
       console.log(`** Updating content_md for article ${blog_article_id}...`);
       console.log(`** New content_md preview: ${content_md.substring(0, 100)}...`);
-      const updated = await BlogService.updateBlogArticleContentMd(blog_article_id, content_md);
+      const updated = await BlogService.updateBlogArticleContentMd(blog_article_id, content_md, main_image_url);
       console.log(`Updated content_md for article ${blog_article_id}`);
       res.json({ success: true, updated });
     } catch (err) {

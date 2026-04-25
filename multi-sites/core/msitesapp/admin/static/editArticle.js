@@ -81,6 +81,7 @@ const EditArticleOverlay = (() => {
   async function save() {
     const content_md = el.textarea().value;
     const mainImageUrl = el.mainImageSelect().value;
+    console.log('Saving article with main image:', mainImageUrl);
     setError('');
     setSaving(true);
 
@@ -88,7 +89,7 @@ const EditArticleOverlay = (() => {
       const res = await fetch(`${API_BASE}/articles/${articleId}/save-content-md/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blog_article_id: articleId, content_md, main_image_url: mainImageUrl }),
+        body: JSON.stringify({ content_md, main_image_url: mainImageUrl }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao salvar`);

@@ -34,16 +34,17 @@ export class BlogService {
      * @param {string} content_md - The new markdown content
      * @returns {Promise<Object>} The updated article
      */
-    static async updateBlogArticleContentMd(id, content_md) {
+    static async updateBlogArticleContentMd(id, content_md, main_image_url = null) {
         try {
             // Loga a URL do banco de dados (se disponível)
             console.log('[DEBUG] DATABASE_URL:', process.env.DATABASE_URL);
             // Loga o id e o novo conteúdo
-            console.log('[DEBUG] Atualizando artigo:', { id, content_md: content_md?.slice?.(0, 100) }); // Mostra só os 100 primeiros caracteres
+            console.log('[DEBUG] Atualizando artigo:', { id, content_md: content_md?.slice?.(0, 100), main_image_url }); // Mostra só os 100 primeiros caracteres
             const updated = await prisma.blog_article.update({
                 where: { id },
                 data: {
                     content_md,
+                    image: main_image_url, // Atualiza o campo de imagem SEO também
                     modified: new Date(),
                 },
             });
