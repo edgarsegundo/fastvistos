@@ -46,6 +46,15 @@
       gap: 0.75rem;
     }
     .gallery-carousel-layout.hidden { display: none; }
+
+    /* Stock gallery grid */
+    .stock-grid-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      align-content: start;
+    }
+    .stock-grid-layout.hidden { display: none; }
   </style>
 </head>
 <body class="max-w-[480px] mx-auto bg-white min-h-screen">
@@ -53,15 +62,19 @@
   <!-- ===== PÁGINA PRINCIPAL ===== -->
   <div id="main-page" class="p-4">
 
-    <!-- Botões de topo: Galeria + Editar Artigo -->
+    <!-- Botões de topo: Galeria + Stock + Editar Artigo -->
     <div class="flex gap-2 mb-4">
       <button id="btn-gallery"
         class="flex-1 h-11 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-colors text-sm">
         🖼️ Galeria
       </button>
+      <button id="btn-stock-gallery"
+        class="flex-1 h-11 rounded-xl border border-emerald-600 text-emerald-600 font-medium hover:bg-emerald-50 transition-colors text-sm">
+        🌐 Stock
+      </button>
       <button id="btn-edit-article"
         class="flex-1 h-11 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-colors text-sm">
-        📝 Editar Artigo
+        📝 Artigo
       </button>
     </div>
 
@@ -102,7 +115,10 @@
 
     <!-- Área clipboard -->
     <div id="area-clipboard" class="hidden">
-      <p class="text-gray-400 text-sm mb-2">Cole uma imagem (Ctrl+V / Cmd+V)</p>
+      <div class="flex items-center gap-2 mb-2">
+        <p class="text-gray-400 text-sm">Cole uma imagem (Ctrl+V / Cmd+V)</p>
+        <button id="btn-paste-clipboard" type="button" class="ml-auto border border-blue-600 text-blue-600 px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-blue-50 transition-colors shrink-0">Colar imagem</button>
+      </div>
     </div>
 
     <!-- Nome do arquivo -->
@@ -238,7 +254,7 @@
     </div>
   </div>
 
-  <!-- ===== OVERLAY: GALERIA ===== -->
+  <!-- ===== OVERLAY: GALERIA (servidor) ===== -->
   <div id="overlay-gallery" class="overlay">
 
     <!-- Header -->
@@ -315,9 +331,84 @@
     </div>
   </div>
 
+  <!-- ===== OVERLAY: STOCK GALLERY (Pexels + Pixabay) ===== -->
+  <div id="overlay-stock-gallery" class="overlay">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
+      <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
+      <span class="font-semibold text-sm">Imagens Stock</span>
+      <!-- Abas Pexels / Pixabay -->
+      <div class="flex rounded-lg overflow-hidden border border-gray-200 text-xs">
+        <button id="tab-stock-pexels"
+          class="px-3 h-8 transition-colors font-medium">
+          Pexels
+        </button>
+        <button id="tab-stock-pixabay"
+          class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
+          Pixabay
+        </button>
+      </div>
+    </div>
+
+    <!-- Barra de busca -->
+    <div class="flex gap-2 px-3 py-2 border-b border-gray-100 shrink-0">
+      <input
+        id="stock-search-input"
+        type="text"
+        placeholder="Buscar imagens..."
+        class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
+      >
+      <button
+        id="btn-stock-search"
+        class="h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
+        🔍
+      </button>
+    </div>
+
+    <!-- Spinner -->
+    <div id="stock-gallery-spinner" class="hidden flex justify-center py-6 shrink-0">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Erro -->
+    <div id="stock-gallery-error" class="hidden text-red-500 text-sm px-4 pt-3 shrink-0"></div>
+
+    <!-- Loading overlay ao clicar em imagem -->
+    <div id="stock-img-loading"
+      class="hidden fixed inset-0 z-[200] bg-black/40 flex items-center justify-center">
+      <div class="bg-white rounded-2xl px-6 py-4 flex items-center gap-3 shadow-lg">
+        <div class="spinner"></div>
+        <span class="text-sm text-gray-600">Carregando imagem...</span>
+      </div>
+    </div>
+
+    <!-- Grade de imagens -->
+    <div id="stock-gallery-grid"
+      class="stock-grid-layout flex-1 overflow-y-auto p-3">
+    </div>
+
+    <!-- Attribution + Paginação (rodapé fixo) -->
+    <div class="shrink-0 border-t border-gray-100">
+      <div id="stock-gallery-attribution" class="text-center text-xs text-gray-400 pt-2 px-4"></div>
+      <div class="flex items-center justify-between px-4 h-12">
+        <button id="btn-stock-gallery-prev"
+          class="h-8 px-3 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30">
+          ← Anterior
+        </button>
+        <span id="stock-gallery-page-info" class="text-xs text-gray-400">1 / 1</span>
+        <button id="btn-stock-gallery-next"
+          class="h-8 px-3 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30">
+          Próxima →
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script src="static/adjust.js"></script>
   <script src="static/editArticle.js"></script>
   <script src="static/gallery.js"></script>
+  <script src="static/stock-gallery.js"></script>
   <script src="static/app.js"></script>
 </body>
 </html>

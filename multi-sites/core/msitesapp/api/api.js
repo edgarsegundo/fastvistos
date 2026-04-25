@@ -20,6 +20,7 @@ import sectionRoutes from './section-routes.js';
 import publishRoutes from './publish-routes.js';
 import blogArticleRoutes from './blog-article-routes.js';
 import imageRoutes from './image-routes.js';
+import stockRoutes from './stock-routes.js';
 
 const app = express();
 app.use(bodyParser.json());
@@ -41,6 +42,7 @@ app.use(sectionRoutes(WebPageService));
 app.use(publishRoutes(BlogService));
 app.use(blogArticleRoutes(BlogService));
 app.use(imageRoutes(BlogService));
+app.use(stockRoutes);
 
 app.get('/ping', (req, res) => {
     res.json({

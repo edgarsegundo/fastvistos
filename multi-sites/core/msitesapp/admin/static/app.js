@@ -50,6 +50,8 @@ const dom = {
   btnAdjust:          document.getElementById('btn-adjust'),
   btnEditArticle:     document.getElementById('btn-edit-article'),
   btnGallery:         document.getElementById('btn-gallery'),
+  btnStockGallery:    document.getElementById('btn-stock-gallery'),
+  btnPasteClipboard:  document.getElementById('btn-paste-clipboard'),
   errorMsg:           document.getElementById('error-msg'),
   imagesList:         document.getElementById('images-list'),
 };
@@ -209,6 +211,36 @@ function setMode(newMode) {
 dom.tabUpload.addEventListener('click',    () => setMode('upload'));
 dom.tabClipboard.addEventListener('click', () => setMode('clipboard'));
 
+// Botão de colar imagem (clipboard)
+if (dom.btnPasteClipboard) {
+  dom.btnPasteClipboard.addEventListener('click', async () => {
+    if (!('clipboard' in navigator) || !navigator.clipboard.read) {
+      setError('Seu navegador não suporta colar imagem do clipboard.');
+      return;
+    }
+    setError('');
+    try {
+      const items = await navigator.clipboard.read();
+      const imgItem = items.find(item => item.types.some(type => type.startsWith('image/')));
+      if (!imgItem) {
+        setError('Nenhuma imagem encontrada no clipboard.', true);
+        return;
+      }
+      const type = imgItem.types.find(type => type.startsWith('image/'));
+      const blob = await imgItem.getType(type);
+      const name = 'imagem-' + Date.now();
+      state.imageFile = new File([blob], name + '.webp', { type: blob.type });
+      state.imageName = name;
+      state.imageDataUrl = URL.createObjectURL(blob);
+      dom.nameInput.value = state.imageName;
+      updatePreview();
+      updateImageActions();
+    } catch (err) {
+      setError('Erro ao acessar o clipboard ou permissão negada.');
+    }
+  });
+}
+
 // File input — upload normal
 dom.fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
@@ -324,6 +356,11 @@ dom.btnGallery.addEventListener('click', () => {
   GalleryOverlay.open(state.imageGroup);
 });
 
+// Botão Stock Gallery (Pexels + Pixabay)
+dom.btnStockGallery.addEventListener('click', () => {
+  StockGalleryOverlay.open();
+});
+
 // ---------------------------------------------------------------------------
 // Inicialização dos overlays
 // ---------------------------------------------------------------------------
@@ -353,9 +390,8 @@ AdjustOverlay.init((result) => {
 EditArticleOverlay.init(blogArticleId, () => state.imagesSaved);
 
 /**
- * Callback da galeria.
+ * Callback da galeria do servidor.
  * Recebe { filename, url, path, alt } e adiciona à lista de imagens salvas.
- * Não toca no preview nem no estado de upload — fluxos independentes.
  */
 GalleryOverlay.init((selected) => {
   const savedImg = { filename: selected.filename, path: selected.path, url: selected.url, copied: false };
@@ -363,6 +399,30 @@ GalleryOverlay.init((selected) => {
   state.imagesSaved.push(savedImg);
   console.log('** Selected from gallery:', savedImg);
   addToImageList(savedImg, newIndex);
+});
+
+/**
+ * Callback do StockGalleryOverlay (Pexels / Pixabay).
+ *
+ * Recebe { file, dataUrl, name, alt, source } e coloca a imagem no preview
+ * para que o usuário possa ajustar e salvar. Não salva nada no servidor ainda.
+ */
+StockGalleryOverlay.init((selected) => {
+  state.imageFile    = selected.file;
+  state.imageDataUrl = selected.dataUrl;
+  state.imageName    = selected.name;
+
+  dom.nameInput.value = selected.name;
+
+  // Preenche o alt text no overlay de ajuste, se disponível
+  const adjAlt = document.getElementById('adj-alt');
+  if (adjAlt && selected.alt) adjAlt.value = selected.alt;
+
+  updatePreview();
+  updateImageActions();
+  setError('');
+
+  console.log('** Selected from stock gallery:', { name: selected.name, source: selected.source });
 });
 
 // Estado inicial
