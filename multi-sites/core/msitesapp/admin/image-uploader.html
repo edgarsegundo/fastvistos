@@ -234,9 +234,10 @@
     <!-- Erro -->
     <div id="gallery-error" class="hidden text-red-500 text-sm px-4 pt-3 shrink-0"></div>
 
-    <!-- MODO GRADE: scroll vertical, 3 colunas -->
+    <!-- MODO GRADE: scroll vertical, 3 colunas, células de tamanho fixo -->
     <div id="gallery-grid"
-      class="flex-1 overflow-y-auto p-3 grid grid-cols-3 gap-2 content-start">
+      class="flex-1 overflow-y-auto p-3"
+      style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; align-content:start;">
     </div>
 
     <!-- MODO CAROUSEL -->

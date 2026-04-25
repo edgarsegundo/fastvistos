@@ -170,13 +170,17 @@ const GalleryOverlay = (() => {
       const altText = img.alt || img.filename || '';
 
       const div = document.createElement('div');
-      div.className = 'relative group cursor-pointer aspect-square rounded-xl overflow-hidden bg-gray-100';
+      // Tamanho fixo via style, sem aspect-square do Tailwind (evita sobreposição)
+      // Cantos retos: sem rounded
+      div.className = 'relative group cursor-pointer overflow-hidden bg-gray-100';
+      div.style.cssText = 'width: 100%; height: 100px; flex-shrink: 0;';
       div.innerHTML = `
         <img
           src="${imgUrl}"
           alt="${altText}"
           loading="lazy"
-          class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+          style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          class="transition-transform duration-200 group-hover:scale-105"
         >
         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-end">
           <span class="w-full text-white text-xs px-2 py-1 truncate opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-t from-black/60 to-transparent">
