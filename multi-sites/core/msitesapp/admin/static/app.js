@@ -28,7 +28,7 @@ const state = {
   imageName:    '',
   imageGroup:   group,
   saving:       false,
-  imagesSaved:  [],         // [{ filename, url, copied }]
+  imagesSaved:  [],         // [{ filename, url, path, copied }]
 };
 
 // ---------------------------------------------------------------------------
@@ -266,7 +266,12 @@ dom.btnSave.addEventListener('click', async () => {
     const imageName = state.imageName.trim() + '.webp';
     const altValue  = document.getElementById('adj-alt')?.value || '';
     const data      = await uploadImageToDjango(imageName, state.imageGroup, altValue);
-    const savedImg  = { filename: imageName, url: data.image_url, copied: false };
+    const savedImg  = { 
+      filename: imageName, 
+      url: data.image_url, 
+      path: data.image_url,
+      copied: false 
+    };
     const newIndex  = state.imagesSaved.length;
     state.imagesSaved.push(savedImg);
     addToImageList(savedImg, newIndex);
@@ -349,13 +354,14 @@ EditArticleOverlay.init(blogArticleId, () => state.imagesSaved);
 
 /**
  * Callback da galeria.
- * Recebe { filename, url, alt } e adiciona à lista de imagens salvas.
+ * Recebe { filename, url, path, alt } e adiciona à lista de imagens salvas.
  * Não toca no preview nem no estado de upload — fluxos independentes.
  */
 GalleryOverlay.init((selected) => {
-  const savedImg = { filename: selected.filename, url: selected.url, copied: false };
+  const savedImg = { filename: selected.filename, path: selected.path, url: selected.url, copied: false };
   const newIndex = state.imagesSaved.length;
   state.imagesSaved.push(savedImg);
+  console.log('** Selected from gallery:', savedImg);
   addToImageList(savedImg, newIndex);
 });
 

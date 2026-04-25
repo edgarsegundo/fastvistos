@@ -64,8 +64,9 @@ const EditArticleOverlay = (() => {
       while (select.options.length > 1) select.remove(1);
       const imgs = typeof imagesSavedRef === 'function' ? imagesSavedRef() : imagesSavedRef;
       imgs.forEach((img, idx) => {
+        // debugger;
         const opt = document.createElement('option');
-        opt.value = img.url;
+        opt.value = img.path ;
         opt.textContent = img.filename;
         select.appendChild(opt);
       });

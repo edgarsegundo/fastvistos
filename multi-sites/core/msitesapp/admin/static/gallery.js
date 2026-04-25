@@ -248,6 +248,7 @@ const GalleryOverlay = (() => {
       onSelectedCallback({
         filename: img.filename || `imagem-${img.id}`,
         url:      buildImageUrl(img.image),
+        path:     img.image,
         alt:      img.alt || '',
       });
     }
