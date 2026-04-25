@@ -13,7 +13,7 @@ const GalleryOverlay = (() => {
   // Config
   // ---------------------------------------------------------------------------
   const API_BASE   = 'https://fastvistos.com.br/msitesapp/api/image-editor';
-  const MEDIA_BASE = 'https://sys.fastvistos.com.br/media/';
+  const MEDIA_BASE = 'https://sys.fastvistos.com.br/';
   const PAGE_LIMIT = 24;
 
   // ---------------------------------------------------------------------------
