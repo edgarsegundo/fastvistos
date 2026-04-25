@@ -36,6 +36,10 @@ export class BlogService {
      */
     static async updateBlogArticleContentMd(id, content_md, main_image_url = null) {
         try {
+            // Remove prefixo /media/ se existir
+            const imagePath = main_image_url
+                ? main_image_url.replace(/^\/?media\//, '')
+                : null;            
             // Loga a URL do banco de dados (se disponível)
             console.log('[DEBUG] DATABASE_URL:', process.env.DATABASE_URL);
             // Loga o id e o novo conteúdo
@@ -44,7 +48,7 @@ export class BlogService {
                 where: { id },
                 data: {
                     content_md,
-                    image: main_image_url, // Atualiza o campo de imagem SEO também
+                    image: imagePath, // Atualiza o campo de imagem SEO também
                     modified: new Date(),
                 },
             });
