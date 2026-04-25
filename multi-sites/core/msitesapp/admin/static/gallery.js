@@ -275,8 +275,14 @@ const GalleryOverlay = (() => {
 
   function buildImageUrl(imagePath) {
     if (!imagePath) return '';
-    if (imagePath.startsWith('http')) return imagePath;
-    return MEDIA_BASE + imagePath;
+    // Decodifica se vier codificado
+    let path = decodeURIComponent(imagePath);
+    // Se já for URL absoluta, retorna direto
+    if (path.startsWith('http')) return path;
+    // Se já começa com /media/, retorna com o host
+    if (path.startsWith('/media/')) return MEDIA_BASE.replace(/\/media\/$/, '') + path;
+    // Caminho relativo
+    return MEDIA_BASE + path;
   }
 
   // ---------------------------------------------------------------------------
