@@ -16,3 +16,4 @@
 - botao publicar no /admin/image-uploader?
 - Será que eu consigo criar um agente capaz de entrar com um headless browser para fazer a parte de indexar como gsc?
 
+- **ATENÇÃO**: lembrar que ainda precisa pensar em uma maneira de publicar um artigo de forma mais economica sem buildar tudo desde o zero
