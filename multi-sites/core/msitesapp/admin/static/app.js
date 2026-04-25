@@ -344,7 +344,8 @@ AdjustOverlay.init((result) => {
   updatePreview();
 });
 
-EditArticleOverlay.init(blogArticleId);
+// Passa função para acessar imagens salvas
+EditArticleOverlay.init(blogArticleId, () => state.imagesSaved);
 
 /**
  * Callback da galeria.

@@ -21,13 +21,16 @@ const EditArticleOverlay = (() => {
     error:    () => document.getElementById('edit-article-error'),
     btnSave:  () => document.getElementById('btn-save-article'),
     btnClose: () => document.getElementById('btn-close-edit-article'),
+    mainImageSelect: () => document.getElementById('main-image-select'),
   };
 
-  let articleId = '';
+    let articleId = '';
+    let imagesSavedRef = [];
 
   // --- Inicializa eventos (chamado uma vez pelo app.js) ---
-  function init(blogArticleId) {
+  function init(blogArticleId, getImagesSaved) {
     articleId = blogArticleId;
+    if (getImagesSaved) imagesSavedRef = getImagesSaved;
     el.btnClose().addEventListener('click', close);
     el.btnSave().addEventListener('click', save);
   }
@@ -46,10 +49,26 @@ const EditArticleOverlay = (() => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao buscar conteúdo`);
       el.textarea().value = data.content_md ?? '';
+      // Popular select de imagens
+      updateMainImageSelect();
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+
+    // Atualiza a combobox de imagens
+    function updateMainImageSelect() {
+      const select = el.mainImageSelect();
+      // Limpa opções antigas, exceto a primeira
+      while (select.options.length > 1) select.remove(1);
+      const imgs = typeof imagesSavedRef === 'function' ? imagesSavedRef() : imagesSavedRef;
+      imgs.forEach((img, idx) => {
+        const opt = document.createElement('option');
+        opt.value = img.url;
+        opt.textContent = img.filename;
+        select.appendChild(opt);
+      });
     }
   }
 
@@ -61,6 +80,7 @@ const EditArticleOverlay = (() => {
   // --- Salva o conteúdo via API ---
   async function save() {
     const content_md = el.textarea().value;
+    const mainImageUrl = el.mainImageSelect().value;
     setError('');
     setSaving(true);
 
@@ -68,7 +88,7 @@ const EditArticleOverlay = (() => {
       const res = await fetch(`${API_BASE}/articles/${articleId}/save-content-md/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blog_article_id: articleId, content_md }),
+        body: JSON.stringify({ blog_article_id: articleId, content_md, main_image_url: mainImageUrl }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao salvar`);
@@ -100,3 +120,6 @@ const EditArticleOverlay = (() => {
   // --- API pública ---
   return { init, open, close };
 })();
+
+// Garante que EditArticleOverlay está no escopo global
+window.EditArticleOverlay = EditArticleOverlay;
