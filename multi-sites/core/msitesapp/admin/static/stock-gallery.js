@@ -3,7 +3,7 @@
  */
 
 const StockGalleryOverlay = (() => {
-  const API_BASE = '/image-editor/stock';
+  const API_BASE = 'msitesapp/api/image-editor/stock';
 
   let onSelectedCallback = null;
   let currentSource = 'pexels';
