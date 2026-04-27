@@ -181,8 +181,8 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     showImgLoading(true);
     try {
       const proxyEndpoint = currentSource === 'google'
-        ? `/image-editor/stock/google-proxy/?url=${encodeURIComponent(largeUrl)}`
-        : `/image-editor/stock/proxy/?url=${encodeURIComponent(largeUrl)}`;
+        ? `${API_BASE}/google-proxy/?url=${encodeURIComponent(largeUrl)}`
+        : `${API_BASE}/proxy/?url=${encodeURIComponent(largeUrl)}`;
 
       const response = await fetch(proxyEndpoint);
       if (!response.ok) {
