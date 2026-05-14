@@ -59,6 +59,11 @@
 </head>
 <body class="max-w-[480px] mx-auto bg-white min-h-screen">
 
+  <!-- ===== TÍTULO DO ARTIGO (dinâmico) ===== -->
+  <div id="article-title-bar" class="w-full px-4 pt-4 pb-1">
+    <h1 id="article-title" class="text-lg font-semibold text-gray-800 truncate" style="min-height:1.5em"></h1>
+  </div>
+
   <!-- ===== PÁGINA PRINCIPAL ===== -->
   <div id="main-page" class="p-4">
 
@@ -413,6 +418,16 @@
   <script src="static/editArticle.js"></script>
   <script src="static/gallery.js"></script>
   <script src="static/stock-gallery.js"></script>
+  <script type="module">
+    import { fetchArticleTitle } from './static/get-article-title.js';
+    const blogArticleId = new URLSearchParams(window.location.search).get('blog_article_id');
+    if (blogArticleId) {
+      fetchArticleTitle(blogArticleId).then(title => {
+        const el = document.getElementById('article-title');
+        if (el) el.textContent = title || '(Sem título)';
+      });
+    }
+  </script>
   <script src="static/app.js"></script>
 </body>
 </html>
