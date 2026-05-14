@@ -172,8 +172,6 @@ const GalleryOverlay = (() => {
       const altText = img.alt || img.filename || '';
 
       const div = document.createElement('div');
-      // Tamanho fixo via style, sem aspect-square do Tailwind (evita sobreposição)
-      // Cantos retos: sem rounded
       div.className = 'relative group cursor-pointer overflow-hidden bg-gray-100';
       div.style.cssText = 'width: 100%; height: 100px; flex-shrink: 0; overflow: hidden;';
       div.innerHTML = `
@@ -183,7 +181,9 @@ const GalleryOverlay = (() => {
           loading="lazy"
           style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
           class="transition-transform duration-200 group-hover:scale-105"
+          onload="this.nextElementSibling && typeof this.nextElementSibling.setAttribute === 'function' && (this.nextElementSibling.textContent = this.naturalWidth && this.naturalHeight ? this.naturalWidth + 'x' + this.naturalHeight : '')"
         >
+        <span class="absolute bottom-1 left-1 bg-black/60 text-[9px] text-white px-1 py-0.5 rounded z-10 pointer-events-none select-none" style="font-size:9px;line-height:1;min-width:32px;max-width:60px;white-space:nowrap;"> </span>
         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-end">
           <span class="w-full text-white text-xs px-2 py-1 truncate opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-t from-black/60 to-transparent">
             ${img.filename || ''}
@@ -215,6 +215,27 @@ const GalleryOverlay = (() => {
     el.carouselImg().alt = img.alt || img.filename || '';
     el.carouselName().textContent  = img.filename || '';
     el.carouselCount().textContent = `${carouselIndex + 1} / ${images.length}`;
+
+    // Exibe dimensões na imagem do carousel
+    el.carouselImg().onload = function() {
+      let dim = document.getElementById('gallery-carousel-dim');
+      if (!dim) {
+        dim = document.createElement('span');
+        dim.id = 'gallery-carousel-dim';
+        dim.className = 'absolute bottom-2 left-2 bg-black/60 text-[10px] text-white px-2 py-0.5 rounded z-10 pointer-events-none select-none';
+        dim.style.fontSize = '10px';
+        dim.style.lineHeight = '1';
+        dim.style.minWidth = '36px';
+        dim.style.maxWidth = '80px';
+        dim.style.whiteSpace = 'nowrap';
+        el.carouselImg().parentElement.appendChild(dim);
+      }
+      dim.textContent = this.naturalWidth && this.naturalHeight ? this.naturalWidth + 'x' + this.naturalHeight : '';
+    };
+    // Força update se já carregada
+    if (el.carouselImg().complete && el.carouselImg().naturalWidth) {
+      el.carouselImg().onload();
+    }
 
     el.carouselPrev().disabled = carouselIndex === 0;
     el.carouselNext().disabled = carouselIndex === images.length - 1;
