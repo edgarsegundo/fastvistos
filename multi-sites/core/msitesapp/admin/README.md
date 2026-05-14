@@ -17,3 +17,16 @@ https://fastvistos.com.br/msitesapp/api/admin/image-uploader?token=b86189f5c3b75
 
 ## Google Search did not work
 https://claude.ai/chat/60964cd1-45c6-457a-9a0c-d5205fdd9569
+
+
+## How to test msitesapp locally to debug
+
+```bash
+npm run build:msitesapp   # só precisa repetir se mudar arquivos em core/lib/
+npm run msitesapp-dev
+
+curl http://localhost:3900/test-hello
+
+# produção: https://fastvistos.com.br/msitesapp/api/test-hello
+```
+

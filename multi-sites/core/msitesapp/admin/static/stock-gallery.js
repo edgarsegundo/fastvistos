@@ -16,6 +16,7 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
   let photos        = [];
   let loading       = false;
   let defaultQuery  = '';
+  const SEARCH_KEY = 'stockGalleryLastQuery';
 
   const el = {
     overlay:        () => document.getElementById('overlay-stock-gallery'),
@@ -39,6 +40,10 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     onSelectedCallback = callback;
     defaultQuery = new URLSearchParams(window.location.search).get('group') || '';
 
+    // Recupera último termo salvo
+    const lastQuery = localStorage.getItem(SEARCH_KEY);
+    if (lastQuery) defaultQuery = lastQuery;
+
     el.btnClose().addEventListener('click', close);
     el.tabPexels().addEventListener('click',  () => switchSource('pexels'));
     el.tabPixabay().addEventListener('click', () => switchSource('pixabay'));
@@ -54,7 +59,12 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
   function open() {
     currentPage = 1;
     photos      = [];
-    if (defaultQuery) {
+    // Sempre tenta recuperar último termo salvo
+    const lastQuery = localStorage.getItem(SEARCH_KEY);
+    if (lastQuery) {
+      el.searchInput().value = lastQuery;
+      currentQuery = lastQuery;
+    } else if (defaultQuery) {
       el.searchInput().value = defaultQuery;
       currentQuery = defaultQuery;
     } else {
@@ -108,6 +118,8 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     currentQuery = q;
     currentPage  = 1;
     photos       = [];
+    // Salva termo no localStorage
+    localStorage.setItem(SEARCH_KEY, q);
     loadPage(1);
   }
 
