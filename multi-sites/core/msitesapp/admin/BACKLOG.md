@@ -2,8 +2,6 @@
 
 ## 
 
-- colocar se possivel o width and height na imagem na galeia de fotos
-- quando digito uma busca e escolho uma imagem, se eu me arrepender e voltar para a galeria, a busca reseta como default sempre e tenho que digitar de novo, entao seria bom persistir o valor ultimo
 
 - Colocar o titulo do artigo na págima image-uploader
 - Escolher a primeira imagem da lista como default no Imagem principal do artigo?
