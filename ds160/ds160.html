@@ -9,13 +9,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
   <style>
-    /* =============================================
-       BASE — mobile-first, sem estilo decorativo
-       Altere aqui para customizar globalmente
-    ============================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Tela inteira sem scroll na página */
     html, body {
       height: 100%;
       overflow: hidden;
@@ -23,13 +18,12 @@
 
     body {
       font-family: sans-serif;
-      font-size: 16px; /* nunca abaixo de 16px em mobile para evitar zoom */
+      font-size: 16px;
       line-height: 1.5;
       display: flex;
       flex-direction: column;
     }
 
-    /* Wrapper principal ocupa toda a tela */
     #app {
       display: flex;
       flex-direction: column;
@@ -39,15 +33,13 @@
       width: 100%;
     }
 
-    /* Área rolável do formulário — fica entre o topo e os botões */
     #conteudo {
       flex: 1;
       overflow-y: auto;
       padding: 1rem 1rem 0.5rem;
-      -webkit-overflow-scrolling: touch; /* scroll suave no iOS */
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Cada campo empilhado verticalmente */
     .campo {
       display: flex;
       flex-direction: column;
@@ -75,7 +67,6 @@
 
     textarea { min-height: 80px; resize: vertical; }
 
-    /* Radio e checkbox em coluna para facilitar toque */
     .opcoes { display: flex; flex-direction: column; gap: 0.6rem; }
     .opcoes label {
       display: flex;
@@ -87,21 +78,18 @@
     }
     .opcoes input { width: 1.2rem; height: 1.2rem; flex-shrink: 0; }
 
-    /* Separador de seção */
     .secao {
-      border-top: 2px solid #000;
-      padding-top: 1rem;
-      margin-top: 1rem;
+      padding-top: 0.1rem;
+      margin-top: 0.1rem;
     }
     .secao h2 { font-size: 1.1rem; margin-bottom: 0.3rem; }
     .secao .descricao { font-size: 0.85rem; color: #444; margin-bottom: 1rem; }
 
-    /* Progresso — fica no topo, fora da área rolável */
     .progresso {
       padding: 0.75rem 1rem 0.5rem;
       font-size: 0.85rem;
       color: #444;
-      border-bottom: 1px solid #eee;
+      border-bottom: 2px solid #000;
       flex-shrink: 0;
     }
     .progresso-barra {
@@ -117,13 +105,37 @@
       transition: width 0.3s;
     }
 
-    /* Barra de navegação — fixa no fundo, fora da área rolável */
+    /* Wrapper relativo para a sombra ficar posicionada corretamente */
+    #conteudo-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sombra de scroll — aparece quando há conteúdo abaixo */
+    #scroll-sombra {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
+      pointer-events: none; /* não bloqueia cliques */
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    #scroll-sombra.visivel {
+      opacity: 1;
+    }
+
     .nav {
       display: flex;
       gap: 0.75rem;
       padding: 0.75rem 1rem;
       border-top: 1px solid #ddd;
-      background: #fff;
+      background: #000;
       flex-shrink: 0;
     }
     .nav button {
@@ -131,8 +143,9 @@
       padding: 0.85rem;
       font-size: 1rem;
       cursor: pointer;
-      border: 1px solid #000;
-      background: #fff;
+      border: 1px solid #fff;
+      background: #000;
+      color: #fff;
       border-radius: 4px;
     }
     .nav button[type="submit"] { background: #000; color: #fff; }
@@ -142,16 +155,6 @@
 </head>
 <body>
 
-<!--
-  =============================================
-  DADOS DO FORMULÁRIO
-  Para adicionar/remover seções: edite o array
-  `secoes` dentro do x-data abaixo.
-  Cada seção tem: id, titulo, descricao, campos[]
-  Cada campo tem: id, label, tipo, hint, obrigatorio,
-    opcoes[] (para radio/select), condicao (Alpine expr)
-  =============================================
--->
 <div id="app" x-data="formulario()" x-cloak>
 
   <!-- TOPO: barra de progresso — não rola -->
@@ -164,93 +167,93 @@
     </div>
   </div>
 
-  <!-- MEIO: área rolável com os campos -->
-  <div id="conteudo">
-    <template x-for="(secao, idx) in secoesVisiveis()" :key="secao.id">
-      <div x-show="secaoAtual === idx">
+  <!-- Wrapper com posição relativa para a sombra -->
+  <div id="conteudo-wrapper">
 
-        <div class="secao">
-          <h2 x-text="secao.titulo"></h2>
-          <p class="descricao" x-text="secao.descricao" x-show="secao.descricao"></p>
-        </div>
+    <!-- MEIO: área rolável com os campos -->
+    <div id="conteudo">
+      <template x-for="(secao, idx) in secoesVisiveis()" :key="secao.id">
+        <div x-show="secaoAtual === idx">
 
-        <!-- Renderiza cada campo da seção -->
-        <template x-for="campo in secao.campos" :key="campo.id">
-          <div class="campo" x-show="avaliaCondicao(campo.condicao)">
-
-            <label :for="campo.id">
-              <span x-text="campo.label"></span>
-              <span class="obrigatorio" x-show="campo.obrigatorio"> *</span>
-            </label>
-
-            <span class="hint" x-show="campo.hint" x-text="campo.hint"></span>
-
-            <!-- Texto simples -->
-            <template x-if="campo.tipo === 'text'">
-              <input type="text" :id="campo.id" :name="campo.id"
-                     x-model="respostas[campo.id]"
-                     @blur="aoSairDoCampo(campo.id)" />
-            </template>
-
-            <!-- Email -->
-            <template x-if="campo.tipo === 'email'">
-              <input type="email" :id="campo.id" :name="campo.id"
-                     x-model="respostas[campo.id]"
-                     @blur="aoSairDoCampo(campo.id)" />
-            </template>
-
-            <!-- Telefone -->
-            <template x-if="campo.tipo === 'tel'">
-              <input type="tel" :id="campo.id" :name="campo.id"
-                     x-model="respostas[campo.id]"
-                     @blur="aoSairDoCampo(campo.id)" />
-            </template>
-
-            <!-- Data -->
-            <template x-if="campo.tipo === 'date'">
-              <input type="date" :id="campo.id" :name="campo.id"
-                     x-model="respostas[campo.id]"
-                     @blur="aoSairDoCampo(campo.id)" />
-            </template>
-
-            <!-- Textarea -->
-            <template x-if="campo.tipo === 'textarea'">
-              <textarea :id="campo.id" :name="campo.id"
-                        x-model="respostas[campo.id]"
-                        @blur="aoSairDoCampo(campo.id)"></textarea>
-            </template>
-
-            <!-- Radio -->
-            <template x-if="campo.tipo === 'radio'">
-              <div class="opcoes">
-                <template x-for="opcao in campo.opcoes" :key="opcao.valor">
-                  <label>
-                    <input type="radio" :name="campo.id" :value="opcao.valor"
-                           x-model="respostas[campo.id]"
-                           @change="aoSairDoCampo(campo.id)" />
-                    <span x-text="opcao.label"></span>
-                  </label>
-                </template>
-              </div>
-            </template>
-
-            <!-- Select -->
-            <template x-if="campo.tipo === 'select'">
-              <select :id="campo.id" :name="campo.id"
-                      x-model="respostas[campo.id]"
-                      @change="aoSairDoCampo(campo.id)">
-                <option value="">Selecione...</option>
-                <template x-for="opcao in campo.opcoes" :key="opcao.valor">
-                  <option :value="opcao.valor" x-text="opcao.label"></option>
-                </template>
-              </select>
-            </template>
-
+          <div class="secao">
+            <h2 x-text="secao.titulo"></h2>
+            <p class="descricao" x-text="secao.descricao" x-show="secao.descricao"></p>
           </div>
-        </template>
 
-      </div>
-    </template>
+          <template x-for="campo in secao.campos" :key="campo.id">
+            <div class="campo" x-show="avaliaCondicao(campo.condicao)">
+
+              <label :for="campo.id">
+                <span x-text="campo.label"></span>
+                <span class="obrigatorio" x-show="campo.obrigatorio"> *</span>
+              </label>
+
+              <span class="hint" x-show="campo.hint" x-text="campo.hint"></span>
+
+              <template x-if="campo.tipo === 'text'">
+                <input type="text" :id="campo.id" :name="campo.id"
+                       x-model="respostas[campo.id]"
+                       @blur="aoSairDoCampo(campo.id)" />
+              </template>
+
+              <template x-if="campo.tipo === 'email'">
+                <input type="email" :id="campo.id" :name="campo.id"
+                       x-model="respostas[campo.id]"
+                       @blur="aoSairDoCampo(campo.id)" />
+              </template>
+
+              <template x-if="campo.tipo === 'tel'">
+                <input type="tel" :id="campo.id" :name="campo.id"
+                       x-model="respostas[campo.id]"
+                       @blur="aoSairDoCampo(campo.id)" />
+              </template>
+
+              <template x-if="campo.tipo === 'date'">
+                <input type="date" :id="campo.id" :name="campo.id"
+                       x-model="respostas[campo.id]"
+                       @blur="aoSairDoCampo(campo.id)" />
+              </template>
+
+              <template x-if="campo.tipo === 'textarea'">
+                <textarea :id="campo.id" :name="campo.id"
+                          x-model="respostas[campo.id]"
+                          @blur="aoSairDoCampo(campo.id)"></textarea>
+              </template>
+
+              <template x-if="campo.tipo === 'radio'">
+                <div class="opcoes">
+                  <template x-for="opcao in campo.opcoes" :key="opcao.valor">
+                    <label>
+                      <input type="radio" :name="campo.id" :value="opcao.valor"
+                             x-model="respostas[campo.id]"
+                             @change="aoSairDoCampo(campo.id)" />
+                      <span x-text="opcao.label"></span>
+                    </label>
+                  </template>
+                </div>
+              </template>
+
+              <template x-if="campo.tipo === 'select'">
+                <select :id="campo.id" :name="campo.id"
+                        x-model="respostas[campo.id]"
+                        @change="aoSairDoCampo(campo.id)">
+                  <option value="">Selecione...</option>
+                  <template x-for="opcao in campo.opcoes" :key="opcao.valor">
+                    <option :value="opcao.valor" x-text="opcao.label"></option>
+                  </template>
+                </select>
+              </template>
+
+            </div>
+          </template>
+
+        </div>
+      </template>
+    </div>
+
+    <!-- Sombra de scroll -->
+    <div id="scroll-sombra"></div>
+
   </div>
 
   <!-- RODAPÉ: botões fixos — não rolam -->
@@ -265,10 +268,6 @@
 </div>
 
 <script>
-// =============================================
-// DEFINIÇÃO DE TODAS AS SEÇÕES E CAMPOS
-// Edite aqui para adicionar, remover ou alterar
-// =============================================
 const SECOES = [
   {
     id: 'dados_pessoais',
@@ -295,8 +294,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece se casado, divorciado, união estável ou viúvo
   {
     id: 'dados_conjuge',
     titulo: 'Dados do Cônjuge / Ex-cônjuge / Companheiro(a) / Falecido(a)',
@@ -309,8 +306,6 @@ const SECOES = [
       { id: 'data_casamento', label: 'Data de Casamento', tipo: 'date', obrigatorio: true },
     ]
   },
-
-  // Seção condicional: aparece só se divorciado
   {
     id: 'dados_divorcio',
     titulo: 'Dados do Divórcio',
@@ -319,7 +314,6 @@ const SECOES = [
       { id: 'data_divorcio', label: 'Data do Divórcio', tipo: 'date', obrigatorio: true },
     ]
   },
-
   {
     id: 'nacionalidade',
     titulo: 'Nacionalidade',
@@ -336,8 +330,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se tem outra nacionalidade
   {
     id: 'nacionalidade_estrangeira',
     titulo: 'Nationalidade Estrangeira',
@@ -347,7 +339,6 @@ const SECOES = [
       { id: 'nacionalidade_descricao', label: 'Nationalidade e número do passaporte estrangeiro', tipo: 'textarea', obrigatorio: true, hint: 'Se não houver passaporte, volte e selecione Não.' },
     ]
   },
-
   {
     id: 'dados_passaporte',
     titulo: 'Dados do Passaporte',
@@ -360,7 +351,6 @@ const SECOES = [
       { id: 'cpf', label: 'CPF', tipo: 'text', obrigatorio: true, hint: 'Apenas números, sem traços ou pontos.' },
     ]
   },
-
   {
     id: 'contato_endereco',
     titulo: 'Contato e Endereço Residencial',
@@ -377,7 +367,6 @@ const SECOES = [
       { id: 'redes_sociais', label: 'Redes Sociais', tipo: 'textarea', hint: 'Facebook, Instagram, Twitter, LinkedIn etc. Ao menos 2 se possível. Ex: Facebook = Antonio Rossi / Instagram = @rossiantonio.' },
     ]
   },
-
   {
     id: 'dados_viagem',
     titulo: 'Dados da Viagem',
@@ -398,8 +387,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se outra pessoa paga
   {
     id: 'custos_viagem_pessoa',
     titulo: 'Responsável pelos Custos da Viagem',
@@ -422,8 +409,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se endereço do responsável é diferente
   {
     id: 'custos_viagem_endereco',
     titulo: 'Endereço do Responsável pelos Custos',
@@ -436,7 +421,6 @@ const SECOES = [
       { id: 'custo_cep', label: 'CEP', tipo: 'text', obrigatorio: true, hint: 'Apenas números.' },
     ]
   },
-
   {
     id: 'acompanhantes',
     titulo: 'Acompanhantes da Viagem',
@@ -444,7 +428,6 @@ const SECOES = [
       { id: 'acompanhantes', label: 'Quem irá viajar com você?', tipo: 'textarea', obrigatorio: true, hint: 'Nome completo e grau de parentesco. Ex: João Silva = Pai / Larissa Medeiros = Esposa. Se for sozinho, escreva Ninguém.' },
     ]
   },
-
   {
     id: 'entradas_eua_negado',
     titulo: 'Entradas nos Estados Unidos',
@@ -452,7 +435,6 @@ const SECOES = [
       { id: 'visto_negado', label: 'Já teve visto negado?', tipo: 'textarea', obrigatorio: true, hint: 'Se sim, quando? Se não, escreva Não.' },
     ]
   },
-
   {
     id: 'entradas_eua_emitido',
     titulo: 'Visto Americano Anterior',
@@ -469,8 +451,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se já teve visto emitido
   {
     id: 'historico_eua',
     titulo: 'Histórico nos Estados Unidos',
@@ -484,7 +464,6 @@ const SECOES = [
       { id: 'visto_problemas', label: 'Já teve visto negado, revogado, perdido ou roubado?', tipo: 'textarea', obrigatorio: true, hint: 'Se sim, descreva. Se não, escreva Não.' },
     ]
   },
-
   {
     id: 'dados_familiares',
     titulo: 'Dados Familiares',
@@ -507,7 +486,6 @@ const SECOES = [
       { id: 'parentes_eua', label: 'Tem algum parente nos Estados Unidos?', tipo: 'textarea', obrigatorio: true, hint: 'Nome completo, parentesco e situação. Ex: Túlio Martins = Tio = Cidadão Americano. Se não, escreva Não.' },
     ]
   },
-
   {
     id: 'dados_trabalhistas',
     titulo: 'Dados Trabalhistas',
@@ -525,8 +503,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se trabalha
   {
     id: 'dados_trabalhistas_detalhes',
     titulo: 'Detalhes do Emprego',
@@ -543,7 +519,6 @@ const SECOES = [
       { id: 'renda_mensal', label: 'Renda Mensal', tipo: 'text', obrigatorio: true, hint: 'Considere o valor declarado no IR. Ex: R$4.732,52.' },
     ]
   },
-
   {
     id: 'dados_estudantis',
     titulo: 'Dados Estudantis',
@@ -560,8 +535,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se estuda
   {
     id: 'dados_estudantis_detalhes',
     titulo: 'Detalhes da Instituição de Ensino',
@@ -577,7 +550,6 @@ const SECOES = [
       { id: 'instituicao_telefone', label: 'Telefone com DDD', tipo: 'tel', obrigatorio: true, hint: 'Apenas números. Ex: 1932552843.' },
     ]
   },
-
   {
     id: 'formacao_superior',
     titulo: 'Formação Superior',
@@ -594,8 +566,6 @@ const SECOES = [
       },
     ]
   },
-
-  // Seção condicional: aparece só se tem superior
   {
     id: 'formacao_superior_detalhes',
     titulo: 'Detalhes da Formação Superior',
@@ -611,7 +581,6 @@ const SECOES = [
       { id: 'universidade_termino', label: 'Data de Término', tipo: 'date', obrigatorio: true, hint: 'Se não lembrar, coloque uma data aproximada.' },
     ]
   },
-
   {
     id: 'idiomas',
     titulo: 'Idiomas',
@@ -619,7 +588,6 @@ const SECOES = [
       { id: 'idiomas', label: 'Você fala algum outro idioma?', tipo: 'textarea', obrigatorio: true, hint: 'Se sim, quais? Se não, escreva Não.' },
     ]
   },
-
   {
     id: 'viagens_internacionais',
     titulo: 'Viagens Internacionais',
@@ -627,7 +595,6 @@ const SECOES = [
       { id: 'viagens_exterior', label: 'Realizou viagens para o exterior nos últimos 5 anos?', tipo: 'textarea', obrigatorio: true, hint: 'Se sim, quais países? Se não, escreva Não.' },
     ]
   },
-
   {
     id: 'como_conheceu',
     titulo: 'Como você conheceu a Fast Vistos?',
@@ -649,16 +616,11 @@ const SECOES = [
   },
 ];
 
-// =============================================
-// LÓGICA DO FORMULÁRIO — não precisa editar
-// para adicionar campos ou seções
-// =============================================
 function formulario() {
   return {
     secaoAtual: 0,
     respostas: {},
 
-    // Avalia se uma seção deve aparecer baseado na condição
     avaliaCondicaoSecao(condicao) {
       if (!condicao) return true;
       try {
@@ -666,7 +628,6 @@ function formulario() {
       } catch { return true; }
     },
 
-    // Avalia se um campo deve aparecer
     avaliaCondicao(condicao) {
       if (!condicao) return true;
       try {
@@ -674,48 +635,63 @@ function formulario() {
       } catch { return true; }
     },
 
-    // Retorna apenas seções que devem ser exibidas
     secoesVisiveis() {
       return SECOES.filter(s => this.avaliaCondicaoSecao(s.condicao));
     },
 
-    // Chamado quando o usuário sai de um campo
-    // Aqui você vai adicionar: chamada à IA e auto-save no Redis
     aoSairDoCampo(campoId) {
       const valor = this.respostas[campoId];
       console.log(`Campo atualizado: ${campoId} = ${valor}`);
-
       // TODO: auto-save no Redis
-      // fetch('/api/salvar', { method: 'POST', body: JSON.stringify({ campoId, valor }) })
-
       // TODO: validação com IA (async)
-      // fetch('/api/validar', { method: 'POST', body: JSON.stringify({ campoId, valor }) })
-      //   .then(r => r.json()).then(d => { /* mostrar feedback */ })
     },
 
     proximo() {
       const visiveis = this.secoesVisiveis();
       if (this.secaoAtual < visiveis.length - 1) {
         this.secaoAtual++;
-        document.getElementById('conteudo').scrollTop = 0;
+        const c = document.getElementById('conteudo');
+        c.scrollTop = 0;
+        // Reavalia sombra após troca de seção
+        setTimeout(() => atualizaSombra(c), 50);
       }
     },
 
     anterior() {
       if (this.secaoAtual > 0) {
         this.secaoAtual--;
-        document.getElementById('conteudo').scrollTop = 0;
+        const c = document.getElementById('conteudo');
+        c.scrollTop = 0;
+        setTimeout(() => atualizaSombra(c), 50);
       }
     },
 
     enviar() {
       console.log('Respostas finais:', this.respostas);
-      // TODO: envio final
-      // fetch('/api/finalizar', { method: 'POST', body: JSON.stringify(this.respostas) })
       alert('Formulário enviado! (conecte ao backend aqui)');
     },
   };
 }
+
+// =============================================
+// SOMBRA DE SCROLL
+// Aparece quando há conteúdo abaixo do visível
+// =============================================
+function atualizaSombra(el) {
+  const sombra = document.getElementById('scroll-sombra');
+  const temMaisAbaixo = el.scrollTop + el.clientHeight < el.scrollHeight - 4;
+  sombra.classList.toggle('visivel', temMaisAbaixo);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const conteudo = document.getElementById('conteudo');
+
+  // Listener de scroll
+  conteudo.addEventListener('scroll', () => atualizaSombra(conteudo));
+
+  // Verifica ao carregar e quando Alpine atualiza o DOM
+  setTimeout(() => atualizaSombra(conteudo), 300);
+});
 </script>
 
 </body>
