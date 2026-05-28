@@ -4,39 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DS-160 Nonimmigrant Visa Application</title>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  
+<script>
+// ── DS-160 Alpine helper functions ──────────────────────────────────
+// All imperative logic lives here so Alpine attribute expressions
+// remain single function-call expressions (Alpine's strict requirement).
+
+// Toggle "N/A" on a text field via a checkbox
+function dsNaToggle(event, getter, setter) {
+  if (event.target.checked) {
+    setter('N/A');
+    var inp = event.target.closest('.field').querySelector('input[type=text]');
+    if (inp) inp.disabled = true;
+  } else {
+    setter('');
+    var inp = event.target.closest('.field').querySelector('input[type=text]');
+    if (inp) inp.disabled = false;
+  }
+}
+
+// Initialise a repeatable list: ensure STORE.lists[id] has MAX empty slots
+// and STORE.data[countKey] tracks how many are visible.
+function dsRepeatInit(listId, countKey, max) {
+  if (!STORE.data[countKey]) STORE.data[countKey] = 1;
+  if (!STORE.lists[listId]) STORE.lists[listId] = [];
+  while (STORE.lists[listId].length < max) STORE.lists[listId].push({});
+}
+
+// Add one more visible row (up to max)
+function dsRepeatAdd(listId, countKey, max) {
+  var c = STORE.data[countKey] || 1;
+  if (c < max) STORE.data[countKey] = c + 1;
+}
+
+// Remove row at idx: splice data, push empty to keep length==MAX, decrement count
+function dsRepeatRemove(listId, countKey, idx) {
+  var c = STORE.data[countKey] || 1;
+  if (c > 1) {
+    STORE.lists[listId].splice(idx, 1);
+    STORE.lists[listId].push({});
+    STORE.data[countKey] = c - 1;
+  }
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; background: #f5f5f5; color: #111; }
 
     #app { display: flex; flex-direction: column; height: 100%; max-width: 620px; margin: 0 auto; background: #fff; }
 
-    /* ── Header ── */
     .header { padding: 0.6rem 1rem; background: #000; color: #fff; flex-shrink: 0; }
     .header h1 { font-size: 0.95rem; font-weight: 600; letter-spacing: 0.02em; }
     .header .appid { font-size: 0.75rem; color: #aaa; }
 
-    /* ── Progress ── */
     .progress { padding: 0.55rem 1rem 0.45rem; border-bottom: 1px solid #ddd; flex-shrink: 0; background: #fafafa; }
     .progress-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.8rem; color: #555; margin-bottom: 0.3rem; }
     .progress-meta strong { color: #000; }
     .progress-bar { height: 3px; background: #ddd; border-radius: 2px; }
     .progress-bar-fill { height: 100%; background: #000; border-radius: 2px; transition: width .35s ease; }
 
-    /* ── Scroll area ── */
     #scroll-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
     #content { flex: 1; overflow-y: auto; padding: 1rem 1rem 2rem; -webkit-overflow-scrolling: touch; }
     #scroll-shadow { position: absolute; bottom: 0; left: 0; right: 0; height: 64px; background: linear-gradient(transparent, rgba(255,255,255,.92)); pointer-events: none; opacity: 0; transition: opacity .25s; }
     #scroll-shadow.visible { opacity: 1; }
 
-    /* ── Page title ── */
     .page-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
     .page-note { font-size: 0.82rem; color: #555; margin-bottom: 1.1rem; background: #fffbe6; border-left: 3px solid #f0c040; padding: 0.45rem 0.65rem; border-radius: 2px; }
 
-    /* ── Section heading ── */
     .section-heading { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #555; margin: 1.3rem 0 0.7rem; border-bottom: 1px solid #eee; padding-bottom: 0.3rem; }
 
-    /* ── Fields ── */
     .field { margin-bottom: 1.15rem; }
     .field label { display: block; font-size: 0.87rem; font-weight: 600; margin-bottom: 0.3rem; }
     .field .req { color: #c0392b; margin-left: 2px; }
@@ -53,12 +91,10 @@
     .field textarea { min-height: 72px; resize: vertical; }
     .field select { cursor: pointer; }
 
-    /* ── Field group (inline row) ── */
     .field-row { display: flex; gap: 0.5rem; }
     .field-row .field { flex: 1; margin-bottom: 0; }
     .field-row .field.narrow { flex: 0 0 80px; }
 
-    /* ── Radio / checkbox ── */
     .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; }
     .radio-group label { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; font-size: 0.9rem; cursor: pointer; }
     .radio-group input { width: 1.1rem; height: 1.1rem; cursor: pointer; flex-shrink: 0; }
@@ -66,7 +102,6 @@
     .check-row input { width: 1rem; height: 1rem; cursor: pointer; }
     .check-row label { font-size: 0.85rem; font-weight: normal; cursor: pointer; }
 
-    /* ── Repeatable group ── */
     .repeatable { border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 1rem; overflow: hidden; }
     .repeatable-item { padding: 0.8rem; border-bottom: 1px solid #eee; position: relative; }
     .repeatable-item:last-child { border-bottom: none; }
@@ -78,10 +113,8 @@
     .btn-add { background: none; border: 1px dashed #999; border-radius: 4px; font-size: 0.82rem; color: #444; padding: 0.3rem 1rem; cursor: pointer; }
     .btn-add:hover { border-color: #000; color: #000; background: #f0f0f0; }
 
-    /* ── Children / conditional block ── */
     .children-block { margin-top: 0.6rem; padding: 0.7rem; background: #fafafa; border-left: 3px solid #ddd; border-radius: 0 4px 4px 0; }
 
-    /* ── Nav ── */
     .nav { display: flex; gap: 0.6rem; padding: 0.7rem 1rem; border-top: 1px solid #ddd; background: #000; flex-shrink: 0; }
     .nav button { flex: 1; padding: 0.8rem; font-size: 0.95rem; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; font-weight: 500; transition: background .15s; }
     .nav button:hover { background: #444; }
@@ -89,7 +122,6 @@
     .nav button.primary:hover { background: #e8e8e8; }
     .nav button:disabled { opacity: .4; cursor: not-allowed; }
 
-    /* ── Validation summary ── */
     .val-summary { background: #fff0f0; border: 1px solid #f5c6c6; border-radius: 4px; padding: 0.6rem 0.8rem; margin-bottom: 0.8rem; font-size: 0.82rem; color: #a00; }
     .val-summary ul { margin: 0.3rem 0 0 1.1rem; }
 
@@ -99,13 +131,11 @@
 <body>
 <div id="app" x-data="ds160App()" x-cloak>
 
-  <!-- Header -->
   <div class="header">
     <h1>DS-160 — Online Nonimmigrant Visa Application</h1>
     <div class="appid">Electronic Application Center · U.S. Department of State</div>
   </div>
 
-  <!-- Progress -->
   <div class="progress">
     <div class="progress-meta">
       <span>Page <strong x-text="pageIndex + 1"></strong> of <strong x-text="pages.length"></strong>: <strong x-text="pages[pageIndex].title"></strong></span>
@@ -116,11 +146,9 @@
     </div>
   </div>
 
-  <!-- Scroll area -->
   <div id="scroll-wrapper">
     <div id="content">
 
-      <!-- Validation summary -->
       <div class="val-summary" x-show="errors.length > 0" x-cloak>
         Please correct all areas in error before continuing.
         <ul>
@@ -128,13 +156,10 @@
         </ul>
       </div>
 
-      <!-- Pages -->
       <template x-for="(page, pi) in pages" :key="page.id">
         <div x-show="pageIndex === pi">
           <div class="page-title" x-text="page.title"></div>
           <div class="page-note" x-show="page.note" x-text="page.note"></div>
-
-          <!-- Render page nodes via pageRenderer component -->
           <div x-data="pageRenderer(page)">
             <div class="nodes-container"></div>
           </div>
@@ -145,7 +170,6 @@
     <div id="scroll-shadow"></div>
   </div>
 
-  <!-- Navigation -->
   <div class="nav">
     <button type="button" @click="prevPage()" :disabled="pageIndex === 0">← Back</button>
     <button type="button" class="primary"
@@ -157,22 +181,16 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════════════════
-// SHARED DATA STORE  (reactive, shared across all node renderers)
+// SHARED STORE — initialized as a plain object first, made reactive in alpine:init
 // ═══════════════════════════════════════════════════════════════════════
-// STORE is initialized in alpine:init (see below) so Alpine.reactive() is available
-let STORE = { data: {}, lists: {} }; // placeholder replaced after alpine:init
+let STORE = { data: {}, lists: {} };
 
-function get(id) { return STORE.data[id]; }
-function set(id, val) { STORE.data[id] = val; }
-function getList(id) { if (!STORE.lists[id]) STORE.lists[id] = [{}]; return STORE.lists[id]; }
-function addItem(id) { STORE.lists[id].push({}); }
-function removeItem(id, idx) { STORE.lists[id].splice(idx, 1); }
-function setListField(groupId, idx, fieldId, val) { STORE.lists[groupId][idx][fieldId] = val; }
-function getListField(groupId, idx, fieldId) { return STORE.lists[groupId]?.[idx]?.[fieldId] ?? ''; }
+// Safe accessor helpers — always use STORE.lists[id] with bracket notation
+function getListSafe(id) {
+  if (!STORE.lists[id]) STORE.lists[id] = [{}];
+  return STORE.lists[id];
+}
 
-// ═══════════════════════════════════════════════════════════════════════
-// COUNTRIES (full list from ds160_1_personal_1.yml pob_country)
-// ═══════════════════════════════════════════════════════════════════════
 const COUNTRIES = [
   {v:'AFGH',l:'AFGHANISTAN'},{v:'ALB',l:'ALBANIA'},{v:'ALGR',l:'ALGERIA'},
   {v:'ASMO',l:'AMERICAN SAMOA'},{v:'ANDO',l:'ANDORRA'},{v:'ANGL',l:'ANGOLA'},
@@ -189,101 +207,65 @@ const COUNTRIES = [
   {v:'CMRN',l:'CAMEROON'},{v:'CAN',l:'CANADA'},{v:'CAVI',l:'CABO VERDE'},
   {v:'CAYI',l:'CAYMAN ISLANDS'},{v:'CAFR',l:'CENTRAL AFRICAN REPUBLIC'},
   {v:'CHAD',l:'CHAD'},{v:'CHIL',l:'CHILE'},{v:'CHIN',l:'CHINA'},
-  {v:'CHRI',l:'CHRISTMAS ISLAND'},{v:'COCI',l:'COCOS KEELING ISLANDS'},
   {v:'COL',l:'COLOMBIA'},{v:'COMO',l:'COMOROS'},{v:'COD',l:'CONGO, DEMOCRATIC REPUBLIC OF THE'},
-  {v:'CONB',l:'CONGO, REPUBLIC OF THE'},{v:'CKIS',l:'COOK ISLANDS'},
-  {v:'CSTR',l:'COSTA RICA'},{v:'IVCO',l:"COTE D'IVOIRE"},{v:'HRV',l:'CROATIA'},
-  {v:'CUBA',l:'CUBA'},{v:'CUR',l:'CURACAO'},{v:'CYPR',l:'CYPRUS'},
+  {v:'CONB',l:'CONGO, REPUBLIC OF THE'},{v:'CSTR',l:'COSTA RICA'},{v:'IVCO',l:"COTE D'IVOIRE"},
+  {v:'HRV',l:'CROATIA'},{v:'CUBA',l:'CUBA'},{v:'CUR',l:'CURACAO'},{v:'CYPR',l:'CYPRUS'},
   {v:'CZEC',l:'CZECH REPUBLIC'},{v:'DEN',l:'DENMARK'},{v:'DJI',l:'DJIBOUTI'},
   {v:'DOMN',l:'DOMINICA'},{v:'DOMR',l:'DOMINICAN REPUBLIC'},{v:'ECUA',l:'ECUADOR'},
   {v:'EGYP',l:'EGYPT'},{v:'ELSL',l:'EL SALVADOR'},{v:'EGN',l:'EQUATORIAL GUINEA'},
   {v:'ERI',l:'ERITREA'},{v:'EST',l:'ESTONIA'},{v:'SZLD',l:'ESWATINI'},
-  {v:'ETH',l:'ETHIOPIA'},{v:'FKLI',l:'FALKLAND ISLANDS'},{v:'FRO',l:'FAROE ISLANDS'},
-  {v:'FIJI',l:'FIJI'},{v:'FIN',l:'FINLAND'},{v:'FRAN',l:'FRANCE'},
-  {v:'FPOL',l:'FRENCH POLYNESIA'},{v:'FSAT',l:'FRENCH SOUTHERN AND ANTARCTIC TERRITORIES'},
-  {v:'GABN',l:'GABON'},{v:'GAM',l:'GAMBIA, THE'},{v:'XGZ',l:'GAZA STRIP'},
-  {v:'GEO',l:'GEORGIA'},{v:'GER',l:'GERMANY'},{v:'GHAN',l:'GHANA'},
-  {v:'GIB',l:'GIBRALTAR'},{v:'GRC',l:'GREECE'},{v:'GRLD',l:'GREENLAND'},
-  {v:'GREN',l:'GRENADA'},{v:'GUAM',l:'GUAM'},{v:'GUAT',l:'GUATEMALA'},
-  {v:'GNEA',l:'GUINEA'},{v:'GUIB',l:'GUINEA - BISSAU'},{v:'GUY',l:'GUYANA'},
-  {v:'HAT',l:'HAITI'},{v:'HMD',l:'HEARD AND MCDONALD ISLANDS'},
+  {v:'ETH',l:'ETHIOPIA'},{v:'FIJI',l:'FIJI'},{v:'FIN',l:'FINLAND'},{v:'FRAN',l:'FRANCE'},
+  {v:'GABN',l:'GABON'},{v:'GAM',l:'GAMBIA, THE'},{v:'GEO',l:'GEORGIA'},
+  {v:'GER',l:'GERMANY'},{v:'GHAN',l:'GHANA'},{v:'GIB',l:'GIBRALTAR'},
+  {v:'GRC',l:'GREECE'},{v:'GRLD',l:'GREENLAND'},{v:'GREN',l:'GRENADA'},
+  {v:'GUAM',l:'GUAM'},{v:'GUAT',l:'GUATEMALA'},{v:'GNEA',l:'GUINEA'},
+  {v:'GUIB',l:'GUINEA - BISSAU'},{v:'GUY',l:'GUYANA'},{v:'HAT',l:'HAITI'},
   {v:'VAT',l:'HOLY SEE (VATICAN CITY)'},{v:'HOND',l:'HONDURAS'},
-  {v:'HOKO',l:'HONG KONG BNO'},{v:'HNK',l:'HONG KONG SAR'},{v:'XHI',l:'HOWLAND ISLAND'},
-  {v:'HUNG',l:'HUNGARY'},{v:'ICLD',l:'ICELAND'},{v:'XIR',l:'IN THE AIR'},
+  {v:'HNK',l:'HONG KONG SAR'},{v:'HUNG',l:'HUNGARY'},{v:'ICLD',l:'ICELAND'},
   {v:'IND',l:'INDIA'},{v:'IDSA',l:'INDONESIA'},{v:'IRAN',l:'IRAN'},
   {v:'IRAQ',l:'IRAQ'},{v:'IRE',l:'IRELAND'},{v:'ISRL',l:'ISRAEL'},
   {v:'ITLY',l:'ITALY'},{v:'JAM',l:'JAMAICA'},{v:'JPN',l:'JAPAN'},
-  {v:'JRSM',l:'JERUSALEM'},{v:'JORD',l:'JORDAN'},{v:'KAZ',l:'KAZAKHSTAN'},
-  {v:'KENY',l:'KENYA'},{v:'KIRI',l:'KIRIBATI'},{v:'PRK',l:'KOREA, DEMOCRATIC REPUBLIC OF (NORTH)'},
-  {v:'KOR',l:'KOREA, REPUBLIC OF (SOUTH)'},{v:'KSV',l:'KOSOVO'},
-  {v:'KUWT',l:'KUWAIT'},{v:'KGZ',l:'KYRGYZSTAN'},{v:'LAOS',l:'LAOS'},
-  {v:'LATV',l:'LATVIA'},{v:'LEBN',l:'LEBANON'},{v:'LES',l:'LESOTHO'},
-  {v:'LIBR',l:'LIBERIA'},{v:'LBYA',l:'LIBYA'},{v:'LCHT',l:'LIECHTENSTEIN'},
-  {v:'LITH',l:'LITHUANIA'},{v:'LXM',l:'LUXEMBOURG'},{v:'MAC',l:'MACAU'},
-  {v:'MKD',l:'MACEDONIA, NORTH'},{v:'MADG',l:'MADAGASCAR'},{v:'MALW',l:'MALAWI'},
-  {v:'MLAS',l:'MALAYSIA'},{v:'MLDI',l:'MALDEN ISLAND'},{v:'MLDV',l:'MALDIVES'},
+  {v:'JORD',l:'JORDAN'},{v:'KAZ',l:'KAZAKHSTAN'},{v:'KENY',l:'KENYA'},
+  {v:'KOR',l:'KOREA, REPUBLIC OF (SOUTH)'},{v:'PRK',l:'KOREA, DEMOCRATIC REPUBLIC OF (NORTH)'},
+  {v:'KSV',l:'KOSOVO'},{v:'KUWT',l:'KUWAIT'},{v:'KGZ',l:'KYRGYZSTAN'},
+  {v:'LAOS',l:'LAOS'},{v:'LATV',l:'LATVIA'},{v:'LEBN',l:'LEBANON'},
+  {v:'LES',l:'LESOTHO'},{v:'LIBR',l:'LIBERIA'},{v:'LBYA',l:'LIBYA'},
+  {v:'LCHT',l:'LIECHTENSTEIN'},{v:'LITH',l:'LITHUANIA'},{v:'LXM',l:'LUXEMBOURG'},
+  {v:'MAC',l:'MACAU'},{v:'MKD',l:'MACEDONIA, NORTH'},{v:'MADG',l:'MADAGASCAR'},
+  {v:'MALW',l:'MALAWI'},{v:'MLAS',l:'MALAYSIA'},{v:'MLDV',l:'MALDIVES'},
   {v:'MALI',l:'MALI'},{v:'MLTA',l:'MALTA'},{v:'RMI',l:'MARSHALL ISLANDS'},
-  {v:'MAUR',l:'MAURITANIA'},{v:'MRTS',l:'MAURITIUS'},{v:'MYT',l:'MAYOTTE'},
-  {v:'AGS',l:'MEXICO - AGUASCALIENTES'},{v:'BC',l:'MEXICO - BAJA CALIFORNIA NORTE'},
-  {v:'BCSR',l:'MEXICO - BAJA CALIFORNIA SUR'},{v:'CAMP',l:'MEXICO - CAMPECHE'},
-  {v:'CHIS',l:'MEXICO - CHIAPAS'},{v:'CHIH',l:'MEXICO - CHIHUAHUA'},
-  {v:'COAH',l:'MEXICO - COAHUILA'},{v:'COLI',l:'MEXICO - COLIMA'},
-  {v:'DF',l:'MEXICO - DISTRITO FEDERAL'},{v:'DGO',l:'MEXICO - DURANGO'},
-  {v:'GTO',l:'MEXICO - GUANAJUATO'},{v:'GRO',l:'MEXICO - GUERRERO'},
-  {v:'HGO',l:'MEXICO - HIDALGO'},{v:'JAL',l:'MEXICO - JALISCO'},
-  {v:'MCH',l:'MEXICO - MICHOACAN'},{v:'MOR',l:'MEXICO - MORELOS'},
-  {v:'NAY',l:'MEXICO - NAYARIT'},{v:'NL',l:'MEXICO - NUEVO LEON'},
-  {v:'OAX',l:'MEXICO - OAXACA'},{v:'PUE',l:'MEXICO - PUEBLA'},
-  {v:'QRO',l:'MEXICO - QUERETARO'},{v:'QROO',l:'MEXICO - QUINTANA ROO'},
-  {v:'SLP',l:'MEXICO - SAN LUIS POTOSI'},{v:'SIN',l:'MEXICO - SINALOA'},
-  {v:'SON',l:'MEXICO - SONORA'},{v:'MXCO',l:'MEXICO - STATE OF MEXICO'},
-  {v:'TAB',l:'MEXICO - TABASCO'},{v:'TAMP',l:'MEXICO - TAMAULIPAS'},
-  {v:'TLAX',l:'MEXICO - TLAXCALA'},{v:'VER',l:'MEXICO - VERACRUZ'},
-  {v:'YUC',l:'MEXICO - YUCATAN'},{v:'ZAC',l:'MEXICO - ZACATECAS'},
-  {v:'MEX',l:'MEXICO'},{v:'FSM',l:'MICRONESIA'},{v:'MDWI',l:'MIDWAY ISLANDS'},
-  {v:'MLD',l:'MOLDOVA'},{v:'MON',l:'MONACO'},{v:'MONG',l:'MONGOLIA'},
-  {v:'MTG',l:'MONTENEGRO'},{v:'MONT',l:'MONTSERRAT'},{v:'MORO',l:'MOROCCO'},
-  {v:'MOZ',l:'MOZAMBIQUE'},{v:'NAMB',l:'NAMIBIA'},{v:'NAU',l:'NAURU'},
-  {v:'NEP',l:'NEPAL'},{v:'NETH',l:'NETHERLANDS'},{v:'NCAL',l:'NEW CALEDONIA'},
+  {v:'MAUR',l:'MAURITANIA'},{v:'MRTS',l:'MAURITIUS'},{v:'MEX',l:'MEXICO'},
+  {v:'FSM',l:'MICRONESIA'},{v:'MLD',l:'MOLDOVA'},{v:'MON',l:'MONACO'},
+  {v:'MONG',l:'MONGOLIA'},{v:'MTG',l:'MONTENEGRO'},{v:'MONT',l:'MONTSERRAT'},
+  {v:'MORO',l:'MOROCCO'},{v:'MOZ',l:'MOZAMBIQUE'},{v:'NAMB',l:'NAMIBIA'},
+  {v:'NAU',l:'NAURU'},{v:'NEP',l:'NEPAL'},{v:'NETH',l:'NETHERLANDS'},
   {v:'NZLD',l:'NEW ZEALAND'},{v:'NIC',l:'NICARAGUA'},{v:'NIR',l:'NIGER'},
-  {v:'NRA',l:'NIGERIA'},{v:'NIUE',l:'NIUE'},{v:'NFK',l:'NORFOLK ISLAND'},
-  {v:'MNP',l:'NORTH MARIANA ISLANDS'},{v:'NIRE',l:'NORTHERN IRELAND'},
-  {v:'NORW',l:'NORWAY'},{v:'OMAN',l:'OMAN'},{v:'PKST',l:'PAKISTAN'},
-  {v:'PALA',l:'PALAU'},{v:'PLMR',l:'PALMYRA ATOLL'},{v:'PAL',l:'PALESTINIAN AUTHORITY'},
+  {v:'NRA',l:'NIGERIA'},{v:'NORW',l:'NORWAY'},{v:'OMAN',l:'OMAN'},
+  {v:'PKST',l:'PAKISTAN'},{v:'PALA',l:'PALAU'},{v:'PAL',l:'PALESTINIAN AUTHORITY'},
   {v:'PAN',l:'PANAMA'},{v:'PNG',l:'PAPUA NEW GUINEA'},{v:'PARA',l:'PARAGUAY'},
-  {v:'PERU',l:'PERU'},{v:'PHIL',l:'PHILIPPINES'},{v:'PITC',l:'PITCAIRN ISLANDS'},
-  {v:'POL',l:'POLAND'},{v:'PORT',l:'PORTUGAL'},{v:'PR',l:'PUERTO RICO'},
-  {v:'QTAR',l:'QATAR'},{v:'ROM',l:'ROMANIA'},{v:'RUS',l:'RUSSIA'},
-  {v:'RWND',l:'RWANDA'},{v:'MAF',l:'SAINT MARTIN'},{v:'WSAM',l:'SAMOA'},
-  {v:'SMAR',l:'SAN MARINO'},{v:'STPR',l:'SAO TOME AND PRINCIPE'},
-  {v:'SARB',l:'SAUDI ARABIA'},{v:'SENG',l:'SENEGAL'},{v:'SBA',l:'SERBIA'},
-  {v:'SEYC',l:'SEYCHELLES'},{v:'SLEO',l:'SIERRA LEONE'},{v:'SING',l:'SINGAPORE'},
-  {v:'STM',l:'SINT MAARTEN'},{v:'SVK',l:'SLOVAKIA'},{v:'SVN',l:'SLOVENIA'},
+  {v:'PERU',l:'PERU'},{v:'PHIL',l:'PHILIPPINES'},{v:'POL',l:'POLAND'},
+  {v:'PORT',l:'PORTUGAL'},{v:'QTAR',l:'QATAR'},{v:'ROM',l:'ROMANIA'},
+  {v:'RUS',l:'RUSSIA'},{v:'RWND',l:'RWANDA'},{v:'WSAM',l:'SAMOA'},
+  {v:'SMAR',l:'SAN MARINO'},{v:'SARB',l:'SAUDI ARABIA'},{v:'SENG',l:'SENEGAL'},
+  {v:'SBA',l:'SERBIA'},{v:'SEYC',l:'SEYCHELLES'},{v:'SLEO',l:'SIERRA LEONE'},
+  {v:'SING',l:'SINGAPORE'},{v:'SVK',l:'SLOVAKIA'},{v:'SVN',l:'SLOVENIA'},
   {v:'SLMN',l:'SOLOMON ISLANDS'},{v:'SOMA',l:'SOMALIA'},{v:'SAFR',l:'SOUTH AFRICA'},
-  {v:'SGS',l:'SOUTH GEORGIA AND THE SOUTH SANDWICH ISLAND'},{v:'SSDN',l:'SOUTH SUDAN'},
-  {v:'SPN',l:'SPAIN'},{v:'SRL',l:'SRI LANKA'},{v:'STBR',l:'ST. BARTHELEMY'},
-  {v:'SHEL',l:'ST. HELENA'},{v:'STCN',l:'ST. KITTS AND NEVIS'},
-  {v:'SLCA',l:'ST. LUCIA'},{v:'SPMI',l:'ST. PIERRE AND MIQUELON'},
+  {v:'SSDN',l:'SOUTH SUDAN'},{v:'SPN',l:'SPAIN'},{v:'SRL',l:'SRI LANKA'},
+  {v:'STCN',l:'ST. KITTS AND NEVIS'},{v:'SLCA',l:'ST. LUCIA'},
   {v:'STVN',l:'ST. VINCENT AND THE GRENADINES'},{v:'XXX',l:'STATELESS'},
-  {v:'SNTD',l:'STATUS NEUTRAL TRAVEL DOCUMENT'},{v:'SUDA',l:'SUDAN'},
-  {v:'SURM',l:'SURINAME'},{v:'SJM',l:'SVALBARD'},{v:'SWDN',l:'SWEDEN'},
+  {v:'SUDA',l:'SUDAN'},{v:'SURM',l:'SURINAME'},{v:'SWDN',l:'SWEDEN'},
   {v:'SWTZ',l:'SWITZERLAND'},{v:'SYR',l:'SYRIA'},{v:'TWAN',l:'TAIWAN'},
   {v:'TJK',l:'TAJIKISTAN'},{v:'TAZN',l:'TANZANIA'},{v:'THAI',l:'THAILAND'},
-  {v:'TMOR',l:'TIMOR-LESTE'},{v:'TOGO',l:'TOGO'},{v:'TKL',l:'TOKELAU'},
-  {v:'TONG',l:'TONGA'},{v:'TRIN',l:'TRINIDAD AND TOBAGO'},{v:'TNSA',l:'TUNISIA'},
-  {v:'TRKY',l:'TURKEY'},{v:'TKM',l:'TURKMENISTAN'},{v:'TCIS',l:'TURKS AND CAICOS ISLANDS'},
-  {v:'TUV',l:'TUVALU'},{v:'UGAN',l:'UGANDA'},{v:'UKR',l:'UKRAINE'},
-  {v:'UAE',l:'UNITED ARAB EMIRATES'},{v:'GRBR',l:'UNITED KINGDOM'},
-  {v:'UNLP',l:'UNITED NATIONS'},{v:'USA',l:'UNITED STATES OF AMERICA'},
+  {v:'TMOR',l:'TIMOR-LESTE'},{v:'TOGO',l:'TOGO'},{v:'TONG',l:'TONGA'},
+  {v:'TRIN',l:'TRINIDAD AND TOBAGO'},{v:'TNSA',l:'TUNISIA'},{v:'TRKY',l:'TURKEY'},
+  {v:'TKM',l:'TURKMENISTAN'},{v:'TUV',l:'TUVALU'},{v:'UGAN',l:'UGANDA'},
+  {v:'UKR',l:'UKRAINE'},{v:'UAE',l:'UNITED ARAB EMIRATES'},
+  {v:'GRBR',l:'UNITED KINGDOM'},{v:'USA',l:'UNITED STATES OF AMERICA'},
   {v:'URU',l:'URUGUAY'},{v:'UZB',l:'UZBEKISTAN'},{v:'VANU',l:'VANUATU'},
-  {v:'VENZ',l:'VENEZUELA'},{v:'VTNM',l:'VIETNAM'},{v:'VI',l:'VIRGIN ISLANDS (U.S.)'},
-  {v:'BRVI',l:'VIRGIN ISLANDS, BRITISH'},{v:'WKI',l:'WAKE ISLAND'},
-  {v:'WAFT',l:'WALLIS AND FUTUNA ISLANDS'},{v:'XWB',l:'WEST BANK'},
-  {v:'SSAH',l:'WESTERN SAHARA'},{v:'YEM',l:'YEMEN'},{v:'ZAMB',l:'ZAMBIA'},
-  {v:'ZIMB',l:'ZIMBABWE'}
+  {v:'VENZ',l:'VENEZUELA'},{v:'VTNM',l:'VIETNAM'},{v:'YEM',l:'YEMEN'},
+  {v:'ZAMB',l:'ZAMBIA'},{v:'ZIMB',l:'ZIMBABWE'}
 ];
 
-// Shared helpers
 function countriesOptions(placeholder='- Select One -') {
   return `<option value="">${placeholder}</option>` +
     COUNTRIES.map(c=>`<option value="${c.v}">${c.l}</option>`).join('');
@@ -302,12 +284,10 @@ function dayOptions(blank='') {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// DS-160 PAGES SCHEMA  — driven by the 13 YAML specs
+// PAGES SCHEMA
 // ═══════════════════════════════════════════════════════════════════════
 function buildPages() {
   return [
-
-  // ── Page 1: Personal 1 ───────────────────────────────────────────────
   {
     id: 'personal_1',
     title: 'Personal Information 1',
@@ -351,8 +331,6 @@ function buildPages() {
       {type:'country', id:'pob_country', label:'Country/Region of Birth', required:true},
     ]
   },
-
-  // ── Page 2: Personal 2 ───────────────────────────────────────────────
   {
     id: 'personal_2',
     title: 'Personal Information 2',
@@ -389,8 +367,6 @@ function buildPages() {
         na:{label:'Does Not Apply', id:'taxpayer_id_na'}},
     ]
   },
-
-  // ── Page 3: Travel Information ───────────────────────────────────────
   {
     id: 'travel',
     title: 'Travel Information',
@@ -404,19 +380,10 @@ function buildPages() {
           {v:'G',l:'INTERNATIONAL ORGANIZATION REP./EMP. (G)'},{v:'H',l:'TEMPORARY WORKER (H)'},
           {v:'I',l:'FOREIGN MEDIA REPRESENTATIVE (I)'},{v:'J',l:'EXCHANGE VISITOR (J)'},
           {v:'K',l:"FIANCÉ(E) OR SPOUSE OF A U.S. CITIZEN (K)"},{v:'L',l:'INTRACOMPANY TRANSFEREE (L)'},
-          {v:'M',l:'VOCATIONAL/NONACADEMIC STUDENT (M)'},{v:'N',l:'OTHER (N)'},
-          {v:'O',l:'ALIEN WITH EXTRAORDINARY ABILITY (O)'},{v:'P',l:'INTERNATIONALLY RECOGNIZED ALIEN (P)'},
-          {v:'Q',l:'CULTURAL EXCHANGE VISITOR (Q)'},{v:'R',l:'RELIGIOUS WORKER (R)'},
-          {v:'S',l:'INFORMANT OR WITNESS (S)'},{v:'T',l:'VICTIM OF TRAFFICKING (T)'},
-          {v:'TD/TN',l:'NAFTA PROFESSIONAL (TD/TN)'},{v:'U',l:'VICTIM OF CRIMINAL ACTIVITY (U)'},
+          {v:'M',l:'VOCATIONAL/NONACADEMIC STUDENT (M)'},{v:'O',l:'ALIEN WITH EXTRAORDINARY ABILITY (O)'},
+          {v:'P',l:'INTERNATIONALLY RECOGNIZED ALIEN (P)'},{v:'Q',l:'CULTURAL EXCHANGE VISITOR (Q)'},
+          {v:'R',l:'RELIGIOUS WORKER (R)'},{v:'TD/TN',l:'NAFTA PROFESSIONAL (TD/TN)'},
           {v:'NATO',l:'NATO STAFF (NATO)'}
-        ]
-      },
-      {type:'select', id:'purpose_specify', label:'Specify (B visa class)', required:false, placeholder:'PLEASE SELECT',
-        hint:'Only if applicable for your visa class',
-        options:[
-          {v:'B1-B2',l:'BUSINESS OR TOURISM (B1/B2)'},{v:'B1-CF',l:'BUSINESS/CONFERENCE (B1)'},
-          {v:'B2-TM',l:'TOURISM/MEDICAL TREATMENT (B2)'}
         ]
       },
       {type:'radio', id:'has_specific_travel_plans', label:'Have you made specific travel plans?', required:true,
@@ -457,8 +424,8 @@ function buildPages() {
           {v:'TN',l:'TENNESSEE'},{v:'TX',l:'TEXAS'},{v:'UT',l:'UTAH'},{v:'VT',l:'VERMONT'},
           {v:'VA',l:'VIRGINIA'},{v:'WA',l:'WASHINGTON'},{v:'WV',l:'WEST VIRGINIA'},
           {v:'WI',l:'WISCONSIN'},{v:'WY',l:'WYOMING'},{v:'DC',l:'DISTRICT OF COLUMBIA'},
-          {v:'AS',l:'AMERICAN SAMOA'},{v:'GU',l:'GUAM'},{v:'MP',l:'NORTHERN MARIANA ISLANDS'},
-          {v:'PR',l:'PUERTO RICO'},{v:'VI',l:'VIRGIN ISLANDS'}
+          {v:'AS',l:'AMERICAN SAMOA'},{v:'GU',l:'GUAM'},{v:'PR',l:'PUERTO RICO'},
+          {v:'VI',l:'VIRGIN ISLANDS'}
         ]
       },
       {type:'text', id:'us_zip', label:'ZIP Code', required:true},
@@ -470,8 +437,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 4: Travel Companions ────────────────────────────────────────
   {
     id: 'travel_companions',
     title: 'Travel Companions Information',
@@ -497,8 +462,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 5: Previous U.S. Travel ────────────────────────────────────
   {
     id: 'previous_us_travel',
     title: 'Previous U.S. Travel Information',
@@ -546,8 +509,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 6: Address & Phone ───────────────────────────────────────────
   {
     id: 'address_phone',
     title: 'Address and Phone Information',
@@ -597,17 +558,14 @@ function buildPages() {
         fields:[
           {type:'select', id:'social_platform', label:'Social Media Platform', placeholder:'-Select One-',
             options:[
-              {v:'FBOOK',l:'FACEBOOK'},{v:'GOOGL',l:'GOOGLE+'},{v:'INSTA',l:'INSTAGRAM'},
-              {v:'LINKED',l:'LINKEDIN'},{v:'MYSP',l:'MYSPACE'},{v:'TWIT',l:'TWITTER'},
-              {v:'YTUBE',l:'YOUTUBE'},{v:'NONE',l:'NONE'},{v:'OTHER',l:'OTHER'}
+              {v:'FBOOK',l:'FACEBOOK'},{v:'INSTA',l:'INSTAGRAM'},{v:'LINKED',l:'LINKEDIN'},
+              {v:'TWIT',l:'TWITTER'},{v:'YTUBE',l:'YOUTUBE'},{v:'NONE',l:'NONE'},{v:'OTHER',l:'OTHER'}
             ]},
           {type:'text', id:'social_identifier', label:'Social Media Identifier / Handle'}
         ]
       },
     ]
   },
-
-  // ── Page 7: Passport ─────────────────────────────────────────────────
   {
     id: 'passport',
     title: 'Passport Information',
@@ -640,8 +598,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 8: U.S. Contact ─────────────────────────────────────────────
   {
     id: 'us_contact',
     title: 'U.S. Point of Contact Information',
@@ -662,12 +618,10 @@ function buildPages() {
       {type:'text', id:'poc_phone', label:'Phone Number', required:true},
     ]
   },
-
-  // ── Page 9: Family Relatives ─────────────────────────────────────────
   {
     id: 'family_relatives',
     title: 'Family Information: Relatives',
-    note: 'Please provide the following information concerning your biological parents. If you are adopted, provide information on your adoptive parents.',
+    note: 'Please provide the following information concerning your biological parents.',
     nodes: [
       {type:'section', label:"Father's Full Name and Date of Birth"},
       {type:'text', id:'father_surname', label:'Surnames', required:true,
@@ -717,8 +671,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 10: Family Spouse ───────────────────────────────────────────
   {
     id: 'family_spouse',
     title: 'Family Information: Spouse',
@@ -740,8 +692,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 11: Work/Education Present ─────────────────────────────────
   {
     id: 'work_present',
     title: 'Present Work/Education/Training Information',
@@ -758,20 +708,9 @@ function buildPages() {
           {v:'RT',l:'RETIRED'},{v:'SS',l:'SOCIAL SCIENCE'},{v:'S',l:'STUDENT'},{v:'O',l:'OTHER'}
         ]
       },
-      {type:'radio', id:'occupation_is_employer', label:'',
-        note: 'employer_block', // special rendering handled in template
-        options:[], children:{}
-      },
-    ],
-    // Employer block is rendered dynamically based on occupation value
-    employer_block: {
-      employed: ['A','AP','B','CM','CS','C','ED','EN','G','LP','MH','M','NS','PS','RV','R','SS','O'],
-      student: ['S'],
-      none: ['H','N','RT']
-    }
+      {type:'occupation_block'}
+    ]
   },
-
-  // ── Page 12: Work/Education Previous ────────────────────────────────
   {
     id: 'work_previous',
     title: 'Previous Work/Education/Training Information',
@@ -784,7 +723,6 @@ function buildPages() {
               fields:[
                 {type:'text', id:'prev_employer_name', label:'Employer Name'},
                 {type:'text', id:'prev_employer_street1', label:'Street Address (Line 1)'},
-                {type:'text', id:'prev_employer_street2', label:'Street Address (Line 2)'},
                 {type:'text', id:'prev_employer_city', label:'City'},
                 {type:'text', id:'prev_employer_state', label:'State/Province'},
                 {type:'text', id:'prev_employer_postal', label:'Postal Zone / ZIP Code'},
@@ -801,14 +739,12 @@ function buildPages() {
       },
       {type:'radio', id:'has_attended_educational_institution',
         label:'Have you attended any educational institutions at a secondary level or above?', required:true,
-        help:'Answer Yes if you ever attended high school, college, university, graduate school, doctoral program, or vocational program.',
         options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
         children:{
           Y:[{type:'repeatable', id:'educational_institutions', label:'Educational Institutions',
               fields:[
                 {type:'text', id:'inst_name', label:'Name of Institution'},
                 {type:'text', id:'inst_street1', label:'Street Address (Line 1)'},
-                {type:'text', id:'inst_street2', label:'Street Address (Line 2)'},
                 {type:'text', id:'inst_city', label:'City'},
                 {type:'text', id:'inst_state', label:'State/Province'},
                 {type:'text', id:'inst_postal', label:'Postal Zone / ZIP Code'},
@@ -821,8 +757,6 @@ function buildPages() {
       },
     ]
   },
-
-  // ── Page 13: Work/Education Additional ──────────────────────────────
   {
     id: 'work_additional',
     title: 'Additional Work/Education/Training Information',
@@ -873,148 +807,49 @@ function buildPages() {
       },
     ]
   },
-
-  ]; // end pages
+  ];
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// GENERIC NODE RENDERER  (pure HTML string, no Alpine templates inside)
+// NODE RENDERERS
 // ═══════════════════════════════════════════════════════════════════════
-// Because Alpine x-html can't use Alpine directives inside, we build
-// actual DOM elements using x-data + $watch on each rendered node.
 
-// Main app component
-function ds160App() {
-  return {
-    pages: buildPages(),
-    pageIndex: 0,
-    errors: [],
+// FIX: All x-show expressions use STORE.lists['id'] with bracket notation
+// instead of bare variable names like military_service_entries
 
-    get store() { return STORE; },
-
-    prevPage() {
-      if (this.pageIndex > 0) {
-        this.pageIndex--;
-        this.errors = [];
-        scrollToTop();
-      }
-    },
-
-    nextPage() {
-      this.errors = this.validatePage(this.pages[this.pageIndex]);
-      if (this.errors.length > 0) {
-        scrollToTop();
-        return;
-      }
-      this.pageIndex++;
-      scrollToTop();
-    },
-
-    submit() {
-      this.errors = this.validatePage(this.pages[this.pageIndex]);
-      if (this.errors.length > 0) { scrollToTop(); return; }
-      alert('DS-160 data collected successfully!\n\nIn a production implementation, this would be submitted to the server.\n\nTotal fields captured: ' + Object.keys(STORE.data).length);
-    },
-
-    validatePage(page) {
-      const errs = [];
-      for (const node of page.nodes || []) {
-        if (node.required && node.id && !STORE.data[node.id]) {
-          errs.push(`"${node.label}" is required.`);
-        }
-        // Date triples
-        if (node.type === 'date3' && node.required) {
-          if (!STORE.data[node.id_year]) errs.push(`"${node.label}" year is required.`);
-        }
-      }
-      return errs;
-    }
-  };
-}
-
-function scrollToTop() {
-  const el = document.getElementById('content');
-  if (el) el.scrollTop = 0;
-  setTimeout(() => updateShadow(el), 80);
-}
-
-// ── Individual node Alpine component ─────────────────────────────────
-// Each node is a self-contained Alpine x-data component so it can react
-// to STORE changes without needing x-for inside x-html.
-
-// We render each node as an Alpine-aware div with x-data on it.
-// This is injected into the template via x-html on a wrapper.
-
-function makeNodeEl(node, groupId, itemIdx) {
-  // groupId / itemIdx are for rendering fields inside repeatable groups
-  const inGroup = groupId != null;
-
-  const fieldKey = (id) => {
-    if (inGroup) return null; // handled inside group component
-    return id;
-  };
-
+function makeNodeEl(node, inGroup, groupId, itemIdx) {
   switch(node.type) {
-
-    case 'section':
-      return `<div class="section-heading">${node.label}</div>`;
-
-    case 'text':
-      return makeTextField(node, inGroup, groupId, itemIdx);
-
-    case 'textarea':
-      return makeTextareaField(node, inGroup, groupId, itemIdx);
-
-    case 'select':
-      return makeSelectField(node, inGroup, groupId, itemIdx);
-
-    case 'country':
-      return makeCountryField(node, inGroup, groupId, itemIdx);
-
-    case 'radio':
-      return makeRadioField(node, inGroup, groupId, itemIdx);
-
-    case 'date3':
-      return makeDateField(node, inGroup, groupId, itemIdx);
-
-    case 'month_year':
-      return makeMonthYearField(node, inGroup, groupId, itemIdx);
-
-    case 'repeatable':
-      return makeRepeatableGroup(node);
-
-    default:
-      return '';
+    case 'section':     return `<div class="section-heading">${node.label}</div>`;
+    case 'text':        return makeTextField(node, inGroup, groupId, itemIdx);
+    case 'textarea':    return makeTextareaField(node, inGroup, groupId, itemIdx);
+    case 'select':      return makeSelectField(node, inGroup, groupId, itemIdx);
+    case 'country':     return makeCountryField(node, inGroup, groupId, itemIdx);
+    case 'radio':       return makeRadioField(node, inGroup, groupId, itemIdx);
+    case 'date3':       return makeDateField(node, inGroup, groupId, itemIdx);
+    case 'month_year':  return makeMonthYearField(node, inGroup, groupId, itemIdx);
+    case 'repeatable':  return makeRepeatableGroup(node);
+    case 'occupation_block': return makeOccupationBlock();
+    default: return '';
   }
 }
 
-// ── Helper: build x-model binding ─────────────────────────────────────
 function xmodel(id, inGroup, groupId, itemIdx) {
-  if (inGroup) {
-    return `x-model="STORE.lists['${groupId}'][${itemIdx}]['${id}']"`;
-  }
+  if (inGroup) return `x-model="STORE.lists['${groupId}'][${itemIdx}]['${id}']"`;
   return `x-model="STORE.data['${id}']"`;
 }
 
-function ensureInit(id, inGroup, groupId, itemIdx) {
-  if (inGroup) {
-    return `x-init="if(!STORE.lists['${groupId}'][${itemIdx}]) STORE.lists['${groupId}'][${itemIdx}] = {};"`;
-  }
-  return '';
-}
-
-// ── Text field ────────────────────────────────────────────────────────
 function makeTextField(node, inGroup, groupId, itemIdx) {
   const req = node.required ? '<span class="req">*</span>' : '';
   const hint = node.hint ? `<span class="hint">${node.hint}</span>` : '';
   const xm = xmodel(node.id, inGroup, groupId, itemIdx);
+  const inputRef = inGroup
+    ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']`
+    : `STORE.data['${node.id}']`;
   const naBlock = node.na ? `
     <div class="check-row">
-      <input type="checkbox" id="na_${node.na.id}" @change="
-        if($event.target.checked) { ${inGroup ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']='N/A'` : `STORE.data['${node.id}']='N/A'`}; $el.previousElementSibling.querySelector('input').disabled=true; }
-        else { ${inGroup ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']=''` : `STORE.data['${node.id}']= ''`}; $el.previousElementSibling.querySelector('input').disabled=false; }
-      " />
-      <label for="na_${node.na.id}">${node.na.label}</label>
+      <input type="checkbox" id="na_${node.na.id}_${inGroup ? groupId+'_'+itemIdx : 'top'}"
+        @change="dsNaToggle($event, () => ${inputRef}, v => { ${inputRef} = v; })" />
+      <label for="na_${node.na.id}_${inGroup ? groupId+'_'+itemIdx : 'top'}">${node.na.label}</label>
     </div>` : '';
   return `<div class="field">
     <label>${node.label}${req}</label>${hint}
@@ -1023,7 +858,6 @@ function makeTextField(node, inGroup, groupId, itemIdx) {
   </div>`;
 }
 
-// ── Textarea ─────────────────────────────────────────────────────────
 function makeTextareaField(node, inGroup, groupId, itemIdx) {
   const req = node.required ? '<span class="req">*</span>' : '';
   const xm = xmodel(node.id, inGroup, groupId, itemIdx);
@@ -1033,7 +867,6 @@ function makeTextareaField(node, inGroup, groupId, itemIdx) {
   </div>`;
 }
 
-// ── Select ────────────────────────────────────────────────────────────
 function makeSelectField(node, inGroup, groupId, itemIdx) {
   const req = node.required ? '<span class="req">*</span>' : '';
   const hint = node.hint ? `<span class="hint">${node.hint}</span>` : '';
@@ -1046,7 +879,6 @@ function makeSelectField(node, inGroup, groupId, itemIdx) {
   </div>`;
 }
 
-// ── Country select ────────────────────────────────────────────────────
 function makeCountryField(node, inGroup, groupId, itemIdx) {
   const req = node.required ? '<span class="req">*</span>' : '';
   const xm = xmodel(node.id, inGroup, groupId, itemIdx);
@@ -1056,48 +888,53 @@ function makeCountryField(node, inGroup, groupId, itemIdx) {
   </div>`;
 }
 
-// ── Radio with conditional children ───────────────────────────────────
 function makeRadioField(node, inGroup, groupId, itemIdx) {
   if (!node.options || node.options.length === 0) return '';
   const req = node.required ? '<span class="req">*</span>' : '';
   const help = node.help ? `<span class="hint">${node.help}</span>` : '';
-  const xm_key = inGroup ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']` : `STORE.data['${node.id}']`;
+  // Slots are always pre-filled with {} by makeRepeatableGroup x-init,
+  // so we can use direct bracket notation safely.
+  const xm_key = inGroup
+    ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']`
+    : `STORE.data['${node.id}']`;
+  const xm_set = xm_key;
+
+  const radioName = inGroup
+    ? `${groupId}_${itemIdx}_${node.id}`
+    : node.id;
 
   const radios = node.options.map(o => `
     <label>
-      <input type="radio" name="${inGroup ? groupId+'_'+itemIdx+'_'+node.id : node.id}"
-             value="${o.v}"
-             @change="${xm_key} = '${o.v}'" 
+      <input type="radio" name="${radioName}" value="${o.v}"
+             @change="${xm_set} = '${o.v}'"
              :checked="${xm_key} === '${o.v}'" />
       ${o.l}
     </label>`).join('');
 
-  // Children blocks for each value
+  // FIX: x-show uses the same safe bracket notation
   const childrenBlocks = Object.entries(node.children || {}).map(([val, children]) => {
     if (!children || children.length === 0) return '';
-    const childHtml = children.map(c => makeNodeEl(c, inGroup ? groupId : null, inGroup ? itemIdx : null)).join('');
+    const childHtml = children.map(c => makeNodeEl(c, inGroup, groupId, itemIdx)).join('');
     return `<div class="children-block" x-show="${xm_key} === '${val}'">${childHtml}</div>`;
   }).join('');
 
-  return `<div class="field" x-data="{}">
+  return `<div class="field">
     <label>${node.label}${req}</label>${help}
     <div class="radio-group">${radios}</div>
     ${childrenBlocks}
   </div>`;
 }
 
-// ── Date triple (day/month/year) ───────────────────────────────────────
 function makeDateField(node, inGroup, groupId, itemIdx) {
   const req = node.required ? '<span class="req">*</span>' : '';
   const xmDay = xmodel(node.id_day, inGroup, groupId, itemIdx);
   const xmMon = xmodel(node.id_month, inGroup, groupId, itemIdx);
   const xmYr  = xmodel(node.id_year, inGroup, groupId, itemIdx);
+  const naId = node.na ? `na_${node.na.id}` : '';
   const naBlock = node.na ? `
     <div class="check-row">
-      <input type="checkbox" id="na_${node.na.id}" @change="
-        STORE.data['${node.na.id}'] = $event.target.checked ? 'Y' : ''
-      "/>
-      <label for="na_${node.na.id}">${node.na.label}</label>
+      <input type="checkbox" id="${naId}" @change="STORE.data['${node.na.id}'] = $event.target.checked ? 'Y' : ''" />
+      <label for="${naId}">${node.na.label}</label>
     </div>` : '';
   return `<div class="field">
     <label>${node.label}${req}</label>
@@ -1119,7 +956,6 @@ function makeDateField(node, inGroup, groupId, itemIdx) {
   </div>`;
 }
 
-// ── Month/Year pair ────────────────────────────────────────────────────
 function makeMonthYearField(node, inGroup, groupId, itemIdx) {
   const xmMon = xmodel(node.id_month, inGroup, groupId, itemIdx);
   const xmYr  = xmodel(node.id_year, inGroup, groupId, itemIdx);
@@ -1136,59 +972,50 @@ function makeMonthYearField(node, inGroup, groupId, itemIdx) {
   </div>`;
 }
 
-// ── Repeatable group ───────────────────────────────────────────────────
+// FIX: makeRepeatableGroup — do NOT access STORE.lists here (STORE may not be reactive yet).
+// Instead, initialize lazily in x-init, and use STORE.lists['id'] in x-show (bracket notation).
 function makeRepeatableGroup(node) {
-  // Initialize list if not already
-  if (!STORE.lists[node.id]) STORE.lists[node.id] = [{}];
-
-  // Build template with x-data and x-for using the store directly
-  const fieldsForItem = (idxExpr) => {
-    return (node.fields || []).map(f => {
-      // For repeatable items we build bindings dynamically using index
-      return makeNodeEl(f, true, node.id, idxExpr);
-    }).join('');
-  };
-
-  // Since x-html doesn't support Alpine directives, we use a custom
-  // approach: render items statically for indices 0..max, and show/hide
-  // based on list length. We support up to 10 items.
+  const listId = node.id;
   const MAX = 10;
-  const items = Array.from({length:MAX}, (_,i) => {
-    const fields = (node.fields || []).map(f => makeNodeEl(f, true, node.id, i)).join('');
+
+  // We pre-fill ALL 10 slots with {} in x-init so x-model="STORE.lists['id'][i]['field']"
+  // never hits undefined[field] — even for hidden rows.
+  // We track how many are "active" (visible) with a separate _count key on STORE.data.
+  const countKey = '__count_' + listId;
+
+  const items = Array.from({length: MAX}, (_, i) => {
+    const fields = (node.fields || []).map(f => makeNodeEl(f, true, listId, i)).join('');
     return `
-      <div class="repeatable-item" x-show="(STORE.lists['${node.id}'] || []).length > ${i}">
+      <div class="repeatable-item" x-show="(STORE.data['${countKey}'] || 1) > ${i}">
         <div class="repeatable-item-header">
           <span>${node.label} #${i+1}</span>
-          <button class="btn-remove" type="button" @click="removeRepeatItem('${node.id}', ${i})"
-                  x-show="${i} > 0 || (STORE.lists['${node.id}'] || []).length > 1">Remove</button>
+          <button class="btn-remove" type="button"
+            x-show="${i} > 0 || (STORE.data['${countKey}'] || 1) > 1"
+            @click="dsRepeatRemove('${listId}', '${countKey}', ${i})">Remove</button>
         </div>
         ${fields}
       </div>`;
   }).join('');
 
-  return `<div class="field" x-data="{
-    removeRepeatItem(id, idx) {
-      if(STORE.lists[id] && STORE.lists[id].length > 1) STORE.lists[id].splice(idx, 1);
-    }
-  }">
+  return `<div class="field"
+    x-init="dsRepeatInit('${listId}', '${countKey}', ${MAX})">
     <div class="repeatable">
       ${items}
       <div class="repeatable-add">
-        <button class="btn-add" type="button" @click="
-          if(!STORE.lists['${node.id}']) STORE.lists['${node.id}'] = [{}];
-          if(STORE.lists['${node.id}'].length < ${MAX}) STORE.lists['${node.id}'].push({});
-        ">+ Add Another</button>
+        <button class="btn-add" type="button"
+          @click="dsRepeatAdd('${listId}', '${countKey}', ${MAX})">
+          + Add Another
+        </button>
       </div>
     </div>
   </div>`;
 }
 
-// ── Special: Occupation-dependent employer/student block ────────────────
 function makeOccupationBlock() {
   const employedVals = ['A','AP','B','CM','CS','C','ED','EN','G','LP','MH','M','NS','PS','RV','R','SS','O'];
-  const employedList = JSON.stringify(employedVals);
+  const employedJSON = JSON.stringify(employedVals);
   return `
-    <div class="field" x-data="{}" x-show="${employedList}.includes(STORE.data['present_occupation'])">
+    <div x-show="${employedJSON}.includes(STORE.data['present_occupation'])">
       <div class="children-block">
         <div class="section-heading">Employer / Organization Details</div>
         <div class="field"><label>Employer Name</label><input type="text" x-model="STORE.data['employer_name']" /></div>
@@ -1212,7 +1039,7 @@ function makeOccupationBlock() {
         <div class="field"><label>Briefly Describe Your Duties</label><textarea x-model="STORE.data['employer_duties']"></textarea></div>
       </div>
     </div>
-    <div class="field" x-data="{}" x-show="STORE.data['present_occupation'] === 'S'">
+    <div x-show="STORE.data['present_occupation'] === 'S'">
       <div class="children-block">
         <div class="section-heading">School / Educational Institution</div>
         <div class="field"><label>Name of Institution</label><input type="text" x-model="STORE.data['school_name']" /></div>
@@ -1224,58 +1051,71 @@ function makeOccupationBlock() {
         <div class="field"><label>Telephone Number</label><input type="text" x-model="STORE.data['school_phone']" /></div>
         <div class="field"><label>Course of Study</label><input type="text" x-model="STORE.data['school_course']" /></div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
-
-// ═══════════════════════════════════════════════════════════════════════
-// Minimal Alpine component for each PAGE that renders its own nodes
-// ═══════════════════════════════════════════════════════════════════════
-// We register a global function that each page div can call via x-init
-
-// Alpine.js magic: each page div uses x-data="{}" and renders nodes
-// via DOM insertion in x-init. This avoids the x-html + Alpine directives
-// incompatibility by using innerHTML with proper Alpine attribute parsing.
-
-// We'll use a simpler approach: generate the nodes as static HTML
-// with Alpine x-model/x-show attributes, then inject into a container div.
-// Alpine will parse these when they're inserted via innerHTML if we use
-// Alpine.$nextTick properly. Actually the cleanest approach for this
-// use-case is to pre-render everything and let Alpine pick it up.
-
-// Since the form is inside a single Alpine tree (ds160App), all x-model,
-// x-show etc. on the injected HTML will be parsed by Alpine on init.
-// We need to use Alpine.initTree() for dynamically added content.
 
 function renderPageNodes(page) {
   if (!page || !page.nodes) return '';
-  let html = '';
-  for (const node of page.nodes) {
-    if (node.type === 'radio' && node.note === 'employer_block') {
-      html += makeOccupationBlock();
-    } else {
-      html += makeNodeEl(node, false, null, null);
-    }
-  }
-  return html;
+  return page.nodes.map(node => makeNodeEl(node, false, null, null)).join('');
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// Alpine component: per-page renderer
+// MAIN APP + ALPINE INIT
 // ═══════════════════════════════════════════════════════════════════════
+function ds160App() {
+  return {
+    pages: buildPages(),
+    pageIndex: 0,
+    errors: [],
+
+    prevPage() {
+      if (this.pageIndex > 0) { this.pageIndex--; this.errors = []; scrollToTop(); }
+    },
+    nextPage() {
+      this.errors = this.validatePage(this.pages[this.pageIndex]);
+      if (this.errors.length > 0) { scrollToTop(); return; }
+      this.pageIndex++;
+      scrollToTop();
+    },
+    submit() {
+      this.errors = this.validatePage(this.pages[this.pageIndex]);
+      if (this.errors.length > 0) { scrollToTop(); return; }
+      alert('DS-160 data collected successfully!\n\nTotal fields captured: ' + Object.keys(STORE.data).length);
+    },
+    validatePage(page) {
+      const errs = [];
+      for (const node of page.nodes || []) {
+        if (node.required && node.id && !STORE.data[node.id]) {
+          errs.push(`"${node.label}" is required.`);
+        }
+        if (node.type === 'date3' && node.required) {
+          if (!STORE.data[node.id_year]) errs.push(`"${node.label}" year is required.`);
+        }
+      }
+      return errs;
+    }
+  };
+}
+
+function scrollToTop() {
+  const el = document.getElementById('content');
+  if (el) el.scrollTop = 0;
+  setTimeout(() => updateShadow(el), 80);
+}
+
+// FIX: alpine:init — make STORE reactive BEFORE any component accesses it,
+// and expose it on window so inline Alpine expressions can reach it.
 document.addEventListener('alpine:init', () => {
-  // Initialize STORE with Alpine reactivity now that Alpine is available
   STORE = Alpine.reactive({ data: {}, lists: {} });
-  window.STORE = STORE; // keep global in sync with reactive object
+  window.STORE = STORE;
 
   Alpine.data('pageRenderer', (page) => ({
-    html: '',
     init() {
-      this.html = renderPageNodes(page);
+      const html = renderPageNodes(page);
       this.$nextTick(() => {
         const container = this.$el.querySelector('.nodes-container');
         if (container) {
-          container.innerHTML = this.html;
+          container.innerHTML = html;
           Alpine.initTree(container);
         }
       });
@@ -1283,7 +1123,6 @@ document.addEventListener('alpine:init', () => {
   }));
 });
 
-// Scroll shadow
 function updateShadow(el) {
   const shadow = document.getElementById('scroll-shadow');
   if (!el || !shadow) return;
@@ -1292,23 +1131,11 @@ function updateShadow(el) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const content = document.getElementById('content');
-  if (!content) return;
-  content.addEventListener('scroll', () => updateShadow(content));
-  setTimeout(() => updateShadow(content), 400);
+  if (content) {
+    content.addEventListener('scroll', () => updateShadow(content));
+    setTimeout(() => updateShadow(content), 400);
+  }
 });
 </script>
-
-<!-- ─────────────────────────────────────────────────────────────────── -->
-<!-- TEMPLATE: replace the simple x-html node renderer with per-page   -->
-<!-- Alpine components that properly inject and initialize the nodes.   -->
-<!-- ─────────────────────────────────────────────────────────────────── -->
-<script>
-// Override the template to use pageRenderer components.
-// We patch ds160App to store rendered HTML per page after DOM ready.
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => updateShadow(document.getElementById('content')), 600);
-});
-</script>
-
 </body>
 </html>
