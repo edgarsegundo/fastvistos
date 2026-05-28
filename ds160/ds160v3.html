@@ -10,17 +10,11 @@
 // All imperative logic lives here so Alpine attribute expressions
 // remain single function-call expressions (Alpine's strict requirement).
 
-// Toggle "N/A" on a text field via a checkbox
-function dsNaToggle(event, getter, setter) {
-  if (event.target.checked) {
-    setter('N/A');
-    var inp = event.target.closest('.field').querySelector('input[type=text]');
-    if (inp) inp.disabled = true;
-  } else {
-    setter('');
-    var inp = event.target.closest('.field').querySelector('input[type=text]');
-    if (inp) inp.disabled = false;
-  }
+// Disable/enable the text input sibling when the N/A checkbox changes.
+// The store value is already set inline via the comma-operator expression.
+function dsNaDisable(event) {
+  var inp = event.target.closest('.field').querySelector('input[type=text]');
+  if (inp) inp.disabled = event.target.checked;
 }
 
 // Initialise a repeatable list: ensure STORE.lists[id] has MAX empty slots
@@ -848,7 +842,7 @@ function makeTextField(node, inGroup, groupId, itemIdx) {
   const naBlock = node.na ? `
     <div class="check-row">
       <input type="checkbox" id="na_${node.na.id}_${inGroup ? groupId+'_'+itemIdx : 'top'}"
-        @change="dsNaToggle($event, () => ${inputRef}, v => { ${inputRef} = v; })" />
+        @change="(($event.target.checked ? (${inputRef}='N/A') : (${inputRef}='')), dsNaDisable($event))" />
       <label for="na_${node.na.id}_${inGroup ? groupId+'_'+itemIdx : 'top'}">${node.na.label}</label>
     </div>` : '';
   return `<div class="field">
