@@ -1233,8 +1233,6 @@ function makeOccupationBlock() {
 // ═══════════════════════════════════════════════════════════════════════
 // We register a global function that each page div can call via x-init
 
-window.STORE = STORE; // expose globally for x-data expressions
-
 // Alpine.js magic: each page div uses x-data="{}" and renders nodes
 // via DOM insertion in x-init. This avoids the x-html + Alpine directives
 // incompatibility by using innerHTML with proper Alpine attribute parsing.
@@ -1268,6 +1266,7 @@ function renderPageNodes(page) {
 document.addEventListener('alpine:init', () => {
   // Initialize STORE with Alpine reactivity now that Alpine is available
   STORE = Alpine.reactive({ data: {}, lists: {} });
+  window.STORE = STORE; // keep global in sync with reactive object
 
   Alpine.data('pageRenderer', (page) => ({
     html: '',
