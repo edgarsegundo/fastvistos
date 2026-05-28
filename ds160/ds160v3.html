@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DS-160 Nonimmigrant Visa Application</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; background: #f5f5f5; color: #111; }
+
+    #app { display: flex; flex-direction: column; height: 100%; max-width: 620px; margin: 0 auto; background: #fff; }
+
+    /* ── Header ── */
+    .header { padding: 0.6rem 1rem; background: #000; color: #fff; flex-shrink: 0; }
+    .header h1 { font-size: 0.95rem; font-weight: 600; letter-spacing: 0.02em; }
+    .header .appid { font-size: 0.75rem; color: #aaa; }
+
+    /* ── Progress ── */
+    .progress { padding: 0.55rem 1rem 0.45rem; border-bottom: 1px solid #ddd; flex-shrink: 0; background: #fafafa; }
+    .progress-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.8rem; color: #555; margin-bottom: 0.3rem; }
+    .progress-meta strong { color: #000; }
+    .progress-bar { height: 3px; background: #ddd; border-radius: 2px; }
+    .progress-bar-fill { height: 100%; background: #000; border-radius: 2px; transition: width .35s ease; }
+
+    /* ── Scroll area ── */
+    #scroll-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    #content { flex: 1; overflow-y: auto; padding: 1rem 1rem 2rem; -webkit-overflow-scrolling: touch; }
+    #scroll-shadow { position: absolute; bottom: 0; left: 0; right: 0; height: 64px; background: linear-gradient(transparent, rgba(255,255,255,.92)); pointer-events: none; opacity: 0; transition: opacity .25s; }
+    #scroll-shadow.visible { opacity: 1; }
+
+    /* ── Page title ── */
+    .page-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .page-note { font-size: 0.82rem; color: #555; margin-bottom: 1.1rem; background: #fffbe6; border-left: 3px solid #f0c040; padding: 0.45rem 0.65rem; border-radius: 2px; }
+
+    /* ── Section heading ── */
+    .section-heading { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #555; margin: 1.3rem 0 0.7rem; border-bottom: 1px solid #eee; padding-bottom: 0.3rem; }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 1.15rem; }
+    .field label { display: block; font-size: 0.87rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .field .req { color: #c0392b; margin-left: 2px; }
+    .field .hint { font-size: 0.78rem; color: #666; margin-bottom: 0.3rem; display: block; }
+    .field input[type="text"], .field input[type="number"],
+    .field textarea, .field select {
+      width: 100%; font-size: 0.92rem; padding: 0.55rem 0.6rem;
+      border: 1px solid #bbb; border-radius: 4px; background: #fff;
+      transition: border-color .15s;
+    }
+    .field input[type="text"]:focus, .field textarea:focus, .field select:focus { border-color: #000; outline: none; box-shadow: 0 0 0 2px rgba(0,0,0,.08); }
+    .field input.err, .field select.err, .field textarea.err { border-color: #c0392b; }
+    .field .err-msg { font-size: 0.78rem; color: #c0392b; margin-top: 0.2rem; }
+    .field textarea { min-height: 72px; resize: vertical; }
+    .field select { cursor: pointer; }
+
+    /* ── Field group (inline row) ── */
+    .field-row { display: flex; gap: 0.5rem; }
+    .field-row .field { flex: 1; margin-bottom: 0; }
+    .field-row .field.narrow { flex: 0 0 80px; }
+
+    /* ── Radio / checkbox ── */
+    .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .radio-group label { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; font-size: 0.9rem; cursor: pointer; }
+    .radio-group input { width: 1.1rem; height: 1.1rem; cursor: pointer; flex-shrink: 0; }
+    .check-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; }
+    .check-row input { width: 1rem; height: 1rem; cursor: pointer; }
+    .check-row label { font-size: 0.85rem; font-weight: normal; cursor: pointer; }
+
+    /* ── Repeatable group ── */
+    .repeatable { border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 1rem; overflow: hidden; }
+    .repeatable-item { padding: 0.8rem; border-bottom: 1px solid #eee; position: relative; }
+    .repeatable-item:last-child { border-bottom: none; }
+    .repeatable-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+    .repeatable-item-header span { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #777; }
+    .btn-remove { background: none; border: 1px solid #ddd; border-radius: 4px; color: #888; font-size: 0.78rem; padding: 0.2rem 0.55rem; cursor: pointer; }
+    .btn-remove:hover { background: #fef; border-color: #c0392b; color: #c0392b; }
+    .repeatable-add { display: flex; justify-content: center; padding: 0.55rem; background: #f9f9f9; }
+    .btn-add { background: none; border: 1px dashed #999; border-radius: 4px; font-size: 0.82rem; color: #444; padding: 0.3rem 1rem; cursor: pointer; }
+    .btn-add:hover { border-color: #000; color: #000; background: #f0f0f0; }
+
+    /* ── Children / conditional block ── */
+    .children-block { margin-top: 0.6rem; padding: 0.7rem; background: #fafafa; border-left: 3px solid #ddd; border-radius: 0 4px 4px 0; }
+
+    /* ── Nav ── */
+    .nav { display: flex; gap: 0.6rem; padding: 0.7rem 1rem; border-top: 1px solid #ddd; background: #000; flex-shrink: 0; }
+    .nav button { flex: 1; padding: 0.8rem; font-size: 0.95rem; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; font-weight: 500; transition: background .15s; }
+    .nav button:hover { background: #444; }
+    .nav button.primary { background: #fff; color: #000; border-color: #fff; }
+    .nav button.primary:hover { background: #e8e8e8; }
+    .nav button:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── Validation summary ── */
+    .val-summary { background: #fff0f0; border: 1px solid #f5c6c6; border-radius: 4px; padding: 0.6rem 0.8rem; margin-bottom: 0.8rem; font-size: 0.82rem; color: #a00; }
+    .val-summary ul { margin: 0.3rem 0 0 1.1rem; }
+
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body>
+<div id="app" x-data="ds160App()" x-cloak>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>DS-160 — Online Nonimmigrant Visa Application</h1>
+    <div class="appid">Electronic Application Center · U.S. Department of State</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress">
+    <div class="progress-meta">
+      <span>Page <strong x-text="pageIndex + 1"></strong> of <strong x-text="pages.length"></strong>: <strong x-text="pages[pageIndex].title"></strong></span>
+      <span x-text="Math.round(((pageIndex + 1) / pages.length) * 100) + '%'"></span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" :style="`width:${((pageIndex + 1) / pages.length) * 100}%`"></div>
+    </div>
+  </div>
+
+  <!-- Scroll area -->
+  <div id="scroll-wrapper">
+    <div id="content">
+
+      <!-- Validation summary -->
+      <div class="val-summary" x-show="errors.length > 0" x-cloak>
+        Please correct all areas in error before continuing.
+        <ul>
+          <template x-for="e in errors" :key="e"><li x-text="e"></li></template>
+        </ul>
+      </div>
+
+      <!-- Pages -->
+      <template x-for="(page, pi) in pages" :key="page.id">
+        <div x-show="pageIndex === pi">
+          <div class="page-title" x-text="page.title"></div>
+          <div class="page-note" x-show="page.note" x-text="page.note"></div>
+
+          <!-- Render page nodes via pageRenderer component -->
+          <div x-data="pageRenderer(page)">
+            <div class="nodes-container"></div>
+          </div>
+        </div>
+      </template>
+
+    </div>
+    <div id="scroll-shadow"></div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <button type="button" @click="prevPage()" :disabled="pageIndex === 0">← Back</button>
+    <button type="button" class="primary"
+            @click="pageIndex < pages.length - 1 ? nextPage() : submit()"
+            x-text="pageIndex < pages.length - 1 ? 'Next →' : 'Submit'"></button>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+// SHARED DATA STORE  (reactive, shared across all node renderers)
+// ═══════════════════════════════════════════════════════════════════════
+// STORE is initialized in alpine:init (see below) so Alpine.reactive() is available
+let STORE = { data: {}, lists: {} }; // placeholder replaced after alpine:init
+
+function get(id) { return STORE.data[id]; }
+function set(id, val) { STORE.data[id] = val; }
+function getList(id) { if (!STORE.lists[id]) STORE.lists[id] = [{}]; return STORE.lists[id]; }
+function addItem(id) { STORE.lists[id].push({}); }
+function removeItem(id, idx) { STORE.lists[id].splice(idx, 1); }
+function setListField(groupId, idx, fieldId, val) { STORE.lists[groupId][idx][fieldId] = val; }
+function getListField(groupId, idx, fieldId) { return STORE.lists[groupId]?.[idx]?.[fieldId] ?? ''; }
+
+// ═══════════════════════════════════════════════════════════════════════
+// COUNTRIES (full list from ds160_1_personal_1.yml pob_country)
+// ═══════════════════════════════════════════════════════════════════════
+const COUNTRIES = [
+  {v:'AFGH',l:'AFGHANISTAN'},{v:'ALB',l:'ALBANIA'},{v:'ALGR',l:'ALGERIA'},
+  {v:'ASMO',l:'AMERICAN SAMOA'},{v:'ANDO',l:'ANDORRA'},{v:'ANGL',l:'ANGOLA'},
+  {v:'ANGU',l:'ANGUILLA'},{v:'ANTI',l:'ANTIGUA AND BARBUDA'},{v:'ARG',l:'ARGENTINA'},
+  {v:'ARM',l:'ARMENIA'},{v:'ARB',l:'ARUBA'},{v:'XAS',l:'AT SEA'},
+  {v:'ASTL',l:'AUSTRALIA'},{v:'AUST',l:'AUSTRIA'},{v:'AZR',l:'AZERBAIJAN'},
+  {v:'BAMA',l:'BAHAMAS'},{v:'BAHR',l:'BAHRAIN'},{v:'BANG',l:'BANGLADESH'},
+  {v:'BRDO',l:'BARBADOS'},{v:'BYS',l:'BELARUS'},{v:'BELG',l:'BELGIUM'},
+  {v:'BLZ',l:'BELIZE'},{v:'BENN',l:'BENIN'},{v:'BERM',l:'BERMUDA'},
+  {v:'BHU',l:'BHUTAN'},{v:'BOL',l:'BOLIVIA'},{v:'BIH',l:'BOSNIA-HERZEGOVINA'},
+  {v:'BOT',l:'BOTSWANA'},{v:'BRZL',l:'BRAZIL'},{v:'IOT',l:'BRITISH INDIAN OCEAN TERRITORY'},
+  {v:'BRNI',l:'BRUNEI'},{v:'BULG',l:'BULGARIA'},{v:'BURK',l:'BURKINA FASO'},
+  {v:'BURM',l:'BURMA'},{v:'BRND',l:'BURUNDI'},{v:'CBDA',l:'CAMBODIA'},
+  {v:'CMRN',l:'CAMEROON'},{v:'CAN',l:'CANADA'},{v:'CAVI',l:'CABO VERDE'},
+  {v:'CAYI',l:'CAYMAN ISLANDS'},{v:'CAFR',l:'CENTRAL AFRICAN REPUBLIC'},
+  {v:'CHAD',l:'CHAD'},{v:'CHIL',l:'CHILE'},{v:'CHIN',l:'CHINA'},
+  {v:'CHRI',l:'CHRISTMAS ISLAND'},{v:'COCI',l:'COCOS KEELING ISLANDS'},
+  {v:'COL',l:'COLOMBIA'},{v:'COMO',l:'COMOROS'},{v:'COD',l:'CONGO, DEMOCRATIC REPUBLIC OF THE'},
+  {v:'CONB',l:'CONGO, REPUBLIC OF THE'},{v:'CKIS',l:'COOK ISLANDS'},
+  {v:'CSTR',l:'COSTA RICA'},{v:'IVCO',l:"COTE D'IVOIRE"},{v:'HRV',l:'CROATIA'},
+  {v:'CUBA',l:'CUBA'},{v:'CUR',l:'CURACAO'},{v:'CYPR',l:'CYPRUS'},
+  {v:'CZEC',l:'CZECH REPUBLIC'},{v:'DEN',l:'DENMARK'},{v:'DJI',l:'DJIBOUTI'},
+  {v:'DOMN',l:'DOMINICA'},{v:'DOMR',l:'DOMINICAN REPUBLIC'},{v:'ECUA',l:'ECUADOR'},
+  {v:'EGYP',l:'EGYPT'},{v:'ELSL',l:'EL SALVADOR'},{v:'EGN',l:'EQUATORIAL GUINEA'},
+  {v:'ERI',l:'ERITREA'},{v:'EST',l:'ESTONIA'},{v:'SZLD',l:'ESWATINI'},
+  {v:'ETH',l:'ETHIOPIA'},{v:'FKLI',l:'FALKLAND ISLANDS'},{v:'FRO',l:'FAROE ISLANDS'},
+  {v:'FIJI',l:'FIJI'},{v:'FIN',l:'FINLAND'},{v:'FRAN',l:'FRANCE'},
+  {v:'FPOL',l:'FRENCH POLYNESIA'},{v:'FSAT',l:'FRENCH SOUTHERN AND ANTARCTIC TERRITORIES'},
+  {v:'GABN',l:'GABON'},{v:'GAM',l:'GAMBIA, THE'},{v:'XGZ',l:'GAZA STRIP'},
+  {v:'GEO',l:'GEORGIA'},{v:'GER',l:'GERMANY'},{v:'GHAN',l:'GHANA'},
+  {v:'GIB',l:'GIBRALTAR'},{v:'GRC',l:'GREECE'},{v:'GRLD',l:'GREENLAND'},
+  {v:'GREN',l:'GRENADA'},{v:'GUAM',l:'GUAM'},{v:'GUAT',l:'GUATEMALA'},
+  {v:'GNEA',l:'GUINEA'},{v:'GUIB',l:'GUINEA - BISSAU'},{v:'GUY',l:'GUYANA'},
+  {v:'HAT',l:'HAITI'},{v:'HMD',l:'HEARD AND MCDONALD ISLANDS'},
+  {v:'VAT',l:'HOLY SEE (VATICAN CITY)'},{v:'HOND',l:'HONDURAS'},
+  {v:'HOKO',l:'HONG KONG BNO'},{v:'HNK',l:'HONG KONG SAR'},{v:'XHI',l:'HOWLAND ISLAND'},
+  {v:'HUNG',l:'HUNGARY'},{v:'ICLD',l:'ICELAND'},{v:'XIR',l:'IN THE AIR'},
+  {v:'IND',l:'INDIA'},{v:'IDSA',l:'INDONESIA'},{v:'IRAN',l:'IRAN'},
+  {v:'IRAQ',l:'IRAQ'},{v:'IRE',l:'IRELAND'},{v:'ISRL',l:'ISRAEL'},
+  {v:'ITLY',l:'ITALY'},{v:'JAM',l:'JAMAICA'},{v:'JPN',l:'JAPAN'},
+  {v:'JRSM',l:'JERUSALEM'},{v:'JORD',l:'JORDAN'},{v:'KAZ',l:'KAZAKHSTAN'},
+  {v:'KENY',l:'KENYA'},{v:'KIRI',l:'KIRIBATI'},{v:'PRK',l:'KOREA, DEMOCRATIC REPUBLIC OF (NORTH)'},
+  {v:'KOR',l:'KOREA, REPUBLIC OF (SOUTH)'},{v:'KSV',l:'KOSOVO'},
+  {v:'KUWT',l:'KUWAIT'},{v:'KGZ',l:'KYRGYZSTAN'},{v:'LAOS',l:'LAOS'},
+  {v:'LATV',l:'LATVIA'},{v:'LEBN',l:'LEBANON'},{v:'LES',l:'LESOTHO'},
+  {v:'LIBR',l:'LIBERIA'},{v:'LBYA',l:'LIBYA'},{v:'LCHT',l:'LIECHTENSTEIN'},
+  {v:'LITH',l:'LITHUANIA'},{v:'LXM',l:'LUXEMBOURG'},{v:'MAC',l:'MACAU'},
+  {v:'MKD',l:'MACEDONIA, NORTH'},{v:'MADG',l:'MADAGASCAR'},{v:'MALW',l:'MALAWI'},
+  {v:'MLAS',l:'MALAYSIA'},{v:'MLDI',l:'MALDEN ISLAND'},{v:'MLDV',l:'MALDIVES'},
+  {v:'MALI',l:'MALI'},{v:'MLTA',l:'MALTA'},{v:'RMI',l:'MARSHALL ISLANDS'},
+  {v:'MAUR',l:'MAURITANIA'},{v:'MRTS',l:'MAURITIUS'},{v:'MYT',l:'MAYOTTE'},
+  {v:'AGS',l:'MEXICO - AGUASCALIENTES'},{v:'BC',l:'MEXICO - BAJA CALIFORNIA NORTE'},
+  {v:'BCSR',l:'MEXICO - BAJA CALIFORNIA SUR'},{v:'CAMP',l:'MEXICO - CAMPECHE'},
+  {v:'CHIS',l:'MEXICO - CHIAPAS'},{v:'CHIH',l:'MEXICO - CHIHUAHUA'},
+  {v:'COAH',l:'MEXICO - COAHUILA'},{v:'COLI',l:'MEXICO - COLIMA'},
+  {v:'DF',l:'MEXICO - DISTRITO FEDERAL'},{v:'DGO',l:'MEXICO - DURANGO'},
+  {v:'GTO',l:'MEXICO - GUANAJUATO'},{v:'GRO',l:'MEXICO - GUERRERO'},
+  {v:'HGO',l:'MEXICO - HIDALGO'},{v:'JAL',l:'MEXICO - JALISCO'},
+  {v:'MCH',l:'MEXICO - MICHOACAN'},{v:'MOR',l:'MEXICO - MORELOS'},
+  {v:'NAY',l:'MEXICO - NAYARIT'},{v:'NL',l:'MEXICO - NUEVO LEON'},
+  {v:'OAX',l:'MEXICO - OAXACA'},{v:'PUE',l:'MEXICO - PUEBLA'},
+  {v:'QRO',l:'MEXICO - QUERETARO'},{v:'QROO',l:'MEXICO - QUINTANA ROO'},
+  {v:'SLP',l:'MEXICO - SAN LUIS POTOSI'},{v:'SIN',l:'MEXICO - SINALOA'},
+  {v:'SON',l:'MEXICO - SONORA'},{v:'MXCO',l:'MEXICO - STATE OF MEXICO'},
+  {v:'TAB',l:'MEXICO - TABASCO'},{v:'TAMP',l:'MEXICO - TAMAULIPAS'},
+  {v:'TLAX',l:'MEXICO - TLAXCALA'},{v:'VER',l:'MEXICO - VERACRUZ'},
+  {v:'YUC',l:'MEXICO - YUCATAN'},{v:'ZAC',l:'MEXICO - ZACATECAS'},
+  {v:'MEX',l:'MEXICO'},{v:'FSM',l:'MICRONESIA'},{v:'MDWI',l:'MIDWAY ISLANDS'},
+  {v:'MLD',l:'MOLDOVA'},{v:'MON',l:'MONACO'},{v:'MONG',l:'MONGOLIA'},
+  {v:'MTG',l:'MONTENEGRO'},{v:'MONT',l:'MONTSERRAT'},{v:'MORO',l:'MOROCCO'},
+  {v:'MOZ',l:'MOZAMBIQUE'},{v:'NAMB',l:'NAMIBIA'},{v:'NAU',l:'NAURU'},
+  {v:'NEP',l:'NEPAL'},{v:'NETH',l:'NETHERLANDS'},{v:'NCAL',l:'NEW CALEDONIA'},
+  {v:'NZLD',l:'NEW ZEALAND'},{v:'NIC',l:'NICARAGUA'},{v:'NIR',l:'NIGER'},
+  {v:'NRA',l:'NIGERIA'},{v:'NIUE',l:'NIUE'},{v:'NFK',l:'NORFOLK ISLAND'},
+  {v:'MNP',l:'NORTH MARIANA ISLANDS'},{v:'NIRE',l:'NORTHERN IRELAND'},
+  {v:'NORW',l:'NORWAY'},{v:'OMAN',l:'OMAN'},{v:'PKST',l:'PAKISTAN'},
+  {v:'PALA',l:'PALAU'},{v:'PLMR',l:'PALMYRA ATOLL'},{v:'PAL',l:'PALESTINIAN AUTHORITY'},
+  {v:'PAN',l:'PANAMA'},{v:'PNG',l:'PAPUA NEW GUINEA'},{v:'PARA',l:'PARAGUAY'},
+  {v:'PERU',l:'PERU'},{v:'PHIL',l:'PHILIPPINES'},{v:'PITC',l:'PITCAIRN ISLANDS'},
+  {v:'POL',l:'POLAND'},{v:'PORT',l:'PORTUGAL'},{v:'PR',l:'PUERTO RICO'},
+  {v:'QTAR',l:'QATAR'},{v:'ROM',l:'ROMANIA'},{v:'RUS',l:'RUSSIA'},
+  {v:'RWND',l:'RWANDA'},{v:'MAF',l:'SAINT MARTIN'},{v:'WSAM',l:'SAMOA'},
+  {v:'SMAR',l:'SAN MARINO'},{v:'STPR',l:'SAO TOME AND PRINCIPE'},
+  {v:'SARB',l:'SAUDI ARABIA'},{v:'SENG',l:'SENEGAL'},{v:'SBA',l:'SERBIA'},
+  {v:'SEYC',l:'SEYCHELLES'},{v:'SLEO',l:'SIERRA LEONE'},{v:'SING',l:'SINGAPORE'},
+  {v:'STM',l:'SINT MAARTEN'},{v:'SVK',l:'SLOVAKIA'},{v:'SVN',l:'SLOVENIA'},
+  {v:'SLMN',l:'SOLOMON ISLANDS'},{v:'SOMA',l:'SOMALIA'},{v:'SAFR',l:'SOUTH AFRICA'},
+  {v:'SGS',l:'SOUTH GEORGIA AND THE SOUTH SANDWICH ISLAND'},{v:'SSDN',l:'SOUTH SUDAN'},
+  {v:'SPN',l:'SPAIN'},{v:'SRL',l:'SRI LANKA'},{v:'STBR',l:'ST. BARTHELEMY'},
+  {v:'SHEL',l:'ST. HELENA'},{v:'STCN',l:'ST. KITTS AND NEVIS'},
+  {v:'SLCA',l:'ST. LUCIA'},{v:'SPMI',l:'ST. PIERRE AND MIQUELON'},
+  {v:'STVN',l:'ST. VINCENT AND THE GRENADINES'},{v:'XXX',l:'STATELESS'},
+  {v:'SNTD',l:'STATUS NEUTRAL TRAVEL DOCUMENT'},{v:'SUDA',l:'SUDAN'},
+  {v:'SURM',l:'SURINAME'},{v:'SJM',l:'SVALBARD'},{v:'SWDN',l:'SWEDEN'},
+  {v:'SWTZ',l:'SWITZERLAND'},{v:'SYR',l:'SYRIA'},{v:'TWAN',l:'TAIWAN'},
+  {v:'TJK',l:'TAJIKISTAN'},{v:'TAZN',l:'TANZANIA'},{v:'THAI',l:'THAILAND'},
+  {v:'TMOR',l:'TIMOR-LESTE'},{v:'TOGO',l:'TOGO'},{v:'TKL',l:'TOKELAU'},
+  {v:'TONG',l:'TONGA'},{v:'TRIN',l:'TRINIDAD AND TOBAGO'},{v:'TNSA',l:'TUNISIA'},
+  {v:'TRKY',l:'TURKEY'},{v:'TKM',l:'TURKMENISTAN'},{v:'TCIS',l:'TURKS AND CAICOS ISLANDS'},
+  {v:'TUV',l:'TUVALU'},{v:'UGAN',l:'UGANDA'},{v:'UKR',l:'UKRAINE'},
+  {v:'UAE',l:'UNITED ARAB EMIRATES'},{v:'GRBR',l:'UNITED KINGDOM'},
+  {v:'UNLP',l:'UNITED NATIONS'},{v:'USA',l:'UNITED STATES OF AMERICA'},
+  {v:'URU',l:'URUGUAY'},{v:'UZB',l:'UZBEKISTAN'},{v:'VANU',l:'VANUATU'},
+  {v:'VENZ',l:'VENEZUELA'},{v:'VTNM',l:'VIETNAM'},{v:'VI',l:'VIRGIN ISLANDS (U.S.)'},
+  {v:'BRVI',l:'VIRGIN ISLANDS, BRITISH'},{v:'WKI',l:'WAKE ISLAND'},
+  {v:'WAFT',l:'WALLIS AND FUTUNA ISLANDS'},{v:'XWB',l:'WEST BANK'},
+  {v:'SSAH',l:'WESTERN SAHARA'},{v:'YEM',l:'YEMEN'},{v:'ZAMB',l:'ZAMBIA'},
+  {v:'ZIMB',l:'ZIMBABWE'}
+];
+
+// Shared helpers
+function countriesOptions(placeholder='- Select One -') {
+  return `<option value="">${placeholder}</option>` +
+    COUNTRIES.map(c=>`<option value="${c.v}">${c.l}</option>`).join('');
+}
+
+const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const DAYS = Array.from({length:31},(_,i)=>String(i+1).padStart(2,'0'));
+
+function monthOptions(blank='') {
+  return `<option value="">${blank}</option>` +
+    MONTHS.map(m=>`<option value="${m}">${m}</option>`).join('');
+}
+function dayOptions(blank='') {
+  return `<option value="">${blank}</option>` +
+    DAYS.map(d=>`<option value="${d}">${d}</option>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// DS-160 PAGES SCHEMA  — driven by the 13 YAML specs
+// ═══════════════════════════════════════════════════════════════════════
+function buildPages() {
+  return [
+
+  // ── Page 1: Personal 1 ───────────────────────────────────────────────
+  {
+    id: 'personal_1',
+    title: 'Personal Information 1',
+    note: 'Data on this page must match the information as written in your passport.',
+    nodes: [
+      {type:'text', id:'surnames', label:'Surnames', required:true, hint:'(e.g., FERNANDEZ GARCIA)'},
+      {type:'text', id:'given_names', label:'Given Names', required:true, hint:'(e.g., JUAN MIGUEL)'},
+      {type:'text', id:'full_name_native_alphabet', label:'Full Name in Native Alphabet', required:false,
+        na:{label:'Does Not Apply / Technology Not Available', id:'full_name_native_na'}},
+      {type:'radio', id:'has_other_names', label:'Have you ever used other names (maiden, religious, professional, alias, etc.)?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'other_names', label:'Other Names Used',
+              fields:[
+                {type:'text', id:'other_surname', label:'Surname'},
+                {type:'text', id:'other_given_name', label:'Given Name'}
+              ]}]
+        }
+      },
+      {type:'radio', id:'has_telecode', label:'Do you have a telecode that represents your name?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[
+            {type:'text', id:'telecode_surname', label:'Telecode Surname', hint:'4-digit code'},
+            {type:'text', id:'telecode_given_name', label:'Telecode Given Name', hint:'4-digit code'}
+          ]
+        }
+      },
+      {type:'select', id:'sex', label:'Sex', required:true,
+        options:[{v:'M',l:'MALE'},{v:'F',l:'FEMALE'}], placeholder:'- Select One -'},
+      {type:'select', id:'marital_status', label:'Marital Status', required:true, placeholder:'-Select One-',
+        options:[
+          {v:'M',l:'MARRIED'},{v:'C',l:'COMMON LAW MARRIAGE'},{v:'P',l:'CIVIL UNION/DOMESTIC PARTNERSHIP'},
+          {v:'S',l:'SINGLE'},{v:'W',l:'WIDOWED'},{v:'D',l:'DIVORCED'},{v:'L',l:'LEGALLY SEPARATED'},{v:'O',l:'OTHER'}
+        ]},
+      {type:'section', label:'Date and Place of Birth'},
+      {type:'date3', id_day:'dob_day', id_month:'dob_month', id_year:'dob_year', label:'Date of Birth', required:true},
+      {type:'text', id:'pob_city', label:'City of Birth', required:true},
+      {type:'text', id:'pob_state', label:'State/Province of Birth', required:false,
+        na:{label:'Does Not Apply', id:'pob_state_na'}},
+      {type:'country', id:'pob_country', label:'Country/Region of Birth', required:true},
+    ]
+  },
+
+  // ── Page 2: Personal 2 ───────────────────────────────────────────────
+  {
+    id: 'personal_2',
+    title: 'Personal Information 2',
+    note: '',
+    nodes: [
+      {type:'country', id:'nationality', label:'Country/Region of Origin (Nationality)', required:true},
+      {type:'radio', id:'has_other_nationality', label:'Do you hold or have you held any other nationality?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'other_nationalities', label:'Other Nationalities',
+              fields:[
+                {type:'country', id:'other_natl_country', label:'Country/Region of Other Nationality'},
+                {type:'select', id:'other_natl_acquired', label:'How Was Nationality Acquired?', placeholder:'-Select One-',
+                  options:[{v:'B',l:'BY BIRTH'},{v:'M',l:'BY MARRIAGE'},{v:'A',l:'BY ADOPTION'},{v:'O',l:'OTHER'}]},
+                {type:'radio', id:'other_natl_passport', label:'Do/Did You Hold a Passport for This Country?',
+                  options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}]}
+              ]}]
+        }
+      },
+      {type:'radio', id:'is_permanent_resident_other', label:'Are you a permanent resident of a country/region other than your country of nationality?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'perm_res_countries', label:'Countries of Permanent Residence',
+              fields:[{type:'country', id:'perm_res_country', label:'Country/Region'}]}]
+        }
+      },
+      {type:'text', id:'national_id_number', label:'National Identification Number', required:false,
+        na:{label:'Does Not Apply', id:'national_id_na'}},
+      {type:'section', label:'U.S. Social Security Number'},
+      {type:'text', id:'ssn_1', label:'SSN Part 1 (3 digits)', hint:'Leave blank if not applicable'},
+      {type:'text', id:'ssn_2', label:'SSN Part 2 (2 digits)'},
+      {type:'text', id:'ssn_3', label:'SSN Part 3 (4 digits)'},
+      {type:'text', id:'us_taxpayer_id', label:'U.S. Taxpayer ID Number', required:false,
+        na:{label:'Does Not Apply', id:'taxpayer_id_na'}},
+    ]
+  },
+
+  // ── Page 3: Travel Information ───────────────────────────────────────
+  {
+    id: 'travel',
+    title: 'Travel Information',
+    note: 'Provide the following information concerning your travel plans.',
+    nodes: [
+      {type:'select', id:'purpose_of_trip', label:'Purpose of Trip to the U.S.', required:true, placeholder:'PLEASE SELECT A VISA CLASS',
+        options:[
+          {v:'A',l:'FOREIGN GOVERNMENT OFFICIAL (A)'},{v:'B',l:'TEMP. BUSINESS OR PLEASURE VISITOR (B)'},
+          {v:'C',l:'ALIEN IN TRANSIT (C)'},{v:'D',l:'CREWMEMBER (D)'},
+          {v:'E',l:'TREATY TRADER OR INVESTOR (E)'},{v:'F',l:'ACADEMIC OR LANGUAGE STUDENT (F)'},
+          {v:'G',l:'INTERNATIONAL ORGANIZATION REP./EMP. (G)'},{v:'H',l:'TEMPORARY WORKER (H)'},
+          {v:'I',l:'FOREIGN MEDIA REPRESENTATIVE (I)'},{v:'J',l:'EXCHANGE VISITOR (J)'},
+          {v:'K',l:"FIANCÉ(E) OR SPOUSE OF A U.S. CITIZEN (K)"},{v:'L',l:'INTRACOMPANY TRANSFEREE (L)'},
+          {v:'M',l:'VOCATIONAL/NONACADEMIC STUDENT (M)'},{v:'N',l:'OTHER (N)'},
+          {v:'O',l:'ALIEN WITH EXTRAORDINARY ABILITY (O)'},{v:'P',l:'INTERNATIONALLY RECOGNIZED ALIEN (P)'},
+          {v:'Q',l:'CULTURAL EXCHANGE VISITOR (Q)'},{v:'R',l:'RELIGIOUS WORKER (R)'},
+          {v:'S',l:'INFORMANT OR WITNESS (S)'},{v:'T',l:'VICTIM OF TRAFFICKING (T)'},
+          {v:'TD/TN',l:'NAFTA PROFESSIONAL (TD/TN)'},{v:'U',l:'VICTIM OF CRIMINAL ACTIVITY (U)'},
+          {v:'NATO',l:'NATO STAFF (NATO)'}
+        ]
+      },
+      {type:'select', id:'purpose_specify', label:'Specify (B visa class)', required:false, placeholder:'PLEASE SELECT',
+        hint:'Only if applicable for your visa class',
+        options:[
+          {v:'B1-B2',l:'BUSINESS OR TOURISM (B1/B2)'},{v:'B1-CF',l:'BUSINESS/CONFERENCE (B1)'},
+          {v:'B2-TM',l:'TOURISM/MEDICAL TREATMENT (B2)'}
+        ]
+      },
+      {type:'radio', id:'has_specific_travel_plans', label:'Have you made specific travel plans?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[
+            {type:'date3', id_day:'arrival_day', id_month:'arrival_month', id_year:'arrival_year', label:'Arrival Date'},
+            {type:'text', id:'stay_length', label:'Intended Length of Stay (amount)'},
+            {type:'select', id:'stay_unit', label:'Length of Stay Unit', placeholder:'-Select One-',
+              options:[{v:'Y',l:'Year(s)'},{v:'M',l:'Month(s)'},{v:'W',l:'Week(s)'},{v:'D',l:'Day(s)'},{v:'H',l:'Less Than 24 Hours'}]}
+          ],
+          N:[
+            {type:'date3', id_day:'intended_arrival_day', id_month:'intended_arrival_month', id_year:'intended_arrival_year', label:'Intended Date of Arrival'},
+            {type:'text', id:'intended_stay_length', label:'Intended Length of Stay (amount)'},
+            {type:'select', id:'intended_stay_unit', label:'Length of Stay Unit', placeholder:'-Select One-',
+              options:[{v:'Y',l:'Year(s)'},{v:'M',l:'Month(s)'},{v:'W',l:'Week(s)'},{v:'D',l:'Day(s)'},{v:'H',l:'Less Than 24 Hours'}]}
+          ]
+        }
+      },
+      {type:'section', label:'U.S. Address During Stay'},
+      {type:'text', id:'us_street1', label:'Street Address (Line 1)', required:true},
+      {type:'text', id:'us_street2', label:'Street Address (Line 2)'},
+      {type:'text', id:'us_city', label:'City', required:true},
+      {type:'select', id:'us_state', label:'State', required:true, placeholder:'- Select One -',
+        options:[
+          {v:'AL',l:'ALABAMA'},{v:'AK',l:'ALASKA'},{v:'AZ',l:'ARIZONA'},{v:'AR',l:'ARKANSAS'},
+          {v:'CA',l:'CALIFORNIA'},{v:'CO',l:'COLORADO'},{v:'CT',l:'CONNECTICUT'},{v:'DE',l:'DELAWARE'},
+          {v:'FL',l:'FLORIDA'},{v:'GA',l:'GEORGIA'},{v:'HI',l:'HAWAII'},{v:'ID',l:'IDAHO'},
+          {v:'IL',l:'ILLINOIS'},{v:'IN',l:'INDIANA'},{v:'IA',l:'IOWA'},{v:'KS',l:'KANSAS'},
+          {v:'KY',l:'KENTUCKY'},{v:'LA',l:'LOUISIANA'},{v:'ME',l:'MAINE'},{v:'MD',l:'MARYLAND'},
+          {v:'MA',l:'MASSACHUSETTS'},{v:'MI',l:'MICHIGAN'},{v:'MN',l:'MINNESOTA'},
+          {v:'MS',l:'MISSISSIPPI'},{v:'MO',l:'MISSOURI'},{v:'MT',l:'MONTANA'},
+          {v:'NE',l:'NEBRASKA'},{v:'NV',l:'NEVADA'},{v:'NH',l:'NEW HAMPSHIRE'},
+          {v:'NJ',l:'NEW JERSEY'},{v:'NM',l:'NEW MEXICO'},{v:'NY',l:'NEW YORK'},
+          {v:'NC',l:'NORTH CAROLINA'},{v:'ND',l:'NORTH DAKOTA'},{v:'OH',l:'OHIO'},
+          {v:'OK',l:'OKLAHOMA'},{v:'OR',l:'OREGON'},{v:'PA',l:'PENNSYLVANIA'},
+          {v:'RI',l:'RHODE ISLAND'},{v:'SC',l:'SOUTH CAROLINA'},{v:'SD',l:'SOUTH DAKOTA'},
+          {v:'TN',l:'TENNESSEE'},{v:'TX',l:'TEXAS'},{v:'UT',l:'UTAH'},{v:'VT',l:'VERMONT'},
+          {v:'VA',l:'VIRGINIA'},{v:'WA',l:'WASHINGTON'},{v:'WV',l:'WEST VIRGINIA'},
+          {v:'WI',l:'WISCONSIN'},{v:'WY',l:'WYOMING'},{v:'DC',l:'DISTRICT OF COLUMBIA'},
+          {v:'AS',l:'AMERICAN SAMOA'},{v:'GU',l:'GUAM'},{v:'MP',l:'NORTHERN MARIANA ISLANDS'},
+          {v:'PR',l:'PUERTO RICO'},{v:'VI',l:'VIRGIN ISLANDS'}
+        ]
+      },
+      {type:'text', id:'us_zip', label:'ZIP Code', required:true},
+      {type:'select', id:'trip_payer', label:'Who Is Paying for Your Trip?', required:true, placeholder:'-Select One-',
+        options:[
+          {v:'S',l:'SELF'},{v:'O',l:'OTHER PERSON'},{v:'P',l:'PRESENT EMPLOYER'},
+          {v:'U',l:'U.S. PETITIONER/SPONSOR'},{v:'C',l:'OTHER COMPANY/ORGANIZATION'}
+        ]
+      },
+    ]
+  },
+
+  // ── Page 4: Travel Companions ────────────────────────────────────────
+  {
+    id: 'travel_companions',
+    title: 'Travel Companions Information',
+    note: 'Provide the following travel companion information.',
+    nodes: [
+      {type:'radio', id:'has_travel_companions', label:'Are there other persons traveling with you?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'travel_companions', label:'Travel Companions',
+              fields:[
+                {type:'text', id:'companion_surname', label:'Surname'},
+                {type:'text', id:'companion_given_name', label:'Given Name'},
+                {type:'select', id:'companion_relationship', label:'Relationship to You', placeholder:'-Select One-',
+                  options:[{v:'S',l:'SPOUSE'},{v:'C',l:'CHILD'},{v:'O',l:'OTHER RELATIVE'},{v:'F',l:'FRIEND'},{v:'B',l:'BUSINESS ASSOCIATE'},{v:'OT',l:'OTHER'}]}
+              ]}]
+        }
+      },
+      {type:'radio', id:'is_group_travel', label:'Are you traveling as part of a group or organization?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'text', id:'group_name', label:'Group or Organization Name', required:true}]
+        }
+      },
+    ]
+  },
+
+  // ── Page 5: Previous U.S. Travel ────────────────────────────────────
+  {
+    id: 'previous_us_travel',
+    title: 'Previous U.S. Travel Information',
+    note: '',
+    nodes: [
+      {type:'radio', id:'has_been_in_us', label:'Have you ever been in the U.S.?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'previous_visits', label:'Previous U.S. Visits',
+              fields:[
+                {type:'date3', id_day:'visit_arrival_day', id_month:'visit_arrival_month', id_year:'visit_arrival_year', label:'Arrival Date'},
+                {type:'text', id:'visit_stay_length', label:'Length of Stay'},
+                {type:'select', id:'visit_stay_unit', label:'Stay Unit', placeholder:'-Select One-',
+                  options:[{v:'Y',l:'Year(s)'},{v:'M',l:'Month(s)'},{v:'W',l:'Week(s)'},{v:'D',l:'Day(s)'},{v:'H',l:'Less Than 24 Hours'}]}
+              ]}]
+        }
+      },
+      {type:'radio', id:'has_us_visa', label:'Have you ever been issued a U.S. Visa?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[
+            {type:'date3', id_day:'prev_visa_day', id_month:'prev_visa_month', id_year:'prev_visa_year', label:'Visa Issue Date'},
+            {type:'text', id:'prev_visa_number', label:'Visa Number'},
+            {type:'radio', id:'prev_visa_same_type', label:'Applying for same visa classification?', options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}]},
+            {type:'radio', id:'prev_visa_same_country', label:'Applying in same country where visa was issued?', options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}]},
+            {type:'radio', id:'prev_visa_ten_printed', label:'Have you been ten-printed?', options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}]},
+            {type:'radio', id:'prev_visa_lost', label:'Was your most recent U.S. visa lost or stolen?', options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+              children:{
+                Y:[
+                  {type:'text', id:'prev_visa_lost_year', label:'Year Visa Was Lost or Stolen'},
+                  {type:'textarea', id:'prev_visa_lost_explanation', label:'Explain'}
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {type:'radio', id:'has_visa_refused', label:'Have you ever been refused a U.S. Visa, or refused admission to the U.S.?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'textarea', id:'visa_refused_explanation', label:'Explain'}]}
+      },
+      {type:'radio', id:'has_iv_petition', label:'Has anyone ever filed an immigrant petition on your behalf with USCIS?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'textarea', id:'iv_petition_explanation', label:'Explain'}]}
+      },
+    ]
+  },
+
+  // ── Page 6: Address & Phone ───────────────────────────────────────────
+  {
+    id: 'address_phone',
+    title: 'Address and Phone Information',
+    note: '',
+    nodes: [
+      {type:'section', label:'Home Address'},
+      {type:'text', id:'home_street1', label:'Street Address (Line 1)', required:true},
+      {type:'text', id:'home_street2', label:'Street Address (Line 2)'},
+      {type:'text', id:'home_city', label:'City', required:true},
+      {type:'text', id:'home_state', label:'State/Province', required:false,
+        na:{label:'Does Not Apply', id:'home_state_na'}},
+      {type:'text', id:'home_postal', label:'Postal Zone / ZIP Code', required:false,
+        na:{label:'Does Not Apply', id:'home_postal_na'}},
+      {type:'country', id:'home_country', label:'Country/Region', required:true},
+      {type:'radio', id:'mailing_same_as_home', label:'Is your mailing address the same as your home address?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          N:[
+            {type:'text', id:'mail_street1', label:'Mailing Street Address (Line 1)'},
+            {type:'text', id:'mail_street2', label:'Mailing Street Address (Line 2)'},
+            {type:'text', id:'mail_city', label:'City'},
+            {type:'text', id:'mail_state', label:'State/Province'},
+            {type:'text', id:'mail_postal', label:'Postal Zone / ZIP Code'},
+            {type:'country', id:'mail_country', label:'Country/Region'}
+          ]
+        }
+      },
+      {type:'section', label:'Phone Numbers'},
+      {type:'text', id:'phone_primary', label:'Primary Phone Number', required:true},
+      {type:'text', id:'phone_secondary', label:'Secondary Phone Number', required:false,
+        na:{label:'Does Not Apply', id:'phone_secondary_na'}},
+      {type:'text', id:'phone_work', label:'Work Phone Number', required:false,
+        na:{label:'Does Not Apply', id:'phone_work_na'}},
+      {type:'radio', id:'has_additional_phones', label:'Do you have additional telephone numbers?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'repeatable', id:'additional_phones', label:'Additional Phone Numbers',
+            fields:[{type:'text', id:'phone_number', label:'Phone Number'}]}]}
+      },
+      {type:'text', id:'email_address', label:'Email Address', required:true},
+      {type:'radio', id:'has_additional_emails', label:'Do you have additional email addresses?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'repeatable', id:'additional_emails', label:'Additional Email Addresses',
+            fields:[{type:'text', id:'email', label:'Email Address'}]}]}
+      },
+      {type:'section', label:'Social Media'},
+      {type:'repeatable', id:'social_media', label:'Social Media Presence',
+        fields:[
+          {type:'select', id:'social_platform', label:'Social Media Platform', placeholder:'-Select One-',
+            options:[
+              {v:'FBOOK',l:'FACEBOOK'},{v:'GOOGL',l:'GOOGLE+'},{v:'INSTA',l:'INSTAGRAM'},
+              {v:'LINKED',l:'LINKEDIN'},{v:'MYSP',l:'MYSPACE'},{v:'TWIT',l:'TWITTER'},
+              {v:'YTUBE',l:'YOUTUBE'},{v:'NONE',l:'NONE'},{v:'OTHER',l:'OTHER'}
+            ]},
+          {type:'text', id:'social_identifier', label:'Social Media Identifier / Handle'}
+        ]
+      },
+    ]
+  },
+
+  // ── Page 7: Passport ─────────────────────────────────────────────────
+  {
+    id: 'passport',
+    title: 'Passport Information',
+    note: 'Enter the information on the travel document you will be using when traveling to the U.S.',
+    nodes: [
+      {type:'select', id:'passport_type', label:'Passport/Travel Document Type', required:true, placeholder:'-Select One-',
+        options:[{v:'R',l:'REGULAR'},{v:'O',l:'OFFICIAL'},{v:'D',l:'DIPLOMATIC'},{v:'L',l:'LAISSEZ-PASSER'},{v:'T',l:'OTHER'}]},
+      {type:'text', id:'passport_number', label:'Passport/Travel Document Number', required:true},
+      {type:'text', id:'passport_book_number', label:'Passport Book Number', required:false,
+        na:{label:'Does Not Apply', id:'passport_book_na'}},
+      {type:'country', id:'passport_issuing_country', label:'Country/Authority that Issued Passport', required:true},
+      {type:'section', label:'Where Was the Passport Issued?'},
+      {type:'text', id:'passport_issued_city', label:'City', required:true},
+      {type:'text', id:'passport_issued_state', label:'State/Province', required:false, hint:'*If shown on passport'},
+      {type:'country', id:'passport_issued_country', label:'Country/Region', required:true},
+      {type:'section', label:'Issuance Date'},
+      {type:'date3', id_day:'passport_issue_day', id_month:'passport_issue_month', id_year:'passport_issue_year', label:'Issuance Date', required:true},
+      {type:'section', label:'Expiration Date'},
+      {type:'date3', id_day:'passport_expire_day', id_month:'passport_expire_month', id_year:'passport_expire_year', label:'Expiration Date', required:false},
+      {type:'radio', id:'has_lost_passport', label:'Have you ever lost a passport or had one stolen?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'lost_passports', label:'Lost or Stolen Passports',
+              fields:[
+                {type:'text', id:'lost_passport_number', label:'Passport Number'},
+                {type:'country', id:'lost_passport_country', label:'Country/Authority that Issued Passport'},
+                {type:'textarea', id:'lost_passport_explanation', label:'Explain'}
+              ]}]
+        }
+      },
+    ]
+  },
+
+  // ── Page 8: U.S. Contact ─────────────────────────────────────────────
+  {
+    id: 'us_contact',
+    title: 'U.S. Point of Contact Information',
+    note: 'Your U.S. Point of Contact can be any individual in the U.S. who knows you and can verify your identity.',
+    nodes: [
+      {type:'section', label:'Contact Person or Organization'},
+      {type:'text', id:'poc_surname', label:'Surnames', required:true,
+        na:{label:'Do Not Know', id:'poc_name_dontknow'}},
+      {type:'text', id:'poc_given_name', label:'Given Names', required:true,
+        na:{label:'Do Not Know', id:'poc_given_dontknow'}},
+      {type:'text', id:'poc_organization', label:'Organization Name', required:false,
+        na:{label:'Do Not Know', id:'poc_org_dontknow'}},
+      {type:'select', id:'poc_relationship', label:'Relationship to You', required:true, placeholder:'- SELECT ONE -',
+        options:[
+          {v:'R',l:'RELATIVE'},{v:'S',l:'SPOUSE'},{v:'C',l:'FRIEND'},
+          {v:'B',l:'BUSINESS ASSOCIATE'},{v:'P',l:'EMPLOYER'},{v:'H',l:'SCHOOL OFFICIAL'},{v:'O',l:'OTHER'}
+        ]},
+      {type:'text', id:'poc_phone', label:'Phone Number', required:true},
+    ]
+  },
+
+  // ── Page 9: Family Relatives ─────────────────────────────────────────
+  {
+    id: 'family_relatives',
+    title: 'Family Information: Relatives',
+    note: 'Please provide the following information concerning your biological parents. If you are adopted, provide information on your adoptive parents.',
+    nodes: [
+      {type:'section', label:"Father's Full Name and Date of Birth"},
+      {type:'text', id:'father_surname', label:'Surnames', required:true,
+        na:{label:'Do Not Know', id:'father_surname_dontknow'}},
+      {type:'text', id:'father_given_name', label:'Given Names', required:true,
+        na:{label:'Do Not Know', id:'father_given_dontknow'}},
+      {type:'date3', id_day:'father_dob_day', id_month:'father_dob_month', id_year:'father_dob_year', label:'Date of Birth',
+        na:{label:'Do Not Know', id:'father_dob_dontknow'}},
+      {type:'radio', id:'father_in_us', label:'Is your father in the U.S.?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'select', id:'father_us_status', label:"Father's U.S. Status", placeholder:'-Select One-',
+              options:[{v:'C',l:'U.S. CITIZEN'},{v:'P',l:'LAWFUL PERMANENT RESIDENT'},{v:'O',l:'OTHER'}]}]
+        }
+      },
+      {type:'section', label:"Mother's Full Name and Date of Birth"},
+      {type:'text', id:'mother_surname', label:'Surnames', required:true,
+        na:{label:'Do Not Know', id:'mother_surname_dontknow'}},
+      {type:'text', id:'mother_given_name', label:'Given Names', required:true,
+        na:{label:'Do Not Know', id:'mother_given_dontknow'}},
+      {type:'date3', id_day:'mother_dob_day', id_month:'mother_dob_month', id_year:'mother_dob_year', label:'Date of Birth',
+        na:{label:'Do Not Know', id:'mother_dob_dontknow'}},
+      {type:'radio', id:'mother_in_us', label:'Is your mother in the U.S.?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'select', id:'mother_us_status', label:"Mother's U.S. Status", placeholder:'-Select One-',
+              options:[{v:'C',l:'U.S. CITIZEN'},{v:'P',l:'LAWFUL PERMANENT RESIDENT'},{v:'O',l:'OTHER'}]}]
+        }
+      },
+      {type:'section', label:'Immediate Relatives in the U.S.'},
+      {type:'radio', id:'has_us_immediate_relatives',
+        label:'Do you have any immediate relatives (not including parents) in the United States?',
+        required:true,
+        help:'Immediate relatives means fiancé/fiancée, spouse, child, or sibling.',
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'us_relatives', label:'U.S. Immediate Relatives',
+              fields:[
+                {type:'text', id:'relative_surname', label:'Surnames'},
+                {type:'text', id:'relative_given_name', label:'Given Names'},
+                {type:'select', id:'relative_relationship', label:'Relationship', placeholder:'-Select One-',
+                  options:[{v:'S',l:'SPOUSE'},{v:'C',l:'CHILD'},{v:'SB',l:'SIBLING'},{v:'P',l:'PARENT'},{v:'F',l:'FIANCE/FIANCEE'},{v:'O',l:'OTHER'}]},
+                {type:'select', id:'relative_us_status', label:'Immigration Status', placeholder:'-Select One-',
+                  options:[{v:'C',l:'U.S. CITIZEN'},{v:'P',l:'LAWFUL PERMANENT RESIDENT'},{v:'O',l:'OTHER'}]}
+              ]}]
+        }
+      },
+    ]
+  },
+
+  // ── Page 10: Family Spouse ───────────────────────────────────────────
+  {
+    id: 'family_spouse',
+    title: 'Family Information: Spouse',
+    note: 'Enter current spouse information.',
+    nodes: [
+      {type:'text', id:'spouse_surname', label:"Spouse's Surnames (include Maiden Name)", required:true},
+      {type:'text', id:'spouse_given_name', label:"Spouse's Given Names", required:true},
+      {type:'date3', id_day:'spouse_dob_day', id_month:'spouse_dob_month', id_year:'spouse_dob_year', label:"Spouse's Date of Birth", required:true},
+      {type:'country', id:'spouse_nationality', label:"Spouse's Country/Region of Origin (Nationality)", required:true},
+      {type:'section', label:"Spouse's Place of Birth"},
+      {type:'text', id:'spouse_pob_city', label:'City', required:true,
+        na:{label:'Do Not Know', id:'spouse_pob_city_na'}},
+      {type:'country', id:'spouse_pob_country', label:'Country/Region', required:true},
+      {type:'select', id:'spouse_address_type', label:"Spouse's Address", required:true, placeholder:'-Select One-',
+        options:[
+          {v:'H',l:'Same as Home Address'},{v:'M',l:'Same as Mailing Address'},
+          {v:'U',l:'Same as U.S. Contact Address'},{v:'D',l:'Do Not Know'},{v:'O',l:'Other (Specify Address)'}
+        ]
+      },
+    ]
+  },
+
+  // ── Page 11: Work/Education Present ─────────────────────────────────
+  {
+    id: 'work_present',
+    title: 'Present Work/Education/Training Information',
+    note: 'Provide the following information concerning your current employment or education.',
+    nodes: [
+      {type:'select', id:'present_occupation', label:'Primary Occupation', required:true, placeholder:'-Select One-',
+        options:[
+          {v:'A',l:'AGRICULTURE'},{v:'AP',l:'ARTIST/PERFORMER'},{v:'B',l:'BUSINESS'},
+          {v:'CM',l:'COMMUNICATIONS'},{v:'CS',l:'COMPUTER SCIENCE'},{v:'C',l:'CULINARY/FOOD SERVICES'},
+          {v:'ED',l:'EDUCATION'},{v:'EN',l:'ENGINEERING'},{v:'G',l:'GOVERNMENT'},
+          {v:'H',l:'HOMEMAKER'},{v:'LP',l:'LEGAL PROFESSION'},{v:'MH',l:'MEDICAL/HEALTH'},
+          {v:'M',l:'MILITARY'},{v:'NS',l:'NATURAL SCIENCE'},{v:'N',l:'NOT EMPLOYED'},
+          {v:'PS',l:'PHYSICAL SCIENCES'},{v:'RV',l:'RELIGIOUS VOCATION'},{v:'R',l:'RESEARCH'},
+          {v:'RT',l:'RETIRED'},{v:'SS',l:'SOCIAL SCIENCE'},{v:'S',l:'STUDENT'},{v:'O',l:'OTHER'}
+        ]
+      },
+      {type:'radio', id:'occupation_is_employer', label:'',
+        note: 'employer_block', // special rendering handled in template
+        options:[], children:{}
+      },
+    ],
+    // Employer block is rendered dynamically based on occupation value
+    employer_block: {
+      employed: ['A','AP','B','CM','CS','C','ED','EN','G','LP','MH','M','NS','PS','RV','R','SS','O'],
+      student: ['S'],
+      none: ['H','N','RT']
+    }
+  },
+
+  // ── Page 12: Work/Education Previous ────────────────────────────────
+  {
+    id: 'work_previous',
+    title: 'Previous Work/Education/Training Information',
+    note: 'Provide your employment information for the last five years that you were employed, if applicable.',
+    nodes: [
+      {type:'radio', id:'was_previously_employed', label:'Were you previously employed?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'previous_employers', label:'Previous Employers',
+              fields:[
+                {type:'text', id:'prev_employer_name', label:'Employer Name'},
+                {type:'text', id:'prev_employer_street1', label:'Street Address (Line 1)'},
+                {type:'text', id:'prev_employer_street2', label:'Street Address (Line 2)'},
+                {type:'text', id:'prev_employer_city', label:'City'},
+                {type:'text', id:'prev_employer_state', label:'State/Province'},
+                {type:'text', id:'prev_employer_postal', label:'Postal Zone / ZIP Code'},
+                {type:'country', id:'prev_employer_country', label:'Country/Region'},
+                {type:'text', id:'prev_employer_phone', label:'Telephone Number'},
+                {type:'text', id:'prev_job_title', label:'Job Title'},
+                {type:'text', id:'prev_supervisor_surname', label:"Supervisor's Surname"},
+                {type:'text', id:'prev_supervisor_given_name', label:"Supervisor's Given Names"},
+                {type:'month_year', id_month:'prev_from_month', id_year:'prev_from_year', label:'Employment From'},
+                {type:'month_year', id_month:'prev_to_month', id_year:'prev_to_year', label:'Employment To'},
+                {type:'textarea', id:'prev_duties', label:'Briefly Describe Your Duties'}
+              ]}]
+        }
+      },
+      {type:'radio', id:'has_attended_educational_institution',
+        label:'Have you attended any educational institutions at a secondary level or above?', required:true,
+        help:'Answer Yes if you ever attended high school, college, university, graduate school, doctoral program, or vocational program.',
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'educational_institutions', label:'Educational Institutions',
+              fields:[
+                {type:'text', id:'inst_name', label:'Name of Institution'},
+                {type:'text', id:'inst_street1', label:'Street Address (Line 1)'},
+                {type:'text', id:'inst_street2', label:'Street Address (Line 2)'},
+                {type:'text', id:'inst_city', label:'City'},
+                {type:'text', id:'inst_state', label:'State/Province'},
+                {type:'text', id:'inst_postal', label:'Postal Zone / ZIP Code'},
+                {type:'country', id:'inst_country', label:'Country/Region'},
+                {type:'text', id:'inst_course', label:'Course of Study'},
+                {type:'month_year', id_month:'inst_from_month', id_year:'inst_from_year', label:'Dates of Attendance From'},
+                {type:'month_year', id_month:'inst_to_month', id_year:'inst_to_year', label:'Dates of Attendance To'}
+              ]}]
+        }
+      },
+    ]
+  },
+
+  // ── Page 13: Work/Education Additional ──────────────────────────────
+  {
+    id: 'work_additional',
+    title: 'Additional Work/Education/Training Information',
+    note: 'Provide complete and accurate information to all questions that require an explanation.',
+    nodes: [
+      {type:'radio', id:'belongs_to_clan_tribe', label:'Do you belong to a clan or tribe?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'text', id:'clan_tribe_name', label:'Name of Clan or Tribe'}]}
+      },
+      {type:'repeatable', id:'languages_spoken', label:'Languages You Speak (at least one required)',
+        fields:[{type:'text', id:'language_name', label:'Language Name'}]
+      },
+      {type:'radio', id:'has_traveled_to_countries', label:'Have you traveled to any countries/regions within the last five years?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'countries_visited', label:'Countries/Regions Visited',
+              fields:[{type:'country', id:'country_visited', label:'Country/Region'}]}]
+        }
+      },
+      {type:'radio', id:'belongs_to_organization', label:'Have you belonged to, contributed to, or worked for any professional, social, or charitable organization?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'organizations', label:'Organizations',
+              fields:[{type:'text', id:'organization_name', label:'Organization Name'}]}]
+        }
+      },
+      {type:'radio', id:'has_specialized_skills', label:'Do you have any specialized skills or training, such as firearms, explosives, nuclear, biological, or chemical experience?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'textarea', id:'specialized_skills_explanation', label:'Explain'}]}
+      },
+      {type:'radio', id:'has_military_service', label:'Have you ever served in the military?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{
+          Y:[{type:'repeatable', id:'military_service_entries', label:'Military Service Records',
+              fields:[
+                {type:'country', id:'military_country', label:'Country'},
+                {type:'text', id:'military_branch', label:'Branch of Service'},
+                {type:'text', id:'military_rank', label:'Rank/Position'},
+                {type:'text', id:'military_specialty', label:'Military Specialty'},
+                {type:'month_year', id_month:'military_from_month', id_year:'military_from_year', label:'Service From'},
+                {type:'month_year', id_month:'military_to_month', id_year:'military_to_year', label:'Service To'}
+              ]}]
+        }
+      },
+      {type:'radio', id:'has_insurgent_org', label:'Have you ever served in, been a member of, or been involved with a paramilitary unit, vigilante unit, rebel group, guerrilla group, or insurgent organization?', required:true,
+        options:[{v:'Y',l:'Yes'},{v:'N',l:'No'}],
+        children:{Y:[{type:'textarea', id:'insurgent_org_explanation', label:'Explain'}]}
+      },
+    ]
+  },
+
+  ]; // end pages
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// GENERIC NODE RENDERER  (pure HTML string, no Alpine templates inside)
+// ═══════════════════════════════════════════════════════════════════════
+// Because Alpine x-html can't use Alpine directives inside, we build
+// actual DOM elements using x-data + $watch on each rendered node.
+
+// Main app component
+function ds160App() {
+  return {
+    pages: buildPages(),
+    pageIndex: 0,
+    errors: [],
+
+    get store() { return STORE; },
+
+    prevPage() {
+      if (this.pageIndex > 0) {
+        this.pageIndex--;
+        this.errors = [];
+        scrollToTop();
+      }
+    },
+
+    nextPage() {
+      this.errors = this.validatePage(this.pages[this.pageIndex]);
+      if (this.errors.length > 0) {
+        scrollToTop();
+        return;
+      }
+      this.pageIndex++;
+      scrollToTop();
+    },
+
+    submit() {
+      this.errors = this.validatePage(this.pages[this.pageIndex]);
+      if (this.errors.length > 0) { scrollToTop(); return; }
+      alert('DS-160 data collected successfully!\n\nIn a production implementation, this would be submitted to the server.\n\nTotal fields captured: ' + Object.keys(STORE.data).length);
+    },
+
+    validatePage(page) {
+      const errs = [];
+      for (const node of page.nodes || []) {
+        if (node.required && node.id && !STORE.data[node.id]) {
+          errs.push(`"${node.label}" is required.`);
+        }
+        // Date triples
+        if (node.type === 'date3' && node.required) {
+          if (!STORE.data[node.id_year]) errs.push(`"${node.label}" year is required.`);
+        }
+      }
+      return errs;
+    }
+  };
+}
+
+function scrollToTop() {
+  const el = document.getElementById('content');
+  if (el) el.scrollTop = 0;
+  setTimeout(() => updateShadow(el), 80);
+}
+
+// ── Individual node Alpine component ─────────────────────────────────
+// Each node is a self-contained Alpine x-data component so it can react
+// to STORE changes without needing x-for inside x-html.
+
+// We render each node as an Alpine-aware div with x-data on it.
+// This is injected into the template via x-html on a wrapper.
+
+function makeNodeEl(node, groupId, itemIdx) {
+  // groupId / itemIdx are for rendering fields inside repeatable groups
+  const inGroup = groupId != null;
+
+  const fieldKey = (id) => {
+    if (inGroup) return null; // handled inside group component
+    return id;
+  };
+
+  switch(node.type) {
+
+    case 'section':
+      return `<div class="section-heading">${node.label}</div>`;
+
+    case 'text':
+      return makeTextField(node, inGroup, groupId, itemIdx);
+
+    case 'textarea':
+      return makeTextareaField(node, inGroup, groupId, itemIdx);
+
+    case 'select':
+      return makeSelectField(node, inGroup, groupId, itemIdx);
+
+    case 'country':
+      return makeCountryField(node, inGroup, groupId, itemIdx);
+
+    case 'radio':
+      return makeRadioField(node, inGroup, groupId, itemIdx);
+
+    case 'date3':
+      return makeDateField(node, inGroup, groupId, itemIdx);
+
+    case 'month_year':
+      return makeMonthYearField(node, inGroup, groupId, itemIdx);
+
+    case 'repeatable':
+      return makeRepeatableGroup(node);
+
+    default:
+      return '';
+  }
+}
+
+// ── Helper: build x-model binding ─────────────────────────────────────
+function xmodel(id, inGroup, groupId, itemIdx) {
+  if (inGroup) {
+    return `x-model="STORE.lists['${groupId}'][${itemIdx}]['${id}']"`;
+  }
+  return `x-model="STORE.data['${id}']"`;
+}
+
+function ensureInit(id, inGroup, groupId, itemIdx) {
+  if (inGroup) {
+    return `x-init="if(!STORE.lists['${groupId}'][${itemIdx}]) STORE.lists['${groupId}'][${itemIdx}] = {};"`;
+  }
+  return '';
+}
+
+// ── Text field ────────────────────────────────────────────────────────
+function makeTextField(node, inGroup, groupId, itemIdx) {
+  const req = node.required ? '<span class="req">*</span>' : '';
+  const hint = node.hint ? `<span class="hint">${node.hint}</span>` : '';
+  const xm = xmodel(node.id, inGroup, groupId, itemIdx);
+  const naBlock = node.na ? `
+    <div class="check-row">
+      <input type="checkbox" id="na_${node.na.id}" @change="
+        if($event.target.checked) { ${inGroup ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']='N/A'` : `STORE.data['${node.id}']='N/A'`}; $el.previousElementSibling.querySelector('input').disabled=true; }
+        else { ${inGroup ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']=''` : `STORE.data['${node.id}']= ''`}; $el.previousElementSibling.querySelector('input').disabled=false; }
+      " />
+      <label for="na_${node.na.id}">${node.na.label}</label>
+    </div>` : '';
+  return `<div class="field">
+    <label>${node.label}${req}</label>${hint}
+    <input type="text" ${xm} maxlength="${node.max_length||100}" />
+    ${naBlock}
+  </div>`;
+}
+
+// ── Textarea ─────────────────────────────────────────────────────────
+function makeTextareaField(node, inGroup, groupId, itemIdx) {
+  const req = node.required ? '<span class="req">*</span>' : '';
+  const xm = xmodel(node.id, inGroup, groupId, itemIdx);
+  return `<div class="field">
+    <label>${node.label}${req}</label>
+    <textarea ${xm} maxlength="${node.max_length||4000}"></textarea>
+  </div>`;
+}
+
+// ── Select ────────────────────────────────────────────────────────────
+function makeSelectField(node, inGroup, groupId, itemIdx) {
+  const req = node.required ? '<span class="req">*</span>' : '';
+  const hint = node.hint ? `<span class="hint">${node.hint}</span>` : '';
+  const xm = xmodel(node.id, inGroup, groupId, itemIdx);
+  const opts = (node.options||[]).map(o=>`<option value="${o.v}">${o.l}</option>`).join('');
+  const ph = node.placeholder ? `<option value="">${node.placeholder}</option>` : '';
+  return `<div class="field">
+    <label>${node.label}${req}</label>${hint}
+    <select ${xm}>${ph}${opts}</select>
+  </div>`;
+}
+
+// ── Country select ────────────────────────────────────────────────────
+function makeCountryField(node, inGroup, groupId, itemIdx) {
+  const req = node.required ? '<span class="req">*</span>' : '';
+  const xm = xmodel(node.id, inGroup, groupId, itemIdx);
+  return `<div class="field">
+    <label>${node.label}${req}</label>
+    <select ${xm}>${countriesOptions()}</select>
+  </div>`;
+}
+
+// ── Radio with conditional children ───────────────────────────────────
+function makeRadioField(node, inGroup, groupId, itemIdx) {
+  if (!node.options || node.options.length === 0) return '';
+  const req = node.required ? '<span class="req">*</span>' : '';
+  const help = node.help ? `<span class="hint">${node.help}</span>` : '';
+  const xm_key = inGroup ? `STORE.lists['${groupId}'][${itemIdx}]['${node.id}']` : `STORE.data['${node.id}']`;
+
+  const radios = node.options.map(o => `
+    <label>
+      <input type="radio" name="${inGroup ? groupId+'_'+itemIdx+'_'+node.id : node.id}"
+             value="${o.v}"
+             @change="${xm_key} = '${o.v}'" 
+             :checked="${xm_key} === '${o.v}'" />
+      ${o.l}
+    </label>`).join('');
+
+  // Children blocks for each value
+  const childrenBlocks = Object.entries(node.children || {}).map(([val, children]) => {
+    if (!children || children.length === 0) return '';
+    const childHtml = children.map(c => makeNodeEl(c, inGroup ? groupId : null, inGroup ? itemIdx : null)).join('');
+    return `<div class="children-block" x-show="${xm_key} === '${val}'">${childHtml}</div>`;
+  }).join('');
+
+  return `<div class="field" x-data="{}">
+    <label>${node.label}${req}</label>${help}
+    <div class="radio-group">${radios}</div>
+    ${childrenBlocks}
+  </div>`;
+}
+
+// ── Date triple (day/month/year) ───────────────────────────────────────
+function makeDateField(node, inGroup, groupId, itemIdx) {
+  const req = node.required ? '<span class="req">*</span>' : '';
+  const xmDay = xmodel(node.id_day, inGroup, groupId, itemIdx);
+  const xmMon = xmodel(node.id_month, inGroup, groupId, itemIdx);
+  const xmYr  = xmodel(node.id_year, inGroup, groupId, itemIdx);
+  const naBlock = node.na ? `
+    <div class="check-row">
+      <input type="checkbox" id="na_${node.na.id}" @change="
+        STORE.data['${node.na.id}'] = $event.target.checked ? 'Y' : ''
+      "/>
+      <label for="na_${node.na.id}">${node.na.label}</label>
+    </div>` : '';
+  return `<div class="field">
+    <label>${node.label}${req}</label>
+    <div class="field-row">
+      <div class="field narrow">
+        <label style="font-weight:normal;font-size:.8rem;">Day</label>
+        <select ${xmDay}>${dayOptions()}</select>
+      </div>
+      <div class="field">
+        <label style="font-weight:normal;font-size:.8rem;">Month</label>
+        <select ${xmMon}>${monthOptions()}</select>
+      </div>
+      <div class="field narrow">
+        <label style="font-weight:normal;font-size:.8rem;">Year</label>
+        <input type="text" ${xmYr} maxlength="4" placeholder="YYYY" />
+      </div>
+    </div>
+    ${naBlock}
+  </div>`;
+}
+
+// ── Month/Year pair ────────────────────────────────────────────────────
+function makeMonthYearField(node, inGroup, groupId, itemIdx) {
+  const xmMon = xmodel(node.id_month, inGroup, groupId, itemIdx);
+  const xmYr  = xmodel(node.id_year, inGroup, groupId, itemIdx);
+  return `<div class="field">
+    <label style="font-size:.85rem;">${node.label}</label>
+    <div class="field-row">
+      <div class="field">
+        <select ${xmMon}>${monthOptions()}</select>
+      </div>
+      <div class="field narrow">
+        <input type="text" ${xmYr} maxlength="4" placeholder="YYYY" />
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Repeatable group ───────────────────────────────────────────────────
+function makeRepeatableGroup(node) {
+  // Initialize list if not already
+  if (!STORE.lists[node.id]) STORE.lists[node.id] = [{}];
+
+  // Build template with x-data and x-for using the store directly
+  const fieldsForItem = (idxExpr) => {
+    return (node.fields || []).map(f => {
+      // For repeatable items we build bindings dynamically using index
+      return makeNodeEl(f, true, node.id, idxExpr);
+    }).join('');
+  };
+
+  // Since x-html doesn't support Alpine directives, we use a custom
+  // approach: render items statically for indices 0..max, and show/hide
+  // based on list length. We support up to 10 items.
+  const MAX = 10;
+  const items = Array.from({length:MAX}, (_,i) => {
+    const fields = (node.fields || []).map(f => makeNodeEl(f, true, node.id, i)).join('');
+    return `
+      <div class="repeatable-item" x-show="(STORE.lists['${node.id}'] || []).length > ${i}">
+        <div class="repeatable-item-header">
+          <span>${node.label} #${i+1}</span>
+          <button class="btn-remove" type="button" @click="removeRepeatItem('${node.id}', ${i})"
+                  x-show="${i} > 0 || (STORE.lists['${node.id}'] || []).length > 1">Remove</button>
+        </div>
+        ${fields}
+      </div>`;
+  }).join('');
+
+  return `<div class="field" x-data="{
+    removeRepeatItem(id, idx) {
+      if(STORE.lists[id] && STORE.lists[id].length > 1) STORE.lists[id].splice(idx, 1);
+    }
+  }">
+    <div class="repeatable">
+      ${items}
+      <div class="repeatable-add">
+        <button class="btn-add" type="button" @click="
+          if(!STORE.lists['${node.id}']) STORE.lists['${node.id}'] = [{}];
+          if(STORE.lists['${node.id}'].length < ${MAX}) STORE.lists['${node.id}'].push({});
+        ">+ Add Another</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Special: Occupation-dependent employer/student block ────────────────
+function makeOccupationBlock() {
+  const employedVals = ['A','AP','B','CM','CS','C','ED','EN','G','LP','MH','M','NS','PS','RV','R','SS','O'];
+  const employedList = JSON.stringify(employedVals);
+  return `
+    <div class="field" x-data="{}" x-show="${employedList}.includes(STORE.data['present_occupation'])">
+      <div class="children-block">
+        <div class="section-heading">Employer / Organization Details</div>
+        <div class="field"><label>Employer Name</label><input type="text" x-model="STORE.data['employer_name']" /></div>
+        <div class="field"><label>Street Address (Line 1)</label><input type="text" x-model="STORE.data['employer_street1']" /></div>
+        <div class="field"><label>Street Address (Line 2)</label><input type="text" x-model="STORE.data['employer_street2']" /></div>
+        <div class="field"><label>City</label><input type="text" x-model="STORE.data['employer_city']" /></div>
+        <div class="field"><label>State/Province</label><input type="text" x-model="STORE.data['employer_state']" /></div>
+        <div class="field"><label>Postal Zone / ZIP</label><input type="text" x-model="STORE.data['employer_postal']" /></div>
+        <div class="field"><label>Country/Region</label><select x-model="STORE.data['employer_country']">${countriesOptions()}</select></div>
+        <div class="field"><label>Telephone Number</label><input type="text" x-model="STORE.data['employer_phone']" /></div>
+        <div class="field"><label>Job Title</label><input type="text" x-model="STORE.data['employer_job_title']" /></div>
+        <div class="field"><label>Supervisor's Surname</label><input type="text" x-model="STORE.data['employer_supervisor_surname']" /></div>
+        <div class="field"><label>Supervisor's Given Names</label><input type="text" x-model="STORE.data['employer_supervisor_given']" /></div>
+        <div class="field"><label>Monthly Salary (optional)</label><input type="text" x-model="STORE.data['employer_salary']" /></div>
+        <div class="field"><label>Date Employment Began</label>
+          <div class="field-row">
+            <div class="field"><select x-model="STORE.data['employer_start_month']">${monthOptions()}</select></div>
+            <div class="field narrow"><input type="text" x-model="STORE.data['employer_start_year']" maxlength="4" placeholder="YYYY" /></div>
+          </div>
+        </div>
+        <div class="field"><label>Briefly Describe Your Duties</label><textarea x-model="STORE.data['employer_duties']"></textarea></div>
+      </div>
+    </div>
+    <div class="field" x-data="{}" x-show="STORE.data['present_occupation'] === 'S'">
+      <div class="children-block">
+        <div class="section-heading">School / Educational Institution</div>
+        <div class="field"><label>Name of Institution</label><input type="text" x-model="STORE.data['school_name']" /></div>
+        <div class="field"><label>Street Address (Line 1)</label><input type="text" x-model="STORE.data['school_street1']" /></div>
+        <div class="field"><label>City</label><input type="text" x-model="STORE.data['school_city']" /></div>
+        <div class="field"><label>State/Province</label><input type="text" x-model="STORE.data['school_state']" /></div>
+        <div class="field"><label>Postal Zone / ZIP</label><input type="text" x-model="STORE.data['school_postal']" /></div>
+        <div class="field"><label>Country/Region</label><select x-model="STORE.data['school_country']">${countriesOptions()}</select></div>
+        <div class="field"><label>Telephone Number</label><input type="text" x-model="STORE.data['school_phone']" /></div>
+        <div class="field"><label>Course of Study</label><input type="text" x-model="STORE.data['school_course']" /></div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Minimal Alpine component for each PAGE that renders its own nodes
+// ═══════════════════════════════════════════════════════════════════════
+// We register a global function that each page div can call via x-init
+
+window.STORE = STORE; // expose globally for x-data expressions
+
+// Alpine.js magic: each page div uses x-data="{}" and renders nodes
+// via DOM insertion in x-init. This avoids the x-html + Alpine directives
+// incompatibility by using innerHTML with proper Alpine attribute parsing.
+
+// We'll use a simpler approach: generate the nodes as static HTML
+// with Alpine x-model/x-show attributes, then inject into a container div.
+// Alpine will parse these when they're inserted via innerHTML if we use
+// Alpine.$nextTick properly. Actually the cleanest approach for this
+// use-case is to pre-render everything and let Alpine pick it up.
+
+// Since the form is inside a single Alpine tree (ds160App), all x-model,
+// x-show etc. on the injected HTML will be parsed by Alpine on init.
+// We need to use Alpine.initTree() for dynamically added content.
+
+function renderPageNodes(page) {
+  if (!page || !page.nodes) return '';
+  let html = '';
+  for (const node of page.nodes) {
+    if (node.type === 'radio' && node.note === 'employer_block') {
+      html += makeOccupationBlock();
+    } else {
+      html += makeNodeEl(node, false, null, null);
+    }
+  }
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Alpine component: per-page renderer
+// ═══════════════════════════════════════════════════════════════════════
+document.addEventListener('alpine:init', () => {
+  // Initialize STORE with Alpine reactivity now that Alpine is available
+  STORE = Alpine.reactive({ data: {}, lists: {} });
+
+  Alpine.data('pageRenderer', (page) => ({
+    html: '',
+    init() {
+      this.html = renderPageNodes(page);
+      this.$nextTick(() => {
+        const container = this.$el.querySelector('.nodes-container');
+        if (container) {
+          container.innerHTML = this.html;
+          Alpine.initTree(container);
+        }
+      });
+    }
+  }));
+});
+
+// Scroll shadow
+function updateShadow(el) {
+  const shadow = document.getElementById('scroll-shadow');
+  if (!el || !shadow) return;
+  shadow.classList.toggle('visible', el.scrollTop + el.clientHeight < el.scrollHeight - 4);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const content = document.getElementById('content');
+  if (!content) return;
+  content.addEventListener('scroll', () => updateShadow(content));
+  setTimeout(() => updateShadow(content), 400);
+});
+</script>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<!-- TEMPLATE: replace the simple x-html node renderer with per-page   -->
+<!-- Alpine components that properly inject and initialize the nodes.   -->
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<script>
+// Override the template to use pageRenderer components.
+// We patch ds160App to store rendered HTML per page after DOM ready.
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => updateShadow(document.getElementById('content')), 600);
+});
+</script>
+
+</body>
+</html>
