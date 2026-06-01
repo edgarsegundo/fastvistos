@@ -1,0 +1,532 @@
+ds160:
+  questions:
+
+    # ─────────────────────────────────────────────
+    # PAGE: personal_1
+    # ─────────────────────────────────────────────
+
+    - id: surnames
+      question: Surnames
+      hint: "(e.g., FERNANDEZ GARCIA)"
+      help: >
+        Enter all surnames as listed in your passport. If only one name is
+        listed in your passport, enter that Surname.
+      page_id: personal_1
+
+    - id: given_names
+      question: Given Names
+      hint: "(e.g., JUAN MIGUEL)"
+      help: >
+        If your passport does not include a given name, please enter 'FNU'
+        in Given Names.
+      page_id: personal_1
+
+    - id: full_name_native_alphabet
+      question: Full Name in Native Alphabet
+      page_id: personal_1
+
+    - id: has_other_names
+      question: Have you ever used other names (i.e., maiden, religious, professional, alias, etc.)?
+      help: >
+        Other names used include your maiden name, religious name, professional
+        name, or any other names which you are known by or have been known by
+        in the past.
+      page_id: personal_1
+
+    - id: has_telecode
+      question: Do you have a telecode that represents your name?
+      help: >
+        Telecodes are 4 digit code numbers that represent characters in some
+        non-Roman alphabet names.
+      page_id: personal_1
+
+    - id: sex
+      question: Sex
+      help: Please select MALE or FEMALE.
+      page_id: personal_1
+
+    - id: marital_status
+      question: Marital Status
+      page_id: personal_1
+
+    - id: date_of_birth
+      question: Date of Birth
+      hint: "(Format: DD-MMM-YYYY)"
+      help: >
+        If day or month is unknown, enter as shown in passport.
+      page_id: personal_1
+
+    - id: pob_city
+      question: Place of Birth – City
+      page_id: personal_1
+
+    - id: pob_country
+      question: Place of Birth – Country/Region
+      help: >
+        Select the name that is currently in use for the place where you
+        were born.
+      page_id: personal_1
+
+    # ─────────────────────────────────────────────
+    # PAGE: personal_2
+    # ─────────────────────────────────────────────
+
+    - id: nationality
+      question: Country/Region of Origin (Nationality)
+      page_id: personal_2
+
+    - id: has_other_nationality
+      question: Do you hold or have you held any nationality other than the one indicated above on nationality?
+      note: >
+        If Yes, you will need to provide the country, how it was acquired,
+        and whether you hold or held a passport for that country.
+      page_id: personal_2
+
+    - id: other_nationality_how_acquired
+      question: How Was the Other Nationality Acquired?
+      page_id: personal_2
+
+    - id: other_nationality_renounced
+      question: Do/Did You Hold a Passport for This Country/Region?
+      page_id: personal_2
+
+    - id: is_permanent_resident_other_country
+      question: >
+        Are you a permanent resident of a country/region other than your
+        country/region of origin (nationality) indicated above?
+      help: >
+        Permanent resident means any individual who has been legally granted
+        by a country/region permission to live and work without time limitation
+        in that country/region.
+      page_id: personal_2
+
+    - id: national_id_number
+      question: National Identification Number
+      hint: "Apenas números, sem traços ou pontos (ex.: 12345678901)"
+      help: >
+        Your National ID Number is a unique number that your government provides.
+      page_id: personal_2
+
+    - id: us_social_security_number
+      question: U.S. Social Security Number
+      page_id: personal_2
+
+    - id: us_taxpayer_id
+      question: U.S. Taxpayer ID Number
+      help: >
+        The U.S. Government provides unique numbers to those who seek
+        employment (Social Security Number) or pay taxes (Taxpayer ID).
+      page_id: personal_2
+
+    # ─────────────────────────────────────────────
+    # PAGE: travel
+    # ─────────────────────────────────────────────
+
+    - id: purpose_of_trip
+      question: Purpose of Trip to the U.S.
+      note: >
+        Provide the travel purpose that matches your visa class. Selecting
+        certain classes (e.g. B) will reveal a secondary "Specify" field.
+      page_id: travel
+
+    - id: purpose_specify
+      question: Specify (sub-type of visa purpose)
+      page_id: travel
+
+    - id: has_specific_travel_plans
+      question: Have you made specific travel plans?
+      page_id: travel
+
+    - id: intended_arrival_date
+      question: Selecione o mês e ano estimados de chegada aos Estados Unidos
+      hint: "(Format: DD-MMM-YYYY)"
+      help: If you are unsure of your travel plans, please provide an estimate.
+      page_id: travel
+
+    - id: intended_stay_duration
+      question: Quanto tempo pretende ficar nos Estados Unidos?
+      page_id: travel
+
+    - id: us_address_staying_with_relative
+      question: Você vai ficar na casa de algum parente nos Estados Unidos?
+      note: >
+        If yes, address may differ from the default. Address where you will
+        stay in the U.S. is required (Street, City, State, ZIP).
+      page_id: travel
+
+    - id: trip_payer
+      question: Person/Entity Paying for Your Trip
+      page_id: travel
+
+    # ─────────────────────────────────────────────
+    # PAGE: travel_companions
+    # ─────────────────────────────────────────────
+
+    - id: has_travel_companions
+      question: Are there other persons traveling with you?
+      hint: >
+        Descreva cada acompanhante com NOME COMPLETO e GRAU DE PARENTESCO
+        ou RELAÇÃO no formato: João Silva Oliveira = Pai / Larissa Conceição
+        Medeiros = Esposa / Jean Costa Martinelli = Amigo. Deixe em branco
+        se vai viajar sozinho.
+      help: >
+        You should answer Yes to this question if you are traveling with family,
+        as part of an organized tour, or as part of a performing group or
+        athletic team. You do not need to list individuals who are traveling with
+        you for the purposes of employment with the same employer.
+      page_id: travel_companions
+
+    - id: is_group_travel
+      question: Are you traveling as part of a group or organization?
+      page_id: travel_companions
+
+    # ─────────────────────────────────────────────
+    # PAGE: previous_us_travel
+    # ─────────────────────────────────────────────
+
+    - id: has_been_in_us
+      question: Have you ever been in the U.S.?
+      note: >
+        If Yes, you will need to provide arrival date and length of stay
+        for each previous visit (up to 5 entries).
+      page_id: previous_us_travel
+
+    - id: has_us_visa
+      question: Have you ever been issued a U.S. Visa?
+      note: >
+        If Yes, provide the visa issue date, visa number, and answer the
+        follow-up questions about same type, same country, ten-printing,
+        and lost/stolen status.
+      page_id: previous_us_travel
+
+    - id: previous_visa_same_type
+      question: Are you applying for the same visa classification?
+      page_id: previous_us_travel
+
+    - id: previous_visa_same_country
+      question: >
+        Are you applying in the same country or location where the visa above
+        was issued, and is this country or location your principal place of
+        residence?
+      page_id: previous_us_travel
+
+    - id: previous_visa_ten_printed
+      question: Have you been ten-printed?
+      page_id: previous_us_travel
+
+    - id: previous_visa_lost
+      question: Was your most recent U.S. visa lost or stolen?
+      page_id: previous_us_travel
+
+    - id: has_visa_refused
+      question: >
+        Have you ever been refused a U.S. Visa, or been refused admission to
+        the United States, or withdrawn your application for admission at the
+        port of entry?
+      page_id: previous_us_travel
+
+    - id: has_iv_petition
+      question: >
+        Has anyone ever filed an immigrant petition on your behalf with the
+        United States Citizenship and Immigration Services?
+      page_id: previous_us_travel
+
+    # ─────────────────────────────────────────────
+    # PAGE: address_phone
+    # ─────────────────────────────────────────────
+
+    - id: home_address
+      question: Home Address
+      note: >
+        Provide street address, city, state/province, postal code, and
+        country/region of your current home address.
+      page_id: address_phone
+
+    - id: mailing_address_same_as_home
+      question: Is your Mailing Address the same as your Home Address?
+      page_id: address_phone
+
+    - id: primary_phone
+      question: Primary Phone Number
+      help: >
+        You must provide a primary phone number. The primary phone number should
+        be the phone number at which you are most likely to be reached; this
+        could be a land line or a cellular/mobile number. If you have an
+        additional land line or a cellular/mobile number please list that as
+        your secondary phone number.
+      page_id: address_phone
+
+    - id: secondary_phone
+      question: Secondary Phone Number
+      page_id: address_phone
+
+    - id: work_phone
+      question: Work Phone Number
+      page_id: address_phone
+
+    - id: has_additional_phones
+      question: Have you used any other phone numbers in the last five years?
+      page_id: address_phone
+
+    - id: email_address
+      question: Email Address
+      hint: "(e.g., emailaddress@example.com)"
+      help: >
+        You must provide an email address. The email address you provide will
+        be used for correspondence purposes. Provide an email address that is
+        secure and to which you have reasonable access.
+      page_id: address_phone
+
+    - id: has_additional_emails
+      question: Have you used any other email addresses in the last five years?
+      page_id: address_phone
+
+    - id: social_media_entries
+      question: Social Media Platforms used in the last five years
+      note: >
+        Select each social media platform used within the last five years and
+        enter the username or handle. Do not provide passwords. Select NONE if
+        no listed platforms were used in the last five years.
+      help: >
+        Enter information associated with your online presence, including the
+        types of online providers/platforms, applications and websites that you
+        use to collaborate, share information, and interact with others. List the
+        username, handle, screen-name, or other identifiers associated with your
+        social media profile.
+      page_id: address_phone
+
+    - id: has_additional_social_media
+      question: >
+        Do you wish to provide information about your presence on any other
+        websites or applications you have used within the last five years to
+        create or share content (photos, videos, status updates, etc.)?
+      page_id: address_phone
+
+    # ─────────────────────────────────────────────
+    # PAGE: passport
+    # ─────────────────────────────────────────────
+
+    - id: passport_type
+      question: Passport/Travel Document Type
+      help: >
+        Enter the information on the travel document you will be using when
+        traveling to the U.S. Your travel document should be a valid, unexpired
+        passport or other valid, unexpired documentation that is sufficient to
+        establish your identity and nationality.
+      page_id: passport
+
+    - id: passport_number
+      question: Passport/Travel Document Number
+      page_id: passport
+
+    - id: passport_book_number
+      question: Passport Book Number
+      help: >
+        The Passport Book Number is commonly called the inventory control number.
+        You may or may not have a Passport Book Number on your passport. Please
+        contact your passport issuing authority if you are unable to determine
+        whether or not your passport contains a Passport Book Number.
+      page_id: passport
+
+    - id: passport_issuing_country
+      question: Country/Authority that Issued Passport/Travel Document
+      page_id: passport
+
+    - id: passport_issued_location
+      question: Where was the Passport/Travel Document Issued?
+      hint: "City, State/Province (*If shown on passport), Country/Region"
+      page_id: passport
+
+    - id: issuance_date
+      question: Passport Issuance Date
+      hint: "(Format: DD-MMM-YYYY)"
+      page_id: passport
+
+    - id: expiration_date
+      question: Passport Expiration Date
+      hint: "(Format: DD-MMM-YYYY)"
+      help: >
+        In most cases your passport/Travel Document must have at least six months
+        of validity beyond the date of your visa application and/or your arrival
+        in the United States.
+      page_id: passport
+
+    - id: has_lost_passport
+      question: Have you ever lost a passport or had one stolen?
+      page_id: passport
+
+    # ─────────────────────────────────────────────
+    # PAGE: us_contact
+    # ─────────────────────────────────────────────
+
+    - id: poc_surname
+      question: U.S. Point of Contact – Surnames
+      help: >
+        Your U.S. Point of Contact can be any individual in the U.S. who knows
+        you and can verify, if necessary, your identity. If you do not personally
+        know anyone in the U.S., you may enter the name of the store, company, or
+        organization you plan to visit during your trip.
+      page_id: us_contact
+
+    - id: poc_given_name
+      question: U.S. Point of Contact – Given Names
+      page_id: us_contact
+
+    - id: poc_organization
+      question: U.S. Point of Contact – Organization Name
+      page_id: us_contact
+
+    - id: poc_relationship
+      question: U.S. Point of Contact – Relationship to You
+      page_id: us_contact
+
+    - id: poc_phone
+      question: U.S. Point of Contact – Phone Number
+      page_id: us_contact
+
+    # ─────────────────────────────────────────────
+    # PAGE: family_relatives
+    # ─────────────────────────────────────────────
+
+    - id: father_name
+      question: Father's Full Name (Surnames and Given Names)
+      hint: "(e.g., Hernandez Garcia / Juan Miguel)"
+      note: >
+        Please provide the following information concerning your biological
+        parents. If you are adopted, please provide the following information
+        on your adoptive parents.
+      page_id: family_relatives
+
+    - id: father_dob
+      question: Father's Date of Birth
+      hint: "(Format: DD-MMM-YYYY)"
+      page_id: family_relatives
+
+    - id: father_in_us
+      question: Is your father in the U.S.?
+      page_id: family_relatives
+
+    - id: mother_name
+      question: Mother's Full Name (Surnames and Given Names)
+      hint: "(e.g., Hernandez Garcia / Juanita Miguel)"
+      page_id: family_relatives
+
+    - id: mother_dob
+      question: Mother's Date of Birth
+      hint: "(Format: DD-MMM-YYYY)"
+      page_id: family_relatives
+
+    - id: mother_in_us
+      question: Is your mother in the U.S.?
+      page_id: family_relatives
+
+    - id: has_us_immediate_relatives
+      question: Do you have any immediate relatives, not including parents, in the United States?
+      help: >
+        Immediate relatives means fiancé/fiancée, spouse (husband/wife),
+        child (son/daughter), or sibling (brother/sister).
+      page_id: family_relatives
+
+    # ─────────────────────────────────────────────
+    # PAGE: family_spouse
+    # ─────────────────────────────────────────────
+
+    - id: spouse_surname
+      question: Spouse's Surnames
+      note: Enter current spouse information.
+      page_id: family_spouse
+
+    - id: spouse_given_name
+      question: Spouse's Given Names
+      page_id: family_spouse
+
+    - id: spouse_dob
+      question: Spouse's Date of Birth
+      hint: "(Format: DD-MMM-YYYY)"
+      page_id: family_spouse
+
+    - id: spouse_nationality
+      question: Spouse's Country/Region of Origin (Nationality)
+      page_id: family_spouse
+
+    - id: spouse_place_of_birth
+      question: Spouse's Place of Birth (City and Country/Region)
+      page_id: family_spouse
+
+    - id: spouse_address_type
+      question: Spouse's Address
+      note: >
+        Options include Same as Home Address, Same as Mailing Address,
+        Same as U.S. Contact Address, Do Not Know, or Other (Specify Address).
+      page_id: family_spouse
+
+    # ─────────────────────────────────────────────
+    # PAGE: work_education_present
+    # ─────────────────────────────────────────────
+
+    - id: present_occupation
+      question: Primary Occupation
+      note: >
+        Provide the following information concerning your current employment
+        or education. Selecting certain occupations reveals additional
+        employer or school detail fields.
+      page_id: work_education_present
+
+    # ─────────────────────────────────────────────
+    # PAGE: work_education_previous
+    # ─────────────────────────────────────────────
+
+    - id: was_previously_employed
+      question: Were you previously employed?
+      note: >
+        Provide your employment information for the last five years that
+        you were employed, if applicable.
+      page_id: work_education_previous
+
+    - id: has_attended_educational_institution
+      question: Have you attended any educational institutions at a secondary level or above?
+      help: >
+        You must answer Yes if you have ever attended, for any length of time,
+        a high school/secondary school (or its equivalent in your country) or
+        college, university, graduate school, a doctoral program, or a
+        vocational program.
+      page_id: work_education_previous
+
+    # ─────────────────────────────────────────────
+    # PAGE: work_education_additional
+    # ─────────────────────────────────────────────
+
+    - id: belongs_to_clan_tribe
+      question: Do you belong to a clan or tribe?
+      page_id: work_education_additional
+
+    - id: languages_spoken
+      question: Provide a List of Languages You Speak
+      note: >
+        At least one language entry is required.
+      page_id: work_education_additional
+
+    - id: has_traveled_to_countries
+      question: Have you traveled to any countries/regions within the last five years?
+      page_id: work_education_additional
+
+    - id: belongs_to_organization
+      question: Have you belonged to, contributed to, or worked for any professional, social, or charitable organization?
+      page_id: work_education_additional
+
+    - id: has_specialized_skills
+      question: >
+        Do you have any specialized skills or training, such as firearms,
+        explosives, nuclear, biological, or chemical experience?
+      page_id: work_education_additional
+
+    - id: has_military_service
+      question: Have you ever served in the military?
+      page_id: work_education_additional
+
+    - id: has_insurgent_org
+      question: >
+        Have you ever served in, been a member of, or been involved with a
+        paramilitary unit, vigilante unit, rebel group, guerrilla group, or
+        insurgent organization?
+      page_id: work_education_additional
