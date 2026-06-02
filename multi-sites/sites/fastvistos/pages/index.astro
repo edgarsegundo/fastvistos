@@ -19,6 +19,8 @@ import { reviewVideos } from '../config/reviewVideosConfig.js';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 import VideosSection from '../components/VideosSection.astro';
 import NationalSection from '../components/NationalSection.astro';
+import TermsOfUseSection from '../components/TermsOfUseSection.astro';
+import PrivacyPolicySection from '../components/PrivacyPolicySection.astro';
 
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
@@ -66,6 +68,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         siteId={siteConfig.site.id}
     />
     <GoogleMapsSection />
+    <TermsOfUseSection />
+    <PrivacyPolicySection />
     <CallToActionSection />
     <FooterSection />
     <Whatsapp />
