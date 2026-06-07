@@ -1860,5 +1860,24 @@
       "trump-gold-visawebp-320-1x.webp 320w",
       "trump-gold-visawebp-320-2x.webp 640w"
     ]
+  },
+  "visawebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC1ElEQVR4nB3L2VMSAQCA8f3/ahpzHMxMjVSWzAuFKUYjlQBBEQ8QEEEFJGkRDwxWwDhccBQPVAa5lpVdNO4VFqvHxma+h9/LB1QSGJm8JVMEmc6Rt6UHvFzFKxSW/43if1Pon1SqnkqXY+nMRfLSF3FZQxs6ZGHG82UMHmDvAmQcJeMYmSSqWL6Gl+vZCkVUHrBi8YbAzxIxJHLmvjz8cQFbT7/rg2q5VzLp4vEc/UPbdHADoJIpCsUoLFtN50rJPBG5vwllQt6Ez37t3LrYNh2vqPxLCr9K7lcrEYHQNci2tXebaW2Gly06IB+J4+exaCB67Lo+sIVt0Llp7Xh1OajTBFeWj5QKZGzcIRC6ZDKPVnsknfWxuXY600JrMza16oF9CLHqvatKl3J2Xyp2SKdcfD7M58MikVMm82g0RwIhLBDC4/w90eQ+d9TG6LW8BaEO0NLVuwXIxHaJwPaJbR7hWlgs88joDo+3x+c7pqbcYrFzfv7nZ95O/+BGN9PYyTAyejaYvZbRMef0bECpOQVA0Nj7YZ01YJqbcU5L4EmhY3RkZ3gYGhqCGKDxaQP1tFdLTc2aN+161tCWUOReM5w5nalAgACaXy93gwYOB1IseMQimMOxvO8xdXYb6J36Rpq6oUn1olH1vEHFAM0SsWfTfO1zo+HQPRar3KNV4FmDoqVNxxq2isXur3wHh7PZ329mDUJ9feZ3XettdGNrh4HZA01JvPBeIn5dukNreayWQx/uYhWguVXbxTR95O5OjMMTY3bBBCyVHKjkiHoxuCgPKOTB+XlEqwnt7yViV6UCThXw6i+0kr0pZSIFgMezTYqcC3N+9WJwdfkYMoXh3ZtDF3rix0+D2ZNA9sj3hMRVMYfVylmqRFSLmYcCVimky4BK7llZQr6tnVhNYftW1AujISQbvShk4mTulioSj0XisUTUy9k6eVcn76lqjqrl/5er/QM6ausyp801gQAAAABJRU5ErkJggg==",
+    "jpeg": [
+      "visawebp-1216-1x.jpeg 1216w",
+      "visawebp-1216-2x.jpeg 2432w",
+      "visawebp-608-1x.jpeg 608w",
+      "visawebp-608-2x.jpeg 1216w",
+      "visawebp-320-1x.jpeg 320w",
+      "visawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "visawebp-1216-1x.webp 1216w",
+      "visawebp-1216-2x.webp 2432w",
+      "visawebp-608-1x.webp 608w",
+      "visawebp-608-2x.webp 1216w",
+      "visawebp-320-1x.webp 320w",
+      "visawebp-320-2x.webp 640w"
+    ]
   }
 }
