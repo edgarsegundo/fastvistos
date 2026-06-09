@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DS-160 — Informações Pessoais 1</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; background: #f5f5f5; color: #111; }
+
+    #app { display: flex; flex-direction: column; height: 100vh; max-width: 680px; margin: 0 auto; background: #fff; }
+
+    .header { padding: 1rem; background: #000; color: #fff; flex-shrink: 0; }
+    .header h1 { font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 0.2rem; }
+    .header .subtitle { font-size: 0.85rem; color: #aaa; }
+
+    .progress { padding: 0.6rem 1rem; border-bottom: 1px solid #ddd; flex-shrink: 0; background: #fafafa; }
+    .progress-meta { font-size: 0.8rem; color: #555; margin-bottom: 0.4rem; }
+    .progress-meta strong { color: #000; }
+    .progress-bar { height: 4px; background: #ddd; border-radius: 2px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: #000; transition: width .35s ease; }
+
+    .scroll-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .content { padding: 1rem; padding-bottom: 5rem; }
+
+    .page-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .page-note { font-size: 0.8rem; color: #666; margin-bottom: 1rem; background: #fffbe6; border-left: 3px solid #f0c040; padding: 0.5rem 0.75rem; border-radius: 2px; }
+
+    .section-heading { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #555; margin: 1.2rem 0 0.7rem; border-bottom: 1px solid #eee; padding-bottom: 0.3rem; }
+
+    .field { margin-bottom: 1.1rem; }
+    .field label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: #000; }
+    .field .req { color: #c0392b; margin-left: 2px; }
+    .field .hint { font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; display: block; }
+    .field input[type="text"], .field input[type="number"],
+    .field textarea, .field select {
+      width: 100%; font-size: 0.95rem; padding: 0.65rem 0.7rem;
+      border: 1px solid #bbb; border-radius: 4px; background: #fff;
+      transition: border-color .15s; font-family: inherit;
+    }
+    .field input[type="text"]:focus, .field textarea:focus, .field select:focus { 
+      border-color: #000; outline: none; box-shadow: 0 0 0 2px rgba(0,0,0,.08); 
+    }
+    .field input.err, .field select.err, .field textarea.err { border-color: #c0392b; }
+    .field .err-msg { font-size: 0.75rem; color: #c0392b; margin-top: 0.2rem; display: none; }
+    .field .err-msg.show { display: block; }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field select { cursor: pointer; }
+
+    .field-row { display: flex; gap: 0.5rem; }
+    .field-row .field { flex: 1; margin-bottom: 0; }
+
+    .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .radio-group label { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; font-size: 0.9rem; cursor: pointer; }
+    .radio-group input { width: 1.1rem; height: 1.1rem; cursor: pointer; flex-shrink: 0; accent-color: #000; }
+
+    .check-row { display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.4rem; }
+    .check-row input { width: 1.1rem; height: 1.1rem; cursor: pointer; margin-top: 0.15rem; accent-color: #000; flex-shrink: 0; }
+    .check-row label { font-size: 0.8rem; font-weight: normal; cursor: pointer; }
+
+    .repeatable { border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 1rem; overflow: hidden; background: #fff; display: none; }
+    .repeatable.show { display: block; }
+    .repeatable-item { padding: 0.8rem; border-bottom: 1px solid #eee; position: relative; }
+    .repeatable-item:last-child { border-bottom: none; }
+    .repeatable-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+    .repeatable-header span { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #777; }
+    .btn-remove { background: none; border: 1px solid #ddd; border-radius: 4px; color: #888; font-size: 0.75rem; padding: 0.25rem 0.6rem; cursor: pointer; }
+    .btn-remove:hover { background: #fef; border-color: #c0392b; color: #c0392b; }
+    .repeatable-add { display: flex; justify-content: center; padding: 0.5rem; background: #f9f9f9; border-top: 1px solid #e0e0e0; }
+    .btn-add { background: none; border: 1px dashed #999; border-radius: 4px; font-size: 0.8rem; color: #444; padding: 0.35rem 0.9rem; cursor: pointer; }
+    .btn-add:hover { border-color: #000; color: #000; background: #f0f0f0; }
+
+    .validation-summary { background: #fff0f0; border: 1px solid #f5c6c6; border-radius: 4px; padding: 0.7rem 0.9rem; margin-bottom: 1rem; font-size: 0.8rem; color: #a00; display: none; }
+    .validation-summary.show { display: block; }
+    .validation-summary ul { margin: 0.3rem 0 0 1.1rem; }
+
+    .nav { display: flex; gap: 0.6rem; padding: 0.8rem 1rem; border-top: 1px solid #ddd; background: #000; flex-shrink: 0; }
+    .nav button { flex: 1; padding: 0.85rem; font-size: 0.9rem; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; font-weight: 500; transition: background .15s; }
+    .nav button:hover { background: #444; }
+    .nav button.primary { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
+    .nav button.primary:hover { background: #e8e8e8; }
+    .nav button:disabled { opacity: .4; cursor: not-allowed; }
+
+    .btn-export { background: none; border: 1px dashed #555; color: #666; font-size: 0.8rem; padding: 0.3rem 0.7rem; cursor: pointer; border-radius: 4px; }
+    .btn-export:hover { border-color: #000; color: #000; }
+
+    .toast { position: fixed; bottom: 1.5rem; right: 1rem; background: #000; color: #fff; font-size: 0.8rem; padding: 0.6rem 0.9rem; border-radius: 4px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 100; }
+    .toast.show { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <header class="header">
+    <h1>DS-160 — Visto Americano</h1>
+    <div class="subtitle">Seção 1 de 10 · Informações Pessoais — Parte 1</div>
+  </header>
+
+  <div class="progress">
+    <div class="progress-meta">Página <strong>1</strong> de <strong>10</strong> — <strong>10%</strong></div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" style="width:10%"></div>
+    </div>
+  </div>
+
+  <div class="scroll-container">
+    <div class="content">
+      
+      <div class="page-title">Informações Pessoais — Parte 1</div>
+      <div class="page-note">Os dados desta página devem ser idênticos às informações do seu passaporte. Respostas salvas automaticamente.</div>
+
+      <div id="validation-summary" class="validation-summary"></div>
+
+      <form id="ds160-form" novalidate>
+
+        <!-- IDENTIFICAÇÃO -->
+        <div class="section-heading">Identificação — Conforme Passaporte</div>
+        
+        <div class="field">
+          <label>Sobrenome(s) <span class="req">*</span></label>
+          <input type="text" id="surnames" name="surnames" maxlength="33" placeholder="Ex.: SILVA FERREIRA" autocomplete="off" />
+          <div class="err-msg" id="err-surnames">Sobrenome é obrigatório</div>
+        </div>
+
+        <div class="field">
+          <label>Nome(s) <span class="req">*</span></label>
+          <input type="text" id="given_names" name="given_names" maxlength="33" placeholder="Ex.: JOÃO PEDRO" autocomplete="off" />
+          <span class="hint">Se o passaporte não tiver nome, digite: FNU</span>
+          <div class="err-msg" id="err-given_names">Nome é obrigatório</div>
+        </div>
+
+        <!-- DADOS PESSOAIS -->
+        <div class="section-heading">Dados Pessoais</div>
+
+        <div class="field">
+          <label>Sexo <span class="req">*</span></label>
+          <select id="sex" name="sex">
+            <option value="">— Selecione —</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+          </select>
+          <div class="err-msg" id="err-sex">Selecione o sexo</div>
+        </div>
+
+        <div class="field">
+          <label>Estado civil <span class="req">*</span></label>
+          <select id="marital_status" name="marital_status">
+            <option value="">— Selecione —</option>
+            <option value="M">Casado(a)</option>
+            <option value="C">União estável</option>
+            <option value="P">Parceria civil</option>
+            <option value="S">Solteiro(a)</option>
+            <option value="W">Viúvo(a)</option>
+            <option value="D">Divorciado(a)</option>
+            <option value="L">Separado(a) judicialmente</option>
+          </select>
+          <div class="err-msg" id="err-marital_status">Selecione o estado civil</div>
+        </div>
+
+        <!-- DATA E LOCAL DE NASCIMENTO -->
+        <div class="section-heading">Data e Local de Nascimento</div>
+
+        <div class="field">
+          <label>Data de nascimento <span class="req">*</span></label>
+          <div class="field-row">
+            <div>
+              <select id="dob_day" name="dob_day">
+                <option value="">Dia</option>
+              </select>
+            </div>
+            <div>
+              <select id="dob_month" name="dob_month">
+                <option value="">Mês</option>
+              </select>
+            </div>
+            <div>
+              <input type="text" id="dob_year" name="dob_year" maxlength="4" placeholder="Ano" autocomplete="off" />
+            </div>
+          </div>
+          <div class="err-msg" id="err-dob">Data de nascimento inválida</div>
+        </div>
+
+        <div class="field">
+          <label>Cidade de nascimento <span class="req">*</span></label>
+          <input type="text" id="pob_city" name="pob_city" maxlength="20" placeholder="Ex.: SÃO PAULO" autocomplete="off" />
+          <div class="err-msg" id="err-pob_city">Cidade de nascimento é obrigatória</div>
+        </div>
+
+        <div class="field">
+          <label>Estado / Província</label>
+          <input type="text" id="pob_state_province" name="pob_state_province" maxlength="20" placeholder="Ex.: SÃO PAULO" autocomplete="off" />
+          <div class="check-row">
+            <input type="checkbox" id="pob_state_province_na" name="pob_state_province_na" />
+            <label for="pob_state_province_na">Não se aplica</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>País de nascimento <span class="req">*</span></label>
+          <div id="country-selector">
+            <button type="button" class="btn-add" onclick="selectCountryBrazil(); return false;">🇧🇷 Brasil</button>
+            <button type="button" class="btn-add" onclick="selectCountryOther(); return false;">Outro país →</button>
+          </div>
+          <select id="pob_country" name="pob_country" style="display:none;">
+            <option value="">— Selecione —</option>
+          </select>
+          <div id="country-selected" style="display:none; margin-top: 0.5rem; padding: 0.6rem; background: #f0f0f0; border-radius: 4px; font-size: 0.9rem;"></div>
+          <div class="err-msg" id="err-pob_country">País de nascimento é obrigatório</div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <div class="nav">
+    <button type="button" onclick="exportJSON()" class="btn-export">↓ JSON</button>
+    <button type="button" onclick="goBack()" >← Voltar</button>
+    <button type="button" class="primary" onclick="goNext()">Próximo →</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+// STORE & CONFIG
+// ═══════════════════════════════════════════════════════════════════════
+const PAGE_KEY = 'ds160_personal1';
+const MONTHS = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+const DAYS = Array.from({length:31}, (_,i) => String(i+1).padStart(2,'0'));
+
+const COUNTRIES = [
+  {v:'BRZL',l:'🇧🇷 BRASIL'},
+  {v:'AFGH',l:'AFEGANISTÃO'},{v:'ALB',l:'ALBÂNIA'},{v:'ARGR',l:'ARGÉLIA'},{v:'ANDO',l:'ANDORRA'},
+  {v:'ANGO',l:'ANGOLA'},{v:'ANTI',l:'ANTÍGUA E BARBUDA'},{v:'ARG',l:'ARGENTINA'},{v:'ARM',l:'ARMÊNIA'},
+  {v:'AUS',l:'AUSTRÁLIA'},{v:'AUST',l:'ÁUSTRIA'},{v:'AZE',l:'AZERBAIJÃO'},{v:'BAH',l:'BAHAMAS'},
+  {v:'BAHS',l:'BAHREIN'},{v:'BANG',l:'BANGLADESH'},{v:'BARB',l:'BARBADOS'},{v:'BYS',l:'BELARUS'},
+  {v:'BELG',l:'BÉLGICA'},{v:'BEZE',l:'BELIZE'},{v:'BEN',l:'BENIM'},{v:'BERM',l:'BERMUDAS'},
+  {v:'BHU',l:'BUTÃO'},{v:'BOL',l:'BOLÍVIA'},{v:'BIH',l:'BÓSNIA E HERZEGOVINA'},{v:'BOT',l:'BOTSUANA'},
+  {v:'BRU',l:'BRUNEI'},{v:'BUL',l:'BULGÁRIA'},{v:'BURK',l:'BURKINA FASO'},{v:'BURM',l:'BIRMÂNIA'},
+  {v:'BUR',l:'BURUNDI'},{v:'CAM',l:'CAMBOJA'},{v:'CAM2',l:'CAMARÕES'},{v:'CAN',l:'CANADÁ'},
+  {v:'CCV',l:'CABO VERDE'},{v:'CAY',l:'ILHAS CAYMAN'},{v:'CAR',l:'REPÚBLICA CENTRO-AFRICANA'},
+  {v:'CHA',l:'CHADE'},{v:'CHI',l:'CHILE'},{v:'CHN',l:'CHINA'},{v:'COL',l:'COLÔMBIA'},
+  {v:'COM',l:'COMORES'},{v:'COD',l:'CONGO - REPÚBLICA DEMOCRÁTICA'},{v:'CON',l:'CONGO - REPÚBLICA'},
+  {v:'CRC',l:'COSTA RICA'},{v:'CIV',l:"COSTA DO MARFIM"},{v:'HRV',l:'CROÁCIA'},{v:'CUB',l:'CUBA'},
+  {v:'CYP',l:'CHIPRE'},{v:'CZE',l:'REPÚBLICA TCHECA'},{v:'DEN',l:'DINAMARCA'},{v:'DJI',l:'DJIBUTI'},
+  {v:'DOM',l:'DOMINICA'},{v:'DOR',l:'REPÚBLICA DOMINICANA'},{v:'ECU',l:'EQUADOR'},{v:'EGY',l:'EGITO'},
+  {v:'ESV',l:'EL SALVADOR'},{v:'EGN',l:'GUINÉ EQUATORIAL'},{v:'ERI',l:'ERITREIA'},{v:'EST',l:'ESTÔNIA'},
+  {v:'ETH',l:'ETIÓPIA'},{v:'FIJ',l:'FIJI'},{v:'FIN',l:'FINLÂNDIA'},{v:'FRA',l:'FRANÇA'},
+  {v:'GAB',l:'GABÃO'},{v:'GAM',l:'GÂMBIA'},{v:'GEO',l:'GEÓRGIA'},{v:'GER',l:'ALEMANHA'},
+  {v:'GHA',l:'GANA'},{v:'GRE',l:'GRÉCIA'},{v:'GRL',l:'GROENLÂNDIA'},{v:'GRN',l:'GRANADA'},
+  {v:'GUA',l:'GUAM'},{v:'GTM',l:'GUATEMALA'},{v:'GUI',l:'GUINÉ'},{v:'GUB',l:'GUINÉ-BISSAU'},
+  {v:'GUY',l:'GUIANA'},{v:'HAI',l:'HAITI'},{v:'VAT',l:'SANTA SÉ'},{v:'HON',l:'HONDURAS'},
+  {v:'HKG',l:'HONG KONG'},{v:'HUN',l:'HUNGRIA'},{v:'ISL',l:'ISLÂNDIA'},{v:'IND',l:'ÍNDIA'},
+  {v:'IDO',l:'INDONÉSIA'},{v:'IRA',l:'IRÃ'},{v:'IRQ',l:'IRAQUE'},{v:'IRE',l:'IRLANDA'},
+  {v:'ISR',l:'ISRAEL'},{v:'ITA',l:'ITÁLIA'},{v:'JAM',l:'JAMAICA'},{v:'JPN',l:'JAPÃO'},
+  {v:'JOR',l:'JORDÂNIA'},{v:'KAZ',l:'CAZAQUISTÃO'},{v:'KEN',l:'QUÊNIA'},{v:'RKS',l:'CORÉIA DO SUL'},
+  {v:'PRK',l:'CORÉIA DO NORTE'},{v:'KOS',l:'KOSOVO'},{v:'KUW',l:'KUWAIT'},{v:'KYG',l:'QUIRGUISTÃO'},
+  {v:'LAO',l:'LAOS'},{v:'LAT',l:'LETÔNIA'},{v:'LIB',l:'LÍBANO'},{v:'LES',l:'LESOTO'},
+  {v:'LBR',l:'LIBÉRIA'},{v:'LBY',l:'LÍBIA'},{v:'LIE',l:'LIECHTENSTEIN'},{v:'LTU',l:'LITUÂNIA'},
+  {v:'LUX',l:'LUXEMBURGO'},{v:'MAC',l:'MACAU'},{v:'MKD',l:'REPÚBLICA DA MACEDÔNIA'},
+  {v:'MAD',l:'MADAGASCAR'},{v:'MLW',l:'MALAUI'},{v:'MAS',l:'MALÁSIA'},{v:'MDV',l:'MALDIVAS'},
+  {v:'MLI',l:'MALI'},{v:'MLT',l:'MALTA'},{v:'MHL',l:'ILHAS MARSHALL'},{v:'MAU',l:'MAURITÂNIA'},
+  {v:'MUS',l:'MAURÍCIO'},{v:'MEX',l:'MÉXICO'},{v:'MIC',l:'MICRONÉSIA'},{v:'MLD',l:'MOLDÁVIA'},
+  {v:'MON',l:'MÔNACO'},{v:'MNG',l:'MONGÓLIA'},{v:'MNE',l:'MONTENEGRO'},{v:'MNT',l:'MONSERRATE'},
+  {v:'MOR',l:'MARROCOS'},{v:'MOZ',l:'MOÇAMBIQUE'},{v:'NAM',l:'NAMÍBIA'},{v:'NAU',l:'NAURU'},
+  {v:'NEP',l:'NEPAL'},{v:'NET',l:'HOLANDA'},{v:'NZL',l:'NOVA ZELÂNDIA'},{v:'NIC',l:'NICARÁGUA'},
+  {v:'NGA',l:'NIGER'},{v:'NGR',l:'NIGÉRIA'},{v:'NOR',l:'NORUEGA'},{v:'OMN',l:'OMÃ'},
+  {v:'PAK',l:'PAQUISTÃO'},{v:'PLW',l:'PALAU'},{v:'PSE',l:'PALESTINA'},{v:'PAN',l:'PANAMÁ'},
+  {v:'PNG',l:'PAPUA NOVA GUINÉ'},{v:'PAR',l:'PARAGUAI'},{v:'PER',l:'PERU'},{v:'FLP',l:'FILIPINAS'},
+  {v:'POL',l:'POLÔNIA'},{v:'POR',l:'PORTUGAL'},{v:'QAT',l:'CATAR'},{v:'ROM',l:'ROMÊNIA'},
+  {v:'RUS',l:'RÚSSIA'},{v:'RWA',l:'RUANDA'},{v:'SAM',l:'SAMOA'},{v:'SMR',l:'SÃO MARINO'},
+  {v:'SAU',l:'ARÁBIA SAUDITA'},{v:'SEN',l:'SENEGAL'},{v:'SRB',l:'SÉRVIA'},{v:'SEY',l:'SEYCHELLES'},
+  {v:'SLE',l:'SERRA LEOA'},{v:'SNG',l:'SINGAPURA'},{v:'SVK',l:'ESLOVÁQUIA'},{v:'SVN',l:'ESLOVÊNIA'},
+  {v:'SLM',l:'ILHAS SALOMÃO'},{v:'SOM',l:'SOMÁLIA'},{v:'ZAF',l:'ÁFRICA DO SUL'},{v:'SSD',l:'SUDÃO DO SUL'},
+  {v:'ESP',l:'ESPANHA'},{v:'SRI',l:'SRI LANCA'},{v:'KIT',l:'SÃO CRISTÓVÃO E NEVIS'},
+  {v:'LCA',l:'SANTA LÚCIA'},{v:'VCT',l:'SÃO VICENTE E GRANADINAS'},{v:'SDN',l:'SUDÃO'},
+  {v:'SUR',l:'SURINAME'},{v:'SWE',l:'SUÉCIA'},{v:'SUI',l:'SUÍÇA'},{v:'SYR',l:'SÍRIA'},
+  {v:'TWN',l:'TAIWAN'},{v:'TJK',l:'TAJIQUISTÃO'},{v:'TZN',l:'TANZÂNIA'},{v:'THA',l:'TAILÂNDIA'},
+  {v:'TIM',l:'TIMOR LESTE'},{v:'TOG',l:'TOGO'},{v:'TON',l:'TONGA'},{v:'TTO',l:'TRINIDAD E TOBAGO'},
+  {v:'TUN',l:'TUNÍSIA'},{v:'TUR',l:'TURQUIA'},{v:'TKM',l:'TURCOMENISTÃO'},{v:'TUV',l:'TUVALU'},
+  {v:'UGA',l:'UGANDA'},{v:'UKR',l:'UCRÂNIA'},{v:'UAE',l:'EMIRADOS ÁRABES UNIDOS'},
+  {v:'GBR',l:'REINO UNIDO'},{v:'USA',l:'ESTADOS UNIDOS'},{v:'URU',l:'URUGUAI'},
+  {v:'UZB',l:'UZBEQUISTÃO'},{v:'VAN',l:'VANUATU'},{v:'VEN',l:'VENEZUELA'},{v:'VTN',l:'VIETNÃ'},
+  {v:'YEM',l:'IÊMEN'},{v:'ZMB',l:'ZÂMBIA'},{v:'ZIM',l:'ZIMBÁBUE'}
+];
+
+// ═══════════════════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════════════════
+function loadState() {
+  try {
+    const raw = localStorage.getItem(PAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+
+function saveState() {
+  const state = collectValues();
+  localStorage.setItem(PAGE_KEY, JSON.stringify(state));
+  showToast('Salvo');
+}
+
+function showToast(msg = 'Salvo') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// COLLECT & RESTORE
+// ═══════════════════════════════════════════════════════════════════════
+function collectValues() {
+  const form = document.getElementById('ds160-form');
+  const data = {};
+  
+  new FormData(form).forEach((val, key) => {
+    if (data[key]) {
+      if (!Array.isArray(data[key])) data[key] = [data[key]];
+      data[key].push(val);
+    } else {
+      data[key] = val;
+    }
+  });
+
+  // País
+  const countryVal = document.querySelector('#pob_country').value;
+  if (countryVal) data.pob_country = countryVal;
+
+  return data;
+}
+
+function restoreState(state) {
+  Object.entries(state).forEach(([key, val]) => {
+    const el = document.querySelector(`[name="${key}"]`);
+    if (!el) return;
+    el.value = val;
+  });
+
+  // Restore country
+  if (state.pob_country) {
+    document.getElementById('pob_country').value = state.pob_country;
+    displayCountrySelected(state.pob_country);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// COUNTRY SELECTOR
+// ═══════════════════════════════════════════════════════════════════════
+function selectCountryBrazil() {
+  document.getElementById('pob_country').value = 'BRZL';
+  displayCountrySelected('BRZL');
+  saveState();
+}
+
+function selectCountryOther() {
+  document.getElementById('country-selector').style.display = 'none';
+  document.getElementById('pob_country').style.display = 'block';
+  document.getElementById('pob_country').focus();
+}
+
+function displayCountrySelected(val) {
+  const label = COUNTRIES.find(c => c.v === val)?.l || val;
+  const sel = document.getElementById('country-selected');
+  sel.textContent = label;
+  sel.style.display = 'block';
+  document.getElementById('country-selector').style.display = 'none';
+  document.getElementById('pob_country').style.display = 'none';
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'pob_country' && e.target.value) {
+    displayCountrySelected(e.target.value);
+    saveState();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// POPULATE DROPDOWNS
+// ═══════════════════════════════════════════════════════════════════════
+function populateDate() {
+  const daySel = document.getElementById('dob_day');
+  const monthSel = document.getElementById('dob_month');
+  const countrySel = document.getElementById('pob_country');
+
+  DAYS.forEach(d => daySel.appendChild(Object.assign(document.createElement('option'), { value: d, textContent: d })));
+  MONTHS.forEach((m, i) => monthSel.appendChild(Object.assign(document.createElement('option'), { value: m, textContent: m })));
+  COUNTRIES.forEach(c => countrySel.appendChild(Object.assign(document.createElement('option'), { value: c.v, textContent: c.l })));
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// AUTO-SAVE
+// ═══════════════════════════════════════════════════════════════════════
+document.getElementById('ds160-form').addEventListener('change', saveState);
+document.getElementById('ds160-form').addEventListener('input', saveState);
+
+// ═══════════════════════════════════════════════════════════════════════
+// VALIDATION
+// ═══════════════════════════════════════════════════════════════════════
+function validate() {
+  const vals = collectValues();
+  const errors = [];
+  const required = [
+    { id: 'surnames', label: 'Sobrenome(s)' },
+    { id: 'given_names', label: 'Nome(s)' },
+    { id: 'sex', label: 'Sexo' },
+    { id: 'marital_status', label: 'Estado civil' },
+    { id: 'pob_city', label: 'Cidade de nascimento' },
+    { id: 'pob_country', label: 'País de nascimento' }
+  ];
+
+  required.forEach(({ id, label }) => {
+    if (!vals[id]) {
+      errors.push(label);
+      const el = document.getElementById(`err-${id}`);
+      if (el) el.classList.add('show');
+    } else {
+      const el = document.getElementById(`err-${id}`);
+      if (el) el.classList.remove('show');
+    }
+  });
+
+  // DOB
+  if (!vals.dob_day || !vals.dob_month || !vals.dob_year || vals.dob_year.length !== 4) {
+    errors.push('Data de nascimento');
+    document.getElementById('err-dob').classList.add('show');
+  } else {
+    document.getElementById('err-dob').classList.remove('show');
+  }
+
+  const summary = document.getElementById('validation-summary');
+  if (errors.length) {
+    summary.innerHTML = `<strong>Corrija os erros:</strong><ul>${errors.map(e => `<li>${e}</li>`).join('')}</ul>`;
+    summary.classList.add('show');
+    summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return false;
+  } else {
+    summary.classList.remove('show');
+    return true;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════════════
+function goNext() {
+  saveState();
+  if (!validate()) return;
+  showToast('✓ Próxima página');
+  // window.location.href = 'page2.html';
+}
+
+function goBack() {
+  saveState();
+  // window.location.href = 'index.html';
+}
+
+function exportJSON() {
+  const data = collectValues();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ds160_personal1.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('JSON exportado');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  populateDate();
+  const saved = loadState();
+  if (Object.keys(saved).length > 0) restoreState(saved);
+});
+</script>
+
+</body>
+</html>

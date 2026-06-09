@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DS-160 — Informações Pessoais 1</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.5; background: #f5f5f5; color: #111; }
+
+    #app { display: flex; flex-direction: column; height: 100vh; max-width: 680px; margin: 0 auto; background: #fff; }
+
+    .header { padding: 1rem; background: #000; color: #fff; flex-shrink: 0; }
+    .header h1 { font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 0.2rem; }
+    .header .subtitle { font-size: 0.85rem; color: #aaa; }
+
+    .progress { padding: 0.6rem 1rem; border-bottom: 1px solid #ddd; flex-shrink: 0; background: #fafafa; }
+    .progress-meta { font-size: 0.8rem; color: #555; margin-bottom: 0.4rem; }
+    .progress-meta strong { color: #000; }
+    .progress-bar { height: 4px; background: #ddd; border-radius: 2px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: #000; transition: width .35s ease; }
+
+    .scroll-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .content { padding: 1rem; padding-bottom: 5rem; }
+
+    .page-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .page-note { font-size: 0.8rem; color: #666; margin-bottom: 1rem; background: #fffbe6; border-left: 3px solid #f0c040; padding: 0.5rem 0.75rem; border-radius: 2px; }
+
+    .section-heading { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #555; margin: 1.2rem 0 0.7rem; border-bottom: 1px solid #eee; padding-bottom: 0.3rem; }
+
+    .field { margin-bottom: 1.1rem; }
+    .field label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: #000; }
+    .field .req { color: #c0392b; margin-left: 2px; }
+    .field .hint { font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; display: block; }
+    .field input[type="text"], .field input[type="number"],
+    .field textarea, .field select {
+      width: 100%; font-size: 0.95rem; padding: 0.65rem 0.7rem;
+      border: 1px solid #bbb; border-radius: 4px; background: #fff;
+      transition: border-color .15s; font-family: inherit;
+    }
+    .field input[type="text"]:focus, .field textarea:focus, .field select:focus { 
+      border-color: #000; outline: none; box-shadow: 0 0 0 2px rgba(0,0,0,.08); 
+    }
+    .field input.err, .field select.err, .field textarea.err { border-color: #c0392b; }
+    .field .err-msg { font-size: 0.75rem; color: #c0392b; margin-top: 0.2rem; }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field select { cursor: pointer; }
+
+    .field-row { display: flex; gap: 0.5rem; }
+    .field-row .field { flex: 1; margin-bottom: 0; }
+
+    .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .radio-group label { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; font-size: 0.9rem; cursor: pointer; }
+    .radio-group input { width: 1.1rem; height: 1.1rem; cursor: pointer; flex-shrink: 0; accent-color: #000; }
+
+    .check-row { display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.4rem; }
+    .check-row input { width: 1.1rem; height: 1.1rem; cursor: pointer; margin-top: 0.15rem; accent-color: #000; flex-shrink: 0; }
+    .check-row label { font-size: 0.8rem; font-weight: normal; cursor: pointer; }
+
+    .repeatable { border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 1rem; overflow: hidden; background: #fff; }
+    .repeatable-item { padding: 0.8rem; border-bottom: 1px solid #eee; position: relative; }
+    .repeatable-item:last-child { border-bottom: none; }
+    .repeatable-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+    .repeatable-header span { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #777; }
+    .btn-remove { background: none; border: 1px solid #ddd; border-radius: 4px; color: #888; font-size: 0.75rem; padding: 0.25rem 0.6rem; cursor: pointer; }
+    .btn-remove:hover { background: #fef; border-color: #c0392b; color: #c0392b; }
+    .repeatable-add { display: flex; justify-content: center; padding: 0.5rem; background: #f9f9f9; border-top: 1px solid #e0e0e0; }
+    .btn-add { background: none; border: 1px dashed #999; border-radius: 4px; font-size: 0.8rem; color: #444; padding: 0.35rem 0.9rem; cursor: pointer; }
+    .btn-add:hover { border-color: #000; color: #000; background: #f0f0f0; }
+
+    .validation-summary { background: #fff0f0; border: 1px solid #f5c6c6; border-radius: 4px; padding: 0.7rem 0.9rem; margin-bottom: 1rem; font-size: 0.8rem; color: #a00; }
+    .validation-summary ul { margin: 0.3rem 0 0 1.1rem; }
+
+    .nav { display: flex; gap: 0.6rem; padding: 0.8rem 1rem; border-top: 1px solid #ddd; background: #000; flex-shrink: 0; }
+    .nav button { flex: 1; padding: 0.85rem; font-size: 0.9rem; cursor: pointer; border: 1px solid #555; background: #222; color: #fff; border-radius: 4px; font-weight: 500; transition: background .15s; }
+    .nav button:hover { background: #444; }
+    .nav button.primary { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
+    .nav button.primary:hover { background: #e8e8e8; }
+    .nav button:disabled { opacity: .4; cursor: not-allowed; }
+
+    .btn-export { background: none; border: 1px dashed #555; color: #666; font-size: 0.8rem; padding: 0.3rem 0.7rem; cursor: pointer; border-radius: 4px; }
+    .btn-export:hover { border-color: #000; color: #000; }
+
+    .toast { position: fixed; bottom: 1.5rem; right: 1rem; background: #000; color: #fff; font-size: 0.8rem; padding: 0.6rem 0.9rem; border-radius: 4px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .toast.show { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <header class="header">
+    <h1>DS-160 — Formulário de Visto Americano</h1>
+    <div class="subtitle">Seção 1 de 10 · Informações Pessoais — Parte 1</div>
+  </header>
+
+  <div class="progress">
+    <div class="progress-meta">Página <strong>1</strong> de <strong>10</strong> <strong id="prog-pct">10%</strong></div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" style="width:10%"></div>
+    </div>
+  </div>
+
+  <div class="scroll-container">
+    <div class="content">
+      
+      <div class="page-title">Informações Pessoais — Parte 1</div>
+      <div class="page-note">Os dados desta página devem ser idênticos às informações do seu passaporte. Suas respostas são salvas automaticamente.</div>
+
+      <div id="validation-summary" class="validation-summary" style="display:none;"></div>
+
+      <form id="ds160-form" novalidate>
+    <form id="ds160-form" novalidate autocomplete="off">
+
+      <!-- ─ Card 1: Nome ─ -->
+      <div class="ds-card">
+        <div class="ds-card-title">Identificação — Nome conforme o passaporte</div>
+
+        <!-- Sobrenome -->
+        <div class="ds-field">
+          <label class="ds-label" for="surnames">Sobrenome(s) <span class="text-flag-red">*</span></label>
+          <input type="text" id="surnames" name="surnames" class="ds-input" maxlength="33"
+                 placeholder="Ex.: FERNANDEZ GARCIA" tabindex="100" autocomplete="off" />
+          <span class="ds-hint">Digite exatamente como consta no passaporte</span>
+          <span class="ds-error" id="err-surnames">Sobrenome é obrigatório</span>
+        </div>
+
+        <!-- Nome -->
+        <div class="ds-field">
+          <label class="ds-label" for="given_names">Nome(s) <span class="text-flag-red">*</span></label>
+          <input type="text" id="given_names" name="given_names" class="ds-input" maxlength="33"
+                 placeholder="Ex.: JUAN MIGUEL" tabindex="110" autocomplete="off" />
+          <span class="ds-hint">Se o passaporte não tiver nome, digite <span class="font-mono font-bold">FNU</span></span>
+          <span class="ds-error" id="err-given_names">Nome é obrigatório</span>
+        </div>
+
+        <!-- Nome alfabeto nativo -->
+        <div class="ds-field" id="field-full_name_native_alphabet">
+          <label class="ds-label" for="full_name_native_alphabet">Nome completo no alfabeto nativo</label>
+          <input type="text" id="full_name_native_alphabet" name="full_name_native_alphabet"
+                 class="ds-input" maxlength="100" tabindex="120" autocomplete="off" />
+          <div class="flex items-center gap-2 mt-2">
+            <input type="checkbox" id="full_name_native_na" name="full_name_native_na"
+                   class="rounded border-sand-border text-sky-500 w-4 h-4 cursor-pointer" tabindex="130" />
+            <label for="full_name_native_na" class="text-xs text-ink-muted cursor-pointer select-none">
+              Não se aplica / Tecnologia não disponível
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─ Card 2: Outros nomes ─ -->
+      <div class="ds-card">
+        <div class="ds-card-title">Outros nomes utilizados</div>
+
+        <div class="ds-field">
+          <label class="ds-label">Você já usou outros nomes? <span class="text-flag-red">*</span></label>
+          <span class="ds-hint mb-2 block">Inclui nome de solteiro(a), religioso, profissional, apelido ou qualquer nome pelo qual você já foi conhecido(a).</span>
+          <div class="radio-pill" id="has_other_names-group">
+            <div>
+              <input type="radio" id="has_other_names_yes" name="has_other_names" value="Y" tabindex="205" />
+              <label for="has_other_names_yes">Sim</label>
+            </div>
+            <div>
+              <input type="radio" id="has_other_names_no" name="has_other_names" value="N" tabindex="206" />
+              <label for="has_other_names_no">Não</label>
+            </div>
+          </div>
+          <span class="ds-error" id="err-has_other_names">Selecione uma opção</span>
+        </div>
+
+        <!-- Outros nomes (condicional) -->
+        <div id="other_names_section" class="hidden mt-2">
+          <div id="other_names_list"></div>
+          <button type="button" id="add_other_name"
+                  class="text-xs text-sky-500 border border-sky-500/30 bg-sky-100 rounded-lg px-4 py-2 hover:bg-sky-500 hover:text-white transition-colors font-medium">
+            + Adicionar outro nome
+          </button>
+          <span class="ds-hint mt-2 block">Máximo 5 nomes adicionais</span>
+        </div>
+      </div>
+
+      <!-- ─ Card 3: Telecode ─ -->
+      <div class="ds-card">
+        <div class="ds-card-title">Telecode</div>
+
+        <div class="ds-field">
+          <label class="ds-label">Você possui um telecode que representa seu nome? <span class="text-flag-red">*</span></label>
+          <span class="ds-hint mb-2 block">Telecodes são números de 4 dígitos que representam caracteres em alfabetos não-romanos (ex.: chinês, árabe).</span>
+          <div class="radio-pill" id="has_telecode-group">
+            <div>
+              <input type="radio" id="has_telecode_yes" name="has_telecode" value="Y" tabindex="510" />
+              <label for="has_telecode_yes">Sim</label>
+            </div>
+            <div>
+              <input type="radio" id="has_telecode_no" name="has_telecode" value="N" tabindex="511" />
+              <label for="has_telecode_no">Não</label>
+            </div>
+          </div>
+          <span class="ds-error" id="err-has_telecode">Selecione uma opção</span>
+        </div>
+
+        <div id="telecode_section" class="hidden grid grid-cols-2 gap-4 mt-2">
+          <div class="ds-field mb-0">
+            <label class="ds-label" for="telecode_surname">Telecode — Sobrenome</label>
+            <input type="text" id="telecode_surname" name="telecode_surname"
+                   class="ds-input font-mono" maxlength="8" placeholder="####" autocomplete="off" />
+          </div>
+          <div class="ds-field mb-0">
+            <label class="ds-label" for="telecode_given_name">Telecode — Nome</label>
+            <input type="text" id="telecode_given_name" name="telecode_given_name"
+                   class="ds-input font-mono" maxlength="8" placeholder="####" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ─ Card 4: Dados pessoais ─ -->
+      <div class="ds-card">
+        <div class="ds-card-title">Dados pessoais</div>
+
+        <!-- Sexo -->
+        <div class="ds-field">
+          <label class="ds-label" for="sex">Sexo <span class="text-flag-red">*</span></label>
+          <div class="relative">
+            <select id="sex" name="sex" class="ds-select" tabindex="600">
+              <option value="">— Selecione —</option>
+              <option value="M">MASCULINO</option>
+              <option value="F">FEMININO</option>
+            </select>
+          </div>
+          <span class="ds-error" id="err-sex">Selecione o sexo</span>
+        </div>
+
+        <!-- Estado civil -->
+        <div class="ds-field">
+          <label class="ds-label" for="marital_status">Estado civil <span class="text-flag-red">*</span></label>
+          <div class="relative">
+            <select id="marital_status" name="marital_status" class="ds-select" tabindex="615">
+              <option value="">— Selecione —</option>
+              <option value="M">CASADO(A)</option>
+              <option value="C">UNIÃO ESTÁVEL (COMMON LAW)</option>
+              <option value="P">PARCERIA CIVIL / DOMÉSTICA</option>
+              <option value="S">SOLTEIRO(A)</option>
+              <option value="W">VIÚVO(A)</option>
+              <option value="D">DIVORCIADO(A)</option>
+              <option value="L">SEPARADO(A) JUDICIALMENTE</option>
+            </select>
+          </div>
+          <span class="ds-error" id="err-marital_status">Selecione o estado civil</span>
+        </div>
+      </div>
+
+      <!-- ─ Card 5: Data e local de nascimento ─ -->
+      <div class="ds-card">
+        <div class="ds-card-title">Data e local de nascimento</div>
+
+        <!-- Data de nascimento -->
+        <div class="ds-field">
+          <label class="ds-label">Data de nascimento <span class="text-flag-red">*</span></label>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="ds-hint mb-1" for="dob_day">Dia</label>
+              <select id="dob_day" name="dob_day" class="ds-select" tabindex="730">
+                <option value="  "></option>
+                <option value="01">01</option><option value="02">02</option><option value="03">03</option>
+                <option value="04">04</option><option value="05">05</option><option value="06">06</option>
+                <option value="07">07</option><option value="08">08</option><option value="09">09</option>
+                <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                <option value="16">16</option><option value="17">17</option><option value="18">18</option>
+                <option value="19">19</option><option value="20">20</option><option value="21">21</option>
+                <option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                <option value="25">25</option><option value="26">26</option><option value="27">27</option>
+                <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+                <option value="31">31</option>
+              </select>
+            </div>
+            <div>
+              <label class="ds-hint mb-1" for="dob_month">Mês</label>
+              <select id="dob_month" name="dob_month" class="ds-select" tabindex="740">
+                <option value="   "></option>
+                <option value="JAN">JAN</option><option value="FEB">FEV</option>
+                <option value="MAR">MAR</option><option value="APR">ABR</option>
+                <option value="MAY">MAI</option><option value="JUN">JUN</option>
+                <option value="JUL">JUL</option><option value="AUG">AGO</option>
+                <option value="SEP">SET</option><option value="OCT">OUT</option>
+                <option value="NOV">NOV</option><option value="DEC">DEZ</option>
+              </select>
+            </div>
+            <div>
+              <label class="ds-hint mb-1" for="dob_year">Ano (AAAA)</label>
+              <input type="text" id="dob_year" name="dob_year" class="ds-input font-mono" maxlength="4"
+                     placeholder="1990" tabindex="750" autocomplete="off" />
+            </div>
+          </div>
+          <span class="ds-error" id="err-dob">Data de nascimento inválida ou incompleta</span>
+        </div>
+
+        <!-- Local de nascimento -->
+        <div class="ds-field">
+          <label class="ds-label" for="pob_city">Cidade de nascimento <span class="text-flag-red">*</span></label>
+          <input type="text" id="pob_city" name="pob_city" class="ds-input" maxlength="20"
+                 placeholder="Ex.: SÃO PAULO" tabindex="755" autocomplete="off" />
+          <span class="ds-error" id="err-pob_city">Cidade de nascimento é obrigatória</span>
+        </div>
+
+        <div class="ds-field">
+          <label class="ds-label" for="pob_state_province">Estado / Província</label>
+          <input type="text" id="pob_state_province" name="pob_state_province" class="ds-input" maxlength="20"
+                 placeholder="Ex.: SÃO PAULO" tabindex="760" autocomplete="off" />
+          <div class="flex items-center gap-2 mt-2">
+            <input type="checkbox" id="pob_state_province_na" name="pob_state_province_na"
+                   class="rounded border-sand-border text-sky-500 w-4 h-4 cursor-pointer" tabindex="770" />
+            <label for="pob_state_province_na" class="text-xs text-ink-muted cursor-pointer select-none">
+              Não se aplica
+            </label>
+          </div>
+          <span class="ds-error" id="err-pob_state_province"></span>
+        </div>
+
+        <!-- País de nascimento -->
+        <div class="ds-field mb-0">
+          <label class="ds-label">País de nascimento <span class="text-flag-red">*</span></label>
+          <!-- Smart select: shortcut Brasil -->
+          <div id="pob_country_smart" class="flex flex-col gap-2">
+            <div class="flex items-center gap-3">
+              <button type="button" id="btn_born_brazil"
+                      class="flex items-center gap-2 px-4 py-2 rounded-lg border border-sand-border bg-white text-sm font-medium text-ink-muted hover:border-sky-500 hover:text-sky-500 transition-colors">
+                <span>🇧🇷</span> Sim, nasci no Brasil
+              </button>
+              <button type="button" id="btn_born_other"
+                      class="flex items-center gap-2 px-4 py-2 rounded-lg border border-sand-border bg-white text-sm font-medium text-ink-muted hover:border-sky-500 hover:text-sky-500 transition-colors">
+                Outro país →
+              </button>
+            </div>
+            <!-- Combobox (oculta inicialmente) -->
+            <div id="pob_country_select_wrap" class="hidden relative">
+              <select id="pob_country" name="pob_country" class="ds-select" tabindex="780">
+                <option value="">— Selecione o país —</option>
+                <option value="AFGH">AFEGANISTÃO</option><option value="SAFR">ÁFRICA DO SUL</option>
+                <option value="ALB">ALBÂNIA</option><option value="ALGR">ARGÉLIA</option>
+                <option value="ASMO">SAMOA AMERICANA</option><option value="ANDO">ANDORRA</option>
+                <option value="ANGL">ANGOLA</option><option value="ANGU">ANGUILA</option>
+                <option value="ANTI">ANTÍGUA E BARBUDA</option><option value="ARG">ARGENTINA</option>
+                <option value="ARM">ARMÊNIA</option><option value="ARB">ARUBA</option>
+                <option value="XAS">NO MAR</option><option value="ASTL">AUSTRÁLIA</option>
+                <option value="AUST">ÁUSTRIA</option><option value="AZR">AZERBAIJÃO</option>
+                <option value="BAMA">BAHAMAS</option><option value="BAHR">BAHREIN</option>
+                <option value="BANG">BANGLADESH</option><option value="BRDO">BARBADOS</option>
+                <option value="BYS">BIELORRÚSSIA</option><option value="BELG">BÉLGICA</option>
+                <option value="BLZ">BELIZE</option><option value="BENN">BENIN</option>
+                <option value="BERM">BERMUDAS</option><option value="BHU">BUTÃO</option>
+                <option value="BOL">BOLÍVIA</option><option value="BIH">BÓSNIA-HERZEGOVINA</option>
+                <option value="BOT">BOTSUANA</option><option value="BRZL">BRASIL</option>
+                <option value="IOT">TERRITÓRIO BRITÂNICO DO OCEANO ÍNDICO</option>
+                <option value="BRNI">BRUNEI</option><option value="BULG">BULGÁRIA</option>
+                <option value="BURK">BURKINA FASO</option><option value="BURM">MIANMAR</option>
+                <option value="BRND">BURUNDI</option><option value="CBDA">CAMBOJA</option>
+                <option value="CMRN">CAMARÕES</option><option value="CAN">CANADÁ</option>
+                <option value="CAVI">CABO VERDE</option><option value="CAYI">ILHAS CAYMAN</option>
+                <option value="CAFR">REPÚBLICA CENTRO-AFRICANA</option><option value="CHAD">CHADE</option>
+                <option value="CHIL">CHILE</option><option value="CHIN">CHINA</option>
+                <option value="COL">COLÔMBIA</option><option value="COMO">COMORES</option>
+                <option value="COD">CONGO, REP. DEM.</option><option value="CONB">CONGO, REP.</option>
+                <option value="CKIS">ILHAS COOK</option><option value="CSTR">COSTA RICA</option>
+                <option value="IVCO">COSTA DO MARFIM</option><option value="HRV">CROÁCIA</option>
+                <option value="CUBA">CUBA</option><option value="CUR">CURAÇAO</option>
+                <option value="CYPR">CHIPRE</option><option value="CZEC">REPÚBLICA TCHECA</option>
+                <option value="DEN">DINAMARCA</option><option value="DJI">DJIBUTI</option>
+                <option value="DOMN">DOMINICA</option><option value="DOMR">REPÚBLICA DOMINICANA</option>
+                <option value="ECUA">EQUADOR</option><option value="EGYP">EGITO</option>
+                <option value="ELSL">EL SALVADOR</option><option value="EGN">GUINÉ EQUATORIAL</option>
+                <option value="ERI">ERITREIA</option><option value="EST">ESTÔNIA</option>
+                <option value="SZLD">ESSUATÍNI</option><option value="ETH">ETIÓPIA</option>
+                <option value="FKLI">ILHAS MALVINAS</option><option value="FRO">ILHAS FAROE</option>
+                <option value="FIJI">FIJI</option><option value="FIN">FINLÂNDIA</option>
+                <option value="FRAN">FRANÇA</option><option value="FPOL">POLINÉSIA FRANCESA</option>
+                <option value="GABN">GABÃO</option><option value="GAM">GÂMBIA</option>
+                <option value="XGZ">FAIXA DE GAZA</option><option value="GEO">GEÓRGIA</option>
+                <option value="GER">ALEMANHA</option><option value="GHAN">GANA</option>
+                <option value="GIB">GIBRALTAR</option><option value="GRC">GRÉCIA</option>
+                <option value="GRLD">GROENLÂNDIA</option><option value="GREN">GRANADA</option>
+                <option value="GUAM">GUAM</option><option value="GUAT">GUATEMALA</option>
+                <option value="GNEA">GUINÉ</option><option value="GUIB">GUINÉ-BISSAU</option>
+                <option value="GUY">GUIANA</option><option value="HAT">HAITI</option>
+                <option value="VAT">SANTA SÉ (VATICANO)</option><option value="HOND">HONDURAS</option>
+                <option value="HNK">HONG KONG SAR</option><option value="HOKO">HONG KONG BNO</option>
+                <option value="HUNG">HUNGRIA</option><option value="ICLD">ISLÂNDIA</option>
+                <option value="XIR">NO AR</option><option value="IND">ÍNDIA</option>
+                <option value="IDSA">INDONÉSIA</option><option value="IRAN">IRÃ</option>
+                <option value="IRAQ">IRAQUE</option><option value="IRE">IRLANDA</option>
+                <option value="ISRL">ISRAEL</option><option value="ITLY">ITÁLIA</option>
+                <option value="JAM">JAMAICA</option><option value="JPN">JAPÃO</option>
+                <option value="JRSM">JERUSALÉM</option><option value="JORD">JORDÂNIA</option>
+                <option value="KAZ">CAZAQUISTÃO</option><option value="KENY">QUÊNIA</option>
+                <option value="KIRI">KIRIBATI</option><option value="PRK">COREIA DO NORTE</option>
+                <option value="KOR">COREIA DO SUL</option><option value="KSV">KOSOVO</option>
+                <option value="KUWT">KUWAIT</option><option value="KGZ">QUIRGUISTÃO</option>
+                <option value="LAOS">LAOS</option><option value="LATV">LETÔNIA</option>
+                <option value="LEBN">LÍBANO</option><option value="LES">LESOTO</option>
+                <option value="LIBR">LIBÉRIA</option><option value="LBYA">LÍBIA</option>
+                <option value="LCHT">LIECHTENSTEIN</option><option value="LITH">LITUÂNIA</option>
+                <option value="LXM">LUXEMBURGO</option><option value="MAC">MACAU</option>
+                <option value="MKD">MACEDÔNIA DO NORTE</option><option value="MADG">MADAGÁSCAR</option>
+                <option value="MALW">MALAWI</option><option value="MLAS">MALÁSIA</option>
+                <option value="MLDV">MALDIVAS</option><option value="MALI">MALI</option>
+                <option value="MLTA">MALTA</option><option value="RMI">ILHAS MARSHALL</option>
+                <option value="MAUR">MAURITÂNIA</option><option value="MRTS">MAURÍCIO</option>
+                <option value="MEXICO - AGUASCALIENTES" value="AGS">MÉXICO - AGUASCALIENTES</option>
+                <option value="BC">MÉXICO - BAJA CALIFORNIA NORTE</option>
+                <option value="DF">MÉXICO - DISTRITO FEDERAL</option>
+                <option value="MLD">MOLDÁVIA</option><option value="MON">MÔNACO</option>
+                <option value="MONG">MONGÓLIA</option><option value="MTG">MONTENEGRO</option>
+                <option value="MORO">MARROCOS</option><option value="MOZ">MOÇAMBIQUE</option>
+                <option value="NAMB">NAMÍBIA</option><option value="NEP">NEPAL</option>
+                <option value="NETH">PAÍSES BAIXOS</option><option value="NZLD">NOVA ZELÂNDIA</option>
+                <option value="NIC">NICARÁGUA</option><option value="NRA">NIGÉRIA</option>
+                <option value="NIR">NÍGER</option><option value="NORW">NORUEGA</option>
+                <option value="OMAN">OMÃ</option><option value="PKST">PAQUISTÃO</option>
+                <option value="PALA">PALAU</option><option value="PAN">PANAMÁ</option>
+                <option value="PNG">PAPUA-NOVA GUINÉ</option><option value="PARA">PARAGUAI</option>
+                <option value="PERU">PERU</option><option value="PHIL">FILIPINAS</option>
+                <option value="POL">POLÔNIA</option><option value="PORT">PORTUGAL</option>
+                <option value="PR">PORTO RICO</option><option value="QTAR">QATAR</option>
+                <option value="ROM">ROMÊNIA</option><option value="RUS">RÚSSIA</option>
+                <option value="RWND">RUANDA</option><option value="WSAM">SAMOA</option>
+                <option value="SMAR">SAN MARINO</option><option value="SARB">ARÁBIA SAUDITA</option>
+                <option value="SENG">SENEGAL</option><option value="SBA">SÉRVIA</option>
+                <option value="SEYC">SEICHELES</option><option value="SING">SINGAPURA</option>
+                <option value="SVK">ESLOVÁQUIA</option><option value="SVN">ESLOVÊNIA</option>
+                <option value="SOMA">SOMÁLIA</option><option value="SPN">ESPANHA</option>
+                <option value="SRL">SRI LANKA</option><option value="SSDN">SUDÃO DO SUL</option>
+                <option value="SUDA">SUDÃO</option><option value="SURM">SURINAME</option>
+                <option value="SWDN">SUÉCIA</option><option value="SWTZ">SUÍÇA</option>
+                <option value="SYR">SÍRIA</option><option value="TWAN">TAIWAN</option>
+                <option value="TJK">TAJIQUISTÃO</option><option value="TAZN">TANZÂNIA</option>
+                <option value="THAI">TAILÂNDIA</option><option value="TMOR">TIMOR-LESTE</option>
+                <option value="TOGO">TOGO</option><option value="TONG">TONGA</option>
+                <option value="TRIN">TRINIDAD E TOBAGO</option><option value="TNSA">TUNÍSIA</option>
+                <option value="TRKY">TURQUIA</option><option value="TKM">TURCOMENISTÃO</option>
+                <option value="UKR">UCRÂNIA</option><option value="UAE">EMIRADOS ÁRABES UNIDOS</option>
+                <option value="GRBR">REINO UNIDO</option><option value="USA">ESTADOS UNIDOS</option>
+                <option value="URU">URUGUAI</option><option value="UZB">UZBEQUISTÃO</option>
+                <option value="VANU">VANUATU</option><option value="VENZ">VENEZUELA</option>
+                <option value="VTNM">VIETNÃ</option><option value="VI">ILHAS VIRGENS (EUA)</option>
+                <option value="BRVI">ILHAS VIRGENS BRITÂNICAS</option>
+                <option value="XWB">CISJORDÂNIA</option><option value="YEM">IÊMEN</option>
+                <option value="ZAMB">ZÂMBIA</option><option value="ZIMB">ZIMBÁBUE</option>
+              </select>
+            </div>
+            <!-- Badge selecionado -->
+            <div id="pob_country_badge" class="hidden flex items-center gap-2">
+              <span id="pob_country_badge_label"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-100 border border-sky-500/30 text-sky-500 text-sm font-medium">
+              </span>
+              <button type="button" id="btn_change_country"
+                      class="text-xs text-ink-muted underline hover:text-sky-500 transition-colors">
+                Alterar
+              </button>
+            </div>
+            <!-- hidden input que guarda o value real -->
+            <input type="hidden" id="pob_country_value" name="pob_country" value="" />
+          </div>
+          <span class="ds-error" id="err-pob_country">País de nascimento é obrigatório</span>
+        </div>
+      </div>
+
+      <!-- ─ Validation summary ─ -->
+      <div id="validation_summary" class="hidden bg-red-50 border border-flag-red/30 rounded-xl px-4 py-4 mb-6">
+        <p class="text-sm font-semibold text-flag-red mb-2">Corrija os erros abaixo antes de continuar:</p>
+        <ul id="validation_list" class="list-disc list-inside text-xs text-flag-red space-y-1"></ul>
+      </div>
+
+      <!-- ─ Nav buttons ─ -->
+      <div class="flex items-center justify-between gap-4 pt-2 pb-10">
+        <div class="flex items-center gap-3">
+          <button type="button" class="btn-secondary" onclick="goBack()">← Início</button>
+          <button type="button" id="btn_export" class="btn-export" onclick="exportJSON()">
+            ↓ Exportar JSON
+          </button>
+        </div>
+        <button type="button" class="btn-primary" onclick="goNext()">
+          Próximo: Pessoal 2 →
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- ── Toast ── -->
+  <div id="save-toast"
+       class="fixed bottom-5 right-5 bg-navy-900 text-white text-xs px-4 py-2 rounded-full
+              shadow-lg flex items-center gap-2 opacity-0 pointer-events-none z-50">
+    <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+    </svg>
+    Salvo automaticamente
+  </div>
+
+  <script>
+  /* ===================================================
+     DS-160 — Personal 1  |  Storage + Logic
+  =================================================== */
+  const PAGE_KEY = 'ds160_personal1';
+
+  // ── All tracked field IDs ──
+  const FIELD_IDS = [
+    'surnames', 'given_names', 'full_name_native_alphabet', 'full_name_native_na',
+    'has_other_names', 'has_telecode',
+    'telecode_surname', 'telecode_given_name',
+    'sex', 'marital_status',
+    'dob_day', 'dob_month', 'dob_year',
+    'pob_city', 'pob_state_province', 'pob_state_province_na',
+    'pob_country'
+  ];
+
+  // ── Load saved state ──
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(PAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  }
+
+  // ── Save state ──
+  let saveTimer = null;
+  function saveState() {
+    const state = collectValues();
+    localStorage.setItem(PAGE_KEY, JSON.stringify(state));
+    showToast();
+  }
+
+  function showToast() {
+    const t = document.getElementById('save-toast');
+    t.style.opacity = '1';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => { t.style.opacity = '0'; }, 2000);
+  }
+
+  // ── Collect current values ──
+  function collectValues() {
+    const data = {};
+
+    FIELD_IDS.forEach(id => {
+      // skip pob_country – handled separately
+      if (id === 'pob_country') return;
+
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      if (el.type === 'checkbox') {
+        data[id] = el.checked;
+      } else if (el.type === 'radio') {
+        // radios are handled by name group below
+      } else {
+        data[id] = el.value;
+      }
+    });
+
+    // radios by name
+    ['has_other_names', 'has_telecode'].forEach(name => {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      data[name] = checked ? checked.value : '';
+    });
+
+    // pob_country from hidden input
+    data['pob_country'] = document.getElementById('pob_country_value').value;
+
+    // other_names repeatable
+    const otherItems = [];
+    document.querySelectorAll('#other_names_list .repeatable-item').forEach(item => {
+      otherItems.push({
+        other_surname:    item.querySelector('[data-field="other_surname"]')?.value || '',
+        other_given_name: item.querySelector('[data-field="other_given_name"]')?.value || '',
+      });
+    });
+    data['other_names'] = otherItems;
+
+    return data;
+  }
+
+  // ── Restore values into form ──
+  function restoreState(state) {
+    Object.entries(state).forEach(([id, val]) => {
+      if (id === 'has_other_names' || id === 'has_telecode') {
+        const radio = document.querySelector(`input[name="${id}"][value="${val}"]`);
+        if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change')); }
+        return;
+      }
+      if (id === 'other_names') return; // handled after
+      if (id === 'pob_country') {
+        setPobCountry(val); return;
+      }
+
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'checkbox') {
+        el.checked = !!val;
+        el.dispatchEvent(new Event('change'));
+      } else {
+        el.value = val;
+      }
+    });
+
+    // restore other_names
+    if (Array.isArray(state.other_names)) {
+      state.other_names.forEach(item => addOtherNameRow(item));
+    }
+  }
+
+  /* ── pob_country smart select ── */
+  function setPobCountry(val) {
+    const hiddenInput = document.getElementById('pob_country_value');
+    hiddenInput.value = val;
+
+    const badge     = document.getElementById('pob_country_badge');
+    const badgeLabel = document.getElementById('pob_country_badge_label');
+    const selectWrap = document.getElementById('pob_country_select_wrap');
+    const btnBrazil  = document.getElementById('btn_born_brazil');
+    const btnOther   = document.getElementById('btn_born_other');
+
+    if (!val) { return; }
+
+    // find label
+    let label = val;
+    if (val === 'BRZL') {
+      label = '🇧🇷 BRASIL';
+    } else {
+      const opt = document.querySelector(`#pob_country option[value="${val}"]`);
+      if (opt) label = opt.textContent;
+    }
+
+    badge.classList.remove('hidden');
+    badgeLabel.textContent = label;
+    selectWrap.classList.add('hidden');
+    btnBrazil.classList.add('hidden');
+    btnOther.classList.add('hidden');
+    saveState();
+  }
+
+  document.getElementById('btn_born_brazil').addEventListener('click', () => {
+    setPobCountry('BRZL');
+  });
+
+  document.getElementById('btn_born_other').addEventListener('click', () => {
+    document.getElementById('pob_country_select_wrap').classList.toggle('hidden');
+  });
+
+  document.getElementById('btn_change_country').addEventListener('click', () => {
+    document.getElementById('pob_country_badge').classList.add('hidden');
+    document.getElementById('pob_country_select_wrap').classList.add('hidden');
+    document.getElementById('btn_born_brazil').classList.remove('hidden');
+    document.getElementById('btn_born_other').classList.remove('hidden');
+    document.getElementById('pob_country_value').value = '';
+    saveState();
+  });
+
+  document.getElementById('pob_country').addEventListener('change', function() {
+    if (this.value) setPobCountry(this.value);
+  });
+
+  /* ── Conditional: outros nomes ── */
+  document.querySelectorAll('input[name="has_other_names"]').forEach(r => {
+    r.addEventListener('change', function() {
+      const sec = document.getElementById('other_names_section');
+      sec.classList.toggle('hidden', this.value !== 'Y');
+      saveState();
+    });
+  });
+
+  /* ── Conditional: telecode ── */
+  document.querySelectorAll('input[name="has_telecode"]').forEach(r => {
+    r.addEventListener('change', function() {
+      const sec = document.getElementById('telecode_section');
+      sec.classList.toggle('hidden', this.value !== 'Y');
+      saveState();
+    });
+  });
+
+  /* ── Checkbox: nome nativo ── */
+  document.getElementById('full_name_native_na').addEventListener('change', function() {
+    const inp = document.getElementById('full_name_native_alphabet');
+    inp.disabled = this.checked;
+    if (this.checked) inp.value = '';
+    saveState();
+  });
+
+  /* ── Checkbox: estado/prov N/A ── */
+  document.getElementById('pob_state_province_na').addEventListener('change', function() {
+    const inp = document.getElementById('pob_state_province');
+    inp.disabled = this.checked;
+    if (this.checked) inp.value = '';
+    saveState();
+  });
+
+  /* ── Auto-fill native name ── */
+  ['surnames', 'given_names'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() {
+      const nativeField = document.getElementById('full_name_native_alphabet');
+      const naChecked   = document.getElementById('full_name_native_na').checked;
+      if (!naChecked && !nativeField.dataset.edited) {
+        const given = document.getElementById('given_names').value;
+        const sur   = document.getElementById('surnames').value;
+        nativeField.value = (given + ' ' + sur).trim();
+      }
+      saveState();
+    });
+  });
+
+  document.getElementById('full_name_native_alphabet').addEventListener('input', function() {
+    this.dataset.edited = 'true';
+    saveState();
+  });
+
+  /* ── Repeatable: outros nomes ── */
+  let otherNameCount = 0;
+
+  function addOtherNameRow(data = {}) {
+    const list = document.getElementById('other_names_list');
+    const items = list.querySelectorAll('.repeatable-item');
+    if (items.length >= 5) return;
+
+    otherNameCount++;
+    const idx = otherNameCount;
+    const div = document.createElement('div');
+    div.className = 'repeatable-item';
+    div.dataset.idx = idx;
+    div.innerHTML = `
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-xs font-semibold text-ink-muted font-mono">NOME ${items.length + 1}</span>
+        <button type="button" onclick="removeOtherName(this)"
+                class="text-xs text-flag-red hover:underline">Remover</button>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="ds-hint mb-1">Sobrenome</label>
+          <input type="text" data-field="other_surname" class="ds-input" maxlength="33"
+                 value="${data.other_surname || ''}" />
+        </div>
+        <div>
+          <label class="ds-hint mb-1">Nome</label>
+          <input type="text" data-field="other_given_name" class="ds-input" maxlength="33"
+                 value="${data.other_given_name || ''}" />
+        </div>
+      </div>
+    `;
+    div.querySelectorAll('input').forEach(i => i.addEventListener('input', saveState));
+    list.appendChild(div);
+
+    const addBtn = document.getElementById('add_other_name');
+    if (list.querySelectorAll('.repeatable-item').length >= 5) addBtn.disabled = true;
+  }
+
+  function removeOtherName(btn) {
+    btn.closest('.repeatable-item').remove();
+    document.getElementById('add_other_name').disabled = false;
+    // re-label
+    document.querySelectorAll('#other_names_list .repeatable-item').forEach((el, i) => {
+      el.querySelector('span').textContent = `NOME ${i + 1}`;
+    });
+    saveState();
+  }
+
+  document.getElementById('add_other_name').addEventListener('click', () => addOtherNameRow());
+
+  /* ── Attach change listeners to all simple fields ── */
+  FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.type === 'radio') return;
+    el.addEventListener('change', saveState);
+    if (el.tagName === 'INPUT' && el.type !== 'checkbox') {
+      el.addEventListener('input', saveState);
+    }
+  });
+
+  /* ── Validation ── */
+  function validateForm() {
+    const errors = [];
+    const vals = collectValues();
+
+    const required = [
+      { id: 'surnames',       label: 'Sobrenome(s)' },
+      { id: 'given_names',    label: 'Nome(s)' },
+      { id: 'sex',            label: 'Sexo' },
+      { id: 'marital_status', label: 'Estado civil' },
+      { id: 'pob_city',       label: 'Cidade de nascimento' },
+      { id: 'pob_country',    label: 'País de nascimento' },
+    ];
+
+    required.forEach(({ id, label }) => {
+      const v = vals[id];
+      const errEl = document.getElementById(`err-${id}`);
+      if (!v || !v.toString().trim()) {
+        errors.push(label);
+        if (errEl) errEl.classList.remove('hidden');
+      } else {
+        if (errEl) errEl.classList.add('hidden');
+      }
+    });
+
+    // radio required
+    ['has_other_names', 'has_telecode'].forEach((name, i) => {
+      const labels = ['Outros nomes (resposta obrigatória)', 'Telecode (resposta obrigatória)'];
+      const errEl = document.getElementById(`err-${name}`);
+      if (!vals[name]) {
+        errors.push(labels[i]);
+        if (errEl) errEl.classList.remove('hidden');
+      } else {
+        if (errEl) errEl.classList.add('hidden');
+      }
+    });
+
+    // DOB basic check
+    const dobFull = vals.dob_day && vals.dob_month && vals.dob_year && vals.dob_year.length === 4;
+    const errDob = document.getElementById('err-dob');
+    if (!dobFull) {
+      errors.push('Data de nascimento');
+      errDob.classList.remove('hidden');
+    } else {
+      errDob.classList.add('hidden');
+    }
+
+    // Summary
+    const summary = document.getElementById('validation_summary');
+    const list    = document.getElementById('validation_list');
+    if (errors.length) {
+      list.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+      summary.classList.remove('hidden');
+      summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    } else {
+      summary.classList.add('hidden');
+      return true;
+    }
+  }
+
+  /* ── Navigation ── */
+  function goBack() {
+    saveState();
+    alert('Navegação: voltar para a página inicial / Getting Started');
+    // window.location.href = 'ds160_start.html';
+  }
+
+  function goNext() {
+    saveState();
+    if (!validateForm()) return;
+    alert('Navegação: avançar para Personal 2 (ds160_personal2.html)');
+    // window.location.href = 'ds160_personal2.html';
+  }
+
+  /* ── Export JSON ── */
+  function exportJSON() {
+    const data = collectValues();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'ds160_personal1.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ── Init ── */
+  (function init() {
+    const saved = loadState();
+    if (Object.keys(saved).length > 0) {
+      restoreState(saved);
+    } else {
+      // default radios to "N"
+      document.querySelector('input[name="has_other_names"][value="N"]').checked = true;
+      document.querySelector('input[name="has_telecode"][value="N"]').checked = true;
+    }
+  })();
+  </script>
+</body>
+</html>
