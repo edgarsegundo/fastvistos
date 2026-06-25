@@ -1,6 +1,6 @@
 /*
   arquivo de customização deste site — estende e sobrescreve o global.css.
-  
+
   Use este arquivo para:
   - Adicionar cores e fontes da marca via @theme
   - Sobrescrever variáveis do global.css via @theme
@@ -18,30 +18,134 @@
   --color-primary-500 → bg-primary-500, text-primary-500, border-primary-500, etc.
 */
 @theme {
-  --color-primary-500: #3b95fa;
-  --color-secondary-500: #ff7900;
-  --font-sans: 'Source Sans Pro', ui-sans-serif, system-ui, sans-serif;
+  /* Cores da marca */
+  --color-text-main: #1f2937;
+  --color-neutral-dark: #232320;
+  --color-bg-page: #F3F4F6;
+  --color-bg-card: #FFFFF7;
+  --color-cta: #37D315;
+  --color-cta-hover: #2eb812;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #128c7e;
+
+  /* Fontes da marca */
+  --font-title: 'Poppins', system-ui, sans-serif;
+  --font-subtitle: 'Inter', system-ui, sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+  --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
-  @layer base — use apenas para sobrescrever o reset do global.css.
-  Ex: mudar line-height do body, background-color padrão, etc.
+  @layer base — estilos de elementos HTML globais para este site.
 */
 @layer base {
+  body {
+    font-family: var(--font-body);
+    line-height: 1.6;
+    color: var(--color-text-main);
+    background: var(--color-bg-page);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  section {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 {
+    font-family: var(--font-title);
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+
+  h3,
+  h4 {
+    font-family: var(--font-subtitle);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+  }
+
+  p {
+    font-size: 1rem;
+    max-width: 72ch;
+    margin-bottom: 1rem;
+  }
+
+  a {
+    font-family: var(--font-subtitle);
+    color: var(--color-whatsapp-dark);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 /*
   @layer components — classes reutilizáveis específicas deste site.
   Use quando uma combinação de estilos se repete em mais de um lugar.
-  Ex: .btn-primary, .hero-section, .card-produto
 */
 @layer components {
+  .btn-whatsapp {
+    display: inline-block;
+    font-family: var(--font-subtitle);
+    background: var(--color-whatsapp);
+    color: #ffffff;
+    padding: 0.75rem 1.2rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .btn-cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: var(--color-cta);
+    color: #ffffff;
+    font-family: var(--font-subtitle);
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+  }
+
+  .btn-cta:hover {
+    background-color: var(--color-cta-hover);
+    text-decoration: none;
+  }
+
+  .kicker {
+    font-family: var(--font-subtitle);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-whatsapp-dark);
+  }
+
+  .deck {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
 }
 
 /*
   @layer utilities — classes atômicas específicas deste site.
   Use quando a classe faz uma coisa só.
-  Ex: .text-brand-primary, .fill-brand
 */
 @layer utilities {
 }
