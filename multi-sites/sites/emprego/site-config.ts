@@ -31,7 +31,7 @@ export const siteConfig = {
 
         assetsUrlBase: 'https://empregoaqui.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
-        priceRange: 'R$ 9,99', // candidato paga R$9,99 ou cadastra grátis se compartilhar
+        priceRange: 'R$', // faixa de preço do serviço (Schema.org: $, $$, $$$)
         openingHoursSpecification: [
             {
                 "@type": "OpeningHoursSpecification",
