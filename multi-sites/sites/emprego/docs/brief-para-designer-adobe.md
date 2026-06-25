@@ -168,6 +168,7 @@ SEÇÃO: hero
 - Sem espaços, sem acentos, sem caracteres especiais
 - Formato kebab-case: `hero-banner-desktop.avif`, `icone-vaga.svg`
 - Indicar variante: `-mobile`, `-desktop`, `-hover` quando relevante
+- **Nome deve descrever o conteúdo real da imagem, pensando em SEO** — o nome do arquivo é indexado pelo Google e contribui para rankeamento de imagens. Evite nomes genéricos como `image1.avif` ou `banner.webp`; prefira nomes descritivos que incluam o assunto e o contexto, ex: `emprego-aqui-candidatos-qualificados-mobile.avif`, `como-funciona-cadastro-vaga-emprego.svg`
 
 ---
 
