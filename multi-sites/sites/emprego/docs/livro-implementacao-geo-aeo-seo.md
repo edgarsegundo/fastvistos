@@ -141,8 +141,8 @@ Assim que a verificação for confirmada, configure dentro do GSC:
 
 #### Status
 
-- [ ] Domínio verificado no GSC
-- [ ] Código preenchido em `site-config.ts`
+- [ ] Domínio verificado no GSC ← **pendente: fazer deploy e clicar em "Verificar" no GSC**
+- [x] Código preenchido em `site-config.ts` — valor: `4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk`
 - [ ] Deploy realizado
 - [ ] Sitemap submetido
 - [ ] Baseline exportado e registrado na tabela acima
