@@ -17,6 +17,7 @@ const bullets = [
 <section class="b2b" id="para-empresas" aria-labelledby="b2b-title">
   <div
     class="b2b__bg"
+    id="b2bBg"
     aria-hidden="true"
     style="background-image: url('/assets/images/v2/emprego-aqui-empresas-bg-secao.webp')"
   ></div>
@@ -125,14 +126,15 @@ const bullets = [
     .b2b__left {
       position: relative;
       z-index: 2;
-      min-height: 640px;
+      min-height: 400px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: 48px 24px 40px;
       text-align: left;
     }
-    .b2b__hero-sub { max-width: none; }
+    .b2b__hero-title { font-size: clamp(26px, 7vw, 38px); margin-bottom: 14px; }
+    .b2b__hero-sub { font-size: 14px; line-height: 1.65; max-width: none; }
 
     .b2b__card {
       position: relative;
@@ -149,18 +151,42 @@ const bullets = [
     .b2b__actions { flex-direction: column; }
     .b2b__actions .btn { width: 100%; justify-content: center; }
 
-    /* Fundo + overlay viram um band no topo (atrás do headline), não cobrem a seção empilhada
-       inteira — senão o cover dá zoom enorme e mostra só o centro da foto. */
-    .b2b__bg, .b2b__overlay { height: 640px; bottom: auto; }
-    .b2b__bg { background-size: 165% auto; background-position: 55% top; background-color: #1e2237; background-repeat: no-repeat; }
+    /* bg + overlay mantêm inset:0 + cover; a ALTURA é definida por JS
+       (= altura do .b2b__left), igual ao original. Sem isso, o cover numa
+       seção empilhada alta dá zoom e mostra só o centro da foto. */
+    .b2b__bg { background-position: 55% center; }
     .b2b__overlay {
-      background: linear-gradient(to top, rgba(20, 23, 42, .95) 0%, rgba(20, 23, 42, .55) 50%, rgba(20, 23, 42, .40) 100%);
+      background: linear-gradient(160deg, rgba(20, 23, 42, .9) 0%, rgba(20, 23, 42, .6) 60%, rgba(20, 23, 42, .3) 100%);
     }
   }
   @media (max-width: 480px) {
-    .b2b__left { min-height: 320px; padding: 40px 20px 32px; }
-    .b2b__bg, .b2b__overlay { height: 320px; }
+    .b2b__left { min-height: 360px; padding: 40px 20px 32px; }
     .b2b__hero-title { font-size: 26px; }
     .b2b__card-img { height: 200px; }
   }
 </style>
+
+<script>
+  /* B2B mobile: a faixa de imagem (bg+overlay) recebe a altura exata do
+     .b2b__left, para o `cover` recortar a foto no tamanho do texto — sem
+     zoom. Idêntico ao comportamento do design original. */
+  (function () {
+    const ajustar = () => {
+      const left = document.querySelector<HTMLElement>('.b2b__left');
+      const bg = document.getElementById('b2bBg');
+      const overlay = document.querySelector<HTMLElement>('.b2b__overlay');
+      if (!left || !bg) return;
+      if (window.innerWidth > 900) {
+        bg.style.height = '';
+        if (overlay) overlay.style.height = '';
+        return;
+      }
+      const h = left.offsetHeight + 'px';
+      bg.style.height = h;
+      if (overlay) overlay.style.height = h;
+    };
+    ajustar();
+    window.addEventListener('resize', ajustar);
+    window.addEventListener('load', ajustar);
+  })();
+</script>
