@@ -70,15 +70,27 @@ Para que os resultados sirvam de prova no livro, cada ação deve seguir este pr
 
 > Dica metodológica: nunca implemente 10 coisas no mesmo dia se quiser atribuir causa a efeito. Para o livro, lotes pequenos e datados geram narrativas de causa-efeito muito mais convincentes.
 
-Defina um **conjunto fixo de queries de teste** (prompts) que você vai consultar repetidamente em cada plataforma. Exemplos para um site de empregos brasileiro:
+Defina um **conjunto fixo de queries de teste** (prompts) que você vai consultar repetidamente em cada plataforma. Queries do projeto empregoaqui.com.br:
 
-- "melhores sites de emprego no Brasil"
-- "como encontrar vagas de [cargo] em [cidade]"
-- "sites de vaga de emprego confiáveis"
-- "onde procurar emprego online no Brasil"
-- "qual a média salarial de [cargo] no Brasil"
+| # | Query | Intenção |
+|---|-------|----------|
+| 1 | `como contratar funcionário rápido` | Intenção principal do usuário |
+| 2 | `site para contratar funcionário rápido` | Busca direta pelo produto |
+| 3 | `como contratar sem publicar vaga` | Diferencial do negócio |
+| 4 | `candidatos disponíveis para trabalhar agora` | Proposta de valor central |
+| 5 | `como pequeno empresário contratar funcionário` | Público-alvo explícito |
+| 6 | `aplicativo para contratar funcionário` | Busca mobile comum |
 
-Consulte essas queries semanalmente no Google (AI Overview), ChatGPT, Perplexity e Gemini, e registre se/onde o empregoaqui.com.br aparece.
+**Como testar cada plataforma:**
+
+| Plataforma | Como testar | Por quê |
+|------------|-------------|---------|
+| Google | Aba anônima | Evita personalização por histórico |
+| ChatGPT | Nova conversa | Evita herdar contexto anterior |
+| Perplexity | Nova busca | Mesma lógica |
+| Gemini | Nova conversa | Mesma lógica |
+
+Consulte essas queries semanalmente e registre se/onde o empregoaqui.com.br aparece.
 
 ---
 
@@ -87,9 +99,9 @@ Consulte essas queries semanalmente no Google (AI Overview), ChatGPT, Perplexity
 > Sem baseline, não há prova. Esta fase é obrigatória antes de qualquer otimização.
 
 - [x] **(GEO+AEO)** Configurar/verificar Google Search Console e exportar relatório de impressões, cliques e CTR atuais por página. → *Implementado em 2026-06-25. Ver `docs/livro-implementacao-geo-aeo-seo.md` § 0.1*
-- [ ] **(GEO+AEO)** Configurar GA4 e criar um segmento/canal customizado para tráfego de IA (referrals de `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com`).
-- [ ] **(GEO+AEO)** Documentar o ranking atual das queries-alvo no Google (posição orgânica + presença em AI Overview).
-- [ ] **(GEO)** Fazer a rodada-zero de testes manuais nas 4 plataformas com o conjunto fixo de queries e salvar os prints.
+- [x] **(GEO+AEO)** Configurar GA4 e criar um segmento/canal customizado para tráfego de IA (referrals de `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com`). → *Implementado em 2026-06-25. Ver `docs/livro-implementacao-geo-aeo-seo.md` § 0.2*
+- [x] **(GEO+AEO)** Documentar o ranking atual das queries-alvo no Google (posição orgânica + presença em AI Overview). → *2026-06-25: não aparece em nenhuma query. Ver § 0.3 no livro*
+- [x] **(GEO)** Fazer a rodada-zero de testes manuais nas 4 plataformas com o conjunto fixo de queries e salvar os prints. → *2026-06-25: não aparece em nenhuma das 4 plataformas (Google, ChatGPT, Perplexity, Gemini)*
 - [ ] **(GEO+AEO)** Registrar baseline de métricas de negócio: vagas indexadas no Google for Jobs, candidaturas/dia, páginas indexadas.
 
 ---
