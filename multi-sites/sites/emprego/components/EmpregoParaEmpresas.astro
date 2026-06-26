@@ -139,13 +139,23 @@ const bullets = [
       z-index: 3;
       margin: 0;
       border-radius: 0;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, .1);
       background: var(--color-navy-mid);
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
-    .b2b__card-img { height: 240px; border-radius: 0; }
+    .b2b__card-img { height: 240px; border-radius: 0; object-position: center 25%; }
     .b2b__actions { flex-direction: column; }
     .b2b__actions .btn { width: 100%; justify-content: center; }
+
+    /* Fundo + overlay viram um band no topo (atrás do headline), não cobrem a seção empilhada
+       inteira — senão o cover dá zoom enorme e mostra só o centro da foto. */
+    .b2b__bg, .b2b__overlay { height: 400px; bottom: auto; }
+    .b2b__bg { background-position: 55% center; }
+    .b2b__overlay {
+      background: linear-gradient(160deg, rgba(20, 23, 42, .9) 0%, rgba(20, 23, 42, .6) 60%, rgba(20, 23, 42, .3) 100%);
+    }
   }
   @media (max-width: 480px) {
     .b2b__left { min-height: 360px; padding: 40px 20px 32px; }
