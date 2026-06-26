@@ -1,0 +1,49 @@
+---
+/**
+ * Footer — fundo azul escuro. Logo + links de nav. Copyright + tagline.
+ * Desktop: logo esq / links dir. Mobile ≤640px: coluna centralizada.
+ *
+ * ⚠️ Links "Privacidade / Termos / Contato" ainda sem destino real (#) — definir.
+ */
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__top">
+      <div class="footer__logo">
+        <img src="/assets/images/v2/emprego-aqui-logo.svg" alt="Emprego Aqui" class="footer__logo-img" width="180" height="48" />
+      </div>
+      <nav class="footer__links" aria-label="Links do rodapé">
+        <a href="#como-funciona" class="footer__link">Como funciona</a>
+        <a href="#para-empresas" class="footer__link">Para empresas</a>
+        <a href="#" class="footer__link">Privacidade</a>
+        <a href="#" class="footer__link">Termos de uso</a>
+        <a href="#" class="footer__link">Contato</a>
+      </nav>
+    </div>
+    <div class="footer__bottom">
+      <p class="footer__copy">© {year} Emprego Aqui. Todos os direitos reservados.</p>
+      <p class="footer__tagline">O emprego encontra você.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--color-bg-dark); padding: 48px 0 32px; border-top: 1px solid rgba(255, 255, 255, .06); }
+  .footer__inner { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+  .footer__top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; padding-bottom: 32px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+  .footer__logo-img { height: 48px; width: auto; display: block; opacity: .9; }
+  .footer__links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer__link { font-size: 13px; color: rgba(255, 255, 255, .4); transition: color .2s; font-family: var(--font-display); font-weight: 500; text-decoration: none; }
+  .footer__link:hover { color: rgba(255, 255, 255, .8); }
+  .footer__bottom { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .footer__copy { font-size: 12px; color: rgba(255, 255, 255, .25); }
+  .footer__tagline { font-size: 12px; color: rgba(255, 255, 255, .25); font-family: var(--font-display); font-style: italic; }
+
+  @media (max-width: 640px) {
+    .footer__top { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+    .footer__links { justify-content: center; gap: 16px; }
+    .footer__bottom { flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+  }
+</style>

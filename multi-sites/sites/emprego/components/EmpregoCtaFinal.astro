@@ -1,0 +1,89 @@
+---
+/**
+ * CTA Final — fullscreen com imagem de fundo + overlay. Grid texto (esq) + espaço (dir).
+ * Mobile ≤860px: 1 coluna, spacer oculto. Efeito zoom-out no hover.
+ *
+ * ⚠️ Copy provisória (o etapa2 só trouxe o CSS) — revisar.
+ */
+import { siteConfig } from '../site-config.ts';
+const whatsappUrl = siteConfig.site.whatsapp.url;
+---
+
+<section class="cta-final" aria-labelledby="cta-final-title">
+  <div
+    class="cta-final__bg"
+    aria-hidden="true"
+    style="background-image: url('/assets/images/v2/emprego-aqui-cta-bg-final.webp')"
+  ></div>
+  <div class="cta-final__overlay" aria-hidden="true"></div>
+
+  <div class="wrap cta-final__inner">
+    <div class="cta-final__content reveal">
+      <p class="cta-final__eyebrow">Comece agora</p>
+      <h2 class="cta-final__title" id="cta-final-title">
+        O próximo emprego pode estar a uma mensagem de distância
+      </h2>
+      <p class="cta-final__sub">
+        Crie seu currículo grátis em 2 minutos e deixe as empresas da sua região encontrarem você.
+      </p>
+      <div class="cta-final__actions">
+        <a href={whatsappUrl} class="btn btn--coral" target="_blank" rel="noopener">
+          <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 .396C7.16.396 0 7.557 0 16.396c0 2.872.755 5.566 2.072 7.897L.066 32l7.934-2.006A15.9 15.9 0 0 0 16 32.396c8.84 0 16-7.16 16-16S24.84.396 16 .396zm0 29.2a13.2 13.2 0 0 1-6.71-1.84l-.48-.285-4.97 1.255 1.327-4.843-.313-.497A13.13 13.13 0 0 1 2.8 16.396c0-7.28 5.92-13.2 13.2-13.2s13.2 5.92 13.2 13.2-5.92 13.2-13.2 13.2z"/><path d="M23.2 19.2c-.39-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.39-1.01 1.27-1.24 1.53-.23.26-.46.29-.85.1-.39-.2-1.65-.61-3.14-1.94-1.16-1.03-1.94-2.31-2.17-2.7-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.11-1.2-2.89-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.81 1.61 4.07c.2.26 2.78 4.25 6.73 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.32-.95 2.65-1.87.33-.92.33-1.7.23-1.87-.1-.16-.36-.26-.75-.45z"/></svg>
+          Criar meu currículo grátis
+        </a>
+      </div>
+      <p class="cta-final__note">Sem cadastro, sem custo — só o WhatsApp que você já usa.</p>
+    </div>
+    <div class="cta-final__spacer" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .cta-final { position: relative; overflow: hidden; min-height: 540px; display: flex; align-items: center; }
+  .cta-final__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 30%;
+    z-index: 0;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+  .cta-final:hover .cta-final__bg { transform: scale(1); }
+  .cta-final__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(95deg, rgba(20, 23, 42, .88) 0%, rgba(20, 23, 42, .62) 45%, rgba(20, 23, 42, .12) 100%);
+  }
+  .cta-final__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 100px 24px;
+    width: 100%;
+  }
+
+  .cta-final__eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-cta); margin-bottom: 16px; }
+  .cta-final__title { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 54px); font-weight: 800; color: #fff; line-height: 1.08; margin-bottom: 20px; text-shadow: 0 2px 14px rgba(0, 0, 0, .35); }
+  .cta-final__sub { font-size: 18px; color: rgba(255, 255, 255, .7); line-height: 1.7; margin-bottom: 36px; max-width: 520px; }
+  .cta-final__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .cta-final__note { margin-top: 16px; font-size: 13px; color: rgba(255, 255, 255, .4); }
+
+  @media (max-width: 860px) {
+    .cta-final { min-height: 480px; }
+    .cta-final__inner { grid-template-columns: 1fr; padding: 72px 24px; }
+    .cta-final__spacer { display: none; }
+    .cta-final__title { font-size: clamp(26px, 6vw, 38px); }
+    .cta-final__sub { font-size: 15px; max-width: none; }
+    .cta-final__actions .btn { width: 100%; max-width: 320px; justify-content: center; }
+    .cta-final__overlay { background: linear-gradient(100deg, rgba(20, 23, 42, .80) 0%, rgba(20, 23, 42, .55) 50%, rgba(20, 23, 42, .1) 100%); }
+  }
+  @media (max-width: 480px) {
+    .cta-final { min-height: 420px; }
+    .cta-final__title { font-size: 26px; }
+  }
+</style>

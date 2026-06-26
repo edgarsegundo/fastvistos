@@ -13,6 +13,12 @@ import EmpregoVideo from '../components/EmpregoVideo.astro';
 import EmpregoPorque from '../components/EmpregoPorque.astro';
 import EmpregoNumeros from '../components/EmpregoNumeros.astro';
 import EmpregoDepoimentos from '../components/EmpregoDepoimentos.astro';
+import EmpregoEmpresasMarquee from '../components/EmpregoEmpresasMarquee.astro';
+import EmpregoParaEmpresas from '../components/EmpregoParaEmpresas.astro';
+import EmpregoFaq from '../components/EmpregoFaq.astro';
+import EmpregoCtaFinal from '../components/EmpregoCtaFinal.astro';
+import EmpregoFooter from '../components/EmpregoFooter.astro';
+import EmpregoWppBar from '../components/EmpregoWppBar.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -54,12 +60,12 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <EmpregoPorque />
     <EmpregoNumeros />
     <EmpregoDepoimentos />
-
-    {/*
-      Ordem oficial das seções (mapa #estrutura do etapa2) — restante na Fase 4:
-      <EmpregoEmpresasMarquee />  ·  <EmpregoParaEmpresas />  ·  <EmpregoFaq />
-      <EmpregoCtaFinal />  ·  <EmpregoFooter />  ·  <EmpregoWppBar />
-    */}
+    <EmpregoEmpresasMarquee />
+    <EmpregoParaEmpresas />
+    <EmpregoFaq />
+    <EmpregoCtaFinal />
+    <EmpregoFooter />
+    <EmpregoWppBar />
 </SharedHomeLayout>
 
 <script>

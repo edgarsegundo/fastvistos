@@ -1,0 +1,155 @@
+---
+/**
+ * Para Empresas (B2B) — seção fullscreen com imagem de fundo + overlay.
+ * Desktop: grid headline (esq) + card glassmorphism (dir). Mobile ≤900px: 2 blocos empilhados.
+ *
+ * ⚠️ Copy provisória (o etapa2 só entregou o CSS do card, não o conteúdo) — revisar.
+ */
+const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
+
+const bullets = [
+  'Veja pessoas disponíveis agora, não currículos parados',
+  'Filtre por região e faixa salarial',
+  'Fale direto pelo WhatsApp, sem intermediário',
+];
+---
+
+<section class="b2b" id="para-empresas" aria-labelledby="b2b-title">
+  <div
+    class="b2b__bg"
+    aria-hidden="true"
+    style="background-image: url('/assets/images/v2/emprego-aqui-empresas-bg-secao.webp')"
+  ></div>
+  <div class="b2b__overlay" aria-hidden="true"></div>
+
+  <div class="wrap b2b__inner">
+
+    <div class="b2b__left reveal">
+      <span class="badge badge--coral">Para empresas</span>
+      <h2 class="b2b__hero-title" id="b2b-title">
+        Precisa contratar <span class="b2b__em">pra ontem?</span>
+      </h2>
+      <p class="b2b__hero-sub">
+        Você não publica vaga e espera. Você vê quem está disponível agora,
+        filtra por região e salário e fala direto no WhatsApp. Sem RH, sem burocracia.
+      </p>
+    </div>
+
+    <div class="b2b__card reveal reveal-delay-1">
+      <img
+        src="/assets/images/v2/emprego-aqui-empresas-foto-rh.webp"
+        alt="Empresária analisando candidatos disponíveis na região"
+        class="b2b__card-img"
+        loading="lazy"
+        width="420"
+        height="200"
+      />
+      <div class="b2b__card-body">
+        <h3 class="b2b__card-title">Encontre quem quer trabalhar agora</h3>
+        <ul class="b2b__list">
+          {bullets.map((b) => (
+            <li>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              {b}
+            </li>
+          ))}
+        </ul>
+        <div class="b2b__actions">
+          <a href={searchUrl} class="btn btn--coral" target="_blank" rel="noopener">Ver candidatos disponíveis</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .b2b { position: relative; overflow: hidden; min-height: 680px; display: flex; align-items: center; padding: 100px 0; }
+  .b2b__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+  .b2b:hover .b2b__bg { transform: scale(1); }
+  .b2b__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(100deg, rgba(20, 23, 42, .92) 0%, rgba(20, 23, 42, .78) 45%, rgba(20, 23, 42, .35) 100%);
+  }
+  .b2b__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .b2b__left .badge { margin-bottom: 16px; }
+  .b2b__hero-title { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 56px); font-weight: 800; line-height: 1.08; color: #fff; margin: 12px 0 20px; }
+  .b2b__em { font-style: normal; color: var(--color-cta); }
+  .b2b__hero-sub { font-size: 17px; color: rgba(255, 255, 255, .65); line-height: 1.7; max-width: 520px; }
+
+  /* Card glassmorphism */
+  .b2b__card {
+    background: rgba(20, 23, 42, .82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, .45);
+  }
+  .b2b__card-img { width: 100%; height: 200px; object-fit: cover; transition: transform .4s ease; display: block; }
+  .b2b__card:hover .b2b__card-img { transform: scale(1.04); }
+
+  .b2b__card-body { padding: 28px; }
+  .b2b__card-title { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 18px; }
+  .b2b__list { list-style: none; padding: 0; margin: 0 0 24px; display: flex; flex-direction: column; gap: 12px; }
+  .b2b__list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: rgba(255, 255, 255, .75); line-height: 1.5; }
+  .b2b__list svg { color: var(--color-cta); flex-shrink: 0; margin-top: 2px; }
+  .b2b__actions { display: flex; gap: 12px; }
+  .b2b__actions .btn { flex: 1; }
+
+  /* ── MOBILE: 2 blocos empilhados ── */
+  @media (max-width: 900px) {
+    .b2b { min-height: auto; display: block; padding: 0; }
+    .b2b__inner { display: flex; flex-direction: column; gap: 0; padding: 0; max-width: none; }
+
+    .b2b__left {
+      position: relative;
+      z-index: 2;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 24px 40px;
+      text-align: left;
+    }
+    .b2b__hero-sub { max-width: none; }
+
+    .b2b__card {
+      position: relative;
+      z-index: 3;
+      margin: 0;
+      border-radius: 0;
+      background: var(--color-navy-mid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .b2b__card-img { height: 240px; border-radius: 0; }
+    .b2b__actions { flex-direction: column; }
+    .b2b__actions .btn { width: 100%; justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .b2b__left { min-height: 360px; padding: 40px 20px 32px; }
+    .b2b__hero-title { font-size: 26px; }
+    .b2b__card-img { height: 200px; }
+  }
+</style>
