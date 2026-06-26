@@ -79,14 +79,16 @@ A lógica no componente verifica se o valor está preenchido antes de renderizar
 2. Clique em **"Adicionar propriedade"**
 3. Escolha **"Prefixo de URL"** (não "Domínio") e digite `https://empregoaqui.com.br/`
 4. Escolha o método **"Tag HTML"**
-5. Copie o valor do atributo `content` da meta tag exibida. Exemplo:
+5. Copie o valor do atributo `content` da meta tag exibida:
+   ```html
+   <meta name="google-site-verification" content="4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk" />
    ```
-   oeOHclcLj3XHEl3bt5vhv3ZAGb0E3bV7o3rVAFIEz9I
-   ```
+   → Copie apenas o valor dentro de `content="..."`, não a tag inteira.
+
 6. Cole esse valor no `site-config.ts`:
    ```typescript
    verification: {
-       googleSiteVerification: 'oeOHclcLj3XHEl3bt5vhv3ZAGb0E3bV7o3rVAFIEz9I',
+       googleSiteVerification: '4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk',
    },
    ```
 7. Faça o deploy do site
@@ -130,7 +132,8 @@ Assim que a verificação for confirmada, configure dentro do GSC:
 
 | Métrica | Valor | Data |
 |---------|-------|------|
-| Páginas indexadas | — | — |
+| Páginas indexadas | 116 | 2026-06-25 |
+| Páginas não indexadas | 205 | 2026-06-25 |
 | Impressões totais (últimos 28 dias) | — | — |
 | Cliques totais (últimos 28 dias) | — | — |
 | CTR médio | — | — |
@@ -141,10 +144,10 @@ Assim que a verificação for confirmada, configure dentro do GSC:
 
 #### Status
 
-- [ ] Domínio verificado no GSC ← **pendente: fazer deploy e clicar em "Verificar" no GSC**
+- [x] Domínio verificado no GSC — método: Tag HTML — data: 2026-06-25
 - [x] Código preenchido em `site-config.ts` — valor: `4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk`
-- [ ] Deploy realizado
-- [ ] Sitemap submetido
-- [ ] Baseline exportado e registrado na tabela acima
+- [x] Deploy realizado
+- [ ] Sitemap submetido ← próximo passo manual no GSC
+- [x] Baseline registrado abaixo
 
 ---

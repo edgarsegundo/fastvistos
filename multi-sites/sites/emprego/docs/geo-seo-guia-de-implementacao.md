@@ -86,7 +86,7 @@ Consulte essas queries semanalmente no Google (AI Overview), ChatGPT, Perplexity
 
 > Sem baseline, não há prova. Esta fase é obrigatória antes de qualquer otimização.
 
-- [ ] **(GEO+AEO)** Configurar/verificar Google Search Console e exportar relatório de impressões, cliques e CTR atuais por página. → *Passo a passo detalhado em `docs/livro-implementacao-geo-aeo-seo.md` § 0.1*
+- [x] **(GEO+AEO)** Configurar/verificar Google Search Console e exportar relatório de impressões, cliques e CTR atuais por página. → *Implementado em 2026-06-25. Ver `docs/livro-implementacao-geo-aeo-seo.md` § 0.1*
 - [ ] **(GEO+AEO)** Configurar GA4 e criar um segmento/canal customizado para tráfego de IA (referrals de `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com`).
 - [ ] **(GEO+AEO)** Documentar o ranking atual das queries-alvo no Google (posição orgânica + presença em AI Overview).
 - [ ] **(GEO)** Fazer a rodada-zero de testes manuais nas 4 plataformas com o conjunto fixo de queries e salvar os prints.
