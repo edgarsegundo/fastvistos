@@ -244,7 +244,7 @@ export const siteConfig = {
     },
 
     analytics: {
-        gtmId: 'GTM-59SRNCQD',
+        gtmId: 'GTM-TDVVKHKB',
     },
 
     verification: {
