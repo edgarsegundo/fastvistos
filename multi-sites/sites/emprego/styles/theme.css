@@ -151,7 +151,7 @@
     padding: 6px 14px;
     border-radius: 30px;
   }
-  .badge--coral { background: rgba(242, 139, 48, .15); color: var(--color-cta); }
+  .badge--coral { background: rgba(242, 139, 48, .25); color: var(--color-cta); }
   .badge--white { background: rgba(255, 255, 255, .12); color: #fff; }
 
   /* ── Títulos / labels de seção ───────────────────────────────── */
