@@ -9,21 +9,16 @@ import WowItWorks from '../components/WowItWorks.astro';
 import CallToAction from '../components/CallToAction.astro';
 import CarouselSection from '../components/CarouselSection.astro';
 import Navigation from '../components/Navigation.astro';
-import HowItWorks from '../components/HowItWorks.astro'; 
+import HowItWorks from '../components/HowItWorks.astro';
 import WhyUs from '../components/WhyUs.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=Roboto:wght@400;500&display=swap"
-  rel="stylesheet"
-/>
-
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal`}
     bodyStyle={`${bodyStyle}`}
-    themeToggleDisable={true} // New prop to control theme toggle visibility
+    themeToggleDisable={true}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
@@ -32,17 +27,22 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     authorNameFromConf={siteConfig.site.authorName}
     imageFromConf={null}
     imageUrlFromConf={siteConfig.site.primaryImage.url}
-    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
-    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
-    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
+    imageCaptionFromConf={siteConfig.site.primaryImage.alt}
+    imageWidthFromConf={siteConfig.site.primaryImage.width}
+    imageHeightFromConf={siteConfig.site.primaryImage.height}
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=Roboto:wght@400;500&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
         <JsonLdHomePageBase
             faqList={[]}
             servicesList={[]}
             reviewsList={[]}
             disableReviews={false}
+            disableLocalBusiness={true}
         />
     </Fragment>
 
@@ -51,21 +51,19 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         <HeroSection />
         <HowItWorks />
 
-        <h2 class="text-4xl font-bold mt-16 text-center" 
-          style="font-family: 'Bricolage Grotesque', sans-serif !important; font-size: 28px; color: #232320;">
+        <h2 class="font-heading font-bold mt-16 text-center text-ink text-[28px]">
         Porque o emprego aqui é diferente?
         </h2>
 
         <WhyUs />
 
         <div class="container mx-auto max-w-3xl px-8 flex flex-col items-center">
-          <h2 class="text-4xl font-bold mt-16 text-center" 
-            style="font-family: 'Bricolage Grotesque', sans-serif !important; font-size: 28px; color: #232320;">
+          <h2 class="font-heading font-bold mt-16 text-center text-ink text-[28px]">
           EMPRESAS
           </h2>
 
           <section class="py-2 bg-gray-100 px-4 flex justify-center">
-            <div class="max-w-xl w-full rounded-3xl shadow-lg border border-gray-200 p-8 sm:p-10" style="background-color: #FFFFF7">
+            <div class="max-w-xl w-full rounded-3xl shadow-lg border border-gray-200 p-8 sm:p-10 bg-card">
 
               <!-- Logos inline -->
               <div class="flex items-center gap-4 mb-6">
@@ -74,34 +72,22 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
               </div>
 
               <!-- Texto -->
-              <p class="leading-relaxed" 
-                  style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; color: #232320;">
+              <p class="deck leading-relaxed text-ink text-xl">
                 Clique no botão abaixo e acesse centenas de currículos de candidatos qualificados. Com o Emprego Aqui, sua empresa contrata de forma rápida, segura e eficiente.
               </p>
 
             </div>
-
-
-            
           </section>
 
-          <div class="w-full  flex flex-col items-center px-4">
-            <a 
+          <div class="w-full flex flex-col items-center px-4">
+            <a
               href="https://admin.empregoaqui.com.br/api/posts/search-page/"
-              class="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-semibold text-2xl py-3 rounded-lg transition duration-200" 
-              style="font-family: inter; color: #ffffff; background-color: #37D315;"
+              class="btn-cta"
             >
               Procurar candidatos
             </a>
           </div>
         </div>
-
-      <!-- <a href="https://admin.empregoaqui.com.br/api/posts/search-page/" class="inline-flex items-center justify-center px-8 py-3 bg-green-600 hover:bg-green-700 
-      !text-white hover:!text-white visited:!text-white
-      text-xl font-semibold rounded-full shadow transition-all duration-200">
-        Procurar Vagas
-      </a> -->
-
 
     </div>
 
@@ -109,103 +95,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         <!-- <CarouselSection /> -->
         <!-- <FooterSection /> -->
     </main>
-
-    <!-- Body content -->
-    <!-- <p>This is the home page content for {siteConfig.site.siteName}.</p> -->
 </SharedHomeLayout>
 
 <style is:global>
-  :root {
-    --font-title: 'Poppins', system-ui, sans-serif;
-    --font-subtitle: 'Inter', system-ui, sans-serif;
-    --font-body: 'Roboto', system-ui, sans-serif;
-
-    --color-text-main: #1f2937;
-    --color-whatsapp: #25d366;
-    --color-whatsapp-dark: #128c7e;
-  }
-
-  /* BASE — clean, popular, light gray */
-  body {
-    font-family: var(--font-body);
-    line-height: 1.6;
-    color: var(--color-text-main);
-    background: #F3F4F6;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  section {
-    margin-bottom: 2.5rem;
-  }
-
-  /* TITLES — job headline */
-  h1 {
-    font-family: var(--font-title);
-    font-size: clamp(1.8rem, 5vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 0.8rem;
-  }
-
-  h2 {
-    font-family: var(--font-title);
-    font-size: clamp(1.4rem, 4vw, 1.9rem);
-    font-weight: 600;
-    line-height: 1.25;
-    margin-bottom: 0.6rem;
-  }
-
-  /* SUBTITLES — explanatory */
-  h3,
-  h4 {
-    font-family: var(--font-subtitle);
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-bottom: 0.4rem;
-  }
-
-  /* BODY — everyone understands */
-  p {
-    font-size: 1rem;
-    max-width: 72ch;
-    margin-bottom: 1rem;
-  }
-
-  a {
-    font-family: var(--font-subtitle);
-    color: var(--color-whatsapp-dark);
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  /* CTA WhatsApp */
-  .btn-whatsapp {
-    display: inline-block;
-    font-family: var(--font-subtitle);
-    background: var(--color-whatsapp);
-    color: #ffffff;
-    padding: 0.75rem 1.2rem;
-    border-radius: 999px;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  /* MICROCOPY */
-  .kicker {
-    font-family: var(--font-subtitle);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-whatsapp-dark);
-  }
-
-  .deck {
-    font-family: var(--font-body);
-    font-size: 1.05rem;
-    line-height: 1.5;
-  }
 </style>

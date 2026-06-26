@@ -35,7 +35,36 @@ public/[SITEID]/assets/images/logo/home-page-main-image-fastvistos-mulher-passap
 
 I already created the HeaderSection.astro and the HeroSection.astro, do the same by creating the respective astro files for the other remaining sections in the index_test.html file.
 
+---
 
+## 🎨 Setup do CSS / tema do site (ANTES de montar a página)
+
+Todo site novo segue o padrão Tailwind v4 descrito em
+[`docs/⭐ README.css.tailwind.no.projeto.md`](./⭐%20README.css.tailwind.no.projeto.md). Leia esse
+arquivo — ele é a referência oficial. Em resumo, ao iniciar um site:
+
+1. **Edite só o `styles/theme.css`** do site (o `global.css` e os layouts são AUTO-GENERATED).
+2. **Defina no `@theme` as três variáveis que o reset do `body` (global.css) consome:**
+   `--color-text-main`, `--color-bg-dark` e `--font-sans`. Sem elas o body fica sem cor/fonte/fundo.
+   Não re-declare o `body` no `@layer base` só para isso.
+3. **Cores e fontes da marca no `@theme`** — uma `--font-*` para cada fonte carregada no `<link>`
+   (sem peso morto), nomes sem colidir com paletas nativas do Tailwind (`neutral`...) e sem prefixo
+   duplicado (`--color-card` → `bg-card`, nunca `--color-bg-card` → `bg-bg-card`).
+4. **Carregue as fontes** dentro de `<Fragment slot="head">` no `index.astro` (cai no `<head>`).
+5. **Nada de `style=""` inline** com cor/fonte/tamanho hardcoded — use classes Tailwind apontando
+   para as vars do `@theme` (`text-ink`, `font-heading`, `text-[28px]`). Isso vale também para
+   `bodyStyle` no layout: não passe `font-family` hardcoded, defina `--font-sans` no `@theme`.
+
+> O site `multi-sites/sites/revistadoturismo/` é um bom exemplo já no padrão.
+
+---
+
+> ⚠️ **Atenção ao template abaixo** (corrigido nesta versão):
+> - As props de imagem vêm de `siteConfig.site.primaryImage` como **`.alt` / `.width` / `.height`**
+>   (não `.imageCaption` / `.imageWidth` / `.imageHeight`, que não existem e dão erro de tipo).
+> - **Não** coloque `font-family: 'Source Sans Pro'` hardcoded no `bodyStyle` nem `text-white gradient`
+>   no `bodyClass` por padrão — isso é específico do fastvistos. Defina a fonte via `--font-sans` no
+>   `theme.css` e adicione classes de cor/fundo só se o design do seu site pedir.
 
 ```html
 ---
@@ -50,8 +79,8 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal text-white gradient antialiased`}
-    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
+    bodyStyle={`${bodyStyle}`}
 
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
@@ -62,9 +91,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     authorNameFromConf={siteConfig.site.authorName}
     imageFromConf={null}
     imageUrlFromConf={siteConfig.site.primaryImage.url}
-    imageCaptionFromConf={siteConfig.site.primaryImage.imageCaption}
-    imageWidthFromConf={siteConfig.site.primaryImage.imageWidth}
-    imageHeightFromConf={siteConfig.site.primaryImage.imageHeight}
+    imageCaptionFromConf={siteConfig.site.primaryImage.alt}
+    imageWidthFromConf={siteConfig.site.primaryImage.width}
+    imageHeightFromConf={siteConfig.site.primaryImage.height}
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">

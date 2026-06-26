@@ -92,7 +92,7 @@
     color: #374151;
     text-align: justify;
     hyphens: auto;
-    margin-bottom: 3.45rem !important;
+    margin-bottom: 2.45rem !important;
 }
 
 .blog-content blockquote p {
@@ -206,7 +206,7 @@
     font-size: 6rem;
     line-height: 1;
     font-weight: 700;
-    color: #820ad1; /* roxo Nubank */
+    color: #333;
 }
 
 .blog-content blockquote p {
@@ -233,7 +233,7 @@
     padding: 1rem;
     border-radius: 0.75rem;
     overflow-x: auto;
-    margin: 1.5rem 0;
+    margin: 0.5rem 0 3.5rem 0;
     border: 1px solid #535353;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }

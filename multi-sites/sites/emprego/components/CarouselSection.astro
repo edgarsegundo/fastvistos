@@ -39,6 +39,13 @@ function buildSources(filename, breakpoints, scales, imageBase) {
     };
 }
 
+function safeImageName(image) {
+    if (typeof image === 'string' && image.trim() !== '') {
+        return path.parse(image).name;
+    }
+    return 'placeholder'; // ou qualquer nome de imagem padrão
+}
+
 ---
 
 <style>
@@ -153,7 +160,7 @@ function buildSources(filename, breakpoints, scales, imageBase) {
                             height={320}
                             sizes="(max-width: 1023px) 320px, 608px"
                             sources={buildSources(
-                                path.parse(article.image).name,
+                                safeImageName(article.image),
                                 [608, 320],
                                 [1, 2],
                                 `/assets/images/blog/resized/`

@@ -10,48 +10,91 @@ export const siteConfig = {
         canonical: 'https://empregoaqui.com.br/',
         authorName: 'Edgar Rezende',
         primaryImage: {
-            url: 'https://empregoaqui.com.br/assets/images/logo/home-page-main-image-emprego.webp',
-            width: 1280,
-            height: 720,
+            url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+            width: 1200,
+            height: 630,
             type: 'image/webp',
-            alt: 'Emprego Aqui - Plataforma de empregos e oportunidades'
+            alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora'
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://empregoaqui.com.br/assets/images/logo/logo-emprego.png',
-            alt: 'Emprego Aqui - Plataforma de empregos e oportunidades',
-            width: 530,
-            height: 67,
+            url: 'https://empregoaqui.com.br/assets/images/ld-json/logo/logo-emprego-aqui.png',
+            alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
+            width: 300,
+            height: 60,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://empregoaqui.com.br/assets/images/logo/home-page-main-image-emprego.webp', // Important for search and social previews
+        thumbnailUrl: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
 
         assetsUrlBase: 'https://empregoaqui.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
-        priceRange: '$$', // e.g. $, $$, $$$, $$$$
-        openingHours: [
-            'Mo-Fr 09:00-18:00',
-            'Sa 09:00-13:00',
+        priceRange: 'R$', // faixa de preço do serviço (Schema.org: $, $$, $$$)
+        openingHoursSpecification: [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday"
+                ],
+                "opens": "09:00",
+                "closes": "18:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "09:00",
+                "closes": "13:00"
+            }
         ],
         sameAs: [  // Social media profiles
             'https://www.facebook.com/empregoaqui/',
             'https://x.com/EmpregoAqui',
-            'https://www.youtube.com/@EmpregoAqui/shorts',
+            'https://www.instagram.com/empregoaqui/',
+            'https://www.youtube.com/@EmpregoAqui',
         ],
         geo: {
             latitude: -22.8807734, // Latitude for the business location
             longitude: -47.0596895, // Longitude for the business location
         },
         serviceArea: {
-            name: 'Campinas e região metropolitana de São Paulo',
+            name: 'Brazil',
         },
         aggregateRating: {
-            ratingValue: '5.0',
-            reviewCount: '277',
+            ratingValue: 5,
+            reviewCount: 277,
         },
+
+        reviews: [],
+
+        makesOffer: [
+            {
+                service: 'Conexão Direta entre Pequenas Empresas e Candidatos Disponíveis',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Cadastro de Candidatos Prontos para Trabalhar Agora',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Busca de Candidatos por Região e Faixa Salarial',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Contato Direto com Candidatos via WhatsApp',
+                priceCurrency: 'BRL',
+            },
+            {
+                service: 'Contratação Rápida sem Publicar Vaga',
+                priceCurrency: 'BRL',
+            },
+        ],
+
         address: {
             streetAddress: 'Av. Júlio Diniz, 257',
             addressLocality: 'Taquaral, Campinas',
@@ -59,55 +102,97 @@ export const siteConfig = {
             postalCode: '13075-420',
             addressCountry: 'BR',
         },
+
         contactPoint: {
             telephone: '+551920422785',
             telephoneFormatted: '+55 (19) 2042-2785',
-            contactType: 'Customer Service',
-            areaServed: 'BR',
-            availableLanguage: ['Portuguese', 'English'],
+            contactType: 'customer service',
+            areaServed: {
+                "@type": "Country",
+                "name": "Brazil"
+            },
+            availableLanguage: ["pt-BR"],
+            email: 'contato@empregoaqui.com.br',
+        },
+        whatsapp: {
+            telephone: '+551920422785',
+            telephoneFormatted: '+55 (19) 2042-2785',
+            contactType: 'customer support',
+            contactOption: "WhatsApp",
+            url: 'https://wa.me/551920422785',
+            areaServed: {
+                "@type": "Country",
+                "name": "Brazil"
+            },
+            availableLanguage: ["pt-BR"],
             email: 'contato@empregoaqui.com.br',
         },
         socialMedia: {
             facebook: 'https://www.facebook.com/empregoaqui/',
             twitter: '@EmpregoAqui',
-            instagram: 'https://instagram.com/empregoaqui',
-            youtube: 'https://youtube.com/@EmpregoAqui',
+            instagram: 'https://www.instagram.com/empregoaqui/',
+            youtube: 'https://www.youtube.com/@EmpregoAqui',
+        },
+    },
+
+    organization: {
+        id: 'https://empregoaqui.com.br/#organization',
+        name: 'Emprego Aqui',
+        url: 'https://empregoaqui.com.br',
+        canonical: 'https://empregoaqui.com.br/',
+        logo: {
+            url: 'https://empregoaqui.com.br/assets/images/ld-json/logo/logo-emprego-aqui.png',
+            alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
+            width: 300,
+            height: 60,
         },
     },
 
     homePageConfig: {
         seo: {
-            title: 'Emprego Aqui — Plataforma de empregos e oportunidades',
-            description: 'Emprego Aqui — Plataforma de empregos e oportunidades para encontrar vagas de emprego e desenvolver sua carreira.',
+            title: 'Emprego Aqui — Precisa Contratar pra Ontem? Fale Direto com Quem Quer Trabalhar',
+            description: 'Sem currículo. Sem anúncio. Sem enrolação. O Emprego Aqui conecta pequenos empresários com candidatos disponíveis agora — contato direto pelo WhatsApp. Quando é pra agora.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://empregoaqui.com.br/assets/images/logo/home-page-main-image-emprego.webp',
-                    width: 1280,
-                    height: 720,
+                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    width: 1200,
+                    height: 630,
                     type: 'image/webp',
-                    alt: 'Emprego Aqui - Plataforma de empregos e oportunidades'
-                }
+                    alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
+                },
+                title: 'Emprego Aqui — Quando é pra agora.',
+                description: 'Você não publica vaga. Você vê pessoas disponíveis agora. Filtra por região e salário. Fala direto no WhatsApp. Sem burocracia.',
             }
         },
     },
 
     blogPageConfig: {
         seo: {
+            title: 'Blog | Como Contratar Rápido, Dicas para Pequenos Empresários e para Quem Busca Emprego | Emprego Aqui',
+            description: 'Dicas práticas para pequenos empresários contratarem rápido e sem RH, e para candidatos serem encontrados pelas empresas. Emprego do jeito que o Brasil vive.',
             themeColor: '#0070f3',
+            canonical: 'https://empregoaqui.com.br/',
             openGraph: {
-                type: 'blog',
+                type: 'website',
                 tags: [
-                    'emprego',
-                    'vagas de emprego',
-                    'carreira',
-                    'oportunidades de trabalho'
+                    'contratar funcionário rápido',
+                    'pequeno empresário contratar',
+                    'vaga urgente',
+                    'candidatos disponíveis agora',
+                    'contratação sem RH',
+                    'emprego sem currículo',
                 ],
             }
         },
         pagination: {
             postsPerPage: 10,
+        },
+        customStyles: {
+            cssVars: {
+                '--blog-bg-color': '#000',
+            },
         },
     },
 
@@ -116,12 +201,15 @@ export const siteConfig = {
             themeColor: '#0070f3',
             openGraph: {
                 type: 'article',
-                section: 'Emprego e Oportunidades',
+                author: 'Emprego Aqui',
+                section: 'Contratação Rápida, Pequenos Negócios e Mercado de Trabalho Real',
                 tags: [
-                    'emprego',
-                    'vagas de emprego',
-                    'carreira',
-                    'oportunidades de trabalho'
+                    'contratar funcionário rápido',
+                    'pequeno empresário contratar',
+                    'vaga urgente',
+                    'candidatos disponíveis agora',
+                    'contratação sem RH',
+                    'emprego sem currículo',
                 ],
             }
         },
@@ -132,27 +220,27 @@ export const siteConfig = {
 
     searchPageConfig: {
         seo: {
-            title: 'Emprego Aqui — Plataforma de empregos e oportunidades',
-            description: 'Emprego Aqui — Plataforma de empregos e oportunidades para encontrar vagas de emprego e desenvolver sua carreira.',
+            title: 'Candidatos Disponíveis para Trabalhar Agora | Emprego Aqui',
+            description: 'Veja candidatos disponíveis na sua região. Filtre por localidade e faixa salarial. Contato direto pelo WhatsApp. Sem publicar vaga, sem burocracia.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://empregoaqui.com.br/assets/images/logo/home-page-main-image-emprego.webp',
-                    width: 1280,
-                    height: 720,
+                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    width: 1200,
+                    height: 630,
                     type: 'image/webp',
-                    alt: 'Emprego Aqui - Plataforma de empregos e oportunidades'
+                    alt: 'Candidatos Disponíveis para Trabalhar Agora — Emprego Aqui'
                 }
             }
         },
     },
 
     socialMedia: {
-        facebook: 'https://facebook.com/empregoaqui',
+        facebook: 'https://www.facebook.com/empregoaqui/',
         twitter: '@EmpregoAqui',
-        instagram: 'https://instagram.com/empregoaqui',
-        youtube: 'https://youtube.com/@EmpregoAqui',
+        instagram: 'https://www.instagram.com/empregoaqui/',
+        youtube: 'https://www.youtube.com/@EmpregoAqui',
     },
 
     analytics: {

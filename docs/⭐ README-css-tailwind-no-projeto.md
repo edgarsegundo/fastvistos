@@ -154,6 +154,66 @@ Você pode ter múltiplos blocos `@theme` em arquivos diferentes — o Tailwind 
 
 ---
 
+### ⚠️ Contrato com o reset do `body` (global.css)
+
+O `global.css` é AUTO-GENERATED e o reset do `<body>` dele referencia **três variáveis** que o seu `theme.css` precisa fornecer:
+
+```css
+/* global.css (auto-generated) — NÃO editar */
+body {
+    color: var(--color-text-main);
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-dark);
+}
+```
+
+Por isso, **defina essas três no `@theme` do seu `theme.css`** e deixe o reset do `global.css` fazer o trabalho:
+
+```css
+/* theme.css */
+@theme {
+  --color-text-main: #1f2937;   /* cor do texto padrão */
+  --color-bg-dark: #F3F4F6;     /* fundo da página (o nome "bg-dark" vem do template;
+                                   o valor pode ser claro ou escuro, conforme a marca) */
+  --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+> ❌ **Não re-declare o `body` inteiro** dentro de `@layer base` só para mudar cor/fonte/fundo —
+> isso duplica o reset e deixa variáveis órfãs. Use `@layer base` apenas para o que o
+> `global.css` **não** cobre (ex: `-webkit-font-smoothing`, defaults tipográficos de `h1`/`h2`/`p`).
+
+---
+
+### Convenção de nomes das variáveis `@theme`
+
+O nome da variável vira o nome da classe (`--color-card` → `bg-card`, `text-card`). Para não confundir quem lê o HTML:
+
+- **Não colida com as paletas nativas do Tailwind** (`neutral`, `slate`, `gray`, `red`...). Evite `--color-neutral-dark` (parece um shade de `neutral`); prefira um nome próprio como `--color-ink`.
+- **Não repita o prefixo da classe** no nome da variável. `--color-bg-card` vira `bg-bg-card` (feio e redundante). Use `--color-card` → `bg-card`.
+- **Nomeie pelo papel, não pela aparência** — `--color-cta`, `--color-ink`, `--color-card` envelhecem melhor que `--color-green` ou `--color-light-gray`.
+
+---
+
+### Toda fonte carregada precisa ser usada (sem peso morto)
+
+Cada família no `<link>` do Google Fonts **deve** ter uma `--font-*` correspondente no `@theme` e ser de fato usada. Carregar uma fonte que ninguém referencia é download desperdiçado; usar uma fonte que não está no `<link>` quebra o visual (cai no fallback).
+
+```css
+/* theme.css — uma var por fonte carregada */
+@theme {
+  --font-heading: 'Bricolage Grotesque', sans-serif;  /* títulos de seção */
+  --font-title: 'Poppins', system-ui, sans-serif;
+  --font-subtitle: 'Inter', system-ui, sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+}
+```
+
+> Ao trocar a fonte de um elemento, confira se a fonte antiga ainda é usada em outro lugar.
+> Se não for, **remova-a do `<link>`**. Se a fonte nova não estiver no `<link>`, **adicione**.
+
+---
+
 ### `@layer base` — reset e estilos globais
 
 Estilos aplicados diretamente em elementos HTML (`html`, `body`, `*`, `h1`...) — sem classes, sem seletores customizados. São os comportamentos base do site que valem para tudo. A fonte saiu daqui porque agora vive no `@theme`, mas `box-sizing`, `scroll-behavior`, `margin`, `line-height` continuam fazendo sentido aqui — são resets e defaults globais que não pertencem a nenhum componente específico.
@@ -244,6 +304,25 @@ Para estilos simples e específicos, use Tailwind direto no HTML. Crie uma class
 <!-- Muitas propriedades ou seletores complexos: classe local -->
 <div class="hero">...</div>
 ```
+
+---
+
+## ❌ Evite `style=""` inline no HTML
+
+`style="..."` inline tem a maior especificidade de todas e **fura a cascata** das `@layer` — vence até as classes utilitárias do Tailwind, tornando o estilo imprevisível e difícil de sobrescrever. Além disso, espalha cor/fonte hardcoded pelo HTML em vez de centralizar no `@theme`.
+
+```html
+<!-- ❌ Evite: cor e fonte hardcoded, fora do design system -->
+<h2 style="font-family: 'Bricolage Grotesque'; font-size: 28px; color: #232320;">EMPRESAS</h2>
+
+<!-- ✅ Prefira: classes Tailwind apontando para as vars do @theme -->
+<h2 class="font-heading text-[28px] text-ink">EMPRESAS</h2>
+```
+
+Para tamanhos pontuais que não estão na escala, use o valor arbitrário do Tailwind (`text-[28px]`) em vez de `style="font-size: 28px"`. Para cor e fonte, **sempre** uma var do `@theme` (`text-ink`, `font-heading`).
+
+> Mesma regra vale para `bodyStyle`/`bodyClass` nos layouts: não passe `font-family` hardcoded —
+> defina `--font-sans` no `@theme` e deixe o reset do `body` aplicar.
 
 ---
 
@@ -355,4 +434,9 @@ no `theme.css` do site:
 - [ ] `global.css` e `theme.css` importados em todos os layouts (nessa ordem)
 - [ ] Novos layouts criados com os dois imports obrigatórios
 - [ ] Cores hardcoded no CSS substituídas por `var(--color-*)`
+- [ ] `--color-text-main`, `--color-bg-dark` e `--font-sans` definidas no `@theme` (contrato do reset do `body`)
+- [ ] `body` NÃO re-declarado no `@layer base` só para mudar cor/fonte/fundo
+- [ ] Nomes de var sem colidir com paletas nativas (`neutral`...) e sem prefixo duplicado (`bg-bg-*`)
+- [ ] Toda fonte no `<link>` tem `--font-*` no `@theme` e é usada (sem peso morto)
+- [ ] Sem `style=""` inline com cor/fonte/tamanho hardcoded no HTML ou no `bodyStyle`
 - [ ] Usar classes normalmente: `bg-primary-500`, `text-custom-dark`, etc.
