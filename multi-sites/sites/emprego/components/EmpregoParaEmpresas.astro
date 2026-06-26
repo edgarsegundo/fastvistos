@@ -30,8 +30,12 @@ const bullets = [
         Precisa contratar <span class="b2b__em">pra ontem?</span>
       </h2>
       <p class="b2b__hero-sub">
-        Você não publica vaga e espera. Você vê quem está disponível agora,
-        filtra por região e salário e fala direto no WhatsApp. Sem RH, sem burocracia.
+
+
+
+        Sem filtrar 200 currículos. Sem marcar 3 entrevistas.<br>
+        Sem esperar enquanto a equipe fica sobrecarregada.
+      
       </p>
     </div>
 
@@ -94,7 +98,7 @@ const bullets = [
   .b2b__left .badge { margin-bottom: 16px; }
   .b2b__hero-title { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 56px); font-weight: 800; line-height: 1.08; color: #fff; margin: 12px 0 20px; }
   .b2b__em { font-style: normal; color: var(--color-cta); }
-  .b2b__hero-sub { font-size: 17px; color: rgba(255, 255, 255, .65); line-height: 1.7; max-width: 520px; }
+  .b2b__hero-sub { font-size: 14px; color: rgba(255, 255, 255, .65); line-height: 1.7; max-width: 520px; }
 
   /* Card glassmorphism */
   .b2b__card {
@@ -125,7 +129,7 @@ const bullets = [
     .b2b__left {
       position: relative;
       z-index: 2;
-      min-height: 400px;
+      min-height: 520px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -151,14 +155,15 @@ const bullets = [
 
     /* Fundo + overlay viram um band no topo (atrás do headline), não cobrem a seção empilhada
        inteira — senão o cover dá zoom enorme e mostra só o centro da foto. */
-    .b2b__bg, .b2b__overlay { height: 400px; bottom: auto; }
-    .b2b__bg { background-position: 55% center; }
+    .b2b__bg, .b2b__overlay { height: 480px; bottom: auto; }
+    .b2b__bg { background-size: 150% auto; background-position: 20% top; background-color: #1e2237; background-repeat: no-repeat; }
     .b2b__overlay {
-      background: linear-gradient(to top, rgba(20, 23, 42, .95) 0%, rgba(20, 23, 42, .55) 55%, rgba(20, 23, 42, .15) 100%);
+      background: linear-gradient(to top, rgba(20, 23, 42, .95) 0%, rgba(20, 23, 42, .55) 50%, rgba(20, 23, 42, .40) 100%);
     }
   }
   @media (max-width: 480px) {
-    .b2b__left { min-height: 360px; padding: 40px 20px 32px; }
+    .b2b__left { min-height: 320px; padding: 40px 20px 32px; }
+    .b2b__bg, .b2b__overlay { height: 320px; }
     .b2b__hero-title { font-size: 26px; }
     .b2b__card-img { height: 200px; }
   }
