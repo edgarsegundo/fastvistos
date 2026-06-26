@@ -9,6 +9,7 @@
 ---
 
 <section class="numeros" aria-label="Números do Emprego Aqui">
+  <div class="numeros__bg" aria-hidden="true"></div>
   <div class="numeros__inner">
 
     <div class="num-card reveal">
@@ -40,7 +41,15 @@
 
 <style>
   .numeros { background: var(--color-bg-dark); padding: 72px 0; position: relative; overflow: hidden; }
+  .numeros__bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(242, 139, 48, .08) 0%, transparent 65%);
+    pointer-events: none;
+  }
   .numeros__inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
