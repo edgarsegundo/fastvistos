@@ -1,10 +1,12 @@
-# Manual de Implementação GEO + AEO — empregoaqui.com.br
+# Manual de Implementação GEO + AEO — empregoaqui.com.br (v2)
 
 > **Para quem é este documento:** este é um guia operacional para ser usado pelo Claude dentro do VS Code (Claude Code) para implementar, passo a passo, otimizações de GEO (Generative Engine Optimization) e AEO (Answer Engine Optimization) no site de empregos `empregoaqui.com.br`.
 >
 > **Objetivo do projeto:** usar o empregoaqui.com.br como caso real (cobaia) para implementar, testar e medir cada ação, documentando resultados que servirão de base empírica para um livro/curso sobre SEO vs GEO vs AEO.
 >
 > **Como usar com o Claude Code:** trabalhe uma seção por vez. Para cada ação, o Claude deve (1) localizar onde aplicar no código, (2) implementar, (3) sugerir como validar, e (4) registrar a data da implementação na seção de log no final do documento.
+>
+> **Nota desta versão (v2):** esta revisão incorpora ações que estavam na checklist original de 50 itens e haviam sido omitidas ou cobertas apenas parcialmente na v1 do manual. As adições estão marcadas com 🆕. Uma ação foi descartada conscientemente (GTIN/SKU — não aplicável a um site de vagas) e está documentada na seção de decisões.
 
 ---
 
@@ -23,7 +25,8 @@
 11. [Fase 7 — Monitoramento e métricas](#fase-7--monitoramento-e-métricas)
 12. [Apêndice A — Snippets prontos de Schema](#apêndice-a--snippets-prontos-de-schema)
 13. [Apêndice B — Template de llms.txt](#apêndice-b--template-de-llmstxt)
-14. [Log de implementação](#log-de-implementação)
+14. [Decisões e exclusões conscientes](#decisões-e-exclusões-conscientes)
+15. [Log de implementação](#log-de-implementação)
 
 ---
 
@@ -54,6 +57,8 @@ Na prática, AEO e GEO se sobrepõem muito. A convenção neste documento:
 - **(AEO)** — ações focadas em ser a resposta direta extraível e em rich results de busca.
 - **(GEO)** — ações focadas em ser citado dentro de respostas geradas por LLMs em múltiplas superfícies.
 - **(GEO+AEO)** — ações que servem aos dois objetivos.
+
+> Nota: nenhuma ação deste manual leva o label isolado "(SEO)", porque o princípio mestre é que SEO é a base sobre a qual GEO/AEO se constroem — não uma categoria de ação separada dentro desta checklist.
 
 ---
 
@@ -115,8 +120,10 @@ Consulte essas queries semanalmente e registre se/onde o empregoaqui.com.br apar
 - [ ] **(GEO)** Usar HTML5 semântico: `<header>`, `<main>`, `<article>`, `<section>`, `<nav>`, `<footer>`. Eliminar "div soup".
 - [ ] **(GEO+AEO)** Garantir Core Web Vitals saudáveis: **LCP < 2,5s**, **CLS < 0,1**, **INP < 200ms**. Crawlers de IA penalizam páginas lentas e pesadas.
 - [ ] **(GEO+AEO)** Manter sitemap XML atualizado e segmentado (um sitemap só para vagas, outro para conteúdo editorial).
+- [ ] 🆕 **(GEO)** Enviar o sitemap XML atualizado via **IndexNow** sempre que houver vaga nova ou conteúdo atualizado, para indexação mais rápida por mecanismos de IA que consomem o protocolo (além do Bing/Google).
 - [ ] **(AEO)** Implementar a **Google Indexing API** especificamente para as páginas de vagas — para um site de empregos, é o método recomendado pelo Google e acelera muito a indexação de conteúdo time-sensitive.
 - [ ] **(GEO+AEO)** Usar URLs canônicas corretas e evitar conteúdo duplicado (vagas que aparecem em múltiplas categorias).
+- [ ] **(GEO+AEO)** Implementar paginação correta (`rel=next/prev` ou equivalente moderno) nas listagens de vagas, em conjunto com as canônicas, para evitar que páginas de resultado paginadas concorram entre si por indexação.
 - [ ] **(GEO+AEO)** Garantir HTTPS em todo o site, sem erros 404 em massa e sem cadeias longas de redirecionamento.
 - [ ] **(GEO)** Auditar logs do servidor (ou Cloudflare Analytics) para confirmar quais AI crawlers já visitam o site e com que frequência — isso vira dado para o livro.
 - [ ] **(GEO+AEO)** Implementar breadcrumbs navegáveis e com Schema `BreadcrumbList` (estrutura clara ajuda extração).
@@ -143,9 +150,12 @@ Consulte essas queries semanalmente e registre se/onde o empregoaqui.com.br apar
 
 - [ ] **(AEO+GEO)** Implementar `Organization` no site inteiro, com `name`, `logo`, `url`, e **`sameAs`** apontando para todos os perfis oficiais (LinkedIn, Instagram, Wikidata, Crunchbase).
 - [ ] **(AEO)** Implementar `FAQPage` nas páginas que tenham seção de perguntas frequentes (ex.: "como funciona o empregoaqui", "como me candidatar").
+- [ ] 🆕 **(AEO)** Implementar **`HowTo`** nas páginas/guias que ensinam um processo passo a passo (ex.: "Como criar um currículo competitivo", "Como se candidatar a uma vaga no EmpregoAqui") — formato preferido por motores de resposta para conteúdo instrucional.
+- [ ] 🆕 **(AEO)** Implementar **`Event`** em JSON-LD para feiras de emprego, mutirões de contratação e eventos de recrutamento divulgados no site (com `startDate`, `location`, `organizer`) — é o schema "Product/LocalBusiness/Event" da checklist original, adaptado: `Event` é o que realisticamente se aplica a um portal de vagas (não há produto físico nem loja local a marcar).
 - [ ] **(AEO)** Implementar `BreadcrumbList` em todas as páginas hierárquicas.
 - [ ] **(AEO)** Implementar `Article` + `Person` (autor) no blog/conteúdo editorial, com o `Person` linkado a perfis externos via `sameAs` (sinal de E-E-A-T).
 - [ ] **(GEO)** Empilhar schemas relevantes na mesma página quando fizer sentido (ex.: `Article` + `FAQPage` + `Organization`) — pesquisas de GEO recomendam "stacked JSON-LD".
+- [ ] 🆕 **(AEO)** Usar markup **`speakable`** nas seções de FAQ e nos blocos "Quick Answer" (Fase 3) das páginas de maior tráfego, para otimizar a leitura em voz alta por assistentes de voz (Google Assistant e similares).
 - [ ] **(AEO)** Validar **todos** os schemas com o Google Rich Results Test e o Schema.org Validator antes de publicar e após qualquer mudança de template.
 - [ ] **(AEO)** Monitorar o relatório de "Job postings" (Enhancements) no Search Console para erros e warnings.
 
@@ -161,7 +171,8 @@ Consulte essas queries semanalmente e registre se/onde o empregoaqui.com.br apar
 - [ ] **(GEO+AEO)** Criar blocos **"Quick Answer"**: respostas diretas de 1 a 3 frases logo abaixo de cada subtítulo.
 - [ ] **(GEO)** Atingir **densidade de "answer nuggets"**: pelo menos 6 respostas diretas e autossuficientes a cada 1.000 palavras.
 - [ ] **(AEO)** Adicionar seções de **FAQ com perguntas reais** ao fim das páginas-chave (e marcar com `FAQPage`).
-- [ ] **(GEO+AEO)** Manter parágrafos curtos (até ~3 linhas), usar listas e usar tabelas para dados comparáveis (faixas salariais por cargo, por exemplo) — formatos que LLMs extraem com facilidade.
+- [ ] **(GEO+AEO)** Manter parágrafos curtos (até ~3 linhas) e usar **listas numeradas para sequências de passos** (ex.: como se candidatar) — formato que LLMs extraem com facilidade para instruções.
+- [ ] 🆕 **(GEO+AEO)** Usar **tabelas de comparação e listas de prós/contras** especificamente para decisões do usuário (ex.: "CLT vs PJ: prós e contras", "vaga remota vs presencial") — formato citado nas pesquisas de GEO como um dos mais reaproveitados por modelos generativos, distinto de tabelas de dados comparáveis simples.
 - [ ] **(GEO)** Adicionar **âncoras de fragmento** (`id` em headings, ex.: `#media-salarial-2026`) para que IAs possam citar trechos específicos da página.
 - [ ] **(GEO)** Enriquecer com **estatísticas e dados com fonte citada** — é a alavanca de maior impacto comprovado (até +40% de visibilidade).
 - [ ] **(GEO)** Incluir **3 a 5 citações de fontes externas reconhecidas** por artigo (IBGE, MTE, pesquisas salariais, etc.).
@@ -177,12 +188,13 @@ Consulte essas queries semanalmente e registre se/onde o empregoaqui.com.br apar
 
 - [ ] **(AEO+GEO)** Criar uma **página canônica da entidade** ("Sobre"): nome oficial, logo, descrição curta, ano de fundação, fatos canônicos sobre o portal — uma fonte única para a IA citar.
 - [ ] **(AEO+GEO)** Criar/verificar a presença em **Wikidata**, **Google Business Profile**, **Crunchbase** e **LinkedIn** com dados idênticos.
+- [ ] 🆕 **(AEO)** Mapear formalmente a marca, fundadores/executivos e produto em um **QID do Wikidata** e nos **URNs/identificadores de página do LinkedIn**, e referenciar esses identificadores no schema `Organization`/`Person` (via `sameAs` ou `identifier`) — vai além de apenas "ter perfil"; é amarrar a entidade ao grafo de conhecimento de forma machine-readable.
 - [ ] **(AEO)** Garantir **consistência total de NAP** (nome, endereço, contato) em todos os perfis e no site.
 - [ ] **(GEO+AEO)** Publicar **bios de autores** com credenciais verificáveis no conteúdo editorial (E-E-A-T), linkadas a perfis externos.
 - [ ] **(GEO+AEO)** Buscar **menções da marca** em publicações reconhecidas do setor de RH/empregos (guest posts, entrevistas, citações em reportagens).
 - [ ] **(GEO)** Construir **backlinks de domínios de alta autoridade** — ainda funciona como sinal de confiança para LLMs.
 - [ ] **(GEO)** Publicar **pesquisa original e dados próprios** (ex.: "Relatório anual de vagas e salários no Brasil pelo empregoaqui") — conteúdo de dados único gera citações espontâneas e é altamente "linkável" por IAs. **Esta é provavelmente a ação de maior potencial para o seu caso.**
-- [ ] **(GEO)** Fortalecer a **presença multicanal** (Reddit, LinkedIn, YouTube, fóruns de carreira) — LLMs treinam e recuperam dados dessas fontes.
+- [ ] **(GEO)** Fortalecer a **presença multicanal** (Reddit, LinkedIn, YouTube, fóruns de carreira🆕 **e podcasts** — ex.: participar como fonte/entrevistado em podcasts de carreira e RH) — LLMs treinam e recuperam dados dessas fontes.
 - [ ] **(GEO)** **[experimental]** Monitorar como os LLMs descrevem a marca e enviar correções via os mecanismos de feedback das plataformas quando houver erro factual.
 
 ---
@@ -314,13 +326,17 @@ Para vaga **remota**, adicione `"jobLocationType": "TELECOMMUTE"` e use `applica
 </script>
 ```
 
-### A.3 — FAQPage
+### A.3 — FAQPage (com Speakable) 🆕
 
 ```html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".quick-answer", ".faq-answer"]
+  },
   "mainEntity": [
     {
       "@type": "Question",
@@ -335,6 +351,8 @@ Para vaga **remota**, adicione `"jobLocationType": "TELECOMMUTE"` e use `applica
 </script>
 ```
 
+> O `speakable` aponta para os seletores CSS dos blocos "Quick Answer"/FAQ na página — não precisa de um schema próprio separado, basta adicionar a propriedade ao `Article` ou `FAQPage` já existente.
+
 ### A.4 — BreadcrumbList
 
 ```html
@@ -347,6 +365,60 @@ Para vaga **remota**, adicione `"jobLocationType": "TELECOMMUTE"` e use `applica
     { "@type": "ListItem", "position": 2, "name": "Vagas em São Paulo", "item": "https://www.empregoaqui.com.br/vagas/sp" },
     { "@type": "ListItem", "position": 3, "name": "Auxiliar Administrativo" }
   ]
+}
+</script>
+```
+
+### A.5 — HowTo 🆕 (guias passo a passo, ex.: "Como criar um currículo")
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Como criar um currículo competitivo",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Escolha o formato",
+      "text": "Use um formato cronológico ou funcional, dependendo da sua experiência."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Liste suas experiências",
+      "text": "Inclua cargo, empresa, período e principais responsabilidades."
+    }
+  ]
+}
+</script>
+```
+
+### A.6 — Event 🆕 (feiras de emprego e mutirões de contratação)
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Mutirão de Empregos EmpregoAqui — Campinas",
+  "startDate": "2026-08-10T09:00",
+  "endDate": "2026-08-10T17:00",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": "Centro de Convenções de Campinas",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Campinas",
+      "addressRegion": "SP",
+      "addressCountry": "BR"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "EmpregoAqui",
+    "url": "https://www.empregoaqui.com.br"
+  }
 }
 </script>
 ```
@@ -384,30 +456,42 @@ Para vaga **remota**, adicione `"jobLocationType": "TELECOMMUTE"` e use `applica
 
 ---
 
+## Decisões e exclusões conscientes
+
+> Registro explícito de itens da checklist original de 50 ações que foram avaliados e conscientemente adaptados ou descartados, para honestidade metodológica no livro.
+
+| Ação original | Decisão | Justificativa |
+|---|---|---|
+| Schema `Product` ou `LocalBusiness` | **Adaptado para `Event`** | EmpregoAqui não vende produto físico nem opera como ponto físico de atendimento ao público; a aplicação realista do conceito "schema de oferta" é `Event` para feiras/mutirões de contratação. |
+| Incluir GTINs e SKUs no schema | **Descartado** | GTIN/SKU são identificadores de produto de e-commerce; não existe equivalente significativo para vagas de emprego (o `identifier` do `JobPosting` já cumpre função análoga). |
+
+---
+
 ## Log de implementação
 
 > O Claude Code deve atualizar esta tabela a cada ação implementada. É a matéria-prima do livro.
 
 | Data | Fase | Ação implementada | Tipo | Baseline registrado? | Resultado medido (data + delta) | Observações |
 |------|------|-------------------|------|----------------------|-------------------------------|-------------|
-| | | | | | | |
-| | | | | | | |
-| | | | | | | |
+| 2026-06-25 | 0.1 | Google Search Console verificado (Tag HTML) | GEO+AEO | ⚠️ páginas indexadas a verificar | — | Código: `4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk` em `site-config.ts`. Dado de indexação pode estar incorreto — revisar após 48h |
+| 2026-06-25 | 0.2 | GTM criado (`GTM-TDVVKHKB`) + GA4 (`G-FKRY70CH06`) + Canal "AI Traffic" | GEO+AEO | ✅ | — | Canal com 5 fontes: ChatGPT, Perplexity, Gemini, Copilot, Claude |
+| 2026-06-25 | 0.3 | Ranking baseline das 6 queries no Google (aba anônima) | GEO+AEO | ✅ não aparece em nenhuma | — | Ponto zero do experimento — site recém-indexado |
+| 2026-06-25 | 0.4 | Rodada-zero nas 4 plataformas de IA | GEO | ✅ não aparece em nenhuma | — | Google, ChatGPT, Perplexity, Gemini — todas as 6 queries |
 
 ---
 
-### Resumo de contagem
+### Resumo de contagem (v2)
 
 - **Fase 0 — Baseline:** 5 ações
-- **Fase 1 — Técnica:** 11 ações
-- **Fase 2 — Schema:** 18 ações
-- **Fase 3 — Conteúdo (formato):** 13 ações
-- **Fase 4 — Autoridade:** 9 ações
+- **Fase 1 — Técnica:** 12 ações *(+1: IndexNow)*
+- **Fase 2 — Schema:** 21 ações *(+3: HowTo, Event, Speakable)*
+- **Fase 3 — Conteúdo (formato):** 14 ações *(+1: tabelas comparativas/prós-contras)*
+- **Fase 4 — Autoridade:** 10 ações *(+1: QIDs/URNs; podcasts incorporado ao item multicanal existente)*
 - **Fase 5 — Conteúdo (estratégia):** 8 ações
 - **Fase 6 — AI-nativa:** 6 ações
 - **Fase 7 — Monitoramento:** 10 ações
 
-**Total: 80 ações de implementação.**
+**Total: 86 ações de implementação** (80 da v1 + 6 novas explícitas; GTIN/SKU descartado por justificativa documentada).
 
 ---
 

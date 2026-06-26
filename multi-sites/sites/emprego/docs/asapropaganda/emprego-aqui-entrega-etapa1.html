@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emprego Aqui — Entrega Dev · Etapa 1: Assets, Paleta & Tipografia</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f1117;
+    color: #e2e4ec;
+    line-height: 1.6;
+  }
+  a { color: #F28B30; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    background: #1a1d2e;
+    color: #a5b4fc;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: .88em;
+  }
+  pre {
+    background: #1a1d2e;
+    border: 1px solid #2c2f45;
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: .85em;
+    line-height: 1.7;
+    color: #c9d1f5;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+  /* ── Layout ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── Header ── */
+  .doc-header {
+    border-bottom: 1px solid #2c2f45;
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+  }
+  .doc-header .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #F28B30;
+    margin-bottom: 8px;
+  }
+  .doc-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .doc-header .meta {
+    font-size: 13px;
+    color: #6b7280;
+  }
+  .doc-header .meta span { color: #9ca3af; }
+
+  /* ── TOC ── */
+  .toc {
+    background: #151824;
+    border: 1px solid #2c2f45;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 48px;
+  }
+  .toc h2 { font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 4px; font-size: 14px; }
+  .toc a { color: #9ca3af; }
+  .toc a:hover { color: #F28B30; text-decoration: none; }
+
+  /* ── Seções ── */
+  .section { margin-bottom: 64px; }
+  .section-header { margin-bottom: 24px; }
+  .section-header .num {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: #F28B30; margin-bottom: 6px;
+  }
+  .section-header h2 {
+    font-size: 22px; font-weight: 800; color: #fff;
+  }
+  .section-header p { font-size: 14px; color: #6b7280; margin-top: 4px; }
+
+  /* ── Tabelas ── */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #2c2f45; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th {
+    background: #151824;
+    color: #9ca3af;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #2c2f45;
+  }
+  tbody tr { border-bottom: 1px solid #1e2035; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #13162a; }
+  tbody td { padding: 12px 16px; vertical-align: middle; }
+  .td-code { font-family: 'Fira Code', monospace; font-size: 12.5px; color: #a5b4fc; }
+  .td-dim { color: #9ca3af; font-size: 12px; }
+  .td-note { color: #6b7280; font-size: 12px; font-style: italic; }
+  .td-alert { color: #fbbf24; font-size: 12px; }
+
+  /* ── Swatches de cor ── */
+  .color-swatch {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.1);
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  .color-row td:first-child { white-space: nowrap; }
+
+  /* ── Badge ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .badge--dup { background: rgba(251,191,36,.12); color: #fbbf24; }
+  .badge--transp { background: rgba(165,180,252,.12); color: #a5b4fc; }
+  .badge--wpp { background: rgba(37,211,102,.12); color: #25D366; }
+  .badge--ok { background: rgba(52,211,153,.12); color: #34d399; }
+
+  /* ── Notice box ── */
+  .notice {
+    background: rgba(242,139,48,.07);
+    border: 1px solid rgba(242,139,48,.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #d4a574;
+    margin-top: 16px;
+  }
+  .notice strong { color: #F28B30; }
+
+  /* ── Font preview ── */
+  .font-preview {
+    background: #151824;
+    border: 1px solid #2c2f45;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .font-preview .fp-label { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+  .fp-display {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .fp-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #9ca3af;
+    line-height: 1.6;
+  }
+
+  /* ── Seção de checklist ── */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0;
+    border-bottom: 1px solid #1e2035;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-ok { color: #34d399; font-size: 16px; }
+  .check-next { color: #6b7280; font-size: 16px; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <header class="doc-header">
+    <div class="label">Emprego Aqui · Landing Page M3 · Entrega para Dev</div>
+    <h1>Etapa 1 — Assets, Paleta de Cores &amp; Tipografia</h1>
+    <p class="meta">
+      Fonte: <span>EmpregoAqui_LP_M3_8_mob.html</span> &nbsp;·&nbsp;
+      Gerado em: <span>Junho 2025</span> &nbsp;·&nbsp;
+      Agência: <span>ASA Propaganda e Design</span>
+    </p>
+  </header>
+
+  <!-- ── TOC ── -->
+  <nav class="toc" aria-label="Sumário">
+    <h2>Neste documento</h2>
+    <ol>
+      <li><a href="#paleta">Paleta de Cores — mapeamento semântico completo</a></li>
+      <li><a href="#tipografia">Tipografia — fontes, pesos e escala</a></li>
+      <li><a href="#assets">Assets — tabela de imagens WebP com dimensões</a></li>
+      <li><a href="#google-fonts">Google Fonts — link de importação</a></li>
+      <li><a href="#proximas">Próximas etapas</a></li>
+    </ol>
+  </nav>
+
+  <!-- ════════════════════════════════════════════════
+       SEÇÃO 1 — PALETA DE CORES
+  ═══════════════════════════════════════════════════ -->
+  <section class="section" id="paleta">
+    <div class="section-header">
+      <div class="num">Seção 1</div>
+      <h2>Paleta de Cores</h2>
+      <p>Todas as cores extraídas do CSS da LP, organizadas por papel semântico conforme o brief.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Papel semântico</th>
+            <th>Token CSS</th>
+            <th>Hex</th>
+            <th>Observações</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- CORES DE MARCA -->
+          <tr><td colspan="4" style="background:#0f1117;color:#6b7280;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;">— Cores de Marca —</td></tr>
+
+          <tr class="color-row">
+            <td>Fundo da página / Azul primário</td>
+            <td class="td-code"><code>--color-bg</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#1e2237;"></span>#1E2237
+            </td>
+            <td class="td-note">Background geral da página e navbar. Cor âncora da identidade.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Azul médio / hero overlay</td>
+            <td class="td-code"><code>--color-bg-mid</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#2c3154;"></span>#2C3154
+            </td>
+            <td class="td-note">Variação mais clara do azul; usada em overlays e gradientes do hero.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Fundo de card / painel escuro</td>
+            <td class="td-code"><code>--color-card</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#252a42;"></span>#252A42
+            </td>
+            <td class="td-note">Fundo dos cards B2B e painéis de destaque.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Cor primária / destaque (CTA)</td>
+            <td class="td-code"><code>--color-cta</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#F28B30;"></span>#F28B30
+            </td>
+            <td class="td-note">Cor coral/laranja. Botões CTA, badges, destaques, labels de seção.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Botão CTA — hover / dark</td>
+            <td class="td-code"><code>--color-cta-dark</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#d4751f;"></span>#D4751F
+            </td>
+            <td class="td-note">Estado hover do botão coral. Variação escurecida ~12%.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Texto principal</td>
+            <td class="td-code"><code>--color-text</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#1e2237;border:1px solid #3a3f5c;"></span>#1E2237
+            </td>
+            <td class="td-note">Mesmo valor do <code>--color-bg</code>. Texto body em seções claras.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Texto secundário / muted</td>
+            <td class="td-code"><code>--color-text-muted</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#8a90a2;"></span>#8A90A2
+            </td>
+            <td class="td-note">Subtítulos, descrições, parágrafos de apoio em seções claras.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Texto em fundos escuros</td>
+            <td class="td-code"><code>--color-text-white</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#ffffff;border:1px solid #3a3f5c;"></span>#FFFFFF
+            </td>
+            <td class="td-note">Texto sobre fundos azul escuro. 100% opacidade = h1/h2; 70% = subitems.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Fundo claro / cinza suave</td>
+            <td class="td-code"><code>--color-bg-light</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#f4f5f8;border:1px solid #ddd;"></span>#F4F5F8
+            </td>
+            <td class="td-note">Background alternativo para seções em modo claro.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>Borda / separador</td>
+            <td class="td-code"><code>--color-border</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:rgba(255,255,255,0.07);border:1px solid #3a3f5c;"></span>rgba(255,255,255,.07)
+            </td>
+            <td class="td-note">Bordas em fundos escuros (navbar). Em fundos claros, usar <code>#e5e7eb</code>.</td>
+          </tr>
+
+          <!-- CORES WHATSAPP -->
+          <tr><td colspan="4" style="background:#0f1117;color:#6b7280;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 16px;">— Cores do Widget WhatsApp (componente isolado) —</td></tr>
+
+          <tr class="color-row">
+            <td>WhatsApp verde principal <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#25D366;"></span>#25D366
+            </td>
+            <td class="td-note">Botão principal do widget e bolhas enviadas.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>WhatsApp — hover / dark <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp-dark</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#1EBE5B;"></span>#1EBE5B
+            </td>
+            <td class="td-note">Estado hover do botão WhatsApp.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>WPP — fundo do widget <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp-bg</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#111B21;"></span>#111B21
+            </td>
+            <td class="td-note">Background geral do widget (simulação do app WPP).</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>WPP — header do chat <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp-header</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#202C33;"></span>#202C33
+            </td>
+            <td class="td-note">Cabeçalho verde-escuro com avatar e nome do contato.</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>WPP — fundo da conversa <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp-chat</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#0B141A;"></span>#0B141A
+            </td>
+            <td class="td-note">Área de mensagens (padrão dark do WPP).</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>WPP — bolha recebida <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp-bubble-in</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#1F2C34;"></span>#1F2C34
+            </td>
+            <td class="td-note">Balão de mensagem recebida (azul-esverdeado escuro).</td>
+          </tr>
+
+          <tr class="color-row">
+            <td>WPP — bolha enviada <span class="badge badge--wpp">WPP</span></td>
+            <td class="td-code"><code>--color-wpp-bubble-out</code></td>
+            <td class="td-code">
+              <span class="color-swatch" style="background:#005C4B;"></span>#005C4B
+            </td>
+            <td class="td-note">Balão de mensagem enviada (verde escuro característico).</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice">
+      <strong>Nota para o dev:</strong> As cores do widget WhatsApp reproduzem a interface nativa do app para criar familiaridade visual. Elas não fazem parte do sistema de marca do Emprego Aqui — podem ser encapsuladas em um namespace separado (ex: <code>--color-wpp-*</code>) no <code>theme.css</code> para não poluir a paleta principal.
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       SEÇÃO 2 — TIPOGRAFIA
+  ═══════════════════════════════════════════════════ -->
+  <section class="section" id="tipografia">
+    <div class="section-header">
+      <div class="num">Seção 2</div>
+      <h2>Tipografia</h2>
+      <p>Duas famílias tipográficas extraídas do HTML. Ambas via Google Fonts.</p>
+    </div>
+
+    <!-- Preview -->
+    <div class="font-preview">
+      <div class="fp-label">Preview das fontes em uso</div>
+      <div class="fp-display">Plus Jakarta Sans — Títulos &amp; Display</div>
+      <div class="fp-body" style="margin-top:8px;">Inter — corpo de texto, legendas e elementos de suporte</div>
+    </div>
+
+    <!-- 2.1 Fontes utilizadas -->
+    <h3 style="font-size:15px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">2.1 Fontes utilizadas</h3>
+    <div class="table-wrap" style="margin-bottom:32px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Papel</th>
+            <th>Família</th>
+            <th>Token CSS</th>
+            <th>Pesos usados</th>
+            <th>Google Fonts?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Títulos, subtítulos, botões, labels, navbar</td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code"><code>--font-display</code></td>
+            <td class="td-code">400 · 500 · 600 · 700 · 800</td>
+            <td><span class="badge badge--ok">Sim</span></td>
+          </tr>
+          <tr>
+            <td>Corpo de texto (p, descrições, notas)</td>
+            <td class="td-code">Inter</td>
+            <td class="td-code"><code>--font-body</code></td>
+            <td class="td-code">400 · 500 · 600</td>
+            <td><span class="badge badge--ok">Sim</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2.2 Escala tipográfica -->
+    <h3 style="font-size:15px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">2.2 Escala tipográfica</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Elemento</th>
+            <th>Família</th>
+            <th>Tamanho</th>
+            <th>Peso</th>
+            <th>Line-height</th>
+            <th>Letter-spacing</th>
+            <th>Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>H1 — Hero headline</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">clamp(32px, 5vw, 54px)</td>
+            <td class="td-code">800</td>
+            <td class="td-code">1.1</td>
+            <td class="td-code">−0.02em</td>
+            <td class="td-note">Fluido. Mobile ≈ 32px, desktop ≈ 54px.</td>
+          </tr>
+          <tr>
+            <td><strong>H2 — Section title</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">clamp(28px, 4vw, 40px)</td>
+            <td class="td-code">800</td>
+            <td class="td-code">1.15</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Classe <code>.section-title</code>. Mobile ≈ 28px, desktop ≈ 40px.</td>
+          </tr>
+          <tr>
+            <td><strong>H3 — Step title / card title</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">18px</td>
+            <td class="td-code">700</td>
+            <td class="td-code">1.3</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Títulos de cards e etapas do "Como Funciona".</td>
+          </tr>
+          <tr>
+            <td><strong>Parágrafo / body</strong></td>
+            <td class="td-code">Inter</td>
+            <td class="td-code">17px</td>
+            <td class="td-code">400</td>
+            <td class="td-code">1.7</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Classe <code>.section-sub</code>. Texto corrido das seções.</td>
+          </tr>
+          <tr>
+            <td><strong>Body menor / apoio</strong></td>
+            <td class="td-code">Inter</td>
+            <td class="td-code">15px</td>
+            <td class="td-code">400 · 500</td>
+            <td class="td-code">1.6</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Descrições de cards, items de lista, texto de widget.</td>
+          </tr>
+          <tr>
+            <td><strong>Label / kicker / badge</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">12px</td>
+            <td class="td-code">700</td>
+            <td class="td-code">1</td>
+            <td class="td-code">0.06–0.10em</td>
+            <td class="td-note">Classes <code>.section-label</code> e <code>.badge</code>. Sempre uppercase.</td>
+          </tr>
+          <tr>
+            <td><strong>Botão (CTA / ghost)</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">16px</td>
+            <td class="td-code">700</td>
+            <td class="td-code">1</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Classe <code>.btn</code>. Padding: 16px 32px. Botão WPP: 15px.</td>
+          </tr>
+          <tr>
+            <td><strong>Navbar link</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">13px</td>
+            <td class="td-code">600</td>
+            <td class="td-code">1</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Oculto em mobile (<code>max-width: 600px</code>).</td>
+          </tr>
+          <tr>
+            <td><strong>Navbar logo</strong></td>
+            <td class="td-code">Plus Jakarta Sans</td>
+            <td class="td-code">22px</td>
+            <td class="td-code">800</td>
+            <td class="td-code">1</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Logotipo textual. Parte branca + parte coral.</td>
+          </tr>
+          <tr>
+            <td><strong>Caption / small</strong></td>
+            <td class="td-code">Inter</td>
+            <td class="td-code">13px</td>
+            <td class="td-code">400 · 500</td>
+            <td class="td-code">1.5</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Notas legais, horários, rodapé de cards.</td>
+          </tr>
+          <tr>
+            <td><strong>Footer corpo</strong></td>
+            <td class="td-code">Inter</td>
+            <td class="td-code">14px</td>
+            <td class="td-code">400</td>
+            <td class="td-code">1.6</td>
+            <td class="td-code">normal</td>
+            <td class="td-note">Links e texto do footer.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice" style="margin-top:16px;">
+      <strong>Responsividade tipográfica:</strong> H1 e H2 usam <code>clamp()</code> — valores fluidos entre mobile e desktop. Os demais elementos têm tamanho fixo em px, mas o <code>font-size: 16px</code> no <code>html</code> serve de base para o sistema rem. A escala <code>clamp()</code> foi escolhida para eliminar breakpoints de tipografia desnecessários.
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       SEÇÃO 3 — GOOGLE FONTS
+  ═══════════════════════════════════════════════════ -->
+  <section class="section" id="google-fonts">
+    <div class="section-header">
+      <div class="num">Seção 3</div>
+      <h2>Google Fonts — link de importação</h2>
+      <p>Link extraído diretamente do HTML original. Inclui todos os pesos em uso.</p>
+    </div>
+
+    <pre><code>&lt;!-- Cole no &lt;head&gt; do projeto, antes de qualquer CSS --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"&gt;</code></pre>
+
+    <div class="notice" style="margin-top:12px;">
+      <strong>Para Tailwind CSS v4:</strong> Adicione ao <code>theme.css</code> as variáveis de fonte:
+      <pre style="margin-top:10px;"><code>@theme {
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       SEÇÃO 4 — ASSETS / IMAGENS
+  ═══════════════════════════════════════════════════ -->
+  <section class="section" id="assets">
+    <div class="section-header">
+      <div class="num">Seção 4</div>
+      <h2>Assets — Imagens WebP extraídas</h2>
+      <p>13 imagens base64 convertidas para WebP. Entregues na pasta <code>assets-webp/</code>.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Arquivo</th>
+            <th>Seção / uso</th>
+            <th>Dimensões orig.</th>
+            <th>Formato orig.</th>
+            <th>WebP</th>
+            <th>Transp.?</th>
+            <th>Observações</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="td-dim">01</td>
+            <td class="td-code">emprego-aqui-favicon.webp</td>
+            <td>Favicon / ícone do site</td>
+            <td class="td-dim">497×496px</td>
+            <td class="td-dim">PNG</td>
+            <td class="td-dim">15 KB</td>
+            <td><span class="badge badge--transp">Sim (RGBA)</span></td>
+            <td class="td-note">
+              Ícone circular da marca. Mesmo conteúdo que o avatar do widget WPP.<br>
+              <span class="td-alert">⚠ Ideal converter para .ico ou .svg para favicon.</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">02</td>
+            <td class="td-code">emprego-aqui-logo.webp</td>
+            <td>Logo — navbar e footer</td>
+            <td class="td-dim">833×496px</td>
+            <td class="td-dim">PNG</td>
+            <td class="td-dim">21 KB</td>
+            <td><span class="badge badge--transp">Sim (RGBA)</span></td>
+            <td class="td-note">
+              Mesmo arquivo usado na navbar e no footer.<br>
+              <span class="td-alert">⚠ Solicitar SVG ao designer para escalabilidade.</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">03</td>
+            <td class="td-code">emprego-aqui-hero-bg-candidatos-slide-1.webp</td>
+            <td>Hero — slide 1 (ativo)</td>
+            <td class="td-dim">1400×781px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">143 KB</td>
+            <td>—</td>
+            <td class="td-note">Background do carousel do hero. Primeiro slide (visível ao carregar).</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">04</td>
+            <td class="td-code">emprego-aqui-hero-bg-candidatos-slide-2.webp</td>
+            <td>Hero — slide 2</td>
+            <td class="td-dim">1400×781px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">134 KB</td>
+            <td>—</td>
+            <td class="td-note">Background do carousel do hero. Alternado via JS.</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">05</td>
+            <td class="td-code">emprego-aqui-hero-bg-candidatos-slide-3.webp</td>
+            <td>Hero — slide 3</td>
+            <td class="td-dim">1400×781px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">147 KB</td>
+            <td>—</td>
+            <td class="td-note">Background do carousel do hero. Alternado via JS.</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">06</td>
+            <td class="td-code">emprego-aqui-avatar-whatsapp-widget.webp</td>
+            <td>Widget WhatsApp — avatar</td>
+            <td class="td-dim">497×496px</td>
+            <td class="td-dim">PNG</td>
+            <td class="td-dim">15 KB</td>
+            <td><span class="badge badge--transp">Sim (RGBA)</span></td>
+            <td class="td-note">
+              Mesmo arquivo do favicon. Avatar circular exibido no header do chat simulado.<br>
+              <span class="td-alert">⚠ Arquivo idêntico ao favicon — reutilize o mesmo asset no código.</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">07</td>
+            <td class="td-code">emprego-aqui-como-funciona-passo-1-cadastro.webp</td>
+            <td>Como Funciona — Passo 1</td>
+            <td class="td-dim">1200×1607px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">253 KB</td>
+            <td>—</td>
+            <td class="td-note">
+              Foto ilustrativa do passo de cadastro. Proporção retrato (~3:4).<br>
+              <span class="td-alert">⚠ Pesar otimização: 253KB é pesado para mobile. Sugestão: gerar versão mobile com max 600px.</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">08</td>
+            <td class="td-code">emprego-aqui-como-funciona-passo-2-curriculo.webp</td>
+            <td>Como Funciona — Passo 2</td>
+            <td class="td-dim">1200×1607px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">284 KB</td>
+            <td>—</td>
+            <td class="td-note">
+              Foto ilustrativa do passo de currículo. Proporção retrato (~3:4).<br>
+              <span class="td-alert">⚠ Maior arquivo do lote. Recomendar versão mobile + lazy-load.</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">09</td>
+            <td class="td-code">emprego-aqui-como-funciona-passo-3-vaga.webp</td>
+            <td>Como Funciona — Passo 3</td>
+            <td class="td-dim">1200×1607px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">148 KB</td>
+            <td>—</td>
+            <td class="td-note">Foto ilustrativa do passo de recebimento de vaga. Proporção retrato (~3:4).</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">10</td>
+            <td class="td-code">emprego-aqui-empresas-foto-rh.webp</td>
+            <td>Seção Empresas — card foto</td>
+            <td class="td-dim">1200×669px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">132 KB</td>
+            <td>—</td>
+            <td class="td-note">Foto menor no topo do card B2B. Proporção landscape (~16:9).</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">11</td>
+            <td class="td-code">emprego-aqui-empresas-bg-secao.webp</td>
+            <td>Seção Empresas — background</td>
+            <td class="td-dim">1400×791px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">131 KB</td>
+            <td>—</td>
+            <td class="td-note">Background de tela cheia da seção <code>#para-empresas</code>.</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">12</td>
+            <td class="td-code">emprego-aqui-cta-bg-final.webp</td>
+            <td>Seção CTA final — background</td>
+            <td class="td-dim">1600×893px</td>
+            <td class="td-dim">JPEG</td>
+            <td class="td-dim">157 KB</td>
+            <td>—</td>
+            <td class="td-note">Background de tela cheia da seção CTA de encerramento da LP. Maior resolução do lote.</td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">—</td>
+            <td class="td-code">emprego-aqui-logo-footer.webp</td>
+            <td colspan="5"><em style="color:#6b7280;">Removido — duplicata de <code>emprego-aqui-logo.webp</code>. Reutilizar o mesmo arquivo.</em></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="td-dim">—</td>
+            <td class="td-code">emprego-aqui-logo-navbar.webp</td>
+            <td colspan="5"><em style="color:#6b7280;">Removido — duplicata de <code>emprego-aqui-logo.webp</code>. Reutilizar o mesmo arquivo.</em></td>
+            <td></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice" style="margin-top:16px;">
+      <strong>Alertas de otimização:</strong> As imagens da seção "Como Funciona" (passos 1, 2, 3) totalizam ~685KB. Recomenda-se gerar variantes mobile com largura máxima de 600px e implementar <code>&lt;picture&gt;</code> com <code>srcset</code> para servir a versão adequada por breakpoint. O AVIF pode reduzir o tamanho mais 20–30% se o pipeline de build suportar.
+    </div>
+
+    <!-- Tabela de assets conforme formato do brief -->
+    <h3 style="font-size:15px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin:32px 0 12px;">Formato do brief — tabela completa</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Formato entregue</th>
+            <th>Dim. mobile (uso)</th>
+            <th>Dim. desktop (orig.)</th>
+            <th>Fundo transp.?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Logo (navbar + footer)</td>
+            <td class="td-code">WebP (RGBA)</td>
+            <td class="td-dim">height: 32px auto</td>
+            <td class="td-dim">833×496px</td>
+            <td><span class="badge badge--transp">Sim</span> · <span class="td-alert">Solicitar SVG</span></td>
+          </tr>
+          <tr>
+            <td>Favicon / ícone do app</td>
+            <td class="td-code">WebP (RGBA)</td>
+            <td class="td-dim">—</td>
+            <td class="td-dim">497×496px</td>
+            <td><span class="badge badge--transp">Sim</span> · <span class="td-alert">Solicitar .ico ou SVG</span></td>
+          </tr>
+          <tr>
+            <td>Hero background (3 slides)</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">cover · 100vw</td>
+            <td class="td-dim">1400×781px</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Avatar widget WhatsApp</td>
+            <td class="td-code">WebP (RGBA)</td>
+            <td class="td-dim">40×40px (exibição)</td>
+            <td class="td-dim">497×496px</td>
+            <td><span class="badge badge--transp">Sim</span></td>
+          </tr>
+          <tr>
+            <td>Como Funciona — Passo 1</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">max 600px larg.</td>
+            <td class="td-dim">1200×1607px</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Como Funciona — Passo 2</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">max 600px larg.</td>
+            <td class="td-dim">1200×1607px</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Como Funciona — Passo 3</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">max 600px larg.</td>
+            <td class="td-dim">1200×1607px</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Empresas — foto card</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">100% larg. do card</td>
+            <td class="td-dim">1200×669px</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Empresas — background seção</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">cover · 100vw</td>
+            <td class="td-dim">1400×791px</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>CTA final — background</td>
+            <td class="td-code">WebP</td>
+            <td class="td-dim">cover · 100vw</td>
+            <td class="td-dim">1600×893px</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       PRÓXIMAS ETAPAS
+  ═══════════════════════════════════════════════════ -->
+  <section class="section" id="proximas">
+    <div class="section-header">
+      <div class="num">Status da entrega</div>
+      <h2>Próximas etapas</h2>
+    </div>
+
+    <ul class="checklist">
+      <li>
+        <span class="check-ok">✓</span>
+        <span>Paleta de cores completa com hex e papel semântico</span>
+      </li>
+      <li>
+        <span class="check-ok">✓</span>
+        <span>Tabela de tipografia com fontes, pesos e tamanhos</span>
+      </li>
+      <li>
+        <span class="check-ok">✓</span>
+        <span>Link Google Fonts com todos os pesos necessários</span>
+      </li>
+      <li>
+        <span class="check-ok">✓</span>
+        <span>Assets em WebP com nomes kebab-case SEO — pasta <code>assets-webp/</code></span>
+      </li>
+      <li>
+        <span class="check-next">○</span>
+        <span><strong>Etapa 2:</strong> HTML + CSS de cada componente (navbar, hero, steps, b2b, footer, widget WPP)</span>
+      </li>
+      <li>
+        <span class="check-next">○</span>
+        <span><strong>Etapa 2:</strong> HTML da página completa anotado por seção com breakpoints</span>
+      </li>
+      <li>
+        <span class="check-next">○</span>
+        <span><strong>Pendente do cliente:</strong> SVG do logo e ícone para substituir os WebP entregues</span>
+      </li>
+      <li>
+        <span class="check-next">○</span>
+        <span><strong>Pendente do cliente:</strong> variantes mobile das imagens "Como Funciona" (largura ≤ 600px)</span>
+      </li>
+    </ul>
+  </section>
+
+</div><!-- /page -->
+</body>
+</html>

@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emprego Aqui — Entrega Dev · Etapa 2: Componentes & Estrutura</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #0f1117; color: #e2e4ec; line-height: 1.6; }
+  a { color: #F28B30; text-decoration: none; }
+
+  code {
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    background: #1a1d2e; color: #a5b4fc;
+    padding: 2px 7px; border-radius: 4px; font-size: .88em;
+  }
+  pre {
+    background: #13162a; border: 1px solid #2c2f45; border-radius: 10px;
+    padding: 20px 24px; overflow-x: auto; font-size: .82em;
+    line-height: 1.75; color: #c9d1f5; tab-size: 2;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+  /* syntax highlight manual */
+  pre .c { color: #4b5563; }       /* comment */
+  pre .s { color: #86efac; }       /* selector */
+  pre .p { color: #fca5a5; }       /* property */
+  pre .v { color: #fde68a; }       /* value */
+  pre .t { color: #7dd3fc; }       /* tag html */
+  pre .a { color: #c4b5fd; }       /* attribute */
+  pre .av { color: #86efac; }      /* attr value */
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 48px 24px 100px; }
+
+  /* Header */
+  .doc-header { border-bottom: 1px solid #2c2f45; padding-bottom: 32px; margin-bottom: 48px; }
+  .doc-header .label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #F28B30; margin-bottom: 8px; }
+  .doc-header h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .doc-header .meta { font-size: 13px; color: #6b7280; }
+  .doc-header .meta span { color: #9ca3af; }
+
+  /* TOC */
+  .toc { background: #151824; border: 1px solid #2c2f45; border-radius: 10px; padding: 20px 24px; margin-bottom: 48px; }
+  .toc h2 { font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+  .toc ol { padding-left: 20px; column-count: 2; column-gap: 32px; }
+  .toc li { margin-bottom: 4px; font-size: 13.5px; break-inside: avoid; }
+  .toc a { color: #9ca3af; }
+  .toc a:hover { color: #F28B30; text-decoration: none; }
+
+  /* Seções */
+  .section { margin-bottom: 72px; }
+  .section-header { margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid #1e2035; }
+  .section-header .num { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #F28B30; margin-bottom: 6px; }
+  .section-header h2 { font-size: 20px; font-weight: 800; color: #fff; }
+  .section-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
+
+  /* Componentes */
+  .component { background: #151824; border: 1px solid #2c2f45; border-radius: 12px; margin-bottom: 32px; overflow: hidden; }
+  .component__header { padding: 16px 20px; border-bottom: 1px solid #1e2035; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .component__title { font-size: 14px; font-weight: 700; color: #fff; }
+  .component__sub { font-size: 12px; color: #6b7280; }
+  .component__tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: .03em; }
+  .tag--html { background: rgba(125,211,252,.1); color: #7dd3fc; }
+  .tag--css { background: rgba(167,139,250,.1); color: #a78bfa; }
+  .tag--mobile { background: rgba(251,191,36,.1); color: #fbbf24; }
+  .tag--js { background: rgba(134,239,172,.1); color: #86efac; }
+
+  .component__body { padding: 20px; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .tab-btn {
+    padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    cursor: pointer; border: 1px solid #2c2f45; background: transparent;
+    color: #6b7280; font-family: inherit; transition: all .15s;
+  }
+  .tab-btn.active { background: #1e2035; color: #e2e4ec; border-color: #3a3f5c; }
+  .tab-btn:hover:not(.active) { color: #9ca3af; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Seção de estrutura */
+  .section-map { background: #151824; border: 1px solid #2c2f45; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+  .section-map__header { padding: 14px 20px; background: #0f1117; border-bottom: 1px solid #1e2035; display: flex; align-items: center; gap: 12px; }
+  .section-map__name { font-family: 'Fira Code', monospace; font-size: 13px; font-weight: 700; color: #7dd3fc; }
+  .section-map__tag { font-size: 11px; color: #6b7280; }
+  .section-map__body { padding: 16px 20px; }
+  .bp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width: 600px) { .bp-grid { grid-template-columns: 1fr; } }
+  .bp-block { background: #0f1117; border-radius: 8px; padding: 14px 16px; border: 1px solid #1e2035; }
+  .bp-block__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+  .bp-block__label.mobile { color: #fbbf24; }
+  .bp-block__label.desktop { color: #7dd3fc; }
+  .bp-block ul { padding-left: 16px; font-size: 13px; color: #9ca3af; line-height: 1.8; }
+
+  /* Notice */
+  .notice { background: rgba(242,139,48,.07); border: 1px solid rgba(242,139,48,.2); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #d4a574; margin: 12px 0; }
+  .notice strong { color: #F28B30; }
+  .notice--blue { background: rgba(125,211,252,.06); border-color: rgba(125,211,252,.2); color: #93c5fd; }
+  .notice--blue strong { color: #7dd3fc; }
+  .notice--green { background: rgba(134,239,172,.06); border-color: rgba(134,239,172,.2); color: #86d9a0; }
+  .notice--green strong { color: #86efac; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #2c2f45; margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: #0f1117; color: #6b7280; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: 10px 14px; text-align: left; border-bottom: 1px solid #2c2f45; }
+  tbody tr { border-bottom: 1px solid #1a1d2e; }
+  tbody tr:last-child { border: none; }
+  tbody td { padding: 10px 14px; font-size: 13px; vertical-align: top; }
+  .td-code { font-family: 'Fira Code', monospace; font-size: 12px; color: #a5b4fc; }
+  .td-note { color: #6b7280; font-size: 12px; }
+
+  /* Checklist final */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 8px 0; border-bottom: 1px solid #1e2035; font-size: 13.5px; display: flex; align-items: center; gap: 10px; }
+  .checklist li:last-child { border: none; }
+  .check-ok { color: #34d399; }
+  .check-next { color: #6b7280; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  function switchTab(btn, panelId) {
+    const group = btn.closest('.component__body');
+    group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    group.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    group.querySelector('#' + panelId).classList.add('active');
+  }
+</script>
+</head>
+<body>
+<div class="page">
+
+<!-- ══ HEADER ══ -->
+<header class="doc-header">
+  <div class="label">Emprego Aqui · Landing Page M3 · Entrega para Dev</div>
+  <h1>Etapa 2 — Componentes HTML+CSS & Estrutura de Seções</h1>
+  <p class="meta">Fonte: <span>EmpregoAqui_LP_M3_8_mob.html</span> &nbsp;·&nbsp; Gerado: <span>Junho 2025</span> &nbsp;·&nbsp; Agência: <span>ASA Propaganda e Design</span></p>
+</header>
+
+<!-- ══ TOC ══ -->
+<nav class="toc">
+  <h2>Neste documento</h2>
+  <ol>
+    <li><a href="#comp-tokens">Tokens CSS — variáveis de design</a></li>
+    <li><a href="#comp-utils">Utilitários globais (badge, btn, section-*)</a></li>
+    <li><a href="#comp-navbar">Componente: Navbar</a></li>
+    <li><a href="#comp-hero">Componente: Hero</a></li>
+    <li><a href="#comp-wpp-widget">Componente: Widget WhatsApp</a></li>
+    <li><a href="#comp-strip">Componente: Strip (prova social)</a></li>
+    <li><a href="#comp-como-funciona">Componente: Como Funciona</a></li>
+    <li><a href="#comp-porque">Componente: Por Que Aqui (cards benefício)</a></li>
+    <li><a href="#comp-numeros">Componente: Números</a></li>
+    <li><a href="#comp-depos">Componente: Depoimentos</a></li>
+    <li><a href="#comp-empresas">Componente: Empresas (marquee)</a></li>
+    <li><a href="#comp-b2b">Componente: Para Empresas (B2B fullscreen)</a></li>
+    <li><a href="#comp-faq">Componente: FAQ</a></li>
+    <li><a href="#comp-cta-final">Componente: CTA Final</a></li>
+    <li><a href="#comp-footer">Componente: Footer</a></li>
+    <li><a href="#comp-wpp-bar">Componente: Barra flutuante mobile (WPP)</a></li>
+    <li><a href="#estrutura">Estrutura de seções com breakpoints</a></li>
+    <li><a href="#checklist">Checklist de entrega</a></li>
+  </ol>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     SEÇÃO 1 — TOKENS CSS
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-tokens">
+  <div class="section-header">
+    <div class="num">Tokens</div>
+    <h2>Variáveis CSS — :root</h2>
+    <p>Cole no início do <code>theme.css</code>. Todas as cores e espaçamentos do projeto partem daqui.</p>
+  </div>
+
+  <div class="component">
+    <div class="component__header">
+      <div>
+        <div class="component__title">:root — design tokens</div>
+        <div class="component__sub">Arquivo: theme.css</div>
+      </div>
+      <div class="component__tags"><span class="tag tag--css">CSS</span></div>
+    </div>
+    <div class="component__body">
+<pre><code><span class="c">/* ── DESIGN TOKENS — Emprego Aqui LP ─────────────── */</span>
+:root {
+  <span class="c">/* Cores de marca */</span>
+  --color-bg:         #1e2237;   <span class="c">/* azul escuro — fundo geral, navbar */</span>
+  --color-bg-mid:     #2c3154;   <span class="c">/* azul médio — overlays, strip */</span>
+  --color-card:       #252a42;   <span class="c">/* azul card — fundos de painéis escuros */</span>
+  --color-cta:        #F28B30;   <span class="c">/* coral — botões principais, badges, labels */</span>
+  --color-cta-dark:   #d4751f;   <span class="c">/* coral hover — estados hover dos botões */</span>
+  --color-text:       #1e2237;   <span class="c">/* texto em fundos claros */</span>
+  --color-text-muted: #8a90a2;   <span class="c">/* texto secundário / suporte */</span>
+  --color-bg-light:   #f4f5f8;   <span class="c">/* fundo claro alternado */</span>
+
+  <span class="c">/* Cores WhatsApp (componente isolado) */</span>
+  --color-wpp:            #25D366;
+  --color-wpp-dark:       #1EBE5B;
+  --color-wpp-bg:         #111B21;
+  --color-wpp-header:     #202C33;
+  --color-wpp-bubble-in:  #1F2C34;
+  --color-wpp-bubble-out: #005C4B;
+
+  <span class="c">/* Tipografia */</span>
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  <span class="c">/* Bordas arredondadas */</span>
+  --radius:    12px;
+  --radius-lg: 20px;
+
+  <span class="c">/* Sombras */</span>
+  --shadow:    0 4px 24px rgba(30, 34, 55, .13);
+  --shadow-sm: 0 2px 12px rgba(30, 34, 55, .08);
+
+  <span class="c">/* Container */</span>
+  --max-w: 1160px;
+}
+</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SEÇÃO 2 — UTILS GLOBAIS
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-utils">
+  <div class="section-header">
+    <div class="num">Utilitários globais</div>
+    <h2>Badge, Botões e Classes de Seção</h2>
+    <p>Usados em múltiplas seções — não pertencem a um componente específico.</p>
+  </div>
+
+  <div class="component">
+    <div class="component__header">
+      <div>
+        <div class="component__title">Botões — sistema completo (.btn)</div>
+        <div class="component__sub">5 variantes: coral, white, ghost, ghost-coral, wpp</div>
+      </div>
+      <div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span></div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'btn-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'btn-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="btn-html">
+<pre><code><span class="c">&lt;!-- Variante coral (CTA principal) --&gt;</span>
+&lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#whatsapp</span>" <span class="a">class</span>="<span class="av">btn btn--coral</span>"&gt;
+  <span class="c">&lt;!-- ícone SVG opcional --&gt;</span>
+  Criar currículo grátis
+&lt;/<span class="t">a</span>&gt;
+
+<span class="c">&lt;!-- Variante ghost (sobre fundos escuros) --&gt;</span>
+&lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">btn btn--ghost</span>"&gt;Área empresa&lt;/<span class="t">a</span>&gt;
+
+<span class="c">&lt;!-- Variante ghost coral (sobre fundos claros) --&gt;</span>
+&lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">btn btn--ghost-coral</span>"&gt;Quero me candidatar&lt;/<span class="t">a</span>&gt;
+
+<span class="c">&lt;!-- Variante white (sobre imagens/fundos escuros) --&gt;</span>
+&lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">btn btn--white</span>"&gt;Criar meu currículo&lt;/<span class="t">a</span>&gt;
+
+<span class="c">&lt;!-- Variante WhatsApp --&gt;</span>
+&lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">btn btn--wpp</span>"&gt;Abrir WhatsApp&lt;/<span class="t">a</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="btn-css">
+<pre><code><span class="c">/* ── BASE ── */</span>
+<span class="s">.btn</span> {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 50px;
+  transition: all .2s ease;
+  line-height: 1;
+  cursor: pointer;
+  border: none;
+}
+
+<span class="c">/* ── CORAL — CTA principal ── */</span>
+<span class="s">.btn--coral</span> { background: var(--color-cta); color: #fff; }
+<span class="s">.btn--coral:hover</span> {
+  background: var(--color-cta-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(242, 139, 48, .35);
+}
+
+<span class="c">/* ── WHITE — sobre fundos escuros ── */</span>
+<span class="s">.btn--white</span> { background: #fff; color: var(--color-bg); }
+<span class="s">.btn--white:hover</span> { background: #f0f0f0; transform: translateY(-1px); }
+
+<span class="c">/* ── GHOST — borda branca semi-opaca ── */</span>
+<span class="s">.btn--ghost</span> {
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, .35);
+}
+<span class="s">.btn--ghost:hover</span> {
+  background: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .7);
+}
+
+<span class="c">/* ── GHOST CORAL — borda coral semi-opaca ── */</span>
+<span class="s">.btn--ghost-coral</span> {
+  background: transparent;
+  color: var(--color-cta);
+  border: 2px solid rgba(242, 139, 48, .4);
+}
+<span class="s">.btn--ghost-coral:hover</span> {
+  background: rgba(242, 139, 48, .06);
+}
+
+<span class="c">/* ── WHATSAPP ── */</span>
+<span class="s">.btn--wpp</span> { background: var(--color-wpp); color: #fff; font-size: 15px; padding: 15px 28px; }
+<span class="s">.btn--wpp:hover</span> {
+  background: var(--color-wpp-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, .35);
+}
+
+<span class="c">/* ── Mobile: full width quando em stack ── */</span>
+<span class="s">@media (max-width: 480px)</span> {
+  <span class="s">.hero__actions .btn,
+  .cta-final__actions .btn,
+  .b2b__actions .btn</span> {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="component">
+    <div class="component__header">
+      <div>
+        <div class="component__title">Badge + Section Labels</div>
+        <div class="component__sub">Kickers de seção e badges de destaque</div>
+      </div>
+      <div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span></div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'badge-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'badge-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="badge-html">
+<pre><code><span class="c">&lt;!-- Label de seção (kicker / eyebrow) --&gt;</span>
+&lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">section-label</span>"&gt;Como funciona&lt;/<span class="t">p</span>&gt;
+
+<span class="c">&lt;!-- Badge coral (sobre fundos claros) --&gt;</span>
+&lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">badge badge--coral</span>"&gt;Texto do badge&lt;/<span class="t">span</span>&gt;
+
+<span class="c">&lt;!-- Badge white (sobre fundos escuros) --&gt;</span>
+&lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">badge badge--white</span>"&gt;
+  &lt;<span class="t">svg</span> ...&gt;&lt;/<span class="t">svg</span>&gt;  <span class="c">&lt;!-- ícone opcional --&gt;</span>
+  100% gratuito
+&lt;/<span class="t">span</span>&gt;
+
+<span class="c">&lt;!-- Título de seção padrão --&gt;</span>
+&lt;<span class="t">h2</span> <span class="a">class</span>="<span class="av">section-title</span>"&gt;Título principal&lt;/<span class="t">h2</span>&gt;
+&lt;<span class="t">h2</span> <span class="a">class</span>="<span class="av">section-title section-title--white</span>"&gt;Sobre fundo escuro&lt;/<span class="t">h2</span>&gt;
+
+<span class="c">&lt;!-- Subtítulo de seção --&gt;</span>
+&lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">section-sub</span>"&gt;Descrição de apoio.&lt;/<span class="t">p</span>&gt;
+&lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">section-sub section-sub--white</span>"&gt;Sobre fundo escuro.&lt;/<span class="t">p</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="badge-css">
+<pre><code><span class="s">.badge</span> {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 30px;
+}
+<span class="s">.badge--coral</span> { background: rgba(242, 139, 48, .15); color: var(--color-cta); }
+<span class="s">.badge--white</span> { background: rgba(255, 255, 255, .12); color: #fff; }
+
+<span class="s">.section-label</span> {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--color-cta);
+  margin-bottom: 12px;
+}
+
+<span class="s">.section-title</span> {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text);
+}
+<span class="s">.section-title--white</span> { color: #fff; }
+
+<span class="s">.section-sub</span> {
+  font-size: 17px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-top: 14px;
+}
+<span class="s">.section-sub--white</span> { color: rgba(255, 255, 255, .7); }
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-navbar">
+  <div class="section-header">
+    <div class="num">Componente 01</div>
+    <h2>Navbar</h2>
+    <p>Fixa no topo. Glassmorphism com blur. Logo como imagem. CTA coral à direita.</p>
+  </div>
+
+  <div class="component">
+    <div class="component__header">
+      <div>
+        <div class="component__title">.navbar</div>
+        <div class="component__sub">position: fixed · z-index: 100 · height: 64px</div>
+      </div>
+      <div class="component__tags">
+        <span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span>
+        <span class="tag tag--mobile">Breakpoint: 600px</span>
+      </div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'navbar-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'navbar-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="navbar-html">
+<pre><code>&lt;<span class="t">nav</span> <span class="a">class</span>="<span class="av">navbar</span>" <span class="a">role</span>="<span class="av">navigation</span>" <span class="a">aria-label</span>="<span class="av">Menu principal</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">navbar__inner</span>"&gt;
+
+    &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">navbar__logo</span>" <span class="a">aria-label</span>="<span class="av">Emprego Aqui - página inicial</span>"&gt;
+      &lt;<span class="t">img</span>
+        <span class="a">src</span>="<span class="av">assets-webp/emprego-aqui-logo.webp</span>"
+        <span class="a">alt</span>="<span class="av">Emprego Aqui</span>"
+        <span class="a">class</span>="<span class="av">navbar__logo-img</span>"&gt;
+    &lt;/<span class="t">a</span>&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">navbar__cta</span>"&gt;
+      &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#como-funciona</span>" <span class="a">class</span>="<span class="av">navbar__link</span>"&gt;Como funciona&lt;/<span class="t">a</span>&gt;
+      &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#para-empresas</span>" <span class="a">class</span>="<span class="av">navbar__link navbar__link--ghost</span>"&gt;Para empresas&lt;/<span class="t">a</span>&gt;
+      &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#whatsapp</span>" <span class="a">class</span>="<span class="av">navbar__btn</span>"
+         <span class="a">aria-label</span>="<span class="av">Criar currículo grátis pelo WhatsApp</span>"&gt;
+        Criar currículo grátis
+      &lt;/<span class="t">a</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">nav</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="navbar-css">
+<pre><code><span class="s">.navbar</span> {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(30, 34, 55, .96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+<span class="s">.navbar__inner</span> {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+<span class="s">.navbar__logo-img</span> { height: 44px; width: auto; display: block; }
+
+<span class="s">.navbar__cta</span> { display: flex; align-items: center; gap: 10px; }
+
+<span class="s">.navbar__link</span> {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  color: rgba(255, 255, 255, .65);
+  transition: color .2s; padding: 6px 0;
+}
+<span class="s">.navbar__link:hover</span> { color: #fff; }
+
+<span class="c">/* Botão "Para empresas" — variante ghost */</span>
+<span class="s">.navbar__link--ghost</span> {
+  background: transparent;
+  color: rgba(255, 255, 255, .85);
+  border: 1.5px solid rgba(255, 255, 255, .35);
+  padding: 7px 16px;
+  border-radius: 30px;
+  transition: all .2s;
+}
+<span class="s">.navbar__link--ghost:hover</span> {
+  border-color: rgba(255, 255, 255, .75);
+  background: rgba(255, 255, 255, .1);
+  color: #fff;
+}
+
+<span class="s">.navbar__btn</span> {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 30px;
+  background: var(--color-cta); color: #fff;
+  transition: all .2s;
+  box-shadow: 0 2px 12px rgba(242, 139, 48, .35);
+}
+<span class="s">.navbar__btn:hover</span> { background: var(--color-cta-dark); }
+
+<span class="c">/* Mobile: oculta links de texto, mantém botão CTA */</span>
+<span class="s">@media (max-width: 600px)</span> {
+  <span class="s">.navbar__link</span> { display: none; }
+}
+<span class="s">@media (max-width: 420px)</span> {
+  <span class="s">.navbar__link--ghost</span> { display: none; }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-hero">
+  <div class="section-header">
+    <div class="num">Componente 02</div>
+    <h2>Hero Section</h2>
+    <p>Fullscreen com slideshow de fundo (3 imagens + JS). Texto à esquerda, widget WPP à direita (desktop) / oculto em mobile.</p>
+  </div>
+
+  <div class="notice notice--blue">
+    <strong>Atenção:</strong> As imagens de fundo do hero são injetadas via <code>style="background-image: url(...)"</code> diretamente no HTML (necessário para o slider JS). Em produção, o desenvolvedor deve referenciar as imagens WebP por URL, não base64.
+  </div>
+
+  <div class="component">
+    <div class="component__header">
+      <div>
+        <div class="component__title">.hero</div>
+        <div class="component__sub">min-height: 100svh · slider com 3 slides · JS necessário para animação</div>
+      </div>
+      <div class="component__tags">
+        <span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span>
+        <span class="tag tag--js">JS</span><span class="tag tag--mobile">Breakpoint: 860px</span>
+      </div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'hero-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'hero-css')">CSS</button>
+        <button class="tab-btn" onclick="switchTab(this, 'hero-js')">JS (slider)</button>
+      </div>
+      <div class="tab-panel active" id="hero-html">
+<pre><code>&lt;<span class="t">section</span> <span class="a">class</span>="<span class="av">hero</span>" <span class="a">aria-labelledby</span>="<span class="av">hero-title</span>"&gt;
+
+  <span class="c">&lt;!-- Slider de fundo fullscreen --&gt;</span>
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__bg-slider</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__slide-bg active</span>"
+         <span class="a">style</span>="<span class="av">background-image: url('assets-webp/emprego-aqui-hero-bg-candidatos-slide-1.webp')</span>"&gt;&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__slide-bg</span>"
+         <span class="a">style</span>="<span class="av">background-image: url('assets-webp/emprego-aqui-hero-bg-candidatos-slide-2.webp')</span>"&gt;&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__slide-bg</span>"
+         <span class="a">style</span>="<span class="av">background-image: url('assets-webp/emprego-aqui-hero-bg-candidatos-slide-3.webp')</span>"&gt;&lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__overlay</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__bg-dots</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__inner</span>"&gt;
+
+    <span class="c">&lt;!-- Coluna esquerda: conteúdo --&gt;</span>
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__content</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__eyebrow</span>"&gt;
+        &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">badge badge--white</span>"&gt;
+          <span class="c">&lt;!-- ícone ponto verde WPP --&gt;</span>
+          100% gratuito para candidatos
+        &lt;/<span class="t">span</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+
+      &lt;<span class="t">h1</span> <span class="a">class</span>="<span class="av">hero__title</span>" <span class="a">id</span>="<span class="av">hero-title</span>"&gt;
+        Pare de correr&lt;<span class="t">br</span>&gt;atrás do emprego.
+        &lt;<span class="t">em</span>&gt;Ele te encontra.&lt;/<span class="t">em</span>&gt;
+      &lt;/<span class="t">h1</span>&gt;
+
+      &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">hero__sub</span>"&gt;
+        Responda algumas perguntas simples pelo WhatsApp, nossa IA monta
+        seu currículo e empresas da região de Campinas entram em contato
+        direto com você.
+      &lt;/<span class="t">p</span>&gt;
+
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__actions</span>"&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#whatsapp</span>" <span class="a">class</span>="<span class="av">btn btn--coral</span>" <span class="a">id</span>="<span class="av">whatsapp</span>"
+           <span class="a">aria-label</span>="<span class="av">Criar currículo grátis agora pelo WhatsApp</span>"&gt;
+          <span class="c">&lt;!-- ícone WPP SVG --&gt;</span>
+          Criar currículo grátis
+        &lt;/<span class="t">a</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#para-empresas</span>" <span class="a">class</span>="<span class="av">btn btn--ghost</span>"&gt;Área empresa&lt;/<span class="t">a</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__note</span>"&gt;
+        <span class="c">&lt;!-- ícone escudo --&gt;</span>
+        Sem cadastro, sem senha — só o WhatsApp que você já usa
+      &lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+    <span class="c">&lt;!-- Coluna direita: widget WPP (oculto em mobile via CSS) --&gt;</span>
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__right</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+      <span class="c">&lt;!-- Ver componente: Widget WhatsApp --&gt;</span>
+    &lt;/<span class="t">div</span>&gt;
+
+  &lt;/<span class="t">div</span>&gt;
+
+  <span class="c">&lt;!-- Dots de navegação do slider --&gt;</span>
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">hero__dots</span>" <span class="a">role</span>="<span class="av">tablist</span>" <span class="a">aria-label</span>="<span class="av">Navegação do carrossel</span>"&gt;
+    &lt;<span class="t">button</span> <span class="a">class</span>="<span class="av">hero__dot active</span>" <span class="a">role</span>="<span class="av">tab</span>"
+            <span class="a">aria-selected</span>="<span class="av">true</span>" <span class="a">aria-label</span>="<span class="av">Foto 1</span>" <span class="a">data-index</span>="<span class="av">0</span>"&gt;&lt;/<span class="t">button</span>&gt;
+    &lt;<span class="t">button</span> <span class="a">class</span>="<span class="av">hero__dot</span>" <span class="a">role</span>="<span class="av">tab</span>"
+            <span class="a">aria-selected</span>="<span class="av">false</span>" <span class="a">aria-label</span>="<span class="av">Foto 2</span>" <span class="a">data-index</span>="<span class="av">1</span>"&gt;&lt;/<span class="t">button</span>&gt;
+    &lt;<span class="t">button</span> <span class="a">class</span>="<span class="av">hero__dot</span>" <span class="a">role</span>="<span class="av">tab</span>"
+            <span class="a">aria-selected</span>="<span class="av">false</span>" <span class="a">aria-label</span>="<span class="av">Foto 3</span>" <span class="a">data-index</span>="<span class="av">2</span>"&gt;&lt;/<span class="t">button</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+
+&lt;/<span class="t">section</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="hero-css">
+<pre><code><span class="s">.hero</span> {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-top: 64px; <span class="c">/* altura da navbar */</span>
+}
+
+<span class="c">/* Slider de fundo */</span>
+<span class="s">.hero__bg-slider</span> { position: absolute; inset: 0; z-index: 0; }
+<span class="s">.hero__slide-bg</span> {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0;
+  transition: opacity .8s ease;
+}
+<span class="s">.hero__slide-bg.active</span> { opacity: 1; }
+
+<span class="c">/* Overlay gradiente */</span>
+<span class="s">.hero__overlay</span> {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(
+    105deg,
+    rgba(20, 23, 42, .88) 0%,
+    rgba(20, 23, 42, .60) 55%,
+    rgba(20, 23, 42, .25) 100%
+  );
+}
+
+<span class="c">/* Textura pontilhada */</span>
+<span class="s">.hero__bg-dots</span> {
+  position: absolute; inset: 0; z-index: 2;
+  background-image: radial-gradient(circle, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+<span class="c">/* Conteúdo interno */</span>
+<span class="s">.hero__inner</span> {
+  position: relative; z-index: 3;
+  max-width: var(--max-w); margin: 0 auto; width: 100%;
+  padding: 100px 20px 80px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+}
+<span class="s">.hero__content</span> { max-width: 580px; }
+<span class="s">.hero__eyebrow</span> { margin-bottom: 20px; }
+
+<span class="s">.hero__title</span> {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.5vw, 68px);
+  font-weight: 800; line-height: 1.06;
+  color: #fff; margin-bottom: 20px;
+}
+<span class="s">.hero__title em</span> {
+  color: var(--color-cta);
+  font-style: normal;
+  display: block;
+}
+
+<span class="s">.hero__sub</span> {
+  font-size: 18px;
+  color: rgba(255, 255, 255, .7);
+  line-height: 1.7; margin-bottom: 36px; max-width: 480px;
+}
+
+<span class="s">.hero__actions</span> { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+<span class="s">.hero__note</span> {
+  margin-top: 20px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: rgba(255, 255, 255, .45);
+}
+
+<span class="c">/* Coluna direita (widget) */</span>
+<span class="s">.hero__right</span> {
+  flex-shrink: 0;
+  display: flex; align-items: flex-end; padding-bottom: 8px;
+}
+
+<span class="c">/* Dots do slider */</span>
+<span class="s">.hero__dots</span> {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 4;
+}
+<span class="s">.hero__dot</span> {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,.35);
+  border: none; cursor: pointer; transition: all .3s;
+}
+<span class="s">.hero__dot.active</span> { width: 24px; border-radius: 6px; background: #fff; }
+
+<span class="c">/* ── MOBILE ─── */</span>
+<span class="s">@media (max-width: 860px)</span> {
+  <span class="s">.hero</span> { min-height: 90svh; }
+  <span class="s">.hero__inner</span> {
+    text-align: left;
+    align-items: flex-start;
+    padding: 80px 20px 100px;
+  }
+  <span class="s">.hero__right</span> { display: none; } <span class="c">/* widget oculto em mobile */</span>
+  <span class="s">.hero__content</span> { max-width: 70%; }
+  <span class="s">.hero__sub</span> { max-width: 100%; font-size: 16px; margin: 0 0 36px; }
+  <span class="s">.hero__title</span> { font-size: clamp(28px, 8vw, 44px); }
+  <span class="s">.hero__slide-bg</span> { background-position: 60% center; }
+}
+<span class="s">@media (max-width: 560px)</span> {
+  <span class="s">.hero__content</span> { max-width: 100%; }
+  <span class="s">.hero__title</span> { font-size: 28px; }
+}
+<span class="s">@media (max-width: 480px)</span> {
+  <span class="s">.hero__actions</span> { flex-direction: column; align-items: flex-start; width: 100%; }
+  <span class="s">.hero__actions .btn</span> { width: 100%; max-width: 320px; justify-content: center; }
+}
+</code></pre>
+      </div>
+      <div class="tab-panel" id="hero-js">
+<pre><code><span class="c">// Slider automático de backgrounds do hero</span>
+<span class="c">// Intervalo: 5 segundos · Transição: 800ms (controlada via CSS)</span>
+(function () {
+  const slides = document.querySelectorAll('.hero__slide-bg');
+  const dots   = document.querySelectorAll('.hero__dot');
+  let current  = 0;
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    dots[current].setAttribute('aria-selected', 'false');
+
+    current = index;
+
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    dots[current].setAttribute('aria-selected', 'true');
+  }
+
+  <span class="c">// Autoplay</span>
+  let timer = setInterval(() =&gt; goTo((current + 1) % slides.length), 5000);
+
+  <span class="c">// Clique nos dots</span>
+  dots.forEach((dot, i) =&gt; {
+    dot.addEventListener('click', () =&gt; {
+      clearInterval(timer);
+      goTo(i);
+      timer = setInterval(() =&gt; goTo((current + 1) % slides.length), 5000);
+    });
+  });
+})();
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     WIDGET WHATSAPP
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-wpp-widget">
+  <div class="section-header">
+    <div class="num">Componente 03</div>
+    <h2>Widget WhatsApp (simulação de chat)</h2>
+    <p>Exibido na coluna direita do hero em desktop. Oculto em mobile. Animação de entrada + digitação via JS.</p>
+  </div>
+
+  <div class="component">
+    <div class="component__header">
+      <div>
+        <div class="component__title">.wpp-widget</div>
+        <div class="component__sub">width: 300px · Cores do namespace --color-wpp-* · display: none em mobile</div>
+      </div>
+      <div class="component__tags">
+        <span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--js">JS (typing)</span>
+      </div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'wpp-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'wpp-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="wpp-html">
+<pre><code>&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__phone</span>"&gt;
+
+    <span class="c">&lt;!-- Header: avatar + nome + status --&gt;</span>
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__header</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__avatar wpp-widget__avatar--img</span>"&gt;
+        &lt;<span class="t">img</span> <span class="a">src</span>="<span class="av">assets-webp/emprego-aqui-avatar-whatsapp-widget.webp</span>"
+             <span class="a">alt</span>="<span class="av">Emprego Aqui</span>"
+             <span class="a">style</span>="<span class="av">width:100%;height:100%;object-fit:cover;border-radius:50%;</span>"&gt;
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__info</span>"&gt;
+        &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__name</span>"&gt;Emprego Aqui&lt;/<span class="t">div</span>&gt;
+        &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__status</span>"&gt;online agora&lt;/<span class="t">div</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+      <span class="c">&lt;!-- ícone WPP --&gt;</span>
+    &lt;/<span class="t">div</span>&gt;
+
+    <span class="c">&lt;!-- Chat --&gt;</span>
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__chat</span>" <span class="a">id</span>="<span class="av">wppChat</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__bubble wpp-widget__bubble--in</span>"&gt;
+        Oi! Vi que você está buscando emprego em Campinas 👋
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__bubble wpp-widget__bubble--in delay-1</span>"&gt;
+        Nossa IA encontrou &lt;<span class="t">strong</span>&gt;3 vagas&lt;/<span class="t">strong</span>&gt; perto de você
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__bubble wpp-widget__bubble--out delay-2</span>"&gt;
+        Sério?! Que vagas são essas? 😮
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__bubble wpp-widget__bubble--in delay-3</span>"&gt;
+        Vagas com salário compatível, pertinho de você 📍 Quer ver?
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__typing</span>" <span class="a">id</span>="<span class="av">wppTyping</span>"&gt;
+        &lt;<span class="t">span</span>&gt;&lt;/<span class="t">span</span>&gt;&lt;<span class="t">span</span>&gt;&lt;/<span class="t">span</span>&gt;&lt;<span class="t">span</span>&gt;&lt;/<span class="t">span</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+    <span class="c">&lt;!-- Input simulado --&gt;</span>
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__footer</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__input</span>"&gt;Criar meu currículo grátis...&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-widget__send</span>"&gt;<span class="c">&lt;!-- ícone enviar --&gt;</span>&lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="wpp-css">
+<pre><code><span class="s">.wpp-widget</span> {
+  width: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .45);
+  animation: wppEntrance .7s cubic-bezier(.34, 1.56, .64, 1) .5s both;
+}
+@keyframes wppEntrance {
+  from { opacity: 0; transform: translateY(32px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+<span class="s">.wpp-widget__phone</span> { background: var(--color-wpp-bg); display: flex; flex-direction: column; }
+
+<span class="s">.wpp-widget__header</span> {
+  background: var(--color-wpp-header);
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+}
+
+<span class="s">.wpp-widget__avatar</span> {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--color-cta);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+<span class="s">.wpp-widget__name</span> { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #E9EDEF; }
+<span class="s">.wpp-widget__status</span> { font-size: 11px; color: #8696A0; margin-top: 1px; }
+
+<span class="s">.wpp-widget__chat</span> {
+  padding: 16px 12px 8px;
+  display: flex; flex-direction: column; gap: 6px;
+  min-height: 180px;
+  background: var(--color-wpp-bg);
+}
+
+<span class="s">.wpp-widget__bubble</span> {
+  max-width: 85%;
+  padding: 8px 12px; border-radius: 8px;
+  font-size: 12.5px; line-height: 1.5; color: #E9EDEF;
+  opacity: 0;
+  animation: bubbleIn .4s ease forwards;
+}
+<span class="s">.wpp-widget__bubble--in</span>  { background: var(--color-wpp-bubble-in); align-self: flex-start; }
+<span class="s">.wpp-widget__bubble--out</span> { background: var(--color-wpp-bubble-out); align-self: flex-end; }
+
+<span class="s">.wpp-widget__bubble.delay-1</span> { animation-delay: 1.2s; }
+<span class="s">.wpp-widget__bubble.delay-2</span> { animation-delay: 2.4s; }
+<span class="s">.wpp-widget__bubble.delay-3</span> { animation-delay: 3.6s; }
+
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+<span class="c">/* Indicador de digitação */</span>
+<span class="s">.wpp-widget__typing</span> {
+  display: flex; gap: 4px; padding: 8px 12px;
+  background: var(--color-wpp-bubble-in);
+  border-radius: 8px; align-self: flex-start;
+  width: 48px;
+}
+<span class="s">.wpp-widget__typing span</span> {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #8696A0;
+  animation: typing 1.2s ease infinite;
+}
+<span class="s">.wpp-widget__typing span:nth-child(2)</span> { animation-delay: .2s; }
+<span class="s">.wpp-widget__typing span:nth-child(3)</span> { animation-delay: .4s; }
+@keyframes typing {
+  0%, 80%, 100% { transform: scale(.8); opacity: .4; }
+  40%           { transform: scale(1);  opacity: 1; }
+}
+
+<span class="c">/* Footer do widget */</span>
+<span class="s">.wpp-widget__footer</span> {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  background: var(--color-wpp-bg);
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+<span class="s">.wpp-widget__input</span> {
+  flex: 1; background: #2A3942;
+  border-radius: 20px; padding: 8px 14px;
+  font-size: 12px; color: #8696A0;
+}
+<span class="s">.wpp-widget__send</span> {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--color-wpp);
+  display: flex; align-items: center; justify-content: center;
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     STRIP PROVA SOCIAL
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-strip">
+  <div class="section-header">
+    <div class="num">Componente 04</div>
+    <h2>Strip — Faixa de Prova Social</h2>
+    <p>Faixa horizontal entre o hero e "Como Funciona". 4 bullets com ícone checkmark coral.</p>
+  </div>
+  <div class="component">
+    <div class="component__header">
+      <div><div class="component__title">.strip</div><div class="component__sub">background: var(--color-bg-mid) · padding: 18px 0</div></div>
+      <div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">Breakpoint: 560px</span></div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'strip-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'strip-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="strip-html">
+<pre><code>&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip</span>" <span class="a">aria-label</span>="<span class="av">Indicadores do Emprego Aqui</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__inner</span>"&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__item</span>"&gt;
+      <span class="c">&lt;!-- ícone check --&gt;</span>
+      Sem fila. Sem agência. Sem papel.
+    &lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__sep</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__item</span>"&gt;<span class="c">&lt;!-- ícone check --&gt;</span> Só o WhatsApp que você já tem&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__sep</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__item</span>"&gt;<span class="c">&lt;!-- ícone check --&gt;</span> Vagas perto da sua casa&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__sep</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">strip__item</span>"&gt;<span class="c">&lt;!-- ícone check --&gt;</span> Currículo pronto em 2 minutos&lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="strip-css">
+<pre><code><span class="s">.strip</span> {
+  background: var(--color-bg-mid);
+  padding: 18px 0;
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+<span class="s">.strip__inner</span> {
+  display: flex; align-items: center; justify-content: center;
+  gap: 32px; flex-wrap: wrap;
+  max-width: var(--max-w); margin: 0 auto; padding: 0 20px;
+}
+<span class="s">.strip__item</span> {
+  display: flex; align-items: center; gap: 10px;
+  color: rgba(255,255,255,.55);
+  font-size: 13px; font-family: var(--font-display); font-weight: 600;
+}
+<span class="s">.strip__item svg</span> { color: var(--color-cta); flex-shrink: 0; }
+<span class="s">.strip__sep</span> { width: 1px; height: 20px; background: rgba(255,255,255,.12); }
+
+<span class="s">@media (max-width: 560px)</span> {
+  <span class="s">.strip__sep</span> { display: none; }
+  <span class="s">.strip__inner</span> { gap: 12px; }
+  <span class="s">.strip__item</span> { font-size: 12px; }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     COMO FUNCIONA
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-como-funciona">
+  <div class="section-header">
+    <div class="num">Componente 05</div>
+    <h2>Como Funciona — 3 Passos</h2>
+    <p>Grid 3 colunas com foto real, badge numerado e linha tracejada coral entre steps. Mobile: coluna única com layout horizontal.</p>
+  </div>
+  <div class="component">
+    <div class="component__header">
+      <div><div class="component__title">.funciona · .step</div><div class="component__sub">grid: repeat(3, 1fr) → 1fr em mobile (720px)</div></div>
+      <div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">Breakpoint: 720px</span></div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'funciona-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'funciona-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="funciona-html">
+<pre><code>&lt;<span class="t">section</span> <span class="a">class</span>="<span class="av">funciona</span>" <span class="a">id</span>="<span class="av">como-funciona</span>" <span class="a">aria-labelledby</span>="<span class="av">funciona-title</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">container</span>"&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">funciona__header reveal</span>"&gt;
+      &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">section-label</span>"&gt;Como funciona&lt;/<span class="t">p</span>&gt;
+      &lt;<span class="t">h2</span> <span class="a">class</span>="<span class="av">section-title</span>" <span class="a">id</span>="<span class="av">funciona-title</span>"&gt;
+        Tão simples quanto mandar&lt;<span class="t">br</span>&gt;uma mensagem
+      &lt;/<span class="t">h2</span>&gt;
+      &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">section-sub</span>"&gt;
+        Três passos e você já está visível para centenas de empresas.
+      &lt;/<span class="t">p</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">funciona__steps</span>"&gt;
+
+      <span class="c">&lt;!-- Passo 1 --&gt;</span>
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">step reveal reveal-delay-1</span>"&gt;
+        &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">step__img-wrap</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+          &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">step__badge</span>"&gt;1&lt;/<span class="t">span</span>&gt;
+          &lt;<span class="t">img</span> <span class="a">src</span>="<span class="av">assets-webp/emprego-aqui-como-funciona-passo-1-cadastro.webp</span>"
+               <span class="a">alt</span>="<span class="av">Passo 1 — Candidata usando celular em casa</span>"
+               <span class="a">class</span>="<span class="av">step__img-real</span>"
+               <span class="a">loading</span>="<span class="av">lazy</span>"&gt;
+        &lt;/<span class="t">div</span>&gt;
+        &lt;<span class="t">div</span>&gt;
+          &lt;<span class="t">h3</span> <span class="a">class</span>="<span class="av">step__title</span>"&gt;Manda um oi no WhatsApp&lt;/<span class="t">h3</span>&gt;
+          &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">step__desc</span>"&gt;Clique no botão e inicie uma conversa. Sem senha, sem cadastro.&lt;/<span class="t">p</span>&gt;
+        &lt;/<span class="t">div</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+
+      <span class="c">&lt;!-- Passo 2 --&gt;</span>
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">step reveal reveal-delay-2</span>"&gt;
+        &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">step__img-wrap</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+          &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">step__badge</span>"&gt;2&lt;/<span class="t">span</span>&gt;
+          &lt;<span class="t">img</span> <span class="a">src</span>="<span class="av">assets-webp/emprego-aqui-como-funciona-passo-2-curriculo.webp</span>"
+               <span class="a">alt</span>="<span class="av">Passo 2 — IA gerando currículo profissional</span>"
+               <span class="a">class</span>="<span class="av">step__img-real</span>" <span class="a">loading</span>="<span class="av">lazy</span>"&gt;
+        &lt;/<span class="t">div</span>&gt;
+        &lt;<span class="t">div</span>&gt;
+          &lt;<span class="t">h3</span> <span class="a">class</span>="<span class="av">step__title</span>"&gt;Nossa IA monta seu currículo&lt;/<span class="t">h3</span>&gt;
+          &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">step__desc</span>"&gt;Responda perguntas simples e a IA cria um currículo profissional.&lt;/<span class="t">p</span>&gt;
+        &lt;/<span class="t">div</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+
+      <span class="c">&lt;!-- Passo 3 --&gt;</span>
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">step reveal reveal-delay-3</span>"&gt;
+        &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">step__img-wrap</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+          &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">step__badge</span>"&gt;3&lt;/<span class="t">span</span>&gt;
+          &lt;<span class="t">img</span> <span class="a">src</span>="<span class="av">assets-webp/emprego-aqui-como-funciona-passo-3-vaga.webp</span>"
+               <span class="a">alt</span>="<span class="av">Passo 3 — Candidata recebendo proposta de emprego</span>"
+               <span class="a">class</span>="<span class="av">step__img-real</span>" <span class="a">loading</span>="<span class="av">lazy</span>"&gt;
+        &lt;/<span class="t">div</span>&gt;
+        &lt;<span class="t">div</span>&gt;
+          &lt;<span class="t">h3</span> <span class="a">class</span>="<span class="av">step__title</span>"&gt;Empresas te encontram&lt;/<span class="t">h3</span>&gt;
+          &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">step__desc</span>"&gt;Empresas da sua região veem seu perfil e entram em contato pelo WhatsApp.&lt;/<span class="t">p</span>&gt;
+        &lt;/<span class="t">div</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+
+    &lt;/<span class="t">div</span>&gt;<span class="c">&lt;!-- /.funciona__steps --&gt;</span>
+
+    &lt;<span class="t">div</span> <span class="a">style</span>="<span class="av">text-align:center;margin-top:52px</span>" <span class="a">class</span>="<span class="av">reveal</span>"&gt;
+      &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#whatsapp</span>" <span class="a">class</span>="<span class="av">btn btn--coral</span>"&gt;Começar agora — é grátis&lt;/<span class="t">a</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">section</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="funciona-css">
+<pre><code><span class="s">.funciona</span> { padding: 96px 0; background: #fff; }
+<span class="s">.funciona__header</span> { text-align: center; margin-bottom: 64px; }
+
+<span class="s">.funciona__steps</span> {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0; position: relative;
+}
+
+<span class="c">/* Linha tracejada coral entre steps */</span>
+<span class="s">.funciona__steps::before</span> {
+  content: '';
+  position: absolute; top: 140px;
+  left: calc(16.66% + 40px); right: calc(16.66% + 40px); height: 2px;
+  background: repeating-linear-gradient(
+    90deg, var(--color-cta) 0, var(--color-cta) 8px, transparent 8px, transparent 18px
+  );
+  z-index: 0;
+}
+
+<span class="s">.step</span> {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 0 16px;
+  position: relative; z-index: 1;
+}
+
+<span class="s">.step__img-wrap</span> { position: relative; flex-shrink: 0; margin-bottom: 28px; }
+<span class="s">.step__badge</span> {
+  position: absolute; top: -8px; right: -8px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--color-cta); color: #fff;
+  font-family: var(--font-display); font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+
+<span class="s">.step__img-real</span> {
+  width: 280px; height: auto; aspect-ratio: 3/4;
+  object-fit: cover; border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(30,34,55,.12);
+}
+
+<span class="s">.step__title</span> { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--color-text); margin-bottom: 10px; }
+<span class="s">.step__desc</span>  { font-size: 15px; color: var(--color-text-muted); line-height: 1.65; max-width: 220px; }
+
+<span class="c">/* ── MOBILE ─── */</span>
+<span class="s">@media (max-width: 720px)</span> {
+  <span class="s">.funciona__steps</span> { grid-template-columns: 1fr; gap: 48px; }
+  <span class="s">.funciona__steps::before</span> { display: none; }
+  <span class="s">.step</span> { flex-direction: row; align-items: flex-start; text-align: left; gap: 20px; padding: 0; }
+  <span class="s">.step__img-real</span> { width: 140px; }
+  <span class="s">.step__desc</span> { max-width: none; }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     POR QUE AQUI
+═══════════════════════════════════════════════════ -->
+<section class="section" id="comp-porque">
+  <div class="section-header">
+    <div class="num">Componente 06</div>
+    <h2>Por Que Aqui — Cards de Benefício</h2>
+    <p>Grid 2×2 de cards sobre fundo cinza claro. Borda coral animada no hover (::before scaleY). Um card tem variante destaque com tag.</p>
+  </div>
+  <div class="component">
+    <div class="component__header">
+      <div><div class="component__title">.card-beneficio</div><div class="component__sub">grid: repeat(2, 1fr) → 1fr em mobile (640px)</div></div>
+      <div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">Breakpoint: 640px</span></div>
+    </div>
+    <div class="component__body">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'porque-html')">HTML</button>
+        <button class="tab-btn" onclick="switchTab(this, 'porque-css')">CSS</button>
+      </div>
+      <div class="tab-panel active" id="porque-html">
+<pre><code><span class="c">&lt;!-- Item padrão --&gt;</span>
+&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">card-beneficio reveal</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">card-beneficio__icon</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+    &lt;<span class="t">svg</span> ...&gt;&lt;/<span class="t">svg</span>&gt; <span class="c">&lt;!-- ícone SVG stroke coral --&gt;</span>
+  &lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">h3</span> <span class="a">class</span>="<span class="av">card-beneficio__title</span>"&gt;Vagas perto de você&lt;/<span class="t">h3</span>&gt;
+  &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">card-beneficio__desc</span>"&gt;Focado 100% na Região Metropolitana de Campinas.&lt;/<span class="t">p</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+
+<span class="c">&lt;!-- Item destaque (com tag extra) --&gt;</span>
+&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">card-beneficio card-beneficio--destaque reveal</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">card-beneficio__icon</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;<span class="t">svg</span> ...&gt;&lt;/<span class="t">svg</span>&gt;&lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">h3</span> <span class="a">class</span>="<span class="av">card-beneficio__title</span>"&gt;Só precisa do WhatsApp&lt;/<span class="t">h3</span>&gt;
+  &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">card-beneficio__desc</span>"&gt;...&lt;/<span class="t">p</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">card-beneficio__tag</span>"&gt;O canal que você já conhece&lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="porque-css">
+<pre><code><span class="s">.porque</span> { padding: 96px 0; background: var(--color-bg-light); }
+<span class="s">.porque__header</span> { text-align: center; margin-bottom: 56px; }
+<span class="s">.porque__grid</span> { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+<span class="s">.card-beneficio</span> {
+  background: #fff; border-radius: var(--radius); padding: 32px 28px;
+  box-shadow: var(--shadow-sm); border: 1px solid rgba(30,34,55,.06);
+  transition: all .25s; position: relative; overflow: hidden;
+}
+<span class="s">.card-beneficio:hover</span> { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+<span class="c">/* Borda coral animada à esquerda */</span>
+<span class="s">.card-beneficio::before</span> {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--color-cta);
+  transform: scaleY(0); transform-origin: top; transition: transform .3s;
+}
+<span class="s">.card-beneficio:hover::before</span> { transform: scaleY(1); }
+
+<span class="s">.card-beneficio__icon</span> {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: rgba(242,139,48,.1);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+}
+<span class="s">.card-beneficio__title</span> { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--color-text); margin-bottom: 8px; }
+<span class="s">.card-beneficio__desc</span>  { font-size: 15px; color: var(--color-text-muted); line-height: 1.65; }
+
+<span class="s">.card-beneficio__tag</span> {
+  display: inline-block; margin-top: 16px;
+  padding: 4px 12px; border-radius: 20px;
+  background: rgba(242,139,48,.12); color: var(--color-cta);
+  font-family: var(--font-display); font-size: 12px; font-weight: 700;
+}
+
+<span class="s">@media (max-width: 640px)</span> { <span class="s">.porque__grid</span> { grid-template-columns: 1fr; } }
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     NÚMEROS, DEPOIMENTOS, EMPRESAS, B2B, FAQ, CTA FINAL, FOOTER, WPP-BAR
+     (versões compactas para referência rápida)
+═══════════════════════════════════════════════════ -->
+
+<section class="section" id="comp-numeros">
+  <div class="section-header"><div class="num">Componente 07</div><h2>Números — Métricas em destaque</h2><p>Fundo azul escuro. 3 valores em clamp, separados por divisórias. Mobile: coluna.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.numeros · .num-card</div><div class="component__sub">background: var(--color-bg) · padding: 72px 0</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">640px</span></div></div>
+    <div class="component__body">
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'num-html')">HTML</button><button class="tab-btn" onclick="switchTab(this,'num-css')">CSS</button></div>
+      <div class="tab-panel active" id="num-html">
+<pre><code>&lt;<span class="t">section</span> <span class="a">class</span>="<span class="av">numeros</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">numeros__inner</span>"&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card reveal</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__value</span>"&gt;10k+&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__label</span>"&gt;Candidatos&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__sub</span>"&gt;buscando oportunidades&lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">numeros__sep</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card reveal</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__value</span>"&gt;2.500+&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__label</span>"&gt;Empresas&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__sub</span>"&gt;na Região de Campinas&lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">numeros__sep</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;&lt;/<span class="t">div</span>&gt;
+
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card reveal</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__value</span>"&gt;
+        &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">num-card__big</span>"&gt;2&lt;/<span class="t">span</span>&gt;
+        &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">num-card__unit</span>"&gt;min&lt;/<span class="t">span</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__label</span>"&gt;Currículo pronto&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">num-card__sub</span>"&gt;do zero ao profissional&lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">section</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="num-css">
+<pre><code><span class="s">.numeros</span> { background: var(--color-bg); padding: 72px 0; position: relative; overflow: hidden; }
+<span class="s">.numeros__inner</span> {
+  display: flex; align-items: center; justify-content: center;
+  max-width: 960px; margin: 0 auto; padding: 0 40px;
+}
+<span class="s">.numeros__sep</span> { width: 1px; height: 80px; background: rgba(255,255,255,.12); flex-shrink: 0; }
+<span class="s">.num-card</span> { text-align: center; padding: 0 48px; flex: 1; min-width: 0; }
+<span class="s">.num-card__value</span> {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 4.8vw, 68px); font-weight: 800;
+  color: var(--color-cta); line-height: 1; margin-bottom: 8px;
+}
+<span class="s">.num-card__label</span> {
+  font-family: var(--font-display); font-size: 12px; font-weight: 700;
+  color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .07em;
+}
+<span class="s">.num-card__sub</span> { font-size: 12px; color: rgba(255,255,255,.28); margin-top: 4px; }
+<span class="s">.num-card__big</span>  { font-size: clamp(36px, 10vw, 68px); }
+<span class="s">.num-card__unit</span> { font-size: clamp(22px, 7vw, 44px); }
+
+<span class="s">@media (max-width: 640px)</span> {
+  <span class="s">.numeros__inner</span> { flex-direction: column; gap: 0; }
+  <span class="s">.numeros__sep</span>   { width: 120px; height: 1px; }
+  <span class="s">.num-card</span>       { padding: 28px 20px; }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-depos">
+  <div class="section-header"><div class="num">Componente 08</div><h2>Depoimentos</h2><p>Grid 2 colunas, fundo cinza. Aspas decorativas, texto itálico, avatar com iniciais, estrelas.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.depo-card</div><div class="component__sub">grid: repeat(2,1fr) → 1fr em 680px</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">680px</span></div></div>
+    <div class="component__body">
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'depo-html')">HTML</button><button class="tab-btn" onclick="switchTab(this,'depo-css')">CSS</button></div>
+      <div class="tab-panel active" id="depo-html">
+<pre><code>&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card reveal</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card__quote</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;"&lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">depo-card__text</span>"&gt;Eu não sabia nem como montar um currículo...&lt;/<span class="t">p</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card__footer</span>"&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card__avatar</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;AM&lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card__name</span>"&gt;Ana Maria S.&lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card__role</span>"&gt;Candidata contratada · Campinas, SP&lt;/<span class="t">div</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">depo-card__stars</span>" <span class="a">aria-label</span>="<span class="av">5 estrelas</span>"&gt;
+    &lt;<span class="t">span</span> <span class="a">class</span>="<span class="av">star</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;★&lt;/<span class="t">span</span>&gt; <span class="c">&lt;!-- ×5 --&gt;</span>
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="depo-css">
+<pre><code><span class="s">.depos</span> { padding: 96px 0; background: #fff; }
+<span class="s">.depos__grid</span> { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+
+<span class="s">.depo-card</span> { background: var(--color-bg-light); border-radius: var(--radius); padding: 32px 28px; position: relative; }
+<span class="s">.depo-card__quote</span> { font-size: 48px; font-family: Georgia, serif; color: var(--color-cta); line-height: .8; margin-bottom: 16px; opacity: .6; }
+<span class="s">.depo-card__text</span>  { font-size: 16px; color: var(--color-text); line-height: 1.7; margin-bottom: 24px; font-style: italic; }
+<span class="s">.depo-card__footer</span>{ display: flex; align-items: center; gap: 12px; }
+<span class="s">.depo-card__avatar</span>{
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--color-cta); color: #fff;
+  font-family: var(--font-display); font-size: 15px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+<span class="s">.depo-card__name</span>  { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--color-text); }
+<span class="s">.depo-card__role</span>  { font-size: 13px; color: var(--color-text-muted); margin-top: 2px; }
+<span class="s">.depo-card__stars</span> { display: flex; gap: 3px; margin-top: 12px; }
+<span class="s">.star</span> { color: var(--color-cta); font-size: 15px; }
+
+<span class="s">@media (max-width: 680px)</span> { <span class="s">.depos__grid</span> { grid-template-columns: 1fr; } }
+<span class="s">@media (max-width: 480px)</span> { <span class="s">.depo-card</span> { padding: 24px 20px; } }
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-empresas">
+  <div class="section-header"><div class="num">Componente 09</div><h2>Empresas — Trust Block + Marquee</h2><p>Bloco qualitativo com trust copy + marquee animado de logos placeholder. Fade nos extremos via gradiente.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.empresas__trust-block · .marquee-wrap</div><div class="component__sub">Animação: marquee 22s linear infinite · pausa no hover</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span></div></div>
+    <div class="component__body">
+      <div class="notice notice--blue"><strong>Nota:</strong> Os <code>.logo-placeholder</code> com texto são placeholders. Substituir pelos logos reais das empresas parceiras em SVG ou WebP.</div>
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'emp-css')">CSS (marquee)</button></div>
+      <div class="tab-panel active" id="emp-css">
+<pre><code><span class="s">.marquee-wrap</span> { width: 100%; overflow: hidden; position: relative; margin-top: 36px; padding-bottom: 48px; }
+<span class="c">/* Fade lateral */</span>
+<span class="s">.marquee-wrap::before,
+.marquee-wrap::after</span> {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+}
+<span class="s">.marquee-wrap::before</span> { left: 0;  background: linear-gradient(90deg, var(--color-bg-light), transparent); }
+<span class="s">.marquee-wrap::after</span>  { right: 0; background: linear-gradient(-90deg, var(--color-bg-light), transparent); }
+<span class="s">.marquee-track</span>  { display: flex; width: max-content; }
+<span class="s">.marquee-inner</span>  { display: flex; align-items: center; gap: 20px; padding: 0 10px; animation: marquee 22s linear infinite; }
+<span class="s">.marquee-wrap:hover .marquee-inner</span> { animation-play-state: paused; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+<span class="c">/* Duplicar .marquee-inner no HTML (2 cópias) para loop seamless */</span>
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-b2b">
+  <div class="section-header"><div class="num">Componente 10</div><h2>Para Empresas — B2B Fullscreen</h2><p>Seção fullscreen com imagem de fundo (via JS), overlay gradiente. Grid 2 colunas: headline + card glassmorphism. Mobile: empilhado.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.b2b · .b2b__card</div><div class="component__sub">grid: 1fr 420px → coluna única em 900px · min-height: 680px</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--js">JS (bg)</span><span class="tag tag--mobile">900px / 480px</span></div></div>
+    <div class="component__body">
+      <div class="notice notice--blue"><strong>Imagem de fundo:</strong> Injetada via JS <code>el.style.backgroundImage = "url('assets-webp/emprego-aqui-empresas-bg-secao.webp')"</code> no elemento <code>#b2bBg</code>. Isso permite lazy-load controlado — o script só executa após o carregamento da página.</div>
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'b2b-css')">CSS (card glassmorphism)</button><button class="tab-btn" onclick="switchTab(this,'b2b-mobile')">CSS Mobile</button></div>
+      <div class="tab-panel active" id="b2b-css">
+<pre><code><span class="s">.b2b</span> { position: relative; overflow: hidden; min-height: 680px; display: flex; align-items: center; padding: 100px 0; }
+<span class="s">.b2b__bg</span> { position: absolute; inset: 0; background-size: cover; background-position: center; z-index: 0; transform: scale(1.04); transition: transform 8s ease; }
+<span class="s">.b2b:hover .b2b__bg</span> { transform: scale(1); }
+<span class="s">.b2b__overlay</span> {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(100deg, rgba(20,23,42,.92) 0%, rgba(20,23,42,.78) 45%, rgba(20,23,42,.35) 100%);
+}
+<span class="s">.b2b__inner</span> { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center; width: 100%; }
+
+<span class="c">/* Card glassmorphism */</span>
+<span class="s">.b2b__card</span> {
+  background: rgba(20, 23, 42, .82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,.45);
+}
+
+<span class="s">.b2b__card-img</span> { width: 100%; height: 200px; object-fit: cover; transition: transform .4s ease; }
+<span class="s">.b2b__card:hover .b2b__card-img</span> { transform: scale(1.04); }
+
+<span class="s">.b2b__hero-title</span> { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 56px); font-weight: 800; line-height: 1.08; color: #fff; margin: 12px 0 20px; }
+<span class="s">.b2b__em</span> { font-style: normal; color: var(--color-cta); }
+<span class="s">.b2b__hero-sub</span> { font-size: 17px; color: rgba(255,255,255,.65); line-height: 1.7; }
+</code></pre>
+      </div>
+      <div class="tab-panel" id="b2b-mobile">
+<pre><code><span class="c">/* Mobile 900px: layout em 2 blocos verticais */</span>
+<span class="s">@media (max-width: 900px)</span> {
+  <span class="s">.b2b</span> { min-height: auto; display: block; padding: 0; }
+  <span class="s">.b2b__inner</span> { display: flex; flex-direction: column; gap: 0; padding: 0; }
+
+  <span class="c">/* Parte superior: headline sobre a foto */</span>
+  <span class="s">.b2b__left</span> {
+    position: relative; z-index: 2;
+    min-height: 400px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 48px 24px 40px; text-align: left;
+  }
+
+  <span class="c">/* Parte inferior: card sobre fundo sólido (cobre bg/overlay) */</span>
+  <span class="s">.b2b__card</span> {
+    position: relative; z-index: 3;
+    margin: 0; border-radius: 0;
+    background: var(--color-bg-mid);
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+  }
+  <span class="s">.b2b__card-img</span>  { height: 240px; border-radius: 0; }
+  <span class="s">.b2b__actions</span>   { flex-direction: column; }
+  <span class="s">.b2b__actions .btn</span> { width: 100%; justify-content: center; }
+}
+<span class="s">@media (max-width: 480px)</span> {
+  <span class="s">.b2b__left</span>      { min-height: 360px; padding: 40px 20px 32px; }
+  <span class="s">.b2b__hero-title</span>{ font-size: 26px; }
+  <span class="s">.b2b__card-img</span>  { height: 200px; }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-faq">
+  <div class="section-header"><div class="num">Componente 11</div><h2>FAQ — Accordion</h2><p>6 perguntas. Accordion via JS (toggle de classe .open). Ícone + que gira 45° ao abrir. CTA inline em cada resposta.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.faq-item</div><div class="component__sub">max-width: 760px · background: var(--color-bg-light)</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--js">JS</span></div></div>
+    <div class="component__body">
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'faq-html')">HTML (1 item)</button><button class="tab-btn" onclick="switchTab(this,'faq-css')">CSS</button><button class="tab-btn" onclick="switchTab(this,'faq-js')">JS</button></div>
+      <div class="tab-panel active" id="faq-html">
+<pre><code>&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">faq-item</span>"&gt;
+  &lt;<span class="t">button</span> <span class="a">class</span>="<span class="av">faq-item__question</span>" <span class="a">aria-expanded</span>="<span class="av">false</span>" <span class="a">aria-controls</span>="<span class="av">faq1</span>"&gt;
+    O serviço é realmente gratuito para candidatos?
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">faq-item__icon</span>" <span class="a">aria-hidden</span>="<span class="av">true</span>"&gt;
+      &lt;<span class="t">svg</span> ...&gt;&lt;/<span class="t">svg</span>&gt; <span class="c">&lt;!-- ícone + --&gt;</span>
+    &lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">button</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">faq-item__answer</span>" <span class="a">id</span>="<span class="av">faq1</span>" <span class="a">role</span>="<span class="av">region</span>"&gt;
+    Sim, 100% gratuito...
+    &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#whatsapp</span>" <span class="a">class</span>="<span class="av">faq-cta</span>"&gt;Criar meu currículo — é de graça&lt;/<span class="t">a</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="faq-css">
+<pre><code><span class="s">.faq</span>         { padding: 80px 0; background: var(--color-bg-light); }
+<span class="s">.faq__inner</span>  { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+<span class="s">.faq__header</span> { text-align: center; margin-bottom: 48px; }
+
+<span class="s">.faq-item</span>    { background: #fff; border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; border: 1px solid rgba(30,34,55,.07); }
+<span class="s">.faq-item__question</span> {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--color-text);
+  cursor: pointer; background: none; border: none; text-align: left; gap: 16px; transition: background .2s;
+}
+<span class="s">.faq-item__question:hover</span> { background: var(--color-bg-light); }
+
+<span class="s">.faq-item__icon</span> {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--color-bg-light);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .3s;
+}
+<span class="s">.faq-item.open .faq-item__icon</span> { background: var(--color-cta); transform: rotate(45deg); }
+
+<span class="s">.faq-item__answer</span> {
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+  font-size: 15px; color: var(--color-text-muted); line-height: 1.7; padding: 0 24px;
+}
+<span class="s">.faq-item.open .faq-item__answer</span> { max-height: 400px; padding: 0 24px 20px; }
+
+<span class="s">.faq-cta</span> {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  color: var(--color-cta); border: 1.5px solid rgba(242,139,48,.3);
+  padding: 8px 16px; border-radius: 30px; transition: all .2s;
+}
+<span class="s">.faq-cta:hover</span> { background: rgba(242,139,48,.08); border-color: rgba(242,139,48,.5); }
+<span class="s">@media (max-width: 480px)</span> { <span class="s">.faq-item.open .faq-item__answer</span> { max-height: 500px; } }
+</code></pre>
+      </div>
+      <div class="tab-panel" id="faq-js">
+<pre><code><span class="c">// FAQ accordion</span>
+document.querySelectorAll('.faq-item__question').forEach(btn =&gt; {
+  btn.addEventListener('click', () =&gt; {
+    const item     = btn.closest('.faq-item');
+    const isOpen   = item.classList.contains('open');
+    <span class="c">// Fecha todos</span>
+    document.querySelectorAll('.faq-item').forEach(i =&gt; {
+      i.classList.remove('open');
+      i.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
+    });
+    <span class="c">// Abre o clicado (se estava fechado)</span>
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-cta-final">
+  <div class="section-header"><div class="num">Componente 12</div><h2>CTA Final — Fullscreen</h2><p>Estrutura idêntica ao B2B: background via JS em #ctaBg, overlay gradiente, grid 2 colunas. Mobile: texto sobre imagem com gradiente.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.cta-final</div><div class="component__sub">min-height: 540px · grid: 1fr 1fr → coluna em 860px</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">860px / 480px</span></div></div>
+    <div class="component__body">
+      <div class="notice notice--blue"><strong>Imagem:</strong> <code>assets-webp/emprego-aqui-cta-bg-final.webp</code> injetada em <code>#ctaBg</code> via JS. O elemento <code>.cta-final__spacer</code> é apenas para deixar espaço visual para a imagem à direita — em mobile ele é ocultado.</div>
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'cta-css')">CSS</button></div>
+      <div class="tab-panel active" id="cta-css">
+<pre><code><span class="s">.cta-final</span> { position: relative; overflow: hidden; min-height: 540px; display: flex; align-items: center; }
+<span class="s">.cta-final__bg</span>      { position: absolute; inset: 0; background-size: cover; background-position: center 30%; z-index: 0; transform: scale(1.04); transition: transform 8s ease; }
+<span class="s">.cta-final:hover .cta-final__bg</span> { transform: scale(1); }
+<span class="s">.cta-final__overlay</span> { position: absolute; inset: 0; z-index: 1; background: linear-gradient(95deg, rgba(20,23,42,.85) 0%, rgba(20,23,42,.60) 45%, rgba(20,23,42,.05) 100%); }
+<span class="s">.cta-final__inner</span>   { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 100px 20px; width: 100%; max-width: var(--max-w); margin: 0 auto; }
+<span class="s">.cta-final__eyebrow</span> { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-cta); margin-bottom: 16px; }
+<span class="s">.cta-final__title</span>   { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 54px); font-weight: 800; color: #fff; line-height: 1.08; margin-bottom: 20px; }
+<span class="s">.cta-final__sub</span>     { font-size: 18px; color: rgba(255,255,255,.7); line-height: 1.7; margin-bottom: 36px; }
+<span class="s">.cta-final__note</span>    { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,.4); }
+
+<span class="s">@media (max-width: 860px)</span> {
+  <span class="s">.cta-final</span>          { min-height: 480px; }
+  <span class="s">.cta-final__inner</span>   { grid-template-columns: 1fr; padding: 72px 20px; }
+  <span class="s">.cta-final__spacer</span>  { display: none; }
+  <span class="s">.cta-final__title</span>   { font-size: clamp(26px, 6vw, 38px); }
+  <span class="s">.cta-final__sub</span>     { font-size: 15px; }
+  <span class="s">.cta-final__actions .btn</span> { width: 100%; max-width: 320px; justify-content: center; }
+  <span class="s">.cta-final__overlay</span> { background: linear-gradient(100deg, rgba(20,23,42,.80) 0%, rgba(20,23,42,.55) 50%, rgba(20,23,42,.1) 100%); }
+}
+<span class="s">@media (max-width: 480px)</span> { <span class="s">.cta-final</span> { min-height: 420px; } <span class="s">.cta-final__title</span> { font-size: 26px; } }
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-footer">
+  <div class="section-header"><div class="num">Componente 13</div><h2>Footer</h2><p>Fundo azul escuro. Logo + links de nav em linha (desktop). Coluna centralizada em mobile.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.footer</div><div class="component__sub">background: var(--color-bg) · padding: 48px 0 32px</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--mobile">640px</span></div></div>
+    <div class="component__body">
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'footer-html')">HTML</button><button class="tab-btn" onclick="switchTab(this,'footer-css')">CSS</button></div>
+      <div class="tab-panel active" id="footer-html">
+<pre><code>&lt;<span class="t">footer</span> <span class="a">class</span>="<span class="av">footer</span>" <span class="a">role</span>="<span class="av">contentinfo</span>"&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">footer__inner</span>"&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">footer__top</span>"&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">footer__logo</span>"&gt;
+        &lt;<span class="t">img</span> <span class="a">src</span>="<span class="av">assets-webp/emprego-aqui-logo.webp</span>" <span class="a">alt</span>="<span class="av">Emprego Aqui</span>"
+             <span class="a">class</span>="<span class="av">footer__logo-img</span>"&gt;
+      &lt;/<span class="t">div</span>&gt;
+      &lt;<span class="t">nav</span> <span class="a">class</span>="<span class="av">footer__links</span>" <span class="a">aria-label</span>="<span class="av">Links do rodapé</span>"&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#como-funciona</span>" <span class="a">class</span>="<span class="av">footer__link</span>"&gt;Como funciona&lt;/<span class="t">a</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#para-empresas</span>" <span class="a">class</span>="<span class="av">footer__link</span>"&gt;Para empresas&lt;/<span class="t">a</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">footer__link</span>"&gt;Privacidade&lt;/<span class="t">a</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">footer__link</span>"&gt;Termos de uso&lt;/<span class="t">a</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#</span>" <span class="a">class</span>="<span class="av">footer__link</span>"&gt;Contato&lt;/<span class="t">a</span>&gt;
+      &lt;/<span class="t">nav</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">footer__bottom</span>"&gt;
+      &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">footer__copy</span>"&gt;© 2026 Emprego Aqui. Todos os direitos reservados.&lt;/<span class="t">p</span>&gt;
+      &lt;<span class="t">p</span> <span class="a">class</span>="<span class="av">footer__tagline</span>"&gt;O emprego encontra você.&lt;/<span class="t">p</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">footer</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="footer-css">
+<pre><code><span class="s">.footer</span>        { background: var(--color-bg); padding: 48px 0 32px; border-top: 1px solid rgba(255,255,255,.06); }
+<span class="s">.footer__inner</span> { max-width: var(--max-w); margin: 0 auto; padding: 0 20px; }
+<span class="s">.footer__top</span>   { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.08); }
+<span class="s">.footer__logo-img</span> { height: 48px; width: auto; display: block; opacity: .9; }
+<span class="s">.footer__links</span>  { display: flex; gap: 24px; flex-wrap: wrap; }
+<span class="s">.footer__link</span>   { font-size: 13px; color: rgba(255,255,255,.4); transition: color .2s; font-family: var(--font-display); font-weight: 500; }
+<span class="s">.footer__link:hover</span> { color: rgba(255,255,255,.8); }
+<span class="s">.footer__bottom</span> { padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+<span class="s">.footer__copy</span>   { font-size: 12px; color: rgba(255,255,255,.25); }
+<span class="s">.footer__tagline</span>{ font-size: 12px; color: rgba(255,255,255,.25); font-family: var(--font-display); font-style: italic; }
+
+<span class="s">@media (max-width: 640px)</span> {
+  <span class="s">.footer__top</span>    { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+  <span class="s">.footer__links</span>  { justify-content: center; gap: 16px; }
+  <span class="s">.footer__bottom</span> { flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+}
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="comp-wpp-bar">
+  <div class="section-header"><div class="num">Componente 14</div><h2>Barra Flutuante Mobile — WhatsApp</h2><p>Fixed no bottom. Visível apenas em mobile (max-width: 860px). Oculta quando o usuário sobe no scroll via JS.</p></div>
+  <div class="component">
+    <div class="component__header"><div><div class="component__title">.wpp-bar</div><div class="component__sub">position: fixed · bottom: 0 · z-index: 200 · oculto em desktop</div></div><div class="component__tags"><span class="tag tag--html">HTML</span><span class="tag tag--css">CSS</span><span class="tag tag--js">JS</span><span class="tag tag--mobile">Apenas mobile ≤ 860px</span></div></div>
+    <div class="component__body">
+      <div class="tabs"><button class="tab-btn active" onclick="switchTab(this,'bar-html')">HTML</button><button class="tab-btn" onclick="switchTab(this,'bar-css')">CSS</button><button class="tab-btn" onclick="switchTab(this,'bar-js')">JS</button></div>
+      <div class="tab-panel active" id="bar-html">
+<pre><code>&lt;<span class="t">div</span> <span class="a">class</span>="<span class="av">wpp-bar</span>" <span class="a">id</span>="<span class="av">wppBar</span>" <span class="a">role</span>="<span class="av">complementary</span>" <span class="a">aria-label</span>="<span class="av">Criar currículo pelo WhatsApp</span>"&gt;
+  &lt;<span class="t">a</span> <span class="a">href</span>="<span class="av">#whatsapp</span>" <span class="a">class</span>="<span class="av">wpp-bar__btn wpp-bar__btn--full</span>"
+     <span class="a">aria-label</span>="<span class="av">Abrir WhatsApp para criar currículo</span>"&gt;
+    <span class="c">&lt;!-- ícone WPP SVG --&gt;</span>
+    Começar agora — grátis
+  &lt;/<span class="t">a</span>&gt;
+&lt;/<span class="t">div</span>&gt;
+</code></pre>
+      </div>
+      <div class="tab-panel" id="bar-css">
+<pre><code><span class="s">.wpp-bar</span> {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: var(--color-wpp);
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,.2);
+  transform: translateY(0); transition: transform .3s;
+}
+<span class="s">.wpp-bar.hidden</span> { transform: translateY(100%); }
+
+<span class="s">.wpp-bar__btn</span> {
+  background: #fff; color: #128C7E;
+  font-family: var(--font-display); font-size: 13px; font-weight: 800;
+  padding: 10px 20px; border-radius: 30px; white-space: nowrap;
+}
+<span class="s">.wpp-bar__btn--full</span> {
+  background: transparent; color: #fff;
+  font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;
+}
+
+<span class="c">/* Oculto em desktop */</span>
+<span class="s">@media (min-width: 860px)</span> { <span class="s">.wpp-bar</span> { display: none; } }
+
+<span class="c">/* Padding no body para barra não cobrir o footer */</span>
+<span class="s">@media (max-width: 860px)</span> { <span class="s">body</span> { padding-bottom: 64px; } }
+</code></pre>
+      </div>
+      <div class="tab-panel" id="bar-js">
+<pre><code><span class="c">// Oculta a barra ao descer, mostra ao subir</span>
+(function () {
+  const bar = document.getElementById('wppBar');
+  if (!bar) return;
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () =&gt; {
+    const y = window.scrollY;
+    bar.classList.toggle('hidden', y > lastY && y > 200);
+    lastY = y;
+  }, { passive: true });
+})();
+</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     ESTRUTURA DE SEÇÕES COM BREAKPOINTS
+═══════════════════════════════════════════════════ -->
+<section class="section" id="estrutura">
+  <div class="section-header">
+    <div class="num">Mapa de Seções</div>
+    <h2>Estrutura da Página com Breakpoints</h2>
+    <p>Ordem de renderização no DOM. Para cada seção: o que muda entre mobile e desktop.</p>
+  </div>
+
+  <div class="notice notice--green" style="margin-bottom: 24px;">
+    <strong>Breakpoints do projeto:</strong> Mobile: 0px (default) · Tablet/sm: 560px · Desktop: 640–720px · Desktop wide: 860px · Desktop XL: 900px · Container max: 1160px
+  </div>
+
+  <!-- navbar -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">navbar</div><div class="section-map__tag">nav.navbar · fixed top · z-index 100</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 600px)</div><ul><li>Links de texto <code>.navbar__link</code> ocultos</li><li>Botão "Para empresas" ghost oculto em ≤ 420px</li><li>Apenas logo + botão CTA visíveis</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop (&gt; 600px)</div><ul><li>Logo à esquerda</li><li>Links "Como funciona" + "Para empresas" (ghost) + CTA coral</li><li>Height fixa: 64px</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">hero</div><div class="section-map__tag">section.hero · min-height 100svh · slider 3 slides</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 860px)</div><ul><li>Widget WPP oculto (<code>.hero__right { display:none }</code>)</li><li>Texto alinhado à esquerda (não centralizado)</li><li>min-height: 90svh</li><li>Content: max-width 70% até 560px, depois 100%</li><li>Título: clamp(28px, 8vw, 44px) → 28px fixo em 560px</li><li>Background-position: 60% center (foca rosto)</li><li>Botões em coluna a partir de 480px</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop (&gt; 860px)</div><ul><li>Layout flex row: conteúdo à esquerda + widget WPP à direita</li><li>Padding: 100px 20px 80px</li><li>Título: clamp(40px, 5.5vw, 68px)</li><li>Container: max-width 1160px, centralizado</li><li>Slider: background-position center</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- strip -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">strip</div><div class="section-map__tag">div.strip · fundo azul médio · padding 18px</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 560px)</div><ul><li>Separadores <code>.strip__sep</code> ocultos</li><li>Gap: 12px entre items</li><li>Fonte: 12px</li><li>Wrap em múltiplas linhas</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>4 items em linha com separadores verticais</li><li>Gap: 32px</li><li>Fonte: 13px</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- como funciona -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">como-funciona</div><div class="section-map__tag">section.funciona · id="como-funciona" · padding 96px 0 · bg #fff</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 720px)</div><ul><li>Grid: 1 coluna</li><li>Steps em flex row (imagem + texto lado a lado)</li><li>Linha tracejada entre steps: oculta</li><li>Imagem do step: 140px largura</li><li>Texto alinhado à esquerda</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Grid: repeat(3, 1fr)</li><li>Steps em coluna (imagem em cima, texto abaixo)</li><li>Linha tracejada coral horizontal entre steps</li><li>Imagem: 280px × aspect-ratio 3:4</li><li>Texto centralizado</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- video -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">video-sec</div><div class="section-map__tag">section.video-sec · bg var(--color-bg-light)</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 860px)</div><ul><li>Texto alinhado à esquerda</li><li>Player abaixo do texto</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Grid: texto à esquerda, player à direita</li><li>Vídeo: <code>https://empregoaqui.com.br/assets/images/hero/hero-desktop.webm</code></li><li>autoplay, loop, muted, playsinline</li><li>Botão de toggle de som no canto do player</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- por que aqui -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">porque</div><div class="section-map__tag">section.porque · bg var(--color-bg-light) · padding 96px 0</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 640px)</div><ul><li>Grid: 1 coluna</li><li>Cards em coluna única</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Grid: repeat(2, 1fr)</li><li>4 cards em 2×2</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- numeros -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">numeros</div><div class="section-map__tag">section.numeros · bg var(--color-bg) · padding 72px 0</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 640px)</div><ul><li>Flex coluna</li><li>Separadores horizontais (1px × 120px)</li><li>Cada card: padding 28px 20px</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Flex row</li><li>Separadores verticais (1px × 80px)</li><li>Cada card: padding 0 48px</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- depoimentos -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">depos</div><div class="section-map__tag">section.depos · bg #fff · padding 96px 0</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 680px)</div><ul><li>Grid: 1 coluna</li><li>Padding dos cards: 24px 20px em ≤ 480px</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Grid: repeat(2, 1fr)</li><li>2 cards lado a lado</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- empresas / marquee -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">empresas</div><div class="section-map__tag">div.empresas · bg var(--color-bg-light) · padding 48px 0 0</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile</div><ul><li>Trust block em coluna</li><li>Marquee: mesma velocidade, cabe menos logos por vez</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Trust block: flex row (ícone + texto + CTA)</li><li>Marquee: 8 logos visíveis simultâneos</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- para empresas B2B -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">para-empresas</div><div class="section-map__tag">section.b2b · id="para-empresas" · fullscreen · min-height 680px</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 900px)</div><ul><li>Layout em 2 blocos empilhados (display: block)</li><li>Superior: headline sobre a foto de fundo (min-height 400px)</li><li>Inferior: card sobre fundo sólido <code>var(--color-bg-mid)</code></li><li>Glassmorphism desativado (backdrop-filter: none)</li><li>Botões em coluna com 100% de largura</li><li>Imagem do card: 240px altura (200px em ≤ 480px)</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Grid: 1fr 420px</li><li>Headline à esquerda sobre a foto</li><li>Card glassmorphism à direita (backdrop-filter: blur(20px))</li><li>Efeito zoom-out no hover (bg scale 1.04 → 1)</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- faq -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">faq</div><div class="section-map__tag">section.faq · bg var(--color-bg-light) · padding 80px 0</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 480px)</div><ul><li>max-height da resposta aberta: 500px</li><li>Resposta com CTA inline — precisa de mais espaço</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>max-width do container: 760px centralizado</li><li>max-height da resposta aberta: 400px</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- cta final -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">cta-final</div><div class="section-map__tag">section.cta-final · fullscreen · min-height 540px</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 860px)</div><ul><li>Grid: 1 coluna (<code>.cta-final__spacer</code> oculto)</li><li>Texto alinhado à esquerda</li><li>Botão: largura total máx 320px</li><li>Background: 70% center (foca no personagem)</li><li>min-height: 480px (420px em ≤ 480px)</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Grid: 1fr 1fr</li><li>Texto à esquerda, imagem respira à direita</li><li>Padding: 100px 20px</li><li>Efeito zoom-out no hover</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">footer</div><div class="section-map__tag">footer.footer · bg var(--color-bg) · padding 48px 0 32px</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 640px)</div><ul><li>Logo centralizado</li><li>Links em flex wrap centralizado</li><li>Copyright e tagline centralizados em coluna</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop</div><ul><li>Logo à esquerda, nav links à direita</li><li>Copyright à esquerda, tagline à direita</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- wpp bar -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">wpp-bar</div><div class="section-map__tag">div.wpp-bar · fixed bottom · z-index 200 · mobile only</div></div>
+    <div class="section-map__body">
+      <div class="bp-grid">
+        <div class="bp-block"><div class="bp-block__label mobile">Mobile (≤ 860px)</div><ul><li>Visível: barra verde fixa no bottom</li><li>Oculta ao descer scroll, reaparece ao subir</li><li>Body tem padding-bottom: 64px para não cobrir conteúdo</li></ul></div>
+        <div class="bp-block"><div class="bp-block__label desktop">Desktop (&gt; 860px)</div><ul><li><code>display: none</code> — completamente oculta</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- reveal -->
+  <div class="section-map">
+    <div class="section-map__header"><div class="section-map__name">scroll-reveal</div><div class="section-map__tag">Utilitário global · .reveal · .reveal-delay-1/2/3</div></div>
+    <div class="section-map__body">
+      <pre style="margin:0;"><code><span class="c">/* Aplicado via JS: adiciona .visible quando o elemento entra no viewport */</span>
+<span class="s">.reveal</span>           { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+<span class="s">.reveal.visible</span>   { opacity: 1; transform: translateY(0); }
+<span class="s">.reveal-delay-1</span>   { transition-delay: .1s; }
+<span class="s">.reveal-delay-2</span>   { transition-delay: .2s; }
+<span class="s">.reveal-delay-3</span>   { transition-delay: .3s; }
+
+<span class="c">// JS — IntersectionObserver</span>
+const io = new IntersectionObserver((entries) =&gt; {
+  entries.forEach(e =&gt; { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el =&gt; io.observe(el));
+</code></pre>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     CHECKLIST FINAL
+═══════════════════════════════════════════════════ -->
+<section class="section" id="checklist">
+  <div class="section-header">
+    <div class="num">Status da entrega</div>
+    <h2>Checklist completo</h2>
+  </div>
+  <ul class="checklist">
+    <li><span class="check-ok">✓</span><span>Paleta de cores completa com hex e papel semântico — <em>Etapa 1</em></span></li>
+    <li><span class="check-ok">✓</span><span>Tabela de tipografia com fontes, pesos e tamanhos — <em>Etapa 1</em></span></li>
+    <li><span class="check-ok">✓</span><span>Link Google Fonts com todos os pesos — <em>Etapa 1</em></span></li>
+    <li><span class="check-ok">✓</span><span>12 assets em WebP com nomes kebab-case SEO — <em>Etapa 1</em></span></li>
+    <li><span class="check-ok">✓</span><span>Tokens CSS (:root) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Botões (5 variantes) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Badge, section-label, section-title, section-sub — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Navbar (com breakpoints 600px / 420px) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS + JS: Hero (slider de 3 slides + dots) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Widget WhatsApp (animação de chat) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Strip prova social — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Como Funciona (3 steps, foto real, linha tracejada) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Por Que Aqui (cards benefício, hover animado) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Números — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Depoimentos — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Empresas + Marquee — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: B2B fullscreen (glassmorphism, mobile em 2 blocos) — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS + JS: FAQ accordion — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: CTA Final fullscreen — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS: Footer — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>HTML + CSS + JS: Barra flutuante WPP mobile — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>Estrutura de seções com anotações de breakpoint — <em>Etapa 2</em></span></li>
+    <li><span class="check-ok">✓</span><span>JS: scroll-reveal (IntersectionObserver) — <em>Etapa 2</em></span></li>
+    <li><span class="check-next">○</span><span><strong>Pendente do cliente:</strong> SVG do logo e ícone</span></li>
+    <li><span class="check-next">○</span><span><strong>Pendente do cliente:</strong> Logos das empresas parceiras (marquee)</span></li>
+    <li><span class="check-next">○</span><span><strong>Pendente do cliente:</strong> Variantes mobile das fotos "Como Funciona" (≤ 600px)</span></li>
+    <li><span class="check-next">○</span><span><strong>Pendente do cliente:</strong> URL final do WhatsApp no atributo <code>href</code> dos botões</span></li>
+    <li><span class="check-next">○</span><span><strong>Pendente do dev:</strong> Conversão dos tokens CSS para <code>@theme</code> do Tailwind CSS v4</span></li>
+    <li><span class="check-next">○</span><span><strong>Pendente do dev:</strong> Implementar <code>&lt;picture&gt; + srcset</code> para variantes mobile das imagens</span></li>
+  </ul>
+</section>
+
+</div><!-- /page -->
+</body>
+</html>

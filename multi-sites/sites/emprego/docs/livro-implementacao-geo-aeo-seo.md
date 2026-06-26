@@ -132,8 +132,8 @@ Assim que a verificação for confirmada, configure dentro do GSC:
 
 | Métrica | Valor | Data |
 |---------|-------|------|
-| Páginas indexadas | 116 | 2026-06-25 |
-| Páginas não indexadas | 205 | 2026-06-25 |
+| Páginas indexadas | ⚠️ a verificar | 2026-06-25 |
+| Páginas não indexadas | ⚠️ a verificar | 2026-06-25 |
 | Impressões totais (últimos 28 dias) | — | — |
 | Cliques totais (últimos 28 dias) | — | — |
 | CTR médio | — | — |
@@ -148,7 +148,7 @@ Assim que a verificação for confirmada, configure dentro do GSC:
 - [x] Código preenchido em `site-config.ts` — valor: `4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk`
 - [x] Deploy realizado
 - [ ] Sitemap submetido ← próximo passo manual no GSC
-- [x] Baseline registrado abaixo
+- [ ] Baseline de indexação a verificar ← revisar no GSC após 48h do primeiro deploy
 
 ---
 
