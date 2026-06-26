@@ -1,46 +1,55 @@
 ---
 /**
- * Empresas — trust block + marquee animado de logos.
- * Marquee: 22s linear infinite, pausa no hover, fade nas laterais.
+ * Empresas — trust block + marquee animado de logos (direita → esquerda, loop infinito).
+ * Conteúdo/ícone do design original (Adobe export). Marquee: 22s linear, pausa no hover, fade lateral.
  *
- * ⚠️ LOGOS PARCEIROS FALTANDO — usando placeholders de texto por setor (decisão acordada).
+ * ⚠️ LOGOS PARCEIROS FALTANDO — placeholders "Empresa A..H" (decisão acordada).
  * Substituir .logo-placeholder pelos logos reais (SVG/WebP) quando disponíveis.
- * ⚠️ Copy do trust block é provisória — revisar.
  */
-const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
+import { siteConfig } from '../site-config.ts';
+const whatsappUrl = siteConfig.site.whatsapp.url;
 
-// Placeholders por setor (não são marcas reais) — trocar pelos logos das empresas parceiras
-const setores = ['Comércio', 'Indústria', 'Serviços', 'Logística', 'Varejo', 'Alimentação', 'Construção', 'Saúde'];
+const placeholders = ['Empresa A', 'Empresa B', 'Empresa C', 'Empresa D', 'Empresa E', 'Empresa F', 'Empresa G', 'Empresa H'];
 ---
 
-<section class="empresas" aria-labelledby="empresas-title">
-  <div class="wrap empresas__trust reveal">
-    <div class="empresas__trust-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"/></svg>
+<div class="empresas" aria-labelledby="empresas-title">
+
+  <!-- Bloco qualitativo -->
+  <div class="wrap">
+    <div class="empresas__trust-block reveal">
+      <div class="empresas__trust-icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="empresas__trust-text">
+        <h2 class="empresas__trust-title" id="empresas-title">Centenas de empresas da Região Metropolitana de Campinas já contratam pelo Emprego Aqui</h2>
+        <p class="empresas__trust-sub">Comércios, restaurantes, clínicas, serviços e indústrias — de Campinas a Vinhedo, de Sumaré a Valinhos. Empresas de todos os tamanhos que precisam contratar rápido, sem burocracia.</p>
+      </div>
+      <div class="empresas__trust-cta">
+        <a href={whatsappUrl} class="btn btn--ghost-coral" target="_blank" rel="noopener" aria-label="Criar currículo grátis agora">
+          Quero me candidatar agora
+        </a>
+      </div>
     </div>
-    <div class="empresas__trust-text">
-      <h2 class="empresas__trust-title" id="empresas-title">Negócios da região já contratam por aqui</h2>
-      <p class="empresas__trust-sub">De pequenos comércios a indústrias — empresas de Campinas e região encontram candidatos todos os dias.</p>
-    </div>
-    <a href={searchUrl} class="btn btn--ghost-coral empresas__trust-cta" target="_blank" rel="noopener">Quero contratar</a>
   </div>
 
-  <div class="marquee-wrap" aria-hidden="true">
+  <!-- Marquee de logos -->
+  <div class="marquee-wrap" aria-label="Logos de empresas parceiras" role="img">
     <div class="marquee-track">
       <div class="marquee-inner">
-        {setores.map((s) => <span class="logo-placeholder">{s}</span>)}
+        {placeholders.map((p) => <div class="logo-placeholder"><span>{p}</span></div>)}
       </div>
-      <div class="marquee-inner">
-        {setores.map((s) => <span class="logo-placeholder">{s}</span>)}
+      <div class="marquee-inner" aria-hidden="true">
+        {placeholders.map((p) => <div class="logo-placeholder"><span>{p}</span></div>)}
       </div>
     </div>
   </div>
-</section>
+
+</div>
 
 <style>
   .empresas { background: var(--color-surface); padding: 48px 0 0; }
 
-  .empresas__trust {
+  .empresas__trust-block {
     display: flex;
     align-items: center;
     gap: 24px;
@@ -57,8 +66,8 @@ const setores = ['Comércio', 'Indústria', 'Serviços', 'Logística', 'Varejo',
     flex-shrink: 0;
   }
   .empresas__trust-text { flex: 1; }
-  .empresas__trust-title { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 26px); font-weight: 800; color: var(--color-text-main); line-height: 1.2; }
-  .empresas__trust-sub { font-size: 15px; color: var(--color-muted); line-height: 1.6; margin-top: 6px; }
+  .empresas__trust-title { font-family: var(--font-display); font-size: clamp(20px, 2.4vw, 26px); font-weight: 800; color: var(--color-text-main); line-height: 1.25; }
+  .empresas__trust-sub { font-size: 15px; color: var(--color-muted); line-height: 1.6; margin-top: 8px; }
   .empresas__trust-cta { flex-shrink: 0; }
 
   /* Marquee */
@@ -98,15 +107,13 @@ const setores = ['Comércio', 'Indústria', 'Serviços', 'Logística', 'Varejo',
     font-family: var(--font-display);
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: .02em;
+    letter-spacing: .04em;
+    text-transform: uppercase;
     white-space: nowrap;
   }
 
   @media (max-width: 720px) {
-    .empresas__trust { flex-direction: column; text-align: center; }
+    .empresas__trust-block { flex-direction: column; text-align: center; }
     .empresas__trust-sub { margin-inline: auto; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .marquee-inner { animation: none; }
   }
 </style>
