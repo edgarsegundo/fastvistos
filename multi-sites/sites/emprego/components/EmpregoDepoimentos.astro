@@ -6,6 +6,9 @@
  * ⚠️ DEPOIMENTOS A CONFIRMAR — só 1 exemplo veio no etapa2; o 2º é provisório.
  * São depoimentos reais/aprovados? (autenticidade) — validar antes de publicar.
  */
+import { siteConfig } from '../site-config.ts';
+const whatsappUrl = siteConfig.site.whatsapp.url;
+
 const depoimentos = [
   {
     text: 'Eu não sabia nem como montar um currículo. Mandei uma mensagem e em dois dias uma empresa daqui do bairro me chamou pra entrevista.',
@@ -53,6 +56,14 @@ const depoimentos = [
       ))}
     </div>
 
+    <div class="depos__cta reveal">
+      <a href={whatsappUrl} class="btn btn--coral" target="_blank" rel="noopener" aria-label="Criar currículo grátis">
+        <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 .396C7.16.396 0 7.557 0 16.396c0 2.872.755 5.566 2.072 7.897L.066 32l7.934-2.006A15.9 15.9 0 0 0 16 32.396c8.84 0 16-7.16 16-16S24.84.396 16 .396zm0 29.2a13.2 13.2 0 0 1-6.71-1.84l-.48-.285-4.97 1.255 1.327-4.843-.313-.497A13.13 13.13 0 0 1 2.8 16.396c0-7.28 5.92-13.2 13.2-13.2s13.2 5.92 13.2 13.2-5.92 13.2-13.2 13.2z"/><path d="M23.2 19.2c-.39-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.39-1.01 1.27-1.24 1.53-.23.26-.46.29-.85.1-.39-.2-1.65-.61-3.14-1.94-1.16-1.03-1.94-2.31-2.17-2.7-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.11-1.2-2.89-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.81 1.61 4.07c.2.26 2.78 4.25 6.73 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.32-.95 2.65-1.87.33-.92.33-1.7.23-1.87-.1-.16-.36-.26-.75-.45z"/></svg>
+        Eu também quero — é grátis
+      </a>
+      <p class="depos__cta-note">Junte-se a quem já encontrou emprego pela região de Campinas</p>
+    </div>
+
   </div>
 </section>
 
@@ -60,6 +71,8 @@ const depoimentos = [
   .depos { padding: 96px 0; background: #fff; }
   .depos__header { text-align: center; margin-bottom: 48px; }
   .depos__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .depos__cta { text-align: center; margin-top: 52px; }
+  .depos__cta-note { font-size: 13px; color: var(--color-muted); margin-top: 12px; }
 
   .depo-card { background: var(--color-surface); border-radius: var(--radius); padding: 32px 28px; position: relative; }
   .depo-card__quote { font-size: 48px; font-family: Georgia, serif; color: var(--color-cta); line-height: .8; margin-bottom: 16px; opacity: .6; }
