@@ -141,6 +141,7 @@
   .badge {
     display: inline-flex;
     align-items: center;
+    align-self: flex-start; /* nunca estica em flex-column */
     gap: 6px;
     font-family: var(--font-display);
     font-size: 12px;
