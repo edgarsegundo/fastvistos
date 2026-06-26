@@ -68,7 +68,7 @@ const slides = [
 
       <div class="hero__note">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-        Sem cadastro, sem senha — só o WhatsApp que você já usa
+        Sem cadastro, sem senha — só o Whats que você já usa
       </div>
     </div>
 
@@ -180,8 +180,8 @@ const slides = [
     margin-top: 20px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13px;
+    gap: 4px;
+    font-size: 11px;
     color: rgba(255, 255, 255, .45);
   }
 
@@ -229,12 +229,15 @@ const slides = [
     .hero__title { font-size: clamp(28px, 8vw, 44px); }
     .hero__slide-bg { background-position: 60% center; }
   }
+  /* ── Celular: conteúdo centralizado (tablet 561–860px permanece à esquerda) ── */
   @media (max-width: 560px) {
-    .hero__content { max-width: 100%; }
+    .hero__content { max-width: 100%; text-align: center; } /* centraliza eyebrow, título, sub e nota de uma vez */
     .hero__title { font-size: 28px; }
+    .hero__actions { justify-content: center; }             /* botões em linha (481–560px) centralizados */
+    .hero__note { justify-content: center; }                /* nota é flex → text-align não basta */
   }
   @media (max-width: 480px) {
-    .hero__actions { flex-direction: column; align-items: flex-start; width: 100%; }
+    .hero__actions { flex-direction: column; align-items: center; width: 100%; } /* botões empilhados centralizados */
     .hero__actions .btn { width: 100%; max-width: 320px; justify-content: center; }
   }
 </style>
