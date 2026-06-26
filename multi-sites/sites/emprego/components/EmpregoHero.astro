@@ -1,0 +1,274 @@
+---
+/**
+ * Hero — fullscreen com slideshow de fundo (3 imagens) + dots.
+ * Texto à esquerda, widget WhatsApp à direita (desktop) / oculto em mobile.
+ * Slider automático (5s) com navegação por dots — JS no final.
+ */
+import { siteConfig } from '../site-config.ts';
+import EmpregoWppWidget from './EmpregoWppWidget.astro';
+
+const whatsappUrl = siteConfig.site.whatsapp.url;
+
+const slides = [
+  '/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp',
+  '/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-2.webp',
+  '/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-3.webp',
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+
+  <!-- Slider de fundo fullscreen -->
+  <div class="hero__bg-slider" aria-hidden="true">
+    {slides.map((src, i) => (
+      <div
+        class:list={['hero__slide-bg', { active: i === 0 }]}
+        style={`background-image: url('${src}')`}
+      />
+    ))}
+  </div>
+  <div class="hero__overlay" aria-hidden="true"></div>
+  <div class="hero__bg-dots" aria-hidden="true"></div>
+
+  <div class="hero__inner wrap">
+
+    <!-- Coluna esquerda: conteúdo -->
+    <div class="hero__content">
+      <div class="hero__eyebrow">
+        <span class="badge badge--white">
+          <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#25D366"/></svg>
+          100% gratuito para candidatos
+        </span>
+      </div>
+
+      <h1 class="hero__title" id="hero-title">
+        Pare de correr<br>atrás do emprego.
+        <em>Ele te encontra.</em>
+      </h1>
+
+      <p class="hero__sub">
+        Responda algumas perguntas simples pelo WhatsApp, nossa IA monta
+        seu currículo e empresas da região de Campinas entram em contato
+        direto com você.
+      </p>
+
+      <div class="hero__actions">
+        <a
+          href={whatsappUrl}
+          class="btn btn--coral"
+          target="_blank"
+          rel="noopener"
+          aria-label="Criar currículo grátis agora pelo WhatsApp"
+        >
+          <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 .396C7.16.396 0 7.557 0 16.396c0 2.872.755 5.566 2.072 7.897L.066 32l7.934-2.006A15.9 15.9 0 0 0 16 32.396c8.84 0 16-7.16 16-16S24.84.396 16 .396zm0 29.2a13.2 13.2 0 0 1-6.71-1.84l-.48-.285-4.97 1.255 1.327-4.843-.313-.497A13.13 13.13 0 0 1 2.8 16.396c0-7.28 5.92-13.2 13.2-13.2s13.2 5.92 13.2 13.2-5.92 13.2-13.2 13.2z"/><path d="M23.2 19.2c-.39-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.39-1.01 1.27-1.24 1.53-.23.26-.46.29-.85.1-.39-.2-1.65-.61-3.14-1.94-1.16-1.03-1.94-2.31-2.17-2.7-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.11-1.2-2.89-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.81 1.61 4.07c.2.26 2.78 4.25 6.73 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.32-.95 2.65-1.87.33-.92.33-1.7.23-1.87-.1-.16-.36-.26-.75-.45z"/></svg>
+          Criar currículo grátis
+        </a>
+        <a href="#para-empresas" class="btn btn--ghost">Área empresa</a>
+      </div>
+
+      <div class="hero__note">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        Sem cadastro, sem senha — só o WhatsApp que você já usa
+      </div>
+    </div>
+
+    <!-- Coluna direita: widget WPP (oculto em mobile via CSS) -->
+    <div class="hero__right" aria-hidden="true">
+      <EmpregoWppWidget />
+    </div>
+
+  </div>
+
+  <!-- Dots de navegação do slider -->
+  <div class="hero__dots" role="tablist" aria-label="Navegação do carrossel">
+    {slides.map((_, i) => (
+      <button
+        class:list={['hero__dot', { active: i === 0 }]}
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        aria-label={`Foto ${i + 1}`}
+        data-index={i}
+      />
+    ))}
+  </div>
+
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-top: 64px; /* altura da navbar */
+  }
+
+  /* Slider de fundo */
+  .hero__bg-slider { position: absolute; inset: 0; z-index: 0; }
+  .hero__slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity .8s ease;
+  }
+  .hero__slide-bg.active { opacity: 1; }
+
+  /* Overlay gradiente */
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      105deg,
+      rgba(20, 23, 42, .88) 0%,
+      rgba(20, 23, 42, .60) 55%,
+      rgba(20, 23, 42, .25) 100%
+    );
+  }
+
+  /* Textura pontilhada */
+  .hero__bg-dots {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, .025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  /* Conteúdo interno */
+  .hero__inner {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding: 100px 20px 80px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 48px;
+  }
+  .hero__content { max-width: 580px; }
+  .hero__eyebrow { margin-bottom: 20px; }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5.5vw, 68px);
+    font-weight: 800;
+    line-height: 1.06;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .hero__title em {
+    color: var(--color-cta);
+    font-style: normal;
+    display: block;
+  }
+
+  .hero__sub {
+    font-size: 18px;
+    color: rgba(255, 255, 255, .7);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    max-width: 480px;
+  }
+
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .hero__note {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .45);
+  }
+
+  /* Coluna direita (widget) */
+  .hero__right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 8px;
+  }
+
+  /* Dots do slider */
+  .hero__dots {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 4;
+  }
+  .hero__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .35);
+    border: none;
+    cursor: pointer;
+    transition: all .3s;
+    padding: 0;
+  }
+  .hero__dot.active { width: 24px; border-radius: 6px; background: #fff; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 860px) {
+    .hero { min-height: 90svh; }
+    .hero__inner {
+      text-align: left;
+      align-items: flex-start;
+      padding: 80px 20px 100px;
+    }
+    .hero__right { display: none; } /* widget oculto em mobile */
+    .hero__content { max-width: 70%; }
+    .hero__sub { max-width: 100%; font-size: 16px; margin: 0 0 36px; }
+    .hero__title { font-size: clamp(28px, 8vw, 44px); }
+    .hero__slide-bg { background-position: 60% center; }
+  }
+  @media (max-width: 560px) {
+    .hero__content { max-width: 100%; }
+    .hero__title { font-size: 28px; }
+  }
+  @media (max-width: 480px) {
+    .hero__actions { flex-direction: column; align-items: flex-start; width: 100%; }
+    .hero__actions .btn { width: 100%; max-width: 320px; justify-content: center; }
+  }
+</style>
+
+<script>
+  // Slider automático de backgrounds do hero (5s · transição CSS 800ms)
+  (function () {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+    const slides = hero.querySelectorAll<HTMLElement>('.hero__slide-bg');
+    const dots = hero.querySelectorAll<HTMLElement>('.hero__dot');
+    if (slides.length < 2) return;
+    let current = 0;
+
+    function goTo(index: number) {
+      slides[current].classList.remove('active');
+      dots[current]?.classList.remove('active');
+      dots[current]?.setAttribute('aria-selected', 'false');
+
+      current = index;
+
+      slides[current].classList.add('active');
+      dots[current]?.classList.add('active');
+      dots[current]?.setAttribute('aria-selected', 'true');
+    }
+
+    let timer = setInterval(() => goTo((current + 1) % slides.length), 5000);
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        clearInterval(timer);
+        goTo(i);
+        timer = setInterval(() => goTo((current + 1) % slides.length), 5000);
+      });
+    });
+  })();
+</script>

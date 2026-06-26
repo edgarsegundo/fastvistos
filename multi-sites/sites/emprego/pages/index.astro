@@ -1,22 +1,19 @@
 ---
+// Emprego Aqui — Landing Page M3 (design ASA Propaganda)
+// Reconstruída em Astro + Tailwind v4. Fonte de verdade: docs/asapropaganda/etapa1+2.
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
-import HeroSection from '../components/HeroSection.astro';
-import FooterSection from '../components/FooterSection.astro';
-import HeaderSection from '../components/HeaderSection.astro';
-import WowItWorks from '../components/WowItWorks.astro';
-import CallToAction from '../components/CallToAction.astro';
-import CarouselSection from '../components/CarouselSection.astro';
-import Navigation from '../components/Navigation.astro';
-import HowItWorks from '../components/HowItWorks.astro';
-import WhyUs from '../components/WhyUs.astro';
+
+import EmpregoNavbar from '../components/EmpregoNavbar.astro';
+import EmpregoHero from '../components/EmpregoHero.astro';
+import EmpregoStrip from '../components/EmpregoStrip.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
-    bodyClass={`${bodyClass} leading-normal tracking-normal`}
+    bodyClass={`${bodyClass} antialiased`}
     bodyStyle={`${bodyStyle}`}
     themeToggleDisable={true}
     canonicalConf={siteConfig.site.canonical}
@@ -31,10 +28,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     imageWidthFromConf={siteConfig.site.primaryImage.width}
     imageHeightFromConf={siteConfig.site.primaryImage.height}
 >
-    <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
         <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=Roboto:wght@400;500&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
         <JsonLdHomePageBase
@@ -42,60 +38,18 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             servicesList={[]}
             reviewsList={[]}
             disableReviews={false}
-            disableLocalBusiness={true}
         />
     </Fragment>
 
-    <div>
-        <Navigation />
-        <HeroSection />
-        <HowItWorks />
+    <EmpregoNavbar />
+    <EmpregoHero />
+    <EmpregoStrip />
 
-        <h2 class="font-heading font-bold mt-16 text-center text-ink text-[28px]">
-        Porque o emprego aqui é diferente?
-        </h2>
-
-        <WhyUs />
-
-        <div class="container mx-auto max-w-3xl px-8 flex flex-col items-center">
-          <h2 class="font-heading font-bold mt-16 text-center text-ink text-[28px]">
-          EMPRESAS
-          </h2>
-
-          <section class="py-2 bg-gray-100 px-4 flex justify-center">
-            <div class="max-w-xl w-full rounded-3xl shadow-lg border border-gray-200 p-8 sm:p-10 bg-card">
-
-              <!-- Logos inline -->
-              <div class="flex items-center gap-4 mb-6">
-                <img src="assets/images/hero/empregoaqui_two_arrows.avif" alt="Emprego Aqui" class="h-12 object-contain">
-                <img src="assets/images/services/handshake.avif" alt="Emprego Aqui" class="h-16 object-contain">
-              </div>
-
-              <!-- Texto -->
-              <p class="deck leading-relaxed text-ink text-xl">
-                Clique no botão abaixo e acesse centenas de currículos de candidatos qualificados. Com o Emprego Aqui, sua empresa contrata de forma rápida, segura e eficiente.
-              </p>
-
-            </div>
-          </section>
-
-          <div class="w-full flex flex-col items-center px-4">
-            <a
-              href="https://admin.empregoaqui.com.br/api/posts/search-page/"
-              class="btn-cta"
-            >
-              Procurar candidatos
-            </a>
-          </div>
-        </div>
-
-    </div>
-
-    <main class="min-h-screen">
-        <!-- <CarouselSection /> -->
-        <!-- <FooterSection /> -->
-    </main>
+    {/*
+      Ordem oficial das seções (mapa #estrutura do etapa2) — construídas por fase:
+      Fase 3: <EmpregoComoFunciona />  ·  <EmpregoVideo />  ·  <EmpregoPorque />
+              <EmpregoNumeros />  ·  <EmpregoDepoimentos />
+      Fase 4: <EmpregoEmpresasMarquee />  ·  <EmpregoParaEmpresas />  ·  <EmpregoFaq />
+              <EmpregoCtaFinal />  ·  <EmpregoFooter />  ·  <EmpregoWppBar />
+    */}
 </SharedHomeLayout>
-
-<style is:global>
-</style>
