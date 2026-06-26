@@ -39,6 +39,9 @@
       <div class="wpp-widget__bubble wpp-widget__bubble--in delay-3">
         Vagas com salário compatível, pertinho de você 📍 Quer ver?
       </div>
+      <div class="wpp-widget__typing" id="wppTyping">
+        <span></span><span></span><span></span>
+      </div>
     </div>
 
     <!-- Input simulado -->
@@ -116,6 +119,35 @@
   @keyframes bubbleIn {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Typing indicator — aparece depois da última bolha */
+  .wpp-widget__typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--color-wpp-bubble-in);
+    align-self: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    opacity: 0;
+    animation: bubbleIn .3s ease forwards;
+    animation-delay: 4.6s;
+  }
+  .wpp-widget__typing span {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8696A0;
+    animation: typingDot .8s ease infinite;
+    animation-delay: 4.6s;
+  }
+  .wpp-widget__typing span:nth-child(2) { animation-delay: 4.75s; }
+  .wpp-widget__typing span:nth-child(3) { animation-delay: 4.9s; }
+  @keyframes typingDot {
+    0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+    30% { transform: translateY(-4px); opacity: 1; }
   }
 
   .wpp-widget__footer {
