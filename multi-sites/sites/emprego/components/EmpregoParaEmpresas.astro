@@ -4,7 +4,13 @@
  * Desktop: grid headline (esq) + card glassmorphism (dir). Mobile ≤900px: 2 blocos empilhados.
  */
 import { siteConfig } from '../site-config.ts';
-const whatsappUrl = siteConfig.site.whatsapp.url;
+
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+
 const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
 ---
 
@@ -86,7 +92,7 @@ const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
 
         <div class="b2b__actions">
           <a href={searchUrl} class="btn btn--coral" target="_blank" rel="noopener">Quero contratar agora</a>
-          <a href={whatsappUrl} class="btn btn--ghost" target="_blank" rel="noopener">Falar com a equipe</a>
+          <!-- <a href={whatsappUrl} class="btn btn--ghost" target="_blank" rel="noopener">Falar com a equipe</a> -->
         </div>
       </div>
     </div>

@@ -7,7 +7,10 @@
  * São depoimentos reais/aprovados? (autenticidade) — validar antes de publicar.
  */
 import { siteConfig } from '../site-config.ts';
-const whatsappUrl = siteConfig.site.whatsapp.url;
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
 
 const depoimentos = [
   {

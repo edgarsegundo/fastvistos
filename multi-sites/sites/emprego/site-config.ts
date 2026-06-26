@@ -104,8 +104,8 @@ export const siteConfig = {
         },
 
         contactPoint: {
-            telephone: '+551920422785',
-            telephoneFormatted: '+55 (19) 2042-2785',
+            telephone: '+5519988055816',
+            telephoneFormatted: '+55 (19) 98805-5816',
             contactType: 'customer service',
             areaServed: {
                 "@type": "Country",
@@ -115,11 +115,12 @@ export const siteConfig = {
             email: 'contato@empregoaqui.com.br',
         },
         whatsapp: {
-            telephone: '+551920422785',
-            telephoneFormatted: '+55 (19) 2042-2785',
+            telephone: '+5519988055816',
+            telephoneFormatted: '+55 (19) 98805-5816',
             contactType: 'customer support',
             contactOption: "WhatsApp",
-            url: 'https://wa.me/551920422785',
+            url: 'https://wa.me/',
+            message: 'Olá! Quero criar meu currículo com a IA!',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"

@@ -7,7 +7,11 @@
  * Substituir .logo-placeholder pelos logos reais (SVG/WebP) quando disponíveis.
  */
 import { siteConfig } from '../site-config.ts';
-const whatsappUrl = siteConfig.site.whatsapp.url;
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
 
 const placeholders = ['Empresa A', 'Empresa B', 'Empresa C', 'Empresa D', 'Empresa E', 'Empresa F', 'Empresa G', 'Empresa H'];
 ---

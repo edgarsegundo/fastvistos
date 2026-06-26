@@ -4,7 +4,10 @@
  * Oculta ao descer o scroll, reaparece ao subir. Body ganha padding-bottom p/ não cobrir o footer.
  */
 import { siteConfig } from '../site-config.ts';
-const whatsappUrl = siteConfig.site.whatsapp.url;
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
 ---
 
 <div class="wpp-bar hidden" id="wppBar" role="complementary" aria-label="Criar currículo pelo WhatsApp">

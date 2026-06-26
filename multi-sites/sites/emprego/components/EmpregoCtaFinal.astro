@@ -6,7 +6,15 @@
  * ⚠️ Copy provisória (o etapa2 só trouxe o CSS) — revisar.
  */
 import { siteConfig } from '../site-config.ts';
-const whatsappUrl = siteConfig.site.whatsapp.url;
+
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+
+const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
+
 ---
 
 <section class="cta-final" aria-labelledby="cta-final-title">
