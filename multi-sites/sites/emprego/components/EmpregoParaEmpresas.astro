@@ -25,17 +25,13 @@ const bullets = [
   <div class="wrap b2b__inner">
 
     <div class="b2b__left reveal">
-      <span class="badge badge--coral">Para empresas</span>
+      <p class="section-label">Para empresas</p>
       <h2 class="b2b__hero-title" id="b2b-title">
-        Precisa contratar <span class="b2b__em">pra ontem?</span>
+        Quando você precisa<br>contratar, precisa<br><em class="b2b__em">pra ontem.</em>
       </h2>
       <p class="b2b__hero-sub">
-
-
-
         Sem filtrar 200 currículos. Sem marcar 3 entrevistas.<br>
         Sem esperar enquanto a equipe fica sobrecarregada.
-      
       </p>
     </div>
 
@@ -129,7 +125,7 @@ const bullets = [
     .b2b__left {
       position: relative;
       z-index: 2;
-      min-height: 520px;
+      min-height: 640px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -155,8 +151,8 @@ const bullets = [
 
     /* Fundo + overlay viram um band no topo (atrás do headline), não cobrem a seção empilhada
        inteira — senão o cover dá zoom enorme e mostra só o centro da foto. */
-    .b2b__bg, .b2b__overlay { height: 480px; bottom: auto; }
-    .b2b__bg { background-size: 150% auto; background-position: 20% top; background-color: #1e2237; background-repeat: no-repeat; }
+    .b2b__bg, .b2b__overlay { height: 640px; bottom: auto; }
+    .b2b__bg { background-size: 165% auto; background-position: 55% top; background-color: #1e2237; background-repeat: no-repeat; }
     .b2b__overlay {
       background: linear-gradient(to top, rgba(20, 23, 42, .95) 0%, rgba(20, 23, 42, .55) 50%, rgba(20, 23, 42, .40) 100%);
     }
