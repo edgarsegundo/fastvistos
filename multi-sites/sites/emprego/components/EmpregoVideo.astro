@@ -1,0 +1,129 @@
+---
+/**
+ * Seção de Vídeo — NÃO havia componente no etapa2, só uma nota no mapa de breakpoints
+ * (bg claro, texto à esquerda + player à direita; vídeo hero-desktop.webm; autoplay/loop/muted;
+ * botão de toggle de som). Reusa os vídeos já existentes em /assets/images/hero/.
+ *
+ * ⚠️ COPY PROVISÓRIA (não veio do designer) — revisar texto antes de publicar.
+ */
+import { siteConfig } from '../site-config.ts';
+const whatsappUrl = siteConfig.site.whatsapp.url;
+---
+
+<section class="video-sec" aria-labelledby="video-title">
+  <div class="wrap video-sec__inner">
+
+    <div class="video-sec__text reveal">
+      <p class="section-label">Veja na prática</p>
+      <h2 class="section-title" id="video-title">
+        Em menos de 1 minuto<br>você entende tudo
+      </h2>
+      <p class="section-sub">
+        Sem complicação: é só conversar pelo WhatsApp. Veja como é rápido criar
+        seu currículo e ficar visível para as empresas da sua região.
+      </p>
+      <div class="video-sec__cta">
+        <a href={whatsappUrl} class="btn btn--coral" target="_blank" rel="noopener">
+          Criar meu currículo grátis
+        </a>
+      </div>
+    </div>
+
+    <div class="video-sec__player reveal reveal-delay-1">
+      <video
+        id="empregoVideo"
+        class="video-sec__video"
+        autoplay
+        loop
+        muted
+        playsinline
+        poster="/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp"
+      >
+        <source src="/assets/images/hero/hero-desktop.webm" type="video/webm" media="(min-width: 861px)" />
+        <source src="/assets/images/hero/hero-desktop.mp4" type="video/mp4" media="(min-width: 861px)" />
+        <source src="/assets/images/hero/hero-mobile.webm" type="video/webm" />
+        <source src="/assets/images/hero/hero-mobile.mp4" type="video/mp4" />
+      </video>
+
+      <button class="video-sec__sound" id="empregoVideoSound" type="button" aria-label="Ativar som do vídeo" aria-pressed="false">
+        <!-- ícone mudo -->
+        <svg class="icon-muted" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <!-- ícone com som -->
+        <svg class="icon-unmuted" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .video-sec { padding: 96px 0; background: var(--color-surface); }
+  .video-sec__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .video-sec__cta { margin-top: 28px; }
+
+  .video-sec__player {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    aspect-ratio: 16 / 9;
+    background: var(--color-bg-dark);
+  }
+  .video-sec__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .video-sec__sound {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: rgba(20, 23, 42, .6);
+    color: #fff;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s;
+  }
+  .video-sec__sound:hover { background: rgba(20, 23, 42, .85); }
+  .video-sec__sound .icon-unmuted { display: none; }
+  .video-sec__sound.is-on .icon-muted { display: none; }
+  .video-sec__sound.is-on .icon-unmuted { display: block; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 860px) {
+    .video-sec { padding: 72px 0; }
+    .video-sec__inner { grid-template-columns: 1fr; gap: 36px; }
+  }
+</style>
+
+<script>
+  (function () {
+    const video = document.getElementById('empregoVideo') as HTMLVideoElement | null;
+    const btn = document.getElementById('empregoVideoSound');
+    if (!video || !btn) return;
+    btn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      const on = !video.muted;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('aria-label', on ? 'Desativar som do vídeo' : 'Ativar som do vídeo');
+      if (on) video.play().catch(() => {});
+    });
+  })();
+</script>

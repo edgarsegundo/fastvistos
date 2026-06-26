@@ -1,0 +1,79 @@
+---
+/**
+ * Números — métricas em destaque sobre fundo azul escuro.
+ * 3 valores separados por divisórias. Mobile ≤640px: coluna.
+ *
+ * ⚠️ NÚMEROS A CONFIRMAR — "10k+" e "2.500+" parecem aspiracionais (o site-config
+ * tem reviewCount: 277). Validar antes de publicar (alegação pública).
+ */
+---
+
+<section class="numeros" aria-label="Números do Emprego Aqui">
+  <div class="numeros__inner">
+
+    <div class="num-card reveal">
+      <div class="num-card__value">10k+</div>
+      <div class="num-card__label">Candidatos</div>
+      <div class="num-card__sub">buscando oportunidades</div>
+    </div>
+
+    <div class="numeros__sep" aria-hidden="true"></div>
+
+    <div class="num-card reveal reveal-delay-1">
+      <div class="num-card__value">2.500+</div>
+      <div class="num-card__label">Empresas</div>
+      <div class="num-card__sub">na Região de Campinas</div>
+    </div>
+
+    <div class="numeros__sep" aria-hidden="true"></div>
+
+    <div class="num-card reveal reveal-delay-2">
+      <div class="num-card__value">
+        <span class="num-card__big">2</span><span class="num-card__unit">min</span>
+      </div>
+      <div class="num-card__label">Currículo pronto</div>
+      <div class="num-card__sub">do zero ao profissional</div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .numeros { background: var(--color-bg-dark); padding: 72px 0; position: relative; overflow: hidden; }
+  .numeros__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .numeros__sep { width: 1px; height: 80px; background: rgba(255, 255, 255, .12); flex-shrink: 0; }
+
+  .num-card { text-align: center; padding: 0 48px; flex: 1; min-width: 0; }
+  .num-card__value {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 4.8vw, 68px);
+    font-weight: 800;
+    color: var(--color-cta);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .num-card__label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, .5);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+  }
+  .num-card__sub { font-size: 12px; color: rgba(255, 255, 255, .28); margin-top: 4px; }
+  .num-card__big { font-size: clamp(36px, 10vw, 68px); }
+  .num-card__unit { font-size: clamp(22px, 7vw, 44px); }
+
+  @media (max-width: 640px) {
+    .numeros__inner { flex-direction: column; gap: 0; }
+    .numeros__sep { width: 120px; height: 1px; }
+    .num-card { padding: 28px 20px; }
+  }
+</style>

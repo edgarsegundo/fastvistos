@@ -8,6 +8,11 @@ import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 import EmpregoNavbar from '../components/EmpregoNavbar.astro';
 import EmpregoHero from '../components/EmpregoHero.astro';
 import EmpregoStrip from '../components/EmpregoStrip.astro';
+import EmpregoComoFunciona from '../components/EmpregoComoFunciona.astro';
+import EmpregoVideo from '../components/EmpregoVideo.astro';
+import EmpregoPorque from '../components/EmpregoPorque.astro';
+import EmpregoNumeros from '../components/EmpregoNumeros.astro';
+import EmpregoDepoimentos from '../components/EmpregoDepoimentos.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -44,12 +49,36 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <EmpregoNavbar />
     <EmpregoHero />
     <EmpregoStrip />
+    <EmpregoComoFunciona />
+    <EmpregoVideo />
+    <EmpregoPorque />
+    <EmpregoNumeros />
+    <EmpregoDepoimentos />
 
     {/*
-      Ordem oficial das seções (mapa #estrutura do etapa2) — construídas por fase:
-      Fase 3: <EmpregoComoFunciona />  ·  <EmpregoVideo />  ·  <EmpregoPorque />
-              <EmpregoNumeros />  ·  <EmpregoDepoimentos />
-      Fase 4: <EmpregoEmpresasMarquee />  ·  <EmpregoParaEmpresas />  ·  <EmpregoFaq />
-              <EmpregoCtaFinal />  ·  <EmpregoFooter />  ·  <EmpregoWppBar />
+      Ordem oficial das seções (mapa #estrutura do etapa2) — restante na Fase 4:
+      <EmpregoEmpresasMarquee />  ·  <EmpregoParaEmpresas />  ·  <EmpregoFaq />
+      <EmpregoCtaFinal />  ·  <EmpregoFooter />  ·  <EmpregoWppBar />
     */}
 </SharedHomeLayout>
+
+<script>
+  // Scroll-reveal: revela elementos .reveal quando entram no viewport.
+  (function () {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('visible')); // fallback: mostra tudo
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+  })();
+</script>

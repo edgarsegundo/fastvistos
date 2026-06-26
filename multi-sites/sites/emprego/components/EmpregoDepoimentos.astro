@@ -1,0 +1,89 @@
+---
+/**
+ * Depoimentos — grid 2 colunas sobre fundo branco. Aspas decorativas, texto
+ * itálico, avatar com iniciais, 5 estrelas. Mobile ≤680px: 1 coluna.
+ *
+ * ⚠️ DEPOIMENTOS A CONFIRMAR — só 1 exemplo veio no etapa2; o 2º é provisório.
+ * São depoimentos reais/aprovados? (autenticidade) — validar antes de publicar.
+ */
+const depoimentos = [
+  {
+    text: 'Eu não sabia nem como montar um currículo. Mandei uma mensagem e em dois dias uma empresa daqui do bairro me chamou pra entrevista.',
+    initials: 'AM',
+    name: 'Ana Maria S.',
+    role: 'Candidata contratada · Campinas, SP',
+  },
+  {
+    text: 'Achei que ia ser complicado, mas foi só conversar pelo WhatsApp. Recebi proposta de uma loja perto de casa numa semana.',
+    initials: 'RC',
+    name: 'Rafael C.',
+    role: 'Candidato contratado · Sumaré, SP',
+  },
+];
+---
+
+<section class="depos" aria-labelledby="depos-title">
+  <div class="wrap">
+
+    <div class="depos__header reveal">
+      <p class="section-label">Depoimentos</p>
+      <h2 class="section-title" id="depos-title">Histórias de quem foi encontrado</h2>
+    </div>
+
+    <div class="depos__grid">
+      {depoimentos.map((d, i) => (
+        <div class={`depo-card reveal${i > 0 ? ' reveal-delay-1' : ''}`}>
+          <div class="depo-card__quote" aria-hidden="true">&ldquo;</div>
+          <p class="depo-card__text">{d.text}</p>
+          <div class="depo-card__footer">
+            <div class="depo-card__avatar" aria-hidden="true">{d.initials}</div>
+            <div>
+              <div class="depo-card__name">{d.name}</div>
+              <div class="depo-card__role">{d.role}</div>
+            </div>
+          </div>
+          <div class="depo-card__stars" aria-label="5 estrelas">
+            <span class="star" aria-hidden="true">★</span>
+            <span class="star" aria-hidden="true">★</span>
+            <span class="star" aria-hidden="true">★</span>
+            <span class="star" aria-hidden="true">★</span>
+            <span class="star" aria-hidden="true">★</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .depos { padding: 96px 0; background: #fff; }
+  .depos__header { text-align: center; margin-bottom: 48px; }
+  .depos__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+  .depo-card { background: var(--color-surface); border-radius: var(--radius); padding: 32px 28px; position: relative; }
+  .depo-card__quote { font-size: 48px; font-family: Georgia, serif; color: var(--color-cta); line-height: .8; margin-bottom: 16px; opacity: .6; }
+  .depo-card__text { font-size: 16px; color: var(--color-text-main); line-height: 1.7; margin-bottom: 24px; font-style: italic; }
+  .depo-card__footer { display: flex; align-items: center; gap: 12px; }
+  .depo-card__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-cta);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .depo-card__name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--color-text-main); }
+  .depo-card__role { font-size: 13px; color: var(--color-muted); margin-top: 2px; }
+  .depo-card__stars { display: flex; gap: 3px; margin-top: 12px; }
+  .star { color: var(--color-cta); font-size: 15px; }
+
+  @media (max-width: 680px) { .depos__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .depo-card { padding: 24px 20px; } }
+</style>
