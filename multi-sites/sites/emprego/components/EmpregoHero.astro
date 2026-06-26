@@ -113,6 +113,7 @@ const slides = [
     background-position: center;
     opacity: 0;
     transition: opacity .8s ease;
+    filter: brightness(.78); /* escurece a foto p/ legibilidade */
   }
   .hero__slide-bg.active { opacity: 1; }
 
@@ -123,9 +124,9 @@ const slides = [
     z-index: 1;
     background: linear-gradient(
       105deg,
-      rgba(20, 23, 42, .88) 0%,
-      rgba(20, 23, 42, .60) 55%,
-      rgba(20, 23, 42, .25) 100%
+      rgba(20, 23, 42, .96) 0%,
+      rgba(20, 23, 42, .85) 45%,
+      rgba(20, 23, 42, .58) 100%
     );
   }
 
@@ -160,6 +161,7 @@ const slides = [
     line-height: 1.06;
     color: #fff;
     margin-bottom: 20px;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, .35); /* contraste local sobre a foto */
   }
   .hero__title em {
     color: var(--color-cta);
@@ -173,6 +175,7 @@ const slides = [
     line-height: 1.7;
     margin-bottom: 36px;
     max-width: 480px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .30);
   }
 
   .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -229,6 +232,15 @@ const slides = [
     .hero__title { font-size: clamp(28px, 8vw, 44px); }
     .hero__note { gap: 4px; font-size: 11px; } /* nota menor em tablet+mobile */
     .hero__slide-bg { background-position: 60% center; }
+    /* texto é centralizado/full-width no mobile → overlay vertical protege em toda a largura */
+    .hero__overlay {
+      background: linear-gradient(
+        180deg,
+        rgba(20, 23, 42, .90) 0%,
+        rgba(20, 23, 42, .74) 45%,
+        rgba(20, 23, 42, .93) 100%
+      );
+    }
   }
   /* ── Celular: conteúdo centralizado (tablet 561–860px permanece à esquerda) ── */
   @media (max-width: 560px) {
