@@ -106,6 +106,10 @@ const faqs = [
     transition: background .2s;
   }
   .faq-item__question:hover { background: var(--color-surface); }
+  /* item aberto: pergunta continua branca (mesmo com o cursor em cima),
+     para a pergunta e a resposta formarem um card branco único. */
+  .faq-item.open .faq-item__question,
+  .faq-item.open .faq-item__question:hover { background: none; }
 
   .faq-item__icon {
     width: 28px;
