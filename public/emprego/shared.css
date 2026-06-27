@@ -1,131 +1,115 @@
+/* ──────────────────────────────────────────────────────────────
+   Emprego Aqui — Design tokens & base typography
+   Fonte: Etapa 1 (paleta + tipografia) e Etapa 2 (tokens CSS)
+   ASA Propaganda e Design
+   ────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
 :root {
-    --font-title: "Bodoni Moda", serif;
-    --font-subtitle: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: "Spectral", Georgia, serif;
-    --color-text-main: #1b375c;
-    --color-bg-main: #F4F4F4;
+    /* Cores de marca */
+    --color-bg: #1e2237;          /* azul escuro — fundo geral, navbar */
+    --color-bg-mid: #2c3154;      /* azul médio — overlays, strip */
+    --color-card: #252a42;        /* azul card — painéis escuros */
+    --color-cta: #f28b30;         /* coral — botões, badges, labels */
+    --color-cta-dark: #d4751f;    /* coral hover */
+    --color-text: #1e2237;        /* texto em fundos claros */
+    --color-text-muted: #8a90a2;  /* texto secundário / suporte */
+    --color-text-white: #ffffff;  /* texto sobre fundos escuros */
+    --color-bg-light: #f4f5f8;    /* fundo claro alternado */
+    --color-border: #e5e7eb;      /* bordas em fundos claros */
+
+    /* Cores WhatsApp (componente isolado) */
+    --color-wpp: #25d366;
+    --color-wpp-dark: #1ebe5b;
+    --color-wpp-bg: #111b21;
+    --color-wpp-header: #202c33;
+    --color-wpp-chat: #0b141a;
+    --color-wpp-bubble-in: #1f2c34;
+    --color-wpp-bubble-out: #005c4b;
+
+    /* Tipografia */
+    --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
+
+    /* Bordas arredondadas */
+    --radius: 12px;
+    --radius-lg: 20px;
+
+    /* Sombras */
+    --shadow: 0 4px 24px rgba(30, 34, 55, 0.13);
+    --shadow-sm: 0 2px 12px rgba(30, 34, 55, 0.08);
+
+    /* Container */
+    --max-w: 1160px;
 }
 
 /* BASE */
 body {
     font-family: var(--font-body);
+    font-size: 17px;
     line-height: 1.7;
-    color: var(--color-text-main);
+    color: var(--color-text);
+    background-color: var(--color-bg-light);
     -webkit-font-smoothing: antialiased;
-    background-color: var(--color-bg-main);
 }
 
-section {
-    margin-bottom: 5rem;
-}
-
-/* TITLES — fashion editorial */
+/* TITLES — Plus Jakarta Sans */
 h1 {
-    font-family: var(--font-title);
-    font-size: clamp(2.9rem, 6vw, 4.2rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin-bottom: 2.5rem !important;
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
 }
 
 h2 {
-    font-family: var(--font-title);
-    font-size: clamp(2.1rem, 4.8vw, 3rem);
-    font-weight: 600;
-    line-height: 1.1;
-    margin-bottom: 2rem;
-}
-
-/* SUBTITLES — quiet & precise */
-h3,
-h4 {
-    font-family: var(--font-subtitle);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    margin-bottom: 0.6rem;
-    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
 }
 
 h3 {
-    font-size: 0.95rem;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.6rem;
 }
 
-/* BODY TEXT — refined reading */
+/* BODY TEXT — Inter */
 p {
-    font-size: 1.02rem;
-    max-width: 62ch;
-    margin-bottom: 3rem;
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
 }
 
 a {
-    font-family: var(--font-subtitle);
-    color: inherit;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
+    color: var(--color-cta);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 /* EDITORIAL ELEMENTS */
-.kicker {
-    font-family: var(--font-subtitle);
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    opacity: 0.6;
-}
-
-.deck {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    opacity: 0.85;
-}
-
-/* LOGO */
-.logo-revista {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    line-height: 1;
-    color: #1b375c;
-}
-.logo-revista.logo-revista-black {
-    color: #fff;
-}
-
-.logo-small {
-    font-family: var(--font-title), serif;
-    font-size: 0.65rem;
-    font-weight: 400;
-    letter-spacing: 0.6em;
-    text-transform: uppercase;
-    margin-bottom: -2px;
-    opacity: 0.85;
-    margin-left: 0.2em;
-}
-
-.logo-small.no-flex {
-    text-align: left;
-    display: block;
-    margin-bottom: -14px;
-}
-
-.logo-large {
-    font-family: var(--font-title), serif;
-    font-size: 1.7rem;
+.kicker,
+.section-label {
+    font-family: var(--font-display);
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    display: flex;
+    color: var(--color-cta);
 }
 
-.logo-large.no-flex {
-    display: block;
-    margin-top: 0;
-}
-
-@media (max-width: 768px) {
-    .logo-small {
-        font-size: 0.55rem;
-    }
+.deck,
+.section-sub {
+    font-family: var(--font-body);
+    font-size: 17px;
+    color: var(--color-text-muted);
+    line-height: 1.7;
 }
