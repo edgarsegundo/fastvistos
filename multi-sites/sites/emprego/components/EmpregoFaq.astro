@@ -1,0 +1,186 @@
+---
+/**
+ * FAQ — accordion (1 aberto por vez; 1º item aberto por padrão, igual ao original).
+ * Ícone + gira 45° ao abrir. CTA inline (faq-cta) em algumas respostas.
+ */
+import { siteConfig } from '../site-config.ts';
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+
+const faqs = [
+  {
+    q: 'O serviço é realmente gratuito para candidatos?',
+    a: 'Sim, 100% gratuito. Criar seu currículo, receber propostas e conversar com empresas não custa nada. Nunca vai custar.',
+    cta: { label: 'Criar meu currículo — é de graça', href: whatsappUrl },
+  },
+  {
+    q: 'Preciso baixar algum aplicativo?',
+    a: 'Não. Tudo acontece pelo WhatsApp, que você já tem no celular. É só clicar no botão e mandar uma mensagem.',
+    cta: { label: 'Abrir o WhatsApp agora', href: whatsappUrl },
+  },
+  {
+    q: 'Quanto tempo leva para receber uma proposta?',
+    a: 'Depende do seu perfil e das vagas disponíveis na sua região, mas muitos candidatos recebem contato das empresas em poucas horas após criar o currículo.',
+    cta: { label: 'Criar currículo e já aparecer para empresas', href: whatsappUrl },
+  },
+  {
+    q: 'O Emprego Aqui atende só Campinas?',
+    a: 'Por enquanto, focamos na Região Metropolitana de Campinas — Campinas, Sumaré, Hortolândia, Valinhos, Vinhedo e cidades vizinhas. Em breve expandiremos para outras regiões.',
+    cta: { label: 'Ver vagas na minha cidade', href: whatsappUrl },
+  },
+  {
+    q: 'E se eu não tiver experiência ou currículo antigo?',
+    a: 'Não precisa ter experiência nem currículo pronto. Nossa IA monta tudo do zero com base nas suas respostas. Você não precisa saber nada de computador — só o WhatsApp que já está no seu celular.',
+    cta: { label: 'Montar meu currículo do zero — grátis', href: whatsappUrl },
+  },
+  {
+    q: 'Como as empresas ficam sabendo do meu contato?',
+    a: 'Quando você cria seu currículo, ele fica visível para empresas da sua região que estão buscando o seu perfil. Só empresas cadastradas na plataforma têm acesso — e você sempre recebe o contato direto pelo WhatsApp, podendo aceitar ou não.',
+    cta: { label: 'Criar meu perfil e ser encontrado', href: whatsappUrl },
+  },
+];
+---
+
+<section class="faq" aria-labelledby="faq-title">
+  <div class="faq__inner">
+
+    <div class="faq__header reveal">
+      <p class="section-label">Perguntas frequentes</p>
+      <h2 class="section-title" id="faq-title">Ficou alguma dúvida?</h2>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map((item, i) => (
+        <div class={`faq-item${i === 0 ? ' open' : ''}`}>
+          <button class="faq-item__question" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`faq-ans-${i}`}>
+            {item.q}
+            <div class="faq-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+          </button>
+          <div class="faq-item__answer" id={`faq-ans-${i}`} role="region">
+            <p>{item.a}</p>
+            {item.cta && (
+              <a href={item.cta.href} class="faq-cta" target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                {item.cta.label}
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .faq { padding: 80px 0; background: var(--color-surface); }
+  .faq__inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .faq__header { text-align: center; margin-bottom: 48px; }
+
+  .faq-item {
+    background: #fff;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(30, 34, 55, .07);
+    /* promove o card a uma layer própria: evita o flicker do fundo branco
+       (border-radius + overflow:hidden repintam quando o ícone rotaciona). */
+    transform: translateZ(0);
+  }
+  .faq-item__question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-main);
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    gap: 16px;
+    transition: background .2s;
+  }
+  .faq-item__question:hover { background: var(--color-surface); }
+  /* item aberto: pergunta continua branca (mesmo com o cursor em cima),
+     para a pergunta e a resposta formarem um card branco único. */
+  .faq-item.open .faq-item__question,
+  .faq-item.open .faq-item__question:hover { background: none; }
+
+  .faq-item__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all .3s;
+  }
+  .faq-item__icon svg { transition: transform .3s; }
+  .faq-item__icon path { stroke: var(--color-text-main); }
+  .faq-item.open .faq-item__icon { background: var(--color-cta); transform: rotate(45deg); }
+  .faq-item.open .faq-item__icon path { stroke: #fff; }
+
+  .faq-item__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease, padding .3s ease;
+    font-size: 15px;
+    color: var(--color-muted);
+    line-height: 1.7;
+    padding: 0 24px;
+  }
+  .faq-item.open .faq-item__answer { max-height: 400px; padding: 0 24px 20px; }
+
+  .faq-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-cta);
+    background: rgba(242, 139, 48, .08);
+    border: 1px solid rgba(242, 139, 48, .25);
+    padding: 9px 16px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all .2s;
+  }
+  .faq-cta:hover {
+    background: rgba(242, 139, 48, .15);
+    border-color: rgba(242, 139, 48, .5);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 480px) { .faq-item.open .faq-item__answer { max-height: 500px; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.faq-item__question').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach((i) => {
+        i.classList.remove('open');
+        i.querySelector('.faq-item__question')?.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>

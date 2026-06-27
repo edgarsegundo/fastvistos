@@ -1,0 +1,161 @@
+---
+/**
+ * Por Que Aqui — grid 2×2 de cards de benefício sobre fundo claro.
+ * Borda coral animada à esquerda no hover. Último card é destaque (com tag).
+ * Mobile ≤640px: 1 coluna.
+ *
+ * Conteúdo e ícones extraídos do design original (Adobe export).
+ */
+import { siteConfig } from '../site-config.ts';
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+const cards = [
+  {
+    icon: 'pin',
+    title: 'Vagas perto de você',
+    desc: 'Focado 100% na Região Metropolitana de Campinas. Sem vagas de outros estados chegando no seu celular.',
+    delay: 1,
+  },
+  {
+    icon: 'shield',
+    title: 'Sempre gratuito para você',
+    desc: 'Criar currículo, receber propostas e conseguir emprego — tudo de graça. Sem assinatura, sem pegar surpresa no cartão.',
+    delay: 2,
+  },
+  {
+    icon: 'bolt',
+    title: 'Rápido de verdade',
+    desc: 'Seu currículo fica pronto em menos de 2 minutos. Sem formulários, sem login, sem foto 3x4 para escanear.',
+    delay: 1,
+  },
+  {
+    icon: 'phone',
+    title: 'Só precisa do WhatsApp',
+    desc: 'Sem formulário, sem login, sem precisar saber nada de informática. Se você usa o WhatsApp, você já sabe usar o Emprego Aqui.',
+    destaque: true,
+    tag: 'O canal que você já conhece',
+    delay: 2,
+  },
+];
+
+const icons: Record<string, string> = {
+  pin: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  bolt: '<polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  phone: '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/>',
+};
+---
+
+<section class="porque" aria-labelledby="porque-title">
+  <div class="wrap">
+
+    <div class="porque__header reveal">
+      <p class="section-label">Por que o Emprego Aqui</p>
+
+
+
+      <h2 class="section-title" id="porque-title">O jeito mais fácil de<br>conseguir emprego em Campinas</h2>
+      <p class="section-sub">Sem burocracia, sem custo e do jeito que o brasileiro já se comunica.</p>
+    </div>
+
+    <div class="porque__grid">
+      {cards.map((card) => (
+        <div class={`card-beneficio reveal reveal-delay-${card.delay}${card.destaque ? ' card-beneficio--destaque' : ''}`}>
+          <div class="card-beneficio__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" set:html={icons[card.icon]} />
+          </div>
+          <h3 class="card-beneficio__title">{card.title}</h3>
+          <p class="card-beneficio__desc">{card.desc}</p>
+          {card.tag && <div class="card-beneficio__tag">{card.tag}</div>}
+        </div>
+      ))}
+    </div>
+
+    <div class="porque__cta reveal">
+      <a href={whatsappUrl} class="btn btn--coral" target="_blank" rel="noopener" aria-label="Criar currículo grátis agora">
+        <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 .396C7.16.396 0 7.557 0 16.396c0 2.872.755 5.566 2.072 7.897L.066 32l7.934-2.006A15.9 15.9 0 0 0 16 32.396c8.84 0 16-7.16 16-16S24.84.396 16 .396zm0 29.2a13.2 13.2 0 0 1-6.71-1.84l-.48-.285-4.97 1.255 1.327-4.843-.313-.497A13.13 13.13 0 0 1 2.8 16.396c0-7.28 5.92-13.2 13.2-13.2s13.2 5.92 13.2 13.2-5.92 13.2-13.2 13.2z"/><path d="M23.2 19.2c-.39-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.39-1.01 1.27-1.24 1.53-.23.26-.46.29-.85.1-.39-.2-1.65-.61-3.14-1.94-1.16-1.03-1.94-2.31-2.17-2.7-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.11-1.2-2.89-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.81 1.61 4.07c.2.26 2.78 4.25 6.73 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.32-.95 2.65-1.87.33-.92.33-1.7.23-1.87-.1-.16-.36-.26-.75-.45z"/></svg>
+        Quero meu currículo grátis agora
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .porque { padding: 96px 0; background: var(--color-surface); }
+  .porque__header { text-align: center; margin-bottom: 56px; }
+  .porque__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .porque__cta { text-align: center; margin-top: 52px; }
+
+  .card-beneficio {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(30, 34, 55, .06);
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-beneficio:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+  /* Borda coral animada à esquerda */
+  .card-beneficio::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--color-cta);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform .3s;
+  }
+  .card-beneficio:hover::before { transform: scaleY(1); }
+
+  /* Card destaque — borda + fundo coral suave; barra lateral sempre visível */
+  .card-beneficio--destaque {
+    border: 2px solid rgba(242, 139, 48, .25);
+    background: linear-gradient(135deg, #fff 0%, rgba(242, 139, 48, .04) 100%);
+  }
+  .card-beneficio--destaque::before { transform: scaleY(1); }
+
+  .card-beneficio__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(242, 139, 48, .1);
+    color: var(--color-cta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .card-beneficio__title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--color-text-main);
+    margin-bottom: 8px;
+  }
+  .card-beneficio__desc { font-size: 15px; color: var(--color-muted); line-height: 1.65; }
+
+  .card-beneficio__tag {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(242, 139, 48, .12);
+    color: var(--color-cta);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    .porque__grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+/**
+ * Barra flutuante mobile (WhatsApp) — fixed no bottom, visível só ≤860px.
+ * Oculta ao descer o scroll, reaparece ao subir. Body ganha padding-bottom p/ não cobrir o footer.
+ */
+import { siteConfig } from '../site-config.ts';
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+---
+
+<div class="wpp-bar hidden" id="wppBar" role="complementary" aria-label="Criar currículo pelo WhatsApp">
+  <a
+    href={whatsappUrl}
+    class="wpp-bar__btn"
+    target="_blank"
+    rel="noopener"
+    aria-label="Abrir WhatsApp para criar currículo"
+  >
+    <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 .396C7.16.396 0 7.557 0 16.396c0 2.872.755 5.566 2.072 7.897L.066 32l7.934-2.006A15.9 15.9 0 0 0 16 32.396c8.84 0 16-7.16 16-16S24.84.396 16 .396zm0 29.2a13.2 13.2 0 0 1-6.71-1.84l-.48-.285-4.97 1.255 1.327-4.843-.313-.497A13.13 13.13 0 0 1 2.8 16.396c0-7.28 5.92-13.2 13.2-13.2s13.2 5.92 13.2 13.2-5.92 13.2-13.2 13.2z"/><path d="M23.2 19.2c-.39-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.39-1.01 1.27-1.24 1.53-.23.26-.46.29-.85.1-.39-.2-1.65-.61-3.14-1.94-1.16-1.03-1.94-2.31-2.17-2.7-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.11-1.2-2.89-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.81 1.61 4.07c.2.26 2.78 4.25 6.73 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.32-.95 2.65-1.87.33-.92.33-1.7.23-1.87-.1-.16-.36-.26-.75-.45z"/></svg>
+    Começar agora — grátis
+  </a>
+</div>
+
+<style>
+  .wpp-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: var(--color-wpp);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, .2);
+    transform: translateY(0);
+    transition: transform .3s;
+  }
+  .wpp-bar.hidden { transform: translateY(100%); }
+
+  .wpp-bar__btn {
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  /* Oculto em desktop */
+  @media (min-width: 861px) { .wpp-bar { display: none; } }
+</style>
+
+<!-- padding no body para a barra não cobrir o footer (precisa ser global) -->
+<style is:global>
+  @media (max-width: 860px) { body { padding-bottom: 64px; } }
+</style>
+
+<script>
+  (function () {
+    const bar = document.getElementById('wppBar');
+    if (!bar) return;
+    // Escondida no topo; aparece depois que o usuário rola ~60% da 1ª tela (passa do hero).
+    const threshold = () => window.innerHeight * 0.6;
+    const update = () => bar.classList.toggle('hidden', window.scrollY < threshold());
+    update(); // estado inicial (escondida no topo)
+    window.addEventListener('scroll', update, { passive: true });
+  })();
+</script>

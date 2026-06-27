@@ -1,0 +1,166 @@
+---
+/**
+ * Como Funciona — 3 passos com foto real, badge numerado e linha tracejada coral.
+ * Desktop: grid 3 colunas (foto em cima, texto abaixo). Mobile ≤720px: 1 coluna,
+ * step em linha (foto + texto lado a lado). <picture> serve variante mobile ≤600px.
+ */
+import { siteConfig } from '../site-config.ts';
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+
+const base = '/assets/images/v2/';
+const steps = [
+  {
+    img: 'emprego-aqui-como-funciona-passo-1-cadastro',
+    alt: 'Passo 1 — Candidata usando o celular em casa',
+    title: 'Manda um oi no WhatsApp',
+    desc: 'Clique no botão e inicie uma conversa. Sem senha, sem cadastro.',
+  },
+  {
+    img: 'emprego-aqui-como-funciona-passo-2-curriculo',
+    alt: 'Passo 2 — IA gerando um currículo profissional',
+    title: 'Nossa IA monta seu currículo',
+    desc: 'Responda perguntas simples e a IA cria um currículo profissional.',
+  },
+  {
+    img: 'emprego-aqui-como-funciona-passo-3-vaga',
+    alt: 'Passo 3 — Candidata recebendo proposta de emprego',
+    title: 'Empresas te encontram',
+    desc: 'Empresas da sua região veem seu perfil e entram em contato pelo WhatsApp.',
+  },
+];
+---
+
+<section class="funciona" id="como-funciona" aria-labelledby="funciona-title">
+  <div class="wrap">
+
+    <div class="funciona__header reveal">
+      <p class="section-label">Como funciona</p>
+      <h2 class="section-title" id="funciona-title">
+        Tão simples quanto mandar<br>uma mensagem
+      </h2>
+      <p class="section-sub">
+        Três passos e você já está visível para centenas de empresas.
+      </p>
+    </div>
+
+    <div class="funciona__steps">
+      {steps.map((step, i) => (
+        <div class={`step reveal reveal-delay-${i + 1}`}>
+          <div class="step__img-wrap" aria-hidden="true">
+            <span class="step__badge">{i + 1}</span>
+            <picture>
+              <source media="(max-width: 600px)" srcset={`${base}${step.img}-mobile.webp`} />
+              <img
+                src={`${base}${step.img}.webp`}
+                alt={step.alt}
+                class="step__img-real"
+                loading="lazy"
+                width="280"
+                height="373"
+              />
+            </picture>
+          </div>
+          <div>
+            <h3 class="step__title">{step.title}</h3>
+            <p class="step__desc">{step.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="funciona__cta reveal">
+      <a href={whatsappUrl} class="btn btn--coral" target="_blank" rel="noopener">
+        Começar agora — é grátis
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .funciona { padding: 96px 0; background: #fff; }
+  .funciona__header { text-align: center; margin-bottom: 64px; }
+  .funciona__cta { text-align: center; margin-top: 52px; }
+
+  .funciona__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  /* Linha tracejada coral entre os steps */
+  .funciona__steps::before {
+    content: '';
+    position: absolute;
+    top: 140px;
+    left: calc(16.66% + 40px);
+    right: calc(16.66% + 40px);
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg, var(--color-cta) 0, var(--color-cta) 8px, transparent 8px, transparent 18px
+    );
+    z-index: 0;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step__img-wrap { position: relative; flex-shrink: 0; margin-bottom: 28px; }
+  .step__badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-cta);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .step__img-real {
+    width: 280px;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(30, 34, 55, .12);
+    display: block;
+  }
+
+  .step__title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-text-main);
+    margin-bottom: 10px;
+  }
+  .step__desc { font-size: 15px; color: var(--color-muted); line-height: 1.65; max-width: 220px; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 720px) {
+    .funciona__steps { grid-template-columns: 1fr; gap: 48px; }
+    .funciona__steps::before { display: none; }
+    .step { flex-direction: row; align-items: flex-start; text-align: left; gap: 20px; padding: 0; }
+    .step__img-real { width: 140px; }
+    .step__desc { max-width: none; }
+  }
+</style>

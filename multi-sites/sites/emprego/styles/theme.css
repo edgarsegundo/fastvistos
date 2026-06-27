@@ -4,153 +4,198 @@
   Use este arquivo para:
   - Adicionar cores e fontes da marca via @theme
   - Sobrescrever variáveis do global.css via @theme
-  - Adicionar componentes específicos deste site via @layer components
-  - Adicionar utilities específicas deste site via @layer utilities
+  - Adicionar componentes/utilitários COMPARTILHADOS via @layer components
   - Sobrescrever o reset do global.css via @layer base (só se necessário)
+
+  CSS específico de UMA seção (.hero__*, .funciona__*, etc.) NÃO fica aqui —
+  fica no <style> scoped do próprio componente .astro. Aqui só mora o que é
+  reutilizado em várias seções (botões, badges, títulos de seção, reveal).
 
   O Tailwind e o CSS juntam este arquivo com o global.css automaticamente.
   O que estiver aqui tem prioridade sobre o global.css.
+
+  Tokens de design migrados da entrega ASA Propaganda (etapa 2 · :root).
+  Renomeados para (1) atender o contrato do reset do body do global.css
+  e (2) evitar classes feias/colisão (bg-bg-*, text-text-*). Os hex são idênticos.
 */
 
-/*
-  @theme — cores e fontes da marca deste site.
-  Cada variável --color-* gera automaticamente classes Tailwind:
-  --color-primary-500 → bg-primary-500, text-primary-500, border-primary-500, etc.
-
-  ⚠️ Contrato com o global.css: o reset do <body> (auto-gerado em global.css)
-  usa var(--color-text-main), var(--font-sans) e var(--color-bg-dark).
-  Defina essas três aqui para o body herdar cor, fonte e fundo sem precisar
-  re-declarar o body no @layer base.
-*/
 @theme {
-  /* Cores da marca */
-  --color-text-main: #1f2937;   /* texto padrão do body (consumido pelo reset do global.css) */
-  --color-bg-dark: #F3F4F6;     /* fundo da página (nome exigido pelo reset do body no global.css) */
-  --color-ink: #232320;         /* títulos e textos de destaque */
-  --color-card: #FFFFF7;        /* fundo de cards / painéis */
-  --color-cta: #37D315;         /* botão call-to-action */
-  --color-cta-hover: #2eb812;
-  --color-whatsapp: #25d366;
-  --color-whatsapp-dark: #128c7e;
+  /* ── Cores de marca ──────────────────────────────────────────── */
+  --color-bg-dark: #1e2237;     /* azul base — navbar, números, footer, overlays; contrato do body */
+  --color-navy-mid: #2c3154;    /* azul médio — strip, card B2B mobile */
+  --color-navy-card: #252a42;   /* azul card — painéis escuros */
+  --color-cta: #F28B30;         /* coral — botões, badges, labels, destaques */
+  --color-cta-dark: #d4751f;    /* coral hover */
+  --color-text-main: #1e2237;   /* texto em fundos claros; contrato do body */
+  --color-muted: #8a90a2;       /* texto secundário / apoio */
+  --color-surface: #f4f5f8;     /* fundo claro alternado (porque, faq, depo) */
 
-  /* Fontes da marca — toda fonte carregada no <link> deve ter uma var aqui (sem peso morto) */
-  --font-heading: 'Bricolage Grotesque', sans-serif;  /* títulos de seção */
-  --font-title: 'Poppins', system-ui, sans-serif;     /* h1/h2 padrão */
-  --font-subtitle: 'Inter', system-ui, sans-serif;    /* h3/h4, links, labels */
-  --font-body: 'Roboto', system-ui, sans-serif;       /* corpo de texto */
-  --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif; /* fonte default do body */
+  /* ── Cores do widget WhatsApp (namespace isolado, reproduz o app) ── */
+  --color-wpp: #25D366;
+  --color-wpp-dark: #1EBE5B;
+  --color-wpp-bg: #111B21;
+  --color-wpp-header: #202C33;
+  --color-wpp-chat: #0B141A;
+  --color-wpp-bubble-in: #1F2C34;
+  --color-wpp-bubble-out: #005C4B;
+
+  /* ── Fontes ──────────────────────────────────────────────────── */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif; /* títulos, botões, labels */
+  --font-body: 'Inter', system-ui, sans-serif;                /* corpo de texto */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif; /* default do body (contrato) */
 }
 
 /*
-  @layer base — só sobrescreve o reset do global.css quando necessário.
-  Cor, fonte e fundo do body já vêm do reset do global.css via as vars do @theme acima,
-  então aqui ficam apenas defaults tipográficos do site e o ajuste que o global.css não cobre.
+  Tokens não-cromáticos (raio, sombra, container). Ficam num :root comum —
+  são usados via var() no CSS scoped dos componentes e não precisam virar
+  classes utilitárias do Tailwind.
+*/
+:root {
+  --radius: 12px;
+  --radius-lg: 20px;
+  --shadow: 0 4px 24px rgba(30, 34, 55, .13);
+  --shadow-sm: 0 2px 12px rgba(30, 34, 55, .08);
+  --max-w: 1160px;
+}
+
+/*
+  @layer base — cor, fonte e fundo do body já vêm do reset do global.css
+  (via as vars do @theme acima). Aqui só o que o global.css não cobre.
 */
 @layer base {
   body {
     -webkit-font-smoothing: antialiased;
-  }
-
-  section {
-    margin-bottom: 2.5rem;
-  }
-
-  h1 {
-    font-family: var(--font-title);
-    font-size: clamp(1.8rem, 5vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 0.8rem;
-  }
-
-  h2 {
-    font-family: var(--font-title);
-    font-size: clamp(1.4rem, 4vw, 1.9rem);
-    font-weight: 600;
-    line-height: 1.25;
-    margin-bottom: 0.6rem;
-  }
-
-  h3,
-  h4 {
-    font-family: var(--font-subtitle);
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-bottom: 0.4rem;
-  }
-
-  p {
-    font-size: 1rem;
-    max-width: 72ch;
-    margin-bottom: 1rem;
-  }
-
-  a {
-    font-family: var(--font-subtitle);
-    color: var(--color-whatsapp-dark);
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  a:hover {
-    text-decoration: underline;
+    text-rendering: optimizeLegibility;
   }
 }
 
 /*
-  @layer components — classes reutilizáveis específicas deste site.
-  Use quando uma combinação de estilos se repete em mais de um lugar.
-  Referencie as cores via var(--color-*) — nunca hardcode hex aqui.
+  @layer components — utilitários COMPARTILHADOS entre seções.
+  Cores sempre via var(--color-*), nunca hex hardcoded.
 */
 @layer components {
-  .btn-whatsapp {
-    display: inline-block;
-    font-family: var(--font-subtitle);
-    background: var(--color-whatsapp);
-    color: #ffffff;
-    padding: 0.75rem 1.2rem;
-    border-radius: 999px;
-    font-size: 1rem;
-    font-weight: 600;
+
+  /* ── Container centralizado (largura máx do projeto) ─────────── */
+  .wrap {
+    max-width: var(--max-w);
+    margin-inline: auto;
+    padding-inline: 24px;
   }
 
-  .btn-cta {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background-color: var(--color-cta);
-    color: #ffffff;
-    font-family: var(--font-subtitle);
-    font-size: 1.5rem;
-    font-weight: 600;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s;
+  /* ── Botões — sistema completo ───────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 16px 32px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all .2s ease;
+    white-space: nowrap; /* rótulo sempre em uma linha (igual ao original) */
   }
 
-  .btn-cta:hover {
-    background-color: var(--color-cta-hover);
+  .btn--coral { background: var(--color-cta); color: #fff; }
+  .btn--coral:hover {
+    background: var(--color-cta-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(242, 139, 48, .35);
     text-decoration: none;
   }
 
-  .kicker {
-    font-family: var(--font-subtitle);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-whatsapp-dark);
+  .btn--white { background: #fff; color: var(--color-bg-dark); }
+  .btn--white:hover { background: #f0f0f0; transform: translateY(-1px); text-decoration: none; }
+
+  .btn--ghost {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, .35);
+  }
+  .btn--ghost:hover {
+    background: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .7);
+    text-decoration: none;
   }
 
-  .deck {
-    font-family: var(--font-body);
-    font-size: 1.05rem;
-    line-height: 1.5;
+  .btn--ghost-coral {
+    background: transparent;
+    color: var(--color-cta);
+    border: 2px solid rgba(242, 139, 48, .4);
   }
+  .btn--ghost-coral:hover { background: rgba(242, 139, 48, .06); text-decoration: none; }
+
+  .btn--wpp { background: var(--color-wpp); color: #fff; font-size: 15px; padding: 15px 28px; }
+  .btn--wpp:hover {
+    background: var(--color-wpp-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(37, 211, 102, .35);
+    text-decoration: none;
+  }
+
+  /* ── Badges ──────────────────────────────────────────────────── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start; /* nunca estica em flex-column */
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 30px;
+  }
+  .badge--coral { background: rgba(242, 139, 48, .75); color: #fff; }
+  .badge--white { background: rgba(255, 255, 255, .12); color: #fff; }
+
+  /* ── Títulos / labels de seção ───────────────────────────────── */
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--color-cta);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-text-main);
+  }
+  .section-title--white { color: #fff; }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--color-muted);
+    line-height: 1.7;
+    margin-top: 14px;
+  }
+  .section-sub--white { color: rgba(255, 255, 255, .7); }
+
+  /* ── Scroll reveal (ativado via IntersectionObserver no index) ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
 }
 
 /*
-  @layer utilities — classes atômicas específicas deste site.
-  Use quando a classe faz uma coisa só.
+  @layer utilities — atômicas específicas deste site (vazio por enquanto).
 */
 @layer utilities {
 }

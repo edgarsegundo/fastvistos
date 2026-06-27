@@ -1,0 +1,132 @@
+---
+/**
+ * Empresas — trust block + marquee animado de logos (direita → esquerda, loop infinito).
+ * Conteúdo/ícone do design original (Adobe export). Marquee: 22s linear, pausa no hover, fade lateral.
+ *
+ * ⚠️ LOGOS PARCEIROS FALTANDO — placeholders "Empresa A..H" (decisão acordada).
+ * Substituir .logo-placeholder pelos logos reais (SVG/WebP) quando disponíveis.
+ */
+import { siteConfig } from '../site-config.ts';
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+
+const placeholders = ['Empresa A', 'Empresa B', 'Empresa C', 'Empresa D', 'Empresa E', 'Empresa F', 'Empresa G', 'Empresa H'];
+---
+
+<div class="empresas" aria-labelledby="empresas-title">
+
+  <!-- Bloco qualitativo -->
+  <div class="wrap">
+    <div class="empresas__trust-block reveal">
+      <div class="empresas__trust-icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="empresas__trust-text">
+        <h2 class="empresas__trust-title" id="empresas-title">Centenas de empresas da Região Metropolitana de Campinas já contratam pelo Emprego Aqui</h2>
+        <p class="empresas__trust-sub">Comércios, restaurantes, clínicas, serviços e indústrias — de Campinas a Vinhedo, de Sumaré a Valinhos. Empresas de todos os tamanhos que precisam contratar rápido, sem burocracia.</p>
+      </div>
+      <div class="empresas__trust-cta">
+        <a href={whatsappUrl} class="btn btn--ghost-coral" target="_blank" rel="noopener" aria-label="Criar currículo grátis agora">
+          Quero me candidatar agora
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee de logos -->
+  <div class="marquee-wrap" aria-label="Logos de empresas parceiras" role="img">
+    <div class="marquee-track">
+      <div class="marquee-inner">
+        {placeholders.map((p) => <div class="logo-placeholder"><span>{p}</span></div>)}
+      </div>
+      <div class="marquee-inner" aria-hidden="true">
+        {placeholders.map((p) => <div class="logo-placeholder"><span>{p}</span></div>)}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .empresas { background: var(--color-surface); padding: 48px 0 0; border-top: 1px solid rgba(30, 34, 55, .07); overflow: hidden; }
+
+  /* Card branco do bloco qualitativo */
+  .empresas__trust-block {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 40px 48px;
+    border: 1px solid rgba(30, 34, 55, .08);
+    box-shadow: var(--shadow-sm);
+  }
+  .empresas__trust-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(242, 139, 48, .1);
+    color: var(--color-cta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .empresas__trust-text { flex: 1; min-width: 0; }
+  .empresas__trust-title { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--color-text-main); line-height: 1.3; margin-bottom: 8px; }
+  .empresas__trust-sub { font-size: 14px; color: var(--color-muted); line-height: 1.65; }
+  .empresas__trust-cta { flex-shrink: 0; }
+
+  /* Marquee */
+  .marquee-wrap { width: 100%; overflow: hidden; position: relative; margin-top: 36px; padding-bottom: 48px; }
+  .marquee-wrap::before,
+  .marquee-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .marquee-wrap::before { left: 0; background: linear-gradient(90deg, var(--color-surface), transparent); }
+  .marquee-wrap::after { right: 0; background: linear-gradient(-90deg, var(--color-surface), transparent); }
+  .marquee-track { display: flex; width: max-content; }
+  .marquee-inner { display: flex; align-items: center; gap: 20px; padding: 0 10px; animation: marquee 22s linear infinite; }
+  .marquee-wrap:hover .marquee-inner { animation-play-state: paused; }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+  }
+
+  .logo-placeholder {
+    width: 120px;
+    height: 52px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid rgba(30, 34, 55, .08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: box-shadow .2s;
+  }
+  .logo-placeholder:hover { box-shadow: 0 4px 16px rgba(30, 34, 55, .1); }
+  .logo-placeholder span {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  @media (max-width: 860px) {
+    .empresas__trust-block { flex-direction: column; text-align: center; padding: 32px 24px; gap: 20px; }
+    .empresas__trust-cta .btn { width: 100%; justify-content: center; }
+  }
+</style>

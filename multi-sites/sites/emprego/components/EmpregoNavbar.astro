@@ -1,0 +1,115 @@
+---
+/**
+ * Navbar — Emprego Aqui LP M3 (ASA Propaganda)
+ * Fixa no topo, glassmorphism com blur. Logo SVG + CTA coral.
+ * Breakpoints: links de texto somem em ≤600px; "Para empresas" some em ≤420px.
+ */
+import { siteConfig } from '../site-config.ts';
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+---
+
+<nav class="navbar" role="navigation" aria-label="Menu principal">
+  <div class="navbar__inner wrap">
+    <a href="/" class="navbar__logo" aria-label="Emprego Aqui - página inicial">
+      <img
+        src="/assets/images/v2/emprego-aqui-logo.svg"
+        alt="Emprego Aqui"
+        class="navbar__logo-img"
+        width="180"
+        height="44"
+      />
+    </a>
+
+    <div class="navbar__cta">
+      <a href="#como-funciona" class="navbar__link">Como funciona</a>
+      <a href="#para-empresas" class="navbar__link navbar__link--ghost">Para empresas</a>
+      <a
+        href={whatsappUrl}
+        class="navbar__btn"
+        target="_blank"
+        rel="noopener"
+        aria-label="Criar currículo grátis pelo WhatsApp"
+      >
+        Criar currículo grátis
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(30, 34, 55, .96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .navbar__logo { display: inline-flex; align-items: center; }
+  .navbar__logo-img { height: 44px; width: auto; display: block; }
+
+  .navbar__cta { display: flex; align-items: center; gap: 10px; }
+
+  .navbar__link {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .65);
+    transition: color .2s;
+    padding: 6px 0;
+    text-decoration: none;
+  }
+  .navbar__link:hover { color: #fff; }
+
+  /* "Para empresas" — variante ghost */
+  .navbar__link--ghost {
+    color: rgba(255, 255, 255, .85);
+    border: 1.5px solid rgba(255, 255, 255, .35);
+    padding: 7px 16px;
+    border-radius: 30px;
+    transition: all .2s;
+  }
+  .navbar__link--ghost:hover {
+    border-color: rgba(255, 255, 255, .75);
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+  }
+
+  .navbar__btn {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: var(--color-cta);
+    color: #fff;
+    transition: all .2s;
+    box-shadow: 0 2px 12px rgba(242, 139, 48, .35);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .navbar__btn:hover { background: var(--color-cta-dark); }
+
+  /* Mobile: oculta links de texto, mantém botão CTA */
+  @media (max-width: 600px) {
+    .navbar__link { display: none; }
+  }
+  @media (max-width: 420px) {
+    .navbar__link--ghost { display: none; }
+  }
+</style>

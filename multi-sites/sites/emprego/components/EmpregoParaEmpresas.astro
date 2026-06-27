@@ -1,0 +1,299 @@
+---
+/**
+ * Para Empresas (B2B) — seção fullscreen com imagem de fundo + overlay.
+ * Desktop: grid headline (esq) + card glassmorphism (dir). Mobile ≤900px: 2 blocos empilhados.
+ */
+import { siteConfig } from '../site-config.ts';
+
+
+const { telephone, message, url } = siteConfig.site.whatsapp;
+const whatsappUrl =
+  `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+
+const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
+---
+
+<section class="b2b" id="para-empresas" aria-labelledby="b2b-title">
+  <div
+    class="b2b__bg"
+    id="b2bBg"
+    aria-hidden="true"
+    style="background-image: url('/assets/images/v2/emprego-aqui-empresas-bg-secao.webp')"
+  ></div>
+  <div class="b2b__overlay" aria-hidden="true"></div>
+
+  <div class="wrap b2b__inner">
+
+    <div class="b2b__left reveal">
+      <p class="section-label">Para empresas</p>
+      <h2 class="b2b__hero-title" id="b2b-title">
+        Quando você precisa<br>contratar, precisa<br><em class="b2b__em">pra ontem.</em>
+      </h2>
+      <p class="b2b__hero-sub">
+        Sem filtrar 200 currículos. Sem marcar 3 entrevistas.<br>
+        Sem esperar enquanto a equipe fica sobrecarregada.
+      </p>
+    </div>
+
+    <div class="b2b__card reveal reveal-delay-1">
+
+      <div class="b2b__card-img-wrap">
+        <img
+          src="/assets/images/v2/emprego-aqui-empresas-foto-rh.webp"
+          alt="Empresária analisando candidatos disponíveis na região"
+          class="b2b__card-img"
+          loading="lazy"
+          width="420"
+          height="200"
+        />
+        <div class="b2b__card-img-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Candidatos da sua cidade
+        </div>
+      </div>
+
+      <div class="b2b__card-body">
+        <div class="b2b__free-banner">
+          <div class="b2b__free-banner__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div>
+          <div class="b2b__free-banner__text">
+            <div class="b2b__free-banner__title">Experimente grátis agora</div>
+            <div class="b2b__free-banner__sub">Acesse os <strong>5 primeiros currículos</strong> sem pagar nada. Sem cadastro, sem cartão.</div>
+          </div>
+        </div>
+
+        <ul class="b2b__list" role="list">
+          <li class="b2b__item">
+            <div class="b2b__check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <p class="b2b__item-text"><strong>Veja quem está disponível agora</strong> — candidatos da sua região, prontos a começar</p>
+          </li>
+          <li class="b2b__item">
+            <div class="b2b__check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <p class="b2b__item-text"><strong>Onde mora, quanto espera ganhar, quando pode começar</strong> — tudo antes de ligar</p>
+          </li>
+          <li class="b2b__item">
+            <div class="b2b__check" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <p class="b2b__item-text"><strong>Fala direto no WhatsApp</strong> — sem intermediário, sem burocracia</p>
+          </li>
+        </ul>
+
+        <div class="b2b__stat-row">
+          <div class="b2b__stat">
+            <div class="b2b__stat-value">2.500+</div>
+            <div class="b2b__stat-label">Empresas</div>
+          </div>
+          <div class="b2b__stat">
+            <div class="b2b__stat-value">10k+</div>
+            <div class="b2b__stat-label">Candidatos</div>
+          </div>
+        </div>
+
+        <p class="b2b__tagline">"Emprego Aqui — quando é pra agora."</p>
+
+        <div class="b2b__actions">
+          <a href={searchUrl} class="btn btn--coral" target="_blank" rel="noopener">Quero contratar agora</a>
+          <!-- <a href={whatsappUrl} class="btn btn--ghost" target="_blank" rel="noopener">Falar com a equipe</a> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .b2b { position: relative; overflow: hidden; min-height: 680px; display: flex; align-items: center; padding: 100px 0; }
+  .b2b__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+  .b2b:hover .b2b__bg { transform: scale(1); }
+  .b2b__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(100deg, rgba(20, 23, 42, .92) 0%, rgba(20, 23, 42, .78) 45%, rgba(20, 23, 42, .35) 100%);
+  }
+  .b2b__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .b2b__left .badge { margin-bottom: 16px; }
+  .b2b__hero-title { font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 56px); font-weight: 800; line-height: 1.08; color: #fff; margin: 12px 0 20px; }
+  .b2b__em { font-style: normal; color: var(--color-cta); }
+  .b2b__hero-sub { font-size: 14px; color: rgba(255, 255, 255, .65); line-height: 1.7; max-width: 520px; }
+
+  /* Card glassmorphism */
+  .b2b__card {
+    background: rgba(20, 23, 42, .82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, .45);
+  }
+  .b2b__card-img-wrap { position: relative; overflow: hidden; }
+  .b2b__card-img { width: 100%; height: 200px; object-fit: cover; transition: transform .4s ease; display: block; }
+  .b2b__card:hover .b2b__card-img { transform: scale(1.04); }
+  .b2b__card-img-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(242, 139, 48, .9);
+    padding: 5px 12px;
+    border-radius: 30px;
+    letter-spacing: .04em;
+    backdrop-filter: blur(4px);
+  }
+
+  .b2b__card-body { padding: 24px 24px 28px; }
+
+  /* Banner "Experimente grátis" */
+  .b2b__free-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, rgba(242, 139, 48, .18) 0%, rgba(242, 139, 48, .08) 100%);
+    border: 1px solid rgba(242, 139, 48, .35);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .b2b__free-banner__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(242, 139, 48, .2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-cta);
+    flex-shrink: 0;
+  }
+  .b2b__free-banner__title { font-family: var(--font-display); font-size: 14px; font-weight: 800; color: var(--color-cta); margin-bottom: 3px; }
+  .b2b__free-banner__sub { font-size: 12px; color: rgba(255, 255, 255, .6); line-height: 1.5; }
+  .b2b__free-banner__sub strong { color: #fff; font-weight: 700; }
+
+  /* Lista com checks */
+  .b2b__list { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 13px; }
+  .b2b__item { display: flex; align-items: flex-start; gap: 12px; }
+  .b2b__check { width: 22px; height: 22px; border-radius: 50%; background: rgba(242, 139, 48, .18); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .b2b__item-text { font-size: 14px; color: rgba(255, 255, 255, .72); line-height: 1.55; margin: 0; }
+  .b2b__item-text strong { color: #fff; font-family: var(--font-display); font-weight: 700; }
+
+  /* Stats */
+  .b2b__stat-row { display: flex; gap: 12px; margin-bottom: 16px; }
+  .b2b__stat { flex: 1; background: rgba(255, 255, 255, .06); border-radius: 10px; padding: 16px 12px; text-align: center; border: 1px solid rgba(255, 255, 255, .08); }
+  .b2b__stat-value { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--color-cta); line-height: 1; margin-bottom: 4px; }
+  .b2b__stat-label { font-size: 11px; color: rgba(255, 255, 255, .4); text-transform: uppercase; font-family: var(--font-display); font-weight: 600; letter-spacing: .05em; }
+
+  /* Tagline */
+  .b2b__tagline {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .35);
+    font-style: italic;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    letter-spacing: .01em;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, .07);
+  }
+
+  .b2b__actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .b2b__actions .btn { font-size: 14px; padding: 13px 22px; }
+
+  /* ── MOBILE: 2 blocos empilhados ── */
+  @media (max-width: 900px) {
+    .b2b { min-height: auto; display: block; padding: 0; }
+    .b2b__inner { display: flex; flex-direction: column; gap: 0; padding: 0; max-width: none; }
+
+    .b2b__left {
+      position: relative;
+      z-index: 2;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 24px 40px;
+      text-align: left;
+    }
+    .b2b__hero-title { font-size: clamp(26px, 7vw, 38px); margin-bottom: 14px; }
+    .b2b__hero-sub { font-size: 14px; line-height: 1.65; max-width: none; }
+
+    .b2b__card {
+      position: relative;
+      z-index: 3;
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, .1);
+      background: var(--color-navy-mid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .b2b__card-img { height: 240px; border-radius: 0; object-position: center 25%; }
+    .b2b__free-banner { padding: 12px 14px; gap: 10px; }
+    .b2b__free-banner__icon { width: 32px; height: 32px; }
+    .b2b__free-banner__sub { font-size: 11px; }
+    .b2b__actions { flex-direction: column; }
+    .b2b__actions .btn { width: 100%; justify-content: center; }
+
+    /* bg + overlay mantêm inset:0 + cover; a ALTURA é definida por JS
+       (= altura do .b2b__left), igual ao original. Sem isso, o cover numa
+       seção empilhada alta dá zoom e mostra só o centro da foto. */
+    .b2b__bg { background-position: 55% center; }
+    .b2b__overlay {
+      background: linear-gradient(to top, rgba(20, 23, 42, .92) 0%, rgba(20, 23, 42, .58) 75%, rgba(20, 23, 42, .28) 100%);
+    }
+  }
+  @media (max-width: 480px) {
+    .b2b__left { min-height: 360px; padding: 40px 20px 32px; }
+    .b2b__hero-title { font-size: 26px; }
+    .b2b__card-img { height: 200px; }
+  }
+</style>
+
+<script>
+  /* B2B mobile: a faixa de imagem (bg+overlay) recebe a altura exata do
+     .b2b__left, para o `cover` recortar a foto no tamanho do texto — sem
+     zoom. Idêntico ao comportamento do design original. */
+  (function () {
+    const ajustar = () => {
+      const left = document.querySelector<HTMLElement>('.b2b__left');
+      const bg = document.getElementById('b2bBg');
+      const overlay = document.querySelector<HTMLElement>('.b2b__overlay');
+      if (!left || !bg) return;
+      if (window.innerWidth > 900) {
+        bg.style.height = '';
+        if (overlay) overlay.style.height = '';
+        return;
+      }
+      const h = left.offsetHeight + 'px';
+      bg.style.height = h;
+      if (overlay) overlay.style.height = h;
+    };
+    ajustar();
+    window.addEventListener('resize', ajustar);
+    window.addEventListener('load', ajustar);
+  })();
+</script>
