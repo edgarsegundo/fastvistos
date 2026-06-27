@@ -1,7 +1,7 @@
 {
-    "name": "Emprego Aqui – Plataforma de Marketplace de Empregos",
-    "short_name": "Emprego Aqui",
-    "description": "O Emprego Aqui é uma plataforma de marketplace de empregos, onde você publica gratuitamente seu currículo e empresas podem encontrar profissionais como você.",
+    "name": "Fast Vistos – Agência de Vistos e Turismo",
+    "short_name": "Fast Vistos",
+    "description": "Site da Fast Vistos: assessoria ágil e sem burocracia para vistos, especialmente americanos (B1/B2), eTA Canadá e México.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -17,4 +17,3 @@
     "categories": ["viagens", "serviços", "negócios", "vistos"],
     "lang": "pt-BR"
 }
-
