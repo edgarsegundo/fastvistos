@@ -14,6 +14,8 @@ const whatsappUrl =
 const videoId = 'wfUA5ZJstgM';
 // maxresdefault: 1280x720 (16:9, nítida) — o vídeo foi enviado em HD.
 const thumbUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+// Fallback caso o YouTube ainda não tenha processado a versão HD da thumb.
+const thumbFallback = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 ---
 
 <link rel="preconnect" href="https://www.youtube-nocookie.com">
@@ -45,11 +47,13 @@ const thumbUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
       >
         <img
           src={thumbUrl}
+          data-fallback={thumbFallback}
           alt="Vídeo demonstrativo do Emprego Aqui"
           width="1280"
           height="720"
           decoding="async"
           loading="lazy"
+          onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.removeAttribute('data-fallback');}"
         />
         <span class="play-button" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
