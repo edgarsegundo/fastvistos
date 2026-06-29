@@ -15,12 +15,7 @@ const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
 ---
 
 <section class="b2b" id="para-empresas" aria-labelledby="b2b-title">
-  <div
-    class="b2b__bg"
-    id="b2bBg"
-    aria-hidden="true"
-    style="background-image: url('/assets/images/v2/emprego-aqui-empresas-bg-secao.webp')"
-  ></div>
+  <div class="b2b__bg" id="b2bBg" aria-hidden="true"></div>
   <div class="b2b__overlay" aria-hidden="true"></div>
 
   <div class="wrap b2b__inner">
@@ -107,11 +102,15 @@ const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
   .b2b__bg {
     position: absolute;
     inset: 0;
+    background-image: url('/assets/images/v2/emprego-aqui-empresas-bg-secao.webp');
     background-size: cover;
     background-position: center;
     z-index: 0;
     transform: scale(1.04);
     transition: transform 8s ease;
+  }
+  @media (max-width: 860px) {
+    .b2b__bg { background-image: url('/assets/images/v2/emprego-aqui-empresas-bg-secao-mobile.webp'); }
   }
   .b2b:hover .b2b__bg { transform: scale(1); }
   .b2b__overlay {

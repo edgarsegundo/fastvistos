@@ -18,11 +18,7 @@ const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
 ---
 
 <section class="cta-final" aria-labelledby="cta-final-title">
-  <div
-    class="cta-final__bg"
-    aria-hidden="true"
-    style="background-image: url('/assets/images/v2/emprego-aqui-cta-bg-final.webp')"
-  ></div>
+  <div class="cta-final__bg" aria-hidden="true"></div>
   <div class="cta-final__overlay" aria-hidden="true"></div>
 
   <div class="wrap cta-final__inner">
@@ -52,11 +48,15 @@ const searchUrl = 'https://admin.empregoaqui.com.br/api/posts/search-page/';
   .cta-final__bg {
     position: absolute;
     inset: 0;
+    background-image: url('/assets/images/v2/emprego-aqui-cta-bg-final.webp');
     background-size: cover;
     background-position: 65% 30%;
     z-index: 0;
     transform: scale(1.04);
     transition: transform 8s ease;
+  }
+  @media (max-width: 860px) {
+    .cta-final__bg { background-image: url('/assets/images/v2/emprego-aqui-cta-bg-final-mobile.webp'); }
   }
   .cta-final:hover .cta-final__bg { transform: scale(1); }
   .cta-final__overlay {
