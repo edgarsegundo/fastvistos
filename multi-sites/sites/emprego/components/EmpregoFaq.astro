@@ -152,8 +152,10 @@ const faqs = [
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 700;
-    /* coral escuro: texto sobre o fundo claro precisa de 4,5:1 (o coral vibrante dá 2,47:1) */
-    color: var(--color-cta-strong);
+    /* Coral mais escuro que o --color-cta-strong: este link fica sobre um fundo
+       creme (coral .08 sobre branco), não branco puro. Nesse creme o #B25C08 dá
+       4,43:1 (reprova); #A8560A sobe para ~4,9:1 (AA). */
+    color: #A8560A;
     background: rgba(242, 139, 48, .08);
     border: 1px solid rgba(242, 139, 48, .25);
     padding: 9px 16px;
