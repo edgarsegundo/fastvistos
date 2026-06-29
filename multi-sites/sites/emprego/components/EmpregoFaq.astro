@@ -136,7 +136,9 @@ const faqs = [
     overflow: hidden;
     transition: max-height .3s ease, padding .3s ease;
     font-size: 15px;
-    color: var(--color-muted);
+    /* #565c6e em vez de --color-muted (#8a90a2): sobe o contraste sobre o
+       branco de 3,19:1 para ~6:1 (AA). Cor de apoio escura, mantém a hierarquia. */
+    color: #565c6e;
     line-height: 1.7;
     padding: 0 24px;
   }
@@ -150,7 +152,8 @@ const faqs = [
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 700;
-    color: var(--color-cta);
+    /* coral escuro: texto sobre o fundo claro precisa de 4,5:1 (o coral vibrante dá 2,47:1) */
+    color: var(--color-cta-strong);
     background: rgba(242, 139, 48, .08);
     border: 1px solid rgba(242, 139, 48, .25);
     padding: 9px 16px;

@@ -24,8 +24,10 @@
   --color-bg-dark: #1e2237;     /* azul base — navbar, números, footer, overlays; contrato do body */
   --color-navy-mid: #2c3154;    /* azul médio — strip, card B2B mobile */
   --color-navy-card: #252a42;   /* azul card — painéis escuros */
-  --color-cta: #F28B30;         /* coral — botões, badges, labels, destaques */
-  --color-cta-dark: #d4751f;    /* coral hover */
+  --color-cta: #F28B30;         /* coral — badges, labels e textos sobre fundo ESCURO (mantém contraste lá) */
+  --color-cta-dark: #d4751f;    /* coral hover (badges/labels) */
+  --color-cta-strong: #B25C08;      /* coral escuro — preenchimento de botão + texto coral sobre fundo CLARO; passa 4,5:1 com branco */
+  --color-cta-strong-dark: #8f4906; /* hover do coral escuro */
   --color-text-main: #1e2237;   /* texto em fundos claros; contrato do body */
   --color-muted: #8a90a2;       /* texto secundário / apoio */
   --color-surface: #f4f5f8;     /* fundo claro alternado (porque, faq, depo) */
@@ -100,9 +102,9 @@
     white-space: nowrap; /* rótulo sempre em uma linha (igual ao original) */
   }
 
-  .btn--coral { background: var(--color-cta); color: #fff; }
+  .btn--coral { background: var(--color-cta-strong); color: #fff; }
   .btn--coral:hover {
-    background: var(--color-cta-dark);
+    background: var(--color-cta-strong-dark);
     transform: translateY(-1px);
     box-shadow: 0 8px 24px rgba(242, 139, 48, .35);
     text-decoration: none;
@@ -124,7 +126,7 @@
 
   .btn--ghost-coral {
     background: transparent;
-    color: var(--color-cta);
+    color: var(--color-cta-strong); /* texto sobre fundo claro (card branco) → 4,5:1 */
     border: 2px solid rgba(242, 139, 48, .4);
   }
   .btn--ghost-coral:hover { background: rgba(242, 139, 48, .06); text-decoration: none; }
@@ -161,7 +163,10 @@
     font-weight: 700;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: var(--color-cta);
+    /* Padrão = coral escuro, pois a maioria das seções tem fundo CLARO (4,5:1).
+       Seções de fundo escuro (Vídeo, Para Empresas) reativam o coral vibrante
+       no próprio <style> scoped. */
+    color: var(--color-cta-strong);
     margin-bottom: 12px;
   }
 
