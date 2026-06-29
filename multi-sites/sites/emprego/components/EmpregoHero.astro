@@ -117,7 +117,7 @@ const slides = [
     background-position: center;
     opacity: 0;
     transition: opacity .8s ease;
-    filter: brightness(.92); /* escurece levemente a foto p/ legibilidade */
+    filter: brightness(1.0);
   }
   .hero__slide-bg.active { opacity: 1; }
 
@@ -140,9 +140,9 @@ const slides = [
     z-index: 1;
     background: linear-gradient(
       105deg,
-      rgba(20, 23, 42, .85) 0%,
-      rgba(20, 23, 42, .65) 45%,
-      rgba(20, 23, 42, .30) 100%
+      rgba(20, 23, 42, .18) 0%,
+      rgba(20, 23, 42, .08) 45%,
+      rgba(20, 23, 42, .00) 100%
     );
   }
 
@@ -267,7 +267,7 @@ const slides = [
     .hero__title { font-size: clamp(28px, 8vw, 44px); }
     .hero__note { gap: 4px; font-size: 11px; }
     .hero__security { font-size: 11px; }
-    .hero__slide-bg { background-position: 60% center; filter: brightness(.82); } /* foto mais escura só no mobile */
+    .hero__slide-bg { background-position: 60% center; filter: brightness(1.0); }
     /* texto é centralizado/full-width no mobile → overlay vertical protege em toda a largura */
     .hero__overlay {
       background: linear-gradient(
