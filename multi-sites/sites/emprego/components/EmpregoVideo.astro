@@ -18,8 +18,11 @@ const thumbUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
 const thumbFallback = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 ---
 
-<link rel="preconnect" href="https://www.youtube-nocookie.com">
-<link rel="preconnect" href="https://i.ytimg.com">
+<!-- dns-prefetch (e não preconnect) de propósito: o player só carrega no clique,
+     então não vale gastar uma das ~4 conexões preconnect recomendadas pelo
+     Lighthouse com um recurso abaixo da dobra. Mantém só o DNS resolvido. -->
+<link rel="dns-prefetch" href="https://www.youtube-nocookie.com">
+<link rel="dns-prefetch" href="https://i.ytimg.com">
 
 <section class="video-sec" aria-labelledby="video-title">
   <div class="wrap video-sec__inner reveal">

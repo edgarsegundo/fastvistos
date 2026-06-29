@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https%3A%2F%2Fempregoaqui.com.br&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo\" -o /private/tmp/claude-501/-Users-edgar-Repos-fastvistos/18873896-615f-48cf-8f5b-2ac042422426/scratchpad/psi.json -w \"%{http_code}\\\\n\")",
+      "WebFetch(domain:pagespeed.web.dev)",
+      "Bash(curl -sL \"https://empregoaqui.com.br\" -o live.html -w \"HTTP %{http_code} | size %{size_download} bytes | time %{time_total}s\\\\n\")",
+      "Bash(curl -s \"https://empregoaqui.com.br/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp\" -o /dev/null -w \"slide-1: %{size_download} bytes, type %{content_type}\\\\n\")",
+      "Bash(timeout 180 npx astro check)",
+      "Bash(npx astro *)"
+    ]
+  }
+}
