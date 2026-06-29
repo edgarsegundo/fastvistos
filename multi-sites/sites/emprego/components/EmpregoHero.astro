@@ -117,7 +117,7 @@ const slides = [
     background-position: center;
     opacity: 0;
     transition: opacity .8s ease;
-    filter: brightness(1.0);
+    filter: brightness(.92); /* desktop/tablet: original */
   }
   .hero__slide-bg.active { opacity: 1; }
 
@@ -140,9 +140,9 @@ const slides = [
     z-index: 1;
     background: linear-gradient(
       105deg,
-      rgba(20, 23, 42, .18) 0%,
-      rgba(20, 23, 42, .08) 45%,
-      rgba(20, 23, 42, .00) 100%
+      rgba(20, 23, 42, .85) 0%,
+      rgba(20, 23, 42, .65) 45%,
+      rgba(20, 23, 42, .30) 100%
     );
   }
 
