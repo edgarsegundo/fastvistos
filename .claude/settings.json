@@ -6,7 +6,10 @@
       "Bash(curl -sL \"https://empregoaqui.com.br\" -o live.html -w \"HTTP %{http_code} | size %{size_download} bytes | time %{time_total}s\\\\n\")",
       "Bash(curl -s \"https://empregoaqui.com.br/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp\" -o /dev/null -w \"slide-1: %{size_download} bytes, type %{content_type}\\\\n\")",
       "Bash(timeout 180 npx astro check)",
-      "Bash(npx astro *)"
+      "Bash(npx astro *)",
+      "Bash(curl -sL \"https://empregoaqui.com.br\" -o live2.html)",
+      "Bash(grep -oiE 'googletagmanager[^<]{0,200}' live2.html)",
+      "Bash(ffmpeg -version)"
     ]
   }
 }

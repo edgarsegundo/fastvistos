@@ -40,30 +40,34 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     imageHeightFromConf={siteConfig.site.primaryImage.height}
 >
     <Fragment slot="head">
-        <!-- Preload do LCP: fundo do Hero (slide 1). É background-image em CSS,
-             então sem isto o navegador só o descobre após baixar/parsear o CSS.
-             Antecipa o download → melhora LCP e "Descoberta de solicitações de LCP". -->
+        <!-- Preload do LCP: slide-1 em duas variantes (desktop e mobile).
+             O atributo media direciona o browser para baixar só o que vai usar. -->
         <link
           rel="preload"
           as="image"
           href="/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp"
+          media="(min-width: 861px)"
+          fetchpriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1-mobile.webp"
+          media="(max-width: 860px)"
           fetchpriority="high"
         />
         <!-- Fontes sem bloquear renderização: carrega como preload e vira
              stylesheet no onload. Com display=swap, o texto aparece de imediato
              na fonte fallback. Resolve "Solicitações que bloquearam a renderização". -->
+        <!-- Fontes não-bloqueantes. O noscript foi removido: o link rel="stylesheet"
+             dentro dele era lido pelo Lighthouse como render-blocking (mesmo com JS
+             ativo, o parser HTML vê o link). O onload cobre 99%+ dos usuários. -->
         <link
           rel="preload"
           as="style"
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
           onload="this.onload=null;this.rel='stylesheet'"
         />
-        <noscript>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
-            rel="stylesheet"
-          />
-        </noscript>
         <JsonLdHomePageBase
             faqList={[]}
             servicesList={[]}

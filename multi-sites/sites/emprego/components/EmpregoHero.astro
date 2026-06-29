@@ -22,11 +22,8 @@ const slides = [
 
   <!-- Slider de fundo fullscreen -->
   <div class="hero__bg-slider" aria-hidden="true">
-    {slides.map((src, i) => (
-      <div
-        class:list={['hero__slide-bg', { active: i === 0 }]}
-        style={`background-image: url('${src}')`}
-      />
+    {slides.map((_, i) => (
+      <div class:list={['hero__slide-bg', `hero__slide-bg--${i}`, { active: i === 0 }]} />
     ))}
   </div>
   <div class="hero__overlay" aria-hidden="true"></div>
@@ -123,6 +120,18 @@ const slides = [
     filter: brightness(.92); /* escurece levemente a foto p/ legibilidade */
   }
   .hero__slide-bg.active { opacity: 1; }
+
+  /* Imagens de fundo — desktop (≥861px) */
+  .hero__slide-bg--0 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp'); }
+  .hero__slide-bg--1 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-2.webp'); }
+  .hero__slide-bg--2 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-3.webp'); }
+
+  /* Mobile: variante 800px — 75% menor, mesma qualidade visual na tela pequena */
+  @media (max-width: 860px) {
+    .hero__slide-bg--0 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1-mobile.webp'); }
+    .hero__slide-bg--1 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-2-mobile.webp'); }
+    .hero__slide-bg--2 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-3-mobile.webp'); }
+  }
 
   /* Overlay gradiente */
   .hero__overlay {
