@@ -53,7 +53,14 @@ const steps = [
           <div class="step__img-wrap" aria-hidden="true">
             <span class="step__badge">{i + 1}</span>
             <picture>
-              <source media="(max-width: 600px)" srcset={`${base}${step.img}-mobile.webp`} />
+              {/* Mobile ≤600px: srcset com w-descriptors → browser escolhe por DPR.
+                  -sm (350px) para telas normais, -mobile (600px) para telas 2x+.
+                  sizes="245px" = largura real de exibição no mobile (medida pelo Lighthouse). */}
+              <source
+                media="(max-width: 600px)"
+                srcset={`${base}${step.img}-mobile-sm.webp 350w, ${base}${step.img}-mobile.webp 600w`}
+                sizes="245px"
+              />
               <img
                 src={`${base}${step.img}.webp`}
                 alt={step.alt}

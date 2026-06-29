@@ -12,10 +12,10 @@ const whatsappUrl =
   `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
 
 const videoId = 'wfUA5ZJstgM';
-// maxresdefault: 1280x720 (16:9, nítida) — o vídeo foi enviado em HD.
-const thumbUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
-// Fallback caso o YouTube ainda não tenha processado a versão HD da thumb.
-const thumbFallback = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+// maxresdefault (1280×720) para desktop; hqdefault (480×360) para mobile.
+// Lighthouse flagou o maxresdefault servido a 637px — hqdefault (~15 KB) é suficiente.
+const thumbDesktop = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+const thumbMobile  = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 ---
 
 <!-- dns-prefetch (e não preconnect) de propósito: o player só carrega no clique,
@@ -48,16 +48,22 @@ const thumbFallback = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
         data-video-id={videoId}
         aria-label="Reproduzir vídeo: Do WhatsApp ao emprego"
       >
-        <img
-          src={thumbUrl}
-          data-fallback={thumbFallback}
-          alt="Vídeo demonstrativo do Emprego Aqui"
-          width="1280"
-          height="720"
-          decoding="async"
-          loading="lazy"
-          onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.removeAttribute('data-fallback');}"
-        />
+        <picture>
+          {/* Mobile ≤860px: hqdefault (480×360, ~15 KB).
+              Desktop: maxresdefault (1280×720, ~120 KB) — nítida na tela grande.
+              onerror no <img> garante fallback se maxresdefault não existir ainda. */}
+          <source media="(max-width: 860px)" srcset={thumbMobile} width="480" height="360" />
+          <img
+            src={thumbDesktop}
+            data-fallback={thumbMobile}
+            alt="Vídeo demonstrativo do Emprego Aqui"
+            width="1280"
+            height="720"
+            decoding="async"
+            loading="lazy"
+            onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.removeAttribute('data-fallback');}"
+          />
+        </picture>
         <span class="play-button" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </span>
