@@ -1,14 +1,23 @@
 ---
 /**
  * Seção de Vídeo — texto à esquerda + player à direita.
- * Vídeo autoplay/loop/muted; botão de toggle de som.
+ * Embed do YouTube com lazy-loading (facade): carrega só a thumbnail do CDN
+ * do YouTube até o clique, então injeta o iframe. Otimizado p/ Lighthouse.
+ * Ref.: docs/*Manual-Vídeo-YouTube-Site.md
+ * Seção abaixo da dobra → usa loading="lazy" e SEM fetchpriority="high".
  */
 import { siteConfig } from '../site-config.ts';
 const { telephone, message, url } = siteConfig.site.whatsapp;
 const whatsappUrl =
   `${url}${telephone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
 
+const videoId = 'wfUA5ZJstgM';
+// maxresdefault: 1280x720 (16:9, nítida) — o vídeo foi enviado em HD.
+const thumbUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
 ---
+
+<link rel="preconnect" href="https://www.youtube-nocookie.com">
+<link rel="preconnect" href="https://i.ytimg.com">
 
 <section class="video-sec" aria-labelledby="video-title">
   <div class="wrap video-sec__inner reveal">
@@ -27,22 +36,25 @@ const whatsappUrl =
     </div>
 
     <div class="video-sec__player">
-      <div class="video-real-wrap">
-        <video
-          id="heroVideo"
-          class="video-real"
-          src="/assets/images/hero/hero-desktop.webm"
-          autoplay
-          loop
-          muted
-          playsinline
-          aria-label="Vídeo demonstrativo do Emprego Aqui"
-        ></video>
-        <button class="video-sound-btn" id="videoSoundBtn" type="button" aria-label="Ligar som do vídeo">
-          <svg class="icon-muted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-          <svg class="icon-unmuted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
-        </button>
-      </div>
+      <button
+        class="video-thumb"
+        id="videoThumb"
+        type="button"
+        data-video-id={videoId}
+        aria-label="Reproduzir vídeo: Do WhatsApp ao emprego"
+      >
+        <img
+          src={thumbUrl}
+          alt="Vídeo demonstrativo do Emprego Aqui"
+          width="1280"
+          height="720"
+          decoding="async"
+          loading="lazy"
+        />
+        <span class="play-button" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </button>
     </div>
 
   </div>
@@ -59,31 +71,37 @@ const whatsappUrl =
 
   .video-sec__cta { margin-top: 28px; }
 
-  /* Player */
+  /* Player (facade do YouTube) */
   .video-sec__player { width: 100%; }
-  .video-real-wrap {
+  .video-thumb {
     position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    aspect-ratio: 16 / 9;       /* zero CLS */
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow);
-    background: var(--color-bg-dark);
+    background: #000;
   }
-  .video-real {
+  .video-thumb img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
 
-  /* Botão de som */
-  .video-sound-btn {
+  /* Botão de play */
+  .video-thumb .play-button {
     position: absolute;
-    bottom: 14px;
-    right: 14px;
-    width: 44px;
-    height: 44px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    border: none;
-    cursor: pointer;
     background: rgba(20, 23, 42, .6);
     color: #fff;
     backdrop-filter: blur(6px);
@@ -91,12 +109,23 @@ const whatsappUrl =
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background .2s;
+    transition: background .2s, transform .2s;
   }
-  .video-sound-btn:hover { background: rgba(20, 23, 42, .85); }
-  .video-sound-btn .icon-unmuted { display: none; }
-  .video-sound-btn.is-on .icon-muted { display: none; }
-  .video-sound-btn.is-on .icon-unmuted { display: block; }
+  .video-thumb .play-button svg { margin-left: 4px; }
+  .video-thumb:hover .play-button {
+    background: rgba(20, 23, 42, .85);
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+
+  /* Iframe injetado após o clique */
+  .video-thumb iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
 
   /* ── MOBILE ── */
   @media (max-width: 860px) {
@@ -107,15 +136,23 @@ const whatsappUrl =
 
 <script>
   (function () {
-    const video = document.getElementById('heroVideo') as HTMLVideoElement | null;
-    const btn = document.getElementById('videoSoundBtn');
-    if (!video || !btn) return;
-    btn.addEventListener('click', () => {
-      video.muted = !video.muted;
-      const on = !video.muted;
-      btn.classList.toggle('is-on', on);
-      btn.setAttribute('aria-label', on ? 'Desligar som do vídeo' : 'Ligar som do vídeo');
-      if (on) video.play().catch(() => {});
+    const thumb = document.getElementById('videoThumb');
+    if (!thumb) return;
+    thumb.addEventListener('click', () => {
+      const id = thumb.getAttribute('data-video-id');
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+      iframe.title = 'Vídeo empregoaqui.com.br';
+      iframe.allow = 'autoplay; encrypted-media';
+      iframe.setAttribute('allowfullscreen', '');
+      // Estilos inline: o iframe é criado em runtime e não recebe o
+      // atributo de escopo do Astro, então o CSS .video-thumb iframe não
+      // se aplicaria a ele.
+      iframe.style.cssText =
+        'position:absolute;top:0;left:0;width:100%;height:100%;border:0;';
+      thumb.innerHTML = '';
+      thumb.appendChild(iframe);
     });
   })();
 </script>
