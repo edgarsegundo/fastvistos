@@ -44,3 +44,11 @@ DRY RUN concluído — 7 artigos seriam atualizados.
 - Roda a partir da raiz do projeto (onde fica o `.env`)
 - As imagens da galeria ficam na tabela `blog_image` — se a galeria estiver vazia o script avisa e encerra
 - O campo `image` do artigo recebe o path relativo da imagem (ex: `images/foo.webp`), igual ao que o editor visual usa
+
+## Como a imagem é escolhida
+
+1. **Pool de imagens** — o script carrega todas as imagens da tabela `blog_image` que têm um path válido. Se `--group=<nome>` for passado, filtra apenas as desse grupo; caso contrário usa tudo (hoje: 46 imagens nos grupos `visto-americano` e `disney-orlando`).
+
+2. **Sorteio aleatório** — para cada artigo sem imagem, uma imagem é escolhida via `Math.random()` independentemente dos outros artigos. O mesmo arquivo pode ser sorteado para mais de um artigo.
+
+3. **Path gravado** — o campo `image` do artigo recebe o path relativo da `blog_image` (ex: `images/stock-pexels-123.webp`), que é exatamente o mesmo formato que o editor visual grava quando você insere uma imagem manualmente.
