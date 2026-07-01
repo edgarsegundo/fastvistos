@@ -266,23 +266,51 @@ export default (BlogService) => {
   });
 
   // POST /execute-publish-script
+  //
+  // Runs publish-from-vps-v2.sh, which already tees its own full output to
+  // ~/deploy_logs/deploy_<site_id>_<timestamp>.log. We deliberately do NOT
+  // capture stdout here (spawn + stdio 'ignore' instead of exec()): exec()'s
+  // default 1MB combined stdout+stderr buffer was silently SIGTERM-ing the
+  // script mid-deploy for sites with enough images/build output to cross that
+  // limit (observed on fastvistos, ~1.05MB of rsync progress output) — the
+  // process died with zero error output, since Node kills it before the
+  // script can log anything about it. Only stderr is kept (capped) for
+  // diagnostics; success/failure is judged by the exit code alone.
   router.post('/execute-publish-script', async (req, res) => {
+    const { site_id } = req.body;
+    if (!site_id) {
+      return res.status(400).json({ success: false, error: 'site_id é obrigatório.' });
+    }
+    const scriptPath = '/home/edgar/Repos/fastvistos/publish-from-vps-v2.sh';
     try {
-      const { site_id } = req.body;
-      const { exec } = await import('child_process');
-      const scriptPath = '/home/edgar/Repos/fastvistos/publish-from-vps-v2.sh';
-      await new Promise((resolve, reject) => {
-        exec(`${scriptPath} ${site_id}`, {
+      const { spawn } = await import('child_process');
+      const { code, stderr } = await new Promise((resolve, reject) => {
+        const child = spawn(scriptPath, [site_id], {
           cwd: '/home/edgar/Repos/fastvistos',
           env: process.env,
-        }, (error, stdout, stderr) => {
-          if (error) return reject(error);
-          resolve({ stdout, stderr });
+          stdio: ['ignore', 'ignore', 'pipe'],
         });
+        let stderrTail = '';
+        child.stderr.on('data', (chunk) => {
+          stderrTail = (stderrTail + chunk.toString()).slice(-200_000);
+        });
+        child.on('error', reject);
+        child.on('close', (code) => resolve({ code, stderr: stderrTail }));
       });
+
+      if (code !== 0) {
+        console.error(`[execute-publish-script] site_id=${site_id} exited with code ${code}\n${stderr}`);
+        return res.status(500).json({
+          success: false,
+          error: `publish script exited with code ${code}`,
+          stderr: stderr.slice(-4000),
+        });
+      }
+
       res.status(200).json({ success: true });
     } catch (error) {
-      res.status(500).json({ success: false, error: 'Internal server error.' });
+      console.error(`[execute-publish-script] site_id=${site_id} failed to start:`, error);
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 
