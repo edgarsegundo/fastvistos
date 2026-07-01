@@ -173,7 +173,7 @@ export const siteConfig = {
         seo: {
             title: 'Blog | Como Contratar Rápido, Dicas para Pequenos Empresários e para Quem Busca Emprego | Emprego Aqui',
             description: 'Dicas práticas para pequenos empresários contratarem rápido e sem RH, e para candidatos serem encontrados pelas empresas. Emprego do jeito que o Brasil vive.',
-            themeColor: '#0070f3',
+            themeColor: '#1F2237',
             canonical: 'https://empregoaqui.com.br/',
             openGraph: {
                 type: 'website',
@@ -192,7 +192,8 @@ export const siteConfig = {
         },
         customStyles: {
             cssVars: {
-                '--blog-bg-color': '#000',
+                '--blog-bg-color': '#0d0f20',
+                '--carousel-topic-color': '#ffffff',
             },
         },
     },

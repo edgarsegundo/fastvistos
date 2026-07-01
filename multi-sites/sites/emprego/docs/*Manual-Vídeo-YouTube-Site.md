@@ -22,12 +22,12 @@ O YouTube já exibe automaticamente o avatar/marca do canal sobre o vídeo, sem 
 ## Passo 2 — Otimizar a versão para o YouTube
 
 ```bash
-ffmpeg -i video_original.mp4 \
+ffmpeg -i video_29_jun_26.mp4 \
 -c:v libx264 -preset slow -crf 18 \
 -pix_fmt yuv420p \
 -c:a aac -b:a 192k \
 -movflags +faststart \
-video_youtube.mp4
+video_yout_29_jun_26.mp4
 ```
 
 Suba `video_youtube.mp4` no YouTube normalmente (qualidade alta, CRF 18).
