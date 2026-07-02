@@ -377,12 +377,6 @@
         class="h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
         🔍
       </button>
-      <button
-        id="btn-open-google-images"
-        title="Abrir Google Imagens em nova aba"
-        class="h-10 px-3 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors shrink-0">
-        G↗
-      </button>
     </div>
 
     <!-- Spinner -->
@@ -409,12 +403,17 @@
 
     <!-- Painel URL direta -->
     <div id="stock-url-panel" class="hidden flex-1 flex flex-col gap-3 p-4 overflow-y-auto">
-      <p class="text-xs text-gray-500">Cole a URL de qualquer imagem (https). Use o botão <strong>G↗</strong> para abrir o Google Imagens e copiar a URL de lá.</p>
+      <p class="text-xs text-gray-500">Cole a URL de qualquer imagem (https).</p>
+      <button
+        id="btn-open-google-images"
+        class="self-start h-9 px-4 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+        <span>🔍</span> Buscar no Google Imagens ↗
+      </button>
       <div class="flex gap-2">
         <input
           id="stock-url-input"
           type="url"
-          placeholder="https://..."
+          placeholder="https://... (cole a URL da imagem aqui)"
           class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
         >
         <button

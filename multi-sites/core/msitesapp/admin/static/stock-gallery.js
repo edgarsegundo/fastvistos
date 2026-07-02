@@ -28,7 +28,6 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     searchBar:      () => document.getElementById('stock-search-bar'),
     searchInput:    () => document.getElementById('stock-search-input'),
     btnSearch:      () => document.getElementById('btn-stock-search'),
-    btnGoogleOpen:  () => document.getElementById('btn-open-google-images'),
     spinner:        () => document.getElementById('stock-gallery-spinner'),
     error:          () => document.getElementById('stock-gallery-error'),
     grid:           () => document.getElementById('stock-gallery-grid'),
@@ -61,8 +60,8 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     el.searchInput().addEventListener('keydown', (e) => {
       if (e.key === 'Enter') triggerSearch();
     });
-    el.btnGoogleOpen().addEventListener('click', () => {
-      const q = el.searchInput().value.trim() || currentQuery;
+    document.getElementById('btn-open-google-images').addEventListener('click', () => {
+      const q = el.urlInput().value.trim() || currentQuery || '';
       window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q), '_blank');
     });
     el.btnPrev().addEventListener('click', () => { if (currentPage > 1) loadPage(currentPage - 1); });
