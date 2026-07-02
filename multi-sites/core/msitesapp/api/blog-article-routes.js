@@ -38,6 +38,10 @@ export default (BlogService) => {
         slug: article.slug || '',
         seo_description: article.seo_description || '',
         metatitle: article.metatitle || '',
+        // Imagem principal (coluna `image`). Usado pelo publish-article (.l2)
+        // para marcar quais artigos já têm imagem definida no CMS.
+        image: article.image || null,
+        has_image: Boolean(article.image),
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
