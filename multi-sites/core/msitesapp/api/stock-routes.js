@@ -249,14 +249,14 @@ router.get('/image-editor/stock/google-proxy/', async (req, res) => {
       signal: AbortSignal.timeout(10000),
     });
 
+    if (!response.ok) {
+      return res.status(response.status).json({ error: `O site bloqueou o acesso (${response.status}). Salve a imagem localmente e faça upload.` });
+    }
+
     const contentType = response.headers.get('content-type') || '';
 
     if (!contentType.startsWith('image/')) {
-      return res.status(415).json({ error: 'Resposta não é uma imagem: ' + contentType });
-    }
-
-    if (!response.ok) {
-      return res.status(response.status).json({ error: 'Erro ao buscar imagem: ' + response.status });
+      return res.status(415).json({ error: 'O site não permite download direto desta imagem (hotlink protection). Salve a imagem localmente e faça upload.' });
     }
 
     const buffer = await response.arrayBuffer();
