@@ -1,5 +1,5 @@
 /**
- * stock-gallery.js — Overlay de imagens stock (Pexels + Pixabay + Google)
+ * stock-gallery.js — Overlay de imagens stock (Pexels + Pixabay + Unsplash + URL direta)
  */
 
 const StockGalleryOverlay = (() => {
@@ -23,12 +23,21 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     btnClose:       () => document.getElementById('btn-close-stock-gallery'),
     tabPexels:      () => document.getElementById('tab-stock-pexels'),
     tabPixabay:     () => document.getElementById('tab-stock-pixabay'),
-    tabGoogle:      () => document.getElementById('tab-stock-google'),
+    tabUnsplash:    () => document.getElementById('tab-stock-unsplash'),
+    tabUrl:         () => document.getElementById('tab-stock-url'),
+    searchBar:      () => document.getElementById('stock-search-bar'),
     searchInput:    () => document.getElementById('stock-search-input'),
     btnSearch:      () => document.getElementById('btn-stock-search'),
+    btnGoogleOpen:  () => document.getElementById('btn-open-google-images'),
     spinner:        () => document.getElementById('stock-gallery-spinner'),
     error:          () => document.getElementById('stock-gallery-error'),
     grid:           () => document.getElementById('stock-gallery-grid'),
+    urlPanel:       () => document.getElementById('stock-url-panel'),
+    urlInput:       () => document.getElementById('stock-url-input'),
+    btnLoadUrl:     () => document.getElementById('btn-stock-load-url'),
+    urlPreview:     () => document.getElementById('stock-url-preview'),
+    urlPreviewImg:  () => document.getElementById('stock-url-preview-img'),
+    pagination:     () => document.getElementById('stock-gallery-pagination'),
     pageInfo:       () => document.getElementById('stock-gallery-page-info'),
     btnPrev:        () => document.getElementById('btn-stock-gallery-prev'),
     btnNext:        () => document.getElementById('btn-stock-gallery-next'),
@@ -40,26 +49,31 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     onSelectedCallback = callback;
     defaultQuery = new URLSearchParams(window.location.search).get('group') || '';
 
-    // Recupera último termo salvo
     const lastQuery = localStorage.getItem(SEARCH_KEY);
     if (lastQuery) defaultQuery = lastQuery;
 
     el.btnClose().addEventListener('click', close);
-    el.tabPexels().addEventListener('click',  () => switchSource('pexels'));
-    el.tabPixabay().addEventListener('click', () => switchSource('pixabay'));
-    el.tabGoogle().addEventListener('click',  () => switchSource('google'));
+    el.tabPexels().addEventListener('click',   () => switchSource('pexels'));
+    el.tabPixabay().addEventListener('click',  () => switchSource('pixabay'));
+    el.tabUnsplash().addEventListener('click', () => switchSource('unsplash'));
+    el.tabUrl().addEventListener('click',      () => switchSource('url'));
     el.btnSearch().addEventListener('click', () => triggerSearch());
     el.searchInput().addEventListener('keydown', (e) => {
       if (e.key === 'Enter') triggerSearch();
     });
+    el.btnGoogleOpen().addEventListener('click', () => {
+      const q = el.searchInput().value.trim() || currentQuery;
+      window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q), '_blank');
+    });
     el.btnPrev().addEventListener('click', () => { if (currentPage > 1) loadPage(currentPage - 1); });
     el.btnNext().addEventListener('click', () => { if (currentPage < totalPages) loadPage(currentPage + 1); });
+    el.btnLoadUrl().addEventListener('click', () => loadFromUrl());
+    el.urlInput().addEventListener('keydown', (e) => { if (e.key === 'Enter') loadFromUrl(); });
   }
 
   function open() {
     currentPage = 1;
     photos      = [];
-    // Sempre tenta recuperar último termo salvo
     const lastQuery = localStorage.getItem(SEARCH_KEY);
     if (lastQuery) {
       el.searchInput().value = lastQuery;
@@ -74,8 +88,13 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     el.overlay().classList.add('open');
     updateTabs();
     updateAttribution();
-    if (currentQuery) loadPage(1);
-    else renderEmpty('Digite um termo para buscar imagens.');
+    if (currentSource === 'url') {
+      showUrlPanel(true);
+    } else if (currentQuery) {
+      loadPage(1);
+    } else {
+      renderEmpty('Digite um termo para buscar imagens.');
+    }
   }
 
   function close() {
@@ -89,13 +108,34 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     photos        = [];
     updateTabs();
     updateAttribution();
-    if (currentQuery) loadPage(1);
-    else renderEmpty('Digite um termo para buscar imagens.');
+
+    if (source === 'url') {
+      showUrlPanel(true);
+      setError('');
+    } else {
+      showUrlPanel(false);
+      if (currentQuery) loadPage(1);
+      else renderEmpty('Digite um termo para buscar imagens.');
+    }
+  }
+
+  function showUrlPanel(active) {
+    el.urlPanel().classList.toggle('hidden', !active);
+    el.grid().classList.toggle('hidden', active);
+    el.searchBar().classList.toggle('hidden', active);
+    el.pagination().classList.toggle('hidden', active);
+    el.spinner().classList.add('hidden');
+    if (active) {
+      el.urlInput().value = '';
+      el.urlPreview().classList.add('hidden');
+      el.urlPreviewImg().src = '';
+    }
   }
 
   function updateTabs() {
-    ['pexels', 'pixabay', 'google'].forEach(src => {
+    ['pexels', 'pixabay', 'unsplash', 'url'].forEach(src => {
       const tabEl    = document.getElementById(`tab-stock-${src}`);
+      if (!tabEl) return;
       const isActive = currentSource === src;
       tabEl.classList.toggle('bg-blue-600',   isActive);
       tabEl.classList.toggle('text-white',    isActive);
@@ -105,9 +145,10 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
 
   function updateAttribution() {
     const map = {
-      pexels:  'Fotos por <a href="https://www.pexels.com" target="_blank" class="text-blue-500 underline">Pexels</a>',
-      pixabay: 'Fotos por <a href="https://pixabay.com" target="_blank" class="text-blue-500 underline">Pixabay</a>',
-      google:  'Via <a href="https://programmablesearchengine.google.com" target="_blank" class="text-blue-500 underline">Google Custom Search</a> — verifique direitos de uso',
+      pexels:   'Fotos por <a href="https://www.pexels.com" target="_blank" class="text-blue-500 underline">Pexels</a>',
+      pixabay:  'Fotos por <a href="https://pixabay.com" target="_blank" class="text-blue-500 underline">Pixabay</a>',
+      unsplash: 'Fotos por <a href="https://unsplash.com" target="_blank" class="text-blue-500 underline">Unsplash</a>',
+      url:      '',
     };
     el.attribution().innerHTML = map[currentSource] || '';
   }
@@ -118,18 +159,17 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     currentQuery = q;
     currentPage  = 1;
     photos       = [];
-    // Salva termo no localStorage
     localStorage.setItem(SEARCH_KEY, q);
     loadPage(1);
   }
 
   async function loadPage(page) {
-    if (loading || !currentQuery) return;
+    if (loading || !currentQuery || currentSource === 'url') return;
     loading = true;
     setLoading(true);
     setError('');
     try {
-      const endpoints = { pexels: 'pexels', pixabay: 'pixabay', google: 'google' };
+      const endpoints = { pexels: 'pexels', pixabay: 'pixabay', unsplash: 'unsplash' };
       const url = `${API_BASE}/${endpoints[currentSource]}/?q=${encodeURIComponent(currentQuery)}&page=${page}`;
       const res  = await fetch(url);
       const data = await res.json();
@@ -161,8 +201,9 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
         thumbUrl = photo.medium_url; largeUrl = photo.large_url;
         label = photo.user;          alt = photo.tags || label || '';
       } else {
+        // unsplash
         thumbUrl = photo.thumb_url;  largeUrl = photo.large_url;
-        label = photo.title || '';   alt = photo.title || '';
+        label = photo.user || '';    alt = photo.alt || label || '';
       }
 
       const div = document.createElement('div');
@@ -195,8 +236,9 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     if (checkEl) checkEl.style.opacity = '1';
     showImgLoading(true);
     try {
-      const proxyEndpoint = currentSource === 'google'
-        ? `${API_BASE}/google-proxy/?url=${encodeURIComponent(largeUrl)}`
+      // Unsplash images are on images.unsplash.com — use the allowlist proxy
+      const proxyEndpoint = currentSource === 'unsplash'
+        ? `${API_BASE}/proxy/?url=${encodeURIComponent(largeUrl)}`
         : `${API_BASE}/proxy/?url=${encodeURIComponent(largeUrl)}`;
 
       const response = await fetch(proxyEndpoint);
@@ -220,6 +262,47 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     } catch (err) {
       setError('Erro ao carregar imagem: ' + err.message);
       if (checkEl) checkEl.style.opacity = '0';
+    } finally {
+      showImgLoading(false);
+    }
+  }
+
+  async function loadFromUrl() {
+    const rawUrl = el.urlInput().value.trim();
+    if (!rawUrl) return;
+
+    let parsed;
+    try { parsed = new URL(rawUrl); } catch { setError('URL inválida.'); return; }
+    if (parsed.protocol !== 'https:') { setError('Apenas URLs https são suportadas.'); return; }
+
+    setError('');
+    showImgLoading(true);
+    try {
+      const proxyUrl = `${API_BASE}/google-proxy/?url=${encodeURIComponent(rawUrl)}`;
+      const response = await fetch(proxyUrl);
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || `Erro ${response.status}`);
+      }
+      const blob = await response.blob();
+      if (!blob.type.startsWith('image/')) throw new Error('URL não retornou uma imagem válida.');
+
+      // Show preview
+      const objectUrl = URL.createObjectURL(blob);
+      el.urlPreviewImg().src = objectUrl;
+      el.urlPreview().classList.remove('hidden');
+
+      const name = `url-import-${Date.now()}`;
+      if (onSelectedCallback) {
+        onSelectedCallback({
+          file:    new File([blob], name + '.jpg', { type: blob.type }),
+          dataUrl: objectUrl,
+          name, alt: '', source: 'url',
+        });
+      }
+      setTimeout(() => close(), 500);
+    } catch (err) {
+      setError('Erro ao carregar imagem: ' + err.message);
     } finally {
       showImgLoading(false);
     }

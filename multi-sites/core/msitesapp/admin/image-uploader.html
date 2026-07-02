@@ -343,7 +343,7 @@
     <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
       <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
       <span class="font-semibold text-sm">Imagens Stock</span>
-      <!-- Abas Pexels / Pixabay / Google -->
+      <!-- Abas Pexels / Pixabay / Unsplash / URL -->
       <div class="flex rounded-lg overflow-hidden border border-gray-200 text-xs">
         <button id="tab-stock-pexels"
           class="px-3 h-8 transition-colors font-medium">
@@ -353,15 +353,19 @@
           class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
           Pixabay
         </button>
-        <button id="tab-stock-google"
+        <button id="tab-stock-unsplash"
           class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-          Google
+          Unsplash
+        </button>
+        <button id="tab-stock-url"
+          class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
+          URL
         </button>
       </div>
     </div>
 
     <!-- Barra de busca -->
-    <div class="flex gap-2 px-3 py-2 border-b border-gray-100 shrink-0">
+    <div id="stock-search-bar" class="flex gap-2 px-3 py-2 border-b border-gray-100 shrink-0">
       <input
         id="stock-search-input"
         type="text"
@@ -372,6 +376,12 @@
         id="btn-stock-search"
         class="h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
         🔍
+      </button>
+      <button
+        id="btn-open-google-images"
+        title="Abrir Google Imagens em nova aba"
+        class="h-10 px-3 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors shrink-0">
+        G↗
       </button>
     </div>
 
@@ -397,8 +407,29 @@
       class="stock-grid-layout flex-1 overflow-y-auto p-3">
     </div>
 
+    <!-- Painel URL direta -->
+    <div id="stock-url-panel" class="hidden flex-1 flex flex-col gap-3 p-4 overflow-y-auto">
+      <p class="text-xs text-gray-500">Cole a URL de qualquer imagem (https). Use o botão <strong>G↗</strong> para abrir o Google Imagens e copiar a URL de lá.</p>
+      <div class="flex gap-2">
+        <input
+          id="stock-url-input"
+          type="url"
+          placeholder="https://..."
+          class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
+        >
+        <button
+          id="btn-stock-load-url"
+          class="h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
+          Carregar
+        </button>
+      </div>
+      <div id="stock-url-preview" class="hidden">
+        <img id="stock-url-preview-img" src="" alt="" class="max-h-40 rounded-lg object-contain border border-gray-100">
+      </div>
+    </div>
+
     <!-- Attribution + Paginação (rodapé fixo) -->
-    <div class="shrink-0 border-t border-gray-100">
+    <div id="stock-gallery-pagination" class="shrink-0 border-t border-gray-100">
       <div id="stock-gallery-attribution" class="text-center text-xs text-gray-400 pt-2 px-4"></div>
       <div class="flex items-center justify-between px-4 h-12">
         <button id="btn-stock-gallery-prev"

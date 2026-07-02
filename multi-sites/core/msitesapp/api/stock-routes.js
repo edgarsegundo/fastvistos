@@ -7,9 +7,9 @@ import { createClient } from 'pexels';
 
 const router = express.Router();
 
-const PEXELS_PER_PAGE  = 20;
-const PIXABAY_PER_PAGE = 20;
-const GOOGLE_PER_PAGE  = 10; // limite fixo da API gratuita
+const PEXELS_PER_PAGE   = 20;
+const PIXABAY_PER_PAGE  = 20;
+const UNSPLASH_PER_PAGE = 20;
 
 // ---------------------------------------------------------------------------
 // GET /image-editor/stock/pexels/
@@ -107,67 +107,59 @@ router.get('/image-editor/stock/pixabay/', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// GET /image-editor/stock/google/
+// GET /image-editor/stock/unsplash/
 //
 // Requer no .env:
-//   GOOGLE_CSE_API_KEY  — chave do Google Cloud (Custom Search API)
-//   GOOGLE_CSE_CX       — Search Engine ID (Programmable Search Engine)
+//   UNSPLASH_ACCESS_KEY  — chave do Unsplash Developer (https://unsplash.com/developers)
 //
-// Limite gratuito: 100 queries/dia, 10 resultados por página, máx 100 resultados.
+// Limite gratuito: 50 req/hora.
 // ---------------------------------------------------------------------------
-router.get('/image-editor/stock/google/', async (req, res) => {
+router.get('/image-editor/stock/unsplash/', async (req, res) => {
   const { q, page = 1 } = req.query;
   if (!q) return res.status(400).json({ error: 'O parâmetro "q" é obrigatório.' });
 
-  const apiKey = process.env.GOOGLE_CSE_API_KEY;
-  const cx     = process.env.GOOGLE_CSE_CX;
-  if (!apiKey) return res.status(500).json({ error: 'GOOGLE_CSE_API_KEY não configurada.' });
-  if (!cx)     return res.status(500).json({ error: 'GOOGLE_CSE_CX não configurada.' });
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  if (!accessKey) return res.status(500).json({ error: 'UNSPLASH_ACCESS_KEY não configurada.' });
 
   const currentPage = parseInt(page) || 1;
-  const start       = (currentPage - 1) * GOOGLE_PER_PAGE + 1;
 
   try {
-    const url = 'https://www.googleapis.com/customsearch/v1'
-      + '?key='        + apiKey
-      + '&cx='         + cx
-      + '&q='          + encodeURIComponent(q)
-      + '&searchType=' + 'image'
-      + '&num='        + GOOGLE_PER_PAGE
-      + '&start='      + start;
+    const url = 'https://api.unsplash.com/search/photos'
+      + '?query='    + encodeURIComponent(q)
+      + '&page='     + currentPage
+      + '&per_page=' + UNSPLASH_PER_PAGE;
 
-    const response = await fetch(url);
-    const data     = await response.json();
+    const response = await fetch(url, {
+      headers: { 'Authorization': 'Client-ID ' + accessKey },
+    });
+    const data = await response.json();
 
     if (!response.ok) {
-      const msg = (data && data.error && data.error.message) || ('Erro ' + response.status);
+      const msg = (data && data.errors && data.errors[0]) || ('Erro ' + response.status);
       throw new Error(msg);
     }
 
-    const items  = data.items || [];
-    const photos = items.map((item, i) => ({
-      id:          String(start + i),
-      title:       item.title || '',
-      thumb_url:   (item.image && item.image.thumbnailLink) || '',
-      large_url:   item.link || '',
-      context_url: (item.image && item.image.contextLink)   || '',
-      width:       (item.image && item.image.width)         || 0,
-      height:      (item.image && item.image.height)        || 0,
-      mime:        item.mime || 'image/jpeg',
+    const photos = (data.results || []).map(photo => ({
+      id:        photo.id,
+      user:      (photo.user && photo.user.name) || '',
+      thumb_url: (photo.urls && photo.urls.small)  || '',
+      large_url: (photo.urls && photo.urls.full)   || '',
+      alt:       photo.alt_description || photo.description || '',
+      width:     photo.width  || 0,
+      height:    photo.height || 0,
     }));
 
-    const totalRaw    = parseInt((data.searchInformation && data.searchInformation.totalResults) || '0');
-    const totalCapped = Math.min(totalRaw, 100);
+    const totalResults = data.total || 0;
 
     res.json({
       photos,
-      total_results: totalCapped,
+      total_results: totalResults,
       page:          currentPage,
-      per_page:      GOOGLE_PER_PAGE,
-      pages:         Math.ceil(totalCapped / GOOGLE_PER_PAGE),
+      per_page:      UNSPLASH_PER_PAGE,
+      pages:         Math.ceil(totalResults / UNSPLASH_PER_PAGE),
     });
   } catch (err) {
-    console.error('Google CSE search error:', err);
+    console.error('Unsplash search error:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -185,6 +177,8 @@ router.get('/image-editor/stock/proxy/', async (req, res) => {
     'www.pexels.com',
     'cdn.pixabay.com',
     'pixabay.com',
+    'images.unsplash.com',
+    'plus.unsplash.com',
   ];
 
   let parsed;
