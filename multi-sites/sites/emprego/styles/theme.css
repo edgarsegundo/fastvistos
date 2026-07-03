@@ -204,3 +204,29 @@
 */
 @layer utilities {
 }
+
+/*
+  Página do artigo do blog: fundo claro.
+  O body tem bg-dark (#1e2237) que fica ótimo na home e no blog/listing,
+  mas não na página do artigo. O seletor :has(.blog-content) bate APENAS
+  na [slug].astro (único lugar com .blog-content), sem afetar outros sites
+  nem outras páginas do emprego.
+*/
+@layer components {
+  main:has(.blog-content) {
+    background-color: #ffffff;
+    color: var(--color-text-main);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+  }
+
+  /* Breadcrumb e metadados do artigo ficam legíveis sobre fundo claro */
+  main:has(.blog-content) nav a,
+  main:has(.blog-content) .text-textSecondary {
+    color: var(--color-muted);
+  }
+
+  main:has(.blog-content) h1 {
+    color: var(--color-text-main);
+  }
+}
