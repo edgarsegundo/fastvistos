@@ -1,4 +1,23 @@
 {
+  "dificuldade-financeirawebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGAwf/xAAlEAABAwQABgMBAAAAAAAAAAADAQQFAAIGEQcSITJBcRMUFTH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAQEBAQEBAAAAAAAAAAAAAAECEQADIf/aAAwDAQACEQMRAD8AS5XlUzA5VJgtEO6Ksv3eir1X+1DNc7CmWK4GG1GjlOQqL43XeuIuORhYs5yN+YpU2S7fdU2nDGBmcMavfiVsQXgad3ugais05ZLCp3487xczX8cX0FRAeNekorSEiW8dGhbNtoOxOiUVHXvKqHJPhUmb3//Z",
+    "jpeg": [
+      "dificuldade-financeirawebp-1216-1x.jpeg 1216w",
+      "dificuldade-financeirawebp-1216-2x.jpeg 2432w",
+      "dificuldade-financeirawebp-608-1x.jpeg 608w",
+      "dificuldade-financeirawebp-608-2x.jpeg 1216w",
+      "dificuldade-financeirawebp-320-1x.jpeg 320w",
+      "dificuldade-financeirawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "dificuldade-financeirawebp-1216-1x.webp 1216w",
+      "dificuldade-financeirawebp-1216-2x.webp 2432w",
+      "dificuldade-financeirawebp-608-1x.webp 608w",
+      "dificuldade-financeirawebp-608-2x.webp 1216w",
+      "dificuldade-financeirawebp-320-1x.webp 320w",
+      "dificuldade-financeirawebp-320-2x.webp 640w"
+    ]
+  },
   "emprego__115587": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAcDBAb/xAAhEAABAwQCAwEAAAAAAAAAAAADAQIEAAUREgYhBzFBUf/EABUBAQEAAAAAAAAAAAAAAAAAAAED/8QAGxEAAgIDAQAAAAAAAAAAAAAAAAIDEQETQVL/2gAMAwEAAhEDEQA/AHaS5SYgYpGIjyenqtZ263owORiS5ahtRcaEx3v+VctLiGmEA8iqxV2TPeKVvmC4y3Xh8JDKgB9tTHpaFne7wLwJVZJOY+RyWrkEmJHitINi9OX7RSN5HMlGubnlO5ztUTOKKtsf0T1RdQ//2Q==",
     "jpeg": [
@@ -417,6 +436,25 @@
       "mulher-preocupada-com-financaswebp-320-2x.webp 640w"
     ]
   },
+  "setor-servicos-brasilwebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAMABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBAf/xAAiEAABBAIBBAMAAAAAAAAAAAACAQMEBQAGESEiMUETFGH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFAQL/xAAcEQACAwADAQAAAAAAAAAAAAABAwACERITIkL/2gAMAwEAAhEDEQA/ANauNgbjXDcSXIL7BH0QfWQbRttfVQzmHJN1B7SFpeVQvWOLjWKyXtQS3mSV74/KL+YjlaZTO00wDZPhx1CLv95FV85aaZY6Ml3Wr+bJqgeADcEyVUIvPGGMqyK1ChNsR0UWxTomGE9LR9mJlqid4T//2Q==",
+    "jpeg": [
+      "setor-servicos-brasilwebp-1216-1x.jpeg 1216w",
+      "setor-servicos-brasilwebp-1216-2x.jpeg 2432w",
+      "setor-servicos-brasilwebp-608-1x.jpeg 608w",
+      "setor-servicos-brasilwebp-608-2x.jpeg 1216w",
+      "setor-servicos-brasilwebp-320-1x.jpeg 320w",
+      "setor-servicos-brasilwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "setor-servicos-brasilwebp-1216-1x.webp 1216w",
+      "setor-servicos-brasilwebp-1216-2x.webp 2432w",
+      "setor-servicos-brasilwebp-608-1x.webp 608w",
+      "setor-servicos-brasilwebp-608-2x.webp 1216w",
+      "setor-servicos-brasilwebp-320-1x.webp 320w",
+      "setor-servicos-brasilwebp-320-2x.webp 640w"
+    ]
+  },
   "stock-pexels-8483657-1783022881322webp": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGAgf/xAAiEAACAgIBBAMBAAAAAAAAAAACAwEEAAURBhJBUSEiMWH/xAAWAQEBAQAAAAAAAAAAAAAAAAAEAgP/xAAaEQEAAwEBAQAAAAAAAAAAAAABAAIRQQMS/9oADAMBAAIRAxEAPwDs7tmNW8hBxPe/4GcWJ6mINjdXfNaqy54Epn8n+5MLtu2vU60uORhU/WR8Y32XRFPZtsTZsO4ZPcUR7jB3fT6yvIyjRNeysW4iWJL4ICjmJjzhmdPqwra5KRaZCEdsTPrDNKumyVByf//Z",
     "jpeg": [
@@ -453,6 +491,44 @@
       "url-import-1783033510083webp-608-2x.webp 1216w",
       "url-import-1783033510083webp-320-1x.webp 320w",
       "url-import-1783033510083webp-320-2x.webp 640w"
+    ]
+  },
+  "url-import-1783074677352webp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAYCBQf/xAAiEAABAwUAAQUAAAAAAAAAAAABAgMEAAURITEGEhMUQWH/xAAUAQEAAAAAAAAAAAAAAAAAAAAD/8QAGxEAAgIDAQAAAAAAAAAAAAAAAREAAgMSISL/2gAMAwEAAhEDEQA/AF1TqHroWG5J93QIz2oyLRPhy333shn05BH3qmm5eEQY1yfuLbzofOjjh/aVZV6mQPkRlOF9CeFfaSlN/LRh5MhoRdMSqXKWg4cWATsZ7iis+uVwffnPLUsglXBRRnhURvs//9k=",
+    "jpeg": [
+      "url-import-1783074677352webp-1216-1x.jpeg 1216w",
+      "url-import-1783074677352webp-1216-2x.jpeg 2432w",
+      "url-import-1783074677352webp-608-1x.jpeg 608w",
+      "url-import-1783074677352webp-608-2x.jpeg 1216w",
+      "url-import-1783074677352webp-320-1x.jpeg 320w",
+      "url-import-1783074677352webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "url-import-1783074677352webp-1216-1x.webp 1216w",
+      "url-import-1783074677352webp-1216-2x.webp 2432w",
+      "url-import-1783074677352webp-608-1x.webp 608w",
+      "url-import-1783074677352webp-608-2x.webp 1216w",
+      "url-import-1783074677352webp-320-1x.webp 320w",
+      "url-import-1783074677352webp-320-2x.webp 640w"
+    ]
+  },
+  "vagas-de-emprego-2webp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsTAAALEwEAmpwYAAACHUlEQVR4nGNg8JqOBXlO4/SbKRQ0RyhoDqffTAbPadiVMWDTyeA1XTFhsVPZBqeyDYoJixlhggyENXtNZ/SYZpC1Mr57T3z3HoOslYwepNjM6TfTtmhd0YzDRTMO2xWtw+lyBq9pyIjRaxqj51TRsLlOpevypx0smH7QuWy9WPhcRs+pjKgqQYjBYyYyYnSfye49WytlZWjz7vK5JyvnnQpp3q2TuordezajO4pKEJJLqIUj+YRaufgarYxG38YJOTPm1i5dUr9sac6Muf5NE7UymuTia0AKkBBDaJ83Mgrp8Y6fElCyJKp5Q0LLxsTWjYnNGxJKl0YlTA0I6UFRGdrnzdCxWwyKdol17pbo3qMw6aDmrGNGc44bzDpmMPOo3twTIMbkgzrde5Q6d0t27IKp3y3GMO8sAs0/y7LsovjaK9qbrttsuGa58ZrVuqvG664Yrb9qvO6q3opLcgvPcSCrZ5h9CoIYZ51imHOabeVFjW03PA7cS95/N+HAvZR9d+L23onaeydq+w2v1Zf05p3mmnUSpBiii2HOaSiafYph7mmW5RcVNl2z3nU7aNetwN23Q3fdDtpxy3fHLe9N16xWXlSZd4Z9NsgOKELRPOc006JzwisuKq65rLvmss7aK/prrxiuuaK35rLO8ovyi84JzTnNhF0zDDHNPc0y9wzr3NNgdIYNjFjnnmaZc5oJTTG65tlwBA0LFISmGQCRyXywL0xXewAAAABJRU5ErkJggg==",
+    "jpeg": [
+      "vagas-de-emprego-2webp-1216-1x.jpeg 1216w",
+      "vagas-de-emprego-2webp-1216-2x.jpeg 2432w",
+      "vagas-de-emprego-2webp-608-1x.jpeg 608w",
+      "vagas-de-emprego-2webp-608-2x.jpeg 1216w",
+      "vagas-de-emprego-2webp-320-1x.jpeg 320w",
+      "vagas-de-emprego-2webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "vagas-de-emprego-2webp-1216-1x.webp 1216w",
+      "vagas-de-emprego-2webp-1216-2x.webp 2432w",
+      "vagas-de-emprego-2webp-608-1x.webp 608w",
+      "vagas-de-emprego-2webp-608-2x.webp 1216w",
+      "vagas-de-emprego-2webp-320-1x.webp 320w",
+      "vagas-de-emprego-2webp-320-2x.webp 640w"
     ]
   }
 }

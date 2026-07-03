@@ -19,6 +19,8 @@ import EmpregoFaq from '../components/EmpregoFaq.astro';
 import EmpregoCtaFinal from '../components/EmpregoCtaFinal.astro';
 import EmpregoFooter from '../components/EmpregoFooter.astro';
 import EmpregoWppBar from '../components/EmpregoWppBar.astro';
+import EmpregoPrivacyPolicy from '../components/EmpregoPrivacyPolicySection.astro';
+import EmpregoTermsOfUse from '../components/EmpregoTermsOfUseSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -88,6 +90,10 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <EmpregoParaEmpresas />
     <EmpregoFaq />
     <EmpregoCtaFinal />
+
+    <EmpregoPrivacyPolicy />
+    <EmpregoTermsOfUse />
+
     <EmpregoFooter />
     <EmpregoWppBar />
 </SharedHomeLayout>
