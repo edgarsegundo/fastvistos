@@ -49,27 +49,57 @@ const EditArticleOverlay = (() => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao buscar conteúdo`);
       el.textarea().value = data.content_md ?? '';
+
+      // Busca a imagem principal atual do artigo, para deixá-la pré-selecionada
+      let currentImage = '';
+      try {
+        const metaRes = await fetch(`${API_BASE}/articles/${articleId}/meta/`);
+        if (metaRes.ok) currentImage = (await metaRes.json()).image || '';
+      } catch (_) { /* não bloqueia a abertura do overlay se o meta falhar */ }
+
       // Popular select de imagens
-      updateMainImageSelect();
+      updateMainImageSelect(currentImage);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
 
-    // Atualiza a combobox de imagens
-    function updateMainImageSelect() {
+    // Normaliza um path/URL de imagem para comparação (remove host e prefixo /media/)
+    function normalizeImagePath(value) {
+      return (value || '')
+        .replace(/^https?:\/\/[^/]+/, '')
+        .replace(/^\/?media\//, '')
+        .replace(/^\//, '');
+    }
+
+    // Atualiza a combobox de imagens, pré-selecionando a imagem principal atual
+    function updateMainImageSelect(currentImagePath) {
       const select = el.mainImageSelect();
       // Limpa opções antigas, exceto a primeira
       while (select.options.length > 1) select.remove(1);
       const imgs = typeof imagesSavedRef === 'function' ? imagesSavedRef() : imagesSavedRef;
-      imgs.forEach((img, idx) => {
-        // debugger;
+      const normalizedCurrent = normalizeImagePath(currentImagePath);
+      let matched = false;
+      imgs.forEach((img) => {
         const opt = document.createElement('option');
-        opt.value = img.path ;
+        opt.value = img.path;
         opt.textContent = img.filename;
+        if (normalizedCurrent && normalizeImagePath(img.path) === normalizedCurrent) {
+          opt.selected = true;
+          matched = true;
+        }
         select.appendChild(opt);
       });
+      // Se a imagem principal do banco não está entre as imagens desta sessão,
+      // adiciona uma opção extra só para representá-la, já selecionada.
+      if (currentImagePath && !matched) {
+        const opt = document.createElement('option');
+        opt.value = currentImagePath;
+        opt.textContent = currentImagePath.split('/').pop();
+        opt.selected = true;
+        select.appendChild(opt);
+      }
     }
   }
 

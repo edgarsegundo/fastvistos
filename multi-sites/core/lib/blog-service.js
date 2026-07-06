@@ -67,10 +67,13 @@ export class BlogService {
      */
     static async updateBlogArticleImage(id, imagePath) {
         try {
+            // Remove prefixo /media/ se existir, igual ao updateBlogArticleContentMd,
+            // para manter o formato salvo no banco consistente entre os dois fluxos.
+            const cleanPath = imagePath ? imagePath.replace(/^\/?media\//, '') : null;
             const updated = await prisma.blog_article.update({
                 where: { id },
                 data: {
-                    image: imagePath,
+                    image: cleanPath,
                     modified: new Date(),
                 },
             });

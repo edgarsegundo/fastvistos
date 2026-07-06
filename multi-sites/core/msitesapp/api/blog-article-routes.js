@@ -71,6 +71,29 @@ export default (BlogService) => {
   });
 
   /**
+   * POST /image-editor/articles/:blog_article_id/set-main-image/
+   *
+   * Define a imagem principal do artigo (campo `image`) sem alterar o content_md.
+   * Usado pelo botão "Salvar" do image-uploader.html para tornar a imagem recém
+   * salva automaticamente a imagem principal, sem precisar abrir "Editar artigo".
+   */
+  router.post('/image-editor/articles/:blog_article_id/set-main-image/', async (req, res) => {
+    const { blog_article_id } = req.params;
+    const { image_url } = req.body;
+
+    if (!blog_article_id || !image_url) {
+      return res.status(400).json({ error: 'blog_article_id e image_url são obrigatórios.' });
+    }
+    try {
+      const updated = await BlogService.updateBlogArticleImage(blog_article_id, image_url);
+      res.json({ success: true, updated });
+    } catch (err) {
+      console.error(`Error setting main image for article ${blog_article_id}:`, err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
    * POST /image-editor/articles/:blog_article_id/upload-image/
    *
    * Proxy de upload de imagem para o Django.

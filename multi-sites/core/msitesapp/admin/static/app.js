@@ -189,6 +189,26 @@ async function uploadImageToDjango(filename, grp, alt) {
   return data;
 }
 
+/**
+ * Define a imagem recém-salva como imagem principal do artigo.
+ * Best-effort: falha aqui não desfaz o upload, que já foi concluído.
+ */
+async function setArticleMainImage(imageUrl) {
+  if (!blogArticleId || !imageUrl) return;
+  try {
+    const res = await fetch(`https://fastvistos.com.br/msitesapp/api/image-editor/articles/${blogArticleId}/set-main-image/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_url: imageUrl }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+  } catch (err) {
+    console.error('Erro ao definir imagem principal do artigo:', err);
+    setError('Imagem salva, mas falhou ao definir como principal: ' + err.message, true);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Handlers de evento
 // ---------------------------------------------------------------------------
@@ -307,6 +327,7 @@ dom.btnSave.addEventListener('click', async () => {
     const newIndex  = state.imagesSaved.length;
     state.imagesSaved.push(savedImg);
     addToImageList(savedImg, newIndex);
+    await setArticleMainImage(savedImg.path);
     state.imageFile = null;
     state.imageDataUrl = '';
     state.imageName = '';
