@@ -194,9 +194,10 @@ export class BlogService {
                         lte: now,
                     },
                 },
-                orderBy: {
-                    published: 'desc',
-                },
+                orderBy: [
+                    { published: 'desc' },
+                    { id: 'asc' },
+                ],
                 skip: offset,
                 take: limit,
             });

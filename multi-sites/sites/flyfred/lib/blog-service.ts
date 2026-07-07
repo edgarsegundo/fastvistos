@@ -223,9 +223,10 @@ export class BlogService {
                                 lte: now,
                             },
                         },
-                        orderBy: {
-                            published: 'desc',
-                        },
+                        orderBy: [
+                            { published: 'desc' },
+                            { id: 'asc' },
+                        ],
                         ...(limit ? { take: limit } : {}),
                     },
                 },
