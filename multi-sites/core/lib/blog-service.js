@@ -329,5 +329,25 @@ export class BlogService {
         }
     }
 
+    /**
+     * Renomeia o label de exibição (campo `filename`) de uma imagem da galeria.
+     * Não altera o campo `image` (arquivo físico/URL) — nenhuma outra tabela
+     * referencia `filename`, então isso nunca quebra referências existentes.
+     * @param {string} id - id da linha em blog_image
+     * @param {string} filename - novo nome de exibição
+     * @returns {Promise<Object>} O registro atualizado
+     */
+    static async renameBlogImage(id, filename) {
+        try {
+            const updated = await prisma.blog_image.update({
+                where: { id },
+                data: { filename, modified: new Date() },
+            });
+            return updated;
+        } catch (error) {
+            console.error('Erro ao renomear imagem:', error);
+            throw error;
+        }
+    }
 
 }

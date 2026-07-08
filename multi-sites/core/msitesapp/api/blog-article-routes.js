@@ -162,5 +162,28 @@ export default (BlogService) => {
     }
   });
 
+  /**
+   * POST /image-editor/images/:image_id/rename/
+   *
+   * Renomeia apenas o label de exibição (`filename`) de uma imagem da galeria
+   * (tabela blog_image). Não altera o arquivo físico/URL, então não afeta
+   * a imagem principal de artigos nem markdown já colado em content_md.
+   */
+  router.post('/image-editor/images/:image_id/rename/', async (req, res) => {
+    const { image_id } = req.params;
+    const { filename } = req.body;
+
+    if (!image_id || !filename || !filename.trim()) {
+      return res.status(400).json({ error: 'image_id e filename são obrigatórios.' });
+    }
+    try {
+      const updated = await BlogService.renameBlogImage(image_id, filename.trim());
+      res.json({ success: true, updated });
+    } catch (err) {
+      console.error(`Error renaming image ${image_id}:`, err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };

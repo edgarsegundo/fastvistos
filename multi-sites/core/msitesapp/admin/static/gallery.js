@@ -267,6 +267,7 @@ const GalleryOverlay = (() => {
 
     if (onSelectedCallback) {
       onSelectedCallback({
+        id:       img.id,
         filename: img.filename || `imagem-${img.id}`,
         url:      buildImageUrl(img.image),
         path:     img.image,

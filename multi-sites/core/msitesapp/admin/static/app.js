@@ -115,9 +115,14 @@ function addToImageList(img, index) {
   li.className = 'flex items-center gap-2 cursor-pointer py-1 px-2 rounded-lg hover:bg-gray-50 transition-colors';
   li.innerHTML = `
     <span class="copy-icon text-base">📋</span>
-    <span class="text-sm text-gray-700 truncate">${img.filename}</span>
+    <span class="filename-label text-sm text-gray-700 truncate">${img.filename}</span>
+    <button type="button" class="rename-icon text-base ml-auto shrink-0" title="Renomear">✏️</button>
   `;
   li.addEventListener('click', () => onCopyUrl(index));
+  li.querySelector('.rename-icon').addEventListener('click', (e) => {
+    e.stopPropagation();
+    onRenameImage(index);
+  });
   dom.imagesList.prepend(li); // mais recente no topo
 }
 
@@ -127,6 +132,14 @@ function updateCopiedIcon(index, copied) {
   if (!li) return;
   const icon = li.querySelector('.copy-icon');
   if (icon) icon.textContent = copied ? '✅' : '📋';
+}
+
+// Atualiza o texto exibido de um item específico da lista
+function updateImageLabel(index, filename) {
+  const li = dom.imagesList.querySelector(`[data-index="${index}"]`);
+  if (!li) return;
+  const label = li.querySelector('.filename-label');
+  if (label) label.textContent = filename;
 }
 
 // ---------------------------------------------------------------------------
@@ -318,11 +331,12 @@ dom.btnSave.addEventListener('click', async () => {
     const imageName = state.imageName.trim() + '.webp';
     const altValue  = document.getElementById('adj-alt')?.value || '';
     const data      = await uploadImageToDjango(imageName, state.imageGroup, altValue);
-    const savedImg  = { 
-      filename: imageName, 
-      url: data.image_url, 
+    const savedImg  = {
+      id: data.id,
+      filename: imageName,
+      url: data.image_url,
       path: data.image_url,
-      copied: false 
+      copied: false
     };
     const newIndex  = state.imagesSaved.length;
     state.imagesSaved.push(savedImg);
@@ -364,6 +378,35 @@ function onCopyUrl(index) {
   img.copied = true;
   updateCopiedIcon(index, true);
   setTimeout(() => { img.copied = false; updateCopiedIcon(index, false); }, 1500);
+}
+
+// Renomear o label de exibição (filename) de uma imagem já salva
+async function onRenameImage(index) {
+  const img = state.imagesSaved[index];
+  if (!img) return;
+  if (!img.id) {
+    setError('Esta imagem não pode ser renomeada (sem id).', true);
+    return;
+  }
+
+  const newName = prompt('Novo nome do arquivo:', img.filename);
+  if (!newName || !newName.trim() || newName.trim() === img.filename) return;
+  const filename = newName.trim();
+
+  try {
+    const res = await fetch(`https://fastvistos.com.br/msitesapp/api/image-editor/images/${img.id}/rename/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+
+    img.filename = filename;
+    updateImageLabel(index, filename);
+  } catch (err) {
+    setError('Erro ao renomear imagem: ' + err.message, true);
+  }
 }
 
 dom.btnAdjust.addEventListener('click',      () => AdjustOverlay.open(state.imageDataUrl));
@@ -415,7 +458,7 @@ EditArticleOverlay.init(blogArticleId, () => state.imagesSaved);
  * Recebe { filename, url, path, alt } e adiciona à lista de imagens salvas.
  */
 GalleryOverlay.init((selected) => {
-  const savedImg = { filename: selected.filename, path: selected.path, url: selected.url, copied: false };
+  const savedImg = { id: selected.id, filename: selected.filename, path: selected.path, url: selected.url, copied: false };
   const newIndex = state.imagesSaved.length;
   state.imagesSaved.push(savedImg);
   console.log('** Selected from gallery:', savedImg);
