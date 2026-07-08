@@ -420,6 +420,7 @@ GalleryOverlay.init((selected) => {
   state.imagesSaved.push(savedImg);
   console.log('** Selected from gallery:', savedImg);
   addToImageList(savedImg, newIndex);
+  setArticleMainImage(savedImg.path);
 });
 
 /**
