@@ -472,6 +472,25 @@ export class BlogService {
             throw error;
         }
     }
+
+    // Get content block by tag (for dynamic CTA, banners, etc)
+    static async getContentBlock(tag: string) {
+        try {
+            const businessId = this.getBusinessId();
+            return await prisma.blog_content_block.findFirst({
+                where: {
+                    tag: tag,
+                    business_id: businessId,
+                    is_active: true,
+                    is_removed: false,
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching content block:', error);
+            return null;
+        }
+    }
+
     // Format date for display
     static formatDate(date: Date | string | null | undefined, locale: string = 'pt-BR'): string {
         if (!date) return 'Data não disponível';

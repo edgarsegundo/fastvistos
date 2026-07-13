@@ -106,6 +106,77 @@ export class ContentProcessor {
     }
 
     /**
+     * Process content to handle CONTENT-BLOCK tags (dynamic CTA, banners, etc)
+     * Format: <!--<ContentBlock><tag>cta</tag></ContentBlock>-->
+     * @param content - Raw markdown content
+     * @returns Processed content with CONTENT-BLOCK tags resolved to their HTML
+     */
+    static async processContentBlockTags(content: string): Promise<string> {
+        if (!content || typeof content !== 'string') {
+            return content;
+        }
+
+        // Pattern to match <!--<ContentBlock>...</ContentBlock>--> (with optional whitespace)
+        const contentBlockPattern = /<!--\s*<ContentBlock>([\s\S]*?)<\/ContentBlock>\s*-->/gi;
+
+        let processedContent = content;
+        const matches = Array.from(content.matchAll(contentBlockPattern));
+
+        if (matches.length === 0) {
+            return content;
+        }
+
+        console.log(`🔄 Processing ${matches.length} ContentBlock tag(s)`);
+
+        // Process each match
+        for (const match of matches) {
+            const fullMatch = match[0]; // Full <!--<ContentBlock>...</ContentBlock>-->
+            const xmlContent = match[1]; // Content between tags
+
+            try {
+                // Extract tag directly from raw XML using regex
+                const tagMatch = /<tag>([\s\S]*?)<\/tag>/i.exec(xmlContent);
+                const tag = tagMatch ? tagMatch[1].trim() : '';
+
+                console.log('🔍 Processing content block tag:', tag);
+
+                if (!tag) {
+                    console.warn('⚠️ content block tag found without tag identifier, removing tag');
+                    processedContent = processedContent.replace(fullMatch, '');
+                    continue;
+                }
+
+                // Fetch the content block by tag
+                const contentBlock = await BlogService.getContentBlock(tag);
+
+                if (!contentBlock) {
+                    console.log(`⚠️ Content block with tag "${tag}" not found, removing tag`);
+                    processedContent = processedContent.replace(fullMatch, '');
+                    continue;
+                }
+
+                if (!contentBlock.is_active) {
+                    console.log(`⚠️ Content block with tag "${tag}" is inactive, removing tag`);
+                    processedContent = processedContent.replace(fullMatch, '');
+                    continue;
+                }
+
+                // Replace the tag with the content block HTML
+                processedContent = processedContent.replace(fullMatch, contentBlock.content_html);
+
+                console.log(`✅ Successfully resolved content block: ${tag}`);
+
+            } catch (error) {
+                console.error(`❌ Error processing content block:`, error);
+                // On error, remove the tag to prevent broken content
+                processedContent = processedContent.replace(fullMatch, '');
+            }
+        }
+
+        return processedContent;
+    }
+
+    /**
      * Process HowTo and HowToStep XML-like tags, build HowTo JSON, and remove tags from content
      * Uses fast-xml-parser for robust XML parsing
      * @param content - Raw markdown content with <HowTo> and <HowToStep> tags

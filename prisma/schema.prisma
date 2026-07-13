@@ -188,11 +188,30 @@ model blog_config {
   seo_image_width    Int?         @db.UnsignedInt
   author_description String?      @db.LongText
   author_url         String?      @db.VarChar(200)
-  business           business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  business           business              @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
   blog_topic         blog_topic[]
   web_page           web_page[]
+  blog_content_block blog_content_block[]
 
   @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
+}
+
+model blog_content_block {
+  created        DateTime     @db.DateTime(6)
+  modified       DateTime     @db.DateTime(6)
+  is_removed     Boolean
+  id             String       @id @db.Char(32)
+  tag            String       @db.VarChar(100)
+  content_html   String       @db.LongText
+  is_active      Boolean      @default(true)
+  business_id    String       @db.Char(32)
+  blog_config_id String       @db.Char(32)
+  business       business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_content_block_business_id_fk_business_id")
+  blog_config    blog_config  @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_content_block_blog_config_id_fk_blog_config_id")
+
+  @@unique([blog_config_id, tag], map: "blog_content_block_blog_config_id_tag_unique")
+  @@index([business_id], map: "blog_content_block_business_id_fk_business_id")
+  @@index([blog_config_id], map: "blog_content_block_blog_config_id_fk_blog_config_id")
 }
 
 model blog_owner {
@@ -277,6 +296,7 @@ model business {
   blog_article                   blog_article[]
   blog_asset                     blog_asset[]
   blog_config                    blog_config[]
+  blog_content_block             blog_content_block[]
   blog_image                     blog_image[]
   blog_topic                     blog_topic[]
   catalog_item                   catalog_item[]

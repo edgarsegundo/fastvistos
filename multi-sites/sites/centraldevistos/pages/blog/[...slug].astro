@@ -35,11 +35,12 @@ export async function getStaticPaths() {
 // Get the markdown entry from props
 const { entry } = Astro.props;
 
-// Process HowTo tags first, then RELATED-ARTICLE tags
+// Process HowTo tags first, then CONTENT-BLOCK tags, then RELATED-ARTICLE tags
 const rawContent = entry.body || '';
 const { processedContent: contentNoHowTo, howToJson } =
     ContentProcessor.processHowToTags(rawContent);
-const processedContent = await ContentProcessor.processRelatedArticleTags(contentNoHowTo);
+const contentNoContentBlock = await ContentProcessor.processContentBlockTags(contentNoHowTo);
+const processedContent = await ContentProcessor.processRelatedArticleTags(contentNoContentBlock);
 
 console.log(`🛑🛑 howToJson: ${JSON.stringify(howToJson)}`);
 
