@@ -123,6 +123,7 @@ export class ContentProcessor {
         const matches = Array.from(content.matchAll(contentBlockPattern));
 
         if (matches.length === 0) {
+            console.log('🔍 No <ContentBlock> tags found in content');
             return content;
         }
 
