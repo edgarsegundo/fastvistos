@@ -150,6 +150,8 @@ export class ContentProcessor {
                 // Fetch the content block by tag
                 const contentBlock = await BlogService.getContentBlock(tag);
 
+                console.log('🧩 contentBlock raw result from BlogService.getContentBlock:', JSON.stringify(contentBlock, null, 2));
+
                 if (!contentBlock) {
                     console.log(`⚠️ Content block with tag "${tag}" not found, removing tag`);
                     processedContent = processedContent.replace(fullMatch, '');
@@ -162,8 +164,12 @@ export class ContentProcessor {
                     continue;
                 }
 
+                console.log('🧩 contentBlock.content_html type:', typeof contentBlock.content_html);
+                console.log('🧩 contentBlock.content_html length:', contentBlock.content_html?.length ?? 'N/A (null/undefined)');
+                console.log('🧩 contentBlock.content_html value:', contentBlock.content_html);
+
                 // Replace the tag with the content block HTML
-                processedContent = processedContent.replace(fullMatch, contentBlock.content_html);
+                processedContent = processedContent.replace(fullMatch, contentBlock.content_html ?? '');
 
                 console.log(`✅ Successfully resolved content block: ${tag}`);
 
