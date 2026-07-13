@@ -117,7 +117,7 @@ export class ContentProcessor {
         }
 
         // Pattern to match <!--<ContentBlock>...</ContentBlock>--> (with optional whitespace)
-        const contentBlockPattern = /<!--\s*<ContentBlock>([\s\S]*?)<\/ContentBlock>\s*-->/gi;
+        const contentBlockPattern = /<ContentBlock>([\s\S]*?)<\/ContentBlock>/gi;
 
         let processedContent = content;
         const matches = Array.from(content.matchAll(contentBlockPattern));
