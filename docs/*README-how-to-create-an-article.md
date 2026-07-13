@@ -24,6 +24,21 @@ Ex:
 </RelatedArticle>
 -->
 
+## How to add a dynamic content block (CTA, banners, etc)
+
+Ex:
+
+<!--<ContentBlock><tag>cta</tag></ContentBlock>-->
+
+O `tag` identifica qual bloco buscar no banco (`BlogContentBlock`, gerenciado pelo Django
+admin em `blogging2 > Blog content blocks`). Hoje só existe a tag `cta` (o CTA padrão da
+Fast Vistos), mas o mesmo mecanismo serve para qualquer bloco futuro (banner, aviso, etc)
+— basta criar um novo registro no admin com uma `tag` nova e usar essa mesma sintaxe,
+trocando só o valor dentro de `<tag>...</tag>`.
+
+Se a tag não tiver um bloco correspondente no banco (ou o bloco estiver inativo), ela é
+simplesmente removida do artigo publicado — não quebra a página.
+
 ## How to add howto
 
 Ex:
