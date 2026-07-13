@@ -170,48 +170,48 @@ model binary_option {
 }
 
 model blog_config {
-  created            DateTime     @db.DateTime(6)
-  modified           DateTime     @db.DateTime(6)
+  created            DateTime             @db.DateTime(6)
+  modified           DateTime             @db.DateTime(6)
   is_removed         Boolean
-  id                 String       @id @db.Char(32)
-  title              String       @db.VarChar(255)
-  slug               String?      @unique(map: "slug") @db.VarChar(255)
+  id                 String               @id @db.Char(32)
+  title              String               @db.VarChar(255)
+  slug               String?              @unique(map: "slug") @db.VarChar(255)
   config             Json
-  business_id        String       @db.Char(32)
-  author_image       String?      @db.VarChar(100)
-  author_name        String?      @db.VarChar(255)
-  description        String?      @db.VarChar(500)
-  image              String?      @db.VarChar(100)
-  seo_image_caption  String?      @db.VarChar(255)
-  seo_image_height   Int?         @db.UnsignedInt
-  seo_image_url      String?      @db.VarChar(200)
-  seo_image_width    Int?         @db.UnsignedInt
-  author_description String?      @db.LongText
-  author_url         String?      @db.VarChar(200)
-  business           business              @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  business_id        String               @db.Char(32)
+  author_image       String?              @db.VarChar(100)
+  author_name        String?              @db.VarChar(255)
+  description        String?              @db.VarChar(500)
+  image              String?              @db.VarChar(100)
+  seo_image_caption  String?              @db.VarChar(255)
+  seo_image_height   Int?                 @db.UnsignedInt
+  seo_image_url      String?              @db.VarChar(200)
+  seo_image_width    Int?                 @db.UnsignedInt
+  author_description String?              @db.LongText
+  author_url         String?              @db.VarChar(200)
+  business           business             @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_config_business_id_c84a496d_fk_business_id")
+  blog_content_block blog_content_block[]
   blog_topic         blog_topic[]
   web_page           web_page[]
-  blog_content_block blog_content_block[]
 
   @@index([business_id], map: "blog_config_business_id_c84a496d_fk_business_id")
 }
 
 model blog_content_block {
-  created        DateTime     @db.DateTime(6)
-  modified       DateTime     @db.DateTime(6)
+  created        DateTime    @db.DateTime(6)
+  modified       DateTime    @db.DateTime(6)
   is_removed     Boolean
-  id             String       @id @db.Char(32)
-  tag            String       @db.VarChar(100)
-  content_html   String       @db.LongText
-  is_active      Boolean      @default(true)
-  business_id    String       @db.Char(32)
-  blog_config_id String       @db.Char(32)
-  business       business     @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_content_block_business_id_fk_business_id")
-  blog_config    blog_config  @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_content_block_blog_config_id_fk_blog_config_id")
+  id             String      @id @db.Char(32)
+  tag            String      @db.VarChar(100)
+  content_html   String      @db.LongText
+  is_active      Boolean
+  blog_config_id String      @db.Char(32)
+  business_id    String      @db.Char(32)
+  blog_config    blog_config @relation(fields: [blog_config_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_content_block_blog_config_id_fk_blog_config_id")
+  business       business    @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_content_block_business_id_fk_business_id")
 
-  @@unique([blog_config_id, tag], map: "blog_content_block_blog_config_id_tag_unique")
-  @@index([business_id], map: "blog_content_block_business_id_fk_business_id")
-  @@index([blog_config_id], map: "blog_content_block_blog_config_id_fk_blog_config_id")
+  @@index([blog_config_id], map: "blog_content_block_blog_config_id_13d234a7")
+  @@index([business_id], map: "blog_content_block_business_id_c9d8e88b_fk_business_id")
+  @@index([tag], map: "blog_content_block_tag_8e85e0c8")
 }
 
 model blog_owner {
@@ -289,10 +289,12 @@ model business {
   custom_config                  Json?
   canonical_domain               String?                          @db.VarChar(255)
   actionable_group               actionable_group[]
+  application_ds160              application_ds160[]
   appointment_status_1           appointment_status_1[]
   appointment_status_2           appointment_status_2[]
   appointment_status_3           appointment_status_3[]
   appointment_status_4           appointment_status_4[]
+  blog_analytics_query           blog_analytics_query[]
   blog_article                   blog_article[]
   blog_asset                     blog_asset[]
   blog_config                    blog_config[]
@@ -307,6 +309,7 @@ model business {
   customer_order_ofx_transaction customer_order_ofx_transaction[]
   customer_origin                customer_origin[]
   customer_status                customer_status[]
+  ds160_organization             ds160_organization[]
   field_attribute                field_attribute[]
   finance_account                finance_account[]
   finance_accounttype            finance_accounttype[]
@@ -329,6 +332,7 @@ model business {
   status_3                       status_3[]
   status_4                       status_4[]
   status_5                       status_5[]
+  tracker_driver                 tracker_driver[]
   transactions                   transactions[]
   web_page                       web_page[]
   web_page_faq                   web_page_faq[]
@@ -438,6 +442,7 @@ model customer {
   whatsapp              BigInt?
   whats_image_uuid      String?             @db.Char(32)
   name_metaphone        String?             @db.VarChar(255)
+  monitor_identity      String?             @db.VarChar(64)
   business              business            @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_business_id_9c8f4e32_fk_business_id")
   customer_origin       customer_origin?    @relation(fields: [customer_origin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_customer_origin_id_6bc96641_fk_customer_origin_id")
   customer_status       customer_status?    @relation(fields: [customer_status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_customer_status_id_a38837dc_fk_customer_status_id")
@@ -455,6 +460,7 @@ model customer {
   @@index([wa_timestamp], map: "customer_wa_timestamp_43b702b1")
   @@index([whatsapp], map: "customer_whatsapp_05a2f19d")
   @@index([name_metaphone], map: "customer_name_metaphone_48d3deb5")
+  @@index([monitor_identity], map: "customer_monitor_identity_819ee164")
 }
 
 model customer_order {
@@ -1317,6 +1323,7 @@ model blog_article {
   most_read                                                                                     Boolean
   show_in_hero                                                                                  Boolean
   image_vertical                                                                                String?                         @db.VarChar(100)
+  analytics_metadata                                                                            Json?
   blog_topic                                                                                    blog_topic                      @relation(fields: [blog_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_blog_topic_id_a5446626_fk_blog_topic_id")
   business                                                                                      business                        @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_article_business_id_1a83f457_fk_business_id")
   blog_article_related_articles_blog_article_related_articles_from_blogarticle_idToblog_article blog_article_related_articles[] @relation("blog_article_related_articles_from_blogarticle_idToblog_article")
@@ -1379,4 +1386,319 @@ model blog_image {
 
   @@index([business_id], map: "blog_image_business_id_5de59e7b_fk_business_id")
   @@index([slug], map: "blog_image_slug_bbc78326")
+}
+
+model application_ds160 {
+  created                          DateTime               @db.DateTime(6)
+  modified                         DateTime               @db.DateTime(6)
+  is_removed                       Boolean
+  id                               String                 @id @db.Char(32)
+  app_id                           String?                @unique(map: "app_id") @db.VarChar(30)
+  given_names                      String                 @db.VarChar(100)
+  surnames                         String                 @db.VarChar(100)
+  sex                              String                 @db.VarChar(1)
+  status                           String                 @db.VarChar(20)
+  business_id                      String                 @db.Char(32)
+  form_data                        Json                   @default(dbgenerated("(_utf8mb4\\'{}\\')"))
+  passport_image                   String?                @db.VarChar(100)
+  pob_country                      String?                @db.VarChar(100)
+  pob_city                         String?                @db.VarChar(100)
+  national_id_number               String?                @db.VarChar(20)
+  email                            String?                @db.VarChar(254)
+  pob_state_province               String?                @db.VarChar(25)
+  form_fully_completed             Boolean
+  form_submitted_at                DateTime?              @db.DateTime(6)
+  dob_day                          String?                @db.VarChar(2)
+  dob_month                        String?                @db.VarChar(3)
+  dob_year                         String?                @db.VarChar(4)
+  marital_status                   String?                @db.VarChar(1)
+  nationality                      String?                @db.VarChar(10)
+  us_ssn                           String?                @db.VarChar(12)
+  other_nationality                String?                @db.VarChar(500)
+  permanent_residence_countries    String?                @db.VarChar(500)
+  travel_purpose                   String?                @db.VarChar(20)
+  travel_purpose_specify           String?                @db.VarChar(20)
+  intended_arrival_month           String?                @db.VarChar(2)
+  intended_arrival_year            String?                @db.VarChar(4)
+  intended_stay_length             String?                @db.VarChar(5)
+  intended_stay_unit               String?                @db.VarChar(1)
+  us_street_address_1              String?                @db.VarChar(40)
+  us_city                          String?                @db.VarChar(20)
+  us_state                         String?                @db.VarChar(2)
+  us_zip_code                      String?                @db.VarChar(10)
+  trip_payer                       String?                @db.VarChar(10)
+  payer_relationship               String?                @db.VarChar(5)
+  payer_full_name                  String?                @db.VarChar(66)
+  companions_raw_input             String?                @db.LongText
+  has_travel_companions            String?                @db.VarChar(1)
+  travel_companions                Json?
+  is_first_visa                    Boolean
+  has_been_in_us                   String?                @db.VarChar(1)
+  has_iv_petition                  String?                @db.VarChar(1)
+  has_us_visa                      String?                @db.VarChar(1)
+  has_visa_refused                 String?                @db.VarChar(1)
+  iv_petition_explanation          String?                @db.LongText
+  prev_visa_issue_day              String?                @db.VarChar(2)
+  prev_visa_issue_month            String?                @db.VarChar(3)
+  prev_visa_issue_year             String?                @db.VarChar(4)
+  prev_visa_lost                   String?                @db.VarChar(1)
+  prev_visa_lost_explanation       String?                @db.LongText
+  prev_visa_lost_year              String?                @db.VarChar(4)
+  prev_visa_number                 String?                @db.VarChar(8)
+  prev_visa_same_country           String?                @db.VarChar(1)
+  prev_visa_same_type              String?                @db.VarChar(1)
+  prev_visa_ten_printed            String?                @db.VarChar(1)
+  previous_visits                  Json?
+  us_driver_license                String?                @db.VarChar(20)
+  visa_refused_explanation         String?                @db.LongText
+  home_city                        String?                @db.VarChar(20)
+  home_country                     String?                @db.VarChar(10)
+  home_postal_code                 String?                @db.VarChar(10)
+  home_state_province              String?                @db.VarChar(20)
+  home_street_address_1            String?                @db.VarChar(120)
+  home_street_address_2            String?                @db.VarChar(40)
+  social_media_entries             Json?
+  ppt_expiration_day               String?                @db.VarChar(2)
+  ppt_expiration_month             String?                @db.VarChar(2)
+  ppt_expiration_year              String?                @db.VarChar(4)
+  ppt_issuance_day                 String?                @db.VarChar(2)
+  ppt_issuance_month               String?                @db.VarChar(2)
+  ppt_issuance_year                String?                @db.VarChar(4)
+  ppt_issued_city                  String?                @db.VarChar(25)
+  ppt_issued_country               String?                @db.VarChar(10)
+  ppt_issued_state                 String?                @db.VarChar(25)
+  ppt_issuing_country              String?                @db.VarChar(10)
+  ppt_lost                         String?                @db.VarChar(1)
+  ppt_number                       String?                @db.VarChar(20)
+  ppt_type                         String?                @db.VarChar(1)
+  father_full_name                 String?                @db.VarChar(66)
+  mother_full_name                 String?                @db.VarChar(66)
+  father_dob_day                   String?                @db.VarChar(2)
+  father_dob_month                 String?                @db.VarChar(3)
+  father_dob_year                  String?                @db.VarChar(4)
+  father_in_us                     String?                @db.VarChar(1)
+  father_us_status                 String?                @db.VarChar(1)
+  mother_dob_day                   String?                @db.VarChar(2)
+  mother_dob_month                 String?                @db.VarChar(3)
+  mother_dob_year                  String?                @db.VarChar(4)
+  mother_in_us                     String?                @db.VarChar(1)
+  mother_us_status                 String?                @db.VarChar(1)
+  has_us_immediate_relatives       String?                @db.VarChar(1)
+  us_relatives                     Json?
+  spouse_dob_day                   String?                @db.VarChar(2)
+  spouse_dob_month                 String?                @db.VarChar(3)
+  spouse_dob_year                  String?                @db.VarChar(4)
+  spouse_nationality               String?                @db.VarChar(10)
+  spouse_pob_city                  String?                @db.VarChar(20)
+  spouse_pob_country               String?                @db.VarChar(10)
+  prev_employer_addr1              String?                @db.VarChar(120)
+  prev_employer_city               String?                @db.VarChar(25)
+  prev_employer_country            String?                @db.VarChar(10)
+  prev_employer_duties             String?                @db.LongText
+  prev_employer_from_month         String?                @db.VarChar(3)
+  prev_employer_from_year          String?                @db.VarChar(4)
+  prev_employer_job_title          String?                @db.VarChar(100)
+  prev_employer_name               String?                @db.VarChar(50)
+  prev_employer_postal             String?                @db.VarChar(10)
+  prev_employer_state              String?                @db.VarChar(25)
+  prev_employer_supervisor         String?                @db.VarChar(80)
+  prev_employer_to_month           String?                @db.VarChar(3)
+  prev_employer_to_year            String?                @db.VarChar(4)
+  prev_institution_addr1           String?                @db.VarChar(120)
+  prev_institution_city            String?                @db.VarChar(25)
+  prev_institution_country         String?                @db.VarChar(10)
+  prev_institution_course          String?                @db.VarChar(60)
+  prev_institution_from_month      String?                @db.VarChar(3)
+  prev_institution_from_year       String?                @db.VarChar(4)
+  prev_institution_name            String?                @db.VarChar(120)
+  prev_institution_postal          String?                @db.VarChar(10)
+  prev_institution_state           String?                @db.VarChar(25)
+  prev_institution_to_month        String?                @db.VarChar(3)
+  prev_institution_to_year         String?                @db.VarChar(4)
+  previous_employers               Json?
+  previous_institutions            Json?
+  present_occupation               String?                @db.VarChar(5)
+  employer_monthly_income          String?                @db.VarChar(20)
+  present_occupation_other         String?                @db.VarChar(50)
+  spouse_full_name                 String?                @db.VarChar(66)
+  countries_visited                Json?
+  languages_spoken                 Json?
+  prev_employer_phone_country_code String?                @db.VarChar(10)
+  prev_employer_phone_area         String?                @db.VarChar(10)
+  prev_employer_phone_number       String?                @db.VarChar(20)
+  payer_phone_area                 String?                @db.VarChar(10)
+  payer_phone_country_code         String?                @db.VarChar(10)
+  payer_phone_number               String?                @db.VarChar(20)
+  phone_area                       String?                @db.VarChar(10)
+  phone_country_code               String?                @db.VarChar(10)
+  phone_number                     String?                @db.VarChar(20)
+  work_phone_area                  String?                @db.VarChar(10)
+  work_phone_country_code          String?                @db.VarChar(10)
+  work_phone_number                String?                @db.VarChar(20)
+  ppt_lost_country                 String?                @db.VarChar(10)
+  ppt_lost_explain                 String?                @db.VarChar(200)
+  ppt_lost_number                  String?                @db.VarChar(20)
+  social_media_touched             String?                @db.VarChar(1)
+  consulate                        String                 @db.VarChar(40)
+  prev_visa_cancelled_explanation  String?                @db.LongText
+  organization_id                  String?                @db.Char(32)
+  us_address_owner_type            String?                @db.VarChar(1)
+  us_organization                  String?                @db.VarChar(33)
+  us_person_contact                String?                @db.VarChar(66)
+  us_phone_area                    String?                @db.VarChar(10)
+  us_phone_country_code            String?                @db.VarChar(10)
+  us_phone_number                  String?                @db.VarChar(20)
+  us_relationship                  String?                @db.VarChar(1)
+  payer_addr_same                  String?                @db.VarChar(1)
+  payer_address                    String?                @db.VarChar(120)
+  payer_city                       String?                @db.VarChar(20)
+  payer_country                    String?                @db.VarChar(10)
+  payer_state                      String?                @db.VarChar(20)
+  payer_zip                        String?                @db.VarChar(10)
+  other_org_address                String?                @db.VarChar(120)
+  other_org_city                   String?                @db.VarChar(20)
+  other_org_country                String?                @db.VarChar(10)
+  other_org_name                   String?                @db.VarChar(33)
+  other_org_phone_area             String?                @db.VarChar(10)
+  other_org_phone_country_code     String?                @db.VarChar(10)
+  other_org_phone_number           String?                @db.VarChar(20)
+  other_org_relationship           String?                @db.VarChar(50)
+  other_org_state                  String?                @db.VarChar(20)
+  other_org_zip                    String?                @db.VarChar(10)
+  business                         business               @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "application_ds160_business_id_a9392053_fk_business_id")
+  ds160_organization               ds160_organization?    @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "application_ds160_organization_id_3245b572_fk_ds160_org")
+  ds160_access_token               ds160_access_token[]
+  ds160_client_event               ds160_client_event[]
+  ds160_page_status                ds160_page_status[]
+  ds160_worker_process             ds160_worker_process[]
+
+  @@index([business_id], map: "application_ds160_business_id_a9392053_fk_business_id")
+  @@index([organization_id], map: "application_ds160_organization_id_3245b572")
+}
+
+model blog_analytics_query {
+  created         DateTime @db.DateTime(6)
+  modified        DateTime @db.DateTime(6)
+  is_removed      Boolean
+  id              String   @id @db.Char(32)
+  name            String   @db.VarChar(255)
+  conditions      Json
+  sort_field      String?  @db.VarChar(255)
+  sort_report_key String?  @db.VarChar(255)
+  sort_direction  String   @db.VarChar(4)
+  business_id     String   @db.Char(32)
+  business        business @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "blog_analytics_query_business_id_d4a439c3_fk_business_id")
+
+  @@index([business_id], map: "blog_analytics_query_business_id_d4a439c3_fk_business_id")
+}
+
+model ds160_access_token {
+  id                BigInt            @id @default(autoincrement())
+  email             String            @db.VarChar(254)
+  token             String            @unique(map: "token") @db.VarChar(100)
+  created_at        DateTime          @db.DateTime(6)
+  expires_at        DateTime          @db.DateTime(6)
+  used              Boolean
+  used_at           DateTime?         @db.DateTime(6)
+  application_id    String            @db.Char(32)
+  application_ds160 application_ds160 @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ds160_access_token_application_id_24b03ac3_fk_applicati")
+
+  @@index([application_id, email], map: "ds160_acces_applica_5a9d98_idx")
+  @@index([token, expires_at], map: "ds160_acces_token_102552_idx")
+}
+
+model ds160_client_event {
+  id                BigInt             @id @default(autoincrement())
+  token             String             @db.VarChar(100)
+  event_type        String             @db.VarChar(20)
+  page_number       Int?
+  field             String             @db.VarChar(100)
+  message           String             @db.LongText
+  source            String             @db.VarChar(300)
+  url               String             @db.VarChar(500)
+  user_agent        String             @db.VarChar(400)
+  created_at        DateTime           @db.DateTime(6)
+  application_id    String?            @db.Char(32)
+  application_ds160 application_ds160? @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ds160_client_event_application_id_54728f62_fk_applicati")
+
+  @@index([application_id, created_at], map: "ds160_clien_applica_cac167_idx")
+  @@index([event_type, created_at], map: "ds160_clien_event_t_abfc11_idx")
+  @@index([created_at], map: "ds160_client_event_created_at_45e1a029")
+  @@index([event_type], map: "ds160_client_event_event_type_a4deb6e8")
+  @@index([token], map: "ds160_client_event_token_a5ede52f")
+}
+
+model ds160_nome_ibge {
+  nome String @id @db.VarChar(15)
+}
+
+model ds160_organization {
+  created           DateTime            @db.DateTime(6)
+  modified          DateTime            @db.DateTime(6)
+  is_removed        Boolean
+  id                String              @id @db.Char(32)
+  name              String              @db.VarChar(33)
+  address1          String              @db.VarChar(40)
+  address2          String?             @db.VarChar(40)
+  city              String              @db.VarChar(20)
+  state             String?             @db.VarChar(2)
+  zip               String              @db.VarChar(10)
+  phone             String              @db.VarChar(15)
+  email             String?             @db.VarChar(50)
+  business_id       String              @db.Char(32)
+  application_ds160 application_ds160[]
+  business          business            @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ds160_organization_business_id_c0b3ad68_fk_business_id")
+
+  @@index([business_id], map: "ds160_organization_business_id_c0b3ad68_fk_business_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model ds160_page_status {
+  id                BigInt            @id @default(autoincrement())
+  page_id           String            @db.VarChar(30)
+  page_number       Int               @db.UnsignedSmallInt
+  status            String            @db.VarChar(20)
+  last_updated      DateTime          @db.DateTime(6)
+  error_message     String?           @db.LongText
+  application_id    String            @db.Char(32)
+  validation_errors Json              @default(dbgenerated("(_utf8mb4\\'[]\\')"))
+  application_ds160 application_ds160 @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ds160_page_status_application_id_8cec68b8_fk_applicati")
+
+  @@unique([application_id, page_id], map: "ds160_page_status_application_id_page_id_daaf12ad_uniq")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model ds160_worker_process {
+  id                BigInt            @id @default(autoincrement())
+  attempt_number    Int               @db.UnsignedInt
+  celery_task_id    String?           @db.VarChar(100)
+  app_id            String?           @db.VarChar(30)
+  status            String            @db.VarChar(20)
+  progress_log      Json
+  started_at        DateTime          @db.DateTime(6)
+  finished_at       DateTime?         @db.DateTime(6)
+  error_message     String?           @db.LongText
+  application_id    String            @db.Char(32)
+  application_ds160 application_ds160 @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ds160_worker_process_application_id_c86a29d2_fk_applicati")
+
+  @@index([application_id], map: "ds160_worker_process_application_id_c86a29d2_fk_applicati")
+}
+
+model tracker_driver {
+  created                 DateTime @db.DateTime(6)
+  modified                DateTime @db.DateTime(6)
+  is_removed              Boolean
+  id                      String   @id @db.Char(32)
+  driver_code             String   @unique(map: "driver_code") @db.VarChar(50)
+  full_name               String   @db.VarChar(150)
+  phone                   String   @db.VarChar(20)
+  is_active               Boolean
+  shift_start             DateTime @db.Time(6)
+  shift_end               DateTime @db.Time(6)
+  moving_interval_seconds Int
+  idle_interval_seconds   Int
+  business_id             String   @db.Char(32)
+  business                business @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tracker_driver_business_id_c0f7f0b7_fk_business_id")
+
+  @@index([business_id], map: "tracker_driver_business_id_c0f7f0b7_fk_business_id")
 }
