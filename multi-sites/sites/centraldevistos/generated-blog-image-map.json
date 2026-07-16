@@ -664,6 +664,25 @@
       "centraldevistos__walt-disney-world-elimina-exigencia-mascaras-vacinados-orlando-_kt7QdZp-320-2x.webp 640w"
     ]
   },
+  "hoteis-disneywebp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRoIAAABXRUJQVlA4IHYAAAAwBACdASoUAAsAPm0skkWkIqGYBABABsSyAE6ZQZWyJR8b1dnjaXzMkoAA/guZl1hFNT0eaWSYzwyKxwp94PMZgPVhyhgEDPif3WOmM6ZXCbCne58EcqgEaLk5Z64CKXsXSHqWZwHyPy1RirfX9DjYIKnAmAAA",
+    "jpeg": [
+      "hoteis-disneywebp-1216-1x.jpeg 1216w",
+      "hoteis-disneywebp-1216-2x.jpeg 2432w",
+      "hoteis-disneywebp-608-1x.jpeg 608w",
+      "hoteis-disneywebp-608-2x.jpeg 1216w",
+      "hoteis-disneywebp-320-1x.jpeg 320w",
+      "hoteis-disneywebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "hoteis-disneywebp-1216-1x.webp 1216w",
+      "hoteis-disneywebp-1216-2x.webp 2432w",
+      "hoteis-disneywebp-608-1x.webp 608w",
+      "hoteis-disneywebp-608-2x.webp 1216w",
+      "hoteis-disneywebp-320-1x.webp 320w",
+      "hoteis-disneywebp-320-2x.webp 640w"
+    ]
+  },
   "imagem-1777136687323webp": {
     "blurDataURL": "data:image/jpeg;base64,UklGRqwAAABXRUJQVlA4IKAAAABwBACdASoUAA8APm0skUWkIqGYBABABsSxAE6ZQjgO0AAkcDP8gY8UqRKckAD++lRPpS4sA9u9G5gzTiXhGGBl/tnsuJtAtfSTf0IQnBpgecL6q5eexPvcfVA4sN9/dz5tdgdIqC0GOmmnZ7MJMoPLRPClLkvjY24p6DuMaN2tXFyuwHwXodHAp96YMZwa+pmqen/vfZ8lOy/+KfADAAAA",
     "jpeg": [
@@ -681,6 +700,177 @@
       "imagem-1777136687323webp-608-2x.webp 1216w",
       "imagem-1777136687323webp-320-1x.webp 320w",
       "imagem-1777136687323webp-320-2x.webp 640w"
+    ]
+  },
+  "parque-disney-orlandowebp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRp4AAABXRUJQVlA4IJIAAACwBACdASoUAA0APm0qkUWkIqGYBABABsS2AE6ZQjub0m3AAmRHIj3flZMJy2ugAM3lqjSsB7DGpQ86owPdiJ4kKVvzADj9uJHJRd9gF1kTx3UWIrDccdz3WBNzSqkuW3vinp9X08erMY6DDhjqRsdn7BaFFRy1s1DpWf2N/V77/jhp2xEWeiIs9EtTydjS4iAAAA==",
+    "jpeg": [
+      "parque-disney-orlandowebp-1216-1x.jpeg 1216w",
+      "parque-disney-orlandowebp-1216-2x.jpeg 2432w",
+      "parque-disney-orlandowebp-608-1x.jpeg 608w",
+      "parque-disney-orlandowebp-608-2x.jpeg 1216w",
+      "parque-disney-orlandowebp-320-1x.jpeg 320w",
+      "parque-disney-orlandowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "parque-disney-orlandowebp-1216-1x.webp 1216w",
+      "parque-disney-orlandowebp-1216-2x.webp 2432w",
+      "parque-disney-orlandowebp-608-1x.webp 608w",
+      "parque-disney-orlandowebp-608-2x.webp 1216w",
+      "parque-disney-orlandowebp-320-1x.webp 320w",
+      "parque-disney-orlandowebp-320-2x.webp 640w"
+    ]
+  },
+  "passaporte-bandeira-usawebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUHA//EACAQAAICAwACAwEAAAAAAAAAAAEDAgQABREhMRMUIsH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFAwT/xAAfEQABBAEFAQAAAAAAAAAAAAABAAIDEQQFISIxobH/2gAMAwEAAhEDEQA/AMdrq7Cq/ZVmggd8xOLKMjrmIthzPg7xioH9DLvtdM6mozF+bAB6msH+5OJUKkN9Kw9EXCR8rPiPcq/NiksStr1b4NNnbzx3359TelZ+zWg2tY2sVSHQMMdVtbVekMhFiYn1CEyAMMHMQJsdJ4PaBThuv//Z",
+    "jpeg": [
+      "passaporte-bandeira-usawebp-1216-1x.jpeg 1216w",
+      "passaporte-bandeira-usawebp-1216-2x.jpeg 2432w",
+      "passaporte-bandeira-usawebp-608-1x.jpeg 608w",
+      "passaporte-bandeira-usawebp-608-2x.jpeg 1216w",
+      "passaporte-bandeira-usawebp-320-1x.jpeg 320w",
+      "passaporte-bandeira-usawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "passaporte-bandeira-usawebp-1216-1x.webp 1216w",
+      "passaporte-bandeira-usawebp-1216-2x.webp 2432w",
+      "passaporte-bandeira-usawebp-608-1x.webp 608w",
+      "passaporte-bandeira-usawebp-608-2x.webp 1216w",
+      "passaporte-bandeira-usawebp-320-1x.webp 320w",
+      "passaporte-bandeira-usawebp-320-2x.webp 640w"
+    ]
+  },
+  "passaporte-visto-americanowebp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRqAAAABXRUJQVlA4IJQAAABQBACdASoUAA0APm0skkWkIqGYBABABsSxAE6ZQZLGJJdZv0540nXcI/AAAP75Rsgdd/E841v/zXx6of5jh7WX4tJoVx02+7MIPey2iQdfdMfOWJBWPbeFk3Avl9MnJzRWe7Xja7Uky8P2CAAJTf9mbCCpVcrZ1h3chSgxzHy56Ygb0GmuG1dtxOCAQ/uPvpjnfKAA",
+    "jpeg": [
+      "passaporte-visto-americanowebp-1216-1x.jpeg 1216w",
+      "passaporte-visto-americanowebp-1216-2x.jpeg 2432w",
+      "passaporte-visto-americanowebp-608-1x.jpeg 608w",
+      "passaporte-visto-americanowebp-608-2x.jpeg 1216w",
+      "passaporte-visto-americanowebp-320-1x.jpeg 320w",
+      "passaporte-visto-americanowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "passaporte-visto-americanowebp-1216-1x.webp 1216w",
+      "passaporte-visto-americanowebp-1216-2x.webp 2432w",
+      "passaporte-visto-americanowebp-608-1x.webp 608w",
+      "passaporte-visto-americanowebp-608-2x.webp 1216w",
+      "passaporte-visto-americanowebp-320-1x.webp 320w",
+      "passaporte-visto-americanowebp-320-2x.webp 640w"
+    ]
+  },
+  "stock-pexels-3411132-1777463844851webp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRoAAAABXRUJQVlA4IHQAAABwBACdASoUAA0APm0skkWkIqGYBABABsS1AE6XgT0AArrVSsoelCCsMSgCAAD+1tk8HDIb+0V96+b7ntKfpHZAVfNfVE4pYD/u9zrgk1/8YrcPaHN736HzclCajwEq5t1PqZhdYb5evjXba6kNzmhyv+oAAA==",
+    "jpeg": [
+      "stock-pexels-3411132-1777463844851webp-1216-1x.jpeg 1216w",
+      "stock-pexels-3411132-1777463844851webp-1216-2x.jpeg 2432w",
+      "stock-pexels-3411132-1777463844851webp-608-1x.jpeg 608w",
+      "stock-pexels-3411132-1777463844851webp-608-2x.jpeg 1216w",
+      "stock-pexels-3411132-1777463844851webp-320-1x.jpeg 320w",
+      "stock-pexels-3411132-1777463844851webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "stock-pexels-3411132-1777463844851webp-1216-1x.webp 1216w",
+      "stock-pexels-3411132-1777463844851webp-1216-2x.webp 2432w",
+      "stock-pexels-3411132-1777463844851webp-608-1x.webp 608w",
+      "stock-pexels-3411132-1777463844851webp-608-2x.webp 1216w",
+      "stock-pexels-3411132-1777463844851webp-320-1x.webp 320w",
+      "stock-pexels-3411132-1777463844851webp-320-2x.webp 640w"
+    ]
+  },
+  "stock-pexels-35544450-1777302973496webp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRogAAABXRUJQVlA4IHwAAACQBACdASoUAA0APm0qkkWkIqGYBABABsSzAE6ZQjgRYABkk/7sx0zP1TdoqgAA/uGr9iIkYy2BGmNQeeHH4WBVHtpNrsDNsnYqS/3NyMRwFqnILNyT9EZknjJq6Mo7wVVyZZxAdDcMU/ZskUdcDfo3IJAVvicif7U45UgA",
+    "jpeg": [
+      "stock-pexels-35544450-1777302973496webp-1216-1x.jpeg 1216w",
+      "stock-pexels-35544450-1777302973496webp-1216-2x.jpeg 2432w",
+      "stock-pexels-35544450-1777302973496webp-608-1x.jpeg 608w",
+      "stock-pexels-35544450-1777302973496webp-608-2x.jpeg 1216w",
+      "stock-pexels-35544450-1777302973496webp-320-1x.jpeg 320w",
+      "stock-pexels-35544450-1777302973496webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "stock-pexels-35544450-1777302973496webp-1216-1x.webp 1216w",
+      "stock-pexels-35544450-1777302973496webp-1216-2x.webp 2432w",
+      "stock-pexels-35544450-1777302973496webp-608-1x.webp 608w",
+      "stock-pexels-35544450-1777302973496webp-608-2x.webp 1216w",
+      "stock-pexels-35544450-1777302973496webp-320-1x.webp 320w",
+      "stock-pexels-35544450-1777302973496webp-320-2x.webp 640w"
+    ]
+  },
+  "stock-pexels-58461-1777303071748webp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBgf/xAAiEAACAQQBBAMAAAAAAAAAAAABAgMABAUGERITIVExQqH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFAQP/xAAgEQABAwMFAQAAAAAAAAAAAAABAAIRAwQFFCExUXGR/9oADAMBAAIRAxEAPwBdo+wZftIr45GQ/c8eKa7NmcjNaSrHBEAfAA45NU3Tr+6HbQTv0+qabHdTgxESMCCeP2jq2QuG3IpmIPq0t8bReyYHxZzklvjeOXQKx+RRUGQuJXvJGaRiSfdFNg7cKac9r//Z",
+    "jpeg": [
+      "stock-pexels-58461-1777303071748webp-1216-1x.jpeg 1216w",
+      "stock-pexels-58461-1777303071748webp-1216-2x.jpeg 2432w",
+      "stock-pexels-58461-1777303071748webp-608-1x.jpeg 608w",
+      "stock-pexels-58461-1777303071748webp-608-2x.jpeg 1216w",
+      "stock-pexels-58461-1777303071748webp-320-1x.jpeg 320w",
+      "stock-pexels-58461-1777303071748webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "stock-pexels-58461-1777303071748webp-1216-1x.webp 1216w",
+      "stock-pexels-58461-1777303071748webp-1216-2x.webp 2432w",
+      "stock-pexels-58461-1777303071748webp-608-1x.webp 608w",
+      "stock-pexels-58461-1777303071748webp-608-2x.webp 1216w",
+      "stock-pexels-58461-1777303071748webp-320-1x.webp 320w",
+      "stock-pexels-58461-1777303071748webp-320-2x.webp 640w"
+    ]
+  },
+  "stock-pixabay-252816-1777591484228webp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRnYAAABXRUJQVlA4IGoAAAAQBACdASoUAA0APm0skkWkIqGYBABABsSyAE6ZQYwAJMXaKiRHFo8EgAD+/JGuF2GF3HLhn2HQhHLH4YGsCJ7X/p21mGZMFeG/PzSw1NL3TyELul6+FwOARtaex7wHG00knNVKM4l/wlAA",
+    "jpeg": [
+      "stock-pixabay-252816-1777591484228webp-1216-1x.jpeg 1216w",
+      "stock-pixabay-252816-1777591484228webp-1216-2x.jpeg 2432w",
+      "stock-pixabay-252816-1777591484228webp-608-1x.jpeg 608w",
+      "stock-pixabay-252816-1777591484228webp-608-2x.jpeg 1216w",
+      "stock-pixabay-252816-1777591484228webp-320-1x.jpeg 320w",
+      "stock-pixabay-252816-1777591484228webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "stock-pixabay-252816-1777591484228webp-1216-1x.webp 1216w",
+      "stock-pixabay-252816-1777591484228webp-1216-2x.webp 2432w",
+      "stock-pixabay-252816-1777591484228webp-608-1x.webp 608w",
+      "stock-pixabay-252816-1777591484228webp-608-2x.webp 1216w",
+      "stock-pixabay-252816-1777591484228webp-320-1x.webp 320w",
+      "stock-pixabay-252816-1777591484228webp-320-2x.webp 640w"
+    ]
+  },
+  "stock-pixabay-832112-1777735508503webp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoUAAwAPm0qkUWkIqGYBABABsSgC7H8ADBNqdA3dMBmqfW2yYAA/vjSZ9Z0Dd+4kfxgbQwCP1tc171covT4M9+XF6Via+4WQmEu4HdlLLWxwk4BjO6OBs+U2fBZz3JW366WGqdwAAA=",
+    "jpeg": [
+      "stock-pixabay-832112-1777735508503webp-1216-1x.jpeg 1216w",
+      "stock-pixabay-832112-1777735508503webp-1216-2x.jpeg 2432w",
+      "stock-pixabay-832112-1777735508503webp-608-1x.jpeg 608w",
+      "stock-pixabay-832112-1777735508503webp-608-2x.jpeg 1216w",
+      "stock-pixabay-832112-1777735508503webp-320-1x.jpeg 320w",
+      "stock-pixabay-832112-1777735508503webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "stock-pixabay-832112-1777735508503webp-1216-1x.webp 1216w",
+      "stock-pixabay-832112-1777735508503webp-1216-2x.webp 2432w",
+      "stock-pixabay-832112-1777735508503webp-608-1x.webp 608w",
+      "stock-pixabay-832112-1777735508503webp-608-2x.webp 1216w",
+      "stock-pixabay-832112-1777735508503webp-320-1x.webp 320w",
+      "stock-pixabay-832112-1777735508503webp-320-2x.webp 640w"
+    ]
+  },
+  "trump-gold-visawebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAECUlEQVR4nCXMyVNTdxwA8PwHnuyAVBEQhUAgCSH78l5Qti6MrdWIpTLDIHWmdaMyWgVSIUCWYgh5WUheFhITQHAEyVJIShLIQspiRdpOvXeMpxTi8fdNp+3hc/1QUjbsg4RVwopbJedjU+LLEaNQFtbzZKsTbFlwnCXza5gyv4oh8ykZsmUlQ7Y0RpctK+kyv/p/AQ3jckDNOL/yI5O1qmEepaRIYe2mTdyTsonJJCnxxq1iT8ws8Kxo2R6fmulZVtK9QQ3DG1TTvX5ljXdphPYf31i11zda7Vl4RPXODVKts4PU7oCKTqOk7eKWlFVk3rSJ36btkvdJUny4bhblQpPcXHiSlwtPcnIRPTsX0dXlQuP0XEBdm/OranIBVU3Or6Tlng9R3z+VV/41J680LI1Un6XsuvC2ly7c+dKNH+y4cJSwiNC6WQQxkwgSVgyiJiFsGLkQN7IhbqyHsJaJgho68qlqwaesQUsj1ei5oiq7qKgifWO0FsrebFPb/uw55+uZswe7LhzFTEIUNYpgw4KhpL0BrU4KIKTjQMzAhi0bH2JGDgpPslFQy4KftCwUmmChNV1dNqpnkWFtXQvl1WxT25/Pmpx/LDQf7s81Q8reAAlSCkmbFGJmDBZVbPBrWPkIwcnvusQQNfNhVc8Dn5YDQR0HIkYuJK387LZDSKYswn/Dxrbf58859582H76aa4W4rRGiUw2wZpTAyoQAFkbqwD9en09Yhfm9GSkk7RKITIkhZBLBz2YhpOwi2J6WZPc8OLnlxFspEaOgLaznOoMT/MNFjQC8Ch48U/HhhYYHS2ouuAfoMK9g5kN6Xn7HLYX0NA4JpxQ27FKI23HYeYLDrx48+9tcA7nlamil2O5Xf2rpozqIO5UHqutn0FDXKaS/XYUcD2vRzCMmst2nobkhBrzQ1EOY4KMQwUdhkxiFzRgKmyUoPY2hHTeW3Z+VkpsOSQtFfvXkJ8NdJY7Br4r/7rtUhO58XohGr5UhYy8VTffXIvJeNfL+UAvugRpwD9DQ7DADBXQ8FLViKEZiaNuNo123JPvai5Mpm6iF8t3FD6XyzhJtf0fxm+/bj2d6LxS+lV8tzqi+PpUx9FIzprtVGccDWoa4XZFR9pRmdDdPZ7xD9MyKnv8uZBBkNizCdwkr/03axh9fN3ExSn/HyUrV9fIriu4ytbyzmLh78Zj+wZXjhKKrhNDeOEPoblYQk7cqiNHuMuLhlyeI8W/KifkRhmHTLjb8Mi02pB1CQ9LCUyemuO3rRk4FZbir9MhwV2l5f0exoO9SEX6jrQC79Vkh1vtFEXav/QT27flj2LWPCrDOxqNYz8cFmKK7FHsip+HxKR6etPLwNX29dOUxU+BX00+vPq478g/JDTN3B03bwgAAAABJRU5ErkJggg==",
+    "jpeg": [
+      "trump-gold-visawebp-1216-1x.jpeg 1216w",
+      "trump-gold-visawebp-1216-2x.jpeg 2432w",
+      "trump-gold-visawebp-608-1x.jpeg 608w",
+      "trump-gold-visawebp-608-2x.jpeg 1216w",
+      "trump-gold-visawebp-320-1x.jpeg 320w",
+      "trump-gold-visawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "trump-gold-visawebp-1216-1x.webp 1216w",
+      "trump-gold-visawebp-1216-2x.webp 2432w",
+      "trump-gold-visawebp-608-1x.webp 608w",
+      "trump-gold-visawebp-608-2x.webp 1216w",
+      "trump-gold-visawebp-320-1x.webp 320w",
+      "trump-gold-visawebp-320-2x.webp 640w"
     ]
   }
 }

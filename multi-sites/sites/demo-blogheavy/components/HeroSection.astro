@@ -1,0 +1,86 @@
+---
+// Hero Section Component
+import { BlogService } from '../lib/blog-service.js';
+
+// Fetch the hero article dynamically
+const heroArticle = await BlogService.getShowInHeroArticle();
+
+// Helper to build responsive sources (same logic as CarouselSection)
+function buildSources(filename, breakpoints, scales, imageBase) {
+    function buildSrcset(format) {
+        const entries = [];
+        breakpoints.forEach((bp) => {
+            scales.forEach((scale) => {
+                const realWidth = bp * scale;
+                const file = `${filename}-${bp}-${scale}x.${format}`;
+                entries.push(`${imageBase}${file} ${realWidth}w`);
+            });
+        });
+        return entries.join(', ');
+    }
+    return {
+        webp: buildSrcset('webp'),
+        jpeg: buildSrcset('jpeg'),
+    };
+}
+
+// Prepare image data if available
+let heroImage = null;
+if (heroArticle && heroArticle.image) {
+    const path = await import('path');
+    const filename = path.parse(heroArticle.image).name;
+    heroImage = {
+        alt: heroArticle.title || 'Imagem em destaque',
+        sources: buildSources(
+            filename,
+            [1216, 608, 320], // breakpoints
+            [1, 2],           // scales
+            '/assets/images/blog/resized/'
+        ),
+        blurDataURL: heroArticle.blur_base64 || '',
+    };
+}
+---
+
+<section class="relative bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+            {heroImage ? (
+                <picture>
+                    <source
+                        type="image/webp"
+                        srcset={heroImage.sources.webp}
+                        sizes="100vw"
+                    />
+                    <source
+                        type="image/jpeg"
+                        srcset={heroImage.sources.jpeg}
+                        sizes="100vw"
+                    />
+                    <img
+                        src={heroArticle.image}
+                        alt={heroImage.alt}
+                        class="w-full h-full object-cover"
+                        style={heroImage.blurDataURL ? `background-image:url('${heroImage.blurDataURL}');background-size:cover;` : ''}
+                        loading="eager"
+                    />
+                </picture>
+            ) : (
+                <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                    <span class="text-gray-500">Imagem não disponível</span>
+                </div>
+            )}
+
+            <div
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6"
+            >
+                <h2 class="text-white text-xl md:text-3xl font-bold mb-2">
+                    {heroArticle?.title ?? 'Título em destaque'}
+                </h2>
+                <p class="text-white/90 text-sm md:text-base">
+                    {heroArticle?.seo_description ?? 'Descrição do artigo em destaque.'}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -97,7 +97,17 @@
     "dev:watch:final-skip-demo": "node dev-with-sync.js final-skip-demo",
     "build:final-skip-demo": "node sync-blog.js final-skip-demo && SITE_ID=final-skip-demo astro build && node postbuild-updatable.js final-skip-demo",
     "preview:final-skip-demo": "SITE_ID=final-skip-demo astro preview",
-    "download-images:final-skip-demo": "node download-blog-images.js final-skip-demo"
+    "download-images:final-skip-demo": "node download-blog-images.js final-skip-demo",
+    "dev:demo-minimal": "node sync-blog.js demo-minimal && SITE_ID=demo-minimal astro dev",
+    "dev:watch:demo-minimal": "node dev-with-sync.js demo-minimal",
+    "build:demo-minimal": "node sync-blog.js demo-minimal && SITE_ID=demo-minimal astro build && node postbuild-updatable.js demo-minimal",
+    "preview:demo-minimal": "SITE_ID=demo-minimal astro preview",
+    "download-images:demo-minimal": "node download-blog-images.js demo-minimal",
+    "dev:demo-blogheavy": "node sync-blog.js demo-blogheavy && SITE_ID=demo-blogheavy astro dev",
+    "dev:watch:demo-blogheavy": "node dev-with-sync.js demo-blogheavy",
+    "build:demo-blogheavy": "node sync-blog.js demo-blogheavy && SITE_ID=demo-blogheavy astro build && node postbuild-updatable.js demo-blogheavy",
+    "preview:demo-blogheavy": "SITE_ID=demo-blogheavy astro preview",
+    "download-images:demo-blogheavy": "node download-blog-images.js demo-blogheavy"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
