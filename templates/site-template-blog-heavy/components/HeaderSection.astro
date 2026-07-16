@@ -1,0 +1,76 @@
+---
+// Header Section Component
+import { BlogService } from '../lib/blog-service.ts';
+import { siteConfig } from '../site-config.ts';
+const topics = await BlogService.getHomepageTopics();
+---
+
+<!-- Header/Navigation -->
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+    <div class="container mx-auto px-4">
+        <!-- Mobile Header -->
+        <div class="flex items-center justify-between py-4 md:hidden">
+            <button class="p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <a href="/" class="flex-1 text-center font-bold">
+                {siteConfig.site.siteName}
+            </a>
+
+            <button class="p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Desktop Header -->
+        <div class="hidden md:flex items-center justify-between py-4">
+                <!-- Logo Area -->
+                <a href="/" class="flex items-center mr-8 min-w-[180px] font-bold text-lg">
+                    {siteConfig.site.siteName}
+                </a>
+
+                <!-- Topics Menu -->
+                <nav class="flex-1 flex items-center justify-center space-x-6">
+                        {topics && topics.length > 0 ? (
+                            topics.map(topic => (
+                                <a
+                                    href={topic.slug ? `/${topic.slug}` : '#'}
+                                    class="text-sm font-medium hover:text-gray-600"
+                                    key={topic.id}
+                                >
+                                    {topic.title}
+                                </a>
+                            ))
+                        ) : (
+                            <span class="text-gray-400 text-sm">Nenhum tópico</span>
+                        )}
+                </nav>
+
+                <!-- Right-side links -->
+                <nav class="flex items-center space-x-6 ml-8">
+                        <a href="/blog" class="text-sm font-medium hover:text-gray-600">Blog</a>
+                        <button class="p-1">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                        </button>
+                </nav>
+        </div>
+    </div>
+</header>

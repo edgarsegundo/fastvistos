@@ -1,0 +1,50 @@
+---
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import { siteConfig } from '../site-config.ts';
+import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+import HeaderSection from '../components/HeaderSection.astro';
+import HeroSection from '../components/HeroSection.astro';
+import MostReadSection from '../components/MostReadSection.astro';
+import CarouselSection from '../components/CarouselSection.astro';
+import FooterSection from '../components/FooterSection.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+---
+
+<SharedHomeLayout
+    bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
+    bodyStyle={`${bodyStyle}`}
+    canonicalConf={siteConfig.site.canonical}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.homePageConfig.seo}
+    titleFromConf={siteConfig.homePageConfig.seo.title}
+    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.alt}
+    imageWidthFromConf={siteConfig.site.primaryImage.width}
+    imageHeightFromConf={siteConfig.site.primaryImage.height}
+>
+    <!-- Additional head content specific to this layout -->
+    <Fragment slot="head">
+        <JsonLdHomePageBase
+            faqList={[]}
+            servicesList={[]}
+            reviewsList={[]}
+            disableReviews={false}
+        />
+    </Fragment>
+
+    <!-- Body content -->
+    <main class="min-h-screen">
+        <HeaderSection />
+        <HeroSection />
+        <MostReadSection />
+        <CarouselSection />
+        <FooterSection />
+    </main>
+</SharedHomeLayout>
+
+<style is:global>
+</style>

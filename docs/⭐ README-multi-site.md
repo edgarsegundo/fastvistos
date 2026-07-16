@@ -12,7 +12,26 @@ This project implements a **Multi-Site Architecture** using Astro v5.13.5 with c
 node create-site.js
 # Interactive script to create a new site with all necessary configuration files
 # Creates site structure, config files, and registers the site automatically
+# Also prompts which starting template to use for the homepage (see below)
 ```
+
+#### Homepage templates
+
+`create-site.js` asks which template to copy as the starting point for the new site's homepage
+(`pages/index.astro` + its site-specific components). Available templates live under `templates/`:
+
+- `templates/site-template-minimal/` — bare homepage, no prebuilt sections (the original/default)
+- `templates/site-template-blog-heavy/` — homepage with `HeaderSection`, `HeroSection`,
+  `MostReadSection`, `CarouselSection` and `FooterSection` already wired up, modeled after
+  `revistadoturismo`/`emprego`
+
+Once a site is created, its `pages/index.astro` and site-specific components (e.g.
+`HeaderSection.astro`, `HeroSection.astro`, `FooterSection.astro`) belong entirely to that site —
+`sync-blog.js` never touches them again. Only shared components already present in
+`multi-sites/core/components/` (like `CarouselSection.astro`, JSON-LD blocks, `SidebarAbove/Below`)
+keep getting overwritten on every sync. See
+[`⭐ README-multi-site-starting-a-new-site.md`](./⭐%20README-multi-site-starting-a-new-site.md)
+for details.
 
 ### **⚡ Development with Auto-Sync (RECOMMENDED)**
 

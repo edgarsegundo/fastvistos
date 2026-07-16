@@ -16,6 +16,19 @@ import { spawn } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Parse CLI arguments for non-interactive mode
+function parseArgs() {
+    const args = {};
+    for (const arg of process.argv.slice(2)) {
+        if (arg.startsWith('--')) {
+            const [key, value] = arg.slice(2).split('=');
+            const camelKey = key.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+            args[camelKey] = value || true;
+        }
+    }
+    return args;
+}
+
 // Create readline interface for user input
 const rl = readline.createInterface({
     input: process.stdin,
@@ -31,6 +44,23 @@ function question(prompt) {
 
 // Import crypto at module level
 import crypto from 'crypto';
+
+// Available site templates (folder name under templates/ -> label shown to the user)
+const SITE_TEMPLATES = {
+    'site-template-minimal': 'Minimal (leve, sem seções prontas)',
+    'site-template-blog-heavy': 'Blog Heavy (Header/Hero/MostRead/Carousel/Footer prontos)',
+};
+const DEFAULT_TEMPLATE = 'site-template-minimal';
+
+// Resolve a template choice (numeric menu index or folder name) to a valid template folder name
+function resolveTemplateKey(choice) {
+    if (!choice) return DEFAULT_TEMPLATE;
+    const keys = Object.keys(SITE_TEMPLATES);
+    const byIndex = keys[Number(choice) - 1];
+    if (byIndex) return byIndex;
+    if (SITE_TEMPLATES[choice]) return choice;
+    return DEFAULT_TEMPLATE;
+}
 
 // Process template file by replacing placeholders
 async function processTemplate(templatePath, replacements) {
@@ -209,18 +239,32 @@ async function addNpmScripts(siteId) {
 // Main site creation function
 async function createSite() {
     let replacements = {};
-    console.log('🚀 Site Creation Wizard');
-    console.log('========================\n');
+    const args = parseArgs();
+    const isNonInteractive = Boolean(args.siteId);
+    const skipBusinessCreation = Boolean(args.businessId);
+
+    if (!isNonInteractive) {
+        console.log('🚀 Site Creation Wizard');
+        console.log('========================\n');
+    }
 
     try {
         // Get site ID
-        const siteId = await question('Enter site ID (lowercase, no spaces, e.g., "mysite"): ');
+        let siteId;
+        if (isNonInteractive) {
+            siteId = args.siteId;
+        } else {
+            siteId = await question('Enter site ID (lowercase, no spaces, e.g., "mysite"): ');
+        }
 
         const siteIdError = validateSiteId(siteId);
         if (siteIdError) {
             console.error(`❌ ${siteIdError}`);
-            console.log('💡 Examples: mysite, my-company, site123');
+            if (!isNonInteractive) {
+                console.log('💡 Examples: mysite, my-company, site123');
+            }
             rl.close();
+            process.exit(isNonInteractive ? 1 : 0);
             return;
         }
 
@@ -233,16 +277,18 @@ async function createSite() {
             console.error(`❌ Site '${siteId}' already exists in multi-sites/sites/`);
             console.log('🚫 Exiting without making changes.');
             rl.close();
+            process.exit(isNonInteractive ? 1 : 0);
             return;
         } catch {
             // Site doesn't exist, continue
         }
-        
+
         try {
             await fs.access(publicSiteDir);
             console.error(`❌ Public site directory '${siteId}' already exists in public/`);
             console.log('🚫 Exiting without making changes.');
             rl.close();
+            process.exit(isNonInteractive ? 1 : 0);
             return;
         } catch {
             // Public site doesn't exist, continue
@@ -250,153 +296,248 @@ async function createSite() {
 
         // Get domain
         const suggestedDomain = `${siteId}.com`;
-        console.log(`\nSuggested domain: ${suggestedDomain}`);
-        const domainInput = await question(
-            `Enter domain (or press Enter for "${suggestedDomain}"): `
-        );
-        const domain = domainInput || suggestedDomain;
+        let domain;
+        if (isNonInteractive) {
+            domain = args.domain || suggestedDomain;
+        } else {
+            console.log(`\nSuggested domain: ${suggestedDomain}`);
+            const domainInput = await question(
+                `Enter domain (or press Enter for "${suggestedDomain}"): `
+            );
+            domain = domainInput || suggestedDomain;
+        }
 
         const domainError = validateDomain(domain);
         if (domainError) {
             console.error(`❌ ${domainError}`);
             rl.close();
+            process.exit(isNonInteractive ? 1 : 0);
             return;
         }
+
+        // Get template choice
+        let templateKey;
+        if (isNonInteractive) {
+            templateKey = resolveTemplateKey(args.template);
+        } else {
+            console.log('\n📋 Templates disponíveis:');
+            Object.keys(SITE_TEMPLATES).forEach((key, i) => {
+                console.log(`  ${i + 1}) ${SITE_TEMPLATES[key]}`);
+            });
+            const templateChoice = await question(
+                `Escolha o template (1-${Object.keys(SITE_TEMPLATES).length}, Enter = minimal): `
+            );
+            templateKey = resolveTemplateKey(templateChoice);
+        }
+        console.log(`🎨 Template selecionado: ${SITE_TEMPLATES[templateKey]}`);
 
         // Derive site name from siteId (capitalize first letter)
         const siteName = siteId.charAt(0).toUpperCase() + siteId.slice(1).replace(/-/g, ' ');
 
         // Business information prompts (derive from siteId)
-        console.log('\n📊 Business Information (for database):');
-        console.log('   Leave fields empty to skip optional fields\n');
-
-        // Use siteId as business name and derive display name
         const businessName = siteId;
         const displayName = siteName; // Capitalized version of siteId
 
-        const email = await question('Enter business email (optional): ');
-        const emailError = validateEmail(email);
-        if (emailError) {
-            console.error(`❌ ${emailError}`);
-            rl.close();
-            return;
-        }
+        let email, phoneCountryCode, phoneAreaCode, phoneNumber;
 
-        console.log('\nPhone number (optional - leave all empty to skip):');
-        const phoneCountryCode = await question('  Country code (e.g., 1, 55): ');
-        const phoneCountryError = validatePhone(phoneCountryCode, 'Country code');
-        if (phoneCountryError) {
-            console.error(`❌ ${phoneCountryError}`);
-            rl.close();
-            return;
-        }
+        if (skipBusinessCreation) {
+            // Skip business creation mode: use dummy values for email/phone
+            email = '';
+            phoneCountryCode = '';
+            phoneAreaCode = '';
+            phoneNumber = '';
+        } else if (isNonInteractive) {
+            // Non-interactive but creating business: use args or empty defaults
+            email = args.email || '';
+            phoneCountryCode = args.phoneCountry || '';
+            phoneAreaCode = args.phoneArea || '';
+            phoneNumber = args.phoneNumber || '';
+        } else {
+            // Interactive mode: prompt for business info
+            console.log('\n📊 Business Information (for database):');
+            console.log('   Leave fields empty to skip optional fields\n');
 
-        const phoneAreaCode = await question('  Area code (e.g., 11, 212): ');
-        const phoneAreaError = validatePhone(phoneAreaCode, 'Area code');
-        if (phoneAreaError) {
-            console.error(`❌ ${phoneAreaError}`);
-            rl.close();
-            return;
-        }
-
-        const phoneNumber = await question('  Phone number: ');
-        const phoneNumberError = validatePhone(phoneNumber, 'Phone number');
-        if (phoneNumberError) {
-            console.error(`❌ ${phoneNumberError}`);
-            rl.close();
-            return;
-        }
-
-        console.log('\n📋 Configuration Summary:');
-        console.log(`   Site ID: ${siteId}`);
-        console.log(`   Display Name: ${displayName}`);
-        console.log(`   Domain: ${domain}`);
-        console.log(`   Email: ${email || '(not provided)'}`);
-        if (phoneCountryCode || phoneAreaCode || phoneNumber) {
-            console.log(`   Phone: +${phoneCountryCode || ''} (${phoneAreaCode || ''}) ${phoneNumber || ''}`);
-        }
-
-        // Robust confirmation prompt: only accept y/n, repeat if invalid
-        let confirm = '';
-        while (true) {
-            confirm = await question('\nProceed with site creation? (y/N): ');
-            if (/^y$/i.test(confirm)) {
-                break;
-            } else if (/^n$/i.test(confirm) || confirm.trim() === '') {
-                console.log('🚫 Site creation cancelled.');
+            email = await question('Enter business email (optional): ');
+            const emailError = validateEmail(email);
+            if (emailError) {
+                console.error(`❌ ${emailError}`);
                 rl.close();
+                process.exit(0);
                 return;
-            } else {
-                console.log('⚠️  Please enter y or n.');
+            }
+
+            console.log('\nPhone number (optional - leave all empty to skip):');
+            phoneCountryCode = await question('  Country code (e.g., 1, 55): ');
+            const phoneCountryError = validatePhone(phoneCountryCode, 'Country code');
+            if (phoneCountryError) {
+                console.error(`❌ ${phoneCountryError}`);
+                rl.close();
+                process.exit(0);
+                return;
+            }
+
+            phoneAreaCode = await question('  Area code (e.g., 11, 212): ');
+            const phoneAreaError = validatePhone(phoneAreaCode, 'Area code');
+            if (phoneAreaError) {
+                console.error(`❌ ${phoneAreaError}`);
+                rl.close();
+                process.exit(0);
+                return;
+            }
+
+            phoneNumber = await question('  Phone number: ');
+            const phoneNumberError = validatePhone(phoneNumber, 'Phone number');
+            if (phoneNumberError) {
+                console.error(`❌ ${phoneNumberError}`);
+                rl.close();
+                process.exit(0);
+                return;
             }
         }
 
-        console.log('\n🔨 Creating business in database...');
+        // Validate email and phone fields if provided in non-interactive mode creating business
+        if (isNonInteractive && !skipBusinessCreation) {
+            const emailError = validateEmail(email);
+            if (emailError) {
+                console.error(`❌ ${emailError}`);
+                rl.close();
+                process.exit(1);
+                return;
+            }
 
-        // Import BlogService and create business
-        const { BlogService } = await import('./multi-sites/core/lib/blog-service.js');
-        
-        const businessData = {
-            name: businessName,
-            display_name: displayName,
-            canonical_domain: domain,
-        };
-        
-        if (email) businessData.email = email;
-        if (phoneCountryCode) businessData.phone1_country_code = phoneCountryCode;
-        if (phoneAreaCode) businessData.phone1_area_code = phoneAreaCode;
-        if (phoneNumber) businessData.phone1_number = phoneNumber;
+            const phoneCountryError = validatePhone(phoneCountryCode, 'Country code');
+            if (phoneCountryError) {
+                console.error(`❌ ${phoneCountryError}`);
+                rl.close();
+                process.exit(1);
+                return;
+            }
 
-        let businessId;
-        try {
-            const business = await BlogService.createBusiness(businessData);
-            businessId = business.id;
-            console.log(`✅ Business created with ID: ${businessId}`);
-        } catch (error) {
-            console.error('❌ Failed to create business in database:', error.message);
-            console.log('💡 Please check database connection and try again.');
-            rl.close();
-            return;
+            const phoneAreaError = validatePhone(phoneAreaCode, 'Area code');
+            if (phoneAreaError) {
+                console.error(`❌ ${phoneAreaError}`);
+                rl.close();
+                process.exit(1);
+                return;
+            }
+
+            const phoneNumberError = validatePhone(phoneNumber, 'Phone number');
+            if (phoneNumberError) {
+                console.error(`❌ ${phoneNumberError}`);
+                rl.close();
+                process.exit(1);
+                return;
+            }
         }
 
-        // Create user for business via API
-        console.log('\n🔨 Creating user and profile...');
-        try {
-            const response = await fetch('https://sys.fastvistos.com.br/api/create-user-for-business/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-Key': process.env.API_KEY || '',
-                },
-                body: JSON.stringify({
-                    business_id: businessId,
-                    email: email || `${siteId}@example.com`,
-                    username: siteId,
-                }),
-            });
+        // Show configuration summary and confirm (skip in non-interactive mode)
+        if (!isNonInteractive) {
+            console.log('\n📋 Configuration Summary:');
+            console.log(`   Site ID: ${siteId}`);
+            console.log(`   Display Name: ${displayName}`);
+            console.log(`   Domain: ${domain}`);
+            console.log(`   Email: ${email || '(not provided)'}`);
+            if (phoneCountryCode || phoneAreaCode || phoneNumber) {
+                console.log(`   Phone: +${phoneCountryCode || ''} (${phoneAreaCode || ''}) ${phoneNumber || ''}`);
+            }
 
-            // Check if response is JSON before parsing
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                console.error(`❌ API returned non-JSON response (status ${response.status})`);
-                console.log('💡 Response preview:', text.substring(0, 200));
-                console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
-            } else {
-                const result = await response.json();
-
-                if (!response.ok || !result.success) {
-                    console.error(`❌ Failed to create user: ${result.error || 'Unknown error'}`);
-                    console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
+            // Robust confirmation prompt: only accept y/n, repeat if invalid
+            let confirm = '';
+            while (true) {
+                confirm = await question('\nProceed with site creation? (y/N): ');
+                if (/^y$/i.test(confirm)) {
+                    break;
+                } else if (/^n$/i.test(confirm) || confirm.trim() === '') {
+                    console.log('🚫 Site creation cancelled.');
+                    return;
                 } else {
-                    console.log(`✅ User created: ${result.username} (ID: ${result.user_id})`);
-                    console.log(`✅ Profile created (ID: ${result.profile_id})`);
-                    console.log(`🔑 Temporary password: ${result.username}`);
+                    console.log('⚠️  Please enter y or n.');
                 }
             }
-        } catch (error) {
-            console.error('❌ Error calling user creation API:', error.message);
-            console.log('💡 Business was created but user creation failed. Check API connectivity.');
+        }
+
+        let businessId;
+        let userCreated = false;
+
+        if (skipBusinessCreation) {
+            // Use provided businessId directly
+            businessId = args.businessId;
+            if (!businessId) {
+                console.error('❌ --business-id is required when skipping business creation');
+                rl.close();
+                process.exit(isNonInteractive ? 1 : 0);
+                return;
+            }
+        } else {
+            // Create business in database
+            console.log('\n🔨 Creating business in database...');
+
+            // Import BlogService and create business
+            const { BlogService } = await import('./multi-sites/core/lib/blog-service.js');
+
+            const businessData = {
+                name: businessName,
+                display_name: displayName,
+                canonical_domain: domain,
+            };
+
+            if (email) businessData.email = email;
+            if (phoneCountryCode) businessData.phone1_country_code = phoneCountryCode;
+            if (phoneAreaCode) businessData.phone1_area_code = phoneAreaCode;
+            if (phoneNumber) businessData.phone1_number = phoneNumber;
+
+            try {
+                const business = await BlogService.createBusiness(businessData);
+                businessId = business.id;
+                console.log(`✅ Business created with ID: ${businessId}`);
+            } catch (error) {
+                console.error('❌ Failed to create business in database:', error.message);
+                console.log('💡 Please check database connection and try again.');
+                rl.close();
+                process.exit(isNonInteractive ? 1 : 0);
+                return;
+            }
+
+            // Create user for business via API
+            console.log('\n🔨 Creating user and profile...');
+            try {
+                const response = await fetch('https://sys.fastvistos.com.br/api/create-user-for-business/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': process.env.API_KEY || '',
+                    },
+                    body: JSON.stringify({
+                        business_id: businessId,
+                        email: email || `${siteId}@example.com`,
+                        username: siteId,
+                    }),
+                });
+
+                // Check if response is JSON before parsing
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    console.error(`❌ API returned non-JSON response (status ${response.status})`);
+                    console.log('💡 Response preview:', text.substring(0, 200));
+                    console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
+                } else {
+                    const result = await response.json();
+
+                    if (!response.ok || !result.success) {
+                        console.error(`❌ Failed to create user: ${result.error || 'Unknown error'}`);
+                        console.log('💡 Business was created but user creation failed. You may need to create the user manually.');
+                    } else {
+                        console.log(`✅ User created: ${result.username} (ID: ${result.user_id})`);
+                        console.log(`✅ Profile created (ID: ${result.profile_id})`);
+                        console.log(`🔑 Temporary password: ${result.username}`);
+                        userCreated = true;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Error calling user creation API:', error.message);
+                console.log('💡 Business was created but user creation failed. Check API connectivity.');
+            }
         }
 
         console.log('\n🔨 Creating site structure...');
@@ -415,9 +556,9 @@ async function createSite() {
         };
 
         // Copy template files to new site
-        const templateDir = join(__dirname, 'templates/site-template');
+        const templateDir = join(__dirname, `templates/${templateKey}`);
         await copyTemplateFiles(templateDir, siteDir, replacements);
-        console.log(`📁 Created site structure from templates`);
+        console.log(`📁 Created site structure from '${templateKey}' template`);
 
         // Copy public template files to public folder
         const publicTemplateDir = join(__dirname, 'templates/public-template');
@@ -437,21 +578,45 @@ async function createSite() {
         // Add npm scripts for the new site
         await addNpmScripts(siteId);
 
-        console.log('\n✅ Site created successfully!');
-        console.log('\n📋 Next steps:');
-        console.log(`   1. Customize styling in tailwind.${siteId}.config.js`);
-        console.log(`   2. Add your content to ${siteId}/pages/`);
-        console.log(`   3. Add your assets to public/${siteId}/`);
-        console.log(`   4. Run sync to update templates: npm run sync`);
-        console.log(`\n💡 Business ID: ${businessId}`);
-        console.log('    (Automatically created and linked to your site)');
+        if (isNonInteractive) {
+            // Output JSON result for UI/API consumption
+            const result = {
+                success: true,
+                siteId,
+                businessId,
+                domain,
+                userCreated,
+                template: templateKey,
+            };
+            console.log(JSON.stringify(result));
+            rl.close();
+            process.exit(0);
+        } else {
+            console.log('\n✅ Site created successfully!');
+            console.log('\n📋 Next steps:');
+            console.log(`   1. Customize styling in tailwind.${siteId}.config.js`);
+            console.log(`   2. Add your content to ${siteId}/pages/`);
+            console.log(`   3. Add your assets to public/${siteId}/`);
+            console.log(`   4. Run sync to update templates: npm run sync`);
+            console.log(`\n💡 Business ID: ${businessId}`);
+            console.log('    (Automatically created and linked to your site)');
+            rl.close();
+            const child = spawn('npm', ['run', `dev:watch:${siteId}`], {
+                stdio: 'inherit',
+            });
+        }
     } catch (error) {
-        console.error('❌ Error creating site:', error.message);
-    } finally {
+        if (isNonInteractive) {
+            const result = {
+                success: false,
+                error: error.message,
+            };
+            console.log(JSON.stringify(result));
+        } else {
+            console.error('❌ Error creating site:', error.message);
+        }
         rl.close();
-        const child = spawn('npm', ['run', `dev:watch:${replacements.SITE_ID}`], {
-            stdio: 'inherit',
-        });
+        process.exit(isNonInteractive ? 1 : 0);
     }
 }
 

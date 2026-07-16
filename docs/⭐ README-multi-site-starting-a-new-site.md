@@ -10,6 +10,27 @@
 
 ```bash
 node create-site.js
+```
+
+### Templates disponíveis
+
+`create-site.js` pergunta qual template usar como ponto de partida da home (`pages/index.astro` +
+`components/`). Depois de criado, o site é livre para divergir do template à vontade — nada é
+re-sincronizado de volta (diferente do que acontece com `pages/blog/*` e os componentes
+compartilhados via `sync-blog.js`).
+
+| Template | Pasta | Quando usar |
+| --- | --- | --- |
+| **Minimal** | `templates/site-template-minimal/` | Home simples, sem seções prontas — você monta do zero (era o único template antes) |
+| **Blog Heavy** | `templates/site-template-blog-heavy/` | Home no estilo `revistadoturismo`/`emprego`: já vem com `HeaderSection`, `HeroSection`, `MostReadSection`, `CarouselSection` e `FooterSection` montados |
+
+```bash
+# Interativo — mostra o menu de templates
+node create-site.js
+
+# Não-interativo — direto por flag
+node create-site.js --site-id=mysite --template=site-template-blog-heavy
+```
 
 
 Creating the main homepage image, see guidelines. The first image I created for fastvistos and serves as an example can be found [here](multi-sites/sites/fastvistos/docs/images/home-page-main-image.svg)

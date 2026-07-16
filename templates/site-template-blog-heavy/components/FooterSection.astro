@@ -1,0 +1,22 @@
+---
+// Footer Section Component
+import { siteConfig } from '../site-config.ts';
+const currentYear = new Date().getFullYear();
+---
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-8 mt-12">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col items-center text-center">
+
+            <!-- Logo Area -->
+            <a href="/" class="flex items-center font-bold text-lg mb-2">
+                {siteConfig.site.siteName}
+            </a>
+
+            <p class="text-gray-400 text-sm">
+                &copy; {currentYear} {siteConfig.site.siteName}. Todos os direitos reservados.
+            </p>
+        </div>
+    </div>
+</footer>
