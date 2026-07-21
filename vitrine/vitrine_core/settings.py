@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'core',
     'tenancy',
 
+    'unfold',
+    'unfold.contrib.filters',
+    'unfold.contrib.forms',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,3 +139,14 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.ClientUser'
+
+UNFOLD = {
+    'SITE_HEADER': 'Vitrine Admin',
+    'SITE_TITLE': 'Vitrine',
+    'SITE_SYMBOL': 'settings',
+    'SHOW_HISTORY': True,
+    'SIDEBAR': {
+        'show_search': True,
+        'show_all_applications': True,
+    },
+}

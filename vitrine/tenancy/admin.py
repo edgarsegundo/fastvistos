@@ -1,29 +1,33 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from .models import Client, ClientProfile
 from .threadlocal import get_current_client
 
 
 @admin.register(Client)
-class ClientAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug", "created")
+class ClientAdmin(ModelAdmin):
+    list_display = ("name", "slug", "created", "is_removed")
     prepopulated_fields = {"slug": ("name",)}
     filter_horizontal = ("staff_members",)
+    list_filter = ("is_removed",)
 
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        # Usa all_objects pra ver deletados/não-deletados, depois filtra permissão
+        qs = Client.all_objects.get_queryset()
         if request.user.is_superuser:
             return qs
         return qs.filter(staff_members=request.user)
 
 
 @admin.register(ClientProfile)
-class ClientProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "client", "role")
-    list_filter = ("role", "client")
+class ClientProfileAdmin(ModelAdmin):
+    list_display = ("user", "client", "role", "is_removed")
+    list_filter = ("role", "is_removed", "client")
 
     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+        # Usa all_objects pra ver deletados/não-deletados
+        qs = ClientProfile.all_objects.get_queryset()
         if request.user.is_superuser:
             return qs
         return qs.filter(client__staff_members=request.user)
@@ -34,10 +38,10 @@ class ClientProfileAdmin(admin.ModelAdmin):
         # nome de tenants fora do escopo do staff. Removido pra não-superuser.
         if request.user.is_superuser:
             return self.list_filter
-        return ("role",)
+        return ("role", "is_removed")
 
 
-class ClientScopedAdmin(admin.ModelAdmin):
+class ClientScopedAdmin(ModelAdmin):
     """Mixin para ModelAdmin de qualquer model que herde ClientModel.
 
     Usa `all_objects` (sem filtro automático do manager) e filtra
