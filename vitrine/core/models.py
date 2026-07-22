@@ -287,3 +287,78 @@ class Deployment(ClientModel):
 
     def __str__(self):
         return f"Deployment {self.id} (Build {self.build.id}) - {self.status}"
+
+
+class Domain(ClientModel):
+    """Domínio customizado para um projeto"""
+
+    VERIFICATION_PENDING = 'pending_dns'
+    VERIFICATION_VERIFIED = 'dns_verified'
+    VERIFICATION_FAILED = 'failed'
+
+    VERIFICATION_CHOICES = [
+        (VERIFICATION_PENDING, 'Pendente DNS'),
+        (VERIFICATION_VERIFIED, 'DNS Verificado'),
+        (VERIFICATION_FAILED, 'Falha na Verificação'),
+    ]
+
+    SSL_NONE = 'none'
+    SSL_PENDING = 'pending'
+    SSL_ISSUED = 'issued'
+    SSL_FAILED = 'failed'
+
+    SSL_CHOICES = [
+        (SSL_NONE, 'Nenhum'),
+        (SSL_PENDING, 'Pendente'),
+        (SSL_ISSUED, 'Ativo'),
+        (SSL_FAILED, 'Falha'),
+    ]
+
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name='domains',
+        help_text='Projeto associado'
+    )
+    domain = models.CharField(
+        max_length=255,
+        unique=True,
+        help_text='ex: agenciafuturo.com.br'
+    )
+    is_primary = models.BooleanField(
+        default=False,
+        help_text='Se True, é o domínio padrão; False = domínio customizado'
+    )
+    verification_status = models.CharField(
+        max_length=20,
+        choices=VERIFICATION_CHOICES,
+        default=VERIFICATION_PENDING,
+        help_text='Status da verificação de DNS'
+    )
+    ssl_status = models.CharField(
+        max_length=20,
+        choices=SSL_CHOICES,
+        default=SSL_NONE,
+        help_text='Status do certificado SSL'
+    )
+    verified_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='Timestamp da verificação'
+    )
+    dns_check_log = models.TextField(
+        blank=True,
+        help_text='Log da última verificação de DNS'
+    )
+
+    class Meta:
+        verbose_name = 'Domínio'
+        verbose_name_plural = 'Domínios'
+        ordering = ['domain']
+        indexes = [
+            models.Index(fields=['project', 'is_primary']),
+            models.Index(fields=['verification_status', 'ssl_status']),
+        ]
+
+    def __str__(self):
+        return f"{self.domain} ({self.project.name})"

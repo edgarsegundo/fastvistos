@@ -250,3 +250,102 @@ def rollback_to_build(build):
 
     deployment.save()
     return deployment
+
+
+def verify_domain_dns(domain):
+    """
+    Verifica se o domínio está resolvendo pro IP público do VPS.
+
+    Args:
+        domain: Domain instance
+
+    Raises:
+        Exception: if DNS doesn't resolve or doesn't point to VPS IP
+    """
+    import socket
+
+    vps_ip = getattr(settings, 'VPS_PUBLIC_IP', '72.60.57.150')
+
+    try:
+        resolved_ip = socket.gethostbyname(domain.domain)
+    except socket.gaierror as e:
+        domain.verification_status = domain.VERIFICATION_FAILED
+        domain.dns_check_log = f'DNS resolution failed: {str(e)}'
+        domain.save()
+        raise Exception(f'DNS resolution failed for {domain.domain}: {str(e)}')
+
+    if resolved_ip != vps_ip:
+        domain.verification_status = domain.VERIFICATION_FAILED
+        domain.dns_check_log = f'DNS points to {resolved_ip}, expected {vps_ip}'
+        domain.save()
+        raise Exception(f'DNS points to {resolved_ip}, expected {vps_ip}')
+
+    # DNS verificado!
+    domain.verification_status = domain.VERIFICATION_VERIFIED
+    domain.verified_at = timezone.now()
+    domain.dns_check_log = f'✅ DNS verified: {domain.domain} → {resolved_ip}'
+    domain.save()
+
+
+def provision_domain_nginx_ssl(domain):
+    """
+    Provisiona Nginx + SSL para um domínio.
+    Requer que DNS tenha sido verificado antes.
+
+    Args:
+        domain: Domain instance (deve estar em VERIFICATION_VERIFIED status)
+
+    Raises:
+        Exception: if provisioning fails
+    """
+    from core.nginx_templates import generate_nginx_server_block
+
+    if domain.verification_status != domain.VERIFICATION_VERIFIED:
+        raise ValueError(f'Domain {domain.domain} must be DNS verified before provisioning')
+
+    try:
+        # Gerar config Nginx
+        nginx_config = generate_nginx_server_block(
+            domain=domain.domain,
+            project_slug=domain.project.slug,
+            platform_site_id=getattr(settings, 'PLATFORM_SITE_ID', '_saas')
+        )
+
+        # Enviar pra VPS via SSH restrito
+        # Comando: write-nginx-conf <domain> <config-content>
+        # (O script no VPS faz o parsing)
+        rc, stdout, stderr = run_ssh_command(['write-nginx-conf', domain.domain, nginx_config])
+
+        if rc != 0:
+            raise Exception(f'write-nginx-conf failed: {stderr}')
+
+        # Atualizar status SSL
+        domain.ssl_status = domain.SSL_PENDING
+        domain.dns_check_log = 'Nginx config written, awaiting SSL provisioning...'
+        domain.save()
+
+        # Rodar Certbot pra pegar SSL
+        # Comando: certbot-issue <domain>
+        rc, stdout, stderr = run_ssh_command(['certbot-issue', domain.domain])
+
+        if rc != 0:
+            domain.ssl_status = domain.SSL_FAILED
+            domain.dns_check_log = f'Certbot failed: {stderr}'
+            domain.save()
+            raise Exception(f'certbot-issue failed: {stderr}')
+
+        # Sucesso! Reload Nginx e marcar como ativo
+        rc, stdout, stderr = run_ssh_command(['reload-nginx'])
+
+        if rc != 0:
+            raise Exception(f'reload-nginx failed: {stderr}')
+
+        domain.ssl_status = domain.SSL_ISSUED
+        domain.dns_check_log = f'✅ Nginx + SSL provisioned successfully'
+        domain.save()
+
+    except Exception as e:
+        domain.ssl_status = domain.SSL_FAILED
+        domain.dns_check_log = str(e)
+        domain.save()
+        raise

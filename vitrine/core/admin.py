@@ -3,7 +3,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from unfold.admin import ModelAdmin
 from tenancy.admin import ClientScopedAdmin
 
-from .models import ClientUser, Project, Page, Build, Deployment
+from .models import ClientUser, Project, Page, Build, Deployment, Domain
+
+# Import DomainAdmin from separate file to keep admin.py manageable
+from .admin_domain import DomainAdmin as _DomainAdmin
 
 
 @admin.register(ClientUser)
