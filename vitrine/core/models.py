@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 from model_utils.models import TimeStampedModel, UUIDModel
+from tenancy.models import ClientModel
 
 
 class ClientUserManager(BaseUserManager):
@@ -54,3 +55,141 @@ class ClientUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel, UUIDModel
         """Retorna nome completo ou email como fallback."""
         full_name = f'{self.first_name} {self.last_name}'.strip()
         return full_name or self.email
+
+
+class Project(ClientModel):
+    """Um projeto/site criado por um usuário do SaaS"""
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+    description = models.TextField(blank=True)
+    is_published = models.BooleanField(default=False)
+    needs_rebuild = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Projeto"
+        verbose_name_plural = "Projetos"
+        ordering = ['-created']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['client', 'slug'],
+                name='unique_project_slug_per_client'
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['slug', 'is_published']),
+            models.Index(fields=['needs_rebuild']),
+        ]
+
+    def __str__(self):
+        return f"{self.name} ({self.slug})"
+
+
+class Page(ClientModel):
+    """Uma página dentro de um projeto com suporte a múltiplos formatos"""
+
+    # Formatos disponíveis
+    FORMAT_MARKDOWN = 'markdown'
+    FORMAT_HTML_SAFE = 'html_safe'
+    FORMAT_HTML_CUSTOM = 'html_custom'
+
+    FORMAT_CHOICES = [
+        (FORMAT_MARKDOWN, '📝 Markdown (Recomendado - Seguro & Rápido)'),
+        (FORMAT_HTML_SAFE, '🔒 HTML Seguro (HTML + CSS, sem JavaScript)'),
+        (FORMAT_HTML_CUSTOM, '⚡ HTML Customizado (HTML + CSS + JavaScript via iFrame)'),
+    ]
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='pages')
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+
+    # Formato do conteúdo
+    content_format = models.CharField(
+        max_length=20,
+        choices=FORMAT_CHOICES,
+        default=FORMAT_MARKDOWN,
+        help_text="Escolha como você quer criar o conteúdo"
+    )
+
+    # Conteúdo (pode ser Markdown, HTML seguro, ou HTML customizado)
+    content = models.TextField(
+        default='',
+        help_text="Conteúdo em Markdown ou HTML (conforme o formato selecionado)"
+    )
+
+    seo_title = models.CharField(max_length=255, blank=True)
+    seo_description = models.CharField(max_length=160, blank=True)
+    is_published = models.BooleanField(default=True)
+    is_home = models.BooleanField(default=False, help_text="Marque para ser a página inicial")
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Página"
+        verbose_name_plural = "Páginas"
+        ordering = ['order', 'title']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['project', 'slug'],
+                name='unique_page_slug_per_project'
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['project', 'is_published']),
+            models.Index(fields=['slug', 'is_published']),
+        ]
+
+    def __str__(self):
+        return f"{self.project.slug}/{self.slug}"
+
+    def render_content_for_api(self):
+        """Renderiza conteúdo pra API (retorna formato final)"""
+        if self.content_format == self.FORMAT_MARKDOWN:
+            return {
+                'format': 'markdown',
+                'content': self.content,
+                'render_type': 'marked'
+            }
+        elif self.content_format == self.FORMAT_HTML_SAFE:
+            sanitized = self._sanitize_html_safe(self.content)
+            return {
+                'format': 'html_safe',
+                'content': sanitized,
+                'render_type': 'inline'
+            }
+        elif self.content_format == self.FORMAT_HTML_CUSTOM:
+            return {
+                'format': 'html_custom',
+                'content': self.content,
+                'render_type': 'iframe'
+            }
+
+    @staticmethod
+    def _sanitize_html_safe(html_content):
+        """Sanitiza HTML removendo scripts e eventos perigosos"""
+        try:
+            import bleach
+        except ImportError:
+            # Se bleach não tiver instalado, retorna como está
+            return html_content
+
+        allowed_tags = [
+            'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'a', 'img', 'table',
+            'thead', 'tbody', 'tr', 'th', 'td', 'div', 'section', 'article',
+            'figure', 'figcaption', 'video', 'audio', 'source'
+        ]
+
+        allowed_attributes = {
+            'a': ['href', 'title', 'target'],
+            'img': ['src', 'alt', 'width', 'height', 'loading'],
+            'video': ['src', 'width', 'height', 'controls', 'poster'],
+            'audio': ['src', 'controls'],
+            'source': ['src', 'type'],
+            '*': ['class', 'id', 'style']
+        }
+
+        return bleach.clean(
+            html_content,
+            tags=allowed_tags,
+            attributes=allowed_attributes,
+            strip=True
+        )

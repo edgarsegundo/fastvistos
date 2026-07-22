@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from core import views as core_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tenancy/', include('tenancy.urls')),
+
+    # API para Astro
+    path('api/projects/', core_views.api_projects_list, name='api_projects_list'),
+    path('api/projects/<str:project_slug>/pages/', core_views.api_project_pages, name='api_project_pages'),
+    path('api/trigger-rebuild/', core_views.api_trigger_rebuild, name='api_trigger_rebuild'),
 ]

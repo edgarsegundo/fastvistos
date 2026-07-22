@@ -1,0 +1,180 @@
+---
+/**
+ * Dynamic route for user-created projects and pages
+ * Renders any project + sub-page combination
+ *
+ * URL patterns:
+ * /project-slug/            → home page (slug = "index")
+ * /project-slug/about/      → about page (slug = "about")
+ * /project-slug/services/   → services page (slug = "services")
+ */
+
+import { marked } from 'marked';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    console.log('🔨 Building static paths for all user projects...');
+
+    try {
+        const apiBase = import.meta.env.DJANGO_API_URL || 'http://localhost:8000';
+
+        // 1. Busca TODOS os projetos publicados
+        const projectsRes = await fetch(`${apiBase}/api/projects/`);
+
+        if (!projectsRes.ok) {
+            console.error(`❌ Failed to fetch projects (status ${projectsRes.status})`);
+            return [];
+        }
+
+        const projects = await projectsRes.json();
+        console.log(`📦 Found ${projects.length} published projects`);
+
+        // 2. Para cada projeto, busca suas páginas
+        const allPaths = [];
+
+        for (const project of projects) {
+            try {
+                const pagesRes = await fetch(
+                    `${apiBase}/api/projects/${project.slug}/pages/`
+                );
+
+                if (!pagesRes.ok) {
+                    console.warn(`⚠️  Could not fetch pages for project "${project.slug}"`);
+                    continue;
+                }
+
+                const pages = await pagesRes.json();
+                console.log(`  📄 ${project.slug}: ${pages.length} pages`);
+
+                // 3. Gera um path para cada página
+                pages.forEach(page => {
+                    allPaths.push({
+                        params: {
+                            project: project.slug,
+                            slug: page.slug || 'index'  // slug vazio = home
+                        },
+                        props: {
+                            page,
+                            project
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error(`❌ Error fetching pages for project "${project.slug}":`, error);
+            }
+        }
+
+        console.log(`✅ Total static paths generated: ${allPaths.length}\n`);
+        return allPaths;
+
+    } catch (error) {
+        console.error('❌ Critical error in getStaticPaths:', error);
+        return [];
+    }
+}
+
+// Props vêm de getStaticPaths
+const { page, project } = Astro.props;
+
+// ✨ RENDERIZAR CONFORME O TIPO
+let htmlContent = '';
+let renderType = page.render_type; // 'marked' | 'inline' | 'iframe'
+
+if (renderType === 'marked') {
+    // ===== TIPO 1: MARKDOWN =====
+    htmlContent = await marked(page.content, {
+        gfm: true,
+        breaks: true,
+    });
+} else if (renderType === 'inline') {
+    // ===== TIPO 2: HTML SEGURO (inline) =====
+    // HTML já foi sanitizado no backend
+    htmlContent = page.content;
+} else if (renderType === 'iframe') {
+    // ===== TIPO 3: HTML CUSTOMIZADO (iFrame) =====
+    // Será renderizado em iFrame, não precisa processar aqui
+    htmlContent = null;
+}
+---
+
+<Layout
+    title={page.seo_title || page.title}
+    description={page.seo_description}
+>
+    <main class="container mx-auto px-4 py-12">
+        {/* Breadcrumb */}
+        <nav class="text-sm text-gray-600 mb-6">
+            <a href="/">Home</a>
+            <span class="mx-2">›</span>
+            <a href={`/${project.slug}/`}>{project.name}</a>
+            {page.slug !== 'index' && (
+                <>
+                    <span class="mx-2">›</span>
+                    <span>{page.title}</span>
+                </>
+            )}
+        </nav>
+
+        {/* Título */}
+        <h1 class="text-4xl font-bold mb-6">{page.title}</h1>
+
+        {/* ✨ RENDERIZA CONFORME O TIPO */}
+
+        {renderType === 'iframe' ? (
+            // ===== TIPO 3: iFrame Sandbox =====
+            <iframe
+                srcDoc={page.content}
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                style={{
+                    width: '100%',
+                    minHeight: '600px',
+                    border: 'none',
+                    borderRadius: '8px'
+                }}
+                title={page.title}
+            />
+        ) : (
+            // ===== TIPO 1 & 2: Markdown ou HTML Seguro =====
+            <div class="prose prose-lg max-w-none" set:html={htmlContent} />
+        )}
+
+        {/* Footer com info de formato */}
+        <footer class="mt-12 pt-6 border-t border-gray-200 text-sm text-gray-600">
+            <p>
+                Projeto: <strong>{project.name}</strong>
+                {' '}
+                <span class="text-xs px-2 py-1 bg-gray-100 rounded">
+                    {renderType === 'marked' && '📝 Markdown'}
+                    {renderType === 'inline' && '🔒 HTML Seguro'}
+                    {renderType === 'iframe' && '⚡ HTML Custom'}
+                </span>
+            </p>
+            {page.modified && (
+                <p>Última atualização: {new Date(page.modified).toLocaleDateString('pt-BR')}</p>
+            )}
+        </footer>
+    </main>
+</Layout>
+
+<style>
+    .prose {
+        --tw-prose-body: #374151;
+        --tw-prose-headings: #1f2937;
+        --tw-prose-lead: #6b7280;
+        --tw-prose-links: #2563eb;
+        --tw-prose-bold: #1f2937;
+        --tw-prose-counters: #6b7280;
+        --tw-prose-bullets: #d1d5db;
+        --tw-prose-hr: #e5e7eb;
+        --tw-prose-quotes: #6b7280;
+        --tw-prose-quote-borders: #e5e7eb;
+        --tw-prose-captions: #6b7280;
+        --tw-prose-code: #d946ef;
+        --tw-prose-pre-bg: #1f2937;
+        --tw-prose-pre-code: #e5e7eb;
+        --tw-prose-pre-border: #374151;
+        --tw-prose-th-borders: #d1d5db;
+        --tw-prose-td-borders: #e5e7eb;
+    }
+</style>
