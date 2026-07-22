@@ -22,6 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tenancy/', include('tenancy.urls')),
 
+    # Preview
+    path('preview/<int:page_id>/', core_views.preview_page, name='preview_page'),
+
     # API para Astro
     path('api/projects/', core_views.api_projects_list, name='api_projects_list'),
     path('api/projects/<str:project_slug>/pages/', core_views.api_project_pages, name='api_project_pages'),

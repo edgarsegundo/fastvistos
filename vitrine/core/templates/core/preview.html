@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% if seo_title %}{{ seo_title }}{% else %}{{ page.title }}{% endif %}</title>
+    {% if seo_description %}<meta name="description" content="{{ seo_description }}" />{% endif %}
+    <style>
+        :root {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.5;
+            font-weight: 400;
+            color: #333;
+            background-color: #f9fafb;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .header {
+            margin-bottom: 32px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0 0 8px 0;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .format-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+        .format-badge.markdown {
+            background-color: #3498db;
+            color: white;
+        }
+        .format-badge.html-safe {
+            background-color: #f39c12;
+            color: white;
+        }
+        .format-badge.html-custom {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .content {
+            margin: 24px 0;
+            line-height: 1.6;
+        }
+        .content h2 {
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .content h3 {
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        .content p {
+            margin: 16px 0;
+        }
+        .content ul, .content ol {
+            margin: 16px 0 16px 24px;
+        }
+        .content li {
+            margin: 8px 0;
+        }
+        .content a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .content a:hover {
+            color: #1d4ed8;
+        }
+        .content code {
+            background-color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+        .content pre {
+            background-color: #1f2937;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        .iframe-container {
+            margin: 24px 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            min-height: 600px;
+            border: none;
+        }
+        .footer {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .warning {
+            background-color: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="/admin/">Admin</a>
+            <span> › </span>
+            <a href="/admin/core/project/">Projetos</a>
+            <span> › </span>
+            <a href="/admin/core/project/{{ project.id }}/change/">{{ project.name }}</a>
+            <span> › </span>
+            <span>Preview: {{ page.title }}</span>
+        </div>
+
+        <!-- Warning -->
+        <div class="warning">
+            ℹ️ <strong>Modo Preview:</strong> Esta é uma visualização do conteúdo antes da publicação.
+            {% if not page.is_published %}
+            Esta página ainda é um rascunho.
+            {% endif %}
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>{{ page.title }}</h1>
+            <span class="format-badge {% if render_type == 'marked' %}markdown{% elif render_type == 'inline' %}html-safe{% else %}html-custom{% endif %}">
+                {% if render_type == 'marked' %}📝 Markdown{% elif render_type == 'inline' %}🔒 HTML Seguro{% else %}⚡ HTML Customizado{% endif %}
+            </span>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            {% if render_type == 'iframe' %}
+                <div class="iframe-container">
+                    <iframe
+                        srcdoc="{{ content|escapejs }}"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        title="{{ page.title }}"
+                    ></iframe>
+                </div>
+            {% else %}
+                <div class="prose">
+                    {{ content|safe }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <strong>Projeto:</strong> {{ project.name }}<br>
+                <strong>Slug:</strong> {{ page.slug }}<br>
+                <strong>Última atualização:</strong> {{ page.modified|date:"d/m/Y H:i" }}<br>
+                {% if not page.is_published %}
+                <strong style="color: #dc2626;">Estado: RASCUNHO (não publicado)</strong>
+                {% else %}
+                <strong style="color: #16a34a;">Estado: PUBLICADO</strong>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</body>
+</html>

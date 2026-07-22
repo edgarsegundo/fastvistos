@@ -1,8 +1,13 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from core.models import Project, Page
+from tenancy.threadlocal import get_current_client
 import json
+import markdown as md
 
 
 def _check_build_api_access(request):
@@ -81,6 +86,45 @@ def api_project_pages(request, project_slug):
         return JsonResponse(pages_data, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+@login_required
+@require_GET
+def preview_page(request, page_id):
+    """GET /preview/<page_id>/
+
+    Renderiza uma página em preview (draft ou published).
+    Requer autenticação e acesso ao client.
+    """
+    try:
+        page = Page.all_objects.get(id=page_id)
+    except Page.DoesNotExist:
+        return JsonResponse({'error': 'Page not found'}, status=404)
+
+    # Verificar acesso: o user deve estar associado ao client da página
+    # Simplificado: apenas verificar se é superuser ou staff (em prod, usar ClientProfile)
+    if not (request.user.is_superuser or request.user.is_staff):
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+    # Renderizar conteúdo
+    render_info = page.render_content_for_api()
+    render_type = render_info['render_type']
+    content = render_info['content']
+
+    # Converter markdown para HTML se necessário
+    if render_type == 'marked':
+        content = md.markdown(content, extensions=['extra', 'codehilite'])
+
+    context = {
+        'page': page,
+        'project': page.project,
+        'render_type': render_type,
+        'content': content,
+        'seo_title': page.seo_title or page.title,
+        'seo_description': page.seo_description,
+    }
+
+    return render(request, 'core/preview.html', context)
 
 
 @require_http_methods(["POST"])

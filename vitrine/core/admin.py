@@ -63,7 +63,7 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('content_format', 'is_published', 'project', 'created')
     search_fields = ('title', 'slug', 'content')
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created', 'modified', 'format_explanation')
+    readonly_fields = ('created', 'modified', 'format_explanation', 'preview_link')
 
     fieldsets = (
         ('Básico', {
@@ -142,3 +142,17 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             explanations.get(obj.content_format, '<p>Selecione um formato acima</p>')
         )
     format_explanation.short_description = 'ℹ️ Informações sobre o formato'
+
+    def preview_link(self, obj):
+        """Renderiza um link para visualizar a página em preview"""
+        from django.urls import reverse
+        from django.utils.html import format_html
+        if obj.id:
+            url = reverse('preview_page', args=[obj.id])
+            return format_html(
+                '<a href="{}" target="_blank" style="background: #3b82f6; color: white; padding: 8px 16px; '
+                'border-radius: 4px; text-decoration: none; font-weight: 600;">👁 Ver Preview</a>',
+                url
+            )
+        return '-'
+    preview_link.short_description = 'Preview'
