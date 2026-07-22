@@ -193,3 +193,97 @@ class Page(ClientModel):
             attributes=allowed_attributes,
             strip=True
         )
+
+
+class Build(ClientModel):
+    """Registro de um build de Astro (toda a plataforma SaaS)"""
+
+    STATUS_PENDING = 'pending'
+    STATUS_RUNNING = 'running'
+    STATUS_SUCCESS = 'success'
+    STATUS_FAILED = 'failed'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pendente'),
+        (STATUS_RUNNING, 'Em execução'),
+        (STATUS_SUCCESS, 'Sucesso'),
+        (STATUS_FAILED, 'Falha'),
+    ]
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING
+    )
+    triggered_by = models.ForeignKey(
+        ClientUser,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='triggered_builds'
+    )
+    log_output = models.TextField(blank=True, help_text='stdout + stderr do build')
+    content_snapshot = models.JSONField(
+        default=list,
+        help_text='Snapshot das páginas no momento do build'
+    )
+    release_path = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text='ex: releases/20260722-153000'
+    )
+    started_at = models.DateTimeField(null=True, blank=True)
+    finished_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Build'
+        verbose_name_plural = 'Builds'
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['status', 'created']),
+        ]
+
+    def __str__(self):
+        return f"Build {self.id} ({self.status}) - {self.created.strftime('%d/%m/%Y %H:%M')}"
+
+
+class Deployment(ClientModel):
+    """Registro de um deploy de um build pro VPS"""
+
+    STATUS_PENDING = 'pending'
+    STATUS_DEPLOYING = 'deploying'
+    STATUS_SUCCESS = 'success'
+    STATUS_FAILED = 'failed'
+    STATUS_ROLLED_BACK = 'rolled_back'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pendente'),
+        (STATUS_DEPLOYING, 'Deployando'),
+        (STATUS_SUCCESS, 'Sucesso'),
+        (STATUS_FAILED, 'Falha'),
+        (STATUS_ROLLED_BACK, 'Revertido'),
+    ]
+
+    build = models.OneToOneField(
+        Build,
+        on_delete=models.CASCADE,
+        related_name='deployment'
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING
+    )
+    log_output = models.TextField(blank=True, help_text='stdout + stderr do deploy')
+    deployed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Deployment'
+        verbose_name_plural = 'Deployments'
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['status', 'created']),
+        ]
+
+    def __str__(self):
+        return f"Deployment {self.id} (Build {self.build.id}) - {self.status}"

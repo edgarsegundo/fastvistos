@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from unfold.admin import ModelAdmin
 from tenancy.admin import ClientScopedAdmin
 
-from .models import ClientUser, Project, Page
+from .models import ClientUser, Project, Page, Build, Deployment
 
 
 @admin.register(ClientUser)
@@ -42,6 +42,7 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
     search_fields = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created', 'modified')
+    actions = ['action_build_and_deploy']
 
     fieldsets = (
         ('Básico', {
@@ -55,6 +56,30 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def get_inlines(self, request, obj=None):
+        """Mostrar Build/Deployment inlines se project existe"""
+        if obj:
+            return [BuildInline, DeploymentInline]
+        return []
+
+    def action_build_and_deploy(self, request, queryset):
+        """Action: Build & Deploy"""
+        from django.contrib import messages
+        from core.deploy import build_project, deploy_build
+
+        try:
+            build = build_project()
+            deployment = deploy_build(build)
+
+            if deployment.status == Deployment.STATUS_SUCCESS:
+                messages.success(request, f'✅ Build e deploy bem-sucedidos! (ID: {build.id})')
+            else:
+                messages.error(request, f'❌ Deploy falhou: {deployment.log_output[:200]}')
+        except Exception as e:
+            messages.error(request, f'❌ Erro: {str(e)[:200]}')
+
+    action_build_and_deploy.short_description = '🚀 Build & Publicar'
 
 
 @admin.register(Page)
@@ -156,3 +181,133 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             )
         return '-'
     preview_link.short_description = 'Preview'
+
+
+class BuildInline(admin.TabularInline):
+    model = Build
+    extra = 0
+    readonly_fields = ('status', 'triggered_by', 'log_output', 'started_at', 'finished_at', 'created')
+    fields = ('status', 'triggered_by', 'started_at', 'finished_at')
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+class DeploymentInline(admin.TabularInline):
+    model = Deployment
+    extra = 0
+    readonly_fields = ('build', 'status', 'deployed_at', 'created')
+    fields = ('build', 'status', 'deployed_at')
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Build)
+class BuildAdmin(ClientScopedAdmin, ModelAdmin):
+    list_display = ('id', 'status_badge', 'triggered_by', 'started_at', 'finished_at', 'created')
+    list_filter = ('status', 'created')
+    search_fields = ('id', 'log_output')
+    readonly_fields = (
+        'status', 'triggered_by', 'log_output', 'content_snapshot',
+        'release_path', 'started_at', 'finished_at', 'created', 'modified'
+    )
+    fieldsets = (
+        ('Build Info', {
+            'fields': ('status', 'triggered_by', 'release_path')
+        }),
+        ('Timing', {
+            'fields': ('started_at', 'finished_at')
+        }),
+        ('Content', {
+            'fields': ('content_snapshot',),
+            'classes': ('collapse',)
+        }),
+        ('Logs', {
+            'fields': ('log_output',),
+            'classes': ('collapse',)
+        }),
+        ('Auditoria', {
+            'fields': ('created', 'modified'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def status_badge(self, obj):
+        """Status com cor"""
+        from django.utils.html import format_html
+        colors = {
+            'pending': '#6b7280',
+            'running': '#3b82f6',
+            'success': '#10b981',
+            'failed': '#ef4444',
+        }
+        labels = {
+            'pending': 'Pendente',
+            'running': 'Em execução',
+            'success': 'Sucesso',
+            'failed': 'Falha',
+        }
+        color = colors.get(obj.status, '#6b7280')
+        label = labels.get(obj.status, obj.status)
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 4px 12px; border-radius: 3px;">{}</span>',
+            color, label
+        )
+    status_badge.short_description = 'Status'
+
+    def has_add_permission(self, request):
+        return False
+
+
+@admin.register(Deployment)
+class DeploymentAdmin(ClientScopedAdmin, ModelAdmin):
+    list_display = ('id', 'build', 'status_badge', 'deployed_at', 'created')
+    list_filter = ('status', 'created')
+    search_fields = ('id', 'build__id', 'log_output')
+    readonly_fields = (
+        'build', 'status', 'log_output', 'deployed_at', 'created', 'modified'
+    )
+    fieldsets = (
+        ('Deployment Info', {
+            'fields': ('build', 'status', 'deployed_at')
+        }),
+        ('Logs', {
+            'fields': ('log_output',),
+            'classes': ('collapse',)
+        }),
+        ('Auditoria', {
+            'fields': ('created', 'modified'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def status_badge(self, obj):
+        """Status com cor"""
+        from django.utils.html import format_html
+        colors = {
+            'pending': '#6b7280',
+            'deploying': '#3b82f6',
+            'success': '#10b981',
+            'failed': '#ef4444',
+            'rolled_back': '#f59e0b',
+        }
+        labels = {
+            'pending': 'Pendente',
+            'deploying': 'Deployando',
+            'success': 'Sucesso',
+            'failed': 'Falha',
+            'rolled_back': 'Revertido',
+        }
+        color = colors.get(obj.status, '#6b7280')
+        label = labels.get(obj.status, obj.status)
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 4px 12px; border-radius: 3px;">{}</span>',
+            color, label
+        )
+    status_badge.short_description = 'Status'
+
+    def has_add_permission(self, request):
+        return False
