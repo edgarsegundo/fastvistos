@@ -131,21 +131,42 @@ def preview_page(request, page_id):
 def api_trigger_rebuild(request):
     """POST /api/trigger-rebuild/
 
-    Dispara rebuild de todos os projetos que precisam
+    Dispara build+deploy (síncrono) de todos os projetos com needs_rebuild=True.
+    Requer staff. Cada projeto é buildado individualmente via core.deploy
+    (que já tem lock de concorrência — ver core/deploy.py:BuildLockError),
+    então dois requests simultâneos não corrompem o dist/_saas compartilhado.
+
+    Endpoint JSON: retorna 401/403 em JSON em vez de redirecionar pra uma
+    página de login (por isso não usa @login_required, que faz redirect).
     """
-    import subprocess
-    import threading
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+    if not (request.user.is_superuser or request.user.is_staff):
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
 
-    def run_build():
+    from core.deploy import build_project, deploy_build, BuildLockError
+
+    dirty_projects = list(Project.all_objects.filter(needs_rebuild=True))
+
+    if not dirty_projects:
+        return JsonResponse({'status': 'no_projects_need_rebuild', 'results': []})
+
+    results = []
+    for project in dirty_projects:
         try:
-            # Executa management command em thread separada
-            from django.core.management import call_command
-            call_command('build_static_sites')
+            build = build_project(project, triggered_by=request.user)
+            deployment = deploy_build(build)
+            results.append({
+                'project': project.slug,
+                'build_id': build.id,
+                'build_status': build.status,
+                'deployment_status': deployment.status,
+            })
+        except BuildLockError as e:
+            # Outro build já está rodando — para aqui, não insiste nos demais
+            results.append({'project': project.slug, 'error': str(e)})
+            break
         except Exception as e:
-            print(f"❌ Build failed: {e}")
+            results.append({'project': project.slug, 'error': str(e)})
 
-    # Inicia em background
-    thread = threading.Thread(target=run_build, daemon=True)
-    thread.start()
-
-    return JsonResponse({'status': 'Build triggered in background'})
+    return JsonResponse({'status': 'completed', 'results': results})

@@ -13,7 +13,16 @@ import { marked } from 'marked';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-    console.log('🔨 Building static paths for all user projects...');
+    // PROJECT_SLUG_FILTER: quando setado, builda SÓ esse projeto (build
+    // incremental por-projeto). Sem essa env var, builda todos (usado
+    // por --force ou por chamadas antigas). Ver docs/build-per-projeto.md
+    const projectFilter = import.meta.env.PROJECT_SLUG_FILTER;
+
+    if (projectFilter) {
+        console.log(`🎯 Building static paths for project: ${projectFilter}`);
+    } else {
+        console.log('🔨 Building static paths for all user projects...');
+    }
 
     try {
         const apiBase = import.meta.env.DJANGO_API_URL || 'http://localhost:8000';
@@ -26,8 +35,18 @@ export async function getStaticPaths() {
             return [];
         }
 
-        const projects = await projectsRes.json();
-        console.log(`📦 Found ${projects.length} published projects`);
+        let projects = await projectsRes.json();
+
+        // 2. Filtra pra 1 projeto só, se PROJECT_SLUG_FILTER estiver setado
+        if (projectFilter) {
+            projects = projects.filter((p) => p.slug === projectFilter);
+            if (projects.length === 0) {
+                console.error(`❌ Project "${projectFilter}" not found or not published`);
+                return [];
+            }
+        }
+
+        console.log(`📦 Found ${projects.length} project(s) to build`);
 
         // 2. Para cada projeto, busca suas páginas
         const allPaths = [];

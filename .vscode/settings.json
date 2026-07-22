@@ -1,4 +1,5 @@
 {
     "liveServer.settings.port": 5502,
-    "workbench.statusBar.showProfileName": true
+    "workbench.statusBar.showProfileName": true,
+    "claudeCode.allowDangerouslySkipPermissions": true
 }

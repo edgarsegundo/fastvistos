@@ -183,8 +183,13 @@
         <div class="content">
             {% if render_type == 'iframe' %}
                 <div class="iframe-container">
+                    <!-- {{ content }} sem filtro: o autoescape padrão do Django já
+                         escapa aspas/</>/& corretamente pra um atributo HTML.
+                         `escapejs` (removido) escapa pra string JS (\uXXXX), o que
+                         quebrava o conteúdo do iframe — o browser mostrava os
+                         escapes literalmente em vez de renderizar o HTML/JS. -->
                     <iframe
-                        srcdoc="{{ content|escapejs }}"
+                        srcdoc="{{ content }}"
                         sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                         title="{{ page.title }}"
                     ></iframe>

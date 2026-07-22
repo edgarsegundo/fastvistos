@@ -4,16 +4,34 @@ Handles: building, copying to VPS, versioning, and rollback.
 """
 
 import os
+import shlex
 import subprocess
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from django.conf import settings
 from django.core.management import call_command
+from django.db import transaction
 from django.utils import timezone
 
 from core.models import Build, Deployment, Page
+
+# Builds "travados" (running/pending) por mais que isso são tratados como
+# órfãos de um worker que crashou, e viram failed automaticamente — sem
+# isso, um crash deixaria o lock preso pra sempre.
+BUILD_STALE_TIMEOUT_MINUTES = 15
+
+
+class BuildLockError(Exception):
+    """Levantado quando já existe um build em andamento.
+
+    O Astro builda todos os projetos no mesmo `dist/_saas` compartilhado —
+    rodar 2 builds ao mesmo tempo faz um apagar a saída do outro no meio da
+    geração (ver docs/build-por-projeto.md, seção "efeito colateral"). Por
+    isso só pode existir 1 build (de qualquer projeto) rodando por vez.
+    """
+    pass
 
 
 def get_build_timestamp():
@@ -21,12 +39,26 @@ def get_build_timestamp():
     return datetime.now().strftime('%Y%m%d-%H%M%S')
 
 
-def snapshot_pages():
-    """Cria snapshot do conteúdo de todas as páginas publicadas"""
-    pages = Page.all_objects.filter(is_published=True).values(
-        'id', 'slug', 'project__slug', 'title', 'content_format'
+def _mark_stale_builds_as_failed():
+    """Builds presos em pending/running além do timeout viram failed.
+
+    Protege contra o lock ficar preso pra sempre se um worker morrer no
+    meio de um build (ex: processo do Django reiniciado, VM derrubada).
+    """
+    cutoff = timezone.now() - timedelta(minutes=BUILD_STALE_TIMEOUT_MINUTES)
+    stale = Build.objects.filter(
+        status__in=[Build.STATUS_PENDING, Build.STATUS_RUNNING],
+        created__lt=cutoff
     )
-    # Converter para list com timestamps como strings
+    return stale.update(status=Build.STATUS_FAILED, finished_at=timezone.now())
+
+
+def snapshot_pages(project):
+    """Cria snapshot do conteúdo das páginas publicadas de 1 projeto"""
+    pages = Page.all_objects.filter(project=project, is_published=True).values(
+        'id', 'slug', 'title', 'content_format'
+    )
+    # Converter para list com timestamp como string
     result = []
     for page in pages:
         page['timestamp'] = timezone.now().isoformat()
@@ -34,13 +66,23 @@ def snapshot_pages():
     return result
 
 
-def run_ssh_command(command_args):
+def run_ssh_command(command_args, stdin_data=None):
     """
     Executa comando remoto no VPS via SSH restrito.
     Usa chave privada e connect a deploybot@localhost.
 
+    IMPORTANTE: conteúdo grande/multi-linha (ex: um arquivo de config Nginx
+    inteiro) NUNCA deve ir como elemento de `command_args` — argumentos de
+    shell não sobrevivem a quebras de linha, aspas, `$`, `;` etc quando
+    concatenados numa string de comando remoto. Use `stdin_data` pra isso:
+    o script restrito no VPS deve ler o conteúdo de stdin, não de um
+    argumento posicional. Ex:
+        run_ssh_command(['write-nginx-conf', domain], stdin_data=nginx_config)
+        # equivalente a: ssh deploybot@host 'write-nginx-conf example.com' < config.txt
+
     Args:
         command_args (list): ex: ['rsync-release', 'project-slug', '20260722-153000']
+        stdin_data (str, optional): conteúdo a mandar via stdin do comando remoto
 
     Returns:
         tuple: (returncode, stdout, stderr)
@@ -49,13 +91,16 @@ def run_ssh_command(command_args):
     ssh_host = getattr(settings, 'DEPLOY_SSH_HOST', 'localhost')
     ssh_user = getattr(settings, 'DEPLOY_SSH_USER', 'deploybot')
 
-    # Construir comando SSH (passa os args como uma string única pro script restrito)
-    cmd_str = ' '.join(command_args)
+    # Cada argumento é escapado individualmente (shlex.quote) antes de juntar
+    # numa string de comando — defesa em profundidade além da validação de
+    # domain/project_slug já feita antes de chegar aqui.
+    cmd_str = ' '.join(shlex.quote(str(arg)) for arg in command_args)
     ssh_cmd = ['ssh', '-i', ssh_key, f'{ssh_user}@{ssh_host}', cmd_str]
 
     try:
         result = subprocess.run(
             ssh_cmd,
+            input=stdin_data,
             capture_output=True,
             timeout=300,
             text=True
@@ -67,63 +112,70 @@ def run_ssh_command(command_args):
         return 1, '', str(e)
 
 
-def build_project(project=None, force=False, client=None):
+def build_project(project, force=False, triggered_by=None):
     """
-    Executa build de todos os projetos via Astro.
+    Executa build de Astro escopado a UM projeto (ver docs/build-por-projeto.md).
+
+    O client do Build é sempre derivado de project.client — nunca escolhido
+    arbitrariamente, porque o build agora representa de fato uma operação
+    de 1 tenant só (o dono do projeto).
 
     Args:
-        project: Project instance (ignored, build é sempre site-wide)
-        force: bool, force rebuild even if not needed
-        client: Client instance (required for ClientModel)
+        project: Project instance (obrigatório — build é sempre por-projeto)
+        force: bool, ignora needs_rebuild e builda mesmo assim
+        triggered_by: ClientUser instance opcional (quem disparou o build)
 
     Returns:
         Build: instance com status updated
 
     Raises:
+        BuildLockError: se outro build já está em andamento (ver módulo)
         Exception: on critical failure
     """
-    from django.contrib.auth import get_user_model
-    from tenancy.models import Client
+    if project is None:
+        raise ValueError('build_project() requer um Project — build não é mais site-wide')
 
-    User = get_user_model()
+    _mark_stale_builds_as_failed()
 
-    # Se não tem client, usar o primeiro (plataforma global)
-    if not client:
-        client = Client.objects.first()
-        if not client:
-            raise ValueError('No Client found in database')
+    # Lock: só pode existir 1 build (de qualquer projeto) rodando por vez,
+    # porque todos compartilham o mesmo dist/_saas no Astro. A checagem +
+    # criação do Build acontece na mesma transação pra minimizar a janela
+    # de corrida entre "checar se tem build rodando" e "criar o meu".
+    with transaction.atomic():
+        active = Build.objects.select_for_update().filter(
+            status__in=[Build.STATUS_PENDING, Build.STATUS_RUNNING]
+        )
+        blocking = active.first()
+        if blocking is not None:
+            raise BuildLockError(
+                f'Build {blocking.id} (projeto "{blocking.project.slug}") já está em '
+                'andamento. Aguarde terminar antes de iniciar outro build — builds '
+                'concorrentes corrompem o diretório de saída compartilhado do Astro.'
+            )
 
-    # Criar registro Build
+        build = Build.objects.create(
+            client=project.client,
+            project=project,
+            status=Build.STATUS_RUNNING,
+            triggered_by=triggered_by,
+            content_snapshot=snapshot_pages(project),
+            started_at=timezone.now(),
+        )
+
     try:
-        user = User.objects.filter(is_staff=True).first()
-    except:
-        user = None
-
-    build = Build.objects.create(
-        client=client,
-        status=Build.STATUS_RUNNING,
-        triggered_by=user,
-        content_snapshot=snapshot_pages()
-    )
-    build.started_at = timezone.now()
-    build.save()
-
-    try:
-        # Rodar management command
-        astro_root = getattr(settings, 'ASTRO_ROOT', '/Users/edgar/Repos/fastvistos')
-        platform_site_id = getattr(settings, 'PLATFORM_SITE_ID', '_saas')
-
-        # Chamar build_static_sites command (já configura SITE_ID)
+        # Chamar build_static_sites --project <slug> (escopa o build a 1 projeto)
         from io import StringIO
         out = StringIO()
 
+        args = ['--project', project.slug]
         if force:
-            call_command('build_static_sites', '--force', stdout=out, stderr=out)
-        else:
-            call_command('build_static_sites', stdout=out, stderr=out)
+            args.append('--force')
 
-        log = out.getvalue()
-        build.log_output = log
+        # build_static_sites levanta CommandError quando o build de 1 projeto
+        # falha (modo --project), então um sucesso aqui é confiável.
+        call_command('build_static_sites', *args, stdout=out, stderr=out)
+
+        build.log_output = out.getvalue()
         build.status = Build.STATUS_SUCCESS
         build.finished_at = timezone.now()
         build.save()
@@ -131,7 +183,7 @@ def build_project(project=None, force=False, client=None):
         return build
 
     except Exception as e:
-        build.log_output = f'Build failed: {str(e)}'
+        build.log_output = (build.log_output or '') + f'\nBuild failed: {str(e)}'
         build.status = Build.STATUS_FAILED
         build.finished_at = timezone.now()
         build.save()
@@ -140,8 +192,19 @@ def build_project(project=None, force=False, client=None):
 
 def deploy_build(build):
     """
-    Faz deploy de um Build pro VPS (rsync + symlink).
-    Executa via SSH restrito em deploybot.
+    Faz deploy de um Build pro VPS (rsync + symlink), escopado ao projeto
+    do build (build.project.slug), não mais ao site inteiro.
+
+    Cada projeto tem sua própria árvore de releases no VPS, TODAS aninhadas
+    sob 1 diretório pai compartilhado (nunca 1 bind mount novo por projeto —
+    ver docs/provisionamento-producao.md, seção "Por que /var/www/_saas
+    como diretório único"):
+        /var/www/_saas/{project.slug}/releases/{timestamp}/
+        /var/www/_saas/{project.slug}/current -> releases/{timestamp}/
+
+    O prefixo exato (`_saas`) é decidido pelo script restrito no VPS
+    (`vitrine-deploy.sh`), não aqui — este código só manda project_slug e
+    timestamp, sem opinião sobre o path físico completo.
 
     Args:
         build: Build instance (deve estar em SUCCESS status)
@@ -156,24 +219,27 @@ def deploy_build(build):
         raise ValueError(f'Cannot deploy build with status {build.status}')
 
     deployment = Deployment.objects.create(
+        client=build.client,
         build=build,
         status=Deployment.STATUS_DEPLOYING
     )
+
+    project_slug = build.project.slug
 
     try:
         # Gerar timestamp de release
         release_ts = get_build_timestamp()
 
-        # Copiar dist/_saas/* para VPS /var/www/_saas/releases/{ts}/
-        # Comando: rsync-release <site_id> <timestamp>
-        rc, stdout, stderr = run_ssh_command(['rsync-release', '_saas', release_ts])
+        # Copiar dist/_saas/{project_slug}/ para VPS /var/www/{project_slug}/releases/{ts}/
+        # Comando: rsync-release <project_slug> <timestamp>
+        rc, stdout, stderr = run_ssh_command(['rsync-release', project_slug, release_ts])
 
         if rc != 0:
             raise Exception(f'rsync-release failed: {stderr}')
 
-        # Fazer symlink /var/www/_saas/current -> /var/www/_saas/releases/{ts}
-        # Comando: switch-symlink <site_id> <timestamp>
-        rc, stdout, stderr = run_ssh_command(['switch-symlink', '_saas', release_ts])
+        # Fazer symlink /var/www/{project_slug}/current -> /var/www/{project_slug}/releases/{ts}
+        # Comando: switch-symlink <project_slug> <timestamp>
+        rc, stdout, stderr = run_ssh_command(['switch-symlink', project_slug, release_ts])
 
         if rc != 0:
             raise Exception(f'switch-symlink failed: {stderr}')
@@ -184,7 +250,10 @@ def deploy_build(build):
         if rc != 0:
             raise Exception(f'reload-nginx failed: {stderr}')
 
-        # Sucesso
+        # Sucesso: persistir release_path no Build, senão rollback nunca funciona
+        build.release_path = f'releases/{release_ts}'
+        build.save(update_fields=['release_path'])
+
         deployment.status = Deployment.STATUS_SUCCESS
         deployment.deployed_at = timezone.now()
         deployment.log_output = stdout
@@ -200,8 +269,8 @@ def deploy_build(build):
 
 def rollback_to_build(build):
     """
-    Volta o symlink /var/www/_saas/current para uma release anterior.
-    Re-aponta para o release_path do Build fornecido.
+    Volta o symlink /var/www/{project_slug}/current para uma release
+    anterior desse MESMO projeto. Re-aponta para o release_path do Build.
 
     Args:
         build: Build instance com deployment sucesso anterior
@@ -218,8 +287,11 @@ def rollback_to_build(build):
     if not build.release_path:
         raise ValueError(f'Build {build.id} has no release_path stored')
 
+    project_slug = build.project.slug
+
     # Criar novo Deployment record
     deployment = Deployment.objects.create(
+        client=build.client,
         build=build,
         status=Deployment.STATUS_DEPLOYING
     )
@@ -229,7 +301,7 @@ def rollback_to_build(build):
         # release_path format: "releases/20260722-153000"
         release_ts = build.release_path.split('/')[-1]
 
-        rc, stdout, stderr = run_ssh_command(['switch-symlink', '_saas', release_ts])
+        rc, stdout, stderr = run_ssh_command(['switch-symlink', project_slug, release_ts])
 
         if rc != 0:
             raise Exception(f'switch-symlink failed: {stderr}')
@@ -289,8 +361,22 @@ def verify_domain_dns(domain):
 
 def provision_domain_nginx_ssl(domain):
     """
-    Provisiona Nginx + SSL para um domínio.
-    Requer que DNS tenha sido verificado antes.
+    Provisiona Nginx + SSL para um domínio, em 2 fases pra evitar o problema
+    "ovo e galinha" (escrever config HTTPS antes do cert existir faz
+    `nginx -t` falhar e aborta o reload pra TODOS os domínios do host):
+
+      Fase 1: escreve config HTTP-only (sem ssl_certificate), recarrega.
+      Fase 2: roda Certbot (webroot method, usando o path compartilhado
+              /var/www/certbot pro desafio ACME — mesmo padrão já usado
+              pelos sites legados, não um docroot por-projeto).
+      Fase 3: só agora escreve a config completa (HTTP→HTTPS + bloco SSL)
+              e recarrega de novo.
+
+    Requer que:
+    - DNS já tenha sido verificado (verify_domain_dns)
+    - O projeto já tenha sido deployado ao menos 1 vez (precisa existir
+      /var/www/{PLATFORM_SITE_ID}/{project_slug}/current no VPS, senão o
+      Nginx bootstrap não tem o que servir na location "/")
 
     Args:
         domain: Domain instance (deve estar em VERIFICATION_VERIFIED status)
@@ -298,50 +384,68 @@ def provision_domain_nginx_ssl(domain):
     Raises:
         Exception: if provisioning fails
     """
-    from core.nginx_templates import generate_nginx_server_block
+    from core.nginx_templates import generate_nginx_bootstrap_block, generate_nginx_full_block
 
     if domain.verification_status != domain.VERIFICATION_VERIFIED:
         raise ValueError(f'Domain {domain.domain} must be DNS verified before provisioning')
 
+    www_root = getattr(settings, 'WWW_ROOT', '/var/www')
+    platform_site_id = getattr(settings, 'PLATFORM_SITE_ID', '_saas')
+    project_slug = domain.project.slug
+
     try:
-        # Gerar config Nginx
-        nginx_config = generate_nginx_server_block(
+        # --- Fase 1: config HTTP-only (sem SSL), pra servir o desafio ACME ---
+        bootstrap_config = generate_nginx_bootstrap_block(
             domain=domain.domain,
-            project_slug=domain.project.slug,
-            platform_site_id=getattr(settings, 'PLATFORM_SITE_ID', '_saas')
+            project_slug=project_slug,
+            www_root=www_root,
+            platform_site_id=platform_site_id,
         )
 
-        # Enviar pra VPS via SSH restrito
-        # Comando: write-nginx-conf <domain> <config-content>
-        # (O script no VPS faz o parsing)
-        rc, stdout, stderr = run_ssh_command(['write-nginx-conf', domain.domain, nginx_config])
-
+        # Conteúdo vai via stdin (nunca concatenado num argumento de shell —
+        # config multi-linha não sobrevive a isso, ver run_ssh_command())
+        rc, stdout, stderr = run_ssh_command(
+            ['write-nginx-conf', domain.domain], stdin_data=bootstrap_config
+        )
         if rc != 0:
-            raise Exception(f'write-nginx-conf failed: {stderr}')
+            raise Exception(f'write-nginx-conf (bootstrap) failed: {stderr}')
 
-        # Atualizar status SSL
+        rc, stdout, stderr = run_ssh_command(['reload-nginx'])
+        if rc != 0:
+            raise Exception(f'reload-nginx (bootstrap) failed: {stderr}')
+
         domain.ssl_status = domain.SSL_PENDING
-        domain.dns_check_log = 'Nginx config written, awaiting SSL provisioning...'
+        domain.dns_check_log = 'Bootstrap HTTP config ativo, solicitando certificado...'
         domain.save()
 
-        # Rodar Certbot pra pegar SSL
-        # Comando: certbot-issue <domain>
+        # --- Fase 2: Certbot (webroot, usa o docroot que a Fase 1 já está servindo) ---
         rc, stdout, stderr = run_ssh_command(['certbot-issue', domain.domain])
-
         if rc != 0:
             domain.ssl_status = domain.SSL_FAILED
             domain.dns_check_log = f'Certbot failed: {stderr}'
             domain.save()
             raise Exception(f'certbot-issue failed: {stderr}')
 
-        # Sucesso! Reload Nginx e marcar como ativo
-        rc, stdout, stderr = run_ssh_command(['reload-nginx'])
+        # --- Fase 3: agora sim, config completa com HTTPS (certs já existem) ---
+        full_config = generate_nginx_full_block(
+            domain=domain.domain,
+            project_slug=project_slug,
+            www_root=www_root,
+            platform_site_id=platform_site_id,
+        )
 
+        rc, stdout, stderr = run_ssh_command(
+            ['write-nginx-conf', domain.domain], stdin_data=full_config
+        )
         if rc != 0:
-            raise Exception(f'reload-nginx failed: {stderr}')
+            raise Exception(f'write-nginx-conf (full) failed: {stderr}')
+
+        rc, stdout, stderr = run_ssh_command(['reload-nginx'])
+        if rc != 0:
+            raise Exception(f'reload-nginx (full) failed: {stderr}')
 
         domain.ssl_status = domain.SSL_ISSUED
-        domain.dns_check_log = f'✅ Nginx + SSL provisioned successfully'
+        domain.dns_check_log = '✅ Nginx + SSL provisioned successfully'
         domain.save()
 
     except Exception as e:

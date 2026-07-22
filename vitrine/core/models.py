@@ -196,7 +196,15 @@ class Page(ClientModel):
 
 
 class Build(ClientModel):
-    """Registro de um build de Astro (toda a plataforma SaaS)"""
+    """Registro de um build de Astro ESCOPADO A 1 PROJETO.
+
+    Cada Build representa "rodei o Astro só pras páginas deste Project".
+    Por isso faz sentido herdar ClientModel: o build pertence de fato ao
+    client dono do project (client é auto-preenchido a partir de
+    project.client em build_project(), nunca escolhido arbitrariamente).
+
+    Ver docs/build-por-projeto.md para o porquê dessa decisão.
+    """
 
     STATUS_PENDING = 'pending'
     STATUS_RUNNING = 'running'
@@ -210,6 +218,12 @@ class Build(ClientModel):
         (STATUS_FAILED, 'Falha'),
     ]
 
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name='builds',
+        help_text='Projeto que este build gerou (build é sempre escopado a 1 projeto)'
+    )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -225,12 +239,12 @@ class Build(ClientModel):
     log_output = models.TextField(blank=True, help_text='stdout + stderr do build')
     content_snapshot = models.JSONField(
         default=list,
-        help_text='Snapshot das páginas no momento do build'
+        help_text='Snapshot das páginas do projeto no momento do build'
     )
     release_path = models.CharField(
         max_length=255,
         blank=True,
-        help_text='ex: releases/20260722-153000'
+        help_text='ex: releases/20260722-153000 (preenchido no deploy, não no build)'
     )
     started_at = models.DateTimeField(null=True, blank=True)
     finished_at = models.DateTimeField(null=True, blank=True)
@@ -241,10 +255,11 @@ class Build(ClientModel):
         ordering = ['-created']
         indexes = [
             models.Index(fields=['status', 'created']),
+            models.Index(fields=['project', 'created']),
         ]
 
     def __str__(self):
-        return f"Build {self.id} ({self.status}) - {self.created.strftime('%d/%m/%Y %H:%M')}"
+        return f"Build {self.id} ({self.project.slug}, {self.status}) - {self.created.strftime('%d/%m/%Y %H:%M')}"
 
 
 class Deployment(ClientModel):

@@ -33,6 +33,11 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else ['127.0.0.1', 'localhost', '0.0.0.0']
 
+# @login_required (usado em core.views.preview_page) redireciona pra esta URL
+# quando não autenticado — sem isso, cai no default /accounts/login/ que não
+# existe neste projeto (só tem /admin/login/).
+LOGIN_URL = '/admin/login/'
+
 
 # Application definition
 
@@ -131,7 +136,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = os.environ.get('STATIC_URL', 'static/')
+# Sem isso, `collectstatic` (rodado no run.sh do container) crasha com
+# ImproperlyConfigured — precisa existir mesmo fora de produção.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

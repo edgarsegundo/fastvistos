@@ -61,26 +61,37 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
     )
 
     def get_inlines(self, request, obj=None):
-        """Mostrar Build/Deployment inlines se project existe"""
+        """Mostrar histórico de Builds deste projeto (Deployment fica dentro do BuildAdmin,
+        já que Deployment não tem FK direta pra Project, só pra Build)."""
         if obj:
-            return [BuildInline, DeploymentInline]
+            return [BuildInline]
         return []
 
     def action_build_and_deploy(self, request, queryset):
-        """Action: Build & Deploy"""
+        """Action: Build & Deploy — roda 1 build por projeto selecionado
+        (build é sempre escopado a 1 projeto, ver docs/build-por-projeto.md)"""
         from django.contrib import messages
         from core.deploy import build_project, deploy_build
 
-        try:
-            build = build_project()
-            deployment = deploy_build(build)
+        succeeded = 0
+        failed = 0
 
-            if deployment.status == Deployment.STATUS_SUCCESS:
-                messages.success(request, f'✅ Build e deploy bem-sucedidos! (ID: {build.id})')
-            else:
-                messages.error(request, f'❌ Deploy falhou: {deployment.log_output[:200]}')
-        except Exception as e:
-            messages.error(request, f'❌ Erro: {str(e)[:200]}')
+        for project in queryset:
+            try:
+                build = build_project(project, triggered_by=request.user)
+                deployment = deploy_build(build)
+
+                if deployment.status == Deployment.STATUS_SUCCESS:
+                    succeeded += 1
+                else:
+                    failed += 1
+                    messages.error(request, f'❌ Deploy de "{project.slug}" falhou: {deployment.log_output[:200]}')
+            except Exception as e:
+                failed += 1
+                messages.error(request, f'❌ Erro em "{project.slug}": {str(e)[:200]}')
+
+        if succeeded:
+            messages.success(request, f'✅ {succeeded} projeto(s) publicado(s) com sucesso')
 
     action_build_and_deploy.short_description = '🚀 Build & Publicar'
 
@@ -187,6 +198,7 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
 
 
 class BuildInline(admin.TabularInline):
+    """Inline em ProjectAdmin — Build tem FK direta pra Project."""
     model = Build
     extra = 0
     readonly_fields = ('status', 'triggered_by', 'log_output', 'started_at', 'finished_at', 'created')
@@ -198,10 +210,12 @@ class BuildInline(admin.TabularInline):
 
 
 class DeploymentInline(admin.TabularInline):
+    """Inline em BuildAdmin — Deployment só tem FK direta pra Build,
+    não pra Project (por isso não pode ser inline de ProjectAdmin)."""
     model = Deployment
     extra = 0
-    readonly_fields = ('build', 'status', 'deployed_at', 'created')
-    fields = ('build', 'status', 'deployed_at')
+    readonly_fields = ('status', 'deployed_at', 'log_output', 'created')
+    fields = ('status', 'deployed_at')
     can_delete = False
 
     def has_add_permission(self, request, obj=None):
@@ -210,16 +224,17 @@ class DeploymentInline(admin.TabularInline):
 
 @admin.register(Build)
 class BuildAdmin(ClientScopedAdmin, ModelAdmin):
-    list_display = ('id', 'status_badge', 'triggered_by', 'started_at', 'finished_at', 'created')
-    list_filter = ('status', 'created')
-    search_fields = ('id', 'log_output')
+    list_display = ('id', 'project', 'status_badge', 'triggered_by', 'started_at', 'finished_at', 'created')
+    list_filter = ('status', 'project', 'created')
+    search_fields = ('id', 'project__slug', 'project__name', 'log_output')
     readonly_fields = (
-        'status', 'triggered_by', 'log_output', 'content_snapshot',
+        'project', 'status', 'triggered_by', 'log_output', 'content_snapshot',
         'release_path', 'started_at', 'finished_at', 'created', 'modified'
     )
+    inlines = [DeploymentInline]
     fieldsets = (
         ('Build Info', {
-            'fields': ('status', 'triggered_by', 'release_path')
+            'fields': ('project', 'status', 'triggered_by', 'release_path')
         }),
         ('Timing', {
             'fields': ('started_at', 'finished_at')
