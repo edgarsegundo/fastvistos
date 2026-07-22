@@ -140,6 +140,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.ClientUser'
 
+# ============ SaaS Build & Deploy Settings ============
+
+# Astro project root directory
+ASTRO_ROOT = os.environ.get('ASTRO_ROOT', '/Users/edgar/Repos/fastvistos')
+
+# Platform-wide Astro site ID (all user projects build together)
+PLATFORM_SITE_ID = os.environ.get('PLATFORM_SITE_ID', '_saas')
+
+# VPS deployment settings
+VPS_PUBLIC_IP = os.environ.get('VPS_PUBLIC_IP', '72.60.57.150')
+DEPLOY_SSH_HOST = os.environ.get('DEPLOY_SSH_HOST', 'localhost')
+DEPLOY_SSH_USER = os.environ.get('DEPLOY_SSH_USER', 'deploybot')
+DEPLOY_SSH_KEY_PATH = os.environ.get('DEPLOY_SSH_KEY_PATH', '/etc/vitrine/deploy_key')
+WWW_ROOT = os.environ.get('WWW_ROOT', '/var/www')
+
+# API security: shared secret for Astro build-time API calls
+BUILD_API_SECRET = os.environ.get('BUILD_API_SECRET', '')
+
 UNFOLD = {
     'SITE_HEADER': 'Vitrine Admin',
     'SITE_TITLE': 'Vitrine',

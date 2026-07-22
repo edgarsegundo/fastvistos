@@ -5,10 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "bleach>=6.0",
     "django==5.1.7",
     "django-extensions>=4.1",
     "django-model-utils>=5.0.0",
     "django-unfold>=0.91.0",
+    "dnspython>=2.4.0",
+    "markdown>=3.5.0",
     "python-dotenv==1.0.1",
     "werkzeug>=3.1.8",
 ]

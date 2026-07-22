@@ -107,7 +107,10 @@
     "dev:watch:demo-blogheavy": "node dev-with-sync.js demo-blogheavy",
     "build:demo-blogheavy": "node sync-blog.js demo-blogheavy && SITE_ID=demo-blogheavy astro build && node postbuild-updatable.js demo-blogheavy",
     "preview:demo-blogheavy": "SITE_ID=demo-blogheavy astro preview",
-    "download-images:demo-blogheavy": "node download-blog-images.js demo-blogheavy"
+    "download-images:demo-blogheavy": "node download-blog-images.js demo-blogheavy",
+    "dev:_saas": "SITE_ID=_saas astro dev",
+    "build:_saas": "SITE_ID=_saas astro build",
+    "preview:_saas": "SITE_ID=_saas astro preview"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

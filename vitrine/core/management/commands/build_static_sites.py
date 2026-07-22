@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from core.models import Project
 import subprocess
 import os
@@ -43,30 +44,38 @@ class Command(BaseCommand):
         self.stdout.write(f'\n🔨 Building {projects.count()} project(s)...\n')
 
         try:
-            # Caminho do projeto Astro
-            astro_root = '/Users/edgar/Repos/fastvistos'  # Mudar se necessário
+            # Configurações via Django settings (env var)
+            astro_root = getattr(settings, 'ASTRO_ROOT', '/Users/edgar/Repos/fastvistos')
+            platform_site_id = getattr(settings, 'PLATFORM_SITE_ID', '_saas')
 
-            # Executa Astro build uma vez (renderiza todos os projetos)
-            self.stdout.write('📦 Running: npm run build')
+            # Executa Astro build uma vez (renderiza todos os projetos do site SaaS)
+            build_script = f'build:{platform_site_id}'
+            self.stdout.write(f'📦 Running: npm run {build_script}')
+
+            env = os.environ.copy()
+            env['SITE_ID'] = platform_site_id
+
             result = subprocess.run(
-                ['npm', 'run', 'build'],
+                ['npm', 'run', build_script],
                 cwd=astro_root,
                 capture_output=True,
                 timeout=600,
-                text=True
+                text=True,
+                env=env
             )
 
             self.stdout.write(result.stdout)
 
             if result.returncode == 0:
-                # Marca todos como rebuild completo
+                # Marca todos como rebuild completo apenas se o build foi sucesso
                 projects.update(needs_rebuild=False)
                 self.stdout.write(self.style.SUCCESS('\n✅ Build completed successfully'))
-                self.stdout.write(f'📁 Output directory: {astro_root}/dist/')
+                self.stdout.write(f'📁 Output directory: {astro_root}/dist/{platform_site_id}/')
             else:
                 self.stdout.write(self.style.ERROR('\n❌ Build failed'))
                 if result.stderr:
                     self.stdout.write(result.stderr)
+                # Não marca como rebuild completo se falhar
 
         except subprocess.TimeoutExpired:
             self.stdout.write(self.style.ERROR('\n❌ Build timeout (>10 min)'))
