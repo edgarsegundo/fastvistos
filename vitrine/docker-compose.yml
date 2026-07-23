@@ -20,6 +20,11 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - vitrine_staticfiles:/app/staticfiles
+      # Banco SQLite (settings.py: DATABASES.NAME = BASE_DIR/'data'/'db.sqlite3').
+      # SEM isso, cada `docker compose up --build` recria o container e
+      # perde TODOS os dados (projetos, usuários, builds) — já aconteceu
+      # uma vez (superuser criado sumiu depois de um rebuild).
+      - vitrine_db:/app/data
       # Repo Astro inteiro montado do host — build_project() roda `npm run
       # build:_saas` via subprocess de dentro deste container, precisa
       # enxergar multi-sites/, node_modules/, package.json etc.
@@ -47,3 +52,4 @@ networks:
 volumes:
   vitrine_staticfiles:
     external: true
+  vitrine_db:

@@ -108,10 +108,15 @@ WSGI_APPLICATION = 'vitrine_core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# NAME fica em BASE_DIR / 'data' / 'db.sqlite3' (não direto em BASE_DIR)
+# de propósito: em produção, docker-compose.yml monta um volume nomeado em
+# /app/data — sem isso, o SQLite vive na camada gravável do container e
+# some a cada `docker compose up --build` (rebuild recria o container do
+# zero, perdendo todos os dados: projetos, usuários, builds).
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 

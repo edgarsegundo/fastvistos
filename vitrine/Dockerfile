@@ -43,7 +43,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /app/staticfiles \
+RUN mkdir -p /app/staticfiles /app/data \
     && chown -R django:django /app
 
 EXPOSE 8000
