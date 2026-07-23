@@ -175,11 +175,14 @@ def build_project(project, force=False, triggered_by=None):
             started_at=timezone.now(),
         )
 
-    try:
-        # Chamar build_static_sites --project <slug> (escopa o build a 1 projeto)
-        from io import StringIO
-        out = StringIO()
+    # Fora do try: garante que `out` sempre existe no except, mesmo se
+    # call_command() falhar imediatamente — sem isso, o log real (stdout/
+    # stderr do `npm run build`, com o erro de verdade) era descartado e só
+    # sobrava a mensagem genérica do CommandError.
+    from io import StringIO
+    out = StringIO()
 
+    try:
         args = ['--project', project.slug]
         if force:
             args.append('--force')
@@ -196,7 +199,7 @@ def build_project(project, force=False, triggered_by=None):
         return build
 
     except Exception as e:
-        build.log_output = (build.log_output or '') + f'\nBuild failed: {str(e)}'
+        build.log_output = f'{out.getvalue()}\nBuild failed: {str(e)}'
         build.status = Build.STATUS_FAILED
         build.finished_at = timezone.now()
         build.save()
