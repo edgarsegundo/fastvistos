@@ -135,6 +135,7 @@ def api_project_pages(request, project_slug):
 
             pages_data.append({
                 'slug': page.slug or 'index',
+                'is_home': page.is_home,
                 'title': page.title,
                 'content': render_info['content'],
                 'content_format': render_info['format'],
