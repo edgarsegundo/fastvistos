@@ -32,8 +32,17 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-RUN addgroup --system django \
-    && adduser --system --home /home/django --ingroup django django
+# UID/GID 1001 fixo de propósito — precisa bater com o usuário do host
+# (edgar, uid=1001 no VPS) porque este container escreve dentro de
+# /app/astro-repo, um bind mount do repo real no host (multi-sites/, node_modules/
+# etc). Se as UIDs não baterem, todo arquivo que o Astro criar durante o
+# build (.astro/, node_modules/.vite/, dist/) fica acessível só por quem
+# criou (host ou container, nunca os dois) — já causou bugs reais de
+# permissão (EACCES em cascata, toda vez que build rodava ora de um lado
+# ora do outro). Se seu usuário no VPS tiver UID diferente de 1001, ajuste
+# os 2 valores abaixo.
+RUN addgroup --gid 1001 django \
+    && adduser --uid 1001 --gid 1001 --home /home/django --disabled-password --gecos '' django
 RUN mkdir -p /home/django && chown -R django:django /home/django
 ENV HOME=/home/django
 ENV TMPDIR=/tmp
