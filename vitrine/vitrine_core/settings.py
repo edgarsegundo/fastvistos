@@ -33,6 +33,20 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else ['127.0.0.1', 'localhost', '0.0.0.0']
 
+# Necessário pro login do admin funcionar atrás do proxy Nginx (POST de
+# login é bloqueado por CSRF se a origin não estiver aqui, mesmo com
+# ALLOWED_HOSTS correto). Precisa do scheme (https://) incluído.
+CSRF_TRUSTED_ORIGINS = (
+    os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
+    if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
+)
+
+# Nginx conversa com o Gunicorn via HTTP simples (proxy_pass http://vitrine:8000),
+# mesmo quando o client original usa HTTPS — sem isso, Django não reconhece a
+# conexão como segura (CSRF_COOKIE_SECURE, is_secure()) e pode gerar loop de
+# redirect se SECURE_SSL_REDIRECT for ativado no futuro.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # @login_required (usado em core.views.preview_page) redireciona pra esta URL
 # quando não autenticado — sem isso, cai no default /accounts/login/ que não
 # existe neste projeto (só tem /admin/login/).

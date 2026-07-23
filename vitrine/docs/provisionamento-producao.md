@@ -47,18 +47,19 @@ funcionando quando você decidir usar.
 ## Arquitetura resultante
 
 ```
-                    seudominio.com (já tem SSL, config em
-                    reverse-proxy-config/sites/XXX-vitrine.conf)
+                    saas.fastvistos.com.br (subdomínio dedicado, cert próprio,
+                    config em reverse-proxy-config/sites/030-saas-fastvistos.conf)
                                   │
                     ┌─────────────┴──────────────┐
                     │   nginx (container, já existe)  │
                     └─────────────┬──────────────┘
               ┌───────────────────┼────────────────────────┐
               │                                              │
-   location /admin-saas/                          location ~ ^/([a-z0-9-]+)/
-   location /static-saas/                          root /var/www/_saas  ◄── 1 ÚNICO
+   location /admin/, /preview/                    location ~ ^/app/([a-z0-9-]+)/
+   location /static/                               root /var/www/_saas  ◄── 1 ÚNICO
    proxy_pass → vitrine:8000                        (todos os projetos       bind mount,
-   (Django admin/API)                                aninhados aqui)         criado 1x
+   (mesmos paths do Django, sem prefixo —            aninhados aqui)         criado 1x
+    subdomínio dedicado não tem colisão)
               │
    ┌──────────┴──────────┐
    │  vitrine (container   │  ← novo, mesmo padrão do empregoadmin
@@ -296,12 +297,12 @@ if IS_PROD:
     CSRF_COOKIE_SECURE = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATIC_URL = 'static-saas/'   # bate com o location /static-saas/ do Nginx (Passo 6)
-
-# LOGIN_URL não configurado hoje faz @login_required redirecionar pra
-# /accounts/login/ (que não existe) — corrigir também:
-LOGIN_URL = '/admin-saas/login/'
+STATIC_URL = 'static/'   # já é o default, bate com /static/ do Nginx (Passo 6)
+LOGIN_URL = '/admin/login/'   # já é o default, bate com /admin/ do Nginx (Passo 6)
 ```
+(`STATIC_ROOT`, `STATIC_URL` e `LOGIN_URL` já foram adicionados como
+default no `settings.py` — nenhum ajuste extra necessário aqui, subdomínio
+dedicado significa não precisar de prefixo `-saas`.)
 
 **Banco de dados**: o `settings.py` atual usa SQLite (`DATABASES` fixo, sem
 `if IS_PROD`). Pra este escopo reduzido, SQLite continua funcionando (é 1
@@ -367,27 +368,98 @@ BUILD_API_SECRET=
 # MYSQL_USERPASS=<senha do usuário vitrine_appuser>
 ```
 
-## Passo 6 — Nginx: novo arquivo `reverse-proxy-config/sites/030-vitrine.conf`
+## Passo 6 — Nginx: `saas.fastvistos.com.br` (decisão final)
 
-Mesmo estilo exato do `020-empregoadmin.conf`, adaptado. Como seu domínio
-**já tem certificado emitido** (não precisa rodar `create_ssl.sh` de novo
-se for usar um subdomínio que já tem wildcard, ou rodar
-`create-astro-site-conf.sh --only-certificate` se for um subdomínio novo
-tipo `app.seudominio.com` — ver decisão abaixo):
+**Decisão tomada**: subdomínio dedicado `saas.fastvistos.com.br`, projetos
+sob prefixo `/app/{slug}/`. Escolhido porque **nunca edita o
+`000-fastvistos.conf`** que já serve o site legado ao vivo — o único custo
+é emitir 1 certificado novo, uma vez, isolado.
+
+**Correção importante (achada testando de verdade)**: como este é um
+subdomínio **dedicado** (nada mais roda nele), não existe risco de colisão
+de path — por isso o Django é exposto **sem** prefixo extra
+(`/admin/`, `/preview/`, `/static/`, iguais ao que o `urls.py`/`settings.py`
+já usam). Uma primeira versão usava `/admin-saas/` fazendo
+`proxy_pass .../admin/` (troca de prefixo), mas isso quebra os redirects
+do Django: o `LOGIN_URL`/`reverse()` geram `/admin/login/` (path interno,
+sem o prefixo), o browser segue esse `Location`, e o Nginx não tem nenhum
+location pra `/admin/` puro → 404. Solução: nginx expõe exatamente os
+mesmos paths que o Django já usa internamente, sem tradução nenhuma.
+
+### 6.1 — DNS (fazer ANTES do Certbot, senão a validação falha)
+
+Criar um registro **A** apontando o subdomínio pro IP do VPS:
+
+```
+Tipo: A
+Nome: saas
+Destino: 72.60.57.150
+```
+
+Confirmar propagação antes de continuar:
+```bash
+dig +short saas.fastvistos.com.br
+# precisa retornar 72.60.57.150
+```
+
+### 6.2 — Config HTTP-only temporária (só pra passar no desafio ACME)
+
+Criar `reverse-proxy-config/sites/030-saas-fastvistos.conf`:
 
 ```nginx
-# HTTP → HTTPS redirect
 server {
     listen 80;
     listen [::]:80;
-    server_name seudominio.com www.seudominio.com;
+    server_name saas.fastvistos.com.br;
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
     }
 
     location / {
-        return 301 https://$host$request_uri;
+        return 301 https://saas.fastvistos.com.br$request_uri;
+    }
+}
+```
+
+```bash
+cd ~/Repos/reverse-proxy-config
+docker compose exec nginx nginx -t && docker compose exec nginx nginx -s reload
+```
+
+### 6.3 — Emitir o certificado (mesmo comando usado pelo `create-astro-site-conf.sh`)
+
+```bash
+cd ~/Repos/reverse-proxy-config
+docker run -it --rm \
+  -v "$(pwd)/certbot-challenges:/var/www/certbot" \
+  -v "$(pwd)/letsencrypt:/etc/letsencrypt" \
+  certbot/certbot certonly \
+  --webroot -w /var/www/certbot \
+  --config-dir /etc/letsencrypt \
+  --work-dir /etc/letsencrypt/work \
+  --logs-dir /etc/letsencrypt/logs \
+  -d saas.fastvistos.com.br
+```
+
+Se der certo, os arquivos aparecem em
+`./letsencrypt/live/saas.fastvistos.com.br/{fullchain,privkey}.pem`.
+
+### 6.4 — Config final (substitui o arquivo do 6.2)
+
+```nginx
+# HTTP → HTTPS redirect
+server {
+    listen 80;
+    listen [::]:80;
+    server_name saas.fastvistos.com.br;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://saas.fastvistos.com.br$request_uri;
     }
 }
 
@@ -395,28 +467,25 @@ server {
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    server_name seudominio.com www.seudominio.com;
+    server_name saas.fastvistos.com.br;
 
     client_max_body_size 10M;
 
-    ssl_certificate /etc/letsencrypt/live/seudominio.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/seudominio.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/saas.fastvistos.com.br/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/saas.fastvistos.com.br/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers on;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
-    # Redirect /admin-saas → /admin-saas/
-    location = /admin-saas {
-        return 301 /admin-saas/;
-    }
-
-    location /static-saas/ {
-        alias /app/staticfiles/;   # mesmo volume nomeado do Passo 3, montado read-only aqui
+    location /static/ {
+        alias /app/staticfiles/;   # volume vitrine_staticfiles, montado read-only aqui
         expires 30d;
         add_header Cache-Control "public, max-age=2592000";
     }
 
-    location /admin-saas/ {
+    # Sem prefixo — /admin/ do Nginx bate 1:1 com /admin/ do Django (urls.py),
+    # então LOGIN_URL, reverse(), redirects do admin funcionam sem tradução.
+    location /admin/ {
         proxy_pass http://vitrine:8000/admin/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -425,10 +494,20 @@ server {
         proxy_redirect off;
     }
 
-    # NOVO: cada projeto publicado vira /{project_slug}/ neste MESMO domínio.
+    # Preview de páginas (core.views.preview_page) — link "👁 Ver Preview" no admin
+    location /preview/ {
+        proxy_pass http://vitrine:8000/preview/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
+    # Cada projeto publicado vira /app/{project_slug}/ neste subdomínio.
     # root aponta pro diretório pai único (Passo 3) — nenhum projeto novo
     # precisa de mudança aqui.
-    location ~ ^/([a-z0-9-]+)/ {
+    location ~ ^/app/([a-z0-9-]+)/ {
         root /var/www/_saas;
         try_files /$1/current$uri /$1/current$uri/ /$1/current/index.html =404;
     }
@@ -436,15 +515,10 @@ server {
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
     }
-
-    # Mantém o que já serve seudominio.com/ hoje (site institucional etc)
-    location / {
-        # ... sua config atual, sem mudar ...
-    }
 }
 ```
 
-Adicionar também o volume do staticfiles ao `docker-compose.yml` do Nginx
+Adicionar o volume do staticfiles ao `docker-compose.yml` do Nginx
 (`reverse-proxy-config/docker-compose.yml`, junto dos outros
 `*_staticfiles`):
 
@@ -461,19 +535,22 @@ E no serviço `nginx`:
       - vitrine_staticfiles:/app/staticfiles:ro
 ```
 
-**⚠️ Decisão que você precisa tomar**: se `seudominio.com/` já serve algo
-seu hoje (site institucional, landing page), o
-`location ~ ^/([a-z0-9-]+)/` acima pode colidir com paths existentes (ex:
-se seu site já tem `/sobre/`, e alguém criar um projeto SaaS com slug
-`sobre`). Alternativas: usar um prefixo fixo (`seudominio.com/app/{slug}/`)
-ou um subdomínio dedicado (`app.seudominio.com`, exigindo emitir 1 novo
-certificado via `create-astro-site-conf.sh --only-certificate`, rodado à
-mão uma vez — não precisa da automação de Certbot do `core/deploy.py`).
-
-Testar e recarregar (mesmo comando do `rebuild.sh`):
+Testar e recarregar:
 ```bash
 cd ~/Repos/reverse-proxy-config
 docker compose exec nginx nginx -t && docker compose exec nginx nginx -s reload
+```
+
+### 6.5 — Atualizar `vitrine/.env` no VPS com o domínio real
+
+```bash
+DEBUG=False
+ALLOWED_HOSTS=saas.fastvistos.com.br,vitrine,localhost,127.0.0.1
+CSRF_TRUSTED_ORIGINS=https://saas.fastvistos.com.br
+```
+```bash
+cd ~/Repos/fastvistos_saas/vitrine
+docker compose up -d --build   # recria com o .env novo
 ```
 
 ## Passo 7 — Usuário restrito `deploybot` (build/deploy, SEM Certbot ainda)
@@ -516,7 +593,7 @@ depende disso independente da automação de domínio customizado.
    validate_ts() { [[ "$1" =~ ^[0-9]{8}-[0-9]{6}$ ]] || { echo "timestamp inválido: $1" >&2; exit 1; }; }
 
    WWW_ROOT="/var/www/_saas"          # diretório pai único, ver Passo 3
-   ASTRO_DIST="/home/edgar/Repos/fastvistos/dist/_saas"   # onde o build gera os arquivos
+   ASTRO_DIST="/home/edgar/Repos/fastvistos_saas/dist/_saas"   # onde o build gera os arquivos (clone isolado)
 
    case "$VERB" in
      rsync-release)
@@ -601,14 +678,18 @@ seguro rodar sempre porque o schema do `vitrine` é pequeno e controlado.)
 
 ## Passo 9 — Teste ponta a ponta
 
-1. `https://seudominio.com/admin-saas/` → logar com superuser
-   (`docker exec -it vitrine python manage.py createsuperuser`)
+1. `https://saas.fastvistos.com.br/admin/` → logar com o superuser já
+   criado (`edgar.segundo@gmail.com`)
 2. Criar `Client` + `Project` de teste
 3. Criar páginas nos 3 formatos, testar preview
-4. Action "🚀 Build & Publicar"
+   (`https://saas.fastvistos.com.br/preview/<id>/`)
+4. Action "🚀 Build & Publicar" (só funciona depois do Passo 7, usuário
+   `deploybot` provisionado)
 5. No VPS: `ls -la /var/www/_saas/{slug}/releases/` e
    `readlink /var/www/_saas/{slug}/current`
-6. `https://seudominio.com/{slug}/` → confirmar que carrega
+6. `https://saas.fastvistos.com.br/app/{slug}/` → confirmar que carrega
+7. Confirmar que `https://fastvistos.com.br/` (site legado) continua
+   respondendo normalmente — nada neste processo deveria ter tocado nele
 
 ## Depois: Fase de domínio customizado
 

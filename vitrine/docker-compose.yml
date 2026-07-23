@@ -11,13 +11,24 @@ services:
     restart: always
     networks:
       - proxy-network
+    # deploybot (usuário SSH restrito) roda no HOST, não dentro deste
+    # container — "localhost" de dentro do container não alcança o host.
+    # host.docker.internal resolve pro host real (mesmo padrão já usado nos
+    # celery workers do emprego/docker-compose.yml). Combina com
+    # DEPLOY_SSH_HOST=host.docker.internal no .env.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - vitrine_staticfiles:/app/staticfiles
       # Repo Astro inteiro montado do host — build_project() roda `npm run
       # build:_saas` via subprocess de dentro deste container, precisa
       # enxergar multi-sites/, node_modules/, package.json etc.
-      # AJUSTE o path da esquerda para o path real do repo no seu VPS.
-      - /home/edgar/Repos/fastvistos:/app/astro-repo
+      #
+      # IMPORTANTE: aponta pro clone ISOLADO (fastvistos_saas), NUNCA pro
+      # repo legado (fastvistos) — misturar os dois anularia o propósito de
+      # ter clonado separado. Se o path no seu VPS for diferente, ajuste
+      # aqui (mantendo sempre fastvistos_saas, não fastvistos).
+      - /home/edgar/Repos/fastvistos_saas:/app/astro-repo
     logging:
       driver: "json-file"
       options:
