@@ -55,11 +55,12 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
                 'O slug vira parte da URL pública do projeto '
                 '(seudominio.com/app/{slug}/) e do nome da pasta no '
                 'servidor. Se você mudar o slug depois de já ter '
-                'publicado, o sistema tenta renomear a pasta no servidor '
-                'automaticamente (via SSH) — mas isso só funciona se o '
-                'deploybot estiver configurado. Se a renomeação falhar, '
-                'você vai ver um aviso e vai precisar rodar "Build & '
-                'Publicar" de novo pra gerar a pasta com o novo nome.'
+                'publicado, o sistema renomeia a pasta no servidor e '
+                'republica o projeto automaticamente (via SSH) — não '
+                'precisa clicar em "Build & Publicar" de novo. Isso só '
+                'funciona se o deploybot estiver configurado; se falhar, '
+                'você vai ver um aviso pedindo pra rodar "Build & '
+                'Publicar" manualmente.'
             ),
         }),
         ('Status', {
@@ -84,19 +85,48 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
         if old_slug and old_slug != obj.slug:
             has_deployment = obj.builds.filter(deployment__status='success').exists()
             if has_deployment:
-                from core.deploy import rename_project_release
+                from core.deploy import rename_project_release, build_project, deploy_build
+
                 try:
                     rename_project_release(old_slug, obj.slug)
-                    messages.success(
-                        request,
-                        f'📦 Pasta no servidor renomeada de "{old_slug}" pra "{obj.slug}" automaticamente.'
-                    )
                 except Exception as e:
                     messages.warning(
                         request,
                         f'⚠️ Slug mudado de "{old_slug}" pra "{obj.slug}", mas não consegui '
                         f'renomear a pasta no servidor automaticamente ({str(e)[:150]}). '
                         f'Rode "Build & Publicar" de novo pra publicar em /{obj.slug}/.'
+                    )
+                    return
+
+                # A pasta renomeada só resolve o caminho externo — o HTML já
+                # gerado tem o slug antigo embutido nos links internos
+                # (breadcrumbs, nav), então precisa reconstruir pra ficar
+                # 100% correto. Fazemos isso automaticamente aqui pra não
+                # depender do usuário lembrar de clicar em "Build & Publicar"
+                # de novo (perguntado explicitamente por ele: "como podemos
+                # avisar o usuário" → decidimos automatizar em vez de avisar).
+                try:
+                    build = build_project(obj, triggered_by=request.user)
+                    deployment = deploy_build(build)
+                    if deployment.status == Deployment.STATUS_SUCCESS:
+                        messages.success(
+                            request,
+                            f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}" e projeto '
+                            f'republicado automaticamente com os links atualizados.'
+                        )
+                    else:
+                        messages.warning(
+                            request,
+                            f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}", mas o rebuild '
+                            f'automático falhou ({deployment.log_output[:150]}). Rode "Build & '
+                            f'Publicar" manualmente pra corrigir os links internos.'
+                        )
+                except Exception as e:
+                    messages.warning(
+                        request,
+                        f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}", mas o rebuild '
+                        f'automático falhou ({str(e)[:150]}). Rode "Build & Publicar" '
+                        f'manualmente pra corrigir os links internos.'
                     )
 
     def get_inlines(self, request, obj=None):
