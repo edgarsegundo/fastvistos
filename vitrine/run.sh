@@ -3,8 +3,10 @@ set -e
 
 cd /app
 
-echo "Aplicando migrations..."
-python manage.py migrate --noinput
+# migrate NÃO roda automaticamente aqui — fica a cargo do rebuild.sh, que
+# pergunta interativamente (mesmo padrão do emprego/rebuild.sh). Rodar
+# sempre aqui tornaria essa pergunta enganosa (pareceria opcional, mas não
+# seria).
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput

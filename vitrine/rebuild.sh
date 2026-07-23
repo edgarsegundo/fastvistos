@@ -1,7 +1,6 @@
 #!/bin/bash
 # Rebuild + redeploy do vitrine no VPS — mesmo padrão do
-# emprego/rebuild.sh, adaptado (migrate já roda automático no run.sh,
-# não precisa perguntar interativamente).
+# emprego/rebuild.sh (git pull, rebuild, reload nginx, pergunta migrate).
 set -e
 
 SERVICE_NAME="vitrine"
@@ -25,5 +24,16 @@ echo "Reloading nginx..."
   cd ~/Repos/reverse-proxy-config
   docker compose exec -T nginx nginx -s reload || true
 )
+
+# Ask about migration (mesmo padrão do emprego/rebuild.sh)
+read -p "Do you want to run 'python manage.py migrate'? [y/N]: " choice
+choice=${choice:-N}
+
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+    echo "Running migrations..."
+    docker compose exec -T "$SERVICE_NAME" python manage.py migrate
+else
+    echo "Skipping migrations."
+fi
 
 echo "Done!"
