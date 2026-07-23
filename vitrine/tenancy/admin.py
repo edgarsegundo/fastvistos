@@ -52,13 +52,28 @@ class ClientScopedAdmin(ModelAdmin):
     Superuser sem client ativo selecionado ainda vê tudo (conveniência);
     staff comum sem client ativo não vê nada (tem que escolher um antes).
 
-    O campo `client` é escondido do formulário pra não-superuser: sem
-    isso, o usuário veria um dropdown editável pra reatribuir o registro
-    a outro tenant — o `save()` do model bloquearia a troca, mas com um
-    ValueError cru (erro 500), não uma validação limpa. Escondendo o
-    campo, a criação usa o auto-preenchimento normal do `ClientModel.save()`
-    a partir do client corrente.
+    O campo `client` é escondido do formulário pra quem já tem um client
+    fixo (`ClientProfile`) — pra esses, o `save()` do model auto-preenche
+    a partir do `get_current_client()`, que pra eles é sempre o client do
+    profile, sem ambiguidade nenhuma. Mostrar o campo pra esse grupo só
+    criaria risco de reatribuir o registro pra outro tenant sem querer.
+
+    Pra quem NÃO tem `ClientProfile` (superuser, ou staff comum
+    gerenciando vários clients) — mesma resolução do
+    `CurrentClientMiddleware._resolve_client()` — não existe client fixo
+    nenhum, e como hoje não há UI pro `set_active_client` (só o endpoint),
+    esse grupo precisa escolher o `client` direto no formulário na hora de
+    criar um objeto novo, senão `ClientModel.save()` levanta `ValueError`
+    (sem ninguém pra "adivinhar" o dono).
     """
+
+    def _user_needs_client_field(self, request):
+        """True se este usuário não tem client fixo — precisa escolher
+        manualmente (mesma condição que cai no branch `is_staff` do
+        `CurrentClientMiddleware._resolve_client()`)."""
+        if getattr(request.user, "clientprofile", None) is not None:
+            return False
+        return request.user.is_superuser or request.user.is_staff
 
     def get_queryset(self, request):
         qs = self.model.all_objects.get_queryset()
@@ -71,25 +86,27 @@ class ClientScopedAdmin(ModelAdmin):
 
     def get_exclude(self, request, obj=None):
         excluded = super().get_exclude(request, obj) or ()
-        if not request.user.is_superuser:
+        if not self._user_needs_client_field(request):
             return (*excluded, "client")
         return excluded
 
     def get_fieldsets(self, request, obj=None):
-        """Superuser criando um objeto novo (obj is None) precisa escolher
-        o `client` explicitamente no formulário.
-
-        Sem isso: se o superuser não tiver um client ativo selecionado na
-        sessão (não existe UI pra isso hoje, só um endpoint
-        `set_active_client` sem link em lugar nenhum), `ClientModel.save()`
-        levanta `ValueError` — "Nenhum client corrente definido" — porque
-        não tem client_id no form (nunca apareceu, mesmo sem estar
-        excluído) nem client corrente na sessão pra auto-preencher.
-        `get_exclude` já permite esse campo pro superuser, mas ele só
-        aparece de fato se estiver listado em algum fieldset — por isso
-        esse método injeta uma seção extra.
-        """
+        """Quem precisa escolher `client` manualmente (ver
+        `_user_needs_client_field`) vê uma seção extra "Tenant" ao criar
+        um objeto novo (obj is None) — `get_exclude` já permite o campo
+        pra esse grupo, mas ele só aparece de fato se estiver listado em
+        algum fieldset, por isso esse método injeta a seção."""
         fieldsets = super().get_fieldsets(request, obj)
-        if request.user.is_superuser and obj is None:
+        if self._user_needs_client_field(request) and obj is None:
             fieldsets = (*fieldsets, ("Tenant", {"fields": ("client",)}))
         return fieldsets
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Restringe o dropdown de `client` aos tenants que o staff
+        (não-superuser) realmente tem acesso — sem isso, vazaria o nome
+        de TODOS os clients da plataforma pra qualquer staff comum, mesmo
+        os que ele não deveria nem saber que existem. Superuser continua
+        vendo todos (mesmo padrão já usado no ClientAdmin/ClientProfileAdmin)."""
+        if db_field.name == "client" and not request.user.is_superuser:
+            kwargs["queryset"] = request.user.accessible_clients.all()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
