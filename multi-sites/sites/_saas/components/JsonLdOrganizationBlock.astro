@@ -1,0 +1,18 @@
+---
+interface Props {
+    organizationName: string;
+    logoUrl?: string;
+    siteUrl: string;
+}
+const { organizationName, logoUrl, siteUrl } = Astro.props as Props;
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: organizationName,
+    url: siteUrl,
+    ...(logoUrl ? { logo: logoUrl } : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

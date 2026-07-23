@@ -11,6 +11,12 @@
 
 import { marked } from 'marked';
 import Layout from '../../layouts/Layout.astro';
+import JsonLdWebSiteBlock from '../../components/JsonLdWebSiteBlock.astro';
+import JsonLdOrganizationBlock from '../../components/JsonLdOrganizationBlock.astro';
+import JsonLdWebPageBlock from '../../components/JsonLdWebPageBlock.astro';
+import JsonLdBreadcrumbBlock from '../../components/JsonLdBreadcrumbBlock.astro';
+import JsonLdLocalBusinessBlock from '../../components/JsonLdLocalBusinessBlock.astro';
+import JsonLdBlogPostBlock from '../../components/JsonLdBlogPostBlock.astro';
 
 export async function getStaticPaths() {
     // PROJECT_SLUG_FILTER: quando setado, builda SÓ esse projeto (build
@@ -125,12 +131,46 @@ if (renderType === 'marked') {
     // Será renderizado em iFrame, não precisa processar aqui
     htmlContent = null;
 }
+
+// Payload de SEO já resolvido pela cascata Page > Project > Platform
+// (ver vitrine/core/seo.py::resolve_seo) — o Astro só renderiza, sem
+// lógica de fallback própria.
+const seo = page.seo;
+
+// seo.site_url é a raiz do PROJETO (ex: https://.../app/meu-site/),
+// já resolvida no backend considerando canonical_domain_override —
+// não derivar isso de seo.canonical via regex, que quebra quando
+// canonical_override aponta pra um domínio customizado sem "/app/".
+const siteUrl = seo.site_url;
+const breadcrumbItems = [
+    { name: project.name, url: siteUrl },
+    ...(page.slug !== 'index' ? [{ name: page.title, url: seo.canonical }] : []),
+];
 ---
 
 <Layout
-    title={page.seo_title || page.title}
-    description={page.seo_description}
+    title={seo.title}
+    description={seo.description}
+    canonical={seo.canonical}
+    faviconPath={seo.favicon}
+    image={seo.og_image}
+    authorName={seo.author_name}
+    siteName={seo.site_name}
+    themeColor={seo.theme_color}
+    noindex={seo.noindex}
 >
+    <Fragment slot="jsonld">
+        <JsonLdWebSiteBlock siteUrl={siteUrl} siteName={seo.site_name || project.name} locale={seo.locale} />
+        <JsonLdOrganizationBlock organizationName={seo.organization_name} logoUrl={seo.organization_logo_url} siteUrl={siteUrl} />
+        <JsonLdWebPageBlock pageUrl={seo.canonical} pageTitle={seo.title} description={seo.description} locale={seo.locale} imageUrl={seo.og_image} />
+        <JsonLdBreadcrumbBlock items={breadcrumbItems} />
+        {seo.page_type === 'contact' && (
+            <JsonLdLocalBusinessBlock businessName={seo.organization_name} siteUrl={siteUrl} typeSpecificData={seo.type_specific_data} />
+        )}
+        {seo.page_type === 'blog_post' && (
+            <JsonLdBlogPostBlock pageUrl={seo.canonical} headline={seo.title} description={seo.description} imageUrl={seo.og_image} authorName={seo.author_name} typeSpecificData={seo.type_specific_data} />
+        )}
+    </Fragment>
     <main class="container mx-auto px-4 py-12">
         {/* Breadcrumb */}
         <nav class="text-sm text-gray-600 mb-6">

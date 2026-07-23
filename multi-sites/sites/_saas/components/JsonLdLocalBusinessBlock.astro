@@ -1,0 +1,21 @@
+---
+interface Props {
+    businessName: string;
+    siteUrl: string;
+    typeSpecificData: Record<string, any>;
+}
+const { businessName, siteUrl, typeSpecificData } = Astro.props as Props;
+const { address, phone, opening_hours } = typeSpecificData || {};
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: businessName,
+    url: siteUrl,
+    ...(phone ? { telephone: phone } : {}),
+    ...(address ? { address: { '@type': 'PostalAddress', ...address } } : {}),
+    ...(opening_hours ? { openingHours: opening_hours } : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

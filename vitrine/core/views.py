@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.views import View
 from django.views.decorators.http import require_http_methods
@@ -8,8 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from core.forms import SignupForm, LoginForm
-from core.models import Project, Page
+from core.models import Project, Page, PlatformSeoDefaults
 from core.provisioning import provision_tenant_for_user
+from core.seo import resolve_seo
 from tenancy.threadlocal import get_current_client
 import json
 import markdown as md
@@ -132,6 +133,7 @@ def api_project_pages(request, project_slug):
         pages_data = []
         for page in pages:
             render_info = page.render_content_for_api()
+            seo = resolve_seo(page)
 
             pages_data.append({
                 'slug': page.slug or 'index',
@@ -140,8 +142,7 @@ def api_project_pages(request, project_slug):
                 'content': render_info['content'],
                 'content_format': render_info['format'],
                 'render_type': render_info['render_type'],
-                'seo_title': page.seo_title,
-                'seo_description': page.seo_description,
+                'seo': seo,
                 'modified': page.modified.isoformat(),
             })
 
@@ -177,16 +178,76 @@ def preview_page(request, page_id):
     if render_type == 'marked':
         content = md.markdown(content, extensions=['extra', 'codehilite'])
 
+    seo = resolve_seo(page)
+
     context = {
         'page': page,
         'project': page.project,
         'render_type': render_type,
         'content': content,
-        'seo_title': page.seo_title or page.title,
-        'seo_description': page.seo_description,
+        'seo_title': seo['title'],
+        'seo_description': seo['description'],
     }
 
     return render(request, 'core/preview.html', context)
+
+
+@require_GET
+def sitemap_xml(request):
+    """GET /sitemap.xml
+
+    Gerado dinamicamente a partir do banco (não pelo build do Astro) —
+    é o Django, não o Astro, quem sabe de fato quais Projects/Pages estão
+    publicados e qual a URL canônica de cada um (core.seo.resolve_seo).
+    Evita o gap que existia antes: o plugin @astrojs/sitemap montava URLs
+    com o domínio/path errados pro _saas, porque dependia da config
+    estática `site:` do astro.config.mjs (pensada pros sites legados,
+    1 domínio fixo por site-id), que não existe pro _saas (multi-tenant,
+    1 domínio pra N projetos, cada um com seu path /app/{slug}/).
+
+    Páginas com seo.noindex=True são excluídas — não faz sentido pedir
+    ao Google pra indexar e simultaneamente sugerir isso no sitemap.
+
+    Usa `all_objects` (não `objects`) tanto pra Project quanto pra Page:
+    este endpoint é público e cross-tenant por natureza (lista projetos
+    de TODOS os clients), mas `Page.objects`/`Project.objects` (o manager
+    padrão, `ClientManager`) filtram implicitamente por
+    `tenancy.threadlocal.get_current_client()` quando setado — o que
+    aconteceria pra qualquer request autenticado (staff/client-user
+    logado testando a URL, por exemplo). Isso faria o sitemap silenciar
+    todas as páginas de outros tenants, retornando só (ou nada) do
+    tenant do usuário logado. `all_objects` ignora esse filtro
+    threadlocal, então também precisa filtrar `is_removed=False` na mão
+    (não vem de graça como no `objects`), senão projeto soft-deletado
+    com is_published=True ainda vazaria pro sitemap público.
+    """
+    urls = []
+    platform = PlatformSeoDefaults.load()
+    projects = Project.all_objects.filter(is_published=True, is_removed=False)
+    for project in projects:
+        pages = Page.all_objects.filter(
+            project=project, is_published=True, is_removed=False
+        )
+        for page in pages:
+            seo = resolve_seo(page, platform=platform)
+            if seo['noindex']:
+                continue
+            urls.append({
+                'loc': seo['canonical'],
+                'lastmod': page.modified.date().isoformat(),
+            })
+
+    from xml.sax.saxutils import escape
+
+    xml_parts = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml_parts.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for url in urls:
+        xml_parts.append(
+            f"<url><loc>{escape(url['loc'])}</loc><lastmod>{url['lastmod']}</lastmod></url>"
+        )
+    xml_parts.append('</urlset>')
+
+    return HttpResponse('\n'.join(xml_parts), content_type='application/xml')
 
 
 @require_http_methods(["POST"])

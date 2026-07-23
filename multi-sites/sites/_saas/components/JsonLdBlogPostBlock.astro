@@ -1,0 +1,28 @@
+---
+interface Props {
+    pageUrl: string;
+    headline: string;
+    description?: string;
+    imageUrl?: string;
+    authorName?: string;
+    typeSpecificData: Record<string, any>;
+}
+const { pageUrl, headline, description, imageUrl, authorName, typeSpecificData } = Astro.props as Props;
+const { published_at, author_override } = typeSpecificData || {};
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': pageUrl,
+    headline,
+    ...(description ? { description } : {}),
+    ...(imageUrl ? { image: imageUrl } : {}),
+    ...(published_at ? { datePublished: published_at } : {}),
+    author: {
+        '@type': 'Person',
+        name: author_override || authorName || 'Autor',
+    },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

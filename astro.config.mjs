@@ -131,7 +131,23 @@ async function loadSiteConfigurations() {
 // ================================================================
 const SITES        = await loadSiteConfigurations();
 const CURRENT_SITE = process.env.SITE_ID || 'fastvistos';
-const siteConfig   = SITES[CURRENT_SITE] || SITES.fastvistos;
+const IS_SAAS       = CURRENT_SITE === '_saas';
+
+// _saas não tem (nem deve ter) um site-config.ts — é multi-tenant, 1
+// domínio pra N projetos de usuários, cada um com metadados vindos do
+// Django (ver vitrine/core/seo.py::resolve_seo), não config estática por
+// site-id. Sem esse branch, o fallback `SITES.fastvistos` faria o build
+// do _saas herdar o domínio de outro site legado — o sitemap.xml e
+// qualquer coisa que leia `Astro.site` ficariam com URLs erradas (ver
+// vitrine/docs/guia-seo-projetos-paginas.md, seção Limitações).
+const siteConfig = IS_SAAS
+    ? {
+          domain: new URL(process.env.PLATFORM_PUBLIC_BASE_URL || 'https://saas.fastvistos.com.br').hostname,
+          url:    process.env.PLATFORM_PUBLIC_BASE_URL || 'https://saas.fastvistos.com.br',
+          name:   'SaaS',
+          fullConfig: null,
+      }
+    : SITES[CURRENT_SITE] || SITES.fastvistos;
 
 console.log('🟢 Astro site URL:', siteConfig.url);
 
@@ -194,31 +210,42 @@ export default defineConfig({
             remarkPlugins: [],
             rehypePlugins: [],
         }),
-        sitemap({
-            // Exclui páginas de dev/admin e páginas de outros sites
-            filter: (page) => {
-                if (isBlocked(page)) return false;
-                return page.includes(siteConfig.domain) || !page.includes('://');
-            },
+        // @astrojs/sitemap monta URLs a partir do path físico de build +
+        // `site:` acima — funciona bem pros sites legados (1 domínio fixo
+        // por site-id), mas pro _saas geraria URLs com o path errado
+        // (sem o prefixo /app/{slug}/ da URL pública real). O _saas é
+        // multi-tenant: quem sabe de verdade quais projetos/páginas estão
+        // publicados é o Django, não o build do Astro — por isso o
+        // sitemap do _saas é servido dinamicamente em /sitemap.xml
+        // (vitrine/core/views.py::sitemap_xml), não gerado aqui. Ver
+        // vitrine/docs/guia-seo-projetos-paginas.md.
+        ...(IS_SAAS ? [] : [
+            sitemap({
+                // Exclui páginas de dev/admin e páginas de outros sites
+                filter: (page) => {
+                    if (isBlocked(page)) return false;
+                    return page.includes(siteConfig.domain) || !page.includes('://');
+                },
 
-            serialize: ({ url, data }) => {
-                const lastModified  = data?.lastModified || data?.frontmatter?.dateModified;
-                const sitemapMeta   = data?.frontmatter?.sitemap;
-                const lastmod       = formatDate(lastModified); // null se não houver data real
+                serialize: ({ url, data }) => {
+                    const lastModified  = data?.lastModified || data?.frontmatter?.dateModified;
+                    const sitemapMeta   = data?.frontmatter?.sitemap;
+                    const lastmod       = formatDate(lastModified); // null se não houver data real
 
-                const entry = {
-                    url,
-                    changefreq: resolveChangefreq(url, sitemapMeta?.changefreq),
-                    priority:   resolvePriority(url, sitemapMeta?.priority),
-                };
+                    const entry = {
+                        url,
+                        changefreq: resolveChangefreq(url, sitemapMeta?.changefreq),
+                        priority:   resolvePriority(url, sitemapMeta?.priority),
+                    };
 
-                // Só inclui lastmod se houver uma data real — evita enganar o Google
-                // com a data do build em todas as páginas
-                if (lastmod) entry.lastmod = lastmod;
+                    // Só inclui lastmod se houver uma data real — evita enganar o Google
+                    // com a data do build em todas as páginas
+                    if (lastmod) entry.lastmod = lastmod;
 
-                return entry;
-            },
-        }),
+                    return entry;
+                },
+            }),
+        ]),
     ],
 
     vite: {

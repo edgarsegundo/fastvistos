@@ -1,9 +1,16 @@
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.html import format_html, format_html_join
 from unfold.admin import ModelAdmin
 from tenancy.admin import ClientScopedAdmin
 
-from .models import ClientUser, Project, Page, Build, Deployment, Domain
+from .models import (
+    ClientUser, Project, Page, Build, Deployment, Domain,
+    PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings,
+)
+from .seo import resolve_seo
 
 # Import DomainAdmin from separate file to keep admin.py manageable
 from .admin_domain import DomainAdmin as _DomainAdmin
@@ -145,10 +152,11 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
             )
 
     def get_inlines(self, request, obj=None):
-        """Mostrar histórico de Builds deste projeto (Deployment fica dentro do BuildAdmin,
-        já que Deployment não tem FK direta pra Project, só pra Build)."""
+        """Mostrar SEO do projeto (branding/fallback pras páginas) e o
+        histórico de Builds (Deployment fica dentro do BuildAdmin, já que
+        Deployment não tem FK direta pra Project, só pra Build)."""
         if obj:
-            return [BuildInline]
+            return [ProjectSeoSettingsInline, BuildInline]
         return []
 
     def action_build_and_deploy(self, request, queryset):
@@ -190,7 +198,7 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
 
     fieldsets = (
         ('Básico', {
-            'fields': ('project', 'title', 'slug', 'is_home', 'is_published', 'order')
+            'fields': ('project', 'title', 'slug', 'page_type', 'is_home', 'is_published', 'order')
         }),
         ('Links', {
             'fields': ('preview_link', 'live_link_actions'),
@@ -204,14 +212,16 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             'fields': ('content',),
             'classes': ('wide',),
         }),
-        ('SEO', {
-            'fields': ('seo_title', 'seo_description')
-        }),
         ('Auditoria', {
             'fields': ('created', 'modified'),
             'classes': ('collapse',)
         }),
     )
+
+    def get_inlines(self, request, obj=None):
+        if obj:
+            return [PageSeoSettingsInline]
+        return []
 
     def format_badge(self, obj):
         """Mostra badge com formato da página"""
@@ -318,6 +328,67 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             url, url
         )
     live_link_actions.short_description = '🔗 Link ao vivo'
+
+
+def _seo_checklist_html(resolved):
+    """Checklist textual estilo Yoast — não bloqueia salvamento, só avisa."""
+    rows = []
+
+    title_len = len(resolved['title'])
+    if not (30 <= title_len <= 60):
+        rows.append(('#f59e0b', f'⚠️ Título com {title_len} caracteres (ideal: 30–60)'))
+    else:
+        rows.append(('#10b981', '✅ Título com tamanho ideal'))
+
+    desc_len = len(resolved['description'])
+    if desc_len == 0:
+        rows.append(('#ef4444', '❌ Sem descrição — buscadores vão gerar uma automaticamente'))
+    elif not (120 <= desc_len <= 160):
+        rows.append(('#f59e0b', f'⚠️ Descrição com {desc_len} caracteres (ideal: 120–160)'))
+    else:
+        rows.append(('#10b981', '✅ Descrição com tamanho ideal'))
+
+    if not resolved['og_image']:
+        rows.append(('#ef4444', '❌ Sem imagem de compartilhamento (og:image) — nem na página, nem no projeto, nem na plataforma'))
+    else:
+        rows.append(('#10b981', '✅ Imagem de compartilhamento definida'))
+
+    items = format_html_join(
+        '', '<li style="color:{}; margin-bottom:4px;">{}</li>', rows
+    )
+    return format_html('<ul style="list-style:none; padding-left:0; margin:0;">{}</ul>', items)
+
+
+class ProjectSeoSettingsInline(admin.StackedInline):
+    """SEO/branding a nível de projeto — fallback pra todas as páginas
+    que não definirem os próprios campos (ver core/seo.py::resolve_seo)."""
+    model = ProjectSeoSettings
+    can_delete = False
+    max_num = 1
+    verbose_name_plural = 'SEO do Projeto (fallback pras páginas)'
+    fields = (
+        'og_image_url', 'favicon_url', 'author_name',
+        'organization_name_override', 'default_title_suffix',
+    )
+
+
+class PageSeoSettingsInline(admin.StackedInline):
+    """SEO específico da página — sobrescreve o fallback do projeto/plataforma."""
+    model = PageSeoSettings
+    can_delete = False
+    max_num = 1
+    verbose_name_plural = 'SEO da Página'
+    fields = (
+        'seo_checklist', 'seo_title', 'seo_description',
+        'og_image_override', 'canonical_override', 'noindex', 'type_specific_data',
+    )
+    readonly_fields = ('seo_checklist',)
+
+    def seo_checklist(self, obj):
+        if not obj or not obj.pk:
+            return 'Salve a página pra ver o checklist de SEO.'
+        return _seo_checklist_html(resolve_seo(obj.page))
+    seo_checklist.short_description = 'Checklist de SEO'
 
 
 class BuildInline(admin.TabularInline):
@@ -452,3 +523,37 @@ class DeploymentAdmin(ClientScopedAdmin, ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(PlatformSeoDefaults)
+class PlatformSeoDefaultsAdmin(ModelAdmin):
+    """Singleton — substitui multi-sites/sites/_saas/site-config.ts.
+
+    Uma única entrada de menu, sem changelist: qualquer acesso vai direto
+    pro (único) registro, criando-o se ainda não existir.
+    """
+    fieldsets = (
+        ('Identidade', {
+            'fields': ('site_name', 'locale', 'theme_color'),
+        }),
+        ('Branding padrão', {
+            'fields': ('default_favicon_url', 'default_og_image_url', 'default_author_name'),
+            'description': 'Usado por qualquer Projeto/Página que não definir o próprio.',
+        }),
+        ('Organização (JSON-LD)', {
+            'fields': ('organization_name', 'organization_logo_url'),
+        }),
+        ('Verificação/Analytics', {
+            'fields': ('google_site_verification', 'gtm_id'),
+        }),
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        obj = PlatformSeoDefaults.load()
+        return redirect(reverse('admin:core_platformseodefaults_change', args=[obj.pk]))

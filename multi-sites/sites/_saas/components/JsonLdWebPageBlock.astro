@@ -1,0 +1,23 @@
+---
+interface Props {
+    pageUrl: string;
+    pageTitle: string;
+    description?: string;
+    locale: string;
+    imageUrl?: string;
+}
+const { pageUrl, pageTitle, description, locale, imageUrl } = Astro.props as Props;
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': pageUrl,
+    url: pageUrl,
+    name: pageTitle,
+    ...(description ? { description } : {}),
+    ...(imageUrl ? { primaryImageOfPage: imageUrl } : {}),
+    inLanguage: locale,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

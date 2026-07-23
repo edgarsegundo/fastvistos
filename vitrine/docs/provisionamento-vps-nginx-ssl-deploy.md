@@ -524,6 +524,17 @@ server {
         proxy_redirect off;
     }
 
+    # Sitemap dinâmico (core.views.sitemap_xml) — gerado do banco, não
+    # pelo build do Astro (ver vitrine/docs/guia-seo-projetos-paginas.md)
+    location = /sitemap.xml {
+        proxy_pass http://vitrine:8000/sitemap.xml;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
     # Cada projeto publicado vira /app/{project_slug}/ neste subdomínio.
     # root aponta pro diretório pai único (Passo 3) — nenhum projeto novo
     # precisa de mudança aqui.

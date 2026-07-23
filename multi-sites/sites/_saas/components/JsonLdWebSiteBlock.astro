@@ -1,0 +1,18 @@
+---
+interface Props {
+    siteUrl: string;
+    siteName: string;
+    locale: string;
+}
+const { siteUrl, siteName, locale } = Astro.props as Props;
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    url: siteUrl,
+    name: siteName,
+    inLanguage: locale,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

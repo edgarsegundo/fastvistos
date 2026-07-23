@@ -5,9 +5,26 @@
 interface Props {
     title?: string;
     description?: string;
+    canonical?: string;
+    faviconPath?: string;
+    image?: string;
+    authorName?: string;
+    siteName?: string;
+    themeColor?: string;
+    noindex?: boolean;
 }
 
-const { title, description } = Astro.props as Props;
+const {
+    title,
+    description,
+    canonical,
+    faviconPath,
+    image,
+    authorName,
+    siteName,
+    themeColor,
+    noindex,
+} = Astro.props as Props;
 ---
 
 <!doctype html>
@@ -17,9 +34,18 @@ const { title, description } = Astro.props as Props;
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {title && <title>{title}</title>}
         {description && <meta name="description" content={description} />}
+        {canonical && <link rel="canonical" href={canonical} />}
+        {faviconPath && <link rel="icon" href={faviconPath} />}
+        {themeColor && <meta name="theme-color" content={themeColor} />}
+        {authorName && <meta name="author" content={authorName} />}
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
         <meta property="og:type" content="website" />
         {title && <meta property="og:title" content={title} />}
         {description && <meta property="og:description" content={description} />}
+        {siteName && <meta property="og:site_name" content={siteName} />}
+        {image && <meta property="og:image" content={image} />}
+        {image && <meta name="twitter:card" content="summary_large_image" />}
+        <slot name="jsonld" />
         <style>
             :root {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;

@@ -3,8 +3,10 @@
 Arquivo enxuto pra colar/carregar no início de uma sessão nova sobre este
 assunto — não repete explicação, só aponta onde as coisas estão. Docs
 completos: [guia-projetos-paginas-build-deploy.md](guia-projetos-paginas-build-deploy.md)
-(uso + arquitetura) e [provisionamento-vps-nginx-ssl-deploy.md](provisionamento-vps-nginx-ssl-deploy.md)
-(infra/VPS).
+(uso + arquitetura), [provisionamento-vps-nginx-ssl-deploy.md](provisionamento-vps-nginx-ssl-deploy.md)
+(infra/VPS) e [guia-seo-projetos-paginas.md](guia-seo-projetos-paginas.md)
+(SEO em camadas — Project/Page, JSON-LD, se a sessão for sobre SEO/meta
+tags/dados estruturados, ler esse em vez deste).
 
 ## O que é
 
@@ -27,6 +29,11 @@ Build do Astro é sempre escopado a 1 projeto por vez (nunca site-wide).
 
 **Astro**
 - `multi-sites/sites/_saas/pages/[project]/[...slug].astro` — rota dinâmica que renderiza qualquer projeto/página; `getStaticPaths()` respeita `PROJECT_SLUG_FILTER`
+
+**SEO (Project/Page, JSON-LD) — ver [guia-seo-projetos-paginas.md](guia-seo-projetos-paginas.md) pra detalhe**
+- `vitrine/core/seo.py` — `resolve_seo()`, único lugar com a cascata Page > Project > Platform
+- `vitrine/core/models.py` — `PlatformSeoDefaults` (singleton), `ProjectSeoSettings`, `PageSeoSettings`, `Page.page_type`
+- `multi-sites/sites/_saas/components/JsonLd*.astro` — dados estruturados, duplicados do padrão do legado (não compartilhados)
 
 **Infra/VPS (fonte de verdade versionada no repo)**
 - `vitrine/ops/vitrine-deploy.sh` — script restrito rodado pelo `deploybot` no VPS (verbos: `rsync-release`, `switch-symlink`, `reload-nginx`, `rename-project`; `write-nginx-conf`/`certbot-issue`/`dns-check` são stub, fase futura)

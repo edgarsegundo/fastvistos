@@ -33,6 +33,11 @@ urlpatterns = [
     # Preview
     path('preview/<int:page_id>/', core_views.preview_page, name='preview_page'),
 
+    # Sitemap dinâmico de todos os Projects/Pages publicados (substitui o
+    # sitemap.xml estático que o Astro geraria com domínio/path errados
+    # pro _saas — ver core.views.sitemap_xml)
+    path('sitemap.xml', core_views.sitemap_xml, name='sitemap_xml'),
+
     # API para Astro
     path('api/projects/', core_views.api_projects_list, name='api_projects_list'),
     path('api/projects/<str:project_slug>/pages/', core_views.api_project_pages, name='api_project_pages'),

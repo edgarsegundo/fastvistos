@@ -123,8 +123,28 @@ class Page(ClientModel):
         help_text="Conteúdo em Markdown ou HTML (conforme o formato selecionado)"
     )
 
-    seo_title = models.CharField(max_length=255, blank=True)
-    seo_description = models.CharField(max_length=160, blank=True)
+    PAGE_TYPE_HOME = 'home'
+    PAGE_TYPE_GENERIC = 'generic'
+    PAGE_TYPE_CONTACT = 'contact'
+    PAGE_TYPE_ABOUT = 'about'
+    PAGE_TYPE_BLOG_POST = 'blog_post'
+    PAGE_TYPE_LANDING = 'landing'
+
+    PAGE_TYPE_CHOICES = [
+        (PAGE_TYPE_HOME, 'Página Inicial'),
+        (PAGE_TYPE_GENERIC, 'Genérica'),
+        (PAGE_TYPE_CONTACT, 'Contato'),
+        (PAGE_TYPE_ABOUT, 'Sobre'),
+        (PAGE_TYPE_BLOG_POST, 'Post de Blog'),
+        (PAGE_TYPE_LANDING, 'Landing Page'),
+    ]
+
+    page_type = models.CharField(
+        max_length=20,
+        choices=PAGE_TYPE_CHOICES,
+        default=PAGE_TYPE_GENERIC,
+        help_text="Tipo de conteúdo — habilita campos de SEO específicos (ex: endereço em Contato)"
+    )
     is_published = models.BooleanField(default=True)
     is_home = models.BooleanField(default=False, help_text="Marque para ser a página inicial")
     order = models.IntegerField(default=0)
@@ -176,6 +196,17 @@ class Page(ClientModel):
                         'deixe esta desmarcada.'
                     ) % {'other': other.title}
                 })
+
+    def save(self, *args, **kwargs):
+        """Mantém page_type sincronizado com is_home nos dois sentidos —
+        evita o estado inconsistente is_home=True com page_type != 'home'
+        (ou o inverso), sem exigir o usuário entender a interação entre
+        os dois campos. Ver docs/guia-seo-projetos-paginas.md."""
+        if self.is_home:
+            self.page_type = self.PAGE_TYPE_HOME
+        elif self.page_type == self.PAGE_TYPE_HOME:
+            self.page_type = self.PAGE_TYPE_GENERIC
+        super().save(*args, **kwargs)
 
     def render_content_for_api(self):
         """Renderiza conteúdo pra API (retorna formato final)"""
@@ -414,3 +445,103 @@ class Domain(ClientModel):
 
     def __str__(self):
         return f"{self.domain} ({self.project.name})"
+
+
+class PlatformSeoDefaults(models.Model):
+    """Defaults de SEO/branding da plataforma inteira (singleton).
+
+    Substitui o antigo multi-sites/sites/_saas/site-config.ts: em vez de
+    um dev editar um arquivo estático por deploy, um admin edita esses
+    valores no Django admin e eles servem de última camada de fallback
+    pra qualquer Project/Page que não definir algo próprio.
+    """
+
+    site_name = models.CharField(max_length=255, blank=True)
+    default_favicon_url = models.URLField(blank=True)
+    default_og_image_url = models.URLField(blank=True)
+    default_author_name = models.CharField(max_length=255, blank=True)
+    theme_color = models.CharField(max_length=7, blank=True, help_text="ex: #0f172a")
+    google_site_verification = models.CharField(max_length=255, blank=True)
+    gtm_id = models.CharField(max_length=32, blank=True)
+    locale = models.CharField(max_length=10, default='pt-BR')
+    organization_name = models.CharField(max_length=255, blank=True)
+    organization_logo_url = models.URLField(blank=True)
+
+    class Meta:
+        verbose_name = 'Configuração de SEO da Plataforma'
+        verbose_name_plural = 'Configuração de SEO da Plataforma'
+
+    def __str__(self):
+        return 'Configuração de SEO da Plataforma'
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, _created = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class ProjectSeoSettings(models.Model):
+    """Camada de SEO/branding específica de um Project — sobrescreve
+    PlatformSeoDefaults, é sobrescrita por PageSeoSettings."""
+
+    project = models.OneToOneField(
+        Project, on_delete=models.CASCADE, related_name='seo_settings'
+    )
+    og_image_url = models.URLField(blank=True)
+    favicon_url = models.URLField(blank=True)
+    author_name = models.CharField(max_length=255, blank=True)
+    canonical_domain_override = models.CharField(
+        max_length=255, blank=True,
+        help_text="Reservado para domínio customizado (feature futura)"
+    )
+    organization_name_override = models.CharField(max_length=255, blank=True)
+    default_title_suffix = models.CharField(
+        max_length=100, blank=True,
+        help_text='ex: " | Minha Empresa" — anexado ao título quando a página não definir o próprio'
+    )
+
+    class Meta:
+        verbose_name = 'SEO do Projeto'
+        verbose_name_plural = 'SEO dos Projetos'
+
+    def __str__(self):
+        return f"SEO de {self.project.slug}"
+
+
+class PageSeoSettings(models.Model):
+    """Camada de SEO específica de uma Page — última palavra na
+    resolução em cascata (Page > Project > Platform).
+
+    type_specific_data guarda campos que só fazem sentido pra certos
+    page_type (ex: endereço/telefone em Contact, data/autor em BlogPost)
+    sem precisar de coluna dedicada pra cada combinação possível.
+    """
+
+    page = models.OneToOneField(
+        Page, on_delete=models.CASCADE, related_name='seo_settings'
+    )
+    seo_title = models.CharField(max_length=255, blank=True)
+    seo_description = models.CharField(max_length=160, blank=True)
+    og_image_override = models.URLField(blank=True)
+    canonical_override = models.URLField(blank=True)
+    noindex = models.BooleanField(
+        default=False, help_text="Pede aos buscadores para não indexar esta página"
+    )
+    type_specific_data = models.JSONField(
+        default=dict, blank=True,
+        help_text="Campos extras conforme page_type (ex: endereço, telefone, data de publicação)"
+    )
+
+    class Meta:
+        verbose_name = 'SEO da Página'
+        verbose_name_plural = 'SEO das Páginas'
+
+    def __str__(self):
+        return f"SEO de {self.page.slug}"
