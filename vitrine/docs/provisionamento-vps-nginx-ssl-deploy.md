@@ -1,4 +1,4 @@
-# Provisionamento de Produção — Fase Reduzida (domínio próprio, sem Certbot)
+# Provisionamento VPS: Nginx, SSL, Deploy e SSO — Fase Reduzida (domínio próprio, sem Certbot de domínio customizado)
 
 Este documento segue **exatamente** o padrão já usado nos outros Django apps
 do VPS (`emprego`/`empregoadmin`, `microservicesadm`) — mesmo `Dockerfile`,
@@ -691,15 +691,24 @@ seguro rodar sempre porque o schema do `vitrine` é pequeno e controlado.)
 
 1. `https://saas.fastvistos.com.br/admin/` → logar com o superuser já
    criado (`edgar.segundo@gmail.com`)
-2. Criar `Client` + `Project` de teste
-3. Criar páginas nos 3 formatos, testar preview
+2. `https://saas.fastvistos.com.br/entrar/` → testar cadastro por
+   email/senha E pelo botão do Google (Passo 10) — confirmar que os dois
+   caminhos criam `Client`+`ClientProfile` automaticamente e caem em
+   `/admin/`
+3. Criar `Project` de teste, marcar 1 página com `is_home=True`
+4. Criar páginas nos 3 formatos, testar preview
    (`https://saas.fastvistos.com.br/preview/<id>/`)
-4. Action "🚀 Build & Publicar" (só funciona depois do Passo 7, usuário
+5. Action "🚀 Build & Publicar" (só funciona depois do Passo 7, usuário
    `deploybot` provisionado)
-5. No VPS: `ls -la /var/www/_saas/{slug}/releases/` e
+6. No VPS: `ls -la /var/www/_saas/{slug}/releases/` e
    `readlink /var/www/_saas/{slug}/current`
-6. `https://saas.fastvistos.com.br/app/{slug}/` → confirmar que carrega
-7. Confirmar que `https://fastvistos.com.br/` (site legado) continua
+7. `https://saas.fastvistos.com.br/app/{slug}/` → confirmar que carrega
+   a página `is_home` (sem segmento extra na URL)
+8. Editar o `slug` do projeto de teste e confirmar que a pasta é
+   renomeada + o projeto é republicado automaticamente (ver
+   `docs/guia-projetos-paginas-build-deploy.md`, seção "Editar o slug
+   depois de publicado")
+9. Confirmar que `https://fastvistos.com.br/` (site legado) continua
    respondendo normalmente — nada neste processo deveria ter tocado nele
 
 ## Depois: Fase de domínio customizado
@@ -710,3 +719,70 @@ verdade `write-nginx-conf` e `certbot-issue` no `vitrine-deploy.sh`
 espelhando o padrão do `create-astro-site-conf.sh` — webroot method,
 `/var/www/certbot` compartilhado, 2 fases pra evitar o problema
 ovo-e-galinha do SSL). Nada no Python muda, só o script bash do VPS.
+
+## Passo 10 — Login social (Google SSO) via django-allauth
+
+Cadastro/login público em `/entrar/` (`core.views.AuthView`) oferece
+email/senha OU o botão do Google — ambos caem no mesmo lugar depois
+(`/admin/`), e ambos disparam
+`core.provisioning.provision_tenant_for_user()` no primeiro acesso
+(cria `Client`+`ClientProfile`+grupo "Donos de Tenant" automaticamente —
+ver `docs/guia-projetos-paginas-build-deploy.md`, seção "Cadastro e
+login").
+
+### 10.1 — Decisão: sem `SITE_ID` fixo
+
+`vitrine_core/settings.py` **deliberadamente não define `SITE_ID`** —
+`django.contrib.sites` resolve o `Site` pelo header `Host` da request,
+não por um ID fixo. Isso evita o bug de `SocialApp.DoesNotExist` que
+aconteceu quando o `SITE_ID` local (`1`) não batia com o `Site` real
+usado em produção (domínios diferentes por ambiente). É a opção mais
+robusta entre local/staging/produção, ao custo de precisar garantir que
+o `Site` correto (com `domain` = `saas.fastvistos.com.br` em produção)
+tenha o `SocialApp` do Google associado via Django Admin
+(`/admin/sites/site/` e `/admin/socialaccount/socialapp/`).
+
+### 10.2 — Google Cloud Console
+
+1. Criar credencial **OAuth client ID**, tipo **Web application**.
+2. **Authorized redirect URI**:
+   `https://saas.fastvistos.com.br/accounts/google/login/callback/`
+   (path fixo do allauth, não muda).
+3. Guardar `Client ID` e `Client Secret`.
+
+### 10.3 — Django Admin
+
+1. `/admin/sites/site/` → confirmar (ou criar) o `Site` com `domain`
+   correto pro ambiente (`saas.fastvistos.com.br` em produção).
+2. `/admin/socialaccount/socialapp/` → Add:
+   - Provider: `Google`
+   - Name: `google-provider` (ou qualquer nome — é só um label)
+   - Client id / Secret key: os do passo 10.2
+   - **Sites**: associar ao `Site` do passo 1 (esse vínculo é o que
+     resolve `SocialApp.DoesNotExist` — sem ele, o allauth não acha
+     nenhum app configurado pro domínio da request).
+
+### 10.4 — Settings relevantes (já aplicados em `vitrine_core/settings.py`)
+
+```python
+ACCOUNT_ADAPTER = 'core.adapters.NoUsernameAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'core.adapters.NoUsernameSocialAccountAdapter'
+LOGIN_REDIRECT_URL = '/admin/'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_STORE_TOKENS = False
+```
+
+`core/adapters.py` tem os dois adapters (`NoUsernameAccountAdapter` pro
+fluxo email/senha, `NoUsernameSocialAccountAdapter` pro Google) — ambos
+chamam `provision_tenant_for_user()` depois de criar o usuário, e ambos
+redirecionam pra `/admin/`. Necessário porque `ClientUser` não tem campo
+`username` (email é o identificador único), diferente do que o allauth
+espera por padrão.
+
+### 10.5 — Nginx
+
+Rotas `/entrar/` e `/accounts/` já cobertas no Passo 6.4 acima — sem
+elas, o botão do Google e o callback do OAuth dão 404.
