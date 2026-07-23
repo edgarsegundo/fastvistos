@@ -645,7 +645,8 @@ depende disso independente da automação de domínio customizado.
 
 ## Passo 8 — Deploy (mesmo padrão do `rebuild.sh` do emprego)
 
-Criar `vitrine/deploy.sh` (adaptado do `emprego/rebuild.sh`):
+✅ `vitrine/rebuild.sh` já existe no repo (mesmo nome usado no `emprego`,
+adaptado):
 
 ```bash
 #!/bin/bash
