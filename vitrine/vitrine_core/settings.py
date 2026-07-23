@@ -140,6 +140,48 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Logging
+# https://docs.djangoproject.com/en/5.1/topics/logging/
+#
+# Sem isso, o Django usa o handler padrão do 'django' logger, que só manda
+# pro console quando DEBUG=True (filtro require_debug_true) — com
+# DEBUG=False (produção), erros 500 não apareciam em lugar nenhum, nem no
+# `docker logs vitrine`. Aqui forçamos log pro stdout sempre, independente
+# de DEBUG, com o traceback completo — `docker logs vitrine` já captura
+# stdout (driver json-file configurado no docker-compose.yml).
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 

@@ -74,3 +74,22 @@ class ClientScopedAdmin(ModelAdmin):
         if not request.user.is_superuser:
             return (*excluded, "client")
         return excluded
+
+    def get_fieldsets(self, request, obj=None):
+        """Superuser criando um objeto novo (obj is None) precisa escolher
+        o `client` explicitamente no formulário.
+
+        Sem isso: se o superuser não tiver um client ativo selecionado na
+        sessão (não existe UI pra isso hoje, só um endpoint
+        `set_active_client` sem link em lugar nenhum), `ClientModel.save()`
+        levanta `ValueError` — "Nenhum client corrente definido" — porque
+        não tem client_id no form (nunca apareceu, mesmo sem estar
+        excluído) nem client corrente na sessão pra auto-preencher.
+        `get_exclude` já permite esse campo pro superuser, mas ele só
+        aparece de fato se estiver listado em algum fieldset — por isso
+        esse método injeta uma seção extra.
+        """
+        fieldsets = super().get_fieldsets(request, obj)
+        if request.user.is_superuser and obj is None:
+            fieldsets = (*fieldsets, ("Tenant", {"fields": ("client",)}))
+        return fieldsets
