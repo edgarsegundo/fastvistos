@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from core.models import Project
+from pathlib import Path
 import subprocess
 import os
 
@@ -100,16 +101,38 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('❌ npm not found. Make sure Node.js/npm is installed'))
             return False
 
+        # SEMPRE inclui o stderr no log, mesmo quando o Astro "tem sucesso"
+        # (returncode 0) — console.error() do JS (ex: erro dentro de
+        # getStaticPaths(), como falha de fetch na API) escreve no stderr,
+        # não no stdout. Astro trata "0 páginas geradas" como sucesso, não
+        # como erro fatal — sem isso, a mensagem real do erro nunca aparecia
+        # no log salvo (só o texto genérico de "build falhou" no passo
+        # seguinte, sem contexto nenhum).
         self.stdout.write(result.stdout)
+        if result.stderr:
+            self.stdout.write(result.stderr)
 
-        if result.returncode == 0:
-            project.needs_rebuild = False
-            project.save(update_fields=['needs_rebuild'])
-            self.stdout.write(self.style.SUCCESS(f'✅ Build de {project.slug} completo'))
-            self.stdout.write(f'📁 Output: {astro_root}/dist/{platform_site_id}/{project.slug}/')
-            return True
-        else:
-            self.stdout.write(self.style.ERROR(f'❌ Build de {project.slug} falhou'))
-            if result.stderr:
-                self.stdout.write(result.stderr)
+        if result.returncode != 0:
+            self.stdout.write(self.style.ERROR(f'❌ Build de {project.slug} falhou (astro build retornou erro)'))
             return False
+
+        # Astro pode retornar sucesso (returncode 0) mas gerar 0 páginas pro
+        # projeto filtrado (ex: erro de rede/API dentro de getStaticPaths()
+        # que caiu no catch e retornou [] silenciosamente) — sem essa
+        # checagem, o deploy seguinte falha tentando fazer rsync de uma
+        # pasta que nunca foi criada, com uma mensagem de erro confusa.
+        output_dir = Path(astro_root) / 'dist' / platform_site_id / project.slug
+        if not output_dir.is_dir() or not any(output_dir.iterdir()):
+            self.stdout.write(self.style.ERROR(
+                f'❌ Build de {project.slug} não gerou nenhuma página '
+                f'(pasta de saída {output_dir} não existe ou está vazia, '
+                'mesmo o astro build tendo retornado sucesso — provável '
+                'erro de fetch/API dentro de getStaticPaths(), ver stderr acima)'
+            ))
+            return False
+
+        project.needs_rebuild = False
+        project.save(update_fields=['needs_rebuild'])
+        self.stdout.write(self.style.SUCCESS(f'✅ Build de {project.slug} completo'))
+        self.stdout.write(f'📁 Output: {output_dir}/')
+        return True
