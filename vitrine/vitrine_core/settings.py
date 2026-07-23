@@ -78,7 +78,14 @@ INSTALLED_APPS = [
     *([] if not DEBUG else ['django_extensions']),
 ]
 
-SITE_ID = 1
+# SITE_ID (django.contrib.sites) DE PROPÓSITO não é definido aqui — sem
+# ele, o Django/allauth resolve o Site corrente comparando o `Host` da
+# requisição com o campo `domain` de cada linha da tabela Site, em vez de
+# depender de um ID fixo que precisa coincidir entre bancos diferentes
+# (local, VPS) — já causou um bug real (SocialApp.DoesNotExist porque o
+# SITE_ID apontava pro Site errado). Só funciona se o campo `domain` do
+# Site cadastrado bater exatamente com o host real (ex: sem "www." se a
+# request não tiver, sem porta, etc — ver Site.objects.get_current()).
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

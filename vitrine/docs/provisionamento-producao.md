@@ -504,6 +504,26 @@ server {
         proxy_redirect off;
     }
 
+    # Cadastro/login público (core.views.AuthView) — porta de entrada do SaaS
+    location /entrar/ {
+        proxy_pass http://vitrine:8000/entrar/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
+    # django-allauth (login social, callback do Google OAuth)
+    location /accounts/ {
+        proxy_pass http://vitrine:8000/accounts/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
     # Cada projeto publicado vira /app/{project_slug}/ neste subdomínio.
     # root aponta pro diretório pai único (Passo 3) — nenhum projeto novo
     # precisa de mudança aqui.
