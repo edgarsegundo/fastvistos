@@ -113,10 +113,18 @@ WSGI_APPLICATION = 'vitrine_core.wsgi.application'
 # /app/data — sem isso, o SQLite vive na camada gravável do container e
 # some a cada `docker compose up --build` (rebuild recria o container do
 # zero, perdendo todos os dados: projetos, usuários, builds).
+#
+# O SQLite não cria diretórios pai sozinho — sem o mkdir abaixo, rodar
+# localmente (fora do Docker, onde o Dockerfile já faz `mkdir -p /app/data`)
+# falha com "unable to open database file" toda vez que essa pasta não
+# existir (ex: checkout novo, ou depois de um `rm -rf data` de limpeza).
+_DB_DIR = BASE_DIR / 'data'
+_DB_DIR.mkdir(parents=True, exist_ok=True)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+        'NAME': _DB_DIR / 'db.sqlite3',
     }
 }
 
