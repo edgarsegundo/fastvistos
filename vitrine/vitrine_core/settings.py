@@ -257,6 +257,10 @@ ASTRO_ROOT = os.environ.get('ASTRO_ROOT', '/Users/edgar/Repos/fastvistos')
 # Platform-wide Astro site ID (all user projects build together)
 PLATFORM_SITE_ID = os.environ.get('PLATFORM_SITE_ID', '_saas')
 
+# Domínio público onde os projetos publicados ficam no ar (usado pra montar
+# o link "abrir página ao vivo" no admin — core/admin.py: PageAdmin).
+PLATFORM_PUBLIC_BASE_URL = os.environ.get('PLATFORM_PUBLIC_BASE_URL', 'https://saas.fastvistos.com.br')
+
 # VPS deployment settings
 VPS_PUBLIC_IP = os.environ.get('VPS_PUBLIC_IP', '72.60.57.150')
 DEPLOY_SSH_HOST = os.environ.get('DEPLOY_SSH_HOST', 'localhost')

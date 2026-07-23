@@ -67,10 +67,20 @@ export async function getStaticPaths() {
 
                 // 3. Gera um path para cada página
                 pages.forEach(page => {
+                    // A API (core/views.py: api_project_pages) manda
+                    // page.slug = 'index' quando a página é a home (slug
+                    // vazio no banco). Pro Astro gerar o arquivo na RAIZ
+                    // do projeto (/project-slug/index.html, servido em
+                    // /project-slug/ sem segmento extra), o param do rest
+                    // parameter [...slug] precisa ser `undefined` — usar a
+                    // string literal 'index' geraria um subdiretório
+                    // /project-slug/index/index.html, exigindo
+                    // /project-slug/index/ na URL em vez da raiz.
+                    const isHome = !page.slug || page.slug === 'index';
                     allPaths.push({
                         params: {
                             project: project.slug,
-                            slug: page.slug || 'index'  // slug vazio = home
+                            slug: isHome ? undefined : page.slug
                         },
                         props: {
                             page,

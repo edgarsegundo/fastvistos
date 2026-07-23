@@ -527,9 +527,27 @@ server {
     # Cada projeto publicado vira /app/{project_slug}/ neste subdomínio.
     # root aponta pro diretório pai único (Passo 3) — nenhum projeto novo
     # precisa de mudança aqui.
-    location ~ ^/app/([a-z0-9-]+)/ {
-        root /var/www/_saas;
-        try_files /$1/current$uri /$1/current$uri/ /$1/current/index.html =404;
+    #
+    # Duas versões anteriores tinham bugs:
+    # 1ª: `root /var/www/_saas; try_files /$1/current$uri ...` — $uri
+    #     contém o PATH INTEIRO original, concatenar duplicava o path.
+    # 2ª: `rewrite ... break` + `root dinâmico` + `try_files $uri $uri/
+    #     /index.html` — quando try_files precisa do fallback de diretório
+    #     ($uri/, pra achar o index.html dentro), o redirect interno do
+    #     nginx reprocessa a MESMA uri já reescrita (sem o prefixo /app/*)
+    #     contra TODAS as locations de novo — como ela não bate mais com
+    #     `^/app/...`, "escapa" pro root padrão do Nginx (/etc/nginx/html),
+    #     não o nosso. Confirmado no error.log: tentava abrir
+    #     "/etc/nginx/html/home/index.html" em vez do path certo.
+    #
+    # Correção: captura projeto E o resto do path na MESMA regex (sem
+    # `rewrite` nenhum), e o `try_files` usa candidatos de ARQUIVO
+    # explícitos (terminados em .html) em vez de depender do fallback de
+    # diretório implícito — isso nunca dispara o redirect interno
+    # problemático.
+    location ~ ^/app/(?<project>[a-z0-9-]+)/(?<rest>.*)$ {
+        root /var/www/_saas/$project/current;
+        try_files /$rest /$rest/index.html /index.html =404;
     }
 
     location /.well-known/acme-challenge/ {

@@ -98,15 +98,19 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
 
 @admin.register(Page)
 class PageAdmin(ClientScopedAdmin, ModelAdmin):
-    list_display = ('title', 'project', 'slug', 'format_badge', 'is_published', 'order', 'modified')
+    list_display = ('title', 'project', 'slug', 'format_badge', 'is_published', 'live_link_actions', 'order', 'modified')
     list_filter = ('content_format', 'is_published', 'project', 'created')
     search_fields = ('title', 'slug', 'content')
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created', 'modified', 'format_explanation', 'preview_link')
+    readonly_fields = ('created', 'modified', 'format_explanation', 'preview_link', 'live_link_actions')
 
     fieldsets = (
         ('Básico', {
             'fields': ('project', 'title', 'slug', 'is_home', 'is_published', 'order')
+        }),
+        ('Links', {
+            'fields': ('preview_link', 'live_link_actions'),
+            'description': 'Preview mostra rascunhos (mesmo não publicados). Link ao vivo só funciona depois de "Build & Publicar" no projeto.'
         }),
         ('Formato do Conteúdo', {
             'fields': ('content_format', 'format_explanation'),
@@ -195,6 +199,41 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             )
         return '-'
     preview_link.short_description = 'Preview'
+
+    def _live_url(self, obj):
+        """Monta a URL pública da página já publicada (não confundir com
+        preview — essa exige que "Build & Publicar" já tenha rodado pro
+        projeto, senão o arquivo não existe ainda no VPS)."""
+        from django.conf import settings
+        base = settings.PLATFORM_PUBLIC_BASE_URL.rstrip('/')
+        project_slug = obj.project.slug
+        # Página home (is_home ou slug vazio) fica na raiz do projeto, sem
+        # segmento de página — mesma convenção do Astro (ver
+        # multi-sites/sites/_saas/pages/[project]/[...slug].astro).
+        if obj.is_home or not obj.slug:
+            return f'{base}/app/{project_slug}/'
+        return f'{base}/app/{project_slug}/{obj.slug}/'
+
+    def live_link_actions(self, obj):
+        """Ícone pra abrir a página publicada (nova aba) + botão de copiar
+        o link — pedido explicitamente pra aparecer na lista de Páginas."""
+        from django.utils.html import format_html
+        if not obj.id:
+            return '-'
+        url = self._live_url(obj)
+        return format_html(
+            '<div style="display:flex; gap:10px; align-items:center;">'
+            '<a href="{}" target="_blank" rel="noopener" title="Abrir página ao vivo" '
+            'style="text-decoration:none; font-size:1.15em;">🔗</a>'
+            '<button type="button" data-copy-url="{}" '
+            'onclick="navigator.clipboard.writeText(this.dataset.copyUrl); '
+            'const t=this; t.textContent=\'✅\'; setTimeout(()=>{{t.textContent=\'📋\';}}, 1500);" '
+            'title="Copiar link" '
+            'style="border:none; background:none; cursor:pointer; font-size:1.15em; padding:0;">📋</button>'
+            '</div>',
+            url, url
+        )
+    live_link_actions.short_description = '🔗 Link ao vivo'
 
 
 class BuildInline(admin.TabularInline):
