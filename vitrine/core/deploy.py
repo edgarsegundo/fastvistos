@@ -95,7 +95,20 @@ def run_ssh_command(command_args, stdin_data=None):
     # numa string de comando — defesa em profundidade além da validação de
     # domain/project_slug já feita antes de chegar aqui.
     cmd_str = ' '.join(shlex.quote(str(arg)) for arg in command_args)
-    ssh_cmd = ['ssh', '-i', ssh_key, f'{ssh_user}@{ssh_host}', cmd_str]
+    ssh_cmd = [
+        'ssh', '-i', ssh_key,
+        # BatchMode=yes: nunca cai pra prompt de senha — sem isso, um deploy
+        # disparado pelo admin (sem terminal/TTY) travaria em silêncio até o
+        # timeout de 300s esperando uma senha que nunca vai vir.
+        '-o', 'BatchMode=yes',
+        # deploybot@host é sempre o mesmo par fixo (não é acesso interativo
+        # a hosts variados) — StrictHostKeyChecking=no + known_hosts em
+        # /dev/null evita falha na primeira conexão (host novo, sem entrada
+        # prévia) e não deixa resíduo em disco a cada deploy.
+        '-o', 'StrictHostKeyChecking=no',
+        '-o', 'UserKnownHostsFile=/dev/null',
+        f'{ssh_user}@{ssh_host}', cmd_str,
+    ]
 
     try:
         result = subprocess.run(

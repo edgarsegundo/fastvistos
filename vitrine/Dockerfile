@@ -32,7 +32,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-RUN addgroup --system django && adduser --system --ingroup django django
+RUN addgroup --system django \
+    && adduser --system --home /home/django --ingroup django django
 RUN mkdir -p /home/django && chown -R django:django /home/django
 ENV HOME=/home/django
 ENV TMPDIR=/tmp
