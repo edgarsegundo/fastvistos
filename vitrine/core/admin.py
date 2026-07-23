@@ -85,49 +85,64 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
         if old_slug and old_slug != obj.slug:
             has_deployment = obj.builds.filter(deployment__status='success').exists()
             if has_deployment:
-                from core.deploy import rename_project_release, build_project, deploy_build
+                from django.db import transaction
 
-                try:
-                    rename_project_release(old_slug, obj.slug)
-                except Exception as e:
-                    messages.warning(
-                        request,
-                        f'⚠️ Slug mudado de "{old_slug}" pra "{obj.slug}", mas não consegui '
-                        f'renomear a pasta no servidor automaticamente ({str(e)[:150]}). '
-                        f'Rode "Build & Publicar" de novo pra publicar em /{obj.slug}/.'
-                    )
-                    return
+                # O admin envolve save_model() inteiro numa transação. Se
+                # renomear+rebuildar aqui dentro, o `npm run build` sobe um
+                # subprocess que faz fetch() de volta pra API do Django
+                # (/api/projects/<slug>/pages/) numa CONEXÃO NOVA — que ainda
+                # não enxerga o UPDATE do slug, porque a transação externa
+                # não commitou. Resultado: "Project not found", build falha
+                # com 0 páginas, mesmo o slug já estando salvo (só não
+                # visível pra outras conexões ainda). Rodar via
+                # transaction.on_commit() garante que o rename+rebuild só
+                # dispara depois que o commit realmente aconteceu.
+                transaction.on_commit(
+                    lambda: self._rename_and_rebuild(request, obj, old_slug)
+                )
 
-                # A pasta renomeada só resolve o caminho externo — o HTML já
-                # gerado tem o slug antigo embutido nos links internos
-                # (breadcrumbs, nav), então precisa reconstruir pra ficar
-                # 100% correto. Fazemos isso automaticamente aqui pra não
-                # depender do usuário lembrar de clicar em "Build & Publicar"
-                # de novo (perguntado explicitamente por ele: "como podemos
-                # avisar o usuário" → decidimos automatizar em vez de avisar).
-                try:
-                    build = build_project(obj, triggered_by=request.user)
-                    deployment = deploy_build(build)
-                    if deployment.status == Deployment.STATUS_SUCCESS:
-                        messages.success(
-                            request,
-                            f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}" e projeto '
-                            f'republicado automaticamente com os links atualizados.'
-                        )
-                    else:
-                        messages.warning(
-                            request,
-                            f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}", mas o rebuild '
-                            f'automático falhou ({deployment.log_output[:150]}). Rode "Build & '
-                            f'Publicar" manualmente pra corrigir os links internos.'
-                        )
-                except Exception as e:
-                    messages.warning(
-                        request,
-                        f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}", mas o rebuild '
-                        f'automático falhou ({str(e)[:150]}). Rode "Build & Publicar" '
-                        f'manualmente pra corrigir os links internos.'
-                    )
+    def _rename_and_rebuild(self, request, obj, old_slug):
+        from core.deploy import rename_project_release, build_project, deploy_build
+
+        try:
+            rename_project_release(old_slug, obj.slug)
+        except Exception as e:
+            messages.warning(
+                request,
+                f'⚠️ Slug mudado de "{old_slug}" pra "{obj.slug}", mas não consegui '
+                f'renomear a pasta no servidor automaticamente ({str(e)[:150]}). '
+                f'Rode "Build & Publicar" de novo pra publicar em /{obj.slug}/.'
+            )
+            return
+
+        # A pasta renomeada só resolve o caminho externo — o HTML já gerado
+        # tem o slug antigo embutido nos links internos (breadcrumbs, nav),
+        # então precisa reconstruir pra ficar 100% correto. Fazemos isso
+        # automaticamente aqui pra não depender do usuário lembrar de clicar
+        # em "Build & Publicar" de novo.
+        try:
+            build = build_project(obj, triggered_by=request.user)
+            deployment = deploy_build(build)
+            if deployment.status == Deployment.STATUS_SUCCESS:
+                messages.success(
+                    request,
+                    f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}" e projeto '
+                    f'republicado automaticamente com os links atualizados.'
+                )
+            else:
+                messages.warning(
+                    request,
+                    f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}", mas o rebuild '
+                    f'automático falhou ({deployment.log_output[:150]}). Rode "Build & '
+                    f'Publicar" manualmente pra corrigir os links internos.'
+                )
+        except Exception as e:
+            messages.warning(
+                request,
+                f'📦 Pasta renomeada de "{old_slug}" pra "{obj.slug}", mas o rebuild '
+                f'automático falhou ({str(e)[:150]}). Rode "Build & Publicar" '
+                f'manualmente pra corrigir os links internos.'
+            )
 
     def get_inlines(self, request, obj=None):
         """Mostrar histórico de Builds deste projeto (Deployment fica dentro do BuildAdmin,
