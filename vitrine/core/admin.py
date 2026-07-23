@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from unfold.admin import ModelAdmin
 from tenancy.admin import ClientScopedAdmin
@@ -44,12 +44,23 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('is_published', 'needs_rebuild', 'created')
     search_fields = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('created', 'modified')
     actions = ['action_build_and_deploy']
+
+    readonly_fields = ('created', 'modified')
 
     fieldsets = (
         ('Básico', {
-            'fields': ('name', 'slug', 'description', 'is_published')
+            'fields': ('name', 'slug', 'description', 'is_published'),
+            'description': (
+                'O slug vira parte da URL pública do projeto '
+                '(seudominio.com/app/{slug}/) e do nome da pasta no '
+                'servidor. Se você mudar o slug depois de já ter '
+                'publicado, o sistema tenta renomear a pasta no servidor '
+                'automaticamente (via SSH) — mas isso só funciona se o '
+                'deploybot estiver configurado. Se a renomeação falhar, '
+                'você vai ver um aviso e vai precisar rodar "Build & '
+                'Publicar" de novo pra gerar a pasta com o novo nome.'
+            ),
         }),
         ('Status', {
             'fields': ('needs_rebuild',),
@@ -59,6 +70,34 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def save_model(self, request, obj, form, change):
+        """Se o slug mudou e o projeto já tem deploy bem-sucedido, tenta
+        renomear a pasta no VPS automaticamente (evita o cenário: slug
+        antigo com arquivos, slug novo com pasta vazia → 404)."""
+        old_slug = None
+        if change and 'slug' in form.changed_data:
+            old_slug = Project.all_objects.filter(pk=obj.pk).values_list('slug', flat=True).first()
+
+        super().save_model(request, obj, form, change)
+
+        if old_slug and old_slug != obj.slug:
+            has_deployment = obj.builds.filter(deployment__status='success').exists()
+            if has_deployment:
+                from core.deploy import rename_project_release
+                try:
+                    rename_project_release(old_slug, obj.slug)
+                    messages.success(
+                        request,
+                        f'📦 Pasta no servidor renomeada de "{old_slug}" pra "{obj.slug}" automaticamente.'
+                    )
+                except Exception as e:
+                    messages.warning(
+                        request,
+                        f'⚠️ Slug mudado de "{old_slug}" pra "{obj.slug}", mas não consegui '
+                        f'renomear a pasta no servidor automaticamente ({str(e)[:150]}). '
+                        f'Rode "Build & Publicar" de novo pra publicar em /{obj.slug}/.'
+                    )
 
     def get_inlines(self, request, obj=None):
         """Mostrar histórico de Builds deste projeto (Deployment fica dentro do BuildAdmin,

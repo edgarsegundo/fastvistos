@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel, UUIDModel
@@ -137,6 +138,17 @@ class Page(ClientModel):
                 fields=['project', 'slug'],
                 name='unique_page_slug_per_project'
             ),
+            # Só considera unicidade entre linhas com is_home=True — permite
+            # quantas páginas com is_home=False quiser, mas nunca deixa 2
+            # marcadas como home no MESMO projeto ao mesmo tempo (o Astro
+            # geraria 2 arquivos pro mesmo path na raiz do projeto, um
+            # sobrescrevendo o outro silenciosamente — ver
+            # multi-sites/sites/_saas/pages/[project]/[...slug].astro).
+            models.UniqueConstraint(
+                fields=['project'],
+                condition=models.Q(is_home=True),
+                name='unique_home_page_per_project',
+            ),
         ]
         indexes = [
             models.Index(fields=['project', 'is_published']),
@@ -145,6 +157,25 @@ class Page(ClientModel):
 
     def __str__(self):
         return f"{self.project.slug}/{self.slug}"
+
+    def clean(self):
+        """Validação amigável — sem isso, a constraint do banco ainda
+        protege a integridade, mas o erro que o admin mostra é um
+        IntegrityError cru, não uma mensagem de formulário legível."""
+        super().clean()
+        if self.is_home:
+            conflicting = Page.all_objects.filter(
+                project_id=self.project_id, is_home=True
+            ).exclude(pk=self.pk)
+            if conflicting.exists():
+                other = conflicting.first()
+                raise ValidationError({
+                    'is_home': _(
+                        'Já existe outra página marcada como home neste projeto '
+                        '("%(other)s"). Desmarque "is_home" nela primeiro, ou '
+                        'deixe esta desmarcada.'
+                    ) % {'other': other.title}
+                })
 
     def render_content_for_api(self):
         """Renderiza conteúdo pra API (retorna formato final)"""

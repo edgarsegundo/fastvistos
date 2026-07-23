@@ -283,6 +283,41 @@ def deploy_build(build):
     return deployment
 
 
+def rename_project_release(old_slug, new_slug):
+    """
+    Renomeia a pasta de releases de um projeto no VPS depois que o slug
+    muda no Django (ex: /var/www/_saas/velho-slug/ → /var/www/_saas/novo-slug/).
+
+    Sem isso, mudar o slug de um Project já publicado deixaria os arquivos
+    "presos" no nome antigo — a URL nova (com o slug novo) ficaria 404 até
+    rodar um build novo do zero.
+
+    Chamado por ProjectAdmin.save_model() quando detecta que `slug` mudou
+    num projeto que já tem pelo menos 1 deploy bem-sucedido.
+
+    Args:
+        old_slug: slug anterior (nome da pasta atual no VPS)
+        new_slug: slug novo (nome que a pasta deve passar a ter)
+
+    Raises:
+        ValueError: slugs inválidos (defesa em profundidade — o script
+            restrito no VPS valida de novo, mas não custa checar aqui também)
+        Exception: se o comando SSH falhar (pasta não existe, permissão, etc)
+    """
+    import re
+    slug_re = re.compile(r'^[a-z0-9-]+$')
+    if not slug_re.match(old_slug) or not slug_re.match(new_slug):
+        raise ValueError(f'Slug inválido: old={old_slug!r} new={new_slug!r}')
+
+    rc, stdout, stderr = run_ssh_command(['rename-project', old_slug, new_slug])
+    if rc != 0:
+        raise Exception(f'rename-project failed: {stderr}')
+
+    rc, stdout, stderr = run_ssh_command(['reload-nginx'])
+    if rc != 0:
+        raise Exception(f'reload-nginx (após rename) failed: {stderr}')
+
+
 def rollback_to_build(build):
     """
     Volta o symlink /var/www/{project_slug}/current para uma release

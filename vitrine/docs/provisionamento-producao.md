@@ -616,58 +616,30 @@ depende disso independente da automação de domínio customizado.
    command="/usr/local/bin/vitrine-deploy.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding ssh-ed25519 AAAA...conteúdo da chave pública...
    ```
 
-4. `/usr/local/bin/vitrine-deploy.sh` — implementa só os verbos que este
-   escopo reduzido usa (`write-nginx-conf`/`certbot-issue` ficam como stub,
-   prontos pra quando ativar domínio customizado depois):
-
-   ```bash
-   #!/bin/bash
-   set -euo pipefail
-
-   read -r -a ARGS <<< "$SSH_ORIGINAL_COMMAND"
-   VERB="${ARGS[0]:-}"
-
-   validate_slug() { [[ "$1" =~ ^[a-z0-9-]+$ ]] || { echo "slug inválido: $1" >&2; exit 1; }; }
-   validate_ts() { [[ "$1" =~ ^[0-9]{8}-[0-9]{6}$ ]] || { echo "timestamp inválido: $1" >&2; exit 1; }; }
-
-   WWW_ROOT="/var/www/_saas"          # diretório pai único, ver Passo 3
-   ASTRO_DIST="/home/edgar/Repos/fastvistos_saas/dist/_saas"   # onde o build gera os arquivos (clone isolado)
-
-   case "$VERB" in
-     rsync-release)
-       SLUG="${ARGS[1]}"; TS="${ARGS[2]}"
-       validate_slug "$SLUG"; validate_ts "$TS"
-       mkdir -p "$WWW_ROOT/$SLUG/releases/$TS"
-       rsync -a --delete "$ASTRO_DIST/$SLUG/" "$WWW_ROOT/$SLUG/releases/$TS/"
-       ;;
-     switch-symlink)
-       SLUG="${ARGS[1]}"; TS="${ARGS[2]}"
-       validate_slug "$SLUG"; validate_ts "$TS"
-       ln -sfn "$WWW_ROOT/$SLUG/releases/$TS" "$WWW_ROOT/$SLUG/current"
-       ;;
-     reload-nginx)
-       sudo /usr/bin/docker exec nginx nginx -t
-       sudo /usr/bin/docker exec nginx nginx -s reload
-       ;;
-     write-nginx-conf|certbot-issue|dns-check)
-       echo "Verbo '$VERB' ainda não implementado nesta fase (domínio customizado é Fase futura)" >&2
-       exit 1
-       ;;
-     *)
-       echo "Verbo desconhecido: $VERB" >&2
-       exit 1
-       ;;
-   esac
-   ```
+4. `/usr/local/bin/vitrine-deploy.sh` — **fonte de verdade é o arquivo
+   versionado no repo, `vitrine/ops/vitrine-deploy.sh`** (não é mais um
+   arquivo solto colado manualmente no VPS). O `rebuild.sh` (Passo 8) já
+   faz `sudo install -m 755 ops/vitrine-deploy.sh /usr/local/bin/vitrine-deploy.sh`
+   a cada deploy, então o script no host é sempre reinstalado a partir do
+   git — se resetar o VPS, basta clonar o repo e rodar `./rebuild.sh` uma
+   vez (depois de recriar o usuário `deploybot` e o `authorized_keys`,
+   passos 1-3) que o script volta sozinho. Implementa só os verbos que
+   este escopo reduzido usa (`write-nginx-conf`/`certbot-issue` ficam como
+   stub, prontos pra quando ativar domínio customizado depois) — ver
+   conteúdo completo em `vitrine/ops/vitrine-deploy.sh`.
 
    **Nota**: se `vitrine` roda dentro de container (opção A do Passo 1) e
-   `deploybot` roda no host, o `ASTRO_DIST` acima é o path no HOST (onde o
-   volume `/home/edgar/Repos/fastvistos` já existe de verdade), não o path
-   dentro do container — o `rsync-release` roda como processo do host
-   (via SSH), então enxerga o filesystem do host diretamente, sem precisar
-   entrar no container.
+   `deploybot` roda no host, o `ASTRO_DIST` do script é o path no HOST
+   (onde o volume `/home/edgar/Repos/fastvistos` já existe de verdade),
+   não o path dentro do container — o `rsync-release` roda como processo
+   do host (via SSH), então enxerga o filesystem do host diretamente, sem
+   precisar entrar no container.
 
-5. `chmod +x /usr/local/bin/vitrine-deploy.sh`
+5. Ainda assim, na primeira vez (VPS zerado, antes do primeiro
+   `rebuild.sh` rodar), instale manualmente uma vez:
+   ```bash
+   sudo install -m 755 vitrine/ops/vitrine-deploy.sh /usr/local/bin/vitrine-deploy.sh
+   ```
 
 6. Sudoers restrito (`sudo visudo`) — só isso, nada de `ALL=(ALL) NOPASSWD: ALL`:
    ```

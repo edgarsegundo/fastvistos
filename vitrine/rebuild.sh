@@ -8,6 +8,9 @@ SERVICE_NAME="vitrine"
 echo "Pulling latest code..."
 git pull
 
+echo "Installing vitrine-deploy.sh (deploybot forced-command script)..."
+sudo install -m 755 -o root -g root ops/vitrine-deploy.sh /usr/local/bin/vitrine-deploy.sh
+
 echo "Building and starting container..."
 docker compose up -d --build --force-recreate --remove-orphans
 
