@@ -1,0 +1,284 @@
+{% load i18n static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% trans "Criar conta" %}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(180deg, #3B6FE0 0%, #3B6FE0 30%, #10193A 30%, #10193A 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .lang-switcher {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+        }
+        .lang-switcher select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+        }
+        h1 {
+            color: white;
+            font-size: 2rem;
+            margin: 40px 0 8px;
+            text-align: center;
+        }
+        .subtitle {
+            color: white;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .subtitle strong { font-weight: 700; }
+        .card {
+            background: #f4f5f7;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .tabs a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 3px solid transparent;
+        }
+        .tabs a.active {
+            color: #3B6FE0;
+            border-bottom-color: #3B6FE0;
+        }
+        .row { display: flex; gap: 16px; margin-bottom: 16px; }
+        .row .field { flex: 1; }
+        .field { margin-bottom: 16px; }
+        .field input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            font-size: 1rem;
+        }
+        .field .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0;
+            color: #dc2626;
+            font-size: 0.85rem;
+        }
+        .checkbox-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        .checkbox-field input { margin-top: 4px; }
+        .checkbox-field a { color: #3B6FE0; }
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            background: #3B6FE0;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        button[type="submit"]:hover { background: #2f5bc4; }
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #374151;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .google-btn:hover { background: #f9fafb; }
+        .non-field-errors {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        .footer-link {
+            text-align: center;
+            color: white;
+            margin-top: 24px;
+        }
+        .footer-link a { color: white; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            <select name="language" onchange="this.form.submit()">
+                {% get_current_language as CURRENT_LANGUAGE %}
+                {% get_available_languages as AVAILABLE_LANGUAGES %}
+                {% for code, name in AVAILABLE_LANGUAGES %}
+                    <option value="{{ code }}" {% if code == CURRENT_LANGUAGE %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <h1>{% trans "Bem-vindo" %}</h1>
+    <p class="subtitle">{% trans "Crie sua conta e tenha" %} <strong>{% trans "acesso a todas as ferramentas" %}</strong>.</p>
+
+    <div class="card">
+        <div class="tabs">
+            <a href="#" data-tab="register" class="{% if active_tab != 'login' %}active{% endif %}">{% trans "Criar conta" %}</a>
+            <a href="#" data-tab="login" class="{% if active_tab == 'login' %}active{% endif %}">{% trans "Entrar" %}</a>
+        </div>
+
+        <!-- Formulário de cadastro -->
+        <form method="post" id="form-register" style="{% if active_tab == 'login' %}display:none;{% endif %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="register">
+
+            {% if signup_form.non_field_errors %}
+                <div class="non-field-errors">{{ signup_form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="row">
+                <div class="field">
+                    {{ signup_form.first_name }}
+                    {{ signup_form.first_name.errors }}
+                </div>
+                <div class="field">
+                    {{ signup_form.last_name }}
+                    {{ signup_form.last_name.errors }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="field">
+                    {{ signup_form.email }}
+                    {{ signup_form.email.errors }}
+                </div>
+                <div class="field">
+                    {{ signup_form.phone }}
+                    {{ signup_form.phone.errors }}
+                </div>
+            </div>
+            <div class="field">
+                {{ signup_form.password }}
+                {{ signup_form.password.errors }}
+            </div>
+
+            <div class="checkbox-field">
+                {{ signup_form.terms_accepted }}
+                <label for="{{ signup_form.terms_accepted.id_for_label }}">
+                    {% trans "Li e aceito os" %} <a href="#">{% trans "termos de uso" %}</a> {% trans "e" %} <a href="#">{% trans "políticas de privacidade" %}</a>
+                </label>
+            </div>
+            <div class="checkbox-field">
+                {{ signup_form.marketing_opt_in }}
+                <label for="{{ signup_form.marketing_opt_in.id_for_label }}">
+                    {% trans "Aceito receber dicas e atualizações por email." %}
+                </label>
+            </div>
+
+            <button type="submit">{% trans "Criar Conta" %}</button>
+        </form>
+
+        <!-- Formulário de login -->
+        <form method="post" id="form-login" style="{% if active_tab != 'login' %}display:none;{% endif %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="login">
+
+            {% if login_form.non_field_errors %}
+                <div class="non-field-errors">{{ login_form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="field">
+                {{ login_form.email }}
+                {{ login_form.email.errors }}
+            </div>
+            <div class="field">
+                {{ login_form.password }}
+                {{ login_form.password.errors }}
+            </div>
+
+            <button type="submit">{% trans "Entrar" %}</button>
+        </form>
+
+        <div class="divider">{% trans "ou" %}</div>
+
+        <a class="google-btn" href="{% provider_login_url 'google' %}">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.94v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.94A9 9 0 0 0 0 9c0 1.45.35 2.83.94 4.05l3.03-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .94 4.95l3.03 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+            {% trans "Continuar com Google" %}
+        </a>
+    </div>
+
+    <p class="footer-link">
+        <span id="footer-register" style="{% if active_tab == 'login' %}display:none;{% endif %}">
+            {% trans "Já tem uma conta?" %} <a href="#" data-tab="login">{% trans "Clique aqui para entrar" %}</a>
+        </span>
+        <span id="footer-login" style="{% if active_tab != 'login' %}display:none;{% endif %}">
+            {% trans "Ainda não tem conta?" %} <a href="#" data-tab="register">{% trans "Clique aqui para criar" %}</a>
+        </span>
+    </p>
+
+    <script>
+        document.querySelectorAll('[data-tab]').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+                var tab = el.getAttribute('data-tab');
+                var isLogin = tab === 'login';
+                document.getElementById('form-register').style.display = isLogin ? 'none' : 'block';
+                document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
+                document.getElementById('footer-register').style.display = isLogin ? 'none' : 'block';
+                document.getElementById('footer-login').style.display = isLogin ? 'block' : 'none';
+                document.querySelectorAll('.tabs a').forEach(function (t) { t.classList.remove('active'); });
+                el.classList.add('active');
+                document.querySelectorAll('.tabs a[data-tab="' + tab + '"]').forEach(function (t) { t.classList.add('active'); });
+            });
+        });
+    </script>
+</body>
+</html>

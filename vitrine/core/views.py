@@ -1,13 +1,74 @@
+from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.http import require_GET
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+from core.forms import SignupForm, LoginForm
 from core.models import Project, Page
+from core.provisioning import provision_tenant_for_user
 from tenancy.threadlocal import get_current_client
 import json
 import markdown as md
+
+
+class AuthView(View):
+    """Tela pública de cadastro/login (/entrar/) — o usuário escolhe entre
+    criar conta (email/senha) ou logar (email/senha OU botão do Google,
+    que leva pro fluxo allauth em /accounts/google/login/).
+
+    Depois de autenticado (por qualquer um dos 2 caminhos), cai no
+    /admin/ (painel do cliente, reformulado via Unfold) — mesmo destino
+    pros dois fluxos.
+    """
+    template_name = 'core/auth.html'
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/admin/')
+        return render(request, self.template_name, {
+            'signup_form': SignupForm(),
+            'login_form': LoginForm(),
+        })
+
+    def post(self, request):
+        action = request.POST.get('action')
+
+        if action == 'register':
+            form = SignupForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                provision_tenant_for_user(user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                return redirect('/admin/')
+            return render(request, self.template_name, {
+                'signup_form': form,
+                'login_form': LoginForm(),
+                'active_tab': 'register',
+            })
+
+        elif action == 'login':
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                user = authenticate(
+                    request,
+                    username=form.cleaned_data['email'],
+                    password=form.cleaned_data['password'],
+                )
+                if user is not None:
+                    login(request, user)
+                    return redirect('/admin/')
+                form.add_error(None, 'Email ou senha inválidos.')
+            return render(request, self.template_name, {
+                'signup_form': SignupForm(),
+                'login_form': form,
+                'active_tab': 'login',
+            })
+
+        return redirect('entrar')
 
 
 def _check_build_api_access(request):

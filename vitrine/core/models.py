@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel, UUIDModel
 from tenancy.models import ClientModel
 
@@ -35,6 +36,11 @@ class ClientUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel, UUIDModel
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
+    phone = models.CharField(max_length=32, blank=True)
+    marketing_opt_in = models.BooleanField(
+        default=False,
+        help_text='Aceitou receber dicas/atualizações por email no cadastro'
+    )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -66,8 +72,8 @@ class Project(ClientModel):
     needs_rebuild = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Projeto"
-        verbose_name_plural = "Projetos"
+        verbose_name = _("Meu Projeto")
+        verbose_name_plural = _("Meus Projetos")
         ordering = ['-created']
         constraints = [
             models.UniqueConstraint(
@@ -123,8 +129,8 @@ class Page(ClientModel):
     order = models.IntegerField(default=0)
 
     class Meta:
-        verbose_name = "Página"
-        verbose_name_plural = "Páginas"
+        verbose_name = _("Minha Página")
+        verbose_name_plural = _("Minhas Páginas")
         ordering = ['order', 'title']
         constraints = [
             models.UniqueConstraint(
@@ -367,8 +373,8 @@ class Domain(ClientModel):
     )
 
     class Meta:
-        verbose_name = 'Domínio'
-        verbose_name_plural = 'Domínios'
+        verbose_name = _('Meu Domínio')
+        verbose_name_plural = _('Meus Domínios')
         ordering = ['domain']
         indexes = [
             models.Index(fields=['project', 'is_primary']),

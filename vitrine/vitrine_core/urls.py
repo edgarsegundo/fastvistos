@@ -22,6 +22,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tenancy/', include('tenancy.urls')),
 
+    # i18n: seletor de idioma (POST language=<code>&next=<path>)
+    path('i18n/', include('django.conf.urls.i18n')),
+
+    # Cadastro/login público (email+senha ou Google SSO) — porta de entrada
+    # do SaaS, antes de cair no /admin/ (painel do cliente)
+    path('entrar/', core_views.AuthView.as_view(), name='entrar'),
+    path('accounts/', include('allauth.urls')),
+
     # Preview
     path('preview/<int:page_id>/', core_views.preview_page, name='preview_page'),
 

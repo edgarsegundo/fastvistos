@@ -48,9 +48,8 @@ CSRF_TRUSTED_ORIGINS = (
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # @login_required (usado em core.views.preview_page) redireciona pra esta URL
-# quando não autenticado — sem isso, cai no default /accounts/login/ que não
-# existe neste projeto (só tem /admin/login/).
-LOGIN_URL = '/admin/login/'
+# quando não autenticado — valor real setado mais abaixo, junto do bloco
+# django-allauth (LOGIN_URL = '/entrar/', a tela pública de cadastro/login).
 
 
 # Application definition
@@ -69,19 +68,34 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # exigido por django-allauth
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     *([] if not DEBUG else ['django_extensions']),
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # precisa vir antes do CommonMiddleware, depois de Session
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'tenancy.middleware.CurrentClientMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ROOT_URLCONF = 'vitrine_core.urls'
@@ -195,6 +209,17 @@ LOGGING = {
 
 LANGUAGE_CODE = 'pt-br'
 
+LANGUAGES = [
+    ('pt-br', 'Português (Brasil)'),
+    ('en', 'English'),
+]
+
+# Traduções customizadas (strings da nossa UI de signup/login, não das
+# libs). django.contrib.admin/allauth já trazem as próprias traduções.
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
 TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
@@ -235,10 +260,45 @@ WWW_ROOT = os.environ.get('WWW_ROOT', '/var/www')
 # API security: shared secret for Astro build-time API calls
 BUILD_API_SECRET = os.environ.get('BUILD_API_SECRET', '')
 
+# ============ django-allauth: cadastro público + Google SSO ============
+# Mesmo padrão usado no projeto emprego (candidateprofile/adapters.py),
+# adaptado pro ClientUser (sem username, email como identificador único)
+# e pro auto-provisionamento de tenant (core/provisioning.py).
+
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*']
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+ACCOUNT_ADAPTER = 'core.adapters.NoUsernameAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'core.adapters.NoUsernameSocialAccountAdapter'
+
+LOGIN_REDIRECT_URL = '/admin/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/entrar/'
+LOGIN_URL = '/entrar/'  # sobrescreve o /admin/login/ setado antes — cadastro/login público agora é a porta de entrada
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    }
+}
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_STORE_TOKENS = False
+
+# Credenciais do Google OAuth (Client ID/Secret) NÃO ficam aqui — são
+# cadastradas como um registro `SocialApp` via admin (/admin/socialaccount/socialapp/)
+# ou management command, ligado ao Site corrente (SITE_ID=1). Ver
+# docs/google-sso-signup.md.
+
 UNFOLD = {
-    'SITE_HEADER': 'Vitrine Admin',
-    'SITE_TITLE': 'Vitrine',
-    'SITE_SYMBOL': 'settings',
+    'SITE_HEADER': 'Meu Painel',
+    'SITE_TITLE': 'Meu Painel',
+    'SITE_SYMBOL': 'dashboard',
     'SHOW_HISTORY': True,
     'SIDEBAR': {
         'show_search': True,
