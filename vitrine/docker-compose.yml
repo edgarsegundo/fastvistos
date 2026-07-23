@@ -29,6 +29,10 @@ services:
       # ter clonado separado. Se o path no seu VPS for diferente, ajuste
       # aqui (mantendo sempre fastvistos_saas, não fastvistos).
       - /home/edgar/Repos/fastvistos_saas:/app/astro-repo
+      # Chave privada SSH do deploybot (gerada no host, em /etc/vitrine/),
+      # montada read-only — sem isso DEPLOY_SSH_KEY_PATH não existe dentro
+      # do container e core/deploy.py:run_ssh_command() falha.
+      - /etc/vitrine/deploy_key:/etc/vitrine/deploy_key:ro
     logging:
       driver: "json-file"
       options:
