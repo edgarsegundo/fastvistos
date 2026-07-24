@@ -371,6 +371,12 @@ class ProjectSeoSettingsInline(admin.StackedInline):
         'organization_name_override', 'default_title_suffix',
     )
 
+    class Media:
+        css = {
+            'all': ('admin/css/seo_fields.css',)
+        }
+        js = ('admin/js/seo_fields.js',)
+
 
 class PageSeoSettingsInline(admin.StackedInline):
     """SEO específico da página — sobrescreve o fallback do projeto/plataforma."""
@@ -383,6 +389,12 @@ class PageSeoSettingsInline(admin.StackedInline):
         'og_image_override', 'canonical_override', 'noindex', 'type_specific_data',
     )
     readonly_fields = ('seo_checklist',)
+
+    class Media:
+        css = {
+            'all': ('admin/css/seo_fields.css',)
+        }
+        js = ('admin/js/seo_fields.js',)
 
     def seo_checklist(self, obj):
         if not obj or not obj.pk:
