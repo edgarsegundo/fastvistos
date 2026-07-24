@@ -22,6 +22,22 @@ Ler primeiro: [vitrine/docs/guia-projetos-paginas-build-deploy-context.md](vitri
 — tem a lista de paths tocados com frequência e as decisões já tomadas
 (evita reabrir debate já resolvido). Docs completos linkados de lá.
 
+## Se a tarefa for sobre SEO/GEO/AEO (nativo ou a evolução em curso)
+
+Ler primeiro: [vitrine/docs/seo/guia-seo-projetos-paginas.md](vitrine/docs/seo/guia-seo-projetos-paginas.md)
+— arquitetura de SEO em camadas já implementada (`resolve_seo()` é a
+única fonte de verdade de precedência, nunca duplicar fallback no Astro).
+
+Pra tarefas da evolução em curso (JSON-LD por tipo, sitemap/robots/
+llms.txt, blocos de conteúdo estruturado, Core Web Vitals, AI visibility
+score), o trabalho está quebrado em 6 fases — não tentar implementar mais
+de uma por sessão:
+- Roadmap completo: [vitrine/docs/seo/plano-evolucao-seo-geo-aeo.md](vitrine/docs/seo/plano-evolucao-seo-geo-aeo.md)
+- Prompt de cada fase + decisões de arquitetura já fechadas (não
+  reabrir sem motivo novo): [vitrine/docs/seo/prompts-claude-code-seo-geo-aeo.md](vitrine/docs/seo/prompts-claude-code-seo-geo-aeo.md)
+
+Sempre em plan mode, uma fase por vez.
+
 ## Outras áreas do repo
 
 Ainda não documentadas num formato de contexto — se a sessão for sobre
