@@ -346,14 +346,17 @@ o resultado final.
   `address`/`phone`/`opening_hours` (contact) e `published_at`/
   `author_override` (blog_post) são só convenção, não enforced.
 - **Domínio customizado (`canonical_domain_override`) não integrado com
-  o model `Domain`** — existe um model `Domain` separado (verificação
-  DNS/SSL, ver
+  o model `Domain`** — existe um model `Domain` separado com verificação
+  DNS real e provisionamento de Nginx/SSL real (`core/deploy.py::verify_domain_dns`/
+  `provision_domain_nginx_ssl`, ver
   [guia-projetos-paginas-build-deploy-context.md](guia-projetos-paginas-build-deploy-context.md))
-  que já é "stub, fase futura". `canonical_domain_override` em
-  `ProjectSeoSettings` é preenchido manualmente por enquanto — quando
-  `Domain` sair do estágio stub, avaliar se `resolve_seo()` deveria puxar
-  o domínio verificado de lá automaticamente em vez de depender do
-  usuário duplicar a informação nos dois lugares.
+  — **não é mais um stub do lado Python** (só o script do lado do VPS que
+  recebe os comandos SSH ainda falta). `canonical_domain_override` em
+  `ProjectSeoSettings` continua sendo preenchido manualmente, sem nenhuma
+  referência cruzada com `Domain` hoje — problema mapeado (não
+  resolvido) em
+  [decisoes/canonical-domain-vs-domain-model.md](../decisoes/canonical-domain-vs-domain-model.md),
+  também listado em [backlog.md](../backlog.md).
 - **Upload de imagem real** — ver decisão acima, campos são `URLField`.
 
 ## Troubleshooting
