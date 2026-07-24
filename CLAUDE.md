@@ -38,6 +38,18 @@ de uma por sessão:
 
 Sempre em plan mode, uma fase por vez.
 
+## Se a tarefa for sobre o Editor de blocos / WYSIWYG (evolução em curso)
+
+Ler primeiro: [vitrine/docs/editor/guia-editor-blocos-context.md](vitrine/docs/editor/guia-editor-blocos-context.md)
+— modelo mental (página = lista de blocos, os 3 formatos legados viram
+blocos livres), estado atual do roadmap e decisões de arquitetura já
+fechadas (stack React+Puck, formato do documento, sanitização server-side —
+não reabrir sem motivo novo). Spec completa:
+[vitrine/docs/editor/spec-de-produto-v1.md](vitrine/docs/editor/spec-de-produto-v1.md).
+
+Trabalho quebrado em 7 fases (0–6) — não tentar implementar mais de uma por
+sessão. Sempre em plan mode.
+
 ## Outras áreas do repo
 
 Ainda não documentadas num formato de contexto — se a sessão for sobre

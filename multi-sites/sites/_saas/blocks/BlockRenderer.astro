@@ -1,0 +1,26 @@
+---
+/**
+ * BlockRenderer — renderiza um documento de blocos (formato Puck) como HTML
+ * ESTÁTICO. Cada bloco é um componente React renderizado sem client:* →
+ * Astro emite só HTML, zero JS. A hidratação (edição inline) é da fase 2.
+ *
+ * Recebe `document` = { root, content: [{ type, props }, ...] }. Blocos de
+ * tipo desconhecido (ex: catálogo divergente entre build e banco) são
+ * pulados em vez de quebrar o build inteiro.
+ */
+import { BLOCK_COMPONENTS } from './registry';
+import type { BlockDocument } from './types';
+
+interface Props {
+    document?: BlockDocument | null;
+}
+
+const { document } = Astro.props as Props;
+const content = Array.isArray(document?.content) ? document!.content : [];
+---
+
+{content.map((node) => {
+    const Comp = BLOCK_COMPONENTS[node?.type];
+    if (!Comp) return null;
+    return <Comp {...(node.props ?? {})} />;
+})}

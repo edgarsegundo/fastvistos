@@ -9,8 +9,8 @@
  * /project-slug/services/   → services page (slug = "services")
  */
 
-import { marked } from 'marked';
 import Layout from '../../layouts/Layout.astro';
+import BlockRenderer from '../../blocks/BlockRenderer.astro';
 import JsonLdWebSiteBlock from '../../components/JsonLdWebSiteBlock.astro';
 import JsonLdOrganizationBlock from '../../components/JsonLdOrganizationBlock.astro';
 import JsonLdWebPageBlock from '../../components/JsonLdWebPageBlock.astro';
@@ -116,25 +116,10 @@ export async function getStaticPaths() {
 // Props vêm de getStaticPaths
 const { page, project } = Astro.props;
 
-// ✨ RENDERIZAR CONFORME O TIPO
-let htmlContent = '';
-let renderType = page.render_type; // 'marked' | 'inline' | 'iframe'
-
-if (renderType === 'marked') {
-    // ===== TIPO 1: MARKDOWN =====
-    htmlContent = await marked(page.content, {
-        gfm: true,
-        breaks: true,
-    });
-} else if (renderType === 'inline') {
-    // ===== TIPO 2: HTML SEGURO (inline) =====
-    // HTML já foi sanitizado no backend
-    htmlContent = page.content;
-} else if (renderType === 'iframe') {
-    // ===== TIPO 3: HTML CUSTOMIZADO (iFrame) =====
-    // Será renderizado em iFrame, não precisa processar aqui
-    htmlContent = null;
-}
+// ✨ CONTEÚDO = DOCUMENTO DE BLOCOS (formato Puck) resolvido no Django.
+// O render de cada bloco (incl. markdown/html/iframe) mora nos componentes
+// do catálogo (blocks/*), não mais aqui. Ver blocks/BlockRenderer.astro.
+const blocks = page.blocks ?? { content: [] };
 
 // Payload de SEO já resolvido pela cascata Page > Project > Platform
 // (ver vitrine/core/seo.py::resolve_seo) — o Astro só renderiza, sem
@@ -204,37 +189,12 @@ const breadcrumbItems = [
         {/* Título */}
         <h1 class="text-4xl font-bold mb-6">{page.title}</h1>
 
-        {/* ✨ RENDERIZA CONFORME O TIPO */}
+        {/* ✨ RENDERIZA O DOCUMENTO DE BLOCOS (estático, zero JS) */}
+        <BlockRenderer document={blocks} />
 
-        {renderType === 'iframe' ? (
-            // ===== TIPO 3: iFrame Sandbox =====
-            <iframe
-                srcDoc={page.content}
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                style={{
-                    width: '100%',
-                    minHeight: '600px',
-                    border: 'none',
-                    borderRadius: '8px'
-                }}
-                title={page.title}
-            />
-        ) : (
-            // ===== TIPO 1 & 2: Markdown ou HTML Seguro =====
-            <div class="prose prose-lg max-w-none" set:html={htmlContent} />
-        )}
-
-        {/* Footer com info de formato */}
+        {/* Footer */}
         <footer class="mt-12 pt-6 border-t border-gray-200 text-sm text-gray-600">
-            <p>
-                Projeto: <strong>{project.name}</strong>
-                {' '}
-                <span class="text-xs px-2 py-1 bg-gray-100 rounded">
-                    {renderType === 'marked' && '📝 Markdown'}
-                    {renderType === 'inline' && '🔒 HTML Seguro'}
-                    {renderType === 'iframe' && '⚡ HTML Custom'}
-                </span>
-            </p>
+            <p>Projeto: <strong>{project.name}</strong></p>
             {page.modified && (
                 <p>Última atualização: {new Date(page.modified).toLocaleDateString('pt-BR')}</p>
             )}

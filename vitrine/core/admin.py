@@ -201,11 +201,11 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
 
 @admin.register(Page)
 class PageAdmin(ClientScopedAdmin, ModelAdmin):
-    list_display = ('title', 'project', 'slug', 'format_badge', 'is_published', 'live_link_actions', 'order', 'modified')
-    list_filter = ('content_format', 'is_published', 'project', 'created')
-    search_fields = ('title', 'slug', 'content')
+    list_display = ('title', 'project', 'slug', 'blocks_count', 'is_published', 'live_link_actions', 'order', 'modified')
+    list_filter = ('is_published', 'project', 'created')
+    search_fields = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created', 'modified', 'format_explanation', 'preview_link', 'live_link_actions')
+    readonly_fields = ('created', 'modified', 'preview_link', 'live_link_actions')
 
     fieldsets = (
         ('Básico', {
@@ -215,13 +215,15 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             'fields': ('preview_link', 'live_link_actions'),
             'description': 'Preview mostra rascunhos (mesmo não publicados). Link ao vivo só funciona depois de "Build & Publicar" no projeto.'
         }),
-        ('Formato do Conteúdo', {
-            'fields': ('content_format', 'format_explanation'),
-            'description': 'Escolha como você quer criar o conteúdo.'
-        }),
-        ('Conteúdo', {
-            'fields': ('content',),
+        ('Blocos', {
+            'fields': ('blocks',),
             'classes': ('wide',),
+            'description': (
+                'Documento de blocos (formato Puck): {"content": [{"type": "Hero", '
+                '"props": {...}}, ...]}. Edição por JSON cru é STOPGAP da fase 0 — '
+                'o editor visual inline vem na fase 2. Tipos disponíveis: '
+                'Hero, Features, RichText, HtmlSafe, CodeEmbed.'
+            ),
         }),
         ('Auditoria', {
             'fields': ('created', 'modified'),
@@ -299,62 +301,13 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             return [PageSeoSettingsInline]
         return []
 
-    def format_badge(self, obj):
-        """Mostra badge com formato da página"""
-        from django.utils.html import format_html
-        colors = {
-            'markdown': '#3498db',
-            'html_safe': '#f39c12',
-            'html_custom': '#e74c3c',
-        }
-        format_names = {
-            'markdown': '📝 Markdown',
-            'html_safe': '🔒 HTML Seguro',
-            'html_custom': '⚡ HTML Custom',
-        }
-        color = colors.get(obj.content_format, '#95a5a6')
-        name = format_names.get(obj.content_format, obj.content_format)
-        return format_html(
-            '<span style="background-color: {}; color: white; padding: 5px 10px; border-radius: 3px;">{}</span>',
-            color,
-            name
-        )
-    format_badge.short_description = 'Formato'
-
-    def format_explanation(self, obj):
-        """Mostra explicação detalhada de cada formato"""
-        from django.utils.html import format_html
-        explanations = {
-            'markdown': '''
-                <div style="background: #ecf0f1; padding: 15px; border-radius: 5px; border-left: 4px solid #3498db;">
-                    <h3 style="color: #3498db; margin-top: 0;">📝 Markdown</h3>
-                    <p><strong>Melhor para:</strong> Blog posts, documentação, conteúdo simples</p>
-                    <p><strong>Vantagens:</strong> ⚡ Rápido | 🎯 Bom SEO | 📱 Responsivo | 🔍 Analytics funciona</p>
-                    <p><strong>Desvantagens:</strong> ❌ Sem JavaScript | ❌ Sem interatividade</p>
-                </div>
-            ''',
-            'html_safe': '''
-                <div style="background: #fef5e7; padding: 15px; border-radius: 5px; border-left: 4px solid #f39c12;">
-                    <h3 style="color: #f39c12; margin-top: 0;">🔒 HTML Seguro</h3>
-                    <p><strong>Melhor para:</strong> Landing pages, portfolios, conteúdo com styling</p>
-                    <p><strong>Vantagens:</strong> ⚡ Rápido | 🎨 CSS funciona | 🎯 Bom SEO | 🔒 Seguro</p>
-                    <p><strong>Desvantagens:</strong> ❌ Sem JavaScript | ❌ Sem interatividade</p>
-                </div>
-            ''',
-            'html_custom': '''
-                <div style="background: #fadbd8; padding: 15px; border-radius: 5px; border-left: 4px solid #e74c3c;">
-                    <h3 style="color: #e74c3c; margin-top: 0;">⚡ HTML Customizado (com JavaScript)</h3>
-                    <p><strong>Melhor para:</strong> Aplicações interativas, dashboards, conteúdo com JavaScript</p>
-                    <p><strong>Vantagens:</strong> 🚀 JavaScript funciona | 🎯 Máxima flexibilidade | 🤖 Ótimo com IA</p>
-                    <p><strong>Desvantagens:</strong> ⏱️ Um pouco mais lento | 📱 CSS não herda</p>
-                </div>
-            ''',
-        }
-
-        return format_html(
-            explanations.get(obj.content_format, '<p>Selecione um formato acima</p>')
-        )
-    format_explanation.short_description = 'ℹ️ Informações sobre o formato'
+    def blocks_count(self, obj):
+        """Quantos blocos a página tem (stopgap da fase 0)."""
+        doc = obj.blocks if isinstance(obj.blocks, dict) else {}
+        content = doc.get('content')
+        n = len(content) if isinstance(content, list) else 0
+        return f'🧱 {n}'
+    blocks_count.short_description = 'Blocos'
 
     def preview_link(self, obj):
         """Renderiza um link para visualizar a página em preview"""

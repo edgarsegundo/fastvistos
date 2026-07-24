@@ -132,16 +132,15 @@ def api_project_pages(request, project_slug):
 
         pages_data = []
         for page in pages:
-            render_info = page.render_content_for_api()
             seo = resolve_seo(page)
 
             pages_data.append({
                 'slug': page.slug or 'index',
                 'is_home': page.is_home,
                 'title': page.title,
-                'content': render_info['content'],
-                'content_format': render_info['format'],
-                'render_type': render_info['render_type'],
+                # Documento de blocos serializado (HtmlSafe já sanitizado).
+                # Substitui o antigo content/content_format/render_type.
+                'blocks': page.serialize_blocks_for_api(),
                 'seo': seo,
                 'modified': page.modified.isoformat(),
             })
@@ -169,22 +168,19 @@ def preview_page(request, page_id):
     if not (request.user.is_superuser or request.user.is_staff):
         return JsonResponse({'error': 'Unauthorized'}, status=403)
 
-    # Renderizar conteúdo
-    render_info = page.render_content_for_api()
-    render_type = render_info['render_type']
-    content = render_info['content']
-
-    # Converter markdown para HTML se necessário
-    if render_type == 'marked':
-        content = md.markdown(content, extensions=['extra', 'codehilite'])
-
+    # Preview de rascunho (fase 0): mostra o documento de blocos já
+    # serializado (com HtmlSafe sanitizado). O render fiel dos blocos é do
+    # Astro/editor visual (fase 2) — aqui é só uma inspeção leve, admin-only,
+    # sem reimplementar o catálogo de blocos em Python.
+    import json as _json
+    blocks_doc = page.serialize_blocks_for_api()
     seo = resolve_seo(page)
 
     context = {
         'page': page,
         'project': page.project,
-        'render_type': render_type,
-        'content': content,
+        'blocks': blocks_doc.get('content', []),
+        'blocks_json': _json.dumps(blocks_doc, ensure_ascii=False, indent=2),
         'seo_title': seo['title'],
         'seo_description': seo['description'],
     }

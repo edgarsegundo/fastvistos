@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
@@ -204,6 +205,11 @@ export default defineConfig({
     outDir:    `./dist/${CURRENT_SITE}`,
 
     integrations: [
+        // React habilita os blocos do _saas (componentes .tsx) como islands.
+        // Em produção os blocos são renderizados estáticos (sem client:*),
+        // então não enviam JS; a hidratação só entra no editor visual (fase 2).
+        // Os sites legados não usam React — a integração fica inerte pra eles.
+        react(),
         mdx({
             syntaxHighlight: 'shiki',
             shikiConfig: { theme: 'github-dark' },
