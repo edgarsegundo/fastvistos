@@ -1,16 +1,51 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ $# -lt 2 ] || [ $# -gt 3 ]; then
-  echo "Uso: scripts/fase-finish.sh <numero> <slug-curto> [--checkpoint]"
+usage() {
+  echo "Uso: scripts/fase-finish.sh [<numero> <slug-curto>] [--checkpoint]"
+  echo "  sem número/slug: detecta a partir do branch atual (seo-fase-N-slug)"
   echo "  sem --checkpoint: merge final (com tag, apaga o branch)"
   echo "  com --checkpoint: merge parcial pra testar em produção (sem tag, branch continua)"
   exit 1
+}
+
+MODE=""
+NUM=""
+SLUG=""
+
+case "$#" in
+  0)
+    ;;
+  1)
+    [ "$1" = "--checkpoint" ] || usage
+    MODE="$1"
+    ;;
+  2)
+    NUM="$1"
+    SLUG="$2"
+    ;;
+  3)
+    NUM="$1"
+    SLUG="$2"
+    MODE="$3"
+    ;;
+  *)
+    usage
+    ;;
+esac
+
+if [ -z "$NUM" ]; then
+  CURRENT_BRANCH="$(git branch --show-current)"
+  if [[ "$CURRENT_BRANCH" =~ ^seo-fase-([0-9]+)-(.+)$ ]]; then
+    NUM="${BASH_REMATCH[1]}"
+    SLUG="${BASH_REMATCH[2]}"
+    echo "Detectado a partir do branch atual: fase ${NUM} (${SLUG})"
+  else
+    echo "Não foi possível detectar número/slug a partir do branch atual ('${CURRENT_BRANCH}')."
+    usage
+  fi
 fi
 
-NUM="$1"
-SLUG="$2"
-MODE="${3:-}"
 BRANCH="seo-fase-${NUM}-${SLUG}"
 TAG="seo-fase-${NUM}-done"
 

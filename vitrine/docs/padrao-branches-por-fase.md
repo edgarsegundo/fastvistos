@@ -143,8 +143,13 @@ Uso:
 ```bash
 scripts/fase-start.sh 1 jsonld-schemas
 # ... trabalho com Claude Code ...
-scripts/fase-finish.sh 1 jsonld-schemas
+scripts/fase-finish.sh   # detecta número/slug pelo branch atual
 ```
+
+`fase-finish.sh` aceita `<numero> <slug>` explícitos (útil se você não
+estiver no branch da fase, por exemplo rodando de outro lugar), mas se
+omitidos ele detecta a partir do branch atual (`seo-fase-N-slug`) —
+não precisa repetir o que já está no nome do branch.
 
 Propositalmente simples — sem detectar branch atual sujo, sem
 confirmação interativa. Se algo sair errado, os comandos git por trás
@@ -159,7 +164,7 @@ sem quebrar o princípio de nunca commitar solto direto em `seo`,
 `fase-finish.sh` aceita um 3º argumento opcional `--checkpoint`:
 
 ```bash
-scripts/fase-finish.sh 1 jsonld-schemas --checkpoint
+scripts/fase-finish.sh --checkpoint   # ou: scripts/fase-finish.sh 1 jsonld-schemas --checkpoint
 ```
 
 Isso faz merge `--no-ff` do branch de fase em `seo` (pronto pra
