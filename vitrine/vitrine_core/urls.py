@@ -38,8 +38,16 @@ urlpatterns = [
     # pro _saas — ver core.views.sitemap_xml)
     path('sitemap.xml', core_views.sitemap_xml, name='sitemap_xml'),
 
+    # robots.txt dinâmico, mesmo padrão do sitemap.xml acima — aponta pro
+    # sitemap da plataforma e pros domínios customizados dos projetos
+    # (ver core.views.robots_txt)
+    path('robots.txt', core_views.robots_txt, name='robots_txt'),
+
     # API para Astro
     path('api/projects/', core_views.api_projects_list, name='api_projects_list'),
     path('api/projects/<str:project_slug>/pages/', core_views.api_project_pages, name='api_project_pages'),
     path('api/trigger-rebuild/', core_views.api_trigger_rebuild, name='api_trigger_rebuild'),
+
+    # DEBUG: preencher SEO com fake data (apenas com ?debug=1)
+    path('api/debug/fill-seo-fake/<int:page_id>/', core_views.debug_fill_seo_fake_data, name='debug_fill_seo_fake'),
 ]

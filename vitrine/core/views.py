@@ -250,6 +250,120 @@ def sitemap_xml(request):
     return HttpResponse('\n'.join(xml_parts), content_type='application/xml')
 
 
+@require_GET
+def robots_txt(request):
+    """GET /robots.txt
+
+    Mesmo raciocínio multi-tenant do sitemap_xml logo acima: usa
+    `Project.all_objects` (não `objects`) porque este endpoint é público
+    e cross-tenant por natureza, e `objects` (`ClientManager`) filtraria
+    implicitamente pelo client corrente no threadlocal pra qualquer
+    request autenticado, silenciando os domínios de outros tenants.
+    Filtra `is_removed=False` na mão pelo mesmo motivo (não vem de graça
+    em `all_objects`).
+
+    O arquivo é uma única resposta global (não há robots.txt por
+    projeto/subdomínio nesta arquitetura) com uma linha `Sitemap:` pra
+    base da plataforma e uma linha extra por domínio customizado
+    (`ProjectSeoSettings.canonical_domain_override`) — múltiplas linhas
+    `Sitemap:` num único robots.txt são válidas pelo spec. O critério pra
+    incluir um domínio é só o campo estar preenchido, o mesmo que
+    `resolve_seo()` já usa pra montar `site_url` — não consulta o model
+    `Domain`/verificação, que ainda é stub/não integrado.
+
+    Não há equivalente de `noindex` aqui: isso é por-página (via
+    `<meta robots>` e exclusão no sitemap), enquanto `robots.txt` só tem
+    `Disallow`/`Sitemap` por domínio/path fixo.
+    """
+    platform_base = settings.PLATFORM_PUBLIC_BASE_URL.rstrip('/')
+    sitemap_urls = [f'{platform_base}/sitemap.xml']
+
+    projects = Project.all_objects.filter(is_published=True, is_removed=False)
+    seen_domains = set()
+    for project in projects:
+        project_seo = getattr(project, 'seo_settings', None)
+        domain = project_seo.canonical_domain_override if project_seo else ''
+        if domain and domain not in seen_domains:
+            seen_domains.add(domain)
+            sitemap_urls.append(f"{domain.rstrip('/')}/sitemap.xml")
+
+    lines = [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin/',
+        'Disallow: /preview/',
+    ] + [f'Sitemap: {url}' for url in sitemap_urls]
+
+    return HttpResponse('\n'.join(lines) + '\n', content_type='text/plain')
+
+
+@require_GET
+def debug_fill_seo_fake_data(request, page_id):
+    """DEBUG ONLY: GET /api/debug/fill-seo-fake/{page_id}/?debug=1
+
+    Preenche PageSeoSettings com fake data pra testes rápidos.
+    Requer staff/superuser + ?debug=1 na query string.
+    """
+    # Verificar autenticação e permissão
+    if not (request.user.is_authenticated and (request.user.is_superuser or request.user.is_staff)):
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+
+    # Verificar ?debug=1
+    if request.GET.get('debug') != '1':
+        return JsonResponse({'error': 'Debug mode not enabled (?debug=1 required)'}, status=403)
+
+    try:
+        page = Page.all_objects.get(id=page_id)
+    except Page.DoesNotExist:
+        return JsonResponse({'error': 'Page not found'}, status=404)
+
+    # Preenche com fake data
+    seo = page.seo_settings
+    seo.seo_title = f"🚀 {page.title} — Teste SEO (ideally 30-60 chars)"
+    seo.seo_description = (
+        f"Esta é uma descrição automática para testes de '{page.title}'. "
+        f"Tem cerca de 140-160 caracteres de comprimento para validação SEO."
+    )
+    seo.og_image_override = "https://via.placeholder.com/1200x630?text=SEO+Test+Image"
+    seo.canonical_override = ""
+    seo.noindex = False
+
+    # Preenche type_specific_data conforme page_type
+    if page.page_type == 'blog_post':
+        seo.type_specific_data = {
+            'published_at': page.created.isoformat(),
+            'author_override': 'Teste Author',
+        }
+    elif page.page_type == 'contact':
+        seo.type_specific_data = {
+            'address': {
+                'streetAddress': 'Rua Teste, 123',
+                'addressLocality': 'São Paulo',
+                'addressRegion': 'SP',
+                'postalCode': '01234-567',
+                'addressCountry': 'BR',
+            },
+            'phone': '+55 11 9999-9999',
+            'opening_hours': 'Mo-Fr 09:00-18:00',
+        }
+    else:
+        seo.type_specific_data = {}
+
+    seo.save()
+
+    return JsonResponse({
+        'status': 'filled',
+        'page_id': page_id,
+        'page_title': page.title,
+        'page_type': page.page_type,
+        'seo_title': seo.seo_title,
+        'seo_description': seo.seo_description,
+        'og_image_override': seo.og_image_override,
+        'type_specific_data': seo.type_specific_data,
+        'message': '✅ SEO preenchido! Página será recarregada em 2 segundos.'
+    })
+
+
 @require_http_methods(["POST"])
 def api_trigger_rebuild(request):
     """POST /api/trigger-rebuild/
