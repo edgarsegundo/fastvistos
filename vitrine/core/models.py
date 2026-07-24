@@ -117,10 +117,23 @@ class Page(ClientModel):
         help_text="Escolha como você quer criar o conteúdo"
     )
 
-    # Conteúdo (pode ser Markdown, HTML seguro, ou HTML customizado)
+    # Conteúdo legado (blob único). Vestigial desde a fase 0 do editor de
+    # blocos: `blocks` abaixo é a nova fonte de verdade. Mantido só até uma
+    # migração de limpeza futura — sem dados em produção pra migrar.
     content = models.TextField(
         default='',
-        help_text="Conteúdo em Markdown ou HTML (conforme o formato selecionado)"
+        blank=True,
+        help_text="[legado] Conteúdo em blob. Use o campo `blocks`."
+    )
+
+    # Documento de blocos (formato Puck): { root, content: [{type, props}] }.
+    # Fonte de verdade do conteúdo da página desde a fase 0. O render de cada
+    # bloco (incl. markdown/html/iframe) mora nos componentes Astro do
+    # catálogo (multi-sites/sites/_saas/blocks/). Ver docs do editor.
+    blocks = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Documento de blocos (formato Puck)."
     )
 
     PAGE_TYPE_HOME = 'home'
@@ -216,27 +229,31 @@ class Page(ClientModel):
             self.page_type = self.PAGE_TYPE_GENERIC
         super().save(*args, **kwargs)
 
-    def render_content_for_api(self):
-        """Renderiza conteúdo pra API (retorna formato final)"""
-        if self.content_format == self.FORMAT_MARKDOWN:
-            return {
-                'format': 'markdown',
-                'content': self.content,
-                'render_type': 'marked'
-            }
-        elif self.content_format == self.FORMAT_HTML_SAFE:
-            sanitized = self._sanitize_html_safe(self.content)
-            return {
-                'format': 'html_safe',
-                'content': sanitized,
-                'render_type': 'inline'
-            }
-        elif self.content_format == self.FORMAT_HTML_CUSTOM:
-            return {
-                'format': 'html_custom',
-                'content': self.content,
-                'render_type': 'iframe'
-            }
+    def serialize_blocks_for_api(self):
+        """Devolve o documento de blocos pronto pro build do Astro.
+
+        A fronteira de segurança é AQUI (server-side): blocos HtmlSafe têm o
+        HTML sanitizado por bleach antes de sair pra API — o componente Astro
+        HtmlSafe só injeta o HTML já limpo, nunca sanitiza. Blocos Markdown
+        (RichText) e iframe (CodeEmbed) passam sem sanitizar, igual ao
+        comportamento legado (marked confiável; iframe isolado por sandbox).
+        """
+        doc = self.blocks if isinstance(self.blocks, dict) else {}
+        content = doc.get('content')
+        if not isinstance(content, list):
+            return {'root': doc.get('root', {}), 'content': []}
+
+        serialized = []
+        for node in content:
+            if not isinstance(node, dict):
+                continue
+            node_type = node.get('type')
+            props = dict(node.get('props') or {})
+            if node_type == 'HtmlSafe':
+                props['html'] = self._sanitize_html_safe(props.get('html', ''))
+            serialized.append({'type': node_type, 'props': props})
+
+        return {'root': doc.get('root', {}), 'content': serialized}
 
     @staticmethod
     def _sanitize_html_safe(html_content):

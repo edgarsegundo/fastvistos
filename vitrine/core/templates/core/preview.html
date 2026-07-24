@@ -174,30 +174,24 @@
         <!-- Header -->
         <div class="header">
             <h1>{{ page.title }}</h1>
-            <span class="format-badge {% if render_type == 'marked' %}markdown{% elif render_type == 'inline' %}html-safe{% else %}html-custom{% endif %}">
-                {% if render_type == 'marked' %}📝 Markdown{% elif render_type == 'inline' %}🔒 HTML Seguro{% else %}⚡ HTML Customizado{% endif %}
-            </span>
+            <span class="format-badge markdown">🧱 {{ blocks|length }} bloco(s)</span>
         </div>
 
-        <!-- Content -->
+        <!-- Content (fase 0: inspeção leve do documento de blocos; o render
+             fiel é do Astro/editor visual da fase 2) -->
         <div class="content">
-            {% if render_type == 'iframe' %}
-                <div class="iframe-container">
-                    <!-- {{ content }} sem filtro: o autoescape padrão do Django já
-                         escapa aspas/</>/& corretamente pra um atributo HTML.
-                         `escapejs` (removido) escapa pra string JS (\uXXXX), o que
-                         quebrava o conteúdo do iframe — o browser mostrava os
-                         escapes literalmente em vez de renderizar o HTML/JS. -->
-                    <iframe
-                        srcdoc="{{ content }}"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                        title="{{ page.title }}"
-                    ></iframe>
-                </div>
+            {% if blocks %}
+                <ol>
+                    {% for block in blocks %}
+                        <li><strong>{{ block.type }}</strong></li>
+                    {% endfor %}
+                </ol>
+                <details>
+                    <summary>Documento de blocos (JSON)</summary>
+                    <pre style="white-space: pre-wrap; overflow-x: auto;">{{ blocks_json }}</pre>
+                </details>
             {% else %}
-                <div class="prose">
-                    {{ content|safe }}
-                </div>
+                <p><em>Esta página ainda não tem blocos.</em></p>
             {% endif %}
         </div>
 
