@@ -26,6 +26,15 @@ remover a linha.
   caso de uso real hoje, especulativo. Detalhamento:
   [decisoes/robots-txt-per-page-disallow.md](decisoes/robots-txt-per-page-disallow.md).
 
+- **`/llms.txt` (v1, Fase 2) só lista título+descrição por página —
+  falta incluir os blocos de FAQ/estatística/definição** (`ContentBlock`,
+  Fase 3, ainda não implementado) pra virar o diferencial real de
+  citabilidade por IA que o roadmap prevê. Spec já fechado (formato de
+  saída, ponto de extensão em `project_llms_txt`, testes a adicionar),
+  só bloqueado até `ContentBlock` existir. Achado durante a Fase 2 do
+  roadmap SEO/GEO/AEO. Detalhamento:
+  [decisoes/llms-txt-blocos-estruturados.md](decisoes/llms-txt-blocos-estruturados.md).
+
 - **Botão "Importar JSON" de `type_specific_data` só existe pra
   `page_type=faq`** — os outros 5 tipos (`contact`, `blog_post`,
   `person`, `product`, `article`) já têm dataclass+schema validado em
