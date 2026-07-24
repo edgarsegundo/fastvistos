@@ -17,31 +17,31 @@ trabalho futuro dividido em fases.
 
 ## Dia a dia — exemplo rápido
 
-**Início da fase:**
+**Início da fase (com tronco específico ou detecta o atual):**
 ```bash
-scripts/fase-start.sh 1 jsonld-schemas
+scripts/fase-start.sh seo 1 jsonld-schemas        # cria seo-fase-1-jsonld-schemas
+scripts/fase-start.sh editor 1 fundacao-blocos    # cria editor-fase-1-fundacao-blocos
+scripts/fase-start.sh 1 novo-slug                 # detecta tronco do branch atual
 ```
-Cria `seo-fase-1-jsonld-schemas`, já pronto pra trabalhar. Abre uma sessão
-nova do Claude Code, cola só o prompt da fase (de
-[prompts-claude-code-seo-geo-aeo.md](seo/prompts-claude-code-seo-geo-aeo.md)),
-trabalha em plan mode.
+
+Abre uma sessão nova do Claude Code, cola só o prompt da fase, trabalha em plan mode.
 
 **Durante a fase (quando quer testar em produção antes de terminar):**
 ```bash
 scripts/fase-finish.sh --checkpoint
 ```
-Mergeia em `seo` sem apagar o branch — você continua na fase, pronto pra
-mais commits. Deploy na VPS a partir de `seo` pra validar.
+Mergeia no tronco sem apagar o branch — você continua na fase, pronto pra
+mais commits. Deploy na VPS a partir do tronco pra validar.
 
 **Fim da fase (quando tudo está pronto):**
 ```bash
 scripts/fase-finish.sh
 ```
-Mergeia em `seo`, cria tag `seo-fase-N-done`, apaga o branch. Pronto pra próxima fase.
+Mergeia no tronco, cria tag `{tronco}-fase-N-done`, apaga o branch. Pronto pra próxima fase.
 
 **Push quando terminar tudo:**
 ```bash
-git push origin seo --tags
+git push origin {tronco} --tags
 ```
 
 ---
@@ -79,20 +79,21 @@ que uma sessão nova precisa entender "por que isso está assim".
 
 ## Scripts de automação
 
-Dois scripts pequenos em [`scripts/`](../../scripts/) evitam erro de
-digitação em nome de branch/tag:
+Dois scripts genéricos em [`scripts/`](../../scripts/) evitam erro de
+digitação em nome de branch/tag — funcionam com qualquer tronco (`seo`,
+`editor`, etc):
 
 - **[`fase-start.sh`](../../scripts/fase-start.sh)** — cria branch
-  `seo-fase-N-slug` a partir de `seo`. Detecta automaticamente se você
-  estiver dentro de um branch de fase.
+  `{tronco}-fase-N-slug`. Detecta o tronco automaticamente se você
+  estiver em um branch de fase, ou você passa explícito: `fase-start.sh editor 1 fundacao`.
 - **[`fase-finish.sh`](../../scripts/fase-finish.sh)** — mergeia o
-  branch de fase em `seo`. Aceita `--checkpoint` pra teste parcial
-  (sem tag, branch continua) ou roda final (com tag, apaga branch).
-  Detecta número/slug a partir do branch atual se você omitir argumentos.
+  branch de fase no tronco. Detecta tronco/número/slug a partir do
+  branch atual (`{tronco}-fase-N-slug`). Aceita `--checkpoint` pra
+  teste parcial (sem tag, branch continua) ou roda final (com tag, apaga branch).
 
 Ambos usam merge `--no-ff` (força commit de merge mesmo em fast-forward),
 então `git log --graph` mostra visualmente onde cada fase começou/terminou.
-Tags (`seo-fase-N-done`) são pontos de restauração — útil se algo quebrar
+Tags (`{tronco}-fase-N-done`) são pontos de restauração — útil se algo quebrar
 semanas depois.
 
 ## Convenção de commit
@@ -123,10 +124,10 @@ olhando código — mais lento, mais caro, mais chance de errar.
 
 ## Checklist de uma fase
 
-1. `scripts/fase-start.sh <numero> <slug>` — cria branch
+1. `scripts/fase-start.sh {tronco} <numero> <slug>` — cria branch
 2. Trabalhar em plan mode (Claude Code), só o prompt da fase
 3. Um commit por passo lógico, `/commit` pra gerar mensagem
 4. `scripts/fase-finish.sh --checkpoint` (testar em VPS)
 5. `scripts/fase-finish.sh` (merge final + tag)
-6. `git push origin seo --tags`
-7. Deploy na VPS a partir de `seo`
+6. `git push origin {tronco} --tags`
+7. Deploy na VPS a partir do tronco

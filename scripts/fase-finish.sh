@@ -2,52 +2,30 @@
 set -euo pipefail
 
 usage() {
-  echo "Uso: scripts/fase-finish.sh [<numero> <slug-curto>] [--checkpoint]"
-  echo "  sem número/slug: detecta a partir do branch atual (seo-fase-N-slug)"
+  echo "Uso: scripts/fase-finish.sh [--checkpoint]"
+  echo "  detecta tronco/número/slug a partir do branch atual ({tronco}-fase-N-slug)"
   echo "  sem --checkpoint: merge final (com tag, apaga o branch)"
   echo "  com --checkpoint: merge parcial pra testar em produção (sem tag, branch continua)"
   exit 1
 }
 
-MODE=""
-NUM=""
-SLUG=""
+MODE="${1:-}"
+[ "$MODE" = "--checkpoint" ] || [ -z "$MODE" ] || usage
 
-case "$#" in
-  0)
-    ;;
-  1)
-    [ "$1" = "--checkpoint" ] || usage
-    MODE="$1"
-    ;;
-  2)
-    NUM="$1"
-    SLUG="$2"
-    ;;
-  3)
-    NUM="$1"
-    SLUG="$2"
-    MODE="$3"
-    ;;
-  *)
-    usage
-    ;;
-esac
+CURRENT_BRANCH="$(git branch --show-current)"
 
-if [ -z "$NUM" ]; then
-  CURRENT_BRANCH="$(git branch --show-current)"
-  if [[ "$CURRENT_BRANCH" =~ ^seo-fase-([0-9]+)-(.+)$ ]]; then
-    NUM="${BASH_REMATCH[1]}"
-    SLUG="${BASH_REMATCH[2]}"
-    echo "Detectado a partir do branch atual: fase ${NUM} (${SLUG})"
-  else
-    echo "Não foi possível detectar número/slug a partir do branch atual ('${CURRENT_BRANCH}')."
-    usage
-  fi
+if [[ "$CURRENT_BRANCH" =~ ^([a-z0-9_-]+)-fase-([0-9]+)-(.+)$ ]]; then
+  TRUNK="${BASH_REMATCH[1]}"
+  NUM="${BASH_REMATCH[2]}"
+  SLUG="${BASH_REMATCH[3]}"
+  echo "Detectado: tronco '$TRUNK', fase ${NUM} (${SLUG})"
+else
+  echo "Não foi possível detectar tronco/número/slug a partir do branch atual ('${CURRENT_BRANCH}')."
+  usage
 fi
 
-BRANCH="seo-fase-${NUM}-${SLUG}"
-TAG="seo-fase-${NUM}-done"
+BRANCH="${TRUNK}-fase-${NUM}-${SLUG}"
+TAG="${TRUNK}-fase-${NUM}-done"
 
 if [ "$MODE" = "--checkpoint" ]; then
   git checkout seo
