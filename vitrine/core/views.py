@@ -269,7 +269,8 @@ def robots_txt(request):
     `Sitemap:` num único robots.txt são válidas pelo spec. O critério pra
     incluir um domínio é só o campo estar preenchido, o mesmo que
     `resolve_seo()` já usa pra montar `site_url` — não consulta o model
-    `Domain`/verificação, que ainda é stub/não integrado.
+    `Domain`/verificação (desconexão real entre os dois, mapeada mas não
+    resolvida em docs/decisoes/canonical-domain-vs-domain-model.md).
 
     Não há equivalente de `noindex` aqui: isso é por-página (via
     `<meta robots>` e exclusão no sitemap), enquanto `robots.txt` só tem
