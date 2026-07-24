@@ -25,3 +25,15 @@ remover a linha.
   tag `noindex`, página pode indexar mesmo assim via link externo). Sem
   caso de uso real hoje, especulativo. Detalhamento:
   [decisoes/robots-txt-per-page-disallow.md](decisoes/robots-txt-per-page-disallow.md).
+
+- **Botão "Importar JSON" de `type_specific_data` só existe pra
+  `page_type=faq`** — os outros 5 tipos (`contact`, `blog_post`,
+  `person`, `product`, `article`) já têm dataclass+schema validado em
+  `core/seo_schemas.py::PAGE_TYPE_SCHEMAS` (Fase 1 do roadmap
+  SEO/GEO/AEO), mas só FAQ ganhou o botão de importar arquivo — o
+  parsing generaliza quase de graça pros outros tipos, o que falta
+  decidir é o formato de arquivo aceito por tipo (lista de itens faz
+  sentido pra FAQ/`same_as`; não faz sentido do mesmo jeito pra
+  Product/Article, que são objetos únicos). Achado durante a Fase 1 do
+  roadmap SEO/GEO/AEO. Detalhamento:
+  [decisoes/import-json-type-specific-data.md](decisoes/import-json-type-specific-data.md).
