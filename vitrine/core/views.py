@@ -299,6 +299,70 @@ def robots_txt(request):
 
 
 @require_GET
+def project_llms_txt(request, project_slug):
+    """GET /app/<project_slug>/llms.txt
+
+    Diferente de sitemap_xml/robots_txt (globais, cross-tenant), este
+    endpoint é por-projeto por natureza — nome, descrição e lista de
+    páginas só fazem sentido no contexto de 1 projeto. Mesmo raciocínio
+    de managers dos dois endpoints acima: usa `all_objects` (não
+    `objects`) pra Project/Page e filtra `is_removed=False` na mão, pra
+    que um staff/tenant-owner logado testando a URL de OUTRO tenant não
+    receba um 404 falso (o manager padrão filtraria pelo client corrente
+    no threadlocal, escondendo o projeto do tenant certo).
+
+    Título vem de organization_name (mesma cascata override > platform >
+    project.name usada em resolve_seo()). Descrição do projeto usa
+    ProjectSeoSettings.llms_summary; se vazio, cai pra seo_description
+    resolvida da home page; se também vazio, a linha é omitida. Páginas
+    com seo.noindex=True são excluídas, mesmo critério do sitemap.
+    """
+    try:
+        project = Project.all_objects.get(
+            slug=project_slug, is_published=True, is_removed=False
+        )
+    except Project.DoesNotExist:
+        return HttpResponse(status=404)
+
+    platform = PlatformSeoDefaults.load()
+    project_seo = getattr(project, 'seo_settings', None)
+    organization_name = (
+        (project_seo.organization_name_override if project_seo else '')
+        or platform.organization_name
+        or project.name
+    )
+
+    description = project_seo.llms_summary if project_seo else ''
+    if not description:
+        home = Page.all_objects.filter(
+            project=project, is_published=True, is_removed=False, is_home=True
+        ).first()
+        if home:
+            home_seo = resolve_seo(home, platform=platform)
+            if not home_seo['noindex']:
+                description = home_seo['description']
+
+    lines = [f'# {organization_name}', '']
+    if description:
+        lines += [description, '']
+    lines += ['## Páginas', '']
+
+    pages = Page.all_objects.filter(
+        project=project, is_published=True, is_removed=False
+    ).order_by('order', 'title')
+    for page in pages:
+        seo = resolve_seo(page, platform=platform)
+        if seo['noindex']:
+            continue
+        entry = f"- [{seo['title']}]({seo['canonical']})"
+        if seo['description']:
+            entry += f": {seo['description']}"
+        lines.append(entry)
+
+    return HttpResponse('\n'.join(lines) + '\n', content_type='text/markdown')
+
+
+@require_GET
 def debug_fill_seo_fake_data(request, page_id):
     """DEBUG ONLY: GET /api/debug/fill-seo-fake/{page_id}/?debug=1
 

@@ -514,6 +514,10 @@ class ProjectSeoSettings(models.Model):
         max_length=100, blank=True,
         help_text='ex: " | Minha Empresa" — anexado ao título quando a página não definir o próprio'
     )
+    llms_summary = models.CharField(
+        max_length=300, blank=True,
+        help_text="Descrição curta do projeto pro /llms.txt — se vazio, cai pra seo_description da home page"
+    )
 
     class Meta:
         verbose_name = 'SEO do Projeto'
