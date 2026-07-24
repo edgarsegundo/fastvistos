@@ -1,0 +1,80 @@
+/*
+ * Design system do _saas (multi-tenant).
+ *
+ * A ponte de tema por-tenant: `@theme inline` mapeia os tokens semânticos do
+ * Tailwind para variáveis de RUNTIME (`--brand-*`). As utilities (bg-primary,
+ * text-ink, font-heading, rounded-brand...) são compiladas UMA vez e
+ * compartilhadas por todos os projetos; o VALOR de cada token vem do
+ * `:root{--brand-*}` que o Layout injeta a partir do `project.theme` (JSON).
+ * Ver multi-sites/sites/_saas/theme/theme.ts e docs do editor.
+ *
+ * Diferença vs. o legado (1 theme.css assado por site): aqui não dá pra assar
+ * `@theme` por projeto porque o _saas builda todos num pass só (dist/_saas
+ * compartilhado). Por isso token = var de runtime, não valor fixo.
+ */
+@import "tailwindcss";
+
+/* Defaults dos tokens da marca. O Layout sobrescreve por projeto (só as chaves
+ * que o project.theme definir); o que não vier cai nestes valores. Fonte única
+ * dos defaults — não duplicar em TS. */
+:root {
+    --brand-primary: #2563eb;
+    --brand-ink:     #1f2937;
+    --brand-muted:   #6b7280;
+    --brand-canvas:  #ffffff;
+    --brand-surface: #f9fafb;
+    --brand-line:    #e5e7eb;
+    --brand-heading: ui-sans-serif, system-ui, sans-serif;
+    --brand-body:    ui-sans-serif, system-ui, sans-serif;
+    --brand-radius:  12px;
+}
+
+/* Ponte token → var de runtime. Cada entrada vira utilities do Tailwind:
+ *   --color-primary → bg-primary / text-primary / border-primary ...
+ *   --font-heading  → font-heading
+ *   --radius-brand  → rounded-brand
+ */
+@theme inline {
+    --color-primary: var(--brand-primary);
+    --color-ink:     var(--brand-ink);
+    --color-muted:   var(--brand-muted);
+    --color-canvas:  var(--brand-canvas);
+    --color-surface: var(--brand-surface);
+    --color-line:    var(--brand-line);
+    --font-heading:  var(--brand-heading);
+    --font-body:     var(--brand-body);
+    --radius-brand:  var(--brand-radius);
+}
+
+@layer base {
+    body {
+        background-color: var(--brand-canvas);
+        color: var(--brand-ink);
+        font-family: var(--brand-body);
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4 {
+        font-family: var(--brand-heading);
+    }
+}
+
+/* Estilo do conteúdo do bloco Texto Rico (saída do markdown). Fica aqui em vez
+ * de depender do plugin @tailwindcss/typography — usa os tokens do tema. */
+@layer components {
+    .block-richtext { line-height: 1.7; color: var(--brand-ink); }
+    .block-richtext h1,
+    .block-richtext h2,
+    .block-richtext h3 { font-family: var(--brand-heading); font-weight: 700; line-height: 1.25; margin: 1.5em 0 0.5em; }
+    .block-richtext h1 { font-size: 2rem; }
+    .block-richtext h2 { font-size: 1.5rem; }
+    .block-richtext h3 { font-size: 1.25rem; }
+    .block-richtext p { margin: 0 0 1em; }
+    .block-richtext ul,
+    .block-richtext ol { margin: 0 0 1em; padding-left: 1.5em; }
+    .block-richtext li { margin: 0.25em 0; }
+    .block-richtext a { color: var(--brand-primary); text-underline-offset: 2px; }
+    .block-richtext img { max-width: 100%; height: auto; border-radius: var(--brand-radius); }
+    .block-richtext blockquote { margin: 0 0 1em; padding-left: 1em; border-left: 3px solid var(--brand-line); color: var(--brand-muted); }
+    .block-richtext code { font-size: 0.9em; }
+}

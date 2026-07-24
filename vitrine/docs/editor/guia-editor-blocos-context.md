@@ -33,8 +33,10 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 
 ## Estado atual
 
-**Fase 0 (fundação: data model + render, sem UI nova) — FEITA.** Migration
-`core/0013`. Editor visual (fase 2) e resto do catálogo (fase 1) ainda não.
+**Fase 0 (data model + render) — FEITA** (migration `core/0013`).
+**Fase 1 (blocos estruturados + tema/chrome de nível de Site) — FEITA**
+(migration `core/0014`). Editor visual (fase 2) ainda não — tema/chrome/blocos
+se editam por JSON no admin (stopgap).
 
 ## Paths tocados com mais frequência
 
@@ -42,21 +44,35 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 - `types.ts` — tipos/props de cada bloco + `BlockDocument` (formato Puck)
 - `registry.ts` — `BLOCK_COMPONENTS` (type→componente) e `BLOCK_SCHEMAS`
   (campos editáveis; semente do config do Puck e do contrato de IA)
-- `Hero.tsx`, `Features.tsx` — blocos estruturados
-- `RichText.tsx`, `HtmlSafe.tsx`, `CodeEmbed.tsx` — blocos livres (os 3 legados)
+- Estruturados: `Hero`, `Features`, `Sobre`, `Depoimentos`, `Preco`, `Faq`,
+  `Cta`, `Contato` (display-only). Livres (3 legados): `RichText`, `HtmlSafe`,
+  `CodeEmbed`. Todos Tailwind + tokens do tema, render estático (zero JS).
 - `BlockRenderer.astro` — mapeia o documento → componentes, render estático
-- `pages/[project]/[...slug].astro` — só chama `<BlockRenderer document={page.blocks} />`
+- `pages/[project]/[...slug].astro` — passa `theme`/`chrome` do project pro
+  Layout e chama `<BlockRenderer document={page.blocks} />` (sem breadcrumb/h1/
+  footer próprios — a página É os blocos; chrome vem do Layout)
+
+**Astro — tema e chrome de nível de Site**
+- `styles/saas.css` — `@import "tailwindcss"` + **ponte `@theme inline`**
+  (tokens → vars de runtime `--brand-*`) + defaults no `:root` + estilo do
+  `.block-richtext`. É o único CSS do _saas.
+- `theme/theme.ts` — `buildBrandVars()` (emite `:root{--brand-*}` do
+  project.theme), `fontLinks()`, `THEME_SCHEMA`. `theme/fonts.ts` — catálogo
+  curado de fontes → Google Fonts.
+- `chrome/Header.tsx`, `chrome/Footer.tsx`, `chrome/chrome.ts`
+  (tipos + `DEFAULT_CHROME` + `CHROME_SCHEMA`)
+- `layouts/Layout.astro` — importa `saas.css`, injeta `:root{--brand-*}` +
+  `<link>` de fontes, renderiza Header/Footer em volta do `<slot>`
 
 **Django**
-- `vitrine/core/models.py` — `Page.blocks` (JSONField, fonte de verdade);
+- `vitrine/core/models.py` — `Page.blocks` (JSONField, conteúdo);
+  `Project.theme` + `Project.chrome` (JSONField, config de nível de Site);
   `Page.serialize_blocks_for_api()` (**fronteira de segurança**: sanitiza
-  blocos `HtmlSafe` com bleach antes do build); `_sanitize_html_safe()`;
-  `content`/`content_format` são **vestigiais** (remover em migração futura)
-- `vitrine/core/views.py` — `api_project_pages` e `preview_page` emitem `blocks`
-- `vitrine/core/admin.py` — `PageAdmin` edita `blocks` por JSON cru (STOPGAP
-  da fase 0; editor visual real é a fase 2); `blocks_count`
-- `vitrine/core/templates/core/preview.html` — preview mostra só a lista de
-  blocos (fase 0); render fiel é do Astro/editor
+  `HtmlSafe` com bleach); `content`/`content_format` **vestigiais**
+- `vitrine/core/views.py` — `api_project_pages` emite `blocks`;
+  `api_project_pages`/`api_projects_list` — este último emite `theme`+`chrome`
+- `vitrine/core/admin.py` — `PageAdmin` edita `blocks`, `ProjectAdmin` edita
+  `theme`/`chrome`, ambos por JSON cru (STOPGAP; editor visual é a fase 2)
 
 **Config**
 - `astro.config.mjs` — integração `react()` (global; inerte pros sites legados)
@@ -75,6 +91,22 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 - **Sem migração de dados legados** — nada estava em produção.
 - **Ordem diverge da seção 13 da spec de propósito:** editor entra na fase 2
   (não no fim), porque "editor manual sempre disponível" é promessa central.
+- **Estilo: Tailwind utilities sobre CSS vars** (fase 1). CSS var é a camada de
+  tema por-tenant nos dois caminhos; Tailwind foi escolhido pela escala forçada
+  (sustenta o "catálogo curado") e ergonomia com React. Blocos usam utilities,
+  nunca `style` inline.
+- **Tema multi-tenant: ponte `@theme inline` → `--brand-*`.** O `_saas` builda
+  todos os projetos num pass só (dist compartilhado) → não dá pra assar
+  `@theme` por projeto (como o legado faz). Token = var de runtime; o VALOR vem
+  do `:root{--brand-*}` que o Layout injeta do `project.theme`. Um CSS
+  compilado compartilhado + `:root` por-tenant (provado: trocar cor não muda o
+  CSS, só o `:root` inline).
+- **Storage de tema/chrome: JSON no Project** (não modelo tipado, não em
+  SeoSettings). Chrome é árvore de tamanho variável (nav = lista) → JSON de
+  qualquer jeito; manter tema também JSON = um paradigma só.
+- **Contato é display-only** (tel/WhatsApp/endereço/mapa). Formulário que
+  envia e Blog (Listing/Post) ficaram **fora da fase 1** — viram fases próprias
+  (puxam backend de submit e modelo Post, respectivamente).
 
 ## Riscos/dívidas conhecidos
 
@@ -84,14 +116,21 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 - `CodeEmbed` emite `srcDoc` (camelCase) no HTML por conta do React 19 SSR;
   o parser HTML5 minúscula pra `srcdoc` — funciona, é só cosmético.
 - `dist/_astro/client.*.js` (runtime React) é gerado mas não referenciado por
-  nenhuma página na fase 0 (0 hidratação). Passa a ser usado na fase 2.
+  nenhuma página (0 hidratação). Passa a ser usado na fase 2.
+- **Sem menu mobile interativo** no Header (fase 1 é 100% estática; hambúrguer
+  viria hidratado). Links quebram pra baixo em telas pequenas por ora.
+- **FAQ block ↔ FAQ JSON-LD** (`type_specific_data` do SEO) ainda são fontes
+  separadas — risco de dupla entrada. Unificar depois.
+- **Blog e formulário de Contato real** não existem — fases próprias (modelo
+  Post; backend de submit/anti-spam).
 
 ## Roadmap (fases)
 
-0. Fundação: data model + render (FEITA) · 1. Catálogo completo (seção 2) +
-tema/Header/Footer de Site (3.3) · 2. Editor inline Puck (1/5/14) · 3.
+0. Fundação: data model + render (FEITA) · 1. Blocos estruturados +
+tema/Header/Footer de Site (FEITA) · 2. Editor inline Puck (1/5/14) · 3.
 Templates (3) · 4. IA questionário (6) · 5. Importador Inteligente (4) · 6.
 SEO/redirects (4.4) + endurecimento do sandbox (7) + validação pré-publicação (8).
+Fases futuras avulsas: Blog (modelo Post) e formulário de Contato real.
 
 ## Convenção de commit/branch
 

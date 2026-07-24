@@ -55,13 +55,86 @@ export interface FeaturesProps extends BaseBlockProps {
     items: FeatureItem[];
 }
 
-/** União discriminada de todos os blocos suportados na fase 0. */
+/** Sobre/Apresentação — texto + imagem opcional ao lado. */
+export interface SobreProps extends BaseBlockProps {
+    heading?: string;
+    text: string;
+    imageUrl?: string;
+    imagePosition?: 'left' | 'right';
+}
+
+export interface Testimonial {
+    quote: string;
+    author: string;
+    role?: string;
+}
+
+/** Prova social / Depoimentos. */
+export interface DepoimentosProps extends BaseBlockProps {
+    heading?: string;
+    items: Testimonial[];
+}
+
+export interface PricePlan {
+    name: string;
+    price: string;
+    period?: string;
+    features: string[];
+    ctaText?: string;
+    ctaHref?: string;
+    highlighted?: boolean;
+}
+
+/** Preço/Planos. */
+export interface PrecoProps extends BaseBlockProps {
+    heading?: string;
+    plans: PricePlan[];
+}
+
+export interface FaqItem {
+    question: string;
+    answer: string;
+}
+
+/** FAQ (conteúdo visível; independente do JSON-LD de FAQ do SEO por ora). */
+export interface FaqProps extends BaseBlockProps {
+    heading?: string;
+    items: FaqItem[];
+}
+
+/** CTA final. */
+export interface CtaProps extends BaseBlockProps {
+    title: string;
+    subtitle?: string;
+    ctaText?: string;
+    ctaHref?: string;
+}
+
+/** Contato display-only — telefone/WhatsApp/endereço/horário/mapa, SEM
+ *  formulário que envia (o form real é fase própria). */
+export interface ContatoProps extends BaseBlockProps {
+    heading?: string;
+    phone?: string;
+    whatsapp?: string;
+    email?: string;
+    address?: string;
+    hours?: string;
+    mapEmbedUrl?: string;
+}
+
+/** União discriminada de todos os blocos suportados. */
 export type BlockNode =
     | { type: 'RichText'; props: RichTextProps }
     | { type: 'HtmlSafe'; props: HtmlSafeProps }
     | { type: 'CodeEmbed'; props: CodeEmbedProps }
     | { type: 'Hero'; props: HeroProps }
-    | { type: 'Features'; props: FeaturesProps };
+    | { type: 'Features'; props: FeaturesProps }
+    | { type: 'Sobre'; props: SobreProps }
+    | { type: 'Depoimentos'; props: DepoimentosProps }
+    | { type: 'Preco'; props: PrecoProps }
+    | { type: 'Faq'; props: FaqProps }
+    | { type: 'Cta'; props: CtaProps }
+    | { type: 'Contato'; props: ContatoProps };
 
 /** Documento de blocos de uma página (formato Puck). */
 export interface BlockDocument {

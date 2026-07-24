@@ -81,6 +81,19 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
                 'Publicar" manualmente.'
             ),
         }),
+        ('Aparência (nível de Site)', {
+            'fields': ('theme', 'chrome'),
+            'classes': ('wide',),
+            'description': (
+                'Config de nível de Site em JSON (STOPGAP da fase 1 — o painel '
+                'visual vem na fase 2). '
+                'theme: {"colors":{"primary":"#2563eb","ink":"#1f2937",...},'
+                '"fonts":{"heading":"Poppins","body":"Inter"},"radius":"12px"}. '
+                'chrome: {"header":{"logoText":"...","links":[{"label":"..","href":".."}],'
+                '"cta":{"label":"..","href":".."}},"footer":{"columns":[...],"copyright":".."}}. '
+                'Vazio = usa os defaults do tema.'
+            ),
+        }),
         ('Status', {
             'fields': ('needs_rebuild',),
         }),
