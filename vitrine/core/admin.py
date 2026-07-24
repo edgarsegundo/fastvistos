@@ -1,8 +1,11 @@
+import json
+
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.shortcuts import redirect
-from django.urls import reverse
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 from django_jsonform.forms.fields import JSONFormField
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
@@ -14,6 +17,11 @@ from .models import (
 )
 from .seo import resolve_seo
 from .seo_schemas import PAGE_TYPE_SCHEMAS
+
+# Validação de fronteira pro upload de "Importar JSON" (ver
+# PageAdmin.import_type_specific_json) — arquivo vem de fora do sistema.
+MAX_IMPORT_FILE_SIZE = 512 * 1024  # 512 KB
+MAX_FAQ_QUESTIONS_PER_IMPORT = 200
 
 # Import DomainAdmin from separate file to keep admin.py manageable
 from .admin_domain import DomainAdmin as _DomainAdmin
@@ -221,6 +229,71 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
         }),
     )
 
+    def get_urls(self):
+        custom = [
+            path(
+                '<int:page_id>/import-type-specific-json/',
+                self.admin_site.admin_view(self.import_type_specific_json),
+                name='core_page_import_type_specific_json',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def import_type_specific_json(self, request, page_id):
+        """Importa `type_specific_data` de um arquivo JSON enviado pelo
+        usuário — só pra page_type=faq nesta fase (ver
+        docs/decisoes/import-json-type-specific-data.md pro porquê e o
+        plano de generalizar pros outros tipos).
+
+        `self.admin_site.admin_view()` (aplicado em get_urls) já garante
+        login+staff+CSRF antes de chegar aqui — mesmo mecanismo nativo
+        que protege qualquer outra view do admin, não precisa reimplementar."""
+        if request.method != 'POST':
+            return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+        page = get_object_or_404(self.get_queryset(request), pk=page_id)
+
+        if page.page_type != Page.PAGE_TYPE_FAQ:
+            return JsonResponse(
+                {'error': 'Importação de JSON só está disponível pra FAQ nesta fase.'},
+                status=400,
+            )
+        schema_cls = PAGE_TYPE_SCHEMAS[Page.PAGE_TYPE_FAQ]
+
+        upload = request.FILES.get('file')
+        if not upload:
+            return JsonResponse({'error': 'Nenhum arquivo enviado.'}, status=400)
+        if upload.size > MAX_IMPORT_FILE_SIZE:
+            return JsonResponse({'error': 'Arquivo maior que 512 KB.'}, status=400)
+
+        try:
+            raw = json.loads(upload.read().decode('utf-8'))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return JsonResponse({'error': 'Arquivo não é um JSON válido.'}, status=400)
+
+        # Aceita tanto lista solta ([{question,answer}, ...]) quanto o
+        # formato canônico ({"questions": [...]})
+        if isinstance(raw, list):
+            raw = {'questions': raw}
+        if not isinstance(raw, dict):
+            return JsonResponse({'error': 'JSON precisa ser uma lista ou objeto.'}, status=400)
+
+        parsed = schema_cls.from_dict(raw)
+        if len(parsed.questions) > MAX_FAQ_QUESTIONS_PER_IMPORT:
+            return JsonResponse(
+                {'error': f'Máximo de {MAX_FAQ_QUESTIONS_PER_IMPORT} perguntas por importação.'},
+                status=400,
+            )
+
+        page.seo_settings.type_specific_data = parsed.to_dict()
+        page.seo_settings.save()
+
+        return JsonResponse({
+            'status': 'imported',
+            'count': len(parsed.questions),
+            'message': f'✅ {len(parsed.questions)} pergunta(s) importada(s).',
+        })
+
     def get_inlines(self, request, obj=None):
         if obj:
             return [PageSeoSettingsInline]
@@ -416,12 +489,16 @@ class PageSeoSettingsInline(StackedInline):
             'seo_checklist', 'seo_title', 'seo_description',
             'og_image_override', 'canonical_override', 'noindex', 'type_specific_data',
         ]
+        if obj and obj.page_type == Page.PAGE_TYPE_FAQ:
+            base.insert(base.index('type_specific_data'), 'import_faq_json_button')
         if request.GET.get('debug') == '1':
             base.insert(1, 'debug_fill_button')
         return base
 
     def get_readonly_fields(self, request, obj=None):
         base = ['seo_checklist']
+        if obj and obj.page_type == Page.PAGE_TYPE_FAQ:
+            base.append('import_faq_json_button')
         if request.GET.get('debug') == '1':
             base.append('debug_fill_button')
         return base
@@ -431,6 +508,94 @@ class PageSeoSettingsInline(StackedInline):
             return 'Salve a página pra ver o checklist de SEO.'
         return _seo_checklist_html(resolve_seo(obj.page))
     seo_checklist.short_description = 'Checklist de SEO'
+
+    def import_faq_json_button(self, obj):
+        """Botão "Importar JSON" — só aparece pra page_type=faq (ver
+        get_fields/get_readonly_fields). Faz upload direto pro endpoint
+        (PageAdmin.import_type_specific_json), sem passar pelo form
+        principal do admin — por isso não precisa de enctype
+        multipart no <form> do admin em si."""
+        if not obj or not obj.pk:
+            return ''
+
+        import_url = reverse('admin:core_page_import_type_specific_json', args=[obj.page_id])
+        return format_html(
+            '''<input type="file" id="import-faq-json-file" accept="application/json,.json">
+            <button type="button" id="import-faq-json-btn"
+               style="background:#3b82f6; color:white; padding:8px 16px; border:none;
+                      border-radius:4px; cursor:pointer; font-weight:600; margin-left:8px;"
+               onclick="importFaqJson()">
+              📥 Importar JSON
+            </button>
+            <div id="import-faq-json-status" style="margin-top:8px; font-size:0.9em;"></div>
+            <p style="margin-top:8px; font-size:0.85em; color:#6b7280;">
+              Formato aceito: <code>[{{"question": "...", "answer": "..."}}]</code>
+              ou <code>{{"questions": [...]}}</code>.
+            </p>
+            <script>
+              function getCookie(name) {{
+                let value = null;
+                if (document.cookie) {{
+                  for (let part of document.cookie.split(';')) {{
+                    part = part.trim();
+                    if (part.startsWith(name + '=')) {{
+                      value = decodeURIComponent(part.substring(name.length + 1));
+                      break;
+                    }}
+                  }}
+                }}
+                return value;
+              }}
+
+              function importFaqJson() {{
+                const fileInput = document.getElementById('import-faq-json-file');
+                const btn = document.getElementById('import-faq-json-btn');
+                const status = document.getElementById('import-faq-json-status');
+
+                if (!fileInput.files.length) {{
+                  status.textContent = '❌ Selecione um arquivo primeiro.';
+                  status.style.color = '#ef4444';
+                  return;
+                }}
+
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                status.textContent = '⏳ Importando...';
+                status.style.color = '';
+
+                fetch('{}', {{
+                  method: 'POST',
+                  headers: {{'X-CSRFToken': getCookie('csrftoken')}},
+                  body: formData,
+                }})
+                  .then(r => r.json())
+                  .then(data => {{
+                    if (data.status === 'imported') {{
+                      status.textContent = data.message;
+                      status.style.color = '#10b981';
+                      setTimeout(() => window.location.reload(), 1500);
+                    }} else {{
+                      status.textContent = '❌ Erro: ' + (data.error || 'Desconhecido');
+                      status.style.color = '#ef4444';
+                      btn.disabled = false;
+                      btn.style.opacity = '1';
+                    }}
+                  }})
+                  .catch(err => {{
+                    status.textContent = '❌ Erro: ' + err.message;
+                    status.style.color = '#ef4444';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                  }});
+              }}
+            </script>
+            ''',
+            import_url,
+        )
+    import_faq_json_button.short_description = '📥 Importar de arquivo'
 
     def debug_fill_button(self, obj):
         """Botão "Preencher com Fake Data" — aparece apenas se ?debug=1"""
