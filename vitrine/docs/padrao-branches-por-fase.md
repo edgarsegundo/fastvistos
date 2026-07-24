@@ -19,17 +19,17 @@ trabalho futuro dividido em fases. Complementa
 
 ## Princípio
 
-`main` é o legado, intocado, rodando em produção. `feat/seo` é o tronco
+`main` é o legado, intocado, rodando em produção. `seo` é o tronco
 da nova versão (roda numa pasta separada na VPS) — não vai virar merge
 de `main`, é uma linha própria. Cada fase do roadmap vira um branch
-curto que nasce de `feat/seo` e volta pra ele, nunca direto pra `main`.
+curto que nasce de `seo` e volta pra ele, nunca direto pra `main`.
 
 ```
 main (legado, intocado)
-  └─ feat/seo (tronco da nova versão, roda na VPS)
-       ├─ feat/seo/fase-0-robots-txt
-       ├─ feat/seo/fase-1-jsonld-schemas
-       ├─ feat/seo/fase-2-llms-txt
+  └─ seo (tronco da nova versão, roda na VPS)
+       ├─ seo-fase-0-robots-txt
+       ├─ seo-fase-1-jsonld-schemas
+       ├─ seo-fase-2-llms-txt
        └─ ...
 ```
 
@@ -41,12 +41,12 @@ que uma sessão nova precisa entender "por que isso está assim".
 
 ## Estrutura de branches
 
-- **`feat/seo`**: branch de integração. É dele que cada fase nasce, e é
+- **`seo`**: branch de integração. É dele que cada fase nasce, e é
   pra ele que cada fase volta.
-- **`feat/seo/fase-N-slug`**: um por fase, vida curta (só dura enquanto
+- **`seo-fase-N-slug`**: um por fase, vida curta (só dura enquanto
   a fase está em progresso). Nome com número da fase + slug curto do
-  assunto, ex: `feat/seo/fase-1-jsonld-schemas`.
-- **Deploy na VPS**: sempre a partir de `feat/seo`, nunca de um branch
+  assunto, ex: `seo-fase-1-jsonld-schemas`.
+- **Deploy na VPS**: sempre a partir de `seo`, nunca de um branch
   de fase específico ainda não mergeado — senão a VPS roda o meio de
   uma fase ainda não revisada.
 
@@ -54,9 +54,9 @@ que uma sessão nova precisa entender "por que isso está assim".
 
 **Início da fase:**
 ```bash
-git checkout feat/seo
+git checkout seo
 git pull --ff-only  # se tiver remoto
-git checkout -b feat/seo/fase-1-jsonld-schemas
+git checkout -b seo-fase-1-jsonld-schemas
 ```
 
 Cole só o prompt daquela fase específica pro Claude Code (nunca o
@@ -64,10 +64,10 @@ roadmap inteiro), trabalhe em plan mode, revise o diff, aprove.
 
 **Fim da fase**, depois de revisado e aprovado:
 ```bash
-git checkout feat/seo
-git merge --no-ff feat/seo/fase-1-jsonld-schemas
+git checkout seo
+git merge --no-ff seo-fase-1-jsonld-schemas
 git tag -a seo-fase-1-done -m "Fase 1 completa: JSON-LD tipado"
-git branch -d feat/seo/fase-1-jsonld-schemas
+git branch -d seo-fase-1-jsonld-schemas
 ```
 
 O `--no-ff` é o detalhe que importa: força um commit de merge mesmo
@@ -98,10 +98,10 @@ fi
 
 NUM="$1"
 SLUG="$2"
-BRANCH="feat/seo/fase-${NUM}-${SLUG}"
+BRANCH="seo-fase-${NUM}-${SLUG}"
 
-git checkout feat/seo
-git pull --ff-only origin feat/seo 2>/dev/null || true
+git checkout seo
+git pull --ff-only origin seo 2>/dev/null || true
 git checkout -b "$BRANCH"
 
 echo "Branch criado: $BRANCH"
@@ -121,18 +121,18 @@ fi
 
 NUM="$1"
 SLUG="$2"
-BRANCH="feat/seo/fase-${NUM}-${SLUG}"
+BRANCH="seo-fase-${NUM}-${SLUG}"
 TAG="seo-fase-${NUM}-done"
 
-git checkout feat/seo
+git checkout seo
 git merge --no-ff "$BRANCH" -m "merge: Fase ${NUM} (${SLUG}) concluída"
 git tag -a "$TAG" -m "Fase ${NUM} completa: ${SLUG}"
 git branch -d "$BRANCH"
 
-echo "Fase ${NUM} mergeada em feat/seo e taggeada como ${TAG}."
+echo "Fase ${NUM} mergeada em seo e taggeada como ${TAG}."
 echo "Não esqueça:"
-echo "  git push origin feat/seo --tags   (se tiver remoto)"
-echo "  deploy na VPS a partir de feat/seo"
+echo "  git push origin seo --tags   (se tiver remoto)"
+echo "  deploy na VPS a partir de seo"
 ```
 
 ```bash
@@ -155,14 +155,14 @@ ficar preso ao script.
 
 Às vezes vale testar um commit intermediário em produção antes da fase
 estar 100% completa — o fluxo básico só previa merge final. Pra isso
-sem quebrar o princípio de nunca commitar solto direto em `feat/seo`,
+sem quebrar o princípio de nunca commitar solto direto em `seo`,
 `fase-finish.sh` aceita um 3º argumento opcional `--checkpoint`:
 
 ```bash
 scripts/fase-finish.sh 1 jsonld-schemas --checkpoint
 ```
 
-Isso faz merge `--no-ff` do branch de fase em `feat/seo` (pronto pra
+Isso faz merge `--no-ff` do branch de fase em `seo` (pronto pra
 deploy na VPS), mas **sem tag e sem apagar o branch** — o `git
 checkout` volta pro branch de fase logo em seguida, e o trabalho da
 fase continua normalmente. Pode ser chamado quantas vezes forem
@@ -231,11 +231,11 @@ só formatar de acordo com a convenção.
   sessão nova do que rodar `git log --graph` e interpretar. Opcional:
   só vale se você sentir que consultar isso manualmente toda sessão
   está custando tempo; senão as tags já dão conta.
-- **Push da tag junto do branch**: `git push origin feat/seo --tags`
-  depois de cada `fase-finish.sh`, se `feat/seo` também vive num
+- **Push da tag junto do branch**: `git push origin seo --tags`
+  depois de cada `fase-finish.sh`, se `seo` também vive num
   remoto — sem isso a tag só existe local e se perde se a máquina
   falhar.
-- **Não proteger `feat/seo` contra commit direto** por enquanto — você
+- **Não proteger `seo` contra commit direto** por enquanto — você
   trabalha sozinho, então a disciplina de sempre passar por um branch
   de fase é sua, não precisa de trava técnica de branch protection do
   GitHub ainda. Vale reconsiderar só se algum dia outra pessoa entrar
@@ -256,5 +256,5 @@ só formatar de acordo com a convenção.
 - [ ] Fim da fase, já revisado e aprovado:
       `scripts/fase-finish.sh <numero> <slug>`
 - [ ] Push do branch + tags, se houver remoto
-- [ ] Deploy na VPS sempre a partir de `feat/seo`, nunca de um branch
+- [ ] Deploy na VPS sempre a partir de `seo`, nunca de um branch
       de fase isolado

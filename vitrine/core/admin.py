@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html, format_html_join
-from unfold.admin import ModelAdmin
+from unfold.admin import ModelAdmin, StackedInline, TabularInline
 from tenancy.admin import ClientScopedAdmin
 
 from .models import (
@@ -359,7 +359,7 @@ def _seo_checklist_html(resolved):
     return format_html('<ul style="list-style:none; padding-left:0; margin:0;">{}</ul>', items)
 
 
-class ProjectSeoSettingsInline(admin.StackedInline):
+class ProjectSeoSettingsInline(StackedInline):
     """SEO/branding a nível de projeto — fallback pra todas as páginas
     que não definirem os próprios campos (ver core/seo.py::resolve_seo)."""
     model = ProjectSeoSettings
@@ -371,30 +371,28 @@ class ProjectSeoSettingsInline(admin.StackedInline):
         'organization_name_override', 'default_title_suffix',
     )
 
-    class Media:
-        css = {
-            'all': ('admin/css/seo_fields.css',)
-        }
-        js = ('admin/js/seo_fields.js',)
 
-
-class PageSeoSettingsInline(admin.StackedInline):
+class PageSeoSettingsInline(StackedInline):
     """SEO específico da página — sobrescreve o fallback do projeto/plataforma."""
     model = PageSeoSettings
     can_delete = False
     max_num = 1
     verbose_name_plural = 'SEO da Página'
-    fields = (
-        'seo_checklist', 'seo_title', 'seo_description',
-        'og_image_override', 'canonical_override', 'noindex', 'type_specific_data',
-    )
-    readonly_fields = ('seo_checklist',)
 
-    class Media:
-        css = {
-            'all': ('admin/css/seo_fields.css',)
-        }
-        js = ('admin/js/seo_fields.js',)
+    def get_fields(self, request, obj=None):
+        base = [
+            'seo_checklist', 'seo_title', 'seo_description',
+            'og_image_override', 'canonical_override', 'noindex', 'type_specific_data',
+        ]
+        if request.GET.get('debug') == '1':
+            base.insert(1, 'debug_fill_button')
+        return base
+
+    def get_readonly_fields(self, request, obj=None):
+        base = ['seo_checklist']
+        if request.GET.get('debug') == '1':
+            base.append('debug_fill_button')
+        return base
 
     def seo_checklist(self, obj):
         if not obj or not obj.pk:
@@ -402,8 +400,58 @@ class PageSeoSettingsInline(admin.StackedInline):
         return _seo_checklist_html(resolve_seo(obj.page))
     seo_checklist.short_description = 'Checklist de SEO'
 
+    def debug_fill_button(self, obj):
+        """Botão "Preencher com Fake Data" — aparece apenas se ?debug=1"""
+        if not obj or not obj.pk:
+            return ''
 
-class BuildInline(admin.TabularInline):
+        # Renderiza um botão que chama a API via AJAX
+        return format_html(
+            '''<button type="button" id="debug-fill-seo-btn"
+               style="background:#10b981; color:white; padding:8px 16px; border:none;
+                      border-radius:4px; cursor:pointer; font-weight:600;"
+               onclick="debugFillSEOFake({})">
+              🤖 Preencher com Fake Data
+            </button>
+            <div id="debug-fill-status" style="margin-top:8px; font-size:0.9em;"></div>
+            <script>
+              function debugFillSEOFake(pageId) {{
+                const btn = document.getElementById('debug-fill-seo-btn');
+                const status = document.getElementById('debug-fill-status');
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                status.textContent = '⏳ Preenchendo...';
+
+                fetch('/api/debug/fill-seo-fake/' + pageId + '/?debug=1')
+                  .then(r => r.json())
+                  .then(data => {{
+                    if (data.status === 'filled') {{
+                      status.innerHTML = '✅ ' + data.message;
+                      status.style.color = '#10b981';
+                      // Recarrega a página em 2 segundos
+                      setTimeout(() => window.location.reload(), 2000);
+                    }} else {{
+                      status.textContent = '❌ Erro: ' + (data.error || 'Desconhecido');
+                      status.style.color = '#ef4444';
+                      btn.disabled = false;
+                      btn.style.opacity = '1';
+                    }}
+                  }})
+                  .catch(err => {{
+                    status.textContent = '❌ Erro: ' + err.message;
+                    status.style.color = '#ef4444';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                  }});
+              }}
+            </script>
+            ''',
+            obj.pk
+        )
+    debug_fill_button.short_description = '🤖 Debug'
+
+
+class BuildInline(TabularInline):
     """Inline em ProjectAdmin — Build tem FK direta pra Project."""
     model = Build
     extra = 0
@@ -415,7 +463,7 @@ class BuildInline(admin.TabularInline):
         return False
 
 
-class DeploymentInline(admin.TabularInline):
+class DeploymentInline(TabularInline):
     """Inline em BuildAdmin — Deployment só tem FK direta pra Build,
     não pra Project (por isso não pode ser inline de ProjectAdmin)."""
     model = Deployment
