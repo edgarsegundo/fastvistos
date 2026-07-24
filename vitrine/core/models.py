@@ -72,6 +72,20 @@ class Project(ClientModel):
     is_published = models.BooleanField(default=False)
     needs_rebuild = models.BooleanField(default=True)
 
+    # Config de NÍVEL DE SITE (seções 2 e 3.3 da spec). Ambos JSON: o `theme`
+    # guarda os valores dos tokens (cores/fontes/radius) que o Layout injeta
+    # como CSS vars por-tenant; o `chrome` guarda header/footer (nav é lista →
+    # não cabe em colunas). Schema em código no Astro (theme/theme.ts,
+    # chrome/chrome.ts). Defaults moram no CSS/TS — {} aqui = usa defaults.
+    theme = models.JSONField(
+        default=dict, blank=True,
+        help_text="Tokens de tema (cores/fontes/radius). Ver theme/theme.ts."
+    )
+    chrome = models.JSONField(
+        default=dict, blank=True,
+        help_text="Header/Footer de nível de Site. Ver chrome/chrome.ts."
+    )
+
     class Meta:
         verbose_name = _("Meu Projeto")
         verbose_name_plural = _("Meus Projetos")

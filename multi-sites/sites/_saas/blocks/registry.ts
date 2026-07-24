@@ -16,6 +16,12 @@ import HtmlSafe from './HtmlSafe';
 import CodeEmbed from './CodeEmbed';
 import Hero from './Hero';
 import Features from './Features';
+import Sobre from './Sobre';
+import Depoimentos from './Depoimentos';
+import Preco from './Preco';
+import Faq from './Faq';
+import Cta from './Cta';
+import Contato from './Contato';
 
 export const BLOCK_COMPONENTS: Record<string, ComponentType<any>> = {
     RichText,
@@ -23,6 +29,12 @@ export const BLOCK_COMPONENTS: Record<string, ComponentType<any>> = {
     CodeEmbed,
     Hero,
     Features,
+    Sobre,
+    Depoimentos,
+    Preco,
+    Faq,
+    Cta,
+    Contato,
 };
 
 /** Tipo de campo editável — expandido nas fases 2/4. */
@@ -88,6 +100,87 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     description: { type: 'textarea', label: 'Descrição' },
                 },
             },
+        },
+    },
+    Sobre: {
+        label: 'Sobre',
+        freeform: false,
+        fields: {
+            heading: { type: 'text', label: 'Título' },
+            text: { type: 'textarea', label: 'Texto (parágrafos)' },
+            imageUrl: { type: 'url', label: 'Imagem' },
+            imagePosition: { type: 'select', label: 'Posição da imagem', options: ['left', 'right'] },
+        },
+    },
+    Depoimentos: {
+        label: 'Depoimentos',
+        freeform: false,
+        fields: {
+            heading: { type: 'text', label: 'Título da seção' },
+            items: {
+                type: 'array', label: 'Depoimentos',
+                itemFields: {
+                    quote: { type: 'textarea', label: 'Citação' },
+                    author: { type: 'text', label: 'Autor' },
+                    role: { type: 'text', label: 'Cargo/empresa' },
+                },
+            },
+        },
+    },
+    Preco: {
+        label: 'Preço/Planos',
+        freeform: false,
+        fields: {
+            heading: { type: 'text', label: 'Título da seção' },
+            plans: {
+                type: 'array', label: 'Planos',
+                itemFields: {
+                    name: { type: 'text', label: 'Nome' },
+                    price: { type: 'text', label: 'Preço' },
+                    period: { type: 'text', label: 'Período (ex: mês)' },
+                    features: { type: 'array', label: 'Itens', itemFields: { value: { type: 'text', label: 'Item' } } },
+                    ctaText: { type: 'text', label: 'Texto do botão' },
+                    ctaHref: { type: 'url', label: 'Link do botão' },
+                    highlighted: { type: 'text', label: 'Destaque (true/false)' },
+                },
+            },
+        },
+    },
+    Faq: {
+        label: 'FAQ',
+        freeform: false,
+        fields: {
+            heading: { type: 'text', label: 'Título da seção' },
+            items: {
+                type: 'array', label: 'Perguntas',
+                itemFields: {
+                    question: { type: 'text', label: 'Pergunta' },
+                    answer: { type: 'textarea', label: 'Resposta' },
+                },
+            },
+        },
+    },
+    Cta: {
+        label: 'CTA final',
+        freeform: false,
+        fields: {
+            title: { type: 'text', label: 'Título' },
+            subtitle: { type: 'textarea', label: 'Subtítulo' },
+            ctaText: { type: 'text', label: 'Texto do botão' },
+            ctaHref: { type: 'url', label: 'Link do botão' },
+        },
+    },
+    Contato: {
+        label: 'Contato',
+        freeform: false,
+        fields: {
+            heading: { type: 'text', label: 'Título' },
+            phone: { type: 'text', label: 'Telefone' },
+            whatsapp: { type: 'text', label: 'WhatsApp (com DDI/DDD)' },
+            email: { type: 'text', label: 'E-mail' },
+            address: { type: 'textarea', label: 'Endereço' },
+            hours: { type: 'text', label: 'Horário' },
+            mapEmbedUrl: { type: 'url', label: 'URL de mapa (embed)' },
         },
     },
 };

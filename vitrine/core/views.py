@@ -98,9 +98,12 @@ def api_projects_list(request):
         return JsonResponse({'error': 'Unauthorized'}, status=403)
 
     try:
+        # theme/chrome (config de nível de Site) viajam junto do objeto project
+        # — o getStaticPaths do Astro já passa o project inteiro pra rota, que
+        # repassa pro Layout aplicar o tema por-tenant e renderizar o chrome.
         projects = Project.all_objects.filter(
             is_published=True
-        ).values('id', 'slug', 'name', 'description')
+        ).values('id', 'slug', 'name', 'description', 'theme', 'chrome')
 
         return JsonResponse(list(projects), safe=False)
     except Exception as e:

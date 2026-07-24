@@ -12,9 +12,9 @@ import type { RichTextProps } from './types';
 export default function RichText({ markdown }: RichTextProps) {
     const html = marked.parse(markdown ?? '', { gfm: true, breaks: true }) as string;
     return (
-        <div
-            className="block-richtext prose"
-            dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="mx-auto max-w-3xl px-4 py-8">
+            {/* .block-richtext é estilizado em styles/saas.css com os tokens do tema */}
+            <div className="block-richtext" dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
     );
 }

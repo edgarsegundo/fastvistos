@@ -16,16 +16,13 @@ import type { CodeEmbedProps } from './types';
  */
 export default function CodeEmbed({ html, minHeight = 600 }: CodeEmbedProps) {
     return (
-        <iframe
-            className="block-codeembed"
-            srcDoc={html ?? ''}
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            style={{
-                width: '100%',
-                minHeight: `${minHeight}px`,
-                border: 'none',
-                borderRadius: '8px',
-            }}
-        />
+        <div className="mx-auto max-w-6xl px-4 py-8">
+            <iframe
+                className="block-codeembed w-full rounded-brand border-0"
+                srcDoc={html ?? ''}
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                style={{ minHeight: `${minHeight}px` }}
+            />
+        </div>
     );
 }

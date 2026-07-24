@@ -1,7 +1,18 @@
 ---
 /**
- * Minimal layout for user-generated projects
+ * Layout dos projetos do SaaS (_saas).
+ *
+ * Liga o design system (styles/saas.css → Tailwind + ponte de tema) e aplica
+ * o tema por-tenant: injeta `:root{--brand-*}` do project.theme e os <link>
+ * das fontes escolhidas. Renderiza o chrome (Header/Footer de nível de Site,
+ * do project.chrome) em volta do conteúdo da página.
  */
+import '../styles/saas.css';
+import Header from '../chrome/Header.tsx';
+import Footer from '../chrome/Footer.tsx';
+import { buildBrandVars, fontLinks, type ProjectTheme } from '../theme/theme';
+import { DEFAULT_CHROME, type ProjectChrome } from '../chrome/chrome';
+
 interface Props {
     title?: string;
     description?: string;
@@ -12,6 +23,8 @@ interface Props {
     siteName?: string;
     themeColor?: string;
     noindex?: boolean;
+    theme?: ProjectTheme | null;
+    chrome?: ProjectChrome | null;
 }
 
 const {
@@ -24,7 +37,14 @@ const {
     siteName,
     themeColor,
     noindex,
+    theme,
+    chrome,
 } = Astro.props as Props;
+
+const brandVars = buildBrandVars(theme);
+const links = fontLinks(theme);
+const header = { ...DEFAULT_CHROME.header, ...(chrome?.header ?? {}) };
+const footer = { ...DEFAULT_CHROME.footer, ...(chrome?.footer ?? {}) };
 ---
 
 <!doctype html>
@@ -45,22 +65,15 @@ const {
         {siteName && <meta property="og:site_name" content={siteName} />}
         {image && <meta property="og:image" content={image} />}
         {image && <meta name="twitter:card" content="summary_large_image" />}
+        {links.length > 0 && <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />}
+        {links.map((href) => <link rel="stylesheet" href={href} />)}
         <slot name="jsonld" />
-        <style>
-            :root {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                line-height: 1.5;
-                font-weight: 400;
-                color: #333;
-                background-color: #fff;
-            }
-            body {
-                margin: 0;
-                padding: 0;
-            }
-        </style>
+        {/* Tema por-tenant: só os overrides do project.theme; defaults no saas.css */}
+        {brandVars && <style set:html={brandVars} />}
     </head>
     <body>
+        <Header {...header} />
         <slot />
+        <Footer {...footer} />
     </body>
 </html>

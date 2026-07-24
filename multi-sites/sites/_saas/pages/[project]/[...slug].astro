@@ -147,6 +147,8 @@ const breadcrumbItems = [
     siteName={seo.site_name}
     themeColor={seo.theme_color}
     noindex={seo.noindex}
+    theme={project.theme}
+    chrome={project.chrome}
 >
     <Fragment slot="jsonld">
         <JsonLdWebSiteBlock siteUrl={siteUrl} siteName={seo.site_name || project.name} locale={seo.locale} />
@@ -172,54 +174,9 @@ const breadcrumbItems = [
             <JsonLdArticleBlock pageUrl={seo.canonical} description={seo.description} typeSpecificData={seo.type_specific_data} />
         )}
     </Fragment>
-    <main class="container mx-auto px-4 py-12">
-        {/* Breadcrumb */}
-        <nav class="text-sm text-gray-600 mb-6">
-            <a href="/">Home</a>
-            <span class="mx-2">›</span>
-            <a href={`/${project.slug}/`}>{project.name}</a>
-            {page.slug !== 'index' && (
-                <>
-                    <span class="mx-2">›</span>
-                    <span>{page.title}</span>
-                </>
-            )}
-        </nav>
-
-        {/* Título */}
-        <h1 class="text-4xl font-bold mb-6">{page.title}</h1>
-
-        {/* ✨ RENDERIZA O DOCUMENTO DE BLOCOS (estático, zero JS) */}
+    {/* A página É a lista de blocos. Header/Footer vêm do chrome (Layout);
+        cada bloco gerencia sua própria largura/espaçamento. Zero JS. */}
+    <main>
         <BlockRenderer document={blocks} />
-
-        {/* Footer */}
-        <footer class="mt-12 pt-6 border-t border-gray-200 text-sm text-gray-600">
-            <p>Projeto: <strong>{project.name}</strong></p>
-            {page.modified && (
-                <p>Última atualização: {new Date(page.modified).toLocaleDateString('pt-BR')}</p>
-            )}
-        </footer>
     </main>
 </Layout>
-
-<style>
-    .prose {
-        --tw-prose-body: #374151;
-        --tw-prose-headings: #1f2937;
-        --tw-prose-lead: #6b7280;
-        --tw-prose-links: #2563eb;
-        --tw-prose-bold: #1f2937;
-        --tw-prose-counters: #6b7280;
-        --tw-prose-bullets: #d1d5db;
-        --tw-prose-hr: #e5e7eb;
-        --tw-prose-quotes: #6b7280;
-        --tw-prose-quote-borders: #e5e7eb;
-        --tw-prose-captions: #6b7280;
-        --tw-prose-code: #d946ef;
-        --tw-prose-pre-bg: #1f2937;
-        --tw-prose-pre-code: #e5e7eb;
-        --tw-prose-pre-border: #374151;
-        --tw-prose-th-borders: #d1d5db;
-        --tw-prose-td-borders: #e5e7eb;
-    }
-</style>

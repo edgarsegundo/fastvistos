@@ -10,9 +10,8 @@ import type { HtmlSafeProps } from './types';
  */
 export default function HtmlSafe({ html }: HtmlSafeProps) {
     return (
-        <div
-            className="block-htmlsafe"
-            dangerouslySetInnerHTML={{ __html: html ?? '' }}
-        />
+        <div className="mx-auto max-w-4xl px-4 py-8">
+            <div className="block-htmlsafe" dangerouslySetInnerHTML={{ __html: html ?? '' }} />
+        </div>
     );
 }
