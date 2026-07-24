@@ -9,10 +9,10 @@ fi
 
 NUM="$1"
 SLUG="$2"
-BRANCH="feat/seo/fase-${NUM}-${SLUG}"
+BRANCH="seo-fase-${NUM}-${SLUG}"
 
-git checkout feat/seo
-git pull --ff-only origin feat/seo 2>/dev/null || true
+git checkout seo
+git pull --ff-only origin seo 2>/dev/null || true
 git checkout -b "$BRANCH"
 
 echo "Branch criado: $BRANCH"
