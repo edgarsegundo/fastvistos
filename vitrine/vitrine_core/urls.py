@@ -43,6 +43,10 @@ urlpatterns = [
     # (ver core.views.robots_txt)
     path('robots.txt', core_views.robots_txt, name='robots_txt'),
 
+    # llms.txt por projeto — diferente de sitemap.xml/robots.txt (globais),
+    # este é escopado por projeto (ver core.views.project_llms_txt)
+    path('app/<str:project_slug>/llms.txt', core_views.project_llms_txt, name='project_llms_txt'),
+
     # API para Astro
     path('api/projects/', core_views.api_projects_list, name='api_projects_list'),
     path('api/projects/<str:project_slug>/pages/', core_views.api_project_pages, name='api_project_pages'),

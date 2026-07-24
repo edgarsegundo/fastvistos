@@ -444,7 +444,7 @@ class ProjectSeoSettingsInline(StackedInline):
     verbose_name_plural = 'SEO do Projeto (fallback pras páginas)'
     fields = (
         'og_image_url', 'favicon_url', 'author_name',
-        'organization_name_override', 'default_title_suffix',
+        'organization_name_override', 'default_title_suffix', 'llms_summary',
     )
 
 
