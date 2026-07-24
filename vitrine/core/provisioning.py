@@ -22,17 +22,23 @@ _TENANT_MANAGED_MODELS = [
     ('core', 'domain'),
     ('core', 'build'),       # só view (Build não tem add/change form de verdade, é readonly)
     ('core', 'deployment'),  # idem
+    ('core', 'projectseosettings'),  # inline em ProjectAdmin
+    ('core', 'pageseosettings'),     # inline em PageAdmin
 ]
 
 
 def _get_or_create_tenant_owner_group():
-    group, created = Group.objects.get_or_create(name=TENANT_OWNER_GROUP_NAME)
-    if created:
-        perms = Permission.objects.filter(
-            content_type__app_label__in=[a for a, m in _TENANT_MANAGED_MODELS],
-            content_type__model__in=[m for a, m in _TENANT_MANAGED_MODELS],
-        )
-        group.permissions.set(perms)
+    """Sempre resincroniza as permissões (não só na criação) — se
+    `_TENANT_MANAGED_MODELS` ganhar um model novo depois (ex: os SEO
+    settings adicionados quando o inline de SEO passou a existir),
+    o grupo já existente pega a permissão faltante automaticamente no
+    próximo signup, sem precisar de migration/comando manual."""
+    group, _ = Group.objects.get_or_create(name=TENANT_OWNER_GROUP_NAME)
+    perms = Permission.objects.filter(
+        content_type__app_label__in=[a for a, m in _TENANT_MANAGED_MODELS],
+        content_type__model__in=[m for a, m in _TENANT_MANAGED_MODELS],
+    )
+    group.permissions.set(perms)
     return group
 
 
