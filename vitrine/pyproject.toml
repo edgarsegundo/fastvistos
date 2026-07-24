@@ -9,6 +9,7 @@ dependencies = [
     "django==5.1.7",
     "django-allauth[socialaccount]>=65.0.0",
     "django-extensions>=4.1",
+    "django-jsonform>=2.23.0",
     "django-model-utils>=5.0.0",
     "django-unfold>=0.91.0",
     "dnspython>=2.4.0",

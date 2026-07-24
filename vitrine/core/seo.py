@@ -8,6 +8,7 @@ e para que o Astro só precise renderizar um payload já resolvido.
 from django.conf import settings
 
 from core.models import PlatformSeoDefaults
+from core.seo_schemas import PAGE_TYPE_SCHEMAS
 
 
 def resolve_seo(page, platform=None):
@@ -28,6 +29,12 @@ def resolve_seo(page, platform=None):
     page_canonical = page_seo.canonical_override if page_seo else ''
     noindex = page_seo.noindex if page_seo else False
     type_specific_data = page_seo.type_specific_data if page_seo else {}
+
+    # Normaliza via schema formal quando existir pro page_type — tolerante
+    # a dado antigo/malformado (ver core/seo_schemas.py), nunca levanta.
+    schema_cls = PAGE_TYPE_SCHEMAS.get(page.page_type)
+    if schema_cls:
+        type_specific_data = schema_cls.from_dict(type_specific_data or {}).to_dict()
 
     project_og_image = project_seo.og_image_url if project_seo else ''
     project_favicon = project_seo.favicon_url if project_seo else ''

@@ -347,6 +347,37 @@ def debug_fill_seo_fake_data(request, page_id):
             'phone': '+55 11 9999-9999',
             'opening_hours': 'Mo-Fr 09:00-18:00',
         }
+    elif page.page_type == 'faq':
+        seo.type_specific_data = {
+            'questions': [
+                {'question': 'Pergunta de teste 1?', 'answer': 'Resposta de teste 1.'},
+                {'question': 'Pergunta de teste 2?', 'answer': 'Resposta de teste 2.'},
+            ],
+        }
+    elif page.page_type == 'person':
+        seo.type_specific_data = {
+            'name': 'Pessoa de Teste',
+            'job_title': 'Cargo de Teste',
+            'image_url': 'https://via.placeholder.com/400x400?text=Foto',
+            'same_as': ['https://www.linkedin.com/in/teste', 'https://twitter.com/teste'],
+        }
+    elif page.page_type == 'product':
+        seo.type_specific_data = {
+            'name': 'Produto de Teste',
+            'price': '199.90',
+            'currency': 'BRL',
+            'availability': 'InStock',
+            'image_url': 'https://via.placeholder.com/600x600?text=Produto',
+            'rating': 4.5,
+            'review_count': 12,
+        }
+    elif page.page_type == 'article':
+        seo.type_specific_data = {
+            'headline': f"{page.title} — Manchete de Teste",
+            'author': 'Teste Author',
+            'published_at': page.created.isoformat(),
+            'image_url': 'https://via.placeholder.com/1200x630?text=Artigo',
+        }
     else:
         seo.type_specific_data = {}
 

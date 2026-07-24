@@ -1,0 +1,38 @@
+---
+interface Props {
+    pageUrl: string;
+    typeSpecificData: Record<string, any>;
+}
+const { pageUrl, typeSpecificData } = Astro.props as Props;
+const { name, price, currency, availability, image_url, rating, review_count } = typeSpecificData || {};
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': pageUrl,
+    name,
+    ...(image_url ? { image: image_url } : {}),
+    ...(price
+        ? {
+              offers: {
+                  '@type': 'Offer',
+                  url: pageUrl,
+                  price,
+                  ...(currency ? { priceCurrency: currency } : {}),
+                  ...(availability ? { availability: `https://schema.org/${availability}` } : {}),
+              },
+          }
+        : {}),
+    ...(rating != null && review_count != null
+        ? {
+              aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingValue: rating,
+                  reviewCount: review_count,
+              },
+          }
+        : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />
