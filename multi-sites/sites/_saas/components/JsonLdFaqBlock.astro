@@ -1,0 +1,22 @@
+---
+interface Props {
+    typeSpecificData: Record<string, any>;
+}
+const { typeSpecificData } = Astro.props as Props;
+const { questions } = typeSpecificData || {};
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: (questions || []).map((q: { question: string; answer: string }) => ({
+        '@type': 'Question',
+        name: q.question,
+        acceptedAnswer: {
+            '@type': 'Answer',
+            text: q.answer,
+        },
+    })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

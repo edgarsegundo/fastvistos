@@ -1,8 +1,10 @@
+from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.html import format_html, format_html_join
+from django_jsonform.forms.fields import JSONFormField
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
 from tenancy.admin import ClientScopedAdmin
 
@@ -11,6 +13,7 @@ from .models import (
     PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings,
 )
 from .seo import resolve_seo
+from .seo_schemas import PAGE_TYPE_SCHEMAS
 
 # Import DomainAdmin from separate file to keep admin.py manageable
 from .admin_domain import DomainAdmin as _DomainAdmin
@@ -372,9 +375,38 @@ class ProjectSeoSettingsInline(StackedInline):
     )
 
 
+class PageSeoSettingsInlineForm(forms.ModelForm):
+    """Troca o textarea de JSON cru de `type_specific_data` por campos
+    reais, escolhendo o schema (`django-jsonform`) conforme o `page_type`
+    da página dona deste registro — ver core/seo_schemas.py.
+
+    A inline só aparece na edição de uma `Page` já existente
+    (`PageAdmin.get_inlines`), então `page_type` já está persistido
+    quando este form é instanciado — não precisa de JS pra reagir a uma
+    mudança de `page_type` no mesmo request."""
+    class Meta:
+        model = PageSeoSettings
+        fields = [
+            'seo_title', 'seo_description', 'og_image_override',
+            'canonical_override', 'noindex', 'type_specific_data',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        page = getattr(self.instance, 'page', None)
+        schema_cls = PAGE_TYPE_SCHEMAS.get(page.page_type) if page else None
+        if schema_cls:
+            self.fields['type_specific_data'] = JSONFormField(
+                schema=schema_cls.SCHEMA,
+                required=False,
+                model_name='PageSeoSettings',
+            )
+
+
 class PageSeoSettingsInline(StackedInline):
     """SEO específico da página — sobrescreve o fallback do projeto/plataforma."""
     model = PageSeoSettings
+    form = PageSeoSettingsInlineForm
     can_delete = False
     max_num = 1
     verbose_name_plural = 'SEO da Página'

@@ -108,3 +108,74 @@ class ResolveSeoTestCase(TestCase):
         data = resolve_seo(self.page)
         self.assertEqual(data['canonical'], 'https://outrodominio.com.br/pagina-especial/')
         self.assertTrue(data['site_url'].endswith('/app/site-x/'))
+
+    def test_contact_type_specific_data_keeps_same_keys_as_before_schema(self):
+        """Regressão: JsonLdLocalBusinessBlock.astro espera exatamente
+        estas chaves — formalizar em dataclass (Fase 1) não pode mudar o
+        contrato já existente com o Astro."""
+        self.page.page_type = 'contact'
+        self.page.save()
+        self.page.seo_settings.type_specific_data = {
+            'phone': '+55 11 90000-0000',
+            'opening_hours': 'Mo-Fr 09:00-18:00',
+            'address': {
+                'streetAddress': 'Rua X, 1',
+                'addressLocality': 'São Paulo',
+                'addressRegion': 'SP',
+                'postalCode': '00000-000',
+                'addressCountry': 'BR',
+            },
+        }
+        self.page.seo_settings.save()
+
+        data = resolve_seo(self.page)
+        self.assertEqual(data['type_specific_data']['phone'], '+55 11 90000-0000')
+        self.assertEqual(data['type_specific_data']['opening_hours'], 'Mo-Fr 09:00-18:00')
+        self.assertEqual(data['type_specific_data']['address']['streetAddress'], 'Rua X, 1')
+
+    def test_blog_post_type_specific_data_keeps_same_keys_as_before_schema(self):
+        self.page.page_type = 'blog_post'
+        self.page.save()
+        self.page.seo_settings.type_specific_data = {
+            'published_at': '2026-01-01',
+            'author_override': 'Fulano',
+        }
+        self.page.seo_settings.save()
+
+        data = resolve_seo(self.page)
+        self.assertEqual(data['type_specific_data']['published_at'], '2026-01-01')
+        self.assertEqual(data['type_specific_data']['author_override'], 'Fulano')
+
+    def test_new_page_type_with_malformed_type_specific_data_does_not_raise(self):
+        """Migração suave: um page_type novo com dado antigo/malformado
+        salvo antes desta mudança não pode quebrar resolve_seo()."""
+        self.page.page_type = 'faq'
+        self.page.save()
+        self.page.seo_settings.type_specific_data = {'algo': 'inesperado'}
+        self.page.seo_settings.save()
+
+        data = resolve_seo(self.page)
+        self.assertEqual(data['type_specific_data'], {'questions': []})
+
+    def test_faq_page_type_normalizes_questions(self):
+        self.page.page_type = 'faq'
+        self.page.save()
+        self.page.seo_settings.type_specific_data = {
+            'questions': [{'question': 'Pergunta?', 'answer': 'Resposta.'}],
+        }
+        self.page.seo_settings.save()
+
+        data = resolve_seo(self.page)
+        self.assertEqual(
+            data['type_specific_data'],
+            {'questions': [{'question': 'Pergunta?', 'answer': 'Resposta.'}]},
+        )
+
+    def test_page_type_without_schema_keeps_raw_dict(self):
+        """generic/home/about/landing não têm schema formal — o dict cru
+        continua passando direto, sem forçar estrutura."""
+        self.page.seo_settings.type_specific_data = {'qualquer_coisa': 123}
+        self.page.seo_settings.save()
+
+        data = resolve_seo(self.page)
+        self.assertEqual(data['type_specific_data'], {'qualquer_coisa': 123})

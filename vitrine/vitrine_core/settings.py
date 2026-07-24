@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     'unfold.contrib.filters',
     'unfold.contrib.forms',
 
+    'django_jsonform',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -17,6 +17,10 @@ import JsonLdWebPageBlock from '../../components/JsonLdWebPageBlock.astro';
 import JsonLdBreadcrumbBlock from '../../components/JsonLdBreadcrumbBlock.astro';
 import JsonLdLocalBusinessBlock from '../../components/JsonLdLocalBusinessBlock.astro';
 import JsonLdBlogPostBlock from '../../components/JsonLdBlogPostBlock.astro';
+import JsonLdFaqBlock from '../../components/JsonLdFaqBlock.astro';
+import JsonLdPersonBlock from '../../components/JsonLdPersonBlock.astro';
+import JsonLdProductBlock from '../../components/JsonLdProductBlock.astro';
+import JsonLdArticleBlock from '../../components/JsonLdArticleBlock.astro';
 
 export async function getStaticPaths() {
     // PROJECT_SLUG_FILTER: quando setado, builda SÓ esse projeto (build
@@ -169,6 +173,18 @@ const breadcrumbItems = [
         )}
         {seo.page_type === 'blog_post' && (
             <JsonLdBlogPostBlock pageUrl={seo.canonical} headline={seo.title} description={seo.description} imageUrl={seo.og_image} authorName={seo.author_name} typeSpecificData={seo.type_specific_data} />
+        )}
+        {seo.page_type === 'faq' && (
+            <JsonLdFaqBlock typeSpecificData={seo.type_specific_data} />
+        )}
+        {seo.page_type === 'person' && (
+            <JsonLdPersonBlock siteUrl={siteUrl} typeSpecificData={seo.type_specific_data} />
+        )}
+        {seo.page_type === 'product' && (
+            <JsonLdProductBlock pageUrl={seo.canonical} typeSpecificData={seo.type_specific_data} />
+        )}
+        {seo.page_type === 'article' && (
+            <JsonLdArticleBlock pageUrl={seo.canonical} description={seo.description} typeSpecificData={seo.type_specific_data} />
         )}
     </Fragment>
     <main class="container mx-auto px-4 py-12">

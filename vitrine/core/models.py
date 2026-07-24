@@ -129,6 +129,10 @@ class Page(ClientModel):
     PAGE_TYPE_ABOUT = 'about'
     PAGE_TYPE_BLOG_POST = 'blog_post'
     PAGE_TYPE_LANDING = 'landing'
+    PAGE_TYPE_FAQ = 'faq'
+    PAGE_TYPE_PERSON = 'person'
+    PAGE_TYPE_PRODUCT = 'product'
+    PAGE_TYPE_ARTICLE = 'article'
 
     PAGE_TYPE_CHOICES = [
         (PAGE_TYPE_HOME, 'Página Inicial'),
@@ -137,6 +141,10 @@ class Page(ClientModel):
         (PAGE_TYPE_ABOUT, 'Sobre'),
         (PAGE_TYPE_BLOG_POST, 'Post de Blog'),
         (PAGE_TYPE_LANDING, 'Landing Page'),
+        (PAGE_TYPE_FAQ, 'FAQ'),
+        (PAGE_TYPE_PERSON, 'Pessoa/Perfil'),
+        (PAGE_TYPE_PRODUCT, 'Produto'),
+        (PAGE_TYPE_ARTICLE, 'Artigo'),
     ]
 
     page_type = models.CharField(

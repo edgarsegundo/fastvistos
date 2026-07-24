@@ -1,0 +1,29 @@
+---
+interface Props {
+    pageUrl: string;
+    description?: string;
+    typeSpecificData: Record<string, any>;
+}
+const { pageUrl, description, typeSpecificData } = Astro.props as Props;
+const { headline, author, published_at, image_url } = typeSpecificData || {};
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': pageUrl,
+    headline,
+    ...(description ? { description } : {}),
+    ...(image_url ? { image: image_url } : {}),
+    ...(published_at ? { datePublished: published_at } : {}),
+    ...(author
+        ? {
+              author: {
+                  '@type': 'Person',
+                  name: author,
+              },
+          }
+        : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

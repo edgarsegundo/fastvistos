@@ -1,0 +1,20 @@
+---
+interface Props {
+    siteUrl: string;
+    typeSpecificData: Record<string, any>;
+}
+const { siteUrl, typeSpecificData } = Astro.props as Props;
+const { name, job_title, image_url, same_as } = typeSpecificData || {};
+
+const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name,
+    url: siteUrl,
+    ...(job_title ? { jobTitle: job_title } : {}),
+    ...(image_url ? { image: image_url } : {}),
+    ...(same_as && same_as.length ? { sameAs: same_as } : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />
