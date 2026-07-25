@@ -25,7 +25,7 @@ export default function Preco({ heading, plans = [] }: PrecoProps) {
                         </div>
                         <ul className="mt-6 flex-1 space-y-2">
                             {(plan.features ?? []).map((f, j) => (
-                                <li key={j} className="text-sm text-muted">{f}</li>
+                                <li key={j} className="text-sm text-muted">{f?.text}</li>
                             ))}
                         </ul>
                         {plan.ctaText && plan.ctaHref && (

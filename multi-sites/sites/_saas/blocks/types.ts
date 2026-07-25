@@ -79,7 +79,8 @@ export interface PricePlan {
     name: string;
     price: string;
     period?: string;
-    features: string[];
+    /** array de objetos (não string[]) pra casar com o modelo de array do Puck */
+    features: { text: string }[];
     ctaText?: string;
     ctaHref?: string;
     highlighted?: boolean;

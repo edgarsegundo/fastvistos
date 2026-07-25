@@ -4,7 +4,8 @@ from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.middleware.csrf import get_token
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 from django_jsonform.forms.fields import JSONFormField
@@ -218,24 +219,22 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('is_published', 'project', 'created')
     search_fields = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created', 'modified', 'preview_link', 'live_link_actions')
+    readonly_fields = ('created', 'modified', 'preview_link', 'live_link_actions', 'edit_visually_link')
 
     fieldsets = (
         ('Básico', {
             'fields': ('project', 'title', 'slug', 'page_type', 'is_home', 'is_published', 'order')
         }),
         ('Links', {
-            'fields': ('preview_link', 'live_link_actions'),
-            'description': 'Preview mostra rascunhos (mesmo não publicados). Link ao vivo só funciona depois de "Build & Publicar" no projeto.'
+            'fields': ('edit_visually_link', 'preview_link', 'live_link_actions'),
+            'description': 'Editar visualmente abre o editor de blocos (Puck). Preview mostra rascunhos (mesmo não publicados). Link ao vivo só funciona depois de "Build & Publicar" no projeto.'
         }),
-        ('Blocos', {
+        ('Blocos (JSON)', {
             'fields': ('blocks',),
-            'classes': ('wide',),
+            'classes': ('collapse', 'wide'),
             'description': (
-                'Documento de blocos (formato Puck): {"content": [{"type": "Hero", '
-                '"props": {...}}, ...]}. Edição por JSON cru é STOPGAP da fase 0 — '
-                'o editor visual inline vem na fase 2. Tipos disponíveis: '
-                'Hero, Features, RichText, HtmlSafe, CodeEmbed.'
+                'Documento de blocos em JSON cru — fallback/avançado. O jeito '
+                'normal de editar é "Editar visualmente" acima (editor Puck).'
             ),
         }),
         ('Auditoria', {
@@ -251,8 +250,86 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
                 self.admin_site.admin_view(self.import_type_specific_json),
                 name='core_page_import_type_specific_json',
             ),
+            path(
+                '<int:page_id>/editor/',
+                self.admin_site.admin_view(self.editor_view),
+                name='core_page_editor',
+            ),
+            path(
+                '<int:page_id>/editor/save/',
+                self.admin_site.admin_view(self.editor_save),
+                name='core_page_editor_save',
+            ),
         ]
         return custom + super().get_urls()
+
+    def editor_view(self, request, page_id):
+        """Serve o editor visual (bundle Puck) pra uma página. O escopo do
+        client vem de `get_queryset` (ClientScopedAdmin) — um tenant não
+        consegue abrir a página de outro. `admin_view` (get_urls) já exige
+        login+staff."""
+        page = get_object_or_404(self.get_queryset(request), pk=page_id)
+        project = page.project
+
+        blocks = page.blocks if isinstance(page.blocks, dict) and page.blocks.get('content') is not None \
+            else {'root': {'props': {}}, 'content': []}
+
+        editor_data = {
+            'pageId': page.id,
+            'pageTitle': f'{project.name} — {page.title}',
+            'blocks': blocks,
+            'theme': project.theme or {},
+            'chrome': project.chrome or {},
+            'saveUrl': reverse('admin:core_page_editor_save', args=[page.id]),
+            'csrf': get_token(request),
+        }
+        return render(request, 'core/editor.html', {
+            'editor_data': editor_data,
+            'page_title': editor_data['pageTitle'],
+        })
+
+    def editor_save(self, request, page_id):
+        """Grava o draft do editor: Page.blocks + Project.theme/chrome, e marca
+        o projeto pra rebuild. Escopo do client via get_queryset."""
+        if request.method != 'POST':
+            return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+        page = get_object_or_404(self.get_queryset(request), pk=page_id)
+
+        try:
+            payload = json.loads(request.body.decode('utf-8'))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+
+        blocks = payload.get('blocks')
+        if not isinstance(blocks, dict) or not isinstance(blocks.get('content'), list):
+            return JsonResponse({'error': 'blocks inválido'}, status=400)
+
+        page.blocks = blocks
+        page.save()
+
+        project = page.project
+        theme = payload.get('theme')
+        chrome = payload.get('chrome')
+        if isinstance(theme, dict):
+            project.theme = theme
+        if isinstance(chrome, dict):
+            project.chrome = chrome
+        project.needs_rebuild = True
+        project.save()
+
+        return JsonResponse({'status': 'ok'})
+
+    def edit_visually_link(self, obj):
+        if not obj.id:
+            return '— salve a página primeiro —'
+        url = reverse('admin:core_page_editor', args=[obj.id])
+        return format_html(
+            '<a href="{}" target="_blank" style="background:#2563eb;color:#fff;padding:8px 16px;'
+            'border-radius:4px;text-decoration:none;font-weight:600;">🎨 Editar visualmente</a>',
+            url,
+        )
+    edit_visually_link.short_description = 'Editor visual'
 
     def import_type_specific_json(self, request, page_id):
         """Importa `type_specific_data` de um arquivo JSON enviado pelo

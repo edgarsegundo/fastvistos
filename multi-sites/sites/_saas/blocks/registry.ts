@@ -47,6 +47,14 @@ export interface FieldSchema {
     itemFields?: Record<string, FieldSchema>;
     /** para type 'select': opções válidas */
     options?: string[];
+    /**
+     * `text`/`textarea` viram inline (contentEditable) no canvas do Puck por
+     * padrão — mas o Puck troca o valor de string por um objeto/ReactNode
+     * quando faz isso, o que quebra blocos que fazem `.replace`/`.split` no
+     * valor cru (ex: Contato.phone/whatsapp, Sobre.text). Marcar `false`
+     * nesses campos força edição só pelo painel lateral (valor continua string).
+     */
+    inlineEditable?: boolean;
 }
 
 export interface BlockSchema {
@@ -107,7 +115,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
         freeform: false,
         fields: {
             heading: { type: 'text', label: 'Título' },
-            text: { type: 'textarea', label: 'Texto (parágrafos)' },
+            text: { type: 'textarea', label: 'Texto (parágrafos)', inlineEditable: false },
             imageUrl: { type: 'url', label: 'Imagem' },
             imagePosition: { type: 'select', label: 'Posição da imagem', options: ['left', 'right'] },
         },
@@ -138,7 +146,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     name: { type: 'text', label: 'Nome' },
                     price: { type: 'text', label: 'Preço' },
                     period: { type: 'text', label: 'Período (ex: mês)' },
-                    features: { type: 'array', label: 'Itens', itemFields: { value: { type: 'text', label: 'Item' } } },
+                    features: { type: 'array', label: 'Itens', itemFields: { text: { type: 'text', label: 'Item' } } },
                     ctaText: { type: 'text', label: 'Texto do botão' },
                     ctaHref: { type: 'url', label: 'Link do botão' },
                     highlighted: { type: 'text', label: 'Destaque (true/false)' },
@@ -175,8 +183,8 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
         freeform: false,
         fields: {
             heading: { type: 'text', label: 'Título' },
-            phone: { type: 'text', label: 'Telefone' },
-            whatsapp: { type: 'text', label: 'WhatsApp (com DDI/DDD)' },
+            phone: { type: 'text', label: 'Telefone', inlineEditable: false },
+            whatsapp: { type: 'text', label: 'WhatsApp (com DDI/DDD)', inlineEditable: false },
             email: { type: 'text', label: 'E-mail' },
             address: { type: 'textarea', label: 'Endereço' },
             hours: { type: 'text', label: 'Horário' },
