@@ -1,0 +1,18 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editor — {{ page_title }}</title>
+    <link rel="stylesheet" href="{% static 'puck-editor/editor.css' %}" />
+    <style>html,body{margin:0;height:100%}</style>
+</head>
+<body>
+    <div id="editor-root"></div>
+    {# json_script escapa <, >, &: seguro mesmo com conteúdo de bloco com tag de script. #}
+    {{ editor_data|json_script:"editor-data" }}
+    <script>window.__EDITOR_DATA__ = JSON.parse(document.getElementById('editor-data').textContent);</script>
+    <script type="module" src="{% static 'puck-editor/editor.js' %}"></script>
+</body>
+</html>

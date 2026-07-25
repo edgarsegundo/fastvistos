@@ -35,8 +35,34 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 
 **Fase 0 (data model + render) — FEITA** (migration `core/0013`).
 **Fase 1 (blocos estruturados + tema/chrome de nível de Site) — FEITA**
-(migration `core/0014`). Editor visual (fase 2) ainda não — tema/chrome/blocos
-se editam por JSON no admin (stopgap).
+(migration `core/0014`).
+**Fase 2 (editor visual Puck) — FEITA.** Editor de blocos + painéis de tema e
+chrome, montado como ilha React numa view do admin. JSON cru continua como
+fallback avançado no admin.
+**Fase 3 (templates) — FEITA** (migration `core/0015`). Modelo `Template`
+(oficial global + privado por client), "salvar como template" (anonimiza PII),
+"criar projeto a partir de template", seed `seed_official_templates` (Advocacia).
+**Fase 3.1 (página a partir de template) — FEITA** (migration `core/0016`).
+`Template.kind` (site|page); "salvar página como template" (`PageAdmin`),
+"adicionar página de template" (`ProjectAdmin` → view com form → editor);
+seed ganhou "Página de FAQ" (kind=page).
+
+## Como rodar localmente
+
+1. **Django** (a partir de `vitrine/`): `.venv/bin/python manage.py runserver 127.0.0.1:8000`.
+2. **Bundle do editor** (a partir da raiz do repo, sempre que mexer em bloco/
+   schema/editor — build:editor é manual, ver decisões): `npm run build:editor`
+   → gera `vitrine/core/static/puck-editor/editor.{js,css}`.
+3. **Abrir o editor:** logado como superuser/staff em `/admin/`, ir em
+   Páginas → escolher uma página → botão **"🎨 Editar visualmente"**
+   (ou direto `/admin/core/page/<page_id>/editor/`).
+4. **Dado de teste conhecido:** `Project` id 9 (slug `projeto-1`), `Page` id 8
+   (slug `home`) — já tem `theme`/`chrome` preenchidos e ao menos 1 bloco.
+   URL direta: `/admin/core/page/8/editor/`.
+5. **Build de produção pra comparar** (a partir da raiz, com Django rodando):
+   `PROJECT_SLUG_FILTER=projeto-1 SITE_ID=_saas DJANGO_API_URL=http://127.0.0.1:8000 npx astro build`
+   → `dist/_saas/projeto-1/index.html`. Serve pra confirmar que o que o editor
+   salva bate com o que a produção renderiza (canvas do editor ≈ produção).
 
 ## Paths tocados com mais frequência
 
@@ -74,6 +100,41 @@ se editam por JSON no admin (stopgap).
 - `vitrine/core/admin.py` — `PageAdmin` edita `blocks`, `ProjectAdmin` edita
   `theme`/`chrome`, ambos por JSON cru (STOPGAP; editor visual é a fase 2)
 
+**Editor visual (Puck)** — `multi-sites/sites/_saas/editor/`
+- `puck.config.tsx` — adapter que deriva os `fields` do Puck do `BLOCK_SCHEMAS`
+  (fonte única); `render` reusa `BLOCK_COMPONENTS`; texto vira `contentEditable`
+  (inline no canvas), url/markdown/html no painel. `iframe:{enabled:false}`.
+- `App.tsx` — shell com abas Página (`<Puck>`) / Tema / Cabeçalho-Rodapé;
+  lê `window.__EDITOR_DATA__`, injeta `:root{--brand-*}` ao vivo, botão Salvar
+  faz POST. `main.tsx` monta e importa `saas.css` + `@measured/puck` css.
+- `defaults.ts` — placeholder por bloco (o que "adicionar bloco" insere).
+- **Bundle:** `vite.config.editor.mjs` (raiz) → `npm run build:editor` →
+  `vitrine/core/static/puck-editor/editor.{js,css}`. Reusa blocos + saas.css
+  (single-source). **NUNCA `core/static/editor/`** (sem sufixo) — esse path já
+  é do blog-image-editor (feature #56), não relacionado — ver incidente abaixo.
+
+**Django — editor**
+- `core/admin.py` `PageAdmin`: `editor_view` (rota `<id>/editor/`, serve o
+  bundle + `__EDITOR_DATA__` via `json_script`), `editor_save` (POST, grava
+  `Page.blocks` + `Project.theme`/`chrome` + `needs_rebuild`), botão
+  `edit_visually_link`. Escopo do client via `get_queryset` (ClientScopedAdmin).
+- `core/templates/core/editor.html` — página standalone do editor.
+
+**Django — templates (fase 3 + 3.1)**
+- `vitrine/core/models.py` — `Template` (`kind` site|page + `is_official` +
+  `owner_client` nullable + `snapshot` JSON); `TemplateQuerySet.visible_to(client)`.
+  Snapshot difere por kind: site=`{pages,theme,chrome}`, page=`{title,page_type,blocks}`.
+- `vitrine/core/templates_snapshot.py` — SITE: `snapshot_project()`,
+  `anonymize_snapshot()`, `instantiate_template()`. PÁGINA: `snapshot_page()`,
+  `anonymize_page_snapshot()`, `add_page_from_template()`. Compartilham
+  `anonymize_blocks()` (só PII estruturado).
+- `vitrine/core/admin.py` — `ProjectAdmin`: `action_save_as_template` +
+  `add_page_from_template_view` (get_urls + `core/add_page_from_template.html`) +
+  botão `add_page_from_template_link`. `PageAdmin.action_save_page_as_template`.
+  `TemplateAdmin` (escopo + action "criar projeto" gateada a kind=site).
+- `vitrine/core/management/commands/seed_official_templates.py` — Advocacia (site)
+  + Página de FAQ (page)
+
 **Config**
 - `astro.config.mjs` — integração `react()` (global; inerte pros sites legados)
 
@@ -107,9 +168,81 @@ se editam por JSON no admin (stopgap).
 - **Contato é display-only** (tel/WhatsApp/endereço/mapa). Formulário que
   envia e Blog (Listing/Post) ficaram **fora da fase 1** — viram fases próprias
   (puxam backend de submit e modelo Post, respectivamente).
+- **Editor: Puck como ilha em view do admin** (fase 2, seção 14 da spec). Bundle
+  Vite buildado no projeto raiz (reusa blocos + saas.css), servido como static
+  do Django. `iframe:{enabled:false}` no Puck pra o saas.css/tema aplicarem no
+  canvas sem precisar injetar estilo no iframe.
+- **Config do Puck deriva do `BLOCK_SCHEMAS`** — não redefine campo por bloco.
+  Adicionar bloco/campo novo no registry aparece no editor automaticamente.
+- **Save é explícito** (botão), grava draft + `needs_rebuild`. Publish continua
+  no `ProjectAdmin` (build/deploy existente), não acoplado ao editor.
+- **Template = snapshot JSON** (`{pages,theme,chrome}`), um modelo só com
+  `is_official` + `owner_client` nullable (null=oficial/global). NÃO é
+  ClientModel (oficiais não têm dono); escopo via `visible_to(client)`.
+- **Anonimização de template = só PII estruturado** (Contato, logo/copyright,
+  autor de depoimento, hrefs tel/mailto/wa.me). Prosa (títulos, Sobre, citações)
+  fica intacta — texto livre não anonimiza com confiança; usuário revisa.
+- **Projeto instanciado nasce `is_published=False`** (draft) — publicar é passo
+  explícito depois. Thumbnail de template é campo manual (geração automática é
+  fase futura). Marketplace público de templates fica fora do v1 (seção 10).
+- **Dois níveis de template, um modelo (`Template.kind`)** — SITE (`kind=site`:
+  instancia um Project novo, snapshot `{pages,theme,chrome}`) e PÁGINA
+  (`kind=page`: adiciona 1 página a um Project existente, snapshot
+  `{title,page_type,blocks}` — herda tema/chrome do projeto de destino). Página
+  adicionada nasce draft. Decisão de nível-de-site segue a spec (seção 3:
+  "salvar SITE como template", "templates completos por nicho") + chrome/tema
+  serem de nível de Site; o nível-de-página cobre o "só quero +1 página pronta".
+- **`PricePlan.features` é `{text}[]`** (não `string[]`) — arrays do Puck são
+  arrays de objetos, sempre nomeados. Padrão a repetir em blocos futuros com
+  listas de itens simples.
+- **`build:editor` é automatizado em `rebuild.sh`** (não em `build_project()`).
+  Ganchos possíveis têm frequência MUITO diferente: `build_project()` roda a
+  cada publish de QUALQUER cliente (alto volume — descartado, desperdiçaria
+  ~11s por publish); `rebuild.sh` roda só quando você faz deploy de código
+  (baixo volume, sob seu controle). `rebuild.sh` já faz `git pull` (atualiza o
+  monorepo inteiro, blocos+editor inclusos) — `npm run build:editor` entra
+  logo depois, no HOST, ANTES de `docker compose up --build` (a imagem copia
+  `core/static/puck-editor/` via `COPY . .`, então o bundle precisa estar
+  fresco antes do build da imagem). Local/dev continua manual (`npm run
+  build:editor` antes de testar) — isso não muda, só o caminho até produção.
+- **Sem autosave nem aviso de saída** (decisão explícita) — Salvar é sempre
+  manual/explícito. Mudança de mente perde trabalho não salvo se a aba fechar.
+  Reavaliar (ex: `beforeunload` ou autosave) se isso incomodar no uso real.
+- **Sem watch mode** (decisão revertida após incidente — ver "Riscos/dívidas").
+  Só `npm run build:editor` manual, rodado uma vez, termina sozinho. Nenhum
+  processo de build fica parado consumindo CPU/memória.
 
 ## Riscos/dívidas conhecidos
 
+- **INCIDENTE (corrigido): `publicDir` do Vite poluía/colidia com outra
+  feature.** Por padrão o Vite copia a pasta `public/` (raiz do repo) INTEIRA
+  pro `outDir` a cada build. `public/` deste repo contém assets de uma feature
+  não relacionada (`blog-image-editor.js` + imagens por site legado — ver
+  `public/blog-image-editor.js`, o arquivo real e git-tracked). Sem
+  `publicDir: false` em `vite.config.editor.mjs`, todo `npm run build:editor`
+  recopiava ~1.3MB alheio pro destino do bundle — e como o destino inicial era
+  `vitrine/core/static/editor/` (nome quase igual, escolhido sem checar
+  colisão) e essa pasta usa `emptyOutDir: true`, cada build também **apagava**
+  esse conteúdo antes de recopiá-lo do `public/`. Nenhuma perda real (a fonte
+  git-tracked é `public/blog-image-editor.js`, nunca tocada — confirmado via
+  `git log --all` e comparação byte a byte), mas custou uma investigação
+  grande pra confirmar. **Corrigido:** `publicDir: false` em
+  `vite.config.editor.mjs` (não precisa copiar nada de `public/`) + destino
+  movido pra `vitrine/core/static/puck-editor/` (path exclusivo). **Lições:**
+  (1) `publicDir: false` deveria ter sido a config padrão desde o início pra
+  qualquer build Vite que não seja o app "principal" de um projeto — é
+  copiado silenciosamente sem aviso; (2) antes de apontar `outDir`/
+  `emptyOutDir:true` pra qualquer path, checar se já está em uso (`ls`/`git
+  log -- <path>`).
+- **Watch mode tentado e abandonado.** Tentativa de `npm run watch:editor`
+  (antes do fix acima) causou um processo vite preso em CPU alto
+  (120%+, 400-500MB) — muito provavelmente o watcher reagindo a mudanças
+  dentro do `public/` copiado (imagens de vários sites) a cada rebuild, não um
+  processo externo. Com `publicDir:false` isso deixa de existir, mas a decisão
+  foi manter **sem watch mode por ora** — só build manual (`npm run
+  build:editor`, roda uma vez, termina sozinho). Reavaliar só se o build
+  manual virar fricção real —
+  e, se reavaliar, testar isolado com o path já corrigido primeiro.
 - **CodeEmbed sandbox** herda `allow-scripts`+`allow-same-origin` do mecanismo
   atual — inseguro, marcado com TODO no componente. **Endurecer na fase 6**
   (nota de risco da seção 7). Não liberar Code Embed pro usuário antes disso.
@@ -123,12 +256,21 @@ se editam por JSON no admin (stopgap).
   separadas — risco de dupla entrada. Unificar depois.
 - **Blog e formulário de Contato real** não existem — fases próprias (modelo
   Post; backend de submit/anti-spam).
+- **Puck UI × Tailwind preflight:** o saas.css (com reset do Tailwind) e o CSS do
+  Puck coexistem no bundle (`main.tsx` importa `saas.css` antes do CSS do Puck);
+  o canvas do editor **não foi verificado visualmente em browser** — bundle
+  compila e o contrato de dados foi testado ponta-a-ponta, mas conferir a UI
+  real (botões/inputs do Puck podem sofrer do preflight zerando padding/borda).
+- Bug corrigido nesta fase: comentário Django `{# #}` multi-linha no
+  `editor.html` vazava texto literal pro HTML (Django não suporta esse
+  comentário em mais de uma linha) — o Puck usa o `document.body` pro preview
+  de drag, então o texto vazado só aparecia ao arrastar um bloco.
 
 ## Roadmap (fases)
 
 0. Fundação: data model + render (FEITA) · 1. Blocos estruturados +
-tema/Header/Footer de Site (FEITA) · 2. Editor inline Puck (1/5/14) · 3.
-Templates (3) · 4. IA questionário (6) · 5. Importador Inteligente (4) · 6.
+tema/Header/Footer de Site (FEITA) · 2. Editor inline Puck (FEITA) · 3.
+Templates (FEITA) · 4. IA questionário (6) · 5. Importador Inteligente (4) · 6.
 SEO/redirects (4.4) + endurecimento do sandbox (7) + validação pré-publicação (8).
 Fases futuras avulsas: Blog (modelo Post) e formulário de Contato real.
 

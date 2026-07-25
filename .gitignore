@@ -1,5 +1,16 @@
 # build output
 dist/
+# bundle do editor visual (Puck) — gerado por `npm run build:editor`,
+# mesma categoria de dist/. Produção rebuilda sozinha via vitrine/rebuild.sh;
+# local, rode `npm run build:editor` antes de testar. Ver
+# vitrine/docs/editor/guia-editor-blocos-context.md.
+vitrine/core/static/puck-editor/
+# core/static/editor/ (SEM sufixo) é do blog-image-editor (feature #56, não
+# relacionada) — nunca foi rastreado pelo git (a fonte real é public/,
+# rastreada). Sempre foi um espelho local de public/, não código-fonte —
+# ignorar formalmente evita um `git add -A` arrastar milhares de arquivos
+# (imagens/config por site) que não pertencem a nenhum commit.
+vitrine/core/static/editor/
 # generated types
 .astro/
 

@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Adicionar página de template</h1>
+<p>Projeto: <strong>{{ project.name }}</strong>. A página nova entra como
+rascunho e herda o tema/cabeçalho/rodapé deste projeto.</p>
+
+<form method="post" style="max-width:640px;margin-top:16px;">
+    {% csrf_token %}
+
+    <p style="margin-bottom:4px;font-weight:600;">Título da página (opcional)</p>
+    <input type="text" name="title" placeholder="Ex: Perguntas frequentes"
+           style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;margin-bottom:20px;" />
+
+    <p style="margin-bottom:8px;font-weight:600;">Escolha um template de página</p>
+    {% for t in templates %}
+        <label style="display:block;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;">
+            <input type="radio" name="template_id" value="{{ t.id }}" required />
+            <strong>{{ t.name }}</strong>
+            {% if t.is_official %}<span style="color:#2563eb;">(oficial)</span>{% endif %}
+            {% if t.description %}<br><span style="color:#6b7280;font-size:13px;">{{ t.description }}</span>{% endif %}
+        </label>
+    {% empty %}
+        <p style="color:#6b7280;">Nenhum template de página disponível ainda. Crie um em
+        <strong>Páginas → ação "Salvar página como template"</strong>, ou rode o seed
+        dos oficiais (<code>manage.py seed_official_templates</code>).</p>
+    {% endfor %}
+
+    <div style="margin-top:20px;">
+        <button type="submit"
+                style="background:#2563eb;color:#fff;border:none;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer;">
+            ➕ Adicionar página
+        </button>
+        <a href="{% url 'admin:core_project_change' project.id %}" style="margin-left:12px;">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

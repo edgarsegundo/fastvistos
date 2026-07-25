@@ -4,7 +4,8 @@ from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.middleware.csrf import get_token
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 from django_jsonform.forms.fields import JSONFormField
@@ -13,7 +14,7 @@ from tenancy.admin import ClientScopedAdmin
 
 from .models import (
     ClientUser, Project, Page, Build, Deployment, Domain,
-    PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings,
+    PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings, Template,
 )
 from .seo import resolve_seo
 from .seo_schemas import PAGE_TYPE_SCHEMAS
@@ -62,9 +63,9 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('is_published', 'needs_rebuild', 'created')
     search_fields = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    actions = ['action_build_and_deploy']
+    actions = ['action_build_and_deploy', 'action_save_as_template']
 
-    readonly_fields = ('created', 'modified')
+    readonly_fields = ('created', 'modified', 'add_page_from_template_link')
 
     fieldsets = (
         ('Básico', {
@@ -93,6 +94,10 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
                 '"cta":{"label":"..","href":".."}},"footer":{"columns":[...],"copyright":".."}}. '
                 'Vazio = usa os defaults do tema.'
             ),
+        }),
+        ('Páginas', {
+            'fields': ('add_page_from_template_link',),
+            'description': 'Adiciona uma página pronta (de um template de página) a este projeto.',
         }),
         ('Status', {
             'fields': ('needs_rebuild',),
@@ -211,6 +216,84 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
 
     action_build_and_deploy.short_description = '🚀 Build & Publicar'
 
+    def action_save_as_template(self, request, queryset):
+        """Action: salva o(s) projeto(s) como template PRIVADO do client dono,
+        anonimizando o PII estruturado (Contato, logo/copyright, autor de
+        depoimento, links de contato). A prosa (títulos, Sobre) fica intacta."""
+        from core.templates_snapshot import snapshot_project, anonymize_snapshot
+
+        created = 0
+        for project in queryset:
+            snapshot = anonymize_snapshot(snapshot_project(project))
+            Template.objects.create(
+                name=f'{project.name} (template)',
+                niche='',
+                description=project.description or '',
+                is_official=False,
+                owner_client=project.client,
+                snapshot=snapshot,
+            )
+            created += 1
+
+        if created:
+            messages.success(
+                request,
+                f'✅ {created} template(s) privado(s) criado(s) (PII de contato '
+                f'anonimizado; revise a prosa antes de reusar). Veja em Templates.'
+            )
+    action_save_as_template.short_description = '💾 Salvar como template (privado)'
+
+    def get_urls(self):
+        custom = [
+            path(
+                '<int:project_id>/add-page-from-template/',
+                self.admin_site.admin_view(self.add_page_from_template_view),
+                name='core_project_add_page_from_template',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def add_page_from_template_view(self, request, project_id):
+        """Adiciona uma página a este projeto a partir de um template de página.
+        GET: form listando os page-templates visíveis (oficiais + do client dono
+        do projeto). POST: cria a página e manda pro editor visual dela.
+        Escopo via get_queryset (ClientScopedAdmin)."""
+        from core.templates_snapshot import add_page_from_template
+
+        project = get_object_or_404(self.get_queryset(request), pk=project_id)
+        templates = Template.objects.filter(
+            kind=Template.KIND_PAGE
+        ).visible_to(project.client).order_by('-is_official', 'name')
+
+        if request.method == 'POST':
+            template = get_object_or_404(
+                templates, pk=request.POST.get('template_id')
+            )
+            title = (request.POST.get('title') or '').strip() or None
+            page = add_page_from_template(template, project, title=title)
+            messages.success(
+                request,
+                f'✅ Página "{page.title}" adicionada (rascunho). Edite e publique o projeto.'
+            )
+            return redirect(reverse('admin:core_page_editor', args=[page.id]))
+
+        return render(request, 'core/add_page_from_template.html', {
+            'project': project,
+            'templates': templates,
+            'title': f'Adicionar página — {project.name}',
+        })
+
+    def add_page_from_template_link(self, obj):
+        if not obj.id:
+            return '— salve o projeto primeiro —'
+        url = reverse('admin:core_project_add_page_from_template', args=[obj.id])
+        return format_html(
+            '<a href="{}" style="background:#2563eb;color:#fff;padding:8px 16px;'
+            'border-radius:4px;text-decoration:none;font-weight:600;">➕ Adicionar página de template</a>',
+            url,
+        )
+    add_page_from_template_link.short_description = 'Adicionar página'
+
 
 @admin.register(Page)
 class PageAdmin(ClientScopedAdmin, ModelAdmin):
@@ -218,24 +301,23 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('is_published', 'project', 'created')
     search_fields = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created', 'modified', 'preview_link', 'live_link_actions')
+    actions = ['action_save_page_as_template']
+    readonly_fields = ('created', 'modified', 'preview_link', 'live_link_actions', 'edit_visually_link')
 
     fieldsets = (
         ('Básico', {
             'fields': ('project', 'title', 'slug', 'page_type', 'is_home', 'is_published', 'order')
         }),
         ('Links', {
-            'fields': ('preview_link', 'live_link_actions'),
-            'description': 'Preview mostra rascunhos (mesmo não publicados). Link ao vivo só funciona depois de "Build & Publicar" no projeto.'
+            'fields': ('edit_visually_link', 'preview_link', 'live_link_actions'),
+            'description': 'Editar visualmente abre o editor de blocos (Puck). Preview mostra rascunhos (mesmo não publicados). Link ao vivo só funciona depois de "Build & Publicar" no projeto.'
         }),
-        ('Blocos', {
+        ('Blocos (JSON)', {
             'fields': ('blocks',),
-            'classes': ('wide',),
+            'classes': ('collapse', 'wide'),
             'description': (
-                'Documento de blocos (formato Puck): {"content": [{"type": "Hero", '
-                '"props": {...}}, ...]}. Edição por JSON cru é STOPGAP da fase 0 — '
-                'o editor visual inline vem na fase 2. Tipos disponíveis: '
-                'Hero, Features, RichText, HtmlSafe, CodeEmbed.'
+                'Documento de blocos em JSON cru — fallback/avançado. O jeito '
+                'normal de editar é "Editar visualmente" acima (editor Puck).'
             ),
         }),
         ('Auditoria', {
@@ -251,8 +333,111 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
                 self.admin_site.admin_view(self.import_type_specific_json),
                 name='core_page_import_type_specific_json',
             ),
+            path(
+                '<int:page_id>/editor/',
+                self.admin_site.admin_view(self.editor_view),
+                name='core_page_editor',
+            ),
+            path(
+                '<int:page_id>/editor/save/',
+                self.admin_site.admin_view(self.editor_save),
+                name='core_page_editor_save',
+            ),
         ]
         return custom + super().get_urls()
+
+    def editor_view(self, request, page_id):
+        """Serve o editor visual (bundle Puck) pra uma página. O escopo do
+        client vem de `get_queryset` (ClientScopedAdmin) — um tenant não
+        consegue abrir a página de outro. `admin_view` (get_urls) já exige
+        login+staff."""
+        page = get_object_or_404(self.get_queryset(request), pk=page_id)
+        project = page.project
+
+        blocks = page.blocks if isinstance(page.blocks, dict) and page.blocks.get('content') is not None \
+            else {'root': {'props': {}}, 'content': []}
+
+        editor_data = {
+            'pageId': page.id,
+            'pageTitle': f'{project.name} — {page.title}',
+            'blocks': blocks,
+            'theme': project.theme or {},
+            'chrome': project.chrome or {},
+            'saveUrl': reverse('admin:core_page_editor_save', args=[page.id]),
+            'csrf': get_token(request),
+        }
+        return render(request, 'core/editor.html', {
+            'editor_data': editor_data,
+            'page_title': editor_data['pageTitle'],
+        })
+
+    def editor_save(self, request, page_id):
+        """Grava o draft do editor: Page.blocks + Project.theme/chrome, e marca
+        o projeto pra rebuild. Escopo do client via get_queryset."""
+        if request.method != 'POST':
+            return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+        page = get_object_or_404(self.get_queryset(request), pk=page_id)
+
+        try:
+            payload = json.loads(request.body.decode('utf-8'))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+
+        blocks = payload.get('blocks')
+        if not isinstance(blocks, dict) or not isinstance(blocks.get('content'), list):
+            return JsonResponse({'error': 'blocks inválido'}, status=400)
+
+        page.blocks = blocks
+        page.save()
+
+        project = page.project
+        theme = payload.get('theme')
+        chrome = payload.get('chrome')
+        if isinstance(theme, dict):
+            project.theme = theme
+        if isinstance(chrome, dict):
+            project.chrome = chrome
+        project.needs_rebuild = True
+        project.save()
+
+        return JsonResponse({'status': 'ok'})
+
+    def edit_visually_link(self, obj):
+        if not obj.id:
+            return '— salve a página primeiro —'
+        url = reverse('admin:core_page_editor', args=[obj.id])
+        return format_html(
+            '<a href="{}" target="_blank" style="background:#2563eb;color:#fff;padding:8px 16px;'
+            'border-radius:4px;text-decoration:none;font-weight:600;">🎨 Editar visualmente</a>',
+            url,
+        )
+    edit_visually_link.short_description = 'Editor visual'
+
+    def action_save_page_as_template(self, request, queryset):
+        """Salva a(s) página(s) como template de PÁGINA privado (kind='page'),
+        anonimizando o PII estruturado. Não leva theme/chrome (a página herda
+        os do projeto de destino ao ser adicionada)."""
+        from core.templates_snapshot import snapshot_page, anonymize_page_snapshot
+
+        created = 0
+        for page in queryset:
+            Template.objects.create(
+                name=f'{page.title} (página)',
+                kind=Template.KIND_PAGE,
+                is_official=False,
+                owner_client=page.client,
+                snapshot=anonymize_page_snapshot(snapshot_page(page)),
+            )
+            created += 1
+
+        if created:
+            messages.success(
+                request,
+                f'✅ {created} template(s) de página criado(s) (PII anonimizado). '
+                f'Use "Adicionar página de template" num projeto pra reusar.'
+            )
+    action_save_page_as_template.short_description = '💾 Salvar página como template'
 
     def import_type_specific_json(self, request, page_id):
         """Importa `type_specific_data` de um arquivo JSON enviado pelo
@@ -780,3 +965,75 @@ class PlatformSeoDefaultsAdmin(ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         obj = PlatformSeoDefaults.load()
         return redirect(reverse('admin:core_platformseodefaults_change', args=[obj.pk]))
+
+
+@admin.register(Template)
+class TemplateAdmin(ModelAdmin):
+    """Templates oficiais (globais) + privados (do client). Não é
+    ClientScopedAdmin porque a visibilidade é "oficial OU meu" — resolvida por
+    Template.objects.visible_to(client)."""
+
+    list_display = ('name', 'kind', 'scope_label', 'niche', 'created')
+    list_filter = ('kind', 'is_official', 'niche')
+    search_fields = ('name', 'niche', 'description')
+    readonly_fields = ('created', 'modified')
+    actions = ['action_create_project_from_template']
+
+    def get_queryset(self, request):
+        from tenancy.threadlocal import get_current_client
+        qs = Template.objects.all()
+        if request.user.is_superuser:
+            return qs
+        client = get_current_client()
+        if client is None:
+            # staff sem client ativo: só os oficiais (nunca privados alheios)
+            return qs.filter(is_official=True)
+        return qs.visible_to(client)
+
+    def scope_label(self, obj):
+        return 'Oficial' if obj.is_official else 'Privado'
+    scope_label.short_description = 'Origem'
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        # Só superuser marca oficial / muda o dono — evita um tenant publicar
+        # template no catálogo global ou reatribuir dono.
+        if not request.user.is_superuser:
+            ro += ['is_official', 'owner_client']
+        return ro
+
+    def action_create_project_from_template(self, request, queryset):
+        """Cria um Project novo a partir de cada template selecionado, no client
+        corrente. Redireciona pro Project criado (se for 1 só)."""
+        from tenancy.threadlocal import get_current_client
+        from core.templates_snapshot import instantiate_template
+
+        client = get_current_client()
+        if client is None:
+            messages.error(
+                request,
+                'Selecione um client ativo antes de criar um projeto a partir de '
+                'um template (superuser: use o seletor de client).'
+            )
+            return
+
+        site_templates = [t for t in queryset if t.kind == Template.KIND_SITE]
+        skipped = len(queryset) - len(site_templates)
+        if skipped:
+            messages.warning(
+                request,
+                f'⚠️ {skipped} template(s) de PÁGINA ignorado(s) — use "Adicionar '
+                f'página de template" dentro de um projeto pra esses.'
+            )
+
+        created = []
+        for template in site_templates:
+            project = instantiate_template(template, client)
+            created.append(project)
+
+        if len(created) == 1:
+            messages.success(request, f'✅ Projeto "{created[0].slug}" criado do template. Edite e publique.')
+            return redirect(reverse('admin:core_project_change', args=[created[0].id]))
+        if created:
+            messages.success(request, f'✅ {len(created)} projeto(s) criado(s) a partir de templates.')
+    action_create_project_from_template.short_description = '🧩 Criar projeto a partir deste template'

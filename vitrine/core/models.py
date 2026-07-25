@@ -588,3 +588,74 @@ class PageSeoSettings(models.Model):
 
     def __str__(self):
         return f"SEO de {self.page.slug}"
+
+
+class TemplateQuerySet(models.QuerySet):
+    def visible_to(self, client):
+        """Templates que um client enxerga: os oficiais (globais) + os
+        privados do próprio client. Um client nunca vê o privado de outro."""
+        return self.filter(models.Q(is_official=True) | models.Q(owner_client=client))
+
+
+class Template(TimeStampedModel):
+    """Ponto de partida por nicho: um snapshot do conteúdo de um Project
+    (pages + theme + chrome) que instancia num Project novo.
+
+    Um modelo só cobre os dois casos, pelo flag `is_official`:
+      - oficial/global: is_official=True, owner_client=None (catálogo da plataforma)
+      - privado: is_official=False, owner_client=<client> (reuso na própria conta)
+
+    NÃO é ClientModel: os oficiais não têm dono. O escopo de visibilidade
+    é resolvido por TemplateQuerySet.visible_to(client).
+
+    `kind` separa template de SITE (instancia num Project novo:
+    snapshot={pages,theme,chrome}) de template de PÁGINA (adiciona 1 página a
+    um Project existente, que já tem tema/chrome: snapshot={title,page_type,blocks}).
+    """
+
+    KIND_SITE = 'site'
+    KIND_PAGE = 'page'
+    KIND_CHOICES = [
+        (KIND_SITE, 'Site (projeto inteiro)'),
+        (KIND_PAGE, 'Página'),
+    ]
+
+    name = models.CharField(max_length=255)
+    kind = models.CharField(
+        max_length=10, choices=KIND_CHOICES, default=KIND_SITE,
+        help_text="Site = instancia um projeto novo. Página = adiciona 1 página a um projeto."
+    )
+    niche = models.CharField(
+        max_length=80, blank=True,
+        help_text="Nicho do template (ex: Advocacia, Odontologia)."
+    )
+    description = models.TextField(blank=True)
+    is_official = models.BooleanField(
+        default=False,
+        help_text="Oficial = catálogo global da plataforma (sem dono). Marque só via staff."
+    )
+    owner_client = models.ForeignKey(
+        'tenancy.Client', null=True, blank=True,
+        on_delete=models.CASCADE, related_name='templates',
+        help_text="Dono do template privado. Vazio = template oficial/global."
+    )
+    # Snapshot do site: { pages: [{title, slug, page_type, is_home, order,
+    # blocks}], theme: {...}, chrome: {...} }. Mesmo formato JSON dos campos
+    # de origem (Page.blocks, Project.theme, Project.chrome).
+    snapshot = models.JSONField(default=dict)
+    thumbnail_url = models.URLField(
+        blank=True,
+        help_text="Imagem de preview (opcional; geração automática é fase futura)."
+    )
+
+    objects = TemplateQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = 'Template'
+        verbose_name_plural = 'Templates'
+        ordering = ['-is_official', 'name']
+
+    def __str__(self):
+        if self.is_official:
+            return f'{self.name} (oficial)'
+        return f'{self.name} (privado)'
