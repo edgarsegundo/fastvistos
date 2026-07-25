@@ -65,7 +65,7 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     actions = ['action_build_and_deploy', 'action_save_as_template']
 
-    readonly_fields = ('created', 'modified')
+    readonly_fields = ('created', 'modified', 'add_page_from_template_link')
 
     fieldsets = (
         ('Básico', {
@@ -94,6 +94,10 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
                 '"cta":{"label":"..","href":".."}},"footer":{"columns":[...],"copyright":".."}}. '
                 'Vazio = usa os defaults do tema.'
             ),
+        }),
+        ('Páginas', {
+            'fields': ('add_page_from_template_link',),
+            'description': 'Adiciona uma página pronta (de um template de página) a este projeto.',
         }),
         ('Status', {
             'fields': ('needs_rebuild',),
@@ -239,6 +243,57 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
             )
     action_save_as_template.short_description = '💾 Salvar como template (privado)'
 
+    def get_urls(self):
+        custom = [
+            path(
+                '<int:project_id>/add-page-from-template/',
+                self.admin_site.admin_view(self.add_page_from_template_view),
+                name='core_project_add_page_from_template',
+            ),
+        ]
+        return custom + super().get_urls()
+
+    def add_page_from_template_view(self, request, project_id):
+        """Adiciona uma página a este projeto a partir de um template de página.
+        GET: form listando os page-templates visíveis (oficiais + do client dono
+        do projeto). POST: cria a página e manda pro editor visual dela.
+        Escopo via get_queryset (ClientScopedAdmin)."""
+        from core.templates_snapshot import add_page_from_template
+
+        project = get_object_or_404(self.get_queryset(request), pk=project_id)
+        templates = Template.objects.filter(
+            kind=Template.KIND_PAGE
+        ).visible_to(project.client).order_by('-is_official', 'name')
+
+        if request.method == 'POST':
+            template = get_object_or_404(
+                templates, pk=request.POST.get('template_id')
+            )
+            title = (request.POST.get('title') or '').strip() or None
+            page = add_page_from_template(template, project, title=title)
+            messages.success(
+                request,
+                f'✅ Página "{page.title}" adicionada (rascunho). Edite e publique o projeto.'
+            )
+            return redirect(reverse('admin:core_page_editor', args=[page.id]))
+
+        return render(request, 'core/add_page_from_template.html', {
+            'project': project,
+            'templates': templates,
+            'title': f'Adicionar página — {project.name}',
+        })
+
+    def add_page_from_template_link(self, obj):
+        if not obj.id:
+            return '— salve o projeto primeiro —'
+        url = reverse('admin:core_project_add_page_from_template', args=[obj.id])
+        return format_html(
+            '<a href="{}" style="background:#2563eb;color:#fff;padding:8px 16px;'
+            'border-radius:4px;text-decoration:none;font-weight:600;">➕ Adicionar página de template</a>',
+            url,
+        )
+    add_page_from_template_link.short_description = 'Adicionar página'
+
 
 @admin.register(Page)
 class PageAdmin(ClientScopedAdmin, ModelAdmin):
@@ -246,6 +301,7 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('is_published', 'project', 'created')
     search_fields = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
+    actions = ['action_save_page_as_template']
     readonly_fields = ('created', 'modified', 'preview_link', 'live_link_actions', 'edit_visually_link')
 
     fieldsets = (
@@ -357,6 +413,31 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             url,
         )
     edit_visually_link.short_description = 'Editor visual'
+
+    def action_save_page_as_template(self, request, queryset):
+        """Salva a(s) página(s) como template de PÁGINA privado (kind='page'),
+        anonimizando o PII estruturado. Não leva theme/chrome (a página herda
+        os do projeto de destino ao ser adicionada)."""
+        from core.templates_snapshot import snapshot_page, anonymize_page_snapshot
+
+        created = 0
+        for page in queryset:
+            Template.objects.create(
+                name=f'{page.title} (página)',
+                kind=Template.KIND_PAGE,
+                is_official=False,
+                owner_client=page.client,
+                snapshot=anonymize_page_snapshot(snapshot_page(page)),
+            )
+            created += 1
+
+        if created:
+            messages.success(
+                request,
+                f'✅ {created} template(s) de página criado(s) (PII anonimizado). '
+                f'Use "Adicionar página de template" num projeto pra reusar.'
+            )
+    action_save_page_as_template.short_description = '💾 Salvar página como template'
 
     def import_type_specific_json(self, request, page_id):
         """Importa `type_specific_data` de um arquivo JSON enviado pelo
@@ -892,8 +973,8 @@ class TemplateAdmin(ModelAdmin):
     ClientScopedAdmin porque a visibilidade é "oficial OU meu" — resolvida por
     Template.objects.visible_to(client)."""
 
-    list_display = ('name', 'niche', 'kind', 'created')
-    list_filter = ('is_official', 'niche')
+    list_display = ('name', 'kind', 'scope_label', 'niche', 'created')
+    list_filter = ('kind', 'is_official', 'niche')
     search_fields = ('name', 'niche', 'description')
     readonly_fields = ('created', 'modified')
     actions = ['action_create_project_from_template']
@@ -909,9 +990,9 @@ class TemplateAdmin(ModelAdmin):
             return qs.filter(is_official=True)
         return qs.visible_to(client)
 
-    def kind(self, obj):
+    def scope_label(self, obj):
         return 'Oficial' if obj.is_official else 'Privado'
-    kind.short_description = 'Tipo'
+    scope_label.short_description = 'Origem'
 
     def get_readonly_fields(self, request, obj=None):
         ro = list(super().get_readonly_fields(request, obj))
@@ -936,8 +1017,17 @@ class TemplateAdmin(ModelAdmin):
             )
             return
 
+        site_templates = [t for t in queryset if t.kind == Template.KIND_SITE]
+        skipped = len(queryset) - len(site_templates)
+        if skipped:
+            messages.warning(
+                request,
+                f'⚠️ {skipped} template(s) de PÁGINA ignorado(s) — use "Adicionar '
+                f'página de template" dentro de um projeto pra esses.'
+            )
+
         created = []
-        for template in queryset:
+        for template in site_templates:
             project = instantiate_template(template, client)
             created.append(project)
 

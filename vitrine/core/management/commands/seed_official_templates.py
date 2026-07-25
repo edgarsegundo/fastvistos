@@ -119,13 +119,55 @@ def _advocacia_snapshot():
     }
 
 
+def _faq_page_snapshot():
+    """Template de PÁGINA (kind='page'): 1 página pronta de FAQ pra adicionar a
+    um projeto existente. Sem theme/chrome (herda os do projeto de destino)."""
+    return {
+        'title': 'Perguntas frequentes',
+        'page_type': 'faq',
+        'blocks': {
+            'root': {'props': {}},
+            'content': [
+                _blk('Hero',
+                     title='Perguntas frequentes',
+                     subtitle='Tire suas dúvidas mais comuns.',
+                     align='center'),
+                _blk('Faq', _id='faq',
+                     heading='Dúvidas frequentes',
+                     items=[
+                         {'question': 'Qual o horário de atendimento?',
+                          'answer': 'Descreva aqui seu horário de funcionamento.'},
+                         {'question': 'Como faço para agendar?',
+                          'answer': 'Explique aqui como o cliente pode entrar em contato.'},
+                         {'question': 'Vocês atendem online?',
+                          'answer': 'Responda aqui se oferece atendimento remoto.'},
+                     ]),
+                _blk('Cta', _id='cta',
+                     title='Ainda com dúvidas?',
+                     subtitle='Fale com a gente.',
+                     ctaText='Entrar em contato',
+                     ctaHref='#contato'),
+            ],
+        },
+    }
+
+
 OFFICIAL_TEMPLATES = [
     {
         'name': 'Advocacia',
+        'kind': Template.KIND_SITE,
         'niche': 'Advocacia',
         'description': 'Site institucional para escritórios de advocacia: áreas de '
                        'atuação, sobre, depoimentos, FAQ e contato.',
         'snapshot': _advocacia_snapshot,
+    },
+    {
+        'name': 'Página de FAQ',
+        'kind': Template.KIND_PAGE,
+        'niche': '',
+        'description': 'Página pronta de perguntas frequentes (Hero + FAQ + CTA) '
+                       'para adicionar a um projeto existente.',
+        'snapshot': _faq_page_snapshot,
     },
 ]
 
@@ -139,6 +181,7 @@ class Command(BaseCommand):
             obj, created = Template.objects.update_or_create(
                 name=spec['name'],
                 is_official=True,
+                kind=spec['kind'],
                 defaults={
                     'niche': spec['niche'],
                     'description': spec['description'],
@@ -147,4 +190,6 @@ class Command(BaseCommand):
                 },
             )
             verb = 'criado' if created else 'atualizado'
-            self.stdout.write(self.style.SUCCESS(f'✅ Template oficial "{obj.name}" {verb}.'))
+            self.stdout.write(self.style.SUCCESS(
+                f'✅ Template oficial "{obj.name}" ({obj.get_kind_display()}) {verb}.'
+            ))

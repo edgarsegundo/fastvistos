@@ -42,6 +42,10 @@ fallback avançado no admin.
 **Fase 3 (templates) — FEITA** (migration `core/0015`). Modelo `Template`
 (oficial global + privado por client), "salvar como template" (anonimiza PII),
 "criar projeto a partir de template", seed `seed_official_templates` (Advocacia).
+**Fase 3.1 (página a partir de template) — FEITA** (migration `core/0016`).
+`Template.kind` (site|page); "salvar página como template" (`PageAdmin`),
+"adicionar página de template" (`ProjectAdmin` → view com form → editor);
+seed ganhou "Página de FAQ" (kind=page).
 
 ## Como rodar localmente
 
@@ -116,15 +120,20 @@ fallback avançado no admin.
   `edit_visually_link`. Escopo do client via `get_queryset` (ClientScopedAdmin).
 - `core/templates/core/editor.html` — página standalone do editor.
 
-**Django — templates (fase 3)**
-- `vitrine/core/models.py` — `Template` (`is_official` + `owner_client` nullable
-  + `snapshot` JSON `{pages,theme,chrome}`); `TemplateQuerySet.visible_to(client)`
-  (oficiais + privados do client)
-- `vitrine/core/templates_snapshot.py` — `snapshot_project()`,
-  `anonymize_snapshot()` (só PII estruturado), `instantiate_template()`
-- `vitrine/core/admin.py` — `ProjectAdmin.action_save_as_template`;
-  `TemplateAdmin` (get_queryset por escopo + action "criar projeto a partir de")
-- `vitrine/core/management/commands/seed_official_templates.py` — 1 oficial (Advocacia)
+**Django — templates (fase 3 + 3.1)**
+- `vitrine/core/models.py` — `Template` (`kind` site|page + `is_official` +
+  `owner_client` nullable + `snapshot` JSON); `TemplateQuerySet.visible_to(client)`.
+  Snapshot difere por kind: site=`{pages,theme,chrome}`, page=`{title,page_type,blocks}`.
+- `vitrine/core/templates_snapshot.py` — SITE: `snapshot_project()`,
+  `anonymize_snapshot()`, `instantiate_template()`. PÁGINA: `snapshot_page()`,
+  `anonymize_page_snapshot()`, `add_page_from_template()`. Compartilham
+  `anonymize_blocks()` (só PII estruturado).
+- `vitrine/core/admin.py` — `ProjectAdmin`: `action_save_as_template` +
+  `add_page_from_template_view` (get_urls + `core/add_page_from_template.html`) +
+  botão `add_page_from_template_link`. `PageAdmin.action_save_page_as_template`.
+  `TemplateAdmin` (escopo + action "criar projeto" gateada a kind=site).
+- `vitrine/core/management/commands/seed_official_templates.py` — Advocacia (site)
+  + Página de FAQ (page)
 
 **Config**
 - `astro.config.mjs` — integração `react()` (global; inerte pros sites legados)
@@ -176,21 +185,13 @@ fallback avançado no admin.
 - **Projeto instanciado nasce `is_published=False`** (draft) — publicar é passo
   explícito depois. Thumbnail de template é campo manual (geração automática é
   fase futura). Marketplace público de templates fica fora do v1 (seção 10).
-- **Template é de nível de Projeto (site inteiro), não de Página** — decisão
-  seguindo a spec ("salvar SITE como template", "templates completos por
-  nicho", seção 3) + chrome/tema serem de nível de Site (fase 1), não dá pra
-  um template de página carregar isso de forma natural.
-
-### Próximo passo registrado (não implementado)
-
-- **"Adicionar página a partir de template"** — caso de uso diferente do
-  template de site: projeto já existe/publicado, usuário quer só adicionar 1
-  página nova com estrutura pronta (ex: "página de FAQ", "página de Serviços"),
-  sem recriar o projeto inteiro. Dá pra reusar o mesmo modelo `Template` com um
-  snapshot menor (`{blocks}` de 1 página só, sem `theme`/`chrome`) + uma action
-  "adicionar página a partir de template" no `PageAdmin`/`ProjectAdmin`. Não é
-  dívida nem bug — é uma extensão que ficou de fora da fase 3 por escopo,
-  registrada aqui pra não se perder.
+- **Dois níveis de template, um modelo (`Template.kind`)** — SITE (`kind=site`:
+  instancia um Project novo, snapshot `{pages,theme,chrome}`) e PÁGINA
+  (`kind=page`: adiciona 1 página a um Project existente, snapshot
+  `{title,page_type,blocks}` — herda tema/chrome do projeto de destino). Página
+  adicionada nasce draft. Decisão de nível-de-site segue a spec (seção 3:
+  "salvar SITE como template", "templates completos por nicho") + chrome/tema
+  serem de nível de Site; o nível-de-página cobre o "só quero +1 página pronta".
 - **`PricePlan.features` é `{text}[]`** (não `string[]`) — arrays do Puck são
   arrays de objetos, sempre nomeados. Padrão a repetir em blocos futuros com
   listas de itens simples.

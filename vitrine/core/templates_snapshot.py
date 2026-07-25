@@ -111,16 +111,21 @@ def _anonymize_chrome(chrome):
                         link['href'] = _scrub_href(link.get('href'))
 
 
+def anonymize_blocks(blocks_doc):
+    """Anonimiza PII estruturado do content de UM documento de blocos, in-place."""
+    content = (blocks_doc or {}).get('content')
+    if isinstance(content, list):
+        for node in content:
+            _anonymize_block(node)
+
+
 def anonymize_snapshot(snapshot):
-    """Retorna uma cópia do snapshot com o PII estruturado limpo. NÃO muta
-    o original. Prosa livre (títulos, Sobre, RichText, citações) fica intacta —
-    o usuário revisa ao instanciar."""
+    """Retorna uma cópia do snapshot de SITE com o PII estruturado limpo. NÃO
+    muta o original. Prosa livre (títulos, Sobre, RichText, citações) fica
+    intacta — o usuário revisa ao instanciar."""
     snap = copy.deepcopy(snapshot or {})
     for page in snap.get('pages') or []:
-        content = (page.get('blocks') or {}).get('content')
-        if isinstance(content, list):
-            for node in content:
-                _anonymize_block(node)
+        anonymize_blocks(page.get('blocks'))
     _anonymize_chrome(snap.get('chrome'))
     return snap
 
@@ -174,3 +179,66 @@ def instantiate_template(template, client, name=None, slug=None):
         ).save()
 
     return project
+
+
+# ---------------------------------------------------------------------------
+# Templates de PÁGINA (kind='page') — adiciona 1 página a um projeto existente
+# ---------------------------------------------------------------------------
+
+def snapshot_page(page):
+    """Snapshot de UMA página pra virar page-template (sem theme/chrome — a
+    página herda os do projeto de destino)."""
+    return {
+        'title': page.title,
+        'page_type': page.page_type,
+        'blocks': page.blocks or {'root': {'props': {}}, 'content': []},
+    }
+
+
+def anonymize_page_snapshot(snapshot):
+    """Cópia do snapshot de PÁGINA com PII estruturado limpo (prosa intacta)."""
+    snap = copy.deepcopy(snapshot or {})
+    anonymize_blocks(snap.get('blocks'))
+    return snap
+
+
+def _unique_page_slug(project, base):
+    """Slug único dentro do projeto (constraint unique_page_slug_per_project)."""
+    base = base or 'pagina'
+    slug = base
+    suffix = 1
+    while Page.all_objects.filter(project=project, slug=slug).exists():
+        suffix += 1
+        slug = f'{base}-{suffix}'
+    return slug
+
+
+def add_page_from_template(template, project, title=None):
+    """Cria uma Page nova num projeto existente a partir de um page-template.
+    A página nasce draft (is_published=False), no fim da ordem. Marca o projeto
+    pra rebuild. Retorna a Page criada."""
+    snap = template.snapshot or {}
+    page_title = title or snap.get('title') or template.name
+    slug = _unique_page_slug(project, slugify(page_title))
+
+    last = Page.all_objects.filter(project=project).order_by('-order').first()
+    next_order = (last.order + 1) if last else 0
+
+    page = Page(
+        client=project.client,
+        project=project,
+        title=page_title,
+        slug=slug,
+        page_type=snap.get('page_type') or Page.PAGE_TYPE_GENERIC,
+        is_home=False,
+        is_published=False,
+        order=next_order,
+        blocks=snap.get('blocks') or {'root': {'props': {}}, 'content': []},
+    )
+    page.save()
+
+    if not project.needs_rebuild:
+        project.needs_rebuild = True
+        project.save(update_fields=['needs_rebuild'])
+
+    return page
