@@ -607,9 +607,24 @@ class Template(TimeStampedModel):
 
     NÃO é ClientModel: os oficiais não têm dono. O escopo de visibilidade
     é resolvido por TemplateQuerySet.visible_to(client).
+
+    `kind` separa template de SITE (instancia num Project novo:
+    snapshot={pages,theme,chrome}) de template de PÁGINA (adiciona 1 página a
+    um Project existente, que já tem tema/chrome: snapshot={title,page_type,blocks}).
     """
 
+    KIND_SITE = 'site'
+    KIND_PAGE = 'page'
+    KIND_CHOICES = [
+        (KIND_SITE, 'Site (projeto inteiro)'),
+        (KIND_PAGE, 'Página'),
+    ]
+
     name = models.CharField(max_length=255)
+    kind = models.CharField(
+        max_length=10, choices=KIND_CHOICES, default=KIND_SITE,
+        help_text="Site = instancia um projeto novo. Página = adiciona 1 página a um projeto."
+    )
     niche = models.CharField(
         max_length=80, blank=True,
         help_text="Nicho do template (ex: Advocacia, Odontologia)."

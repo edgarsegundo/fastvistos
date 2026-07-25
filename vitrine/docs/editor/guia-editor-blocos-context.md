@@ -176,6 +176,21 @@ fallback avançado no admin.
 - **Projeto instanciado nasce `is_published=False`** (draft) — publicar é passo
   explícito depois. Thumbnail de template é campo manual (geração automática é
   fase futura). Marketplace público de templates fica fora do v1 (seção 10).
+- **Template é de nível de Projeto (site inteiro), não de Página** — decisão
+  seguindo a spec ("salvar SITE como template", "templates completos por
+  nicho", seção 3) + chrome/tema serem de nível de Site (fase 1), não dá pra
+  um template de página carregar isso de forma natural.
+
+### Próximo passo registrado (não implementado)
+
+- **"Adicionar página a partir de template"** — caso de uso diferente do
+  template de site: projeto já existe/publicado, usuário quer só adicionar 1
+  página nova com estrutura pronta (ex: "página de FAQ", "página de Serviços"),
+  sem recriar o projeto inteiro. Dá pra reusar o mesmo modelo `Template` com um
+  snapshot menor (`{blocks}` de 1 página só, sem `theme`/`chrome`) + uma action
+  "adicionar página a partir de template" no `PageAdmin`/`ProjectAdmin`. Não é
+  dívida nem bug — é uma extensão que ficou de fora da fase 3 por escopo,
+  registrada aqui pra não se perder.
 - **`PricePlan.features` é `{text}[]`** (não `string[]`) — arrays do Puck são
   arrays de objetos, sempre nomeados. Padrão a repetir em blocos futuros com
   listas de itens simples.
