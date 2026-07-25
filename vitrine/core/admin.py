@@ -14,7 +14,7 @@ from tenancy.admin import ClientScopedAdmin
 
 from .models import (
     ClientUser, Project, Page, Build, Deployment, Domain,
-    PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings,
+    PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings, Template,
 )
 from .seo import resolve_seo
 from .seo_schemas import PAGE_TYPE_SCHEMAS
@@ -63,7 +63,7 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
     list_filter = ('is_published', 'needs_rebuild', 'created')
     search_fields = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ('name',)}
-    actions = ['action_build_and_deploy']
+    actions = ['action_build_and_deploy', 'action_save_as_template']
 
     readonly_fields = ('created', 'modified')
 
@@ -211,6 +211,33 @@ class ProjectAdmin(ClientScopedAdmin, ModelAdmin):
             messages.success(request, f'✅ {succeeded} projeto(s) publicado(s) com sucesso')
 
     action_build_and_deploy.short_description = '🚀 Build & Publicar'
+
+    def action_save_as_template(self, request, queryset):
+        """Action: salva o(s) projeto(s) como template PRIVADO do client dono,
+        anonimizando o PII estruturado (Contato, logo/copyright, autor de
+        depoimento, links de contato). A prosa (títulos, Sobre) fica intacta."""
+        from core.templates_snapshot import snapshot_project, anonymize_snapshot
+
+        created = 0
+        for project in queryset:
+            snapshot = anonymize_snapshot(snapshot_project(project))
+            Template.objects.create(
+                name=f'{project.name} (template)',
+                niche='',
+                description=project.description or '',
+                is_official=False,
+                owner_client=project.client,
+                snapshot=snapshot,
+            )
+            created += 1
+
+        if created:
+            messages.success(
+                request,
+                f'✅ {created} template(s) privado(s) criado(s) (PII de contato '
+                f'anonimizado; revise a prosa antes de reusar). Veja em Templates.'
+            )
+    action_save_as_template.short_description = '💾 Salvar como template (privado)'
 
 
 @admin.register(Page)
@@ -857,3 +884,66 @@ class PlatformSeoDefaultsAdmin(ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         obj = PlatformSeoDefaults.load()
         return redirect(reverse('admin:core_platformseodefaults_change', args=[obj.pk]))
+
+
+@admin.register(Template)
+class TemplateAdmin(ModelAdmin):
+    """Templates oficiais (globais) + privados (do client). Não é
+    ClientScopedAdmin porque a visibilidade é "oficial OU meu" — resolvida por
+    Template.objects.visible_to(client)."""
+
+    list_display = ('name', 'niche', 'kind', 'created')
+    list_filter = ('is_official', 'niche')
+    search_fields = ('name', 'niche', 'description')
+    readonly_fields = ('created', 'modified')
+    actions = ['action_create_project_from_template']
+
+    def get_queryset(self, request):
+        from tenancy.threadlocal import get_current_client
+        qs = Template.objects.all()
+        if request.user.is_superuser:
+            return qs
+        client = get_current_client()
+        if client is None:
+            # staff sem client ativo: só os oficiais (nunca privados alheios)
+            return qs.filter(is_official=True)
+        return qs.visible_to(client)
+
+    def kind(self, obj):
+        return 'Oficial' if obj.is_official else 'Privado'
+    kind.short_description = 'Tipo'
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        # Só superuser marca oficial / muda o dono — evita um tenant publicar
+        # template no catálogo global ou reatribuir dono.
+        if not request.user.is_superuser:
+            ro += ['is_official', 'owner_client']
+        return ro
+
+    def action_create_project_from_template(self, request, queryset):
+        """Cria um Project novo a partir de cada template selecionado, no client
+        corrente. Redireciona pro Project criado (se for 1 só)."""
+        from tenancy.threadlocal import get_current_client
+        from core.templates_snapshot import instantiate_template
+
+        client = get_current_client()
+        if client is None:
+            messages.error(
+                request,
+                'Selecione um client ativo antes de criar um projeto a partir de '
+                'um template (superuser: use o seletor de client).'
+            )
+            return
+
+        created = []
+        for template in queryset:
+            project = instantiate_template(template, client)
+            created.append(project)
+
+        if len(created) == 1:
+            messages.success(request, f'✅ Projeto "{created[0].slug}" criado do template. Edite e publique.')
+            return redirect(reverse('admin:core_project_change', args=[created[0].id]))
+        if created:
+            messages.success(request, f'✅ {len(created)} projeto(s) criado(s) a partir de templates.')
+    action_create_project_from_template.short_description = '🧩 Criar projeto a partir deste template'

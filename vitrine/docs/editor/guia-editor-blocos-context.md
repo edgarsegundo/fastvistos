@@ -39,6 +39,9 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 **Fase 2 (editor visual Puck) — FEITA.** Editor de blocos + painéis de tema e
 chrome, montado como ilha React numa view do admin. JSON cru continua como
 fallback avançado no admin.
+**Fase 3 (templates) — FEITA** (migration `core/0015`). Modelo `Template`
+(oficial global + privado por client), "salvar como template" (anonimiza PII),
+"criar projeto a partir de template", seed `seed_official_templates` (Advocacia).
 
 ## Como rodar localmente
 
@@ -113,6 +116,16 @@ fallback avançado no admin.
   `edit_visually_link`. Escopo do client via `get_queryset` (ClientScopedAdmin).
 - `core/templates/core/editor.html` — página standalone do editor.
 
+**Django — templates (fase 3)**
+- `vitrine/core/models.py` — `Template` (`is_official` + `owner_client` nullable
+  + `snapshot` JSON `{pages,theme,chrome}`); `TemplateQuerySet.visible_to(client)`
+  (oficiais + privados do client)
+- `vitrine/core/templates_snapshot.py` — `snapshot_project()`,
+  `anonymize_snapshot()` (só PII estruturado), `instantiate_template()`
+- `vitrine/core/admin.py` — `ProjectAdmin.action_save_as_template`;
+  `TemplateAdmin` (get_queryset por escopo + action "criar projeto a partir de")
+- `vitrine/core/management/commands/seed_official_templates.py` — 1 oficial (Advocacia)
+
 **Config**
 - `astro.config.mjs` — integração `react()` (global; inerte pros sites legados)
 
@@ -154,6 +167,15 @@ fallback avançado no admin.
   Adicionar bloco/campo novo no registry aparece no editor automaticamente.
 - **Save é explícito** (botão), grava draft + `needs_rebuild`. Publish continua
   no `ProjectAdmin` (build/deploy existente), não acoplado ao editor.
+- **Template = snapshot JSON** (`{pages,theme,chrome}`), um modelo só com
+  `is_official` + `owner_client` nullable (null=oficial/global). NÃO é
+  ClientModel (oficiais não têm dono); escopo via `visible_to(client)`.
+- **Anonimização de template = só PII estruturado** (Contato, logo/copyright,
+  autor de depoimento, hrefs tel/mailto/wa.me). Prosa (títulos, Sobre, citações)
+  fica intacta — texto livre não anonimiza com confiança; usuário revisa.
+- **Projeto instanciado nasce `is_published=False`** (draft) — publicar é passo
+  explícito depois. Thumbnail de template é campo manual (geração automática é
+  fase futura). Marketplace público de templates fica fora do v1 (seção 10).
 - **`PricePlan.features` é `{text}[]`** (não `string[]`) — arrays do Puck são
   arrays de objetos, sempre nomeados. Padrão a repetir em blocos futuros com
   listas de itens simples.
@@ -232,7 +254,7 @@ fallback avançado no admin.
 
 0. Fundação: data model + render (FEITA) · 1. Blocos estruturados +
 tema/Header/Footer de Site (FEITA) · 2. Editor inline Puck (FEITA) · 3.
-Templates (3) · 4. IA questionário (6) · 5. Importador Inteligente (4) · 6.
+Templates (FEITA) · 4. IA questionário (6) · 5. Importador Inteligente (4) · 6.
 SEO/redirects (4.4) + endurecimento do sandbox (7) + validação pré-publicação (8).
 Fases futuras avulsas: Blog (modelo Post) e formulário de Contato real.
 
