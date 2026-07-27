@@ -1,9 +1,5 @@
-Olhe o diff staged (`git diff --cached`). Escreva uma mensagem de
-commit seguindo Conventional Commits com escopo `(seo)`, no formato:
-
-feat(seo): <resumo curto no imperativo>
-
-<corpo explicando o porquê da mudança, não o que já é óbvio pelo diff>
-<referência à fase do roadmap, se aplicável>
+Olhe o diff staged (`git diff --cached`) e escreva uma mensagem de commit
+seguindo Conventional Commits. Escolha o tipo e o escopo que refletem o que
+o diff realmente muda.
 
 Não faça o commit — só mostre a mensagem proposta pra eu revisar.

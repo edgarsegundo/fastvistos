@@ -258,8 +258,28 @@ export default function App() {
                         data={blocks}
                         onChange={setBlocks}
                         iframe={{ enabled: false }}
-                        overrides={{ header: () => <></> }}
-                    />
+                    >
+                        {/* Interface custom (API de composição do Puck): paleta à
+                            esquerda, canvas no centro, campos numa aba à direita
+                            que revela no hover. Ver editor-chrome.css. */}
+                        <div className="editor-shell">
+                            <aside className="editor-left">
+                                <Puck.Components />
+                                <Puck.Outline />
+                            </aside>
+                            <main className="editor-canvas">
+                                <Puck.Preview />
+                            </main>
+                            <div className="fields-hover-zone">
+                                <div className="fields-tab" tabIndex={0} role="button" aria-label="Propriedades">
+                                    PROPRIEDADES
+                                </div>
+                                <div className="fields-panel">
+                                    <Puck.Fields />
+                                </div>
+                            </div>
+                        </div>
+                    </Puck>
                 )}
                 {tab === 'theme' && <ThemePanel theme={theme} onChange={setTheme} />}
                 {tab === 'chrome' && <ChromePanel chrome={chrome} onChange={setChrome} />}

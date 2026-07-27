@@ -8,6 +8,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '../styles/saas.css';
 import '@measured/puck/dist/index.css';
+import './editor-chrome.css';
 import App from './App';
 
 const el = document.getElementById('editor-root');

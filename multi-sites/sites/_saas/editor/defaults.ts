@@ -5,11 +5,50 @@
  */
 export const EDITOR_DEFAULT_PROPS: Record<string, any> = {
     Hero: {
+        layout: 'centered',
+        eyebrow: 'Sua categoria em uma linha',
         title: 'Seu título aqui',
         subtitle: 'Um subtítulo curto que explica o que você faz.',
+        align: 'center',
+        // Centralizado completo (paridade s1) — toggles ligados por padrão
+        showEyebrow: 'yes',
+        showSubtitle: 'yes',
+        showBadge: 'yes',
+        showHelper: 'yes',
+        showRating: 'yes',
+        showTrust: 'yes',
+        announcementBadge: { tag: 'NOVO', label: 'Novidade recém-lançada', href: '#' },
+        heroVisual: { imageUrl: '', position: 'none' },
+        ctas: [
+            { label: 'Comece agora', href: '#contato', variant: 'primary' },
+            { label: 'Saiba mais', href: '#sobre', variant: 'outline' },
+        ],
+        helperText: 'Sem compromisso · cancele quando quiser',
+        rating: { value: '4.9', count: '1.200' },
+        trustBar: [{ text: 'Empresa A' }, { text: 'Empresa B' }, { text: 'Empresa C' }],
+        socialProofOrder: 'rating-first',
+        // legados (retrocompat com Heroes antigos)
         ctaText: 'Fale conosco',
         ctaHref: '#contato',
-        align: 'center',
+        // placeholders das outras variantes (aparecem ao trocar o Layout)
+        bigWord: 'GRANDE',
+        accentWord: 'IDEIA.',
+        caption: 'Uma frase curta de apoio ao conceito.',
+        avatars: [
+            { imageUrl: '', alt: 'Cliente' },
+            { imageUrl: '', alt: 'Cliente' },
+            { imageUrl: '', alt: 'Cliente' },
+        ],
+        ratingValue: '4.9',
+        ratingCount: '1.200',
+        plan: {
+            name: 'Plano',
+            price: 'R$ 0',
+            period: 'à vista',
+            features: [{ text: 'Item incluído' }, { text: 'Outro item' }],
+            ctaText: 'Assinar',
+            ctaHref: '#',
+        },
     },
     Features: {
         heading: 'O que oferecemos',

@@ -68,6 +68,18 @@
   .nav-hover-zone:hover .nav-tab .nav-tab-chevron{transform:rotate(180deg);}
   .nav-tab-chevron{transition:transform .2s ease;}
 
+  /* left-side variant of the nav panel (elements panel) */
+  .nav-panel-left{
+    position:absolute;top:50%;left:0;
+    padding-left:2.25rem;
+    opacity:0;transform:translate(-10px,-50%);pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease;
+  }
+  .nav-hover-zone:hover .nav-panel-left,
+  .nav-hover-zone:focus-within .nav-panel-left{
+    opacity:1;transform:translate(0,-50%);pointer-events:auto;
+  }
+
   /* view switch (desktop/mobile preview) */
   .view-btn{color:var(--muted);}
   .view-btn:hover{background:rgba(255,255,255,0.08);color:var(--cream);}
@@ -100,6 +112,51 @@
   }
   .gauge-ring{stroke-dasharray:280;stroke-dashoffset:70;}
   input::placeholder{color:var(--muted);}
+
+  /* elements panel (left nav) */
+  .elpanel-switch{position:relative;width:30px;height:17px;border-radius:999px;background:rgba(255,255,255,0.12);border:1px solid var(--line);flex:none;cursor:pointer;transition:background .2s ease,border-color .2s ease;}
+  .elpanel-switch::after{content:'';position:absolute;top:1px;left:1px;width:13px;height:13px;border-radius:999px;background:var(--muted);transition:transform .2s ease,background .2s ease;}
+  .elpanel-switch.on{background:rgba(201,121,62,0.28);border-color:rgba(201,121,62,0.5);}
+  .elpanel-switch.on::after{transform:translateX(13px);background:var(--copper-light);}
+  .elpanel-switch:focus-visible{outline:2px solid var(--copper);outline-offset:2px;}
+  .elpanel-row{color:var(--muted);}
+  .elpanel-row:hover{background:rgba(255,255,255,0.06);}
+  .elpanel-empty{color:var(--muted);}
+  .elpanel-extra{padding:0 2px 6px;}
+  .elpanel-pos{display:inline-flex;gap:2px;padding:2px;border-radius:999px;background:rgba(255,255,255,0.06);}
+  .elpanel-pos button{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:999px;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:background .15s ease,color .15s ease;}
+  .elpanel-pos button.active{background:rgba(201,121,62,0.3);color:var(--copper-light);}
+  .elpanel-swap{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:3px 9px;cursor:pointer;transition:border-color .15s ease,color .15s ease;}
+  .elpanel-swap:hover{color:var(--copper-light);border-color:rgba(201,121,62,0.5);}
+  .el-hover-label{
+    position:fixed;z-index:60;pointer-events:none;
+    padding:1px 6px;border-radius:4px;
+    background:var(--cream);color:var(--bg);
+    font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.02em;
+    white-space:nowrap;opacity:0;transition:opacity .15s ease;
+    transform:translate(-50%,calc(-100% - 6px));
+  }
+  .el-hover-label::after{
+    content:'';position:absolute;left:50%;top:100%;
+    width:1px;height:6px;background:var(--cream);
+    transform:translateX(-50%);
+  }
+  .el-hover-label.pos-center{transform:translate(-50%,calc(-100% - 6px));}
+  .el-hover-label.pos-left{transform:translate(0,calc(-100% - 6px));}
+  .el-hover-label.pos-right{transform:translate(-100%,calc(-100% - 6px));}
+  .el-hover-label.visible{opacity:.5;}
+
+  .elpanel-tooltip{
+    position:fixed;z-index:70;pointer-events:none;
+    width:240px;padding:12px 14px;border-radius:12px;
+    background:rgba(11,8,6,0.97);border:1px solid rgba(255,255,255,0.15);
+    box-shadow:0 20px 50px rgba(0,0,0,.6);
+    opacity:0;transform:translate(8px,-50%);transition:opacity .15s ease,transform .15s ease;
+  }
+  .elpanel-tooltip.visible{opacity:1;transform:translate(0,-50%);}
+  .elpanel-tooltip dt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--copper-light);margin-top:8px;}
+  .elpanel-tooltip dt:first-child{margin-top:0;}
+  .elpanel-tooltip dd{margin:2px 0 0;font-size:11px;line-height:1.4;color:var(--cream);}
 </style>
 </head>
 <body class="relative w-full h-screen">
@@ -153,6 +210,19 @@
   </div>
 </div>
 
+<!-- vertical side panel (desktop): elements of the active layout, show/hide switches -->
+<div id="elPanelZone" class="nav-hover-zone hidden md:block fixed top-1/2 left-0 -translate-y-1/2 z-50">
+  <div class="nav-tab flex flex-col items-center justify-center gap-1.5 w-7 h-28 rounded-r-xl bg-[#0B0806]/80 border border-l-0 border-white/15 backdrop-blur-xl cursor-pointer transition-colors">
+    <i class="ti ti-chevron-right nav-tab-chevron text-sm" aria-hidden="true" style="color:var(--muted)"></i>
+    <span class="w-1 h-1 rounded-full bg-white/45"></span>
+    <span class="w-1 h-1 rounded-full bg-white/45"></span>
+    <span class="w-1 h-1 rounded-full bg-white/45"></span>
+  </div>
+  <div class="nav-panel-left">
+    <div id="elPanelList" class="flex flex-col gap-0.5 px-3 py-4 rounded-2xl backdrop-blur-xl bg-[#0B0806]/95 border border-white/15 shadow-2xl shadow-black/60 max-h-[82vh] overflow-y-auto min-w-[220px]"></div>
+  </div>
+</div>
+
 <!-- bottom dot bar (mobile real) -->
 <nav class="md:hidden fixed z-50 flex flex-row gap-0.5 px-2 py-2 rounded-full backdrop-blur-xl bg-[#0B0806]/85 border border-white/15 shadow-2xl shadow-black/50 bottom-3 left-1/2 -translate-x-1/2 max-w-[94vw] overflow-x-auto">
   <a href="#" data-target="s1" class="navlink active flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors" aria-current="true"><span class="navdot"></span></a>
@@ -184,15 +254,32 @@
   <span class="device-home-indicator"></span>
 
 <!-- 01 CENTERED -->
-<!-- Hero props: eyebrow, title, subtitle, primaryCta{label,href}, secondaryCta{label,href} -->
+<!-- Hero props: announcementBadge{label,href}, eyebrow, title, subtitle, heroVisual{imageUrl,position:'mid'|'bottom'}, ctas[]{label,href,variant}, helperText, ratingCompact{value,count}, trustBar{items[]}, socialProofOrder:['ratingCompact','trustBar'] -->
 <section id="s1" class="stage active grain">
-  <div class="min-h-full flex flex-col items-center justify-center text-center px-6 md:px-10 py-24 md:py-16">
-    <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-6">9 BAR · EXTRAÇÃO CONSTANTE</span>
-    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">A pressão certa,<br><span class="italic text-[var(--copper-light)]">a cada xícara.</span></h1>
-    <p class="mt-6 max-w-md text-[var(--muted)] text-base leading-relaxed">Cinder é a máquina de espresso que mede, ajusta e repete — sem depender da sua sorte de barista.</p>
-    <div class="mt-9 flex flex-wrap items-center justify-center gap-4">
-      <button class="px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition">Reservar a Cinder One</button>
-      <button class="px-6 py-3 rounded-full border border-white/15 text-sm text-[var(--cream)] hover:border-white/40 transition">Ver especificações</button>
+  <div id="s1-inner" class="min-h-full flex flex-col items-center justify-center text-center px-6 md:px-10 py-24 md:py-16">
+    <a href="#" data-el="announcementBadge" class="inline-flex items-center gap-2 mb-5 px-3 py-1 rounded-full bg-white/5 border border-white/15 text-xs text-[var(--cream)] hover:border-white/30 transition">
+      <span class="font-mono text-[10px] text-[var(--copper-light)]">NOVO</span>
+      <span>App Cinder 2.0 já disponível</span>
+      <i class="ti ti-arrow-right text-xs" aria-hidden="true"></i>
+    </a>
+    <span data-el="eyebrow" class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-6">9 BAR · EXTRAÇÃO CONSTANTE</span>
+    <h1 data-el="title" class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">A pressão certa,<br><span class="italic text-[var(--copper-light)]">a cada xícara.</span></h1>
+    <p data-el="subtitle" class="mt-6 max-w-md text-[var(--muted)] text-base leading-relaxed">Cinder é a máquina de espresso que mede, ajusta e repete — sem depender da sua sorte de barista.</p>
+    <div data-el="heroVisual" class="mt-8 w-full max-w-md aspect-video rounded-2xl bg-[var(--bg3)] border border-white/10 flex items-center justify-center">
+      <span class="font-mono text-[10px] text-[var(--muted)] tracking-widest">FOTO DO PRODUTO</span>
+    </div>
+    <div id="s1-cta-group" class="mt-9 flex flex-wrap items-center justify-center gap-4">
+      <button data-el="cta-1" class="px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition">Reservar a Cinder One</button>
+      <button data-el="cta-2" class="px-6 py-3 rounded-full border border-white/15 text-sm text-[var(--cream)] hover:border-white/40 transition">Ver especificações</button>
+      <button data-el="cta-3" class="px-5 py-3 rounded-full text-sm text-[var(--muted)] hover:text-[var(--cream)] transition">Falar com vendas →</button>
+    </div>
+    <span data-el="helperText" class="mt-4 text-xs text-[var(--muted)]">Frete grátis para todo o Brasil · sem cartão agora</span>
+    <div data-el="ratingCompact" class="mt-6 flex items-center gap-1.5 text-[var(--copper-light)]" aria-label="4.9 de 5 estrelas">
+      <i class="ti ti-star text-sm" aria-hidden="true"></i><i class="ti ti-star text-sm" aria-hidden="true"></i><i class="ti ti-star text-sm" aria-hidden="true"></i><i class="ti ti-star text-sm" aria-hidden="true"></i><i class="ti ti-star-half text-sm" aria-hidden="true"></i>
+      <span class="font-mono text-[10px] text-[var(--muted)] ml-1.5">4.9 · 1.204 avaliações</span>
+    </div>
+    <div data-el="trustBar" class="mt-8 flex flex-wrap justify-center gap-6 font-mono text-[10px] text-[var(--muted)] tracking-widest opacity-70">
+      <span>NEVE&nbsp;CAFÉ</span><span>ÂMBAR&nbsp;TORRA</span><span>PORTO&nbsp;ESPRESSO</span><span>LUME</span>
     </div>
   </div>
 </section>
@@ -553,6 +640,7 @@
         if (isActive) { l.setAttribute('aria-current', 'true'); } else { l.removeAttribute('aria-current'); }
       });
       counter.textContent = String(i+1).padStart(2,'0') + ' / ' + links.length + ' — ' + names[i].toLowerCase();
+      renderElPanel(target);
     });
   });
 
@@ -600,6 +688,312 @@
       });
     });
   });
+
+  // ---- elements panel (per-layout show/hide) ----
+  const ELEMENT_REGISTRY = {
+    s1: [
+      { key: 'announcementBadge', label: 'Announcement Badge' },
+      { key: 'eyebrow', label: 'Eyebrow' },
+      { key: 'title', label: 'Title' },
+      { key: 'subtitle', label: 'Subtitle' },
+      { key: 'heroVisual', label: 'Hero Visual', defaultHidden: true },
+      { key: 'cta-1', label: 'CTA 1' },
+      { key: 'cta-2', label: 'CTA 2' },
+      { key: 'cta-3', label: 'CTA 3' },
+      { key: 'helperText', label: 'Helper Text' },
+      { key: 'ratingCompact', label: 'Rating' },
+      { key: 'trustBar', label: 'Trust Bar' },
+    ],
+  };
+
+  const EL_DESCRIPTIONS = {
+    announcementBadge: {
+      purpose: 'Sinaliza novidade recente pra puxar atenção antes do título.',
+      when: 'Quando há lançamento, atualização ou promoção vigente pra destacar.',
+      impact: 'Comunica que o produto está em evolução ativa e gera cliques de curiosidade.',
+    },
+    eyebrow: {
+      purpose: 'Dá contexto rápido da categoria/proposta antes do título.',
+      when: 'Quando o título sozinho não deixa óbvio o que é o produto.',
+      impact: 'Reduz ambiguidade nos primeiros segundos, ancora a leitura do título.',
+    },
+    title: {
+      purpose: 'A promessa central do produto — o que mais pesa na primeira impressão.',
+      when: 'Sempre presente, é o elemento obrigatório do hero.',
+      impact: 'Define se o visitante entende o valor em segundos e continua lendo.',
+    },
+    subtitle: {
+      purpose: 'Expande o título com o "como" ou detalhe que fecha a lacuna de entendimento.',
+      when: 'Quando o título é enxuto/conceitual e precisa de um complemento concreto.',
+      impact: 'Aumenta compreensão e prepara terreno pra decisão do CTA.',
+    },
+    heroVisual: {
+      purpose: 'Mostra o produto visualmente — reforça a promessa (posição Meio) ou fecha o hero como confirmação (posição Final).',
+      when: 'Quando existe um asset visual forte que comunica mais rápido que texto.',
+      impact: 'Bem posicionado, sustenta o clique; mal posicionado, compete com o título e distrai.',
+    },
+    'cta-1': {
+      purpose: 'Ação principal — o que você mais quer que o visitante faça agora.',
+      when: 'Sempre — é o objetivo de conversão do hero.',
+      impact: 'Métrica direta de conversão; o elemento mais testado em A/B.',
+    },
+    'cta-2': {
+      purpose: 'Rota alternativa de menor compromisso (ex: saber mais) pra quem não está pronto.',
+      when: 'Quando o público tem níveis de intenção diferentes.',
+      impact: 'Recupera visitantes que sairiam sem tomar nenhuma ação.',
+    },
+    'cta-3': {
+      purpose: 'Terceira via, geralmente de baixo compromisso e alto suporte (ex: falar com vendas).',
+      when: 'Ciclo de venda mais longo ou ticket alto, onde falta contato humano.',
+      impact: 'Atende quem precisa de conversa antes de decidir; polui se usado sem necessidade real.',
+    },
+    helperText: {
+      purpose: 'Remove objeções rápidas perto do CTA (preço, cartão, compromisso).',
+      when: 'Quando existe fricção conhecida que trava o clique.',
+      impact: 'Reduz hesitação no momento exato da decisão, sobe a taxa de clique.',
+    },
+    ratingCompact: {
+      purpose: 'Prova social quantitativa, rápida de escanear.',
+      when: 'Quando já existem avaliações reais suficientes pra parecer confiável.',
+      impact: 'Reduz percepção de risco sem ocupar espaço extra no layout.',
+    },
+    trustBar: {
+      purpose: 'Prova social por associação — empresas/clientes conhecidos que usam o produto.',
+      when: 'Quando há logos reconhecíveis ou relevantes pro público-alvo.',
+      impact: 'Transfere credibilidade de terceiros pro produto; forte em contexto B2B.',
+    },
+  };
+
+  const EL_STORAGE_KEY = 'heroLayouts.hiddenElements.v2';
+  const HERO_VISUAL_POS_KEY = 'heroLayouts.heroVisualPosition';
+  const SOCIAL_ORDER_KEY = 'heroLayouts.socialProofOrder';
+
+  function loadJSON(key, fallback){
+    try { const v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; }
+    catch { return fallback; }
+  }
+  function saveJSON(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  let hiddenMap = loadJSON(EL_STORAGE_KEY, {});
+  let heroVisualPos = loadJSON(HERO_VISUAL_POS_KEY, {});
+  let socialOrder = loadJSON(SOCIAL_ORDER_KEY, {});
+
+  function elSelector(stageId, key){
+    return `#${stageId} [data-el="${key}"]`;
+  }
+  function isElementHidden(stageId, key){
+    const saved = (hiddenMap[stageId] || {})[key];
+    if (saved !== undefined) return saved;
+    const entry = (ELEMENT_REGISTRY[stageId] || []).find(e => e.key === key);
+    return !!(entry && entry.defaultHidden);
+  }
+  function setElementHidden(stageId, key, hidden){
+    const el = document.querySelector(elSelector(stageId, key));
+    if (el) el.style.display = hidden ? 'none' : '';
+    if (!hiddenMap[stageId]) hiddenMap[stageId] = {};
+    hiddenMap[stageId][key] = hidden;
+    saveJSON(EL_STORAGE_KEY, hiddenMap);
+  }
+  function applyHiddenState(){
+    Object.keys(ELEMENT_REGISTRY).forEach(stageId => {
+      ELEMENT_REGISTRY[stageId].forEach(({ key }) => {
+        const el = document.querySelector(elSelector(stageId, key));
+        if (el) el.style.display = isElementHidden(stageId, key) ? 'none' : '';
+      });
+    });
+  }
+
+  // hero visual: restricted to 2 meaningful positions (mid = before CTAs, bottom = end of hero)
+  function getHeroVisualPosition(stageId){
+    return heroVisualPos[stageId] || 'mid';
+  }
+  function applyHeroVisualPosition(stageId){
+    const el = document.querySelector(elSelector(stageId, 'heroVisual'));
+    const container = document.getElementById(stageId + '-inner');
+    const ctaGroup = document.getElementById(stageId + '-cta-group');
+    if (!el || !container) return;
+    if (getHeroVisualPosition(stageId) === 'bottom') {
+      container.appendChild(el);
+    } else if (ctaGroup) {
+      container.insertBefore(el, ctaGroup);
+    }
+  }
+  function setHeroVisualPosition(stageId, pos){
+    heroVisualPos[stageId] = pos;
+    saveJSON(HERO_VISUAL_POS_KEY, heroVisualPos);
+    applyHeroVisualPosition(stageId);
+  }
+
+  // ratingCompact <-> trustBar: the one pair of elements that's genuinely interchangeable
+  function isRatingFirst(stageId){
+    return socialOrder[stageId] !== false;
+  }
+  function applySocialOrder(stageId){
+    const rating = document.querySelector(elSelector(stageId, 'ratingCompact'));
+    const trust = document.querySelector(elSelector(stageId, 'trustBar'));
+    if (!rating || !trust) return;
+    const parent = rating.parentElement;
+    if (isRatingFirst(stageId)) parent.insertBefore(rating, trust);
+    else parent.insertBefore(trust, rating);
+  }
+  function toggleSocialOrder(stageId){
+    socialOrder[stageId] = !isRatingFirst(stageId);
+    saveJSON(SOCIAL_ORDER_KEY, socialOrder);
+    applySocialOrder(stageId);
+  }
+
+  const elTooltip = document.createElement('div');
+  elTooltip.className = 'elpanel-tooltip';
+  elTooltip.innerHTML = '<dl></dl>';
+  document.body.appendChild(elTooltip);
+  const elTooltipDl = elTooltip.querySelector('dl');
+
+  function showElTooltip(row, key){
+    const desc = EL_DESCRIPTIONS[key];
+    if (!desc) { elTooltip.classList.remove('visible'); return; }
+    elTooltipDl.innerHTML =
+      '<dt>Propósito</dt><dd>' + desc.purpose + '</dd>' +
+      '<dt>Quando usar</dt><dd>' + desc.when + '</dd>' +
+      '<dt>Impacto esperado</dt><dd>' + desc.impact + '</dd>';
+    const rect = row.getBoundingClientRect();
+    elTooltip.style.left = (rect.right + 10) + 'px';
+    elTooltip.style.top = (rect.top + rect.height / 2) + 'px';
+    elTooltip.classList.add('visible');
+  }
+  function hideElTooltip(){
+    elTooltip.classList.remove('visible');
+  }
+
+  const elPanelList = document.getElementById('elPanelList');
+  function renderElPanel(stageId){
+    elPanelList.innerHTML = '';
+    const elements = ELEMENT_REGISTRY[stageId];
+    if (!elements || !elements.length) {
+      const empty = document.createElement('p');
+      empty.className = 'elpanel-empty font-mono text-[10px] px-2 py-1.5 max-w-[180px] leading-relaxed';
+      empty.textContent = 'Elementos ainda não mapeados para este layout.';
+      elPanelList.appendChild(empty);
+      return;
+    }
+    elements.forEach(({ key, label }) => {
+      const row = document.createElement('div');
+      row.className = 'elpanel-row flex items-center justify-between gap-3 px-2 py-1.5 rounded-lg transition-colors';
+      row.dataset.stage = stageId;
+      row.dataset.key = key;
+
+      const name = document.createElement('span');
+      name.className = 'font-mono text-[10px] whitespace-nowrap';
+      name.textContent = label;
+
+      const sw = document.createElement('button');
+      sw.type = 'button';
+      const hidden = isElementHidden(stageId, key);
+      sw.className = 'elpanel-switch' + (hidden ? '' : ' on');
+      sw.setAttribute('role', 'switch');
+      sw.setAttribute('aria-checked', String(!hidden));
+      sw.setAttribute('aria-label', label);
+      sw.addEventListener('click', () => {
+        const nowHidden = sw.classList.contains('on');
+        sw.classList.toggle('on', !nowHidden);
+        sw.setAttribute('aria-checked', String(!nowHidden));
+        setElementHidden(stageId, key, nowHidden);
+        if (elLabelsActive) showElLabels();
+      });
+
+      row.addEventListener('mouseenter', () => showElTooltip(row, key));
+      row.addEventListener('mouseleave', hideElTooltip);
+      row.addEventListener('focusin', () => showElTooltip(row, key));
+      row.addEventListener('focusout', hideElTooltip);
+
+      row.appendChild(name);
+      row.appendChild(sw);
+      elPanelList.appendChild(row);
+
+      if (key === 'heroVisual') {
+        const extra = document.createElement('div');
+        extra.className = 'elpanel-extra';
+        const posWrap = document.createElement('div');
+        posWrap.className = 'elpanel-pos';
+        [['mid', 'Meio'], ['bottom', 'Final']].forEach(([pos, posLabel]) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = posLabel;
+          if (getHeroVisualPosition(stageId) === pos) b.classList.add('active');
+          b.addEventListener('click', () => {
+            setHeroVisualPosition(stageId, pos);
+            [...posWrap.children].forEach(c => c.classList.toggle('active', c === b));
+            if (elLabelsActive) showElLabels();
+          });
+          posWrap.appendChild(b);
+        });
+        extra.appendChild(posWrap);
+        elPanelList.appendChild(extra);
+      }
+
+      if (key === 'trustBar') {
+        const extra = document.createElement('div');
+        extra.className = 'elpanel-extra';
+        const swapBtn = document.createElement('button');
+        swapBtn.type = 'button';
+        swapBtn.className = 'elpanel-swap';
+        swapBtn.innerHTML = '<i class="ti ti-arrows-vertical" aria-hidden="true"></i> Trocar ordem com Rating';
+        swapBtn.addEventListener('click', () => {
+          toggleSocialOrder(stageId);
+          if (elLabelsActive) showElLabels();
+        });
+        extra.appendChild(swapBtn);
+        elPanelList.appendChild(extra);
+      }
+    });
+  }
+
+  applyHeroVisualPosition('s1');
+  applySocialOrder('s1');
+  applyHiddenState();
+  renderElPanel('s1');
+
+  // hover labels over the real elements while the left panel is open
+  const elPanelZone = document.getElementById('elPanelZone');
+  const elLabelLayer = document.createElement('div');
+  document.body.appendChild(elLabelLayer);
+  let elLabels = [];
+  let elLabelsActive = false;
+
+  function showElLabels(){
+    hideElLabels();
+    const activeStage = document.querySelector('.stage.active');
+    const stageId = activeStage ? activeStage.id : null;
+    const elements = stageId ? ELEMENT_REGISTRY[stageId] : null;
+    if (!elements) return;
+    const positions = ['left', 'center', 'right', 'center'];
+    elLabels = elements.map(({ key, label }, i) => {
+      const target = document.querySelector(elSelector(stageId, key));
+      if (!target || target.style.display === 'none') return null;
+      const rect = target.getBoundingClientRect();
+      const pos = positions[i % positions.length];
+      const anchorX = pos === 'right' ? rect.right : pos === 'left' ? rect.left : rect.left + rect.width / 2;
+      const badge = document.createElement('span');
+      badge.className = 'el-hover-label pos-' + pos;
+      badge.textContent = label;
+      badge.style.left = anchorX + 'px';
+      badge.style.top = Math.max(24, rect.top) + 'px';
+      elLabelLayer.appendChild(badge);
+      requestAnimationFrame(() => badge.classList.add('visible'));
+      return badge;
+    }).filter(Boolean);
+    elLabelsActive = true;
+  }
+  function hideElLabels(){
+    elLabels.forEach(badge => badge.remove());
+    elLabels = [];
+    elLabelsActive = false;
+  }
+  elPanelZone.addEventListener('mouseenter', showElLabels);
+  elPanelZone.addEventListener('mouseleave', () => { hideElLabels(); hideElTooltip(); });
+  elPanelZone.addEventListener('focusin', showElLabels);
+  elPanelZone.addEventListener('focusout', () => { hideElLabels(); hideElTooltip(); });
 </script>
 </body>
 </html>

@@ -34,14 +34,97 @@ export interface CodeEmbedProps extends BaseBlockProps {
     minHeight?: number;
 }
 
-/** Hero — primeiro bloco estruturado (campos tipados, não HTML livre). */
+/** Variantes de layout do Hero (o campo discriminador `layout`). */
+export type HeroLayout = 'centered' | 'split' | 'fullbleed' | 'typographic' | 'avatars' | 'pricing';
+
+export interface HeroAvatar {
+    imageUrl?: string;
+    alt?: string;
+}
+
+export interface HeroBadge {
+    tag?: string;
+    label?: string;
+    href?: string;
+}
+
+export interface HeroVisual {
+    imageUrl?: string;
+    position?: 'none' | 'mid' | 'bottom';
+}
+
+export type HeroCtaVariant = 'primary' | 'outline' | 'ghost';
+
+export interface HeroCta {
+    label?: string;
+    href?: string;
+    variant?: HeroCtaVariant;
+}
+
+export interface HeroRating {
+    value?: string;
+    count?: string;
+}
+
+export type HeroSocialOrder = 'rating-first' | 'trust-first';
+
+/** Toggle Mostrar/Ocultar por elemento (undefined = mostrar). */
+export type HeroToggle = 'yes' | 'no';
+
+export interface HeroPlan {
+    name?: string;
+    price?: string;
+    period?: string;
+    features?: { text: string }[];
+    ctaText?: string;
+    ctaHref?: string;
+}
+
+/**
+ * Hero — primeiro bloco estruturado (campos tipados, não HTML livre).
+ * Um único bloco com várias variantes de layout: `layout` escolhe qual, e o
+ * painel do editor mostra só os campos daquela variante (ver `showFor` no
+ * registry + `resolveFields` no adapter). Campos são um superset; cada
+ * variante usa o subconjunto que precisa. Ausência de `layout` = 'centered'
+ * (retrocompat com Heroes salvos antes das variantes).
+ */
 export interface HeroProps extends BaseBlockProps {
-    title: string;
+    layout?: HeroLayout;
+    // compartilhados
+    eyebrow?: string;
+    title?: string;
     subtitle?: string;
+    align?: 'left' | 'center';
     imageUrl?: string;
     ctaText?: string;
     ctaHref?: string;
-    align?: 'left' | 'center';
+    // centralizado completo (paridade s1)
+    announcementBadge?: HeroBadge;
+    heroVisual?: HeroVisual;
+    ctas?: HeroCta[];
+    helperText?: string;
+    rating?: HeroRating;
+    trustBar?: { text: string }[];
+    socialProofOrder?: HeroSocialOrder;
+    // toggles de visibilidade por elemento (undefined = mostrar)
+    showEyebrow?: HeroToggle;
+    showSubtitle?: HeroToggle;
+    showBadge?: HeroToggle;
+    showHelper?: HeroToggle;
+    showRating?: HeroToggle;
+    showTrust?: HeroToggle;
+    // tipográfico
+    bigWord?: string;
+    accentWord?: string;
+    caption?: string;
+    // avatares
+    avatars?: HeroAvatar[];
+    ratingValue?: string;
+    ratingCount?: string;
+    // cartão de preço
+    plan?: HeroPlan;
+    // contexto injetado pelo Puck no editor (ausente na produção)
+    puck?: { isEditing?: boolean };
 }
 
 export interface FeatureItem {

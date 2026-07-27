@@ -1,0 +1,112 @@
+/*
+ * Chrome do editor — SÓ existe no bundle do editor (importado no main.tsx),
+ * nunca vai pra produção. Dá:
+ *  1. o layout custom da aba "Página" (paleta à esquerda, canvas no centro,
+ *     painel de campos numa aba à direita que revela no hover);
+ *  2. os labels dos elementos do Hero no canvas (via data-el/-label).
+ */
+
+/* ---- layout custom da aba Página ---- */
+.editor-shell {
+    position: relative;
+    display: flex;
+    height: 100%;
+    min-height: 0;
+}
+.editor-left {
+    width: 240px;
+    flex: none;
+    overflow-y: auto;
+    border-right: 1px solid #e5e7eb;
+    background: #fff;
+    padding: 12px;
+}
+.editor-canvas {
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
+}
+
+/* painel de campos: aba na borda direita, revela no hover/foco */
+.fields-hover-zone {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 100%;
+    z-index: 20;
+}
+.fields-tab {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 128px;
+    background: #111827;
+    color: #fff;
+    border-radius: 10px 0 0 10px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    writing-mode: vertical-rl;
+    transition: background 0.2s ease;
+}
+.fields-tab:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+.fields-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 340px;
+    height: 100%;
+    overflow-y: auto;
+    background: #fff;
+    border-left: 1px solid #e5e7eb;
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.12);
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.fields-hover-zone:hover .fields-panel,
+.fields-hover-zone:focus-within .fields-panel {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+.fields-hover-zone:hover .fields-tab,
+.fields-hover-zone:focus-within .fields-tab {
+    background: #2563eb;
+}
+
+/* ---- labels dos elementos no canvas (aparecem ao passar o mouse) ----
+ * Escopo global do bundle do editor (data-el só existe no Hero). Produção não
+ * carrega este arquivo, então os atributos data-el ficam inertes lá. */
+[data-el] {
+    position: relative;
+}
+[data-el]:hover::after {
+    content: attr(data-el-label);
+    position: absolute;
+    top: -6px;
+    left: 0;
+    transform: translateY(-100%);
+    background: #111827;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    padding: 3px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 30;
+}
