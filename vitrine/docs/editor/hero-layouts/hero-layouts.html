@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CINDER — galeria de heros</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.44.0/tabler-icons.min.css">
+<style>
+  :root{
+    --bg:#150F0C;
+    --bg2:#1D1512;
+    --bg3:#241A15;
+    --copper:#C9793E;
+    --copper-light:#E3A268;
+    --cream:#F3EAE0;
+    --muted:#A89588;
+    --steam:#8FAFA8;
+    --line:rgba(243,234,224,0.12);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    height:100dvh;
+    overflow:hidden;
+  }
+  .font-display{font-family:'Fraunces',serif;}
+  .font-mono{font-family:'JetBrains Mono',monospace;}
+  .stage{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .5s ease;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .stage.active{opacity:1;pointer-events:auto;}
+  .grain::before{
+    content:'';position:absolute;inset:0;pointer-events:none;opacity:.05;
+    background-image:radial-gradient(circle at 1px 1px, var(--cream) 1px, transparent 0);
+    background-size:3px 3px;
+  }
+  .navdot{width:7px;height:7px;border-radius:999px;background:var(--muted);flex:none;transition:all .2s ease;}
+  .navlink{color:var(--muted);}
+  .navlink .navlabel{color:var(--muted);transition:color .2s ease;}
+  .navlink:hover{background:rgba(255,255,255,0.06);}
+  .navlink:hover .navlabel{color:var(--cream);}
+  .navlink:hover .navdot{background:var(--copper-light);}
+  .navlink.active{background:rgba(201,121,62,0.14);}
+  .navlink.active .navdot{background:var(--copper);transform:scale(1.5);}
+  .navlink.active .navlabel{color:var(--cream);font-weight:500;}
+  .navlink:focus-visible{outline:2px solid var(--copper);outline-offset:2px;}
+  ::selection{background:var(--copper);color:var(--bg);}
+
+  /* nav hover-reveal tab (desktop) */
+  .nav-panel{
+    position:absolute;top:50%;right:0;
+    padding-right:2.25rem; /* bridge over the tab — no hover gap */
+    opacity:0;transform:translate(10px,-50%);pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease;
+  }
+  .nav-hover-zone:hover .nav-panel,
+  .nav-hover-zone:focus-within .nav-panel{
+    opacity:1;transform:translate(0,-50%);pointer-events:auto;
+  }
+  .nav-hover-zone:hover .nav-tab,
+  .nav-hover-zone:focus-within .nav-tab{
+    background:rgba(201,121,62,0.22);border-color:rgba(201,121,62,0.5);
+  }
+  .nav-hover-zone:hover .nav-tab .nav-tab-chevron{transform:rotate(180deg);}
+  .nav-tab-chevron{transition:transform .2s ease;}
+
+  /* view switch (desktop/mobile preview) */
+  .view-btn{color:var(--muted);}
+  .view-btn:hover{background:rgba(255,255,255,0.08);color:var(--cream);}
+  .view-btn.active{background:rgba(201,121,62,0.18);color:var(--copper-light);}
+  .view-btn:focus-visible{outline:2px solid var(--copper);outline-offset:2px;}
+
+  body.preview-mobile{background:#0a0a0a;}
+  body.preview-mobile #viewportBackdrop{opacity:1;pointer-events:auto;}
+  body.preview-mobile #viewportStage{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:390px;height:844px;max-height:88vh;
+    border:12px solid #2b2d33;border-radius:2.75rem;
+    outline:1px solid rgba(255,255,255,0.12);
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,0,0,.6), 0 40px 100px rgba(0,0,0,.85);
+    z-index:20;
+  }
+  #viewportBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.8);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:15;}
+  .device-home-indicator,.device-notch{position:absolute;left:50%;transform:translateX(-50%);z-index:25;display:none;}
+  .device-home-indicator{bottom:8px;width:110px;height:4px;border-radius:999px;background:rgba(255,255,255,.4);}
+  .device-notch{top:0;width:120px;height:24px;border-radius:0 0 16px 16px;background:#2b2d33;}
+  body.preview-mobile .device-home-indicator,
+  body.preview-mobile .device-notch{display:block;}
+  @keyframes drift{0%{transform:translate(0,0) scale(1);}50%{transform:translate(-3%,2%) scale(1.08);}100%{transform:translate(0,0) scale(1);}}
+  .drift{animation:drift 14s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+  .bob{animation:bob 2s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){
+    .drift,.bob{animation:none;}
+  }
+  .gauge-ring{stroke-dasharray:280;stroke-dashoffset:70;}
+  input::placeholder{color:var(--muted);}
+</style>
+</head>
+<body class="relative w-full h-screen">
+
+<!-- persistent chrome -->
+<div class="fixed top-5 left-5 md:top-6 md:left-6 z-40 flex items-center gap-2 select-none">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--copper)" stroke-width="1.5"/><path d="M12 7v5l3 2" stroke="var(--copper)" stroke-width="1.5" stroke-linecap="round"/></svg>
+  <span class="font-display text-sm tracking-[0.2em] uppercase text-[var(--cream)]">Cinder</span>
+</div>
+<div id="counter" class="fixed bottom-20 left-5 md:bottom-6 md:left-6 z-40 font-mono text-[10px] md:text-xs text-[var(--muted)] select-none">01 / 18 — centralizado</div>
+
+<!-- desktop/mobile preview switch -->
+<div class="fixed top-5 right-5 md:top-6 md:right-6 z-50 flex items-center gap-0.5 p-1 rounded-full backdrop-blur-xl bg-[#0B0806]/85 border border-white/15 shadow-2xl shadow-black/50">
+  <button type="button" data-view="desktop" class="view-btn active w-8 h-8 rounded-full flex items-center justify-center transition-colors" aria-label="Ver em desktop" aria-pressed="true">
+    <i class="ti ti-device-desktop text-base" aria-hidden="true" style="color:var(--muted)"></i>
+  </button>
+  <button type="button" data-view="mobile" class="view-btn w-8 h-8 rounded-full flex items-center justify-center transition-colors" aria-label="Ver em celular" aria-pressed="false">
+    <i class="ti ti-device-mobile text-base" aria-hidden="true" style="color:var(--muted)"></i>
+  </button>
+</div>
+
+<!-- vertical side nav (desktop): subtle tab, reveals on hover/focus -->
+<div class="nav-hover-zone hidden md:block fixed top-1/2 right-0 -translate-y-1/2 z-50">
+  <div class="nav-tab flex flex-col items-center justify-center gap-1.5 w-7 h-28 rounded-l-xl bg-[#0B0806]/80 border border-r-0 border-white/15 backdrop-blur-xl cursor-pointer transition-colors">
+    <i class="ti ti-chevron-left nav-tab-chevron text-sm" aria-hidden="true" style="color:var(--muted)"></i>
+    <span class="w-1 h-1 rounded-full bg-white/45"></span>
+    <span class="w-1 h-1 rounded-full bg-white/45"></span>
+    <span class="w-1 h-1 rounded-full bg-white/45"></span>
+  </div>
+  <div class="nav-panel">
+    <nav class="flex flex-col gap-0.5 px-3 py-4 rounded-2xl backdrop-blur-xl bg-[#0B0806]/95 border border-white/15 shadow-2xl shadow-black/60 max-h-[82vh] overflow-y-auto">
+      <a href="#" data-target="s1" class="navlink active flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors" aria-current="true"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">01 Centralizado</span></a>
+      <a href="#" data-target="s2" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">02 Dividido</span></a>
+      <a href="#" data-target="s3" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">03 Imagem full</span></a>
+      <a href="#" data-target="s4" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">04 Vídeo fundo</span></a>
+      <a href="#" data-target="s5" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">05 Tipográfico</span></a>
+      <a href="#" data-target="s6" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">06 Carrossel</span></a>
+      <a href="#" data-target="s7" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">07 Interativo</span></a>
+      <a href="#" data-target="s8" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">08 Formulário</span></a>
+      <a href="#" data-target="s9" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">09 Mockup produto</span></a>
+      <a href="#" data-target="s10" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">10 Ilustração</span></a>
+      <a href="#" data-target="s11" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">11 Prova social</span></a>
+      <a href="#" data-target="s12" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">12 Assimétrico</span></a>
+      <a href="#" data-target="s13" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">13 Bento</span></a>
+      <a href="#" data-target="s14" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">14 Scroll cheio</span></a>
+      <a href="#" data-target="s15" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">15 Screenshot flutuante</span></a>
+      <a href="#" data-target="s16" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">16 Busca central</span></a>
+      <a href="#" data-target="s17" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">17 Avatares</span></a>
+      <a href="#" data-target="s18" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span><span class="navlabel font-mono text-[10px] whitespace-nowrap">18 Preço em destaque</span></a>
+    </nav>
+  </div>
+</div>
+
+<!-- bottom dot bar (mobile real) -->
+<nav class="md:hidden fixed z-50 flex flex-row gap-0.5 px-2 py-2 rounded-full backdrop-blur-xl bg-[#0B0806]/85 border border-white/15 shadow-2xl shadow-black/50 bottom-3 left-1/2 -translate-x-1/2 max-w-[94vw] overflow-x-auto">
+  <a href="#" data-target="s1" class="navlink active flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors" aria-current="true"><span class="navdot"></span></a>
+  <a href="#" data-target="s2" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s3" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s4" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s5" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s6" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s7" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s8" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s9" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s10" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s11" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s12" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s13" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s14" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s15" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s16" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s17" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+  <a href="#" data-target="s18" class="navlink flex items-center gap-2.5 group px-2 py-1.5 rounded-lg transition-colors"><span class="navdot"></span></a>
+</nav>
+
+<!-- backdrop dim behind the mobile device frame -->
+<div id="viewportBackdrop"></div>
+
+<!-- ================= STAGES ================= -->
+<div id="viewportStage" class="relative w-full h-full">
+  <span class="device-notch"></span>
+  <span class="device-home-indicator"></span>
+
+<!-- 01 CENTERED -->
+<!-- Hero props: eyebrow, title, subtitle, primaryCta{label,href}, secondaryCta{label,href} -->
+<section id="s1" class="stage active grain">
+  <div class="min-h-full flex flex-col items-center justify-center text-center px-6 md:px-10 py-24 md:py-16">
+    <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-6">9 BAR · EXTRAÇÃO CONSTANTE</span>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">A pressão certa,<br><span class="italic text-[var(--copper-light)]">a cada xícara.</span></h1>
+    <p class="mt-6 max-w-md text-[var(--muted)] text-base leading-relaxed">Cinder é a máquina de espresso que mede, ajusta e repete — sem depender da sua sorte de barista.</p>
+    <div class="mt-9 flex flex-wrap items-center justify-center gap-4">
+      <button class="px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition">Reservar a Cinder One</button>
+      <button class="px-6 py-3 rounded-full border border-white/15 text-sm text-[var(--cream)] hover:border-white/40 transition">Ver especificações</button>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SPLIT -->
+<!-- Hero props: eyebrow, title, subtitle, ctaLabel, ctaHref, imageUrl -->
+<section id="s2" class="stage grain">
+  <div class="min-h-full grid grid-cols-1 md:grid-cols-2">
+    <div class="flex flex-col justify-center px-6 md:px-10 lg:px-16 py-20 md:py-16">
+      <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-5">EDIÇÃO 002</span>
+      <h1 class="font-display text-4xl sm:text-5xl leading-[1.08] max-w-md">Metade máquina,<br>metade instrumento.</h1>
+      <p class="mt-5 max-w-sm text-[var(--muted)] leading-relaxed">Corpo em cobre escovado, caldeira dupla e um manômetro analógico que você aprende a ler como um velocímetro.</p>
+      <a href="#" class="mt-8 inline-flex items-center gap-2 text-sm text-[var(--copper-light)] border-b border-[var(--copper)]/40 w-fit pb-1">Conhecer a Cinder Duo →</a>
+    </div>
+    <div class="relative min-h-[45vh] md:min-h-full bg-[var(--bg3)] flex items-center justify-center overflow-hidden">
+      <img src="assets/hero-split-product.jpg" alt="Máquina de espresso de cobre em cima de uma bancada" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+      <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg3)]/90 via-[var(--bg3)]/30 to-black/20"></div>
+      <svg width="200" height="200" viewBox="0 0 200 200" class="relative opacity-95">
+        <circle cx="100" cy="100" r="78" fill="none" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="100" cy="100" r="78" fill="none" stroke="var(--copper)" stroke-width="2" class="gauge-ring" stroke-linecap="round" transform="rotate(-90 100 100)"/>
+        <line x1="100" y1="100" x2="130" y2="70" stroke="var(--cream)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="5" fill="var(--cream)"/>
+        <text x="100" y="145" text-anchor="middle" fill="var(--muted)" font-family="JetBrains Mono" font-size="11">9 BAR</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 03 FULL BLEED IMAGE -->
+<!-- Hero props: eyebrow, title, ctaLabel, ctaHref, imageUrl -->
+<section id="s3" class="stage min-h-full">
+  <div class="absolute inset-0 overflow-hidden">
+    <img src="assets/hero-fullbleed.jpg" alt="Máquina de espresso e utensílios de café sobre uma bancada" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10"></div>
+  </div>
+  <div class="relative min-h-full flex flex-col justify-end px-6 md:px-10 lg:px-16 pb-28 md:pb-20 pt-24">
+    <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper-light)] mb-4">FEITA À MÃO EM PORTO</span>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] max-w-2xl text-[var(--cream)]">Fundida em cobre.<br>Calibrada por engenheiros.</h1>
+    <button class="mt-7 w-fit px-6 py-3 rounded-full bg-[var(--cream)] text-[var(--bg)] text-sm font-medium hover:bg-white transition">Explorar o processo</button>
+  </div>
+</section>
+
+<!-- 04 VIDEO BG (simulated motion) -->
+<!-- Hero props: eyebrow, title, videoUrl, posterUrl, captionLabel -->
+<section id="s4" class="stage min-h-full">
+  <div class="absolute inset-0 overflow-hidden bg-[var(--bg)]">
+    <div class="absolute -inset-20 opacity-70 drift" style="background:conic-gradient(from 90deg at 50% 50%, #150F0C, #3a2416, #17110E, #2a1a10, #150F0C); filter:blur(40px);"></div>
+    <div class="absolute inset-0 bg-black/50"></div>
+  </div>
+  <div class="relative min-h-full flex flex-col items-center justify-center text-center px-6 py-24 md:py-16">
+    <button aria-label="reproduzir" class="w-14 h-14 rounded-full border border-white/30 flex items-center justify-center mb-8 hover:border-white/60 transition">
+      <i class="ti ti-player-play text-xl" aria-hidden="true" style="color:var(--cream)"></i>
+    </button>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl max-w-2xl leading-[1.05] text-[var(--cream)]">Assista ao vapor<br><span class="italic text-[var(--copper-light)]">encontrar a crema.</span></h1>
+    <span class="mt-5 font-mono text-xs text-[var(--muted)] tracking-widest">00:32 · LOOP EM VÍDEO</span>
+  </div>
+</section>
+
+<!-- 05 TYPOGRAPHIC MINIMAL -->
+<!-- Hero props: bigWord, accentWord, caption -->
+<section id="s5" class="stage min-h-full bg-[var(--bg)]">
+  <div class="min-h-full flex flex-col justify-center gap-10 px-6 md:px-20 py-24 md:py-16">
+    <h1 class="font-display text-[16vw] sm:text-[13vw] md:text-[9vw] leading-[0.86] tracking-tight text-[var(--cream)]">
+      NOVE<br><span class="text-[var(--copper)]">BAR.</span>
+    </h1>
+    <p class="max-w-xs text-[var(--muted)] text-sm leading-relaxed md:absolute md:bottom-10 md:right-24 lg:right-28 md:text-right">A pressão exata da melhor extração italiana, mantida por toda a xícara. Cinder One, a partir de outubro.</p>
+  </div>
+</section>
+
+<!-- 06 CAROUSEL -->
+<!-- Hero props: slides[]{eyebrow,title,imageUrl} -->
+<section id="s6" class="stage min-h-full bg-[var(--bg2)]">
+  <div class="min-h-full flex flex-col items-center justify-center px-6 py-24 md:py-16">
+    <div id="carouselTrack" class="relative w-full max-w-2xl min-h-72 flex items-center justify-center overflow-hidden">
+      <div class="carousel-slide flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left" data-i="0">
+        <img src="assets/hero-carousel-1.jpg" alt="Máquina de espresso modelo One" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-white/10" loading="lazy">
+        <div>
+          <span class="font-mono text-xs text-[var(--copper)] tracking-[0.3em]">MODELO ONE</span>
+          <h2 class="font-display text-3xl md:text-4xl mt-3">Compacta. Doméstica.</h2>
+        </div>
+      </div>
+      <div class="carousel-slide hidden flex-col sm:flex-row items-center gap-6 text-center sm:text-left" data-i="1">
+        <img src="assets/hero-carousel-2.jpg" alt="Máquina de espresso modelo Duo" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-white/10" loading="lazy">
+        <div>
+          <span class="font-mono text-xs text-[var(--copper)] tracking-[0.3em]">MODELO DUO</span>
+          <h2 class="font-display text-3xl md:text-4xl mt-3">Caldeira dupla, ritmo de café.</h2>
+        </div>
+      </div>
+      <div class="carousel-slide hidden flex-col sm:flex-row items-center gap-6 text-center sm:text-left" data-i="2">
+        <img src="assets/hero-carousel-3.jpg" alt="Máquina de espresso modelo Pro" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-white/10" loading="lazy">
+        <div>
+          <span class="font-mono text-xs text-[var(--copper)] tracking-[0.3em]">MODELO PRO</span>
+          <h2 class="font-display text-3xl md:text-4xl mt-3">Para quem serve trinta xícaras por dia.</h2>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-6 mt-8">
+      <button onclick="carouselMove(-1)" aria-label="anterior" class="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--copper)]"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+      <div class="flex gap-2" id="carouselDots"></div>
+      <button onclick="carouselMove(1)" aria-label="próximo" class="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--copper)]"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- 07 INTERACTIVE / PARALLAX -->
+<!-- Hero props: title -->
+<section id="s7" class="stage min-h-full bg-[var(--bg)] overflow-hidden">
+  <div id="parallaxZone" class="min-h-full flex items-center justify-center px-6 py-24 md:py-16">
+    <div class="parallax-el absolute w-40 h-40 rounded-full border border-[var(--copper)]/40" style="top:20%;left:18%;" data-depth="30"></div>
+    <div class="parallax-el absolute w-24 h-24 rounded-full bg-[var(--copper)]/10" style="bottom:18%;right:22%;" data-depth="60"></div>
+    <div class="parallax-el absolute w-3 h-3 rounded-full bg-[var(--copper-light)]" style="top:35%;right:30%;" data-depth="90"></div>
+    <h1 class="parallax-el font-display text-4xl sm:text-5xl md:text-6xl text-center max-w-xl leading-[1.05] relative z-10" data-depth="15">Mova o cursor.<br><span class="italic text-[var(--copper-light)]">Sinta a pressão mudar.</span></h1>
+  </div>
+  <span class="absolute bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 font-mono text-[11px] text-[var(--muted)] tracking-widest">MOVIMENTE O MOUSE</span>
+</section>
+
+<!-- 08 FORM -->
+<!-- Hero props: eyebrow, title, formPlaceholder, ctaLabel, helperText -->
+<section id="s8" class="stage min-h-full bg-[var(--bg2)]">
+  <div class="min-h-full flex flex-col items-center justify-center text-center px-6 py-24 md:py-16">
+    <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-5">LISTA DE ESPERA · LOTE 03</span>
+    <h1 class="font-display text-4xl sm:text-5xl max-w-lg leading-[1.08]">Reserve sua Cinder<br>antes de outubro.</h1>
+    <form onsubmit="return false" class="mt-8 flex w-full max-w-sm flex-col sm:flex-row gap-2">
+      <input type="email" placeholder="seu@email.com" class="flex-1 px-4 py-3 rounded-full bg-white/5 border border-white/15 text-sm text-[var(--cream)] outline-none focus:border-[var(--copper)]"/>
+      <button class="px-5 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition whitespace-nowrap">Entrar na lista</button>
+    </form>
+    <span class="mt-4 text-xs text-[var(--muted)]">1.204 pessoas já reservaram · sem cartão agora</span>
+  </div>
+</section>
+
+<!-- 09 PRODUCT MOCKUP -->
+<!-- Hero props: eyebrow, title, subtitle, mockupValue, mockupLabel -->
+<section id="s9" class="stage min-h-full bg-[var(--bg)]">
+  <div class="min-h-full grid md:grid-cols-2 items-center px-6 md:px-10 lg:px-16 gap-10 py-24 md:py-16">
+    <div>
+      <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-5 block">APP CINDER</span>
+      <h1 class="font-display text-4xl sm:text-5xl leading-[1.08] max-w-md">Controle a extração<br>pelo celular.</h1>
+      <p class="mt-5 max-w-sm text-[var(--muted)]">Temperatura, pressão e tempo de shot, sincronizados em tempo real com sua máquina.</p>
+    </div>
+    <div class="flex justify-center">
+      <div class="w-56 h-[420px] rounded-[2.2rem] bg-[var(--bg3)] border border-white/10 p-3 shadow-2xl">
+        <div class="w-full h-full rounded-[1.6rem] bg-[var(--bg2)] flex flex-col p-5">
+          <span class="font-mono text-[10px] text-[var(--muted)]">SHOT AO VIVO</span>
+          <div class="flex-1 flex items-center justify-center">
+            <svg width="120" height="120" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--line)" stroke-width="6"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--copper)" stroke-width="6" stroke-dasharray="264" stroke-dashoffset="90" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+              <text x="50" y="55" text-anchor="middle" fill="var(--cream)" font-family="JetBrains Mono" font-size="16">9.1</text>
+            </svg>
+          </div>
+          <span class="font-mono text-[10px] text-[var(--muted)] text-center">BAR DE PRESSÃO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 CUSTOM ILLUSTRATION -->
+<!-- Hero props: eyebrow, title, illustrationUrl -->
+<section id="s10" class="stage min-h-full bg-[var(--bg2)]">
+  <div class="min-h-full flex flex-col md:flex-row items-center justify-center gap-10 px-6 md:px-10 py-24 md:py-16">
+    <svg width="220" height="260" viewBox="0 0 220 260" fill="none" class="flex-none">
+      <rect x="40" y="40" width="140" height="90" rx="6" stroke="var(--copper)" stroke-width="2"/>
+      <rect x="70" y="130" width="80" height="16" fill="var(--copper)"/>
+      <path d="M90 146 L90 200 L130 200 L130 146" stroke="var(--cream)" stroke-width="2"/>
+      <circle cx="60" cy="60" r="10" stroke="var(--cream)" stroke-width="1.5"/>
+      <line x1="60" y1="60" x2="66" y2="53" stroke="var(--copper-light)" stroke-width="1.5"/>
+      <path d="M170 30 q10 15 0 25" stroke="var(--steam)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M160 25 q10 18 0 30" stroke="var(--steam)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+    </svg>
+    <div class="max-w-sm text-center md:text-left">
+      <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)]">TRAÇO A TRAÇO</span>
+      <h1 class="font-display text-3xl sm:text-4xl mt-4 leading-[1.1]">Desenhada como<br>um instrumento de precisão.</h1>
+    </div>
+  </div>
+</section>
+
+<!-- 11 SOCIAL PROOF (stats + logos) -->
+<!-- Hero props: title, logos[], stats[]{value,label} -->
+<section id="s11" class="stage min-h-full bg-[var(--bg)]">
+  <div class="min-h-full flex flex-col items-center justify-center px-6 py-24 md:py-16 text-center">
+    <h1 class="font-display text-3xl sm:text-4xl md:text-5xl max-w-xl leading-[1.08]">Confiada por cafeterias<br>de bairro a torrefações.</h1>
+    <div class="flex flex-wrap justify-center gap-6 md:gap-10 mt-8 font-mono text-xs text-[var(--muted)] tracking-widest opacity-80">
+      <span>NEVE&nbsp;CAFÉ</span><span>ÂMBAR&nbsp;TORRA</span><span>PORTO&nbsp;ESPRESSO</span><span>LUME</span>
+    </div>
+    <div class="grid grid-cols-3 gap-6 md:gap-10 mt-12 font-mono">
+      <div><div class="text-2xl md:text-3xl text-[var(--copper-light)]">1.204</div><div class="text-[11px] text-[var(--muted)] mt-1">máquinas em uso</div></div>
+      <div><div class="text-2xl md:text-3xl text-[var(--copper-light)]">9.0</div><div class="text-[11px] text-[var(--muted)] mt-1">bar constantes</div></div>
+      <div><div class="text-2xl md:text-3xl text-[var(--copper-light)]">4.9</div><div class="text-[11px] text-[var(--muted)] mt-1">nota média</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 ASYMMETRIC / BROKEN GRID -->
+<!-- Hero props: eyebrow, title, caption, imageUrl -->
+<section id="s12" class="stage min-h-full bg-[var(--bg2)] overflow-hidden">
+  <div class="relative min-h-full px-6 md:px-10 py-24 md:py-0">
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl md:absolute md:top-16 md:left-10 max-w-md leading-[1.05] mb-10 md:mb-0">Cada detalhe,<br>fora do lugar certo.</h1>
+    <div class="w-40 h-52 mx-auto md:mx-0 md:absolute md:top-40 md:left-[38%] bg-[var(--bg3)] border border-white/10 rounded-md rotate-[-6deg] shadow-2xl flex items-center justify-center mb-10 md:mb-0">
+      <span class="font-mono text-[10px] text-[var(--muted)]">CORPO EM COBRE</span>
+    </div>
+    <div class="hidden md:block absolute bottom-24 left-1/2 w-32 h-24 bg-[var(--copper)]/20 border border-[var(--copper)]/40 rounded-md rotate-[5deg]"></div>
+    <p class="max-w-xs text-center md:text-right text-[var(--muted)] text-sm mx-auto md:mx-0 md:absolute md:bottom-16 md:right-14">Uma composição que quebra a grade de propósito — porque o processo de fundição também não é perfeitamente simétrico.</p>
+    <span class="block text-center md:text-left mt-6 md:mt-0 md:absolute md:top-10 md:right-16 font-mono text-xs text-[var(--copper)] tracking-[0.3em]">SÉRIE ARTESANAL</span>
+  </div>
+</section>
+
+<!-- 13 BENTO GRID -->
+<!-- Hero props: title, tiles[]{label,value,icon} -->
+<section id="s13" class="stage min-h-full bg-[var(--bg)]">
+  <div class="min-h-full px-6 md:px-14 py-24 md:py-14 grid grid-cols-2 md:grid-cols-4 grid-rows-3 md:grid-rows-2 gap-3">
+    <div class="col-span-2 row-span-2 rounded-2xl bg-[var(--bg3)] border border-white/10 p-6 flex flex-col justify-end min-h-40">
+      <span class="font-mono text-[10px] text-[var(--copper)] tracking-widest">MÁQUINA</span>
+      <h2 class="font-display text-2xl md:text-3xl mt-2">Cinder One</h2>
+    </div>
+    <div class="col-span-2 rounded-2xl bg-[var(--copper)]/15 border border-[var(--copper)]/30 p-5 flex flex-col justify-center">
+      <span class="font-mono text-[10px] text-[var(--muted)]">PRESSÃO</span>
+      <span class="font-display text-xl md:text-2xl">9 bar fixos</span>
+    </div>
+    <div class="rounded-2xl bg-[var(--bg3)] border border-white/10 p-5 flex flex-col justify-center items-center">
+      <i class="ti ti-temperature text-2xl mb-2" style="color:var(--steam)" aria-hidden="true"></i>
+      <span class="font-mono text-[10px] text-[var(--muted)] text-center">93°C estável</span>
+    </div>
+    <div class="rounded-2xl bg-[var(--bg3)] border border-white/10 p-5 flex flex-col justify-center items-center">
+      <i class="ti ti-clock text-2xl mb-2" style="color:var(--steam)" aria-hidden="true"></i>
+      <span class="font-mono text-[10px] text-[var(--muted)] text-center">25s por shot</span>
+    </div>
+  </div>
+</section>
+
+<!-- 14 FULLSCREEN + SCROLL -->
+<!-- Hero props: bigWord, caption -->
+<section id="s14" class="stage min-h-full bg-[var(--bg)]">
+  <div class="min-h-full flex flex-col items-center justify-center text-center px-6 py-24 md:py-16">
+    <h1 class="font-display text-5xl sm:text-6xl md:text-7xl leading-[1.02]">CINDER</h1>
+    <p class="mt-4 text-[var(--muted)] font-mono text-xs tracking-[0.3em]">A MÁQUINA QUE NÃO IMPROVISA</p>
+  </div>
+  <div class="absolute bottom-20 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 bob">
+    <span class="font-mono text-[10px] text-[var(--muted)] tracking-widest">ROLE PARA EXPLORAR</span>
+    <i class="ti ti-chevron-down" aria-hidden="true" style="color:var(--copper)"></i>
+  </div>
+</section>
+
+<!-- 15 FLOATING SCREENSHOT (SaaS clássico) -->
+<!-- Hero props: eyebrow, title, subtitle, ctaLabel, ctaHref, screenshotUrl -->
+<section id="s15" class="stage min-h-full bg-[var(--bg)] grain">
+  <div class="min-h-full flex flex-col items-center px-6 md:px-10 pt-24 pb-28 md:pt-20 md:pb-20">
+    <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-5">APP CINDER · WEB</span>
+    <h1 class="font-display text-4xl sm:text-5xl md:text-6xl text-center leading-[1.05] max-w-2xl">Cada shot, registrado.<br><span class="italic text-[var(--copper-light)]">Cada ajuste, no histórico.</span></h1>
+    <p class="mt-5 max-w-md text-center text-[var(--muted)] leading-relaxed">Veja curvas de pressão em tempo real e compare receitas entre suas máquinas.</p>
+    <div class="mt-8 flex items-center gap-4">
+      <button class="px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition">Experimentar grátis</button>
+    </div>
+    <div class="mt-12 w-full max-w-3xl rounded-2xl border border-white/10 bg-[var(--bg2)] shadow-2xl shadow-black/60 overflow-hidden">
+      <div class="flex items-center gap-1.5 px-4 py-3 border-b border-white/10">
+        <span class="w-2.5 h-2.5 rounded-full bg-white/15"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-white/15"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-white/15"></span>
+      </div>
+      <div class="p-6 md:p-8 grid grid-cols-3 gap-4">
+        <div class="col-span-2 h-36 md:h-44 rounded-xl bg-[var(--bg3)] border border-white/10 flex items-end p-4 gap-2">
+          <div class="w-3 rounded bg-[var(--copper)]/70" style="height:40%"></div>
+          <div class="w-3 rounded bg-[var(--copper)]/70" style="height:65%"></div>
+          <div class="w-3 rounded bg-[var(--copper)]" style="height:90%"></div>
+          <div class="w-3 rounded bg-[var(--copper)]/70" style="height:55%"></div>
+          <div class="w-3 rounded bg-[var(--copper)]/40" style="height:30%"></div>
+        </div>
+        <div class="h-36 md:h-44 rounded-xl bg-[var(--bg3)] border border-white/10 flex flex-col items-center justify-center gap-1">
+          <span class="font-display text-2xl text-[var(--copper-light)]">9.1</span>
+          <span class="font-mono text-[9px] text-[var(--muted)]">BAR MÉDIO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 16 BUSCA / CONSULTA CENTRAL -->
+<!-- Hero props: eyebrow, title, subtitle, searchPlaceholder, searchCtaLabel -->
+<section id="s16" class="stage min-h-full bg-[var(--bg2)]">
+  <div class="min-h-full flex flex-col items-center justify-center text-center px-6 py-24 md:py-16">
+    <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-5">DISPONIBILIDADE</span>
+    <h1 class="font-display text-4xl sm:text-5xl max-w-xl leading-[1.08]">Sua região já recebe a Cinder?</h1>
+    <p class="mt-4 max-w-md text-[var(--muted)]">Digite seu CEP e veja o prazo de entrega e a assistência técnica mais próxima.</p>
+    <form onsubmit="return false" class="mt-8 w-full max-w-lg">
+      <div class="flex flex-col sm:flex-row items-stretch gap-2 p-2 rounded-2xl sm:rounded-full bg-white/5 border border-white/15 focus-within:border-[var(--copper)] transition">
+        <div class="flex items-center gap-2 flex-1 px-3">
+          <i class="ti ti-map-pin text-base" aria-hidden="true" style="color:var(--muted)"></i>
+          <input type="text" placeholder="00000-000" class="w-full bg-transparent py-2.5 text-sm text-[var(--cream)] outline-none"/>
+        </div>
+        <button class="px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition whitespace-nowrap">Verificar</button>
+      </div>
+    </form>
+    <span class="mt-4 text-xs text-[var(--muted)]">Entrega em todo o Brasil · assistência em 48 cidades</span>
+  </div>
+</section>
+
+<!-- 17 PROVA SOCIAL COM AVATARES -->
+<!-- Hero props: eyebrow, title, avatars[]{imageUrl,alt}, ratingValue, ratingCount, ctaLabel, ctaHref -->
+<section id="s17" class="stage min-h-full bg-[var(--bg)]">
+  <div class="min-h-full flex flex-col items-center justify-center text-center px-6 py-24 md:py-16">
+    <div class="flex items-center -space-x-3 mb-6">
+      <img src="assets/avatar-1.jpg" alt="Cliente Cinder" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--bg)]" loading="lazy">
+      <img src="assets/avatar-2.jpg" alt="Cliente Cinder" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--bg)]" loading="lazy">
+      <img src="assets/avatar-3.jpg" alt="Cliente Cinder" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--bg)]" loading="lazy">
+      <img src="assets/avatar-4.jpg" alt="Cliente Cinder" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--bg)]" loading="lazy">
+      <img src="assets/avatar-5.jpg" alt="Cliente Cinder" class="w-10 h-10 rounded-full object-cover border-2 border-[var(--bg)]" loading="lazy">
+    </div>
+    <div class="flex items-center gap-1 mb-5 text-[var(--copper-light)]" aria-label="4.9 de 5 estrelas">
+      <i class="ti ti-star" aria-hidden="true"></i><i class="ti ti-star" aria-hidden="true"></i><i class="ti ti-star" aria-hidden="true"></i><i class="ti ti-star" aria-hidden="true"></i><i class="ti ti-star-half" aria-hidden="true"></i>
+      <span class="font-mono text-xs text-[var(--muted)] ml-2">4.9 · 1.204 avaliações</span>
+    </div>
+    <h1 class="font-display text-4xl sm:text-5xl max-w-lg leading-[1.08]">A escolha de quem não abre mão do espresso perfeito.</h1>
+    <button class="mt-8 px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition">Ver todas as avaliações</button>
+  </div>
+</section>
+
+<!-- 18 CARTÃO DE PREÇO EM DESTAQUE -->
+<!-- Hero props: eyebrow, title, subtitle, ctaLabel, plan{name,price,period,features[],ctaLabel} -->
+<section id="s18" class="stage min-h-full bg-[var(--bg2)]">
+  <div class="min-h-full grid md:grid-cols-2 items-center px-6 md:px-10 lg:px-16 gap-10 py-24 md:py-16">
+    <div>
+      <span class="font-mono text-xs tracking-[0.3em] text-[var(--copper)] mb-5 block">LANÇAMENTO</span>
+      <h1 class="font-display text-4xl sm:text-5xl leading-[1.08] max-w-md">Leve a Cinder One<br>pro seu balcão.</h1>
+      <p class="mt-5 max-w-sm text-[var(--muted)]">Preço de pré-venda válido até o fim do lote 03. Frete e instalação inclusos.</p>
+    </div>
+    <div class="w-full max-w-sm mx-auto rounded-2xl border border-[var(--copper)]/30 bg-[var(--bg3)] p-7 shadow-2xl shadow-black/40">
+      <span class="font-mono text-[10px] tracking-widest text-[var(--copper-light)]">CINDER ONE</span>
+      <div class="mt-3 flex items-end gap-1">
+        <span class="font-display text-4xl">R$ 6.490</span>
+        <span class="text-[var(--muted)] text-sm mb-1">/ à vista</span>
+      </div>
+      <ul class="mt-6 space-y-3 text-sm text-[var(--muted)]">
+        <li class="flex items-center gap-2"><i class="ti ti-check text-[var(--copper)]" aria-hidden="true"></i>9 bar de pressão constante</li>
+        <li class="flex items-center gap-2"><i class="ti ti-check text-[var(--copper)]" aria-hidden="true"></i>App de controle incluso</li>
+        <li class="flex items-center gap-2"><i class="ti ti-check text-[var(--copper)]" aria-hidden="true"></i>2 anos de garantia</li>
+      </ul>
+      <button class="mt-7 w-full px-6 py-3 rounded-full bg-[var(--copper)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--copper-light)] transition">Reservar agora</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+  const links = document.querySelectorAll('.navlink');
+  const stages = document.querySelectorAll('.stage');
+  const counter = document.getElementById('counter');
+  const names = ["Centralizado","Dividido (50/50)","Imagem de fundo","Vídeo de fundo","Tipográfico minimalista","Carrossel","Interativo / parallax","Com formulário","Mockup de produto","Ilustração customizada","Prova social (stats)","Assimétrico","Grade bento","Tela cheia + scroll","Screenshot flutuante","Busca / consulta central","Prova social (avatares)","Cartão de preço em destaque"];
+
+  links.forEach((link, i) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.dataset.target;
+      stages.forEach(s => s.classList.toggle('active', s.id === target));
+      links.forEach(l => {
+        const isActive = l === link;
+        l.classList.toggle('active', isActive);
+        if (isActive) { l.setAttribute('aria-current', 'true'); } else { l.removeAttribute('aria-current'); }
+      });
+      counter.textContent = String(i+1).padStart(2,'0') + ' / ' + links.length + ' — ' + names[i].toLowerCase();
+    });
+  });
+
+  // carousel
+  let cIndex = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dotsWrap = document.getElementById('carouselDots');
+  slides.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'w-1.5 h-1.5 rounded-full ' + (i===0 ? 'bg-[var(--copper)]' : 'bg-white/20');
+    d.dataset.i = i;
+    dotsWrap.appendChild(d);
+  });
+  function renderCarousel(){
+    slides.forEach((s,i) => s.classList.toggle('hidden', i !== cIndex));
+    [...dotsWrap.children].forEach((d,i) => d.className = 'w-1.5 h-1.5 rounded-full ' + (i===cIndex ? 'bg-[var(--copper)]' : 'bg-white/20'));
+  }
+  function carouselMove(dir){
+    cIndex = (cIndex + dir + slides.length) % slides.length;
+    renderCarousel();
+  }
+
+  // parallax
+  const pz = document.getElementById('parallaxZone');
+  pz.addEventListener('mousemove', (e) => {
+    const rect = pz.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width/2) / rect.width;
+    const y = (e.clientY - rect.top - rect.height/2) / rect.height;
+    document.querySelectorAll('.parallax-el').forEach(el => {
+      const depth = el.dataset.depth || 20;
+      el.style.transform = `translate(${x*depth}px, ${y*depth}px)`;
+    });
+  });
+
+  // desktop/mobile preview switch
+  const viewBtns = document.querySelectorAll('.view-btn');
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isMobile = btn.dataset.view === 'mobile';
+      document.body.classList.toggle('preview-mobile', isMobile);
+      viewBtns.forEach(b => {
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+    });
+  });
+</script>
+</body>
+</html>
