@@ -107,7 +107,7 @@ export class ContentProcessor {
 
     /**
      * Process content to handle CONTENT-BLOCK tags (dynamic CTA, banners, etc)
-     * Format: <!--<ContentBlock><tag>cta</tag></ContentBlock>-->
+     * Format: <ContentBlock><tag>cta</tag></ContentBlock>
      * @param content - Raw markdown content
      * @returns Processed content with CONTENT-BLOCK tags resolved to their HTML
      */
@@ -116,13 +116,14 @@ export class ContentProcessor {
             return content;
         }
 
-        // Pattern to match <!--<ContentBlock>...</ContentBlock>--> (with optional whitespace)
+        // Pattern to match <ContentBlock>...</ContentBlock>
         const contentBlockPattern = /<ContentBlock>([\s\S]*?)<\/ContentBlock>/gi;
 
         let processedContent = content;
         const matches = Array.from(content.matchAll(contentBlockPattern));
 
         if (matches.length === 0) {
+            console.log('🔍 No <ContentBlock> tags found in content');
             return content;
         }
 
@@ -130,7 +131,7 @@ export class ContentProcessor {
 
         // Process each match
         for (const match of matches) {
-            const fullMatch = match[0]; // Full <!--<ContentBlock>...</ContentBlock>-->
+            const fullMatch = match[0]; // Full <ContentBlock>...</ContentBlock>
             const xmlContent = match[1]; // Content between tags
 
             try {
