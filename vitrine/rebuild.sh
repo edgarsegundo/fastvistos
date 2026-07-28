@@ -8,6 +8,9 @@ SERVICE_NAME="vitrine"
 echo "Pulling latest code..."
 git pull
 
+echo "Installing Node dependencies..."
+(cd .. && npm ci)
+
 # Rebuilda o bundle do editor visual (Puck) ANTES do `docker compose build` —
 # a imagem do vitrine copia vitrine/core/static/editor/ (Dockerfile: COPY . .),
 # então o bundle precisa estar fresco no disco antes do build da imagem, senão
