@@ -61,14 +61,20 @@ export function buildBrandVars(theme?: ProjectTheme | null): string {
     return decls.length ? `:root{${decls.join(';')}}` : '';
 }
 
-/** hrefs únicos de Google Fonts pras fontes escolhidas (heading + body). */
-export function fontLinks(theme?: ProjectTheme | null): string[] {
-    const t = theme ?? {};
+/** hrefs únicos de Google Fonts pras chaves do FONT_CATALOG passadas (dedupe automático). */
+export function fontLinksForKeys(keys: (string | undefined | null)[]): string[] {
     const hrefs = new Set<string>();
-    for (const f of [resolveFont(t.fonts?.heading), resolveFont(t.fonts?.body)]) {
+    for (const key of keys) {
+        const f = resolveFont(key ?? undefined);
         if (f) hrefs.add(f.href);
     }
     return [...hrefs];
+}
+
+/** hrefs únicos de Google Fonts pras fontes escolhidas (heading + body). */
+export function fontLinks(theme?: ProjectTheme | null): string[] {
+    const t = theme ?? {};
+    return fontLinksForKeys([t.fonts?.heading, t.fonts?.body]);
 }
 
 /** Schema neutro-de-framework (semente do painel de tema da fase 2). */

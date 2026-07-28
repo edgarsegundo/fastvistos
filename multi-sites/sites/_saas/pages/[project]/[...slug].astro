@@ -11,6 +11,7 @@
 
 import Layout from '../../layouts/Layout.astro';
 import BlockRenderer from '../../blocks/BlockRenderer.astro';
+import { collectBlockFontKeys } from '../../blocks/style-runtime';
 import JsonLdWebSiteBlock from '../../components/JsonLdWebSiteBlock.astro';
 import JsonLdOrganizationBlock from '../../components/JsonLdOrganizationBlock.astro';
 import JsonLdWebPageBlock from '../../components/JsonLdWebPageBlock.astro';
@@ -121,6 +122,11 @@ const { page, project } = Astro.props;
 // do catálogo (blocks/*), não mais aqui. Ver blocks/BlockRenderer.astro.
 const blocks = page.blocks ?? { content: [] };
 
+// Fontes customizadas por elemento (Aparência do Hero) precisam do próprio
+// <link> do Google Fonts no <head> — sem isso o seletor "funciona" no editor
+// mas não renderiza em produção (a família cai no fallback do CSS).
+const extraFontKeys = collectBlockFontKeys(blocks);
+
 // Payload de SEO já resolvido pela cascata Page > Project > Platform
 // (ver vitrine/core/seo.py::resolve_seo) — o Astro só renderiza, sem
 // lógica de fallback própria.
@@ -149,6 +155,7 @@ const breadcrumbItems = [
     noindex={seo.noindex}
     theme={project.theme}
     chrome={project.chrome}
+    extraFontKeys={extraFontKeys}
 >
     <Fragment slot="jsonld">
         <JsonLdWebSiteBlock siteUrl={siteUrl} siteName={seo.site_name || project.name} locale={seo.locale} />

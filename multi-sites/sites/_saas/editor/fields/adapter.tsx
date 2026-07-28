@@ -9,6 +9,14 @@ import type { Fields } from '@measured/puck';
 import type { FieldSchema } from '../../blocks/registry';
 import { ToggleField } from './ToggleField';
 import { ImageField } from './ImageField';
+import { ColorField } from './ColorField';
+import { FontField } from './FontField';
+import { DimensionField } from './DimensionField';
+import { ShadowField } from './ShadowField';
+import { BorderField } from './BorderField';
+import { CssField } from './CssField';
+import { AttrsField } from './AttrsField';
+import { ElementStylesField } from './ElementStylesField';
 
 export function toPuckField(f: FieldSchema): any {
     switch (f.type) {
@@ -61,6 +69,50 @@ export function toPuckField(f: FieldSchema): any {
                 type: 'custom',
                 render: ({ value, onChange }: any) => (
                     <ImageField label={label} value={value} onChange={onChange} />
+                ),
+            };
+        }
+        case 'color': {
+            const label = f.label;
+            return { type: 'custom', render: ({ value, onChange }: any) => <ColorField label={label} value={value} onChange={onChange} /> };
+        }
+        case 'font': {
+            const label = f.label;
+            return { type: 'custom', render: ({ value, onChange }: any) => <FontField label={label} value={value} onChange={onChange} /> };
+        }
+        case 'dimension': {
+            const label = f.label;
+            const units = f.units ?? [];
+            const range = f.range;
+            return {
+                type: 'custom',
+                render: ({ value, onChange }: any) => (
+                    <DimensionField label={label} value={value} onChange={onChange} units={units} range={range} />
+                ),
+            };
+        }
+        case 'shadow': {
+            const label = f.label;
+            return { type: 'custom', render: ({ value, onChange }: any) => <ShadowField label={label} value={value} onChange={onChange} /> };
+        }
+        case 'border': {
+            const label = f.label;
+            return { type: 'custom', render: ({ value, onChange }: any) => <BorderField label={label} value={value} onChange={onChange} /> };
+        }
+        case 'css': {
+            const label = f.label;
+            return { type: 'custom', render: ({ value, onChange }: any) => <CssField label={label} value={value} onChange={onChange} /> };
+        }
+        case 'htmlAttrs': {
+            const label = f.label;
+            return { type: 'custom', render: ({ value, onChange }: any) => <AttrsField label={label} value={value} onChange={onChange} /> };
+        }
+        case 'elementStyles': {
+            const groups = f.objectFields ?? {};
+            return {
+                type: 'custom',
+                render: ({ value, onChange }: any) => (
+                    <ElementStylesField groups={groups} value={value} onChange={onChange} renderField={toPuckField} />
                 ),
             };
         }

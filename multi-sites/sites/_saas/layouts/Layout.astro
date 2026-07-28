@@ -10,7 +10,7 @@
 import '../styles/saas.css';
 import Header from '../chrome/Header.tsx';
 import Footer from '../chrome/Footer.tsx';
-import { buildBrandVars, fontLinks, type ProjectTheme } from '../theme/theme';
+import { buildBrandVars, fontLinksForKeys, type ProjectTheme } from '../theme/theme';
 import { DEFAULT_CHROME, type ProjectChrome } from '../chrome/chrome';
 
 interface Props {
@@ -25,6 +25,10 @@ interface Props {
     noindex?: boolean;
     theme?: ProjectTheme | null;
     chrome?: ProjectChrome | null;
+    /** Chaves extra do FONT_CATALOG usadas por blocos (Aparência por
+     *  elemento, ex: Hero) — além das do tema (heading/body). Dedupe é
+     *  automático em `fontLinksForKeys`. */
+    extraFontKeys?: string[];
 }
 
 const {
@@ -39,10 +43,11 @@ const {
     noindex,
     theme,
     chrome,
+    extraFontKeys,
 } = Astro.props as Props;
 
 const brandVars = buildBrandVars(theme);
-const links = fontLinks(theme);
+const links = fontLinksForKeys([theme?.fonts?.heading, theme?.fonts?.body, ...(extraFontKeys ?? [])]);
 const header = { ...DEFAULT_CHROME.header, ...(chrome?.header ?? {}) };
 const footer = { ...DEFAULT_CHROME.footer, ...(chrome?.footer ?? {}) };
 ---

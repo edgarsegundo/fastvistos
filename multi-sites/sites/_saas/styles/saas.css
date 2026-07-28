@@ -77,4 +77,10 @@
     .block-richtext img { max-width: 100%; height: auto; border-radius: var(--brand-radius); }
     .block-richtext blockquote { margin: 0 0 1em; padding-left: 1em; border-left: 3px solid var(--brand-line); color: var(--brand-muted); }
     .block-richtext code { font-size: 0.9em; }
+
+    /* Ponte de CSS var pro hover de cor de fundo customizada por elemento
+     * (Aparência por elemento do Hero) — hover não é expressável via `style`
+     * inline puro, mesmo padrão já usado pro tema global (--brand-*). Ver
+     * blocks/style-runtime.ts::buttonStyleToCss. */
+    .cta-hover-bg:hover { background-color: var(--cta-hover-bg); }
 }

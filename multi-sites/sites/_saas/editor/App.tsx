@@ -8,10 +8,11 @@
 import React, { useEffect, useState } from 'react';
 import { Puck, type Data } from '@measured/puck';
 import { puckConfig } from './puck.config';
-import { buildBrandVars } from '../theme/theme';
+import { buildBrandVars, fontLinksForKeys } from '../theme/theme';
 import { FONT_NAMES } from '../theme/fonts';
 import type { ProjectTheme } from '../theme/theme';
 import type { ProjectChrome, NavLink, FooterColumn } from '../chrome/chrome';
+import { collectBlockFontKeys } from '../blocks/style-runtime';
 
 interface EditorData {
     pageId: number;
@@ -210,6 +211,81 @@ export default function App() {
         }
         el.textContent = buildBrandVars(theme);
     }, [theme]);
+
+    // <link> de fonte (Google Fonts) pro tema (heading/body) + pras fontes
+    // escolhidas por elemento (Aparência do Hero) — sem isso o `<select>` de
+    // fonte "funciona" no editor mas a família não carrega, caindo no
+    // fallback do CSS. Bônus: corrige uma lacuna pré-existente (o editor
+    // nunca carregava nem as fontes de heading/body do tema).
+    useEffect(() => {
+        const hrefs = fontLinksForKeys([theme.fonts?.heading, theme.fonts?.body, ...collectBlockFontKeys(blocks)]);
+        const existing = new Map(
+            Array.from(document.querySelectorAll<HTMLLinkElement>('link[data-editor-font-link]')).map((el) => [el.href, el]),
+        );
+        for (const href of hrefs) {
+            if (existing.has(href)) {
+                existing.delete(href);
+                continue;
+            }
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            link.dataset.editorFontLink = 'true';
+            document.head.appendChild(link);
+        }
+        // sobrou no map = não está mais em uso, remove
+        for (const stale of existing.values()) stale.remove();
+    }, [theme, blocks]);
+
+    // Clique num elemento do canvas (via `data-el`, já usado pros labels de
+    // hover) só rola/expande a seção "Aparência → <elemento>" no painel de
+    // campos já existente — SEM toolbar flutuante, SEM overlay de seleção
+    // próprio: nunca compete com a seleção nativa de bloco do Puck (sem
+    // stopPropagation/preventDefault). Ver editor/fields/ElementStylesField.tsx
+    // (o `id="appearance-group-<key>"` usa a MESMA string do `data-el`).
+    useEffect(() => {
+        if (tab !== 'page') return;
+
+        function onClick(e: Event) {
+            const el = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-el]');
+            const key = el?.dataset.el;
+            if (!key) return;
+            // abre o painel via o :focus-within já existente (editor-chrome.css) — sem CSS novo pra isso
+            document.querySelector<HTMLElement>('.fields-tab')?.focus();
+            // A seleção de bloco do Puck não comita no mesmo frame do clique
+            // (mecanismo de drag-and-drop por baixo) — poll via rAF, até ~30
+            // frames (~0.5s). Sem grupo até o limite = elemento sem
+            // Aparência nesse bloco, no-op.
+            let attempts = 0;
+            const tryOpen = () => {
+                const group = document.getElementById(`appearance-group-${key}`);
+                if (!group) {
+                    attempts += 1;
+                    if (attempts < 30) requestAnimationFrame(tryOpen);
+                    return;
+                }
+                if (group instanceof HTMLDetailsElement) group.open = true;
+                group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                group.classList.add('appearance-group--flash');
+                setTimeout(() => group.classList.remove('appearance-group--flash'), 1200);
+            };
+            requestAnimationFrame(tryOpen);
+        }
+
+        // Anexado no `document`, não em `.editor-canvas`: o próprio sensor de
+        // drag-and-drop do Puck chama `stopPropagation()` na fase de CAPTURA
+        // já no nível do document (confirmado por instrumentação), então
+        // qualquer listener num descendente (mesmo capture) nunca é
+        // alcançado. `document` é o topo da cadeia de captura — sempre vê o
+        // clique primeiro, antes de qualquer stopPropagation mais abaixo.
+        // Também é o único jeito de pegar cliques em texto inline-editable
+        // (Puck troca o filho por um overlay `_InlineTextField_`, mas ele
+        // continua sendo descendente de `[data-el]`, então `closest` resolve
+        // normalmente). Nunca chamamos stopPropagation/preventDefault aqui —
+        // não compete com a seleção nativa do Puck.
+        document.addEventListener('click', onClick, true);
+        return () => document.removeEventListener('click', onClick, true);
+    }, [tab]);
 
     async function save() {
         setSaving(true);

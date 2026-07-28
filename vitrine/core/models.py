@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -103,6 +105,168 @@ class Project(ClientModel):
 
     def __str__(self):
         return f"{self.name} ({self.slug})"
+
+
+# ---------------------------------------------------------------------------
+# Sanitização de "Aparência por elemento" (estilo Carrd) — usada por
+# Page.serialize_blocks_for_api() abaixo. Reimplementa em Python as MESMAS
+# regras de multi-sites/sites/_saas/theme/validation.ts: `editor_save`
+# (core/admin.py, PageAdmin) só valida a FORMA do payload de `blocks`, não o
+# conteúdo dos props, então esta é a fronteira de segurança real — o mesmo
+# papel que `_sanitize_html_safe` (bleach) já cumpre pro bloco HtmlSafe.
+# Qualquer mudança de regra em theme/validation.ts precisa ser espelhada aqui.
+# ---------------------------------------------------------------------------
+_STYLE_HEX_RE = re.compile(r'^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$')
+_STYLE_DIMENSION_RE = re.compile(r'^-?[0-9]+(\.[0-9]+)?(px|rem|em|%)?$')
+_STYLE_ID_CLASS_RE = re.compile(r'^[a-zA-Z][a-zA-Z0-9_-]*$')
+_STYLE_RESERVED_TOKENS = {'brand-vars', 'root', 'editor-root'}
+# Chaves do FONT_CATALOG (multi-sites/sites/_saas/theme/fonts.ts) — allowlist,
+# não família de fonte arbitrária.
+_STYLE_FONT_KEYS = {
+    'Inter', 'Poppins', 'Montserrat', 'Roboto', 'Open Sans',
+    'Lora', 'Playfair Display', 'Source Sans 3',
+}
+_STYLE_CSS_PROP_ALLOWLIST = {
+    'color', 'background-color', 'font-family', 'font-size', 'font-weight', 'font-style',
+    'line-height', 'letter-spacing', 'text-align', 'text-decoration', 'text-transform', 'text-shadow',
+    'border', 'border-color', 'border-width', 'border-style', 'border-radius', 'box-shadow',
+    'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+    'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+    'opacity', 'width', 'max-width', 'aspect-ratio', 'object-fit',
+}
+_STYLE_CSS_VALUE_BLOCKLIST = [
+    re.compile(r'url\(', re.I),
+    re.compile(r'expression\(', re.I),
+    re.compile(r'@import', re.I),
+    re.compile(r'javascript:', re.I),
+    re.compile(r'[<>]'),
+]
+
+
+def _style_camel_to_kebab(prop):
+    return re.sub(r'([A-Z])', lambda m: '-' + m.group(1).lower(), prop)
+
+
+def _style_is_hex(v):
+    return isinstance(v, str) and bool(_STYLE_HEX_RE.match(v))
+
+
+def _style_is_dimension(v):
+    return isinstance(v, str) and bool(_STYLE_DIMENSION_RE.match(v))
+
+
+def _style_is_font_key(v):
+    return isinstance(v, str) and v in _STYLE_FONT_KEYS
+
+
+def _style_is_id_or_class(v):
+    return isinstance(v, str) and bool(_STYLE_ID_CLASS_RE.match(v)) and v not in _STYLE_RESERVED_TOKENS
+
+
+def _sanitize_style_css(v):
+    if not isinstance(v, dict):
+        return None
+    out = {}
+    for key, val in v.items():
+        if not isinstance(key, str) or not isinstance(val, str):
+            continue
+        kebab = _style_camel_to_kebab(key)
+        if kebab not in _STYLE_CSS_PROP_ALLOWLIST:
+            continue
+        if any(pattern.search(val) for pattern in _STYLE_CSS_VALUE_BLOCKLIST):
+            continue
+        out[key] = val
+    return out or None
+
+
+def _sanitize_style_html_attrs(v):
+    if not isinstance(v, dict):
+        return None
+    out = {}
+    if _style_is_id_or_class(v.get('id')):
+        out['id'] = v['id']
+    class_name = v.get('className')
+    if isinstance(class_name, str):
+        classes = [c for c in class_name.split() if _style_is_id_or_class(c)]
+        if classes:
+            out['className'] = ' '.join(classes)
+    return out or None
+
+
+def _sanitize_style_border(v):
+    if not isinstance(v, dict):
+        return None
+    out = {}
+    if _style_is_dimension(v.get('width')):
+        out['width'] = v['width']
+    if v.get('style') in ('solid', 'dashed', 'dotted', 'none'):
+        out['style'] = v['style']
+    if _style_is_hex(v.get('color')):
+        out['color'] = v['color']
+    return out or None
+
+
+def _sanitize_style_shadow(v):
+    if not isinstance(v, dict):
+        return None
+    out = {}
+    if _style_is_hex(v.get('color')):
+        out['color'] = v['color']
+    for key in ('x', 'y', 'blur', 'spread'):
+        if _style_is_dimension(v.get(key)):
+            out[key] = v[key]
+    return out or None
+
+
+def _sanitize_style_element(v):
+    """Sanitiza UM grupo de estilo (qualquer tipo de elemento — texto/botão/
+    mídia/badge). Não sabe qual é o tipo do elemento: é generoso sobre QUAIS
+    chaves aceita (cada `*StyleToCss` em blocks/style-runtime.ts só lê as que
+    fazem sentido pro elemento — uma chave irrelevante aqui fica inerte), mas
+    estrito sobre a VALIDADE de cada chave aceita."""
+    if not isinstance(v, dict):
+        return {}
+    out = {}
+    if _style_is_hex(v.get('color')):
+        out['color'] = v['color']
+    if _style_is_hex(v.get('bgColor')):
+        out['bgColor'] = v['bgColor']
+    if _style_is_hex(v.get('hoverBgColor')):
+        out['hoverBgColor'] = v['hoverBgColor']
+    if _style_is_font_key(v.get('font')):
+        out['font'] = v['font']
+    for key in ('fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'radius'):
+        if _style_is_dimension(v.get(key)):
+            out[key] = v[key]
+    if v.get('align') in ('left', 'center', 'right'):
+        out['align'] = v['align']
+    border = _sanitize_style_border(v.get('border'))
+    if border:
+        out['border'] = border
+    shadow = _sanitize_style_shadow(v.get('shadow'))
+    if shadow:
+        out['shadow'] = shadow
+    css = _sanitize_style_css(v.get('css'))
+    if css:
+        out['css'] = css
+    html_attrs = _sanitize_style_html_attrs(v.get('htmlAttrs'))
+    if html_attrs:
+        out['htmlAttrs'] = html_attrs
+    return out
+
+
+def _sanitize_hero_element_styles(style):
+    """Sanitiza `props.style` (Aparência por elemento) do bloco Hero."""
+    if not isinstance(style, dict):
+        return {}
+    return {key: _sanitize_style_element(val) for key, val in style.items() if isinstance(key, str)}
+
+
+# Extensível por `type` de bloco, mesmo espírito de BLOCK_COMPONENTS (TS) —
+# só o Hero tem Aparência por elemento nesta fase.
+STYLE_SANITIZERS = {
+    'Hero': _sanitize_hero_element_styles,
+}
 
 
 class Page(ClientModel):
@@ -251,6 +415,9 @@ class Page(ClientModel):
         HtmlSafe só injeta o HTML já limpo, nunca sanitiza. Blocos Markdown
         (RichText) e iframe (CodeEmbed) passam sem sanitizar, igual ao
         comportamento legado (marked confiável; iframe isolado por sandbox).
+        Blocos com `props.style` (Aparência por elemento, ex: Hero) passam
+        por STYLE_SANITIZERS pelo mesmo motivo: `editor_save` só valida a
+        FORMA do payload, não o conteúdo.
         """
         doc = self.blocks if isinstance(self.blocks, dict) else {}
         content = doc.get('content')
@@ -265,6 +432,9 @@ class Page(ClientModel):
             props = dict(node.get('props') or {})
             if node_type == 'HtmlSafe':
                 props['html'] = self._sanitize_html_safe(props.get('html', ''))
+            style_sanitizer = STYLE_SANITIZERS.get(node_type)
+            if style_sanitizer and 'style' in props:
+                props['style'] = style_sanitizer(props['style'])
             serialized.append({'type': node_type, 'props': props})
 
         return {'root': doc.get('root', {}), 'content': serialized}

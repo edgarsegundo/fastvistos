@@ -22,6 +22,7 @@ import Preco from './Preco';
 import Faq from './Faq';
 import Cta from './Cta';
 import Contato from './Contato';
+import { BADGE_STYLE_FIELDS, BUTTON_STYLE_FIELDS, MEDIA_STYLE_FIELDS, TEXT_STYLE_FIELDS } from './style-fields';
 
 export const BLOCK_COMPONENTS: Record<string, ComponentType<any>> = {
     RichText,
@@ -38,7 +39,29 @@ export const BLOCK_COMPONENTS: Record<string, ComponentType<any>> = {
 };
 
 /** Tipo de campo editável — expandido nas fases 2/4. */
-export type FieldType = 'text' | 'textarea' | 'markdown' | 'html' | 'url' | 'image' | 'select' | 'radio' | 'toggle' | 'array' | 'object';
+export type FieldType =
+    | 'text'
+    | 'textarea'
+    | 'markdown'
+    | 'html'
+    | 'url'
+    | 'image'
+    | 'select'
+    | 'radio'
+    | 'toggle'
+    | 'array'
+    | 'object'
+    // Aparência por elemento (estilo Carrd) — ver blocks/style-types.ts e
+    // blocks/style-fields.ts. Todos viram campo custom no adapter, mesmo
+    // padrão já usado por 'toggle'/'image'.
+    | 'elementStyles'
+    | 'color'
+    | 'font'
+    | 'dimension'
+    | 'shadow'
+    | 'border'
+    | 'css'
+    | 'htmlAttrs';
 
 /** Opção de select/radio: string simples (label = value) ou par label/valor. */
 export type SelectOption = string | { label: string; value: string };
@@ -77,6 +100,10 @@ export interface FieldSchema {
      * variantes onde o toggle nem existe (undefined) o campo continua visível.
      */
     hideWhen?: { field: string; equals: string };
+    /** para type 'dimension': unidades aceitas ([] = sem unidade, ex: peso/altura de linha) */
+    units?: string[];
+    /** para type 'dimension': limites do slider/input numérico */
+    range?: { min: number; max: number; step?: number };
 }
 
 /** Opções padrão de um toggle Mostrar/Ocultar por elemento. */
@@ -255,6 +282,26 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     features: { type: 'array', label: 'Itens', itemFields: { text: { type: 'text', label: 'Item' } } },
                     ctaText: { type: 'text', label: 'Texto do botão' },
                     ctaHref: { type: 'url', label: 'Link do botão' },
+                },
+            },
+            // === Aparência por elemento (estilo Carrd) — só no Centralizado por
+            // ora. Chave de cada grupo = mesmo nome do `data-el` no render
+            // (HeroCentered.tsx), o que permite ao clique no canvas achar a
+            // seção certa do painel sem tabela de tradução (ver editor/App.tsx).
+            style: {
+                type: 'elementStyles',
+                label: 'Aparência',
+                showFor: ['centered'],
+                objectFields: {
+                    eyebrow: { type: 'object', label: 'Eyebrow', objectFields: TEXT_STYLE_FIELDS },
+                    title: { type: 'object', label: 'Título', objectFields: TEXT_STYLE_FIELDS },
+                    subtitle: { type: 'object', label: 'Subtítulo', objectFields: TEXT_STYLE_FIELDS },
+                    announcementBadge: { type: 'object', label: 'Selo de anúncio', objectFields: BADGE_STYLE_FIELDS },
+                    heroVisual: { type: 'object', label: 'Hero Visual', objectFields: MEDIA_STYLE_FIELDS },
+                    ctas: { type: 'object', label: 'Botões', objectFields: BUTTON_STYLE_FIELDS },
+                    helperText: { type: 'object', label: 'Texto de apoio', objectFields: TEXT_STYLE_FIELDS },
+                    rating: { type: 'object', label: 'Avaliação', objectFields: TEXT_STYLE_FIELDS },
+                    trustBar: { type: 'object', label: 'Barra de confiança', objectFields: TEXT_STYLE_FIELDS },
                 },
             },
         },

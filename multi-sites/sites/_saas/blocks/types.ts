@@ -8,6 +8,7 @@
  * de cada bloco — reusada pelo BlockRenderer agora, e depois pelo config do
  * Puck (fase 2) e pelo contrato de saída da IA (fase 4).
  */
+import type { BadgeElementStyle, ButtonElementStyle, MediaElementStyle, TextElementStyle } from './style-types';
 
 /** Props comuns a todo bloco (o Puck injeta um `id` por instância). */
 export interface BaseBlockProps {
@@ -81,6 +82,30 @@ export interface HeroPlan {
 }
 
 /**
+ * Aparência por elemento (estilo Carrd), só na variante `centered`. Chaveado
+ * pelo MESMO nome usado em `data-el` no render (HeroCentered.tsx) — elimina
+ * qualquer tabela de tradução entre clique-no-canvas e painel (ver
+ * editor/App.tsx). Ausência de `style` ou de uma chave = herda do tema/
+ * Tailwind, igual hoje (opt-in, nunca substitui o default).
+ *
+ * `ctas` é UM ÚNICO estilo aplicado a todos os botões, não por-item do
+ * array: `data-el="ctas"` está no `<div>` wrapper (não em cada botão), não
+ * existe unidade de seleção por-botão no DOM hoje, e criar uma quebraria a
+ * decisão de não construir seleção de sub-elemento nova.
+ */
+export interface HeroElementStyles {
+    eyebrow?: TextElementStyle;
+    title?: TextElementStyle;
+    subtitle?: TextElementStyle;
+    announcementBadge?: BadgeElementStyle;
+    heroVisual?: MediaElementStyle;
+    ctas?: ButtonElementStyle;
+    helperText?: TextElementStyle;
+    rating?: TextElementStyle;
+    trustBar?: TextElementStyle;
+}
+
+/**
  * Hero — primeiro bloco estruturado (campos tipados, não HTML livre).
  * Um único bloco com várias variantes de layout: `layout` escolhe qual, e o
  * painel do editor mostra só os campos daquela variante (ver `showFor` no
@@ -123,6 +148,8 @@ export interface HeroProps extends BaseBlockProps {
     ratingCount?: string;
     // cartão de preço
     plan?: HeroPlan;
+    // aparência por elemento (estilo Carrd) — só no centralizado
+    style?: HeroElementStyles;
     // contexto injetado pelo Puck no editor (ausente na produção)
     puck?: { isEditing?: boolean };
 }
