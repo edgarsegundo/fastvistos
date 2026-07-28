@@ -50,6 +50,62 @@ não reabrir sem motivo novo). Spec completa:
 Trabalho quebrado em 7 fases (0–6) — não tentar implementar mais de uma por
 sessão. Sempre em plan mode.
 
+## Se a tarefa for sobre Upload de imagens / Cloudflare R2 e Editor de imagens
+
+**Backend:** R2 + galeria + busca stock já **pronto e testado**, end-to-end validado.
+
+- `MediaAsset` model (`core/models.py`): client-scoped, soft-delete, denota 
+  source (upload/stock/url/adjusted).
+- `upload_image` endpoint (`/admin/core/page/upload-image/`, POST): valida 
+  `project_id`, cria path `users/{client.id}/projects/{project.id}/{uuid}`, 
+  registra MediaAsset row.
+- `MediaAssetAdmin` rotas customizadas (`core/admin_media.py`):
+  - `gallery/`: GET, retorna JSON paginado de imagens por client.
+  - `stock/{pexels,pixabay,unsplash}/`: GET com `?q=` e `?page=`, search via 
+    requests + Pexels/Pixabay/Unsplash API keys (próprias do vitrine, não 
+    compartilhadas com msitesapp — evita contenção de quota).
+  - `stock/proxy/` + `stock/google-proxy/`: GET com `?url=`, proxy same-origin 
+    pra evitar CORS na modal do React.
+- Settings: `PEXELS_API_KEY`, `PIXABAY_API_KEY`, `UNSPLASH_ACCESS_KEY` em 
+  `vitrine/.env`.
+- Seam já definido pra per-client BYO keys (v2 futura, veja `resolve_stock_api_key` 
+  em `admin_media.py`).
+
+**Frontend (editor Puck):** seletor de imagem **completo e refatorado para melhorar UI/UX**.
+
+- `ui/Modal.tsx` (novo): primitivo genérico reutilizável — sempre via 
+  `createPortal(document.body)`, semanticamente correto (role="dialog", a11y), 
+  foco gerenciado, trap de Tab built-in, escapa do containing-block do 
+  `.fields-panel` do Puck. Pronto pra ser usado em outros diálogos futuros 
+  (ex: seletor de logo, confirm dialogs).
+- `media/ImagePickerModal.tsx` (refatorado): monta sobre `Modal`, abas 
+  Galeria/Stock, preview maior da imagem atual com chip de origem, "Remover 
+  imagem" no rodapé (só se há valor).
+- `media/GalleryTab.tsx`: drag-and-drop dropzone + grid com skeleton shimmer.
+- `media/StockTab.tsx`: busca sticky no topo, grid aspect-ratio 4:3, sub-abas 
+  Pexels/Pixabay/Unsplash/URL.
+- `media/AdjustPanel.tsx`: 2 colunas (preview esquerda, controles direita) no 
+  modal `size="lg"`.
+- `fields/ImageField.tsx` (reescrito): **um único controle** sempre — placeholder 
+  dashed quando vazio, thumbnail clicável quando preenchido. Nada de botão 
+  "Remover" duplicado no sidebar (isso é ação da modal agora).
+- `FieldType: 'image'` adicionado em `registry.ts`, 4 campos convertidos 
+  (Hero imageUrl split/fullbleed, heroVisual.imageUrl, avatars[].imageUrl, 
+  Sobre imageUrl).
+
+**Padrões de UX aplicados** (pesquisa [Atlassian](https://atlassian.design/patterns/media-picker/),
+[LogRocket](https://blog.logrocket.com/ux-design/modal-ux-design-patterns-examples-best-practices/)):
+- Fade+scale entrance animation, respeta `prefers-reduced-motion`.
+- Grid com hover lift, border-ring claro de seleção (não emoji ✅).
+- Skeleton placeholders animados vs. "Carregando…" cru.
+- Dropdown de fonte na imagem atual (Galeria/Stock/Ajustada).
+- Rodapé com ações primária/secundária/danger bem diferenciadas.
+
+**Nota:** o bug da modal presa no sidebar foi causado pelo `transform` do 
+`.fields-panel` do Puck — contém `position:fixed` descendentes por regra CSS. 
+Solução: `createPortal(document.body)`. Isso também torna o primitivo 
+verdadeiramente reutilizável (nenhuma noção de layout de editor, puro modal).
+
 ## Outras áreas do repo
 
 Ainda não documentadas num formato de contexto — se a sessão for sobre

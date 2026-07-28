@@ -245,6 +245,40 @@ STATIC_URL = os.environ.get('STATIC_URL', 'static/')
 # ImproperlyConfigured — precisa existir mesmo fora de produção.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# ============ Cloudflare R2 (S3-compatible object storage) ============
+# Configuração de storage padrão: usa R2 se as credenciais estão preenchidas,
+# senão fica no sistema de arquivos local (vazio = desabilitado).
+
+STORAGES = {
+    'default': {'BACKEND': 'storages.backends.s3.S3Storage'},
+    'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+}
+
+# Credenciais do R2 (vêm do .env, lido por load_dotenv lá em cima)
+AWS_ACCESS_KEY_ID = os.environ.get('R2_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('R2_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('R2_BUCKET_NAME', '')
+AWS_S3_ENDPOINT_URL = os.environ.get('R2_ENDPOINT_URL', '')
+AWS_S3_REGION_NAME = 'auto'
+AWS_S3_ADDRESSING_STYLE = 'path'
+
+# Se configurar um Custom Domain no R2, coloca aqui (ex: cdn.example.com).
+# Senão fica com a URL padrão do bucket do R2.
+AWS_S3_CUSTOM_DOMAIN = os.environ.get('R2_CUSTOM_DOMAIN', '')
+
+# Bucket público (não precisa de URL assinada por querystring)
+AWS_DEFAULT_ACL = None  # R2 não usa ACL, deixa None
+AWS_QUERYSTRING_AUTH = False  # URL sem assinatura — pública e cacheável por CDN
+
+# ============ Busca de imagens stock (aba "Stock" do seletor de imagem) ====
+# Chaves PRÓPRIAS do vitrine — não reaproveitar as do msitesapp (legado),
+# que já tem consumidor de produção (pipeline Discord → publicação de
+# artigo) com quota própria. Vazio desabilita só aquela fonte (ver
+# core/admin_media.py).
+PEXELS_API_KEY = os.environ.get('PEXELS_API_KEY', '')
+PIXABAY_API_KEY = os.environ.get('PIXABAY_API_KEY', '')
+UNSPLASH_ACCESS_KEY = os.environ.get('UNSPLASH_ACCESS_KEY', '')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

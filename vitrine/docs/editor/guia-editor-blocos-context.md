@@ -19,9 +19,13 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 
 - Uma `Page` guarda um **documento de blocos no formato Puck**:
   `{ root, content: [ { type, props }, ... ] }`, no campo `Page.blocks` (JSONField).
-- A maioria dos blocos é **estruturada** (campos tipados: Hero tem title,
-  subtitle, imageUrl…). É isso que deixa IA preencher e editor editar por
-  clique, sem o usuário ver HTML.
+- A maioria dos blocos é **estruturada** (campos tipados). É isso que deixa
+  IA preencher e editor editar por clique, sem o usuário ver HTML.
+- **Blocos com variantes de layout** (ex: `Hero`): um `variantField` no
+  schema (ex: `layout`) + `showFor`/`hideWhen` por campo — o adapter emite
+  `resolveFields` que filtra o painel pela variante/toggle atual. Um bloco só,
+  N layouts, sem virar N componentes no catálogo. Ver "Hero — variantes de
+  layout" abaixo.
 - Os **3 formatos legados** (markdown / html_safe / html_custom) **não
   morreram** — viraram 3 **blocos livres** (escape hatch):
   `RichText` (markdown via `marked`), `HtmlSafe` (HTML+CSS, sanitizado por
@@ -39,6 +43,18 @@ inline. Roadmap em 7 fases (0–6); **uma fase por sessão, sempre em plan mode.
 **Fase 2 (editor visual Puck) — FEITA.** Editor de blocos + painéis de tema e
 chrome, montado como ilha React numa view do admin. JSON cru continua como
 fallback avançado no admin.
+**Evolução: Hero com variantes de layout — EM ANDAMENTO.** Catálogo de 6
+variantes (`centered`/`split`/`fullbleed`/`typographic`/`avatars`/`pricing`)
+num único bloco; a variante `centered` tem paridade com o `s1` da galeria de
+referência (`vitrine/docs/editor/hero-layouts/hero-layouts.html`): selo de
+anúncio, hero visual com posição, até 3 CTAs com estilo, texto de apoio,
+avaliação, barra de confiança, ordem da prova social — cada elemento opcional
+com toggle Mostrar/Ocultar. Sidebar de campos do Puck customizado (aba que
+revela no hover, via API de composição `Puck.Preview`/`Puck.Fields`/
+`Puck.Components`). Faltam as outras 5 variantes ao nível do `s1` e as 3
+variantes que dependem de JS (vídeo/carrossel/parallax — hidratação pontual,
+decisão à parte). Ver "Hero — variantes de layout" e "Decisões fechadas"
+abaixo.
 **Fase 3 (templates) — FEITA** (migration `core/0015`). Modelo `Template`
 (oficial global + privado por client), "salvar como template" (anonimiza PII),
 "criar projeto a partir de template", seed `seed_official_templates` (Advocacia).
@@ -104,14 +120,43 @@ seed ganhou "Página de FAQ" (kind=page).
 - `puck.config.tsx` — adapter que deriva os `fields` do Puck do `BLOCK_SCHEMAS`
   (fonte única); `render` reusa `BLOCK_COMPONENTS`; texto vira `contentEditable`
   (inline no canvas), url/markdown/html no painel. `iframe:{enabled:false}`.
-- `App.tsx` — shell com abas Página (`<Puck>`) / Tema / Cabeçalho-Rodapé;
-  lê `window.__EDITOR_DATA__`, injeta `:root{--brand-*}` ao vivo, botão Salvar
-  faz POST. `main.tsx` monta e importa `saas.css` + `@measured/puck` css.
+  Blocos com `variantField` (ex: Hero) ganham `resolveFields` (filtra por
+  `showFor`/`hideWhen`). Tipos de campo suportados: `text`/`textarea`/
+  `markdown`/`html`/`url`/`select`/`radio`/`array`(com `max`)/`object`/
+  `toggle` (custom field, ver `fields/ToggleField.tsx`).
+- `fields/ToggleField.tsx` — campo customizado do Puck (`type:'custom'`):
+  switch Mostrar/Ocultar à direita do nome do elemento. Padrão pra qualquer
+  campo booleano futuro no painel.
+- `editor-chrome.css` — CSS só do bundle do editor (importado no `main.tsx`,
+  **nunca** vai pra produção): layout custom da aba Página (paleta esquerda +
+  canvas + painel de campos numa aba que revela no hover, via
+  `Puck.Preview`/`Puck.Fields`/`Puck.Components`) e os labels dos elementos do
+  Hero no canvas (`[data-el]:hover::after`, lendo `data-el-label`).
+- `App.tsx` — shell com abas Página / Tema / Cabeçalho-Rodapé; lê
+  `window.__EDITOR_DATA__`, injeta `:root{--brand-*}` ao vivo, botão Salvar
+  (manual, sem autosave) faz POST. A aba Página usa a API de composição do
+  Puck (`<Puck>` com `children`) em vez do `<Puck>` "tudo-em-um" — dá o
+  sidebar hover acima. `main.tsx` monta e importa `saas.css` +
+  `@measured/puck` css + `editor-chrome.css`.
 - `defaults.ts` — placeholder por bloco (o que "adicionar bloco" insere).
 - **Bundle:** `vite.config.editor.mjs` (raiz) → `npm run build:editor` →
   `vitrine/core/static/puck-editor/editor.{js,css}`. Reusa blocos + saas.css
   (single-source). **NUNCA `core/static/editor/`** (sem sufixo) — esse path já
   é do blog-image-editor (feature #56), não relacionado — ver incidente abaixo.
+
+**Hero — variantes de layout** — `multi-sites/sites/_saas/blocks/`
+- `Hero.tsx` — dispatcher: lê `props.layout`, delega pro componente da
+  variante em `hero-variants/`. `layout` ausente = `'centered'` (retrocompat
+  com Heroes salvos antes das variantes).
+- `hero-variants/HeroCentered.tsx` (paridade com o `s1` da galeria),
+  `HeroSplit.tsx`, `HeroFullbleed.tsx`, `HeroTypographic.tsx`,
+  `HeroAvatars.tsx`, `HeroPricing.tsx`, `shared.tsx` (Eyebrow/CtaButton/Stars).
+  Cada elemento opcional do Centralizado tem `data-el`/`data-el-label`
+  (inertes em produção; alimentam os labels do canvas no editor) e é regido
+  por um toggle (`show*` no schema, `hideWhen` filtra o campo, `on()` no
+  render decide se o elemento aparece).
+- Mesmo componente serve editor (Puck hidratado) e produção (ilha Astro
+  estática, `client:none`) — sem divergência de markup entre os dois hosts.
 
 **Django — editor**
 - `core/admin.py` `PageAdmin`: `editor_view` (rota `<id>/editor/`, serve o
@@ -174,6 +219,26 @@ seed ganhou "Página de FAQ" (kind=page).
   canvas sem precisar injetar estilo no iframe.
 - **Config do Puck deriva do `BLOCK_SCHEMAS`** — não redefine campo por bloco.
   Adicionar bloco/campo novo no registry aparece no editor automaticamente.
+- **Variantes de layout = 1 bloco com `variantField`, NÃO N blocos separados
+  nem galeria visual ao arrastar.** Um `select`/`layout` no schema +
+  `resolveFields` no adapter filtra o painel; o componente vira dispatcher pra
+  sub-componentes por variante. Decidido pra Hero (6 variantes); repetir o
+  padrão pra outros blocos que precisem de variantes.
+- **Visibilidade por elemento = toggle custom field (`type:'custom'`), NÃO
+  select/radio.** UX pedida: switch sutil à direita do nome do elemento
+  (`ToggleField`), não um dropdown "Mostrar/Ocultar". `hideWhen` no schema
+  colapsa os campos de conteúdo quando o toggle está desligado.
+- **Sidebar de campos do Puck em hover, via API de composição pública
+  (`<Puck>` com `children` + `Puck.Preview`/`Puck.Fields`/`Puck.Components`),
+  NÃO fork nem patch do Puck.** Toda customização de UI do editor feita até
+  aqui (variantes, toggles, sidebar hover, labels no canvas) usa só API
+  pública do `@measured/puck` — ver
+  [carrd-features-classificacao.md](carrd-features-classificacao.md) pro
+  raciocínio de quando isso deixaria de bastar (degrau 2/3).
+  **Cuidado:** a zona de hover do sidebar precisa ter o tamanho da ABA, não
+  da borda da tela inteira (bug já corrigido uma vez — `.fields-hover-zone`
+  do tamanho de `.fields-tab`, painel em `position:fixed` pra não ficar
+  espremido nesse tamanho pequeno).
 - **Save é explícito** (botão), grava draft + `needs_rebuild`. Publish continua
   no `ProjectAdmin` (build/deploy existente), não acoplado ao editor.
 - **Template = snapshot JSON** (`{pages,theme,chrome}`), um modelo só com
@@ -257,10 +322,13 @@ seed ganhou "Página de FAQ" (kind=page).
 - **Blog e formulário de Contato real** não existem — fases próprias (modelo
   Post; backend de submit/anti-spam).
 - **Puck UI × Tailwind preflight:** o saas.css (com reset do Tailwind) e o CSS do
-  Puck coexistem no bundle (`main.tsx` importa `saas.css` antes do CSS do Puck);
-  o canvas do editor **não foi verificado visualmente em browser** — bundle
-  compila e o contrato de dados foi testado ponta-a-ponta, mas conferir a UI
-  real (botões/inputs do Puck podem sofrer do preflight zerando padding/borda).
+  Puck coexistem no bundle (`main.tsx` importa `saas.css` antes do CSS do Puck).
+  **Verificado visualmente em browser** (evolução do Hero) — sem conflito de
+  preflight percebido até aqui.
+- **Save é manual — não esquecer de clicar "Salvar".** Já causou confusão
+  (bloco parecia "sumir" após refresh; era só o save não ter sido clicado).
+  Decisão de não ter autosave continua de pé (ver abaixo), mas vale lembrar
+  o usuário nas próximas sessões se algo "não persistir".
 - Bug corrigido nesta fase: comentário Django `{# #}` multi-linha no
   `editor.html` vazava texto literal pro HTML (Django não suporta esse
   comentário em mais de uma linha) — o Puck usa o `document.body` pro preview

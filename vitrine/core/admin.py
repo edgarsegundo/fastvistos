@@ -1,8 +1,13 @@
 import json
+import mimetypes
+import os
+import uuid
+from pathlib import Path
 
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, redirect, render
@@ -11,10 +16,12 @@ from django.utils.html import format_html, format_html_join
 from django_jsonform.forms.fields import JSONFormField
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
 from tenancy.admin import ClientScopedAdmin
+from tenancy.threadlocal import get_current_client
 
 from .models import (
     ClientUser, Project, Page, Build, Deployment, Domain,
     PlatformSeoDefaults, ProjectSeoSettings, PageSeoSettings, Template,
+    MediaAsset,
 )
 from .seo import resolve_seo
 from .seo_schemas import PAGE_TYPE_SCHEMAS
@@ -26,6 +33,7 @@ MAX_FAQ_QUESTIONS_PER_IMPORT = 200
 
 # Import DomainAdmin from separate file to keep admin.py manageable
 from .admin_domain import DomainAdmin as _DomainAdmin
+from .admin_media import MediaAssetAdmin as _MediaAssetAdmin
 
 
 @admin.register(ClientUser)
@@ -329,6 +337,11 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
     def get_urls(self):
         custom = [
             path(
+                'upload-image/',
+                self.admin_site.admin_view(self.upload_image),
+                name='core_page_upload_image',
+            ),
+            path(
                 '<int:page_id>/import-type-specific-json/',
                 self.admin_site.admin_view(self.import_type_specific_json),
                 name='core_page_import_type_specific_json',
@@ -359,6 +372,7 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
 
         editor_data = {
             'pageId': page.id,
+            'projectId': project.id,
             'pageTitle': f'{project.name} — {page.title}',
             'blocks': blocks,
             'theme': project.theme or {},
@@ -555,6 +569,92 @@ class PageAdmin(ClientScopedAdmin, ModelAdmin):
             url, url
         )
     live_link_actions.short_description = '🔗 Link ao vivo'
+
+    def upload_image(self, request):
+        """Endpoint genérico de upload de imagem: recebe arquivo, grava no
+        storage padrão (R2 se configurado, local do contrário), devolve URL.
+        Registra também um `MediaAsset` (best-effort) pra aparecer na aba
+        Galeria do seletor de imagem do Puck.
+
+        POST /admin/core/page/upload-image/ (staff-only, CSRF-protegido)
+        → multipart/form-data: file=<binary>, project_id=<int>, source=<str, opcional>
+        ← { url: "https://cdn.example.com/users/<client-id>/projects/<project-id>/abc123.jpg" }
+
+        Validações: content-type (image/*), tamanho máximo 8MB, project_id
+        precisa existir e pertencer ao tenant atual (evita path injection e
+        pastas mal rotuladas — ver docs/editor/guia-editor-blocos-context.md).
+        Path: users/{client.id}/projects/{project.id}/{uuid}.{ext}."""
+
+        if request.method != 'POST':
+            return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+        file = request.FILES.get('file')
+        if not file:
+            return JsonResponse({'error': 'No file provided'}, status=400)
+
+        # Validar content-type: apenas imagens raster (sem SVG — risco de XSS)
+        content_type = file.content_type or mimetypes.guess_type(file.name)[0] or ''
+        allowed_types = {'image/jpeg', 'image/png', 'image/webp', 'image/gif'}
+        if content_type not in allowed_types:
+            return JsonResponse(
+                {'error': 'Tipo de arquivo não permitido. Use JPEG, PNG, WebP ou GIF.'},
+                status=400
+            )
+
+        # Validar tamanho (8MB máximo)
+        max_size = 8 * 1024 * 1024
+        if file.size > max_size:
+            return JsonResponse(
+                {'error': 'Arquivo muito grande (máx. 8MB).'},
+                status=400
+            )
+
+        client = get_current_client()
+        if client is None:
+            return JsonResponse({'error': 'Nenhum client ativo.'}, status=400)
+
+        project_id = request.POST.get('project_id')
+        try:
+            project_id = int(project_id)
+        except (TypeError, ValueError):
+            return JsonResponse({'error': 'project_id inválido.'}, status=400)
+        project = get_object_or_404(Project.objects.filter(client=client), pk=project_id)
+
+        source = request.POST.get('source', MediaAsset.SOURCE_UPLOAD)
+        if source not in dict(MediaAsset.SOURCE_CHOICES):
+            source = MediaAsset.SOURCE_UPLOAD
+
+        # Path namespaced por tenant (client.id, imutável — não usar slug,
+        # que pode ser renomeado) e por projeto (validado acima contra o
+        # tenant atual). Gera um UUID pra evitar colisões.
+        ext = Path(file.name).suffix or '.jpg'
+        filename = f'users/{client.id}/projects/{project.id}/{uuid.uuid4().hex}{ext}'
+
+        try:
+            saved_path = default_storage.save(filename, file)
+            url = default_storage.url(saved_path)
+        except Exception as e:
+            return JsonResponse(
+                {'error': f'Erro ao gravar arquivo: {str(e)}'},
+                status=500
+            )
+
+        try:
+            MediaAsset.objects.create(
+                url=url,
+                storage_path=saved_path,
+                project=project,
+                filename=file.name,
+                content_type=content_type,
+                size=file.size,
+                source=source,
+            )
+        except Exception:
+            # Best-effort: o arquivo já foi salvo e a URL já é utilizável —
+            # falha aqui só significa que não vai aparecer na Galeria.
+            pass
+
+        return JsonResponse({'url': url})
 
 
 def _seo_checklist_html(resolved):

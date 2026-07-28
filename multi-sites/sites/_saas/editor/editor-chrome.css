@@ -3,7 +3,9 @@
  * nunca vai pra produção. Dá:
  *  1. o layout custom da aba "Página" (paleta à esquerda, canvas no centro,
  *     painel de campos numa aba à direita que revela no hover);
- *  2. os labels dos elementos do Hero no canvas (via data-el/-label).
+ *  2. os labels dos elementos do Hero no canvas (via data-el/-label);
+ *  3. o primitivo genérico de modal (ui/Modal) + o seletor de imagem
+ *     (Galeria/Stock/Ajustar) construído sobre ele.
  */
 
 /* ---- layout custom da aba Página ---- */
@@ -27,25 +29,33 @@
     overflow: auto;
 }
 
-/* painel de campos: aba na borda direita, revela no hover/foco */
+/* painel de campos: aba na borda direita, revela no hover/foco.
+ * A zona de hover é do TAMANHO DA ABA (não da tela toda) — só dispara
+ * perto da aba, não em qualquer ponto da borda direita. O painel usa
+ * position:fixed (não depende do tamanho da zona) pra ocupar a altura
+ * inteira quando aberto. */
 .fields-hover-zone {
+    /* Sem `transform` de propósito: um transform em qualquer ancestral vira o
+     * containing block de descendentes `position:fixed` (regra da spec CSS) —
+     * o `.fields-panel` fixed lá embaixo ficaria preso à altura de 128px desta
+     * zona em vez da viewport inteira. `top` com `calc` centraliza sem transform.
+     * MESMO MOTIVO pelo qual o Modal (abaixo) é montado via createPortal em
+     * document.body — .fields-panel tem transform o tempo todo (linha ~77),
+     * então qualquer position:fixed renderizado como filho React dele fica
+     * preso na caixa de 340px do painel em vez da tela inteira. */
     position: absolute;
-    top: 0;
     right: 0;
+    top: calc(50% - 64px);
     width: 30px;
-    height: 100%;
+    height: 128px;
     z-index: 20;
 }
 .fields-tab {
     position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 128px;
     background: #111827;
     color: #fff;
     border-radius: 10px 0 0 10px;
@@ -61,7 +71,7 @@
     outline-offset: 2px;
 }
 .fields-panel {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     width: 340px;
@@ -109,4 +119,490 @@
     white-space: nowrap;
     pointer-events: none;
     z-index: 30;
+}
+
+/* =====================================================================
+ * ui/Modal — primitivo genérico (sem noção de imagem/mídia).
+ * Sempre montado via createPortal(document.body) — ver comentário em
+ * .fields-hover-zone acima pro porquê isso é obrigatório, não estético.
+ * ===================================================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(17, 24, 39, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: modal-backdrop-in 0.16s ease-out;
+}
+.modal-panel {
+    width: 100%;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    outline: none;
+    animation: modal-panel-in 0.18s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.modal-panel--md {
+    max-width: 480px;
+    max-height: 70vh;
+}
+.modal-panel--lg {
+    max-width: 900px;
+    height: 82vh;
+    max-height: 720px;
+}
+@keyframes modal-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes modal-panel-in {
+    from { opacity: 0; transform: scale(0.96) translateY(4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .modal-overlay, .modal-panel { animation: none; }
+}
+.modal-header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+}
+.modal-close {
+    border: none;
+    background: none;
+    color: #9ca3af;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+}
+.modal-close:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+.modal-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 18px;
+}
+.modal-footer {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid #e5e7eb;
+    background: #fafafa;
+}
+.modal-btn-primary,
+.modal-btn-secondary,
+.modal-btn-danger {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.modal-btn-primary {
+    border: none;
+    background: #2563eb;
+    color: #fff;
+}
+.modal-btn-primary:hover {
+    background: #1d4ed8;
+}
+.modal-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.modal-btn-secondary {
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+}
+.modal-btn-secondary:hover {
+    background: #f9fafb;
+}
+.modal-btn-danger {
+    border: 1px solid transparent;
+    background: none;
+    color: #dc2626;
+}
+.modal-btn-danger:hover {
+    background: #fef2f2;
+}
+
+/* =====================================================================
+ * ImageField — campo custom do Puck. UM controle só, sempre: placeholder
+ * tracejado quando vazio, thumbnail clicável quando preenchido.
+ * ===================================================================== */
+.image-field-empty {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 8px;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 8px;
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.image-field-empty:hover {
+    border-color: #93c5fd;
+    background: #eff6ff;
+    color: #2563eb;
+}
+.image-field-empty-icon {
+    font-size: 20px;
+}
+.image-field-thumb {
+    position: relative;
+    width: 100%;
+    height: 84px;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #f3f4f6;
+}
+.image-field-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.image-field-thumb-hint {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 4px 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.image-field-thumb:hover .image-field-thumb-hint,
+.image-field-thumb:focus-visible .image-field-thumb-hint {
+    opacity: 1;
+}
+
+/* =====================================================================
+ * ImagePickerModal — conteúdo específico de imagem, dentro do Modal.
+ * ===================================================================== */
+.image-picker-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+.image-picker-tabs button,
+.image-picker-subtabs button {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #374151;
+    cursor: pointer;
+}
+.image-picker-tabs button.is-active,
+.image-picker-subtabs button.is-active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+}
+.image-picker-current {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f9fafb;
+}
+.image-picker-current img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex: none;
+    background: #fff;
+}
+.image-picker-current-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.image-picker-current-chip {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #e0e7ff;
+    color: #3730a3;
+}
+.image-picker-tab-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.image-picker-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 22px 12px;
+    border: 1.5px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+.image-picker-dropzone strong {
+    color: #2563eb;
+}
+.image-picker-dropzone:hover,
+.image-picker-dropzone.is-dragover {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+.image-picker-dropzone.is-uploading {
+    opacity: 0.7;
+    cursor: default;
+}
+.image-picker-dropzone-icon {
+    font-size: 22px;
+}
+.image-picker-subtabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.image-picker-search-bar {
+    display: flex;
+    gap: 8px;
+}
+.image-picker-search-bar--sticky {
+    position: sticky;
+    top: -18px;
+    z-index: 5;
+    background: #fff;
+    padding: 4px 0 8px;
+    margin: -4px 0 0;
+}
+.image-picker-search-bar input {
+    flex: 1;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+}
+.image-picker-search-bar input:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 1px;
+    border-color: #2563eb;
+}
+.image-picker-search-bar button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.image-picker-search-bar button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+.image-picker-url-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.image-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+.image-picker-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f3f4f6;
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 0;
+    transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.image-picker-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.image-picker-thumb:hover {
+    border-color: #93c5fd;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+.image-picker-thumb:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+.image-picker-thumb.is-selected {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+.image-picker-thumb-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.image-picker-thumb-label {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 4px 6px;
+    font-size: 10px;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
+    text-align: left;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.image-picker-thumb:hover .image-picker-thumb-label {
+    opacity: 1;
+}
+.image-picker-skeleton {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #f0f1f3 25%, #e5e7eb 37%, #f0f1f3 63%);
+    background-size: 400% 100%;
+    animation: image-picker-shimmer 1.4s ease infinite;
+}
+@keyframes image-picker-shimmer {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .image-picker-skeleton { animation: none; }
+}
+.image-picker-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #6b7280;
+}
+.image-picker-pagination button {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.image-picker-pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+.image-picker-hint {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 4px 0;
+}
+.image-picker-error {
+    font-size: 12px;
+    color: #dc2626;
+    margin: 4px 0 0;
+}
+
+/* =====================================================================
+ * AdjustPanel — crop/brilho/contraste/saturação/nitidez/cinza. 2 colunas
+ * no modal 'lg' (preview à esquerda, controles à direita); empilha em
+ * telas estreitas.
+ * ===================================================================== */
+.adjust-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    height: 100%;
+}
+@media (max-width: 640px) {
+    .adjust-panel {
+        grid-template-columns: 1fr;
+    }
+}
+.adjust-panel-preview-col {
+    display: flex;
+    flex-direction: column;
+}
+.adjust-panel-controls-col {
+    display: flex;
+    flex-direction: column;
+}
+.adjust-panel-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #111827;
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 1;
+    min-height: 220px;
+}
+.adjust-panel-preview img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+.adjust-panel input[type='range'] {
+    accent-color: #2563eb;
 }

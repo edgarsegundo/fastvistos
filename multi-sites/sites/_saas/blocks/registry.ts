@@ -38,7 +38,7 @@ export const BLOCK_COMPONENTS: Record<string, ComponentType<any>> = {
 };
 
 /** Tipo de campo editável — expandido nas fases 2/4. */
-export type FieldType = 'text' | 'textarea' | 'markdown' | 'html' | 'url' | 'select' | 'radio' | 'toggle' | 'array' | 'object';
+export type FieldType = 'text' | 'textarea' | 'markdown' | 'html' | 'url' | 'image' | 'select' | 'radio' | 'toggle' | 'array' | 'object';
 
 /** Opção de select/radio: string simples (label = value) ou par label/valor. */
 export type SelectOption = string | { label: string; value: string };
@@ -143,7 +143,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
             showSubtitle: { type: 'toggle', label: 'Subtítulo', showFor: ['centered'] },
             subtitle: { type: 'textarea', label: 'Texto do subtítulo', showFor: ['centered', 'split', 'pricing'], hideWhen: { field: 'showSubtitle', equals: 'no' } },
             align: { type: 'select', label: 'Alinhamento', options: ['left', 'center'], showFor: ['centered'] },
-            imageUrl: { type: 'url', label: 'Imagem', showFor: ['split', 'fullbleed'] },
+            imageUrl: { type: 'image', label: 'Imagem', showFor: ['split', 'fullbleed'] },
             ctaText: { type: 'text', label: 'Texto do botão', showFor: ['split', 'fullbleed', 'avatars'] },
             ctaHref: { type: 'url', label: 'Link do botão', showFor: ['split', 'fullbleed', 'avatars'] },
             // === Centralizado completo (paridade com o s1 da galeria) ===
@@ -166,7 +166,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                 label: 'Hero Visual',
                 showFor: ['centered'],
                 objectFields: {
-                    imageUrl: { type: 'url', label: 'Imagem' },
+                    imageUrl: { type: 'image', label: 'Imagem' },
                     position: {
                         type: 'radio',
                         label: 'Posição',
@@ -237,7 +237,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                 label: 'Avatares',
                 showFor: ['avatars'],
                 itemFields: {
-                    imageUrl: { type: 'url', label: 'Imagem' },
+                    imageUrl: { type: 'image', label: 'Imagem' },
                     alt: { type: 'text', label: 'Descrição (alt)' },
                 },
             },
@@ -280,7 +280,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
         fields: {
             heading: { type: 'text', label: 'Título' },
             text: { type: 'textarea', label: 'Texto (parágrafos)', inlineEditable: false },
-            imageUrl: { type: 'url', label: 'Imagem' },
+            imageUrl: { type: 'image', label: 'Imagem' },
             imagePosition: { type: 'select', label: 'Posição da imagem', options: ['left', 'right'] },
         },
     },

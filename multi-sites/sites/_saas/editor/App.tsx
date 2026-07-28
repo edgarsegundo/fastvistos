@@ -15,6 +15,7 @@ import type { ProjectChrome, NavLink, FooterColumn } from '../chrome/chrome';
 
 interface EditorData {
     pageId: number;
+    projectId: number;
     pageTitle: string;
     blocks: Data;
     theme: ProjectTheme;

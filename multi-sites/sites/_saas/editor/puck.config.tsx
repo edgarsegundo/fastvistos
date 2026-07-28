@@ -9,6 +9,7 @@ import type { Config, Fields } from '@measured/puck';
 import { BLOCK_COMPONENTS, BLOCK_SCHEMAS, type BlockSchema, type FieldSchema } from '../blocks/registry';
 import { EDITOR_DEFAULT_PROPS } from './defaults';
 import { ToggleField } from './fields/ToggleField';
+import { ImageField } from './fields/ImageField';
 
 function toPuckField(f: FieldSchema): any {
     switch (f.type) {
@@ -52,6 +53,15 @@ function toPuckField(f: FieldSchema): any {
                 type: 'custom',
                 render: ({ value, onChange }: any) => (
                     <ToggleField label={label} value={value} onChange={onChange} />
+                ),
+            };
+        }
+        case 'image': {
+            const label = f.label;
+            return {
+                type: 'custom',
+                render: ({ value, onChange }: any) => (
+                    <ImageField label={label} value={value} onChange={onChange} />
                 ),
             };
         }

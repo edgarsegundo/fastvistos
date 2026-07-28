@@ -659,3 +659,42 @@ class Template(TimeStampedModel):
         if self.is_official:
             return f'{self.name} (oficial)'
         return f'{self.name} (privado)'
+
+
+class MediaAsset(ClientModel):
+    """Imagem enviada/importada por um client — biblioteca reaproveitável
+    entre páginas/blocos (aba Galeria do seletor de imagem do Puck).
+    Listagem é sempre por Client inteiro (não filtra por `project`, que é
+    só informativo — mesmo project_id validado e usado no path do R2)."""
+
+    SOURCE_UPLOAD = 'upload'
+    SOURCE_STOCK = 'stock'
+    SOURCE_URL = 'url'
+    SOURCE_ADJUSTED = 'adjusted'
+    SOURCE_CHOICES = [
+        (SOURCE_UPLOAD, 'Upload'),
+        (SOURCE_STOCK, 'Stock'),
+        (SOURCE_URL, 'URL externa'),
+        (SOURCE_ADJUSTED, 'Ajustado'),
+    ]
+
+    url = models.URLField(blank=True)
+    storage_path = models.CharField(max_length=500, blank=True)
+    project = models.ForeignKey(
+        'core.Project', null=True, blank=True, on_delete=models.SET_NULL,
+        help_text="Projeto de origem do upload (denormalizado, não filtra a galeria)."
+    )
+    filename = models.CharField(max_length=255, blank=True)
+    alt = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=100, blank=True)
+    size = models.PositiveIntegerField(null=True, blank=True)
+    source = models.CharField(max_length=20, choices=SOURCE_CHOICES, blank=True)
+
+    class Meta:
+        verbose_name = 'Imagem'
+        verbose_name_plural = 'Galeria de Imagens'
+        ordering = ('-created',)
+        indexes = [models.Index(fields=['client', '-created'])]
+
+    def __str__(self):
+        return self.filename or self.url
