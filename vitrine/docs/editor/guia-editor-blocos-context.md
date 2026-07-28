@@ -279,6 +279,37 @@ seed ganhou "Página de FAQ" (kind=page).
 
 ## Riscos/dívidas conhecidos
 
+- **INCIDENTE (corrigido): CSS 404 em produção (`_saas` sem `base` +
+  `rsync-release` não copiava assets compartilhados).** Reportado como 2
+  sintomas numa mesma sessão: (1) página com 1 bloco só ficava
+  aparentemente em branco; (2) página com 2+ blocos aparecia sem nenhum
+  estilo (Tailwind não aplicado, só o HTML cru). Investigação confirmou a
+  causa raiz do sintoma 2: `astro.config.mjs` não definia `base` pro
+  `_saas`, então o Astro emitia assets (`/_astro/...css`) absolutos na
+  raiz do domínio — mas o nginx serve cada projeto isolado sob
+  `/app/{slug}/` (`reverse-proxy-config/sites/030-saas-fastvistos.conf`),
+  então o navegador pedia `/_astro/x.css` (raiz) e o arquivo 404 sempre,
+  em qualquer projeto. **Corrigido:** `base: /app/${PROJECT_SLUG_FILTER}/`
+  condicional em `astro.config.mjs` (build já é sempre por-projeto, então
+  dá pra fixar 1 base por build) + `vitrine/ops/vitrine-deploy.sh` passou a
+  fazer um segundo `rsync` de `dist/_saas/_astro/` (diretório irmão
+  compartilhado, fora do que já era copiado) pra dentro de
+  `releases/{ts}/_astro/` de cada projeto — sem isso o `base` sozinho não
+  bastava, porque o arquivo físico do CSS nunca chegava no VPS. Simulado
+  localmente (build + rsync) e confirmado que o path referenciado no HTML
+  bate com o path físico no release.
+  **Sintoma 1 (página em branco com 1 bloco) NÃO foi reproduzido de novo**
+  depois — hipótese de colapso de array (`content` virar objeto único com
+  1 item) foi investigada e **descartada** (`Page.serialize_blocks_for_api()`
+  em `core/models.py`, `api_project_pages` em `core/views.py`, guard de
+  `editor_save` em `core/admin.py`, e o save do Puck em `editor/App.tsx`
+  tratam `content` como array em todo lugar, sem exceção pra length=1).
+  Fica em aberto: pode ter sido o mesmo bug do CSS 404 mascarado (site sem
+  nenhum estilo pode ter parecido "vazio" dependendo do conteúdo daquele
+  Hero específico) ou um build/deploy que falhou silenciosamente na
+  primeira tentativa daquele projeto. Se voltar a acontecer, checar o
+  `log_output` do `Build` correspondente no Django admin antes de
+  investigar de novo — é o dado que faltou desta vez.
 - **INCIDENTE (corrigido): `publicDir` do Vite poluía/colidia com outra
   feature.** Por padrão o Vite copia a pasta `public/` (raiz do repo) INTEIRA
   pro `outDir` a cada build. `public/` deste repo contém assets de uma feature

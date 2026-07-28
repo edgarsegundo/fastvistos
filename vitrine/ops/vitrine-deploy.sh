@@ -26,6 +26,14 @@ case "$VERB" in
     validate_slug "$SLUG"; validate_ts "$TS"
     mkdir -p "$WWW_ROOT/$SLUG/releases/$TS"
     rsync -a --delete "$ASTRO_DIST/$SLUG/" "$WWW_ROOT/$SLUG/releases/$TS/"
+    # Assets (_astro/) saem num diretório irmão compartilhado do outDir do
+    # Astro (dist/_saas/_astro/), não dentro de dist/_saas/$SLUG/ — `base`
+    # (astro.config.mjs) só prefixa a URL emitida no HTML (/app/$SLUG/_astro/...),
+    # não move o arquivo físico. Sem este rsync extra, o CSS/JS do projeto
+    # nunca chega no VPS e a página publica sem estilo nenhum (404 no asset).
+    if [ -d "$ASTRO_DIST/_astro" ]; then
+        rsync -a --delete "$ASTRO_DIST/_astro/" "$WWW_ROOT/$SLUG/releases/$TS/_astro/"
+    fi
     ;;
   switch-symlink)
     SLUG="${ARGS[1]}"; TS="${ARGS[2]}"

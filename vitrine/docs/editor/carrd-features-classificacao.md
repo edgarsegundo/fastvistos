@@ -59,13 +59,14 @@ Ver também: [guia-editor-blocos-context.md](guia-editor-blocos-context.md)
 
 | Funcionalidade | Degrau | Como |
 |---|---|---|
-| Cor de um elemento (color picker) | **1** | `type:'custom'` field → salva no prop; render aplica via CSS var inline |
-| Fonte por elemento (dropdown) | **1** | `custom` field reusando `FONT_CATALOG`/`FONT_NAMES` de `theme/fonts.ts`; **atenção**: estender `fontLinks()` pra emitir o `<link>` da fonte escolhida |
-| Tamanho de fonte / peso / espaçamento (sliders) | **1** | `custom` fields numéricos → CSS var inline no render |
-| Alinhamento, largura, padding, margin do bloco | **1** | `custom`/`select` fields |
-| Background por seção (cor / imagem / gradiente) | **1** | `custom` field |
-| Estilo de botão (raio, cor, contorno, hover) | **1** | `custom` fields |
-| **Selecionar sub-elemento** (o `<h1>` dentro do Hero) e estilizar só ele | **2** | a unidade de seleção do Puck é o bloco; precisa overlay + estado de seleção de sub-elemento próprio, e um canal de `style` por-elemento nos props |
+| Cor de um elemento (color picker) | **1** | `type:'custom'` field → salva no prop; render aplica via CSS var inline — **FEITO no Hero centered** |
+| Fonte por elemento (dropdown) | **1** | `custom` field reusando `FONT_CATALOG`/`FONT_NAMES` de `theme/fonts.ts`; `fontLinksForKeys()` emite `<link>` da fonte escolhida — **FEITO** |
+| Tamanho de fonte / peso / espaçamento (sliders) | **1** | `custom` fields numéricos → CSS var inline no render — **FEITO** |
+| Alinhamento, largura, padding, margin | **1** | `custom`/`select` fields — **FEITO (alinhamento)** em Hero centered |
+| Background por seção (cor / imagem / gradiente) | **1** | `custom` field — **cor FEITA**, imagem/gradiente pra depois |
+| Estilo de botão (raio, cor, contorno, hover) | **1** | `custom` fields — **FEITO no Hero centered** |
+| ID/classe HTML + CSS customizado por elemento | **1** | `htmlAttrs` field + `css` field (parser inline com allowlist) — **FEITO** |
+| **Selecionar sub-elemento** (o `<h1>` dentro do Hero) e estilizar só ele | **2** | clique-no-canvas rola/expande `<details>` do painel — **FEITO (Degrau 1, sem overlay)** |
 | Estilizar no canvas (não no painel), direct-manipulation | **2** | overlay próprio + toolbar contextual |
 
 > **Nota de arquitetura pro degrau 1 de aparência:** hoje NENHUM bloco tem
