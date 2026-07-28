@@ -1,4 +1,213 @@
 {
+  "alerta-de-golpewebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGgABAQACAwAAAAAAAAAAAAAAAAUBAgMEBv/EACQQAAEDAwQBBQAAAAAAAAAAAAEAAgMEBREGEhNBIQciUWFx/8QAGAEBAAMBAAAAAAAAAAAAAAAABAIFBgf/xAAlEQABAwMDAwUAAAAAAAAAAAABAAIDBBEhBRMxBhJBIkJxkbH/2gAMAwEAAhEDEQA/AN5Lk1hlJwXYyqtG6Ga0Cp5QZj5wOl07JYG3a3zyMfwzE+0u7XpNNacoW2yWlnq2OmYfPGc7f1EqNThhmLDf0mxsPxEh02jdG7tZyBa/hQuY/SLgrdsVVLHTu5Y2OLQ75RWrZ6NwuHI46UndkRlV5pXUGmxLTHa9rTgrPpc7e2WVwBkmBLye0Rc4hzTVJPNytFSYjd8K3eLFQGtLhEW7mgkNOBlEROpHu2WZ8BR35B7j9r//2Q==",
+    "jpeg": [
+      "alerta-de-golpewebp-1216-1x.jpeg 1216w",
+      "alerta-de-golpewebp-1216-2x.jpeg 2432w",
+      "alerta-de-golpewebp-608-1x.jpeg 608w",
+      "alerta-de-golpewebp-608-2x.jpeg 1216w",
+      "alerta-de-golpewebp-320-1x.jpeg 320w",
+      "alerta-de-golpewebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "alerta-de-golpewebp-1216-1x.webp 1216w",
+      "alerta-de-golpewebp-1216-2x.webp 2432w",
+      "alerta-de-golpewebp-608-1x.webp 608w",
+      "alerta-de-golpewebp-608-2x.webp 1216w",
+      "alerta-de-golpewebp-320-1x.webp 320w",
+      "alerta-de-golpewebp-320-2x.webp 640w"
+    ]
+  },
+  "camprevwebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAAAAIEBgX/xAAeEAACAgICAwAAAAAAAAAAAAAAAgEDBAURIiExQf/EABgBAAIDAAAAAAAAAAAAAAAAAAABAwUG/8QAGREBAQEBAQEAAAAAAAAAAAAAAQACIRFB/9oADAMBAAIRAxEAPwDDk7KnrhZdeIb0dLEx9c9aTfeyNMeeC3euqs6tk2NCx1k02t6NAHPtVByz4LObXQl8xjPLV/JkEo+yqwACUAARf//Z",
+    "jpeg": [
+      "camprevwebp-1216-1x.jpeg 1216w",
+      "camprevwebp-1216-2x.jpeg 2432w",
+      "camprevwebp-608-1x.jpeg 608w",
+      "camprevwebp-608-2x.jpeg 1216w",
+      "camprevwebp-320-1x.jpeg 320w",
+      "camprevwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "camprevwebp-1216-1x.webp 1216w",
+      "camprevwebp-1216-2x.webp 2432w",
+      "camprevwebp-608-1x.webp 608w",
+      "camprevwebp-608-2x.webp 1216w",
+      "camprevwebp-320-1x.webp 320w",
+      "camprevwebp-320-2x.webp 640w"
+    ]
+  },
+  "carteira-de-trabalho-digital-empregoswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUHBP/EACIQAAIBBQACAgMAAAAAAAAAAAECAwAEBQYREiEVMWGS0f/EABYBAQEBAAAAAAAAAAAAAAAAAAQCBf/EACARAAEEAQQDAAAAAAAAAAAAAAMAAQIEERQhMkFCofD/2gAMAwEAAhEDEQA/ALRn4bdMFdOpeAQRl14fXQPVRvR9hye15mTGz5hURQWQ/XCO8FJ8NveWuILvFXjCeGccLMfYp9qGrWeKRclAzGQjvie/381MjjpwIOw2JbY7SHpmnGBo8Hd1QBq+eA58xF+worKM0sqqz2g8ucJEhoo+pD9lZr3hN5el/9k=",
+    "jpeg": [
+      "carteira-de-trabalho-digital-empregoswebp-1216-1x.jpeg 1216w",
+      "carteira-de-trabalho-digital-empregoswebp-1216-2x.jpeg 2432w",
+      "carteira-de-trabalho-digital-empregoswebp-608-1x.jpeg 608w",
+      "carteira-de-trabalho-digital-empregoswebp-608-2x.jpeg 1216w",
+      "carteira-de-trabalho-digital-empregoswebp-320-1x.jpeg 320w",
+      "carteira-de-trabalho-digital-empregoswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "carteira-de-trabalho-digital-empregoswebp-1216-1x.webp 1216w",
+      "carteira-de-trabalho-digital-empregoswebp-1216-2x.webp 2432w",
+      "carteira-de-trabalho-digital-empregoswebp-608-1x.webp 608w",
+      "carteira-de-trabalho-digital-empregoswebp-608-2x.webp 1216w",
+      "carteira-de-trabalho-digital-empregoswebp-320-1x.webp 320w",
+      "carteira-de-trabalho-digital-empregoswebp-320-2x.webp 640w"
+    ]
+  },
+  "concurso-publico-3webp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAMABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQGAf/EAB4QAAICAgIDAAAAAAAAAAAAAAEDAAIEESExBQYS/8QAFQEBAQAAAAAAAAAAAAAAAAAAAwb/xAAYEQEAAwEAAAAAAAAAAAAAAAABAAISEf/aAAwDAQACEQMRAD8AV9funPzQp21jvmUud4rGGK24bUGg41JpICmC1BoxrIeyy/k2Oj3zKuytujI+uSvEiMJutQjbIGGf/9k=",
+    "jpeg": [
+      "concurso-publico-3webp-1216-1x.jpeg 1216w",
+      "concurso-publico-3webp-1216-2x.jpeg 2432w",
+      "concurso-publico-3webp-608-1x.jpeg 608w",
+      "concurso-publico-3webp-608-2x.jpeg 1216w",
+      "concurso-publico-3webp-320-1x.jpeg 320w",
+      "concurso-publico-3webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "concurso-publico-3webp-1216-1x.webp 1216w",
+      "concurso-publico-3webp-1216-2x.webp 2432w",
+      "concurso-publico-3webp-608-1x.webp 608w",
+      "concurso-publico-3webp-608-2x.webp 1216w",
+      "concurso-publico-3webp-320-1x.webp 320w",
+      "concurso-publico-3webp-320-2x.webp 640w"
+    ]
+  },
+  "concurso-publicowebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBAb/xAAiEAACAQQBBAMAAAAAAAAAAAABAgMABAURMQYSIUETJGH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFBAb/xAAfEQEBAAIBBAMAAAAAAAAAAAABAgARMQMEBSFxkfD/2gAMAwEAAhEDEQA/ANLk0kkVCmy/Hg1WSyuiyfKrqPZ3TDAZG2e+liljLuvgb4pt1Zk47S1P11I7Rx6pCu5dLJsPzmdjx1Nz07dVXB88feQxdixqoYED9opRbyCWBJF3phuiqShNmHVLFM0ezP/Z",
+    "jpeg": [
+      "concurso-publicowebp-1216-1x.jpeg 1216w",
+      "concurso-publicowebp-1216-2x.jpeg 2432w",
+      "concurso-publicowebp-608-1x.jpeg 608w",
+      "concurso-publicowebp-608-2x.jpeg 1216w",
+      "concurso-publicowebp-320-1x.jpeg 320w",
+      "concurso-publicowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "concurso-publicowebp-1216-1x.webp 1216w",
+      "concurso-publicowebp-1216-2x.webp 2432w",
+      "concurso-publicowebp-608-1x.webp 608w",
+      "concurso-publicowebp-608-2x.webp 1216w",
+      "concurso-publicowebp-320-1x.webp 320w",
+      "concurso-publicowebp-320-2x.webp 640w"
+    ]
+  },
+  "concursos-publicoswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgcA/8QAIRAAAgICAgEFAAAAAAAAAAAAAQIDBAAFBiEREhMyUaH/xAAWAQEBAQAAAAAAAAAAAAAAAAABAwT/xAAeEQACAQMFAAAAAAAAAAAAAAAAAQIDERMUITFBkf/aAAwDAQACEQMRAD8AsL62tdr+4qgOnyXBXIuSx0NlBqqeskuTOfAcDpMofKa9inFHLpCqSjplc+AwwzrK+ys34pLcVaP1N2ynyT+YypymtpWQXSfAem1PKHkLRrFCrdhPrNlmEtOIBHUsy9EkZsx6Kn236yuRn//Z",
+    "jpeg": [
+      "concursos-publicoswebp-1216-1x.jpeg 1216w",
+      "concursos-publicoswebp-1216-2x.jpeg 2432w",
+      "concursos-publicoswebp-608-1x.jpeg 608w",
+      "concursos-publicoswebp-608-2x.jpeg 1216w",
+      "concursos-publicoswebp-320-1x.jpeg 320w",
+      "concursos-publicoswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "concursos-publicoswebp-1216-1x.webp 1216w",
+      "concursos-publicoswebp-1216-2x.webp 2432w",
+      "concursos-publicoswebp-608-1x.webp 608w",
+      "concursos-publicoswebp-608-2x.webp 1216w",
+      "concursos-publicoswebp-320-1x.webp 320w",
+      "concursos-publicoswebp-320-2x.webp 640w"
+    ]
+  },
+  "concursoswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQGA//EACUQAAEDAQYHAAAAAAAAAAAAAAEAAgMEBQYREiExExUiMjZBUf/EABYBAQEBAAAAAAAAAAAAAAAAAAUEBv/EABsRAAIDAQEBAAAAAAAAAAAAAAIDAAEhERIF/9oADAMBAAIRAxEAPwCPuXSF1NLLDn4pGuPamHS20cxZFCWg/U5cDxqvPsPCcdoTgsyRCJaPYexfUrIL85NLOpa2ala+WPrO+GyFXWG0cuj0CEiPzVHVFuytaq8125//2Q==",
+    "jpeg": [
+      "concursoswebp-1216-1x.jpeg 1216w",
+      "concursoswebp-1216-2x.jpeg 2432w",
+      "concursoswebp-608-1x.jpeg 608w",
+      "concursoswebp-608-2x.jpeg 1216w",
+      "concursoswebp-320-1x.jpeg 320w",
+      "concursoswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "concursoswebp-1216-1x.webp 1216w",
+      "concursoswebp-1216-2x.webp 2432w",
+      "concursoswebp-608-1x.webp 608w",
+      "concursoswebp-608-2x.webp 1216w",
+      "concursoswebp-320-1x.webp 320w",
+      "concursoswebp-320-2x.webp 640w"
+    ]
+  },
+  "copa-do-mundo-2026webp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAQFBgf/xAAjEAACAgEEAAcAAAAAAAAAAAABAgMEAAUGESEHEhNBQoHR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAgMEBf/EAB0RAAICAQUAAAAAAAAAAAAAAAEDAAITFBUxQVL/2gAMAwEAAhEDEQA/AJu3/ETXoSsdcuXPQ5B/c0Y3nuOX1hq1iWMqnnQD5ZzOaV4qxaJirAdEZVpXbNmzVFiZpOIuufrMfXscsk8xarCvUW1LXtRuXHmliZnb3IwxiWRg54OGTbo3yIGW0//Z",
+    "jpeg": [
+      "copa-do-mundo-2026webp-1216-1x.jpeg 1216w",
+      "copa-do-mundo-2026webp-1216-2x.jpeg 2432w",
+      "copa-do-mundo-2026webp-608-1x.jpeg 608w",
+      "copa-do-mundo-2026webp-608-2x.jpeg 1216w",
+      "copa-do-mundo-2026webp-320-1x.jpeg 320w",
+      "copa-do-mundo-2026webp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "copa-do-mundo-2026webp-1216-1x.webp 1216w",
+      "copa-do-mundo-2026webp-1216-2x.webp 2432w",
+      "copa-do-mundo-2026webp-608-1x.webp 608w",
+      "copa-do-mundo-2026webp-608-2x.webp 1216w",
+      "copa-do-mundo-2026webp-320-1x.webp 320w",
+      "copa-do-mundo-2026webp-320-2x.webp 640w"
+    ]
+  },
+  "copel-energiawebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAQFAQL/xAAlEAACAQMDAgcAAAAAAAAAAAABAgMABBEFBjESExQVISJBYZH/xAAWAQEBAQAAAAAAAAAAAAAAAAACBAX/xAAeEQABBAEFAAAAAAAAAAAAAAABAAIDBBEFEhQhUv/aAAwDAQACEQMRAD8AzS94SyQytcWysA2A1NSbthM4iihj6uPdjn9qNsfRo77SbgGaSPofIxXOo6Ckd2zeIc4Ycr904bljbkvKiFCs5uS3tW13n2Mx3FmpkU+pHFFNeV2aRxhoQ7FASx+aKzHa9MCQHFDgQeV//9k=",
+    "jpeg": [
+      "copel-energiawebp-1216-1x.jpeg 1216w",
+      "copel-energiawebp-1216-2x.jpeg 2432w",
+      "copel-energiawebp-608-1x.jpeg 608w",
+      "copel-energiawebp-608-2x.jpeg 1216w",
+      "copel-energiawebp-320-1x.jpeg 320w",
+      "copel-energiawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "copel-energiawebp-1216-1x.webp 1216w",
+      "copel-energiawebp-1216-2x.webp 2432w",
+      "copel-energiawebp-608-1x.webp 608w",
+      "copel-energiawebp-608-2x.webp 1216w",
+      "copel-energiawebp-320-1x.webp 320w",
+      "copel-energiawebp-320-2x.webp 640w"
+    ]
+  },
+  "cpat-campinaswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAAAAUHCAb/xAAnEAABBAEEAQIHAAAAAAAAAAABAAIDBQQGERIhBwihIjJRVWFi0f/EABgBAAIDAAAAAAAAAAAAAAAAAAEDAgQF/8QAHREAAQQCAwAAAAAAAAAAAAAAAAECAxEEIRIUUv/aAAwDAQACEQMRAD8A0fquzkqaSbKhZye0dfhVVp/yPYyXuPBkNLo5X8du+1G2nnOnt8GTBnrsgMl+EkbrnsS/03puwx7KTGnm2PKNgJOysLiTXVC3OXdGoWnk0H6oqOHqFp/t8/v/ABEenN5JckM2V2Q7GnEjA0n9hupSW7ypo3skbCQRt8p690Rbzk2KII9klERMAf/Z",
+    "jpeg": [
+      "cpat-campinaswebp-1216-1x.jpeg 1216w",
+      "cpat-campinaswebp-1216-2x.jpeg 2432w",
+      "cpat-campinaswebp-608-1x.jpeg 608w",
+      "cpat-campinaswebp-608-2x.jpeg 1216w",
+      "cpat-campinaswebp-320-1x.jpeg 320w",
+      "cpat-campinaswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "cpat-campinaswebp-1216-1x.webp 1216w",
+      "cpat-campinaswebp-1216-2x.webp 2432w",
+      "cpat-campinaswebp-608-1x.webp 608w",
+      "cpat-campinaswebp-608-2x.webp 1216w",
+      "cpat-campinaswebp-320-1x.webp 320w",
+      "cpat-campinaswebp-320-2x.webp 640w"
+    ]
+  },
+  "desemprego-jovenswebp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRpQAAABXRUJQVlA4IIgAAADQAwCdASoUAA0APm0skUWkIqGYBABABsSgCdABZt1tFUlhPSmz98AA/tKvsVi8a/vITD525jIeSJzhR/j2qX25VrfIWpShy4t0/mHbllyU9waQXRP7RiLvGpXGlv4vDtd5/9aohh+D1oTABaLBbZncxTyEIr9LeSXG1k6iHZLeH0WvYN9AAAAA",
+    "jpeg": [
+      "desemprego-jovenswebp-1216-1x.jpeg 1216w",
+      "desemprego-jovenswebp-1216-2x.jpeg 2432w",
+      "desemprego-jovenswebp-608-1x.jpeg 608w",
+      "desemprego-jovenswebp-608-2x.jpeg 1216w",
+      "desemprego-jovenswebp-320-1x.jpeg 320w",
+      "desemprego-jovenswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "desemprego-jovenswebp-1216-1x.webp 1216w",
+      "desemprego-jovenswebp-1216-2x.webp 2432w",
+      "desemprego-jovenswebp-608-1x.webp 608w",
+      "desemprego-jovenswebp-608-2x.webp 1216w",
+      "desemprego-jovenswebp-320-1x.webp 320w",
+      "desemprego-jovenswebp-320-2x.webp 640w"
+    ]
+  },
   "dificuldade-financeirawebp": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGAwf/xAAlEAABAwQABgMBAAAAAAAAAAADAQQFAAIGEQcSITJBcRMUFTH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAQEBAQEBAAAAAAAAAAAAAAECEQADIf/aAAwDAQACEQMRAD8AS5XlUzA5VJgtEO6Ksv3eir1X+1DNc7CmWK4GG1GjlOQqL43XeuIuORhYs5yN+YpU2S7fdU2nDGBmcMavfiVsQXgad3ugais05ZLCp3487xczX8cX0FRAeNekorSEiW8dGhbNtoOxOiUVHXvKqHJPhUmb3//Z",
     "jpeg": [
@@ -16,6 +225,63 @@
       "dificuldade-financeirawebp-608-2x.webp 1216w",
       "dificuldade-financeirawebp-320-1x.webp 320w",
       "dificuldade-financeirawebp-320-2x.webp 640w"
+    ]
+  },
+  "embraer-empresawebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBgf/xAAiEAACAgICAAcAAAAAAAAAAAABAwIEABEFEgYjQVGhseH/xAAUAQEAAAAAAAAAAAAAAAAAAAAB/8QAGREAAgMBAAAAAAAAAAAAAAAAAAECE1ER/9oADAMBAAIRAxEAPwDY7lzmJk9XLXGPudb+cR2vENqvHzXqsHt1Kwdn7wvObZWVymQD6gkYoXwdaL4t3MsB7A7OKmDh0tEVsdEMlxqyZDe9/uGQrtOjAAMOsMbXoVrD/9k=",
+    "jpeg": [
+      "embraer-empresawebp-1216-1x.jpeg 1216w",
+      "embraer-empresawebp-1216-2x.jpeg 2432w",
+      "embraer-empresawebp-608-1x.jpeg 608w",
+      "embraer-empresawebp-608-2x.jpeg 1216w",
+      "embraer-empresawebp-320-1x.jpeg 320w",
+      "embraer-empresawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "embraer-empresawebp-1216-1x.webp 1216w",
+      "embraer-empresawebp-1216-2x.webp 2432w",
+      "embraer-empresawebp-608-1x.webp 608w",
+      "embraer-empresawebp-608-2x.webp 1216w",
+      "embraer-empresawebp-320-1x.webp 320w",
+      "embraer-empresawebp-320-2x.webp 640w"
+    ]
+  },
+  "emprego-e-oportunidadeswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGBAf/xAAgEAACAQQCAwEAAAAAAAAAAAABAwIABAURBhIHMUFR/8QAFQEBAQAAAAAAAAAAAAAAAAAAAwT/xAAbEQACAwEBAQAAAAAAAAAAAAABAgADBBETYf/aAAwDAQACEQMRAD8Ac4byExjmyCg13XR6+gf2see8kX1himyTasa2RMYHW9k1AYlMoi5EWSERLehXZeKYW0dxyzm6AYd9h2H2m1pTSo8wZDk0Pe3GMofGMMjlOIWl3lrQRumEkifvXyim8Miy2XBS4gQiNCigDDksI+T/2Q==",
+    "jpeg": [
+      "emprego-e-oportunidadeswebp-1216-1x.jpeg 1216w",
+      "emprego-e-oportunidadeswebp-1216-2x.jpeg 2432w",
+      "emprego-e-oportunidadeswebp-608-1x.jpeg 608w",
+      "emprego-e-oportunidadeswebp-608-2x.jpeg 1216w",
+      "emprego-e-oportunidadeswebp-320-1x.jpeg 320w",
+      "emprego-e-oportunidadeswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "emprego-e-oportunidadeswebp-1216-1x.webp 1216w",
+      "emprego-e-oportunidadeswebp-1216-2x.webp 2432w",
+      "emprego-e-oportunidadeswebp-608-1x.webp 608w",
+      "emprego-e-oportunidadeswebp-608-2x.webp 1216w",
+      "emprego-e-oportunidadeswebp-320-1x.webp 320w",
+      "emprego-e-oportunidadeswebp-320-2x.webp 640w"
+    ]
+  },
+  "emprego-professoreswebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsTAAALEwEAmpwYAAADAElEQVR4nB3NWW/SAAAA4P4IX33Q+OK78T+YmBijxuNpURMzNVEzs2QzOo074jWyqXNDmNlgTgaMDQZ0sLHSDQptuXqyUihXKVcppTDcnsz8AV8+QJBapWaHzhYdTs/HqU+66dmN7QBVrBZbWrPTV7rH7d6xenTS7h3LWl9qaWJDlZpqvdWpyipQqCmirKFJyrZmm5mc0M/M2LfAEM1n6mpd7Sndv+p/rB6dKN2/BanJl6oML9B8FqcIoNRQpXYvACNmg3H29cjihwmrxQqGMFZsVprthqIpWr9zdKL1T3MuX06x2Z3wwXZ4zwJaAVHWqu0jXwA2fPv+cejZ19Fhi9EA+ve4fLkoSiWx2lC0du9Y65/mXL4cZzIeGHIFfWb3KlBpdWvtfgCOzs/Mvxl8PjLw6MfU5w27M5UicQwPQRBN0VK1rnZP/1y5mkhnAlFkFz0AQ35AUnpSqxeJMb9NLt27+bdPJ79P6v+sOA/g8J7XC64uRXyeLEPVJEmWlaIoHRbKqUMOoygkGT/FxVonTuRBZ8Ru8Ju+2CwLbrsd2vGFttcdrm86n1Gf8oM5Iibls7k0zfMcm6aTDI2SBCC2enxJQVHOvxnZtIRt1pDVGjU7IuYt9JcXXjKtWYzLkN1G+DeFZISP7Ze4VD6dZNIszmSAUkOjMzUQRJfM4BezT+cO69fh+bWdiXVkeJd8vRleWPVs252Ez1lIhLN4UKCiPImxTJrgykBWVLBUweGAF5a3xq2770FkwuR8ozPentu4skXc32XnvBHIBdFuSNjHuWiMo0mOoWiWS7ACcFhoBJG0ccn9bnrx+fTPodmfQ2NTo2OTDxdsT4LseExwYQwdIoT9RC6MEnEcT7NxlouRLBIjAa5QP8A4w6Jz6MX43buPbly/d+3qnceDL1/NrfxCaTcrELxQYYsScZhNxDEGD/IMRFIBBPP6YSBXaeKU8ENvu3Vz8OL5y2fPXLh47tKDgWeLyzaS5zOlYqVRl+W2IguFWgKVEDCfsEdCay6PyWT9B9X5UrsQDUgHAAAAAElFTkSuQmCC",
+    "jpeg": [
+      "emprego-professoreswebp-1216-1x.jpeg 1216w",
+      "emprego-professoreswebp-1216-2x.jpeg 2432w",
+      "emprego-professoreswebp-608-1x.jpeg 608w",
+      "emprego-professoreswebp-608-2x.jpeg 1216w",
+      "emprego-professoreswebp-320-1x.jpeg 320w",
+      "emprego-professoreswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "emprego-professoreswebp-1216-1x.webp 1216w",
+      "emprego-professoreswebp-1216-2x.webp 2432w",
+      "emprego-professoreswebp-608-1x.webp 608w",
+      "emprego-professoreswebp-608-2x.webp 1216w",
+      "emprego-professoreswebp-320-1x.webp 320w",
+      "emprego-professoreswebp-320-2x.webp 640w"
     ]
   },
   "emprego__115587": {
@@ -360,6 +626,63 @@
       "emprego__tipos-de-empresa-as-7-modalidades-existentes-caracteristicas-e-portes-3-1024x644-320-2x.webp 640w"
     ]
   },
+  "feirao-do-empregowebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAOABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAIGAwX/xAAjEAABAwMEAgMAAAAAAAAAAAACAQMEAAURBgcSMRMhFDJB/8QAFwEAAwEAAAAAAAAAAAAAAAAAAwUGB//EACIRAAEDAwMFAAAAAAAAAAAAAAMBAhEABCEFEjEGE0FRYf/aAAwDAQACEQMRAD8AqLtuEUC5yI/hRxG1xySkTcZtxQRoBBTDlyLpFqmf0/bJHlVyI2pOfYse1rF7Slocjgz8QEEcImE91n4dY6c7bWkA7dEKs/OefdOHBuJWHJSW7UZzIgPInLP6PVFdaHb4sSOLMdkQbHpMUVOn1CxUjlENds4z4ozRFRMur//Z",
+    "jpeg": [
+      "feirao-do-empregowebp-1216-1x.jpeg 1216w",
+      "feirao-do-empregowebp-1216-2x.jpeg 2432w",
+      "feirao-do-empregowebp-608-1x.jpeg 608w",
+      "feirao-do-empregowebp-608-2x.jpeg 1216w",
+      "feirao-do-empregowebp-320-1x.jpeg 320w",
+      "feirao-do-empregowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "feirao-do-empregowebp-1216-1x.webp 1216w",
+      "feirao-do-empregowebp-1216-2x.webp 2432w",
+      "feirao-do-empregowebp-608-1x.webp 608w",
+      "feirao-do-empregowebp-608-2x.webp 1216w",
+      "feirao-do-empregowebp-320-1x.webp 320w",
+      "feirao-do-empregowebp-320-2x.webp 640w"
+    ]
+  },
+  "fiemgwebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAACXBIWXMAAAsTAAALEwEAmpwYAAABx0lEQVR4nNVT20vbUBzOv+mLiM8Dq1CGPjjrbSytrcPL9hDxMuZsYpdaUzVpSistWml6W9quyTkn6S2Js2Ir1AuCF5KsD9vb6IPs4+Pwwe98v/M7fPyw5z6A/afmpz6A9WXu3D6cX9+rlzdK6w+qPYFaXdTq2kLpnXrnrn3zgKWr7WDe2Dipk0Jzr2BQGW03o33P6YGsTueN3YxGClogq2+fNShLhwrGTroZFs9TyhXmF7QZRhqjii6m4ouiaUb6GEU+Hs0fyjgHcBYsxZSVmOLhoI9HLqby/kh2kCLOgq9nDWw5pjj84vBWbpwu4ywYp8uf4qqbg+/2K1NMxcOBtWSVSFQXeeTmwGTop4uRBtezzkDJG4HYSlydCJaHNrJvtgtOqjhKikSythCBM2HJbkckqp+P1YUIxFkwfyRPM9IAIThI0csjc+zFKBrx/3BSxbeB0gRdXo2rHg5+YM13cBZYv4BzB/LcgezloZsDo6Q4G5a+pBqYUGuzpV9ryRqRMMfbOq0H8wad0+mc/i3d3Olx87TuF7S9vBEqGJvWnZR6ZUald+6sDGx24UUXXZjx2PovIqv0Oyo77sd/pI3+zM+vtlWvZn4B5rRAwXIyfpUAAAAASUVORK5CYII=",
+    "jpeg": [
+      "fiemgwebp-1216-1x.jpeg 1216w",
+      "fiemgwebp-1216-2x.jpeg 2432w",
+      "fiemgwebp-608-1x.jpeg 608w",
+      "fiemgwebp-608-2x.jpeg 1216w",
+      "fiemgwebp-320-1x.jpeg 320w",
+      "fiemgwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "fiemgwebp-1216-1x.webp 1216w",
+      "fiemgwebp-1216-2x.webp 2432w",
+      "fiemgwebp-608-1x.webp 608w",
+      "fiemgwebp-608-2x.webp 1216w",
+      "fiemgwebp-320-1x.webp 320w",
+      "fiemgwebp-320-2x.webp 640w"
+    ]
+  },
+  "gov-brasilwebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsSAAALEgHS3X78AAACBklEQVR4nO2T208TQRSH+zfyJxA1+mJMiJoQE5XEJzU+NN4FY2MkIEkplChpggqs1LbhUmy1F4EtuGxvW8ru9kI785ktFWhMKpI+epJfZjI58505l3EBjV7KJaUUvZSLHpvrX5zlCfUGKI/VFShbTrIl0V4PJdqSXUUrgvwTKLoAnfOCVUcv18iWaxw0fwcSnUBnL4TEsA/YKlZIZC30UpGKqVK3E+xZaYqVHJqd5/OWhv9rBn9UJ60XKZd3ENVNZH0X2ay0wC4nsgOLbJXwruh4lCTKuoK6MYWlDRNXX6OoXvzqR9xLQYZmwwxOJvB+WWYtNoO560Oay8jGfhsoJJlihbeRn9ycTnLJs8Crd8NEgkOYifMsRgd4GhpgMOim3ztG/5sP9D1e4c7EJL7AfXLJB4jypzZQHALVgs1oaJsr43H63AHuTTxhfuE2tR+XicRv8Cx8jevKQy5OT3B1MsQ5T4y7Xh9Tc4/Ib75E2lGkODhO2Sn2+1iWW/4kFzwhngcCrMW8iPw4mj7DgupjLDHPi0iY0XCGEWWH2ZVV1lNL2IaTbuGo287Xo94QJHQT3+ouI4rK3LcMWn4TWVOpVTWMaoHtfYMNo0Q6Z5HK2WhGCdMykI09ELWjAW11uSkOX5nKWXzXTfRylXqj+df565zDUww2p4XJLsAO5zOY60y3/gM5UcNfyOD57nSxvRcAAAAASUVORK5CYII=",
+    "jpeg": [
+      "gov-brasilwebp-1216-1x.jpeg 1216w",
+      "gov-brasilwebp-1216-2x.jpeg 2432w",
+      "gov-brasilwebp-608-1x.jpeg 608w",
+      "gov-brasilwebp-608-2x.jpeg 1216w",
+      "gov-brasilwebp-320-1x.jpeg 320w",
+      "gov-brasilwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "gov-brasilwebp-1216-1x.webp 1216w",
+      "gov-brasilwebp-1216-2x.webp 2432w",
+      "gov-brasilwebp-608-1x.webp 608w",
+      "gov-brasilwebp-608-2x.webp 1216w",
+      "gov-brasilwebp-320-1x.webp 320w",
+      "gov-brasilwebp-320-2x.webp 640w"
+    ]
+  },
   "grupo-dollywebp": {
     "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACe0lEQVR4nGXI6U/aAAAF8P5/+7Z9MTHLsi3ZNM4tHoBOqCKiyCHXgIhyCSgIlmuIKDDRqdkEZXTIYB5RUarFioWWtiAsZvPTXn7Jy3tA82/u7x81W4/Xv/5/th60Wk2g1qhRDYqiiDrxgCEqDabG0ARJV0imSlJVhqIYiiJqOEFXCLpC1Sm6UWca9WazCZwU9k8LcD6XzP1MHx3Al9nd6mm6fLaPlDLF6u/jApzLpHMwnDvcO8eyFzdptJS6wzJV/OS+UQPiO8b4ls0P6dxmQ8gys7ugQtbMJ1/t8IEvWViNbrsgh83ncK7ErIljXyJvgWHdUdaMFGJEDQMCHqHLJdCqWLJxcGaC75Vz09bxBDT5ZU3p+6Y3LSmUSvG0XGG3S1d39KEdUWR9cCs+mEnNnl8kgc8eldPO10i7xbzuKU6ffoQTVnPXzbyAlWfxiVXz8imtRCeRGBQjbrfIEQShlUGvv3s9IkzszgHzkNJmE2ilPWpBvwwENULB0qex4DRvTsNWmARjBqlcp56VKEwSvnNOaHVxIf+Q09EZ8rGjYRGgmGWpVR189tOBjmed7W3DL5/bWS8ignZI/XrazgWNo2zBR7DrvZj1xqjvNTrfQc5XS/ona7a2GNQLzDj4BsvQ1GTXJPgB7O/RDvSFJZykjr3h5kMRrcarFamksuFRo3LEG5D5ohOxZU7c9TYV4vzY0ADb24HNDWcwaIQgk91mXrZZ0h4LEjEjKSh/HNv8FfdH/f5FRzS4+H1vef8wnM14DhPmy9QCkl8B7nCsXL6+uSmiaBFBEPQKwdEijRVpHCXI2zJxV7otoVcIhiJlvISTWJUokThCV64ZEvsDEIvpMH1r524AAAAASUVORK5CYII=",
     "jpeg": [
@@ -377,6 +700,120 @@
       "grupo-dollywebp-608-2x.webp 1216w",
       "grupo-dollywebp-320-1x.webp 320w",
       "grupo-dollywebp-320-2x.webp 640w"
+    ]
+  },
+  "ia-no-trabalhowebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAYDBAX/xAAlEAACAQMDAgcAAAAAAAAAAAABAgMABAUGESESMQciQVJTcdH/xAAXAQADAQAAAAAAAAAAAAAAAAADBAYH/8QAIBEAAgICAgIDAAAAAAAAAAAAAQIDBAARBSESMUFh0f/aAAwDAQACEQMRAD8Av43JQXkrx3EiIdt16j37ftZ+orjH46xnnvHEZUeQe7mkLUDstzjSrEHp9D9VF4xOwtsOAzbGMb896RvTzG4oRyo2RofX7guK4unHRPlEGOgdkd9484/EC/sobpUKrKoYA0U1aU503jt/hFFUsNyR0DH5zMLrmGw8a+gSM//Z",
+    "jpeg": [
+      "ia-no-trabalhowebp-1216-1x.jpeg 1216w",
+      "ia-no-trabalhowebp-1216-2x.jpeg 2432w",
+      "ia-no-trabalhowebp-608-1x.jpeg 608w",
+      "ia-no-trabalhowebp-608-2x.jpeg 1216w",
+      "ia-no-trabalhowebp-320-1x.jpeg 320w",
+      "ia-no-trabalhowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "ia-no-trabalhowebp-1216-1x.webp 1216w",
+      "ia-no-trabalhowebp-1216-2x.webp 2432w",
+      "ia-no-trabalhowebp-608-1x.webp 608w",
+      "ia-no-trabalhowebp-608-2x.webp 1216w",
+      "ia-no-trabalhowebp-320-1x.webp 320w",
+      "ia-no-trabalhowebp-320-2x.webp 640w"
+    ]
+  },
+  "ibgewebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAcBBv/EACcQAAEDBAADCQAAAAAAAAAAAAEAAgMEBRESBxSSBhMhMUFTYaHh/8QAFwEAAwEAAAAAAAAAAAAAAAAAAAIDBv/EABwRAAICAgMAAAAAAAAAAAAAAAABAgMTUjFRof/aAAwDAQACEQMRAD8AkPLz6B3cy6n10OFvLT+xL0FUR/EekNtio2WWBrWADOoyftZNxGpJXDazQgNGBho+P1arJZr6ZvHXsTs08w84ZOkougvnad1wrzPBTsgj1ADA0eGEVE5NcE2o9nNIiJxAiIgD/9k=",
+    "jpeg": [
+      "ibgewebp-1216-1x.jpeg 1216w",
+      "ibgewebp-1216-2x.jpeg 2432w",
+      "ibgewebp-608-1x.jpeg 608w",
+      "ibgewebp-608-2x.jpeg 1216w",
+      "ibgewebp-320-1x.jpeg 320w",
+      "ibgewebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "ibgewebp-1216-1x.webp 1216w",
+      "ibgewebp-1216-2x.webp 2432w",
+      "ibgewebp-608-1x.webp 608w",
+      "ibgewebp-608-2x.webp 1216w",
+      "ibgewebp-320-1x.webp 320w",
+      "ibgewebp-320-2x.webp 640w"
+    ]
+  },
+  "ifpbwebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAYHBf/EACIQAAEEAQQCAwAAAAAAAAAAAAEAAgMEEQUSEyEGIjEyUf/EABYBAQEBAAAAAAAAAAAAAAAAAAMEBv/EAB0RAAIBBAMAAAAAAAAAAAAAAAABAgMFBhIRFFH/2gAMAwEAAhEDEQA/AIBRqhrt0jThaV+o3jY6IZyOwE3eLVKItk3YeWED6fpTLqcGiyaZMyGiIpcejgPhLC4LXho19XHJQnoiIyVXbzgEIThNUi5D0hD3ytYm/T//2Q==",
+    "jpeg": [
+      "ifpbwebp-1216-1x.jpeg 1216w",
+      "ifpbwebp-1216-2x.jpeg 2432w",
+      "ifpbwebp-608-1x.jpeg 608w",
+      "ifpbwebp-608-2x.jpeg 1216w",
+      "ifpbwebp-320-1x.jpeg 320w",
+      "ifpbwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "ifpbwebp-1216-1x.webp 1216w",
+      "ifpbwebp-1216-2x.webp 2432w",
+      "ifpbwebp-608-1x.webp 608w",
+      "ifpbwebp-608-2x.webp 1216w",
+      "ifpbwebp-320-1x.webp 320w",
+      "ifpbwebp-320-2x.webp 640w"
+    ]
+  },
+  "justica-federalwebp": {
+    "blurDataURL": "data:image/jpeg;base64,UklGRn4AAABXRUJQVlA4IHIAAADwAwCdASoUABQAPm0qkUWkIiGYDAYAQAbEoAwNwQ78mzE87VYEAWhAAP7+L4CJAC5rn6UcT/LwzfLdQJXdP3jXafiF6ZLJXfMiVAg3ruIkutMvcY/aRcx9C5PLX4/rJHjTpA/xg6xBtkJ29wqUoYE4AAA=",
+    "jpeg": [
+      "justica-federalwebp-1216-1x.jpeg 1216w",
+      "justica-federalwebp-1216-2x.jpeg 2432w",
+      "justica-federalwebp-608-1x.jpeg 608w",
+      "justica-federalwebp-608-2x.jpeg 1216w",
+      "justica-federalwebp-320-1x.jpeg 320w",
+      "justica-federalwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "justica-federalwebp-1216-1x.webp 1216w",
+      "justica-federalwebp-1216-2x.webp 2432w",
+      "justica-federalwebp-608-1x.webp 608w",
+      "justica-federalwebp-608-2x.webp 1216w",
+      "justica-federalwebp-320-1x.webp 320w",
+      "justica-federalwebp-320-2x.webp 640w"
+    ]
+  },
+  "leroy-merlinwebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBgf/xAAkEAACAAUEAQUAAAAAAAAAAAABAgADBAURBhMhMQcSIkFSof/EABYBAQEBAAAAAAAAAAAAAAAAAAMEBf/EABwRAAIDAQADAAAAAAAAAAAAAAECAAMEEhEhMf/aAAwDAQACEQMRAD8AVadtNTMq1a4S1aQBk7nAEN71ZdMVC+vd26n6SujESTXqLXQpOYspbBHWeYr2t5a0l9tCU421bsD54irXvudzbU3IA+TIrwCtSjnzNLs/jaxVtuk1Egh0cZyx5zBDfQ0xzYE9x4dgPyCDTdayhix9x0yVFQeZ/9k=",
+    "jpeg": [
+      "leroy-merlinwebp-1216-1x.jpeg 1216w",
+      "leroy-merlinwebp-1216-2x.jpeg 2432w",
+      "leroy-merlinwebp-608-1x.jpeg 608w",
+      "leroy-merlinwebp-608-2x.jpeg 1216w",
+      "leroy-merlinwebp-320-1x.jpeg 320w",
+      "leroy-merlinwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "leroy-merlinwebp-1216-1x.webp 1216w",
+      "leroy-merlinwebp-1216-2x.webp 2432w",
+      "leroy-merlinwebp-608-1x.webp 608w",
+      "leroy-merlinwebp-608-2x.webp 1216w",
+      "leroy-merlinwebp-320-1x.webp 320w",
+      "leroy-merlinwebp-320-2x.webp 640w"
+    ]
+  },
+  "marinha-empregoswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAMABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAYEBQcI/8QAIxAAAQQCAQMFAAAAAAAAAAAAAQIDBAUAEQYHEiEUIjFCUf/EABUBAQEAAAAAAAAAAAAAAAAAAAED/8QAGxEAAgIDAQAAAAAAAAAAAAAAAQIAEQMEEiH/2gAMAwEAAhEDEQA/AEfi/DJ7da3JSz6qUVfU+EZZ2fBbWfZpVIjrU32+0nfk/nzknohdzn0tR3HdthOahf2clpbLaFgJI3rWCaqsvZPscm46PyBOfLzp5as2C0twVBOgQAcMZeYcotW7t1LcjtSEjwBhk+QPLlxkJF0J/9k=",
+    "jpeg": [
+      "marinha-empregoswebp-1216-1x.jpeg 1216w",
+      "marinha-empregoswebp-1216-2x.jpeg 2432w",
+      "marinha-empregoswebp-608-1x.jpeg 608w",
+      "marinha-empregoswebp-608-2x.jpeg 1216w",
+      "marinha-empregoswebp-320-1x.jpeg 320w",
+      "marinha-empregoswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "marinha-empregoswebp-1216-1x.webp 1216w",
+      "marinha-empregoswebp-1216-2x.webp 2432w",
+      "marinha-empregoswebp-608-1x.webp 608w",
+      "marinha-empregoswebp-608-2x.webp 1216w",
+      "marinha-empregoswebp-320-1x.webp 320w",
+      "marinha-empregoswebp-320-2x.webp 640w"
     ]
   },
   "marinha-no-brasilwebp": {
@@ -417,6 +854,44 @@
       "mei-microempreededor-receita-federalwebp-320-2x.webp 640w"
     ]
   },
+  "meiwebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAMABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAYHAQj/xAAhEAACAgIBBAMAAAAAAAAAAAABAgMEABEGBQcSMSNBkf/EABQBAQAAAAAAAAAAAAAAAAAAAAT/xAAaEQACAwEBAAAAAAAAAAAAAAAAEgIDESGB/9oADAMBAAIRAxEAPwC490LdivRqRQWWrJLJp5F+hsYhVr8le9C1TrU07rIB4k7DY9d36UVvjXylwVfYKto5HeF9CqJyOqQ9g7kBIMhOLqhsWbwNbrcOmoGLQxsfZUE/mGbGAqKB6A1hhBJ//9k=",
+    "jpeg": [
+      "meiwebp-1216-1x.jpeg 1216w",
+      "meiwebp-1216-2x.jpeg 2432w",
+      "meiwebp-608-1x.jpeg 608w",
+      "meiwebp-608-2x.jpeg 1216w",
+      "meiwebp-320-1x.jpeg 320w",
+      "meiwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "meiwebp-1216-1x.webp 1216w",
+      "meiwebp-1216-2x.webp 2432w",
+      "meiwebp-608-1x.webp 608w",
+      "meiwebp-608-2x.webp 1216w",
+      "meiwebp-320-1x.webp 320w",
+      "meiwebp-320-2x.webp 640w"
+    ]
+  },
+  "metawebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBgf/xAAlEAABAwMDAwUAAAAAAAAAAAACAQMEAAYRBQcxExRREiFBcYH/xAAWAQEBAQAAAAAAAAAAAAAAAAADBAX/xAAdEQABBAIDAAAAAAAAAAAAAAABAAIDERJRImHB/9oADAMBAAIRAxEAPwBDs9ZEu448nVG3gdVk8IJcZ809uC3LoHuCjNCYAi5QPhE5qPa27WbG0yZpJRlkGRZUqtcO95MwHu100EJwSDKnzn9pI5qiLciB16gfES8ENtYiph6iR4U6iKqF90U+lbZ3NKkuvtLGEXDU8dRPbK580Vn8dqrA6X//2Q==",
+    "jpeg": [
+      "metawebp-1216-1x.jpeg 1216w",
+      "metawebp-1216-2x.jpeg 2432w",
+      "metawebp-608-1x.jpeg 608w",
+      "metawebp-608-2x.jpeg 1216w",
+      "metawebp-320-1x.jpeg 320w",
+      "metawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "metawebp-1216-1x.webp 1216w",
+      "metawebp-1216-2x.webp 2432w",
+      "metawebp-608-1x.webp 608w",
+      "metawebp-608-2x.webp 1216w",
+      "metawebp-320-1x.webp 320w",
+      "metawebp-320-2x.webp 640w"
+    ]
+  },
   "mulher-preocupada-com-financaswebp": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUHAv/EACMQAAEEAgEDBQAAAAAAAAAAAAEAAgMEBREGEhMxISMyUfD/xAAUAQEAAAAAAAAAAAAAAAAAAAAC/8QAFxEAAwEAAAAAAAAAAAAAAAAAAQIRAP/aAAwDAQACEQMRAD8AubZmklocNjyFKM3yTPz8x7dCQMx9eToMYHq8/gqZLhw606UWZGgj4hL5cFVZZMwHub2TryUWUkQHNGVTSLm9KeSSpE+dvTKRtw+kLVdnciDiTtCUmFu//9k=",
     "jpeg": [
@@ -434,6 +909,63 @@
       "mulher-preocupada-com-financaswebp-608-2x.webp 1216w",
       "mulher-preocupada-com-financaswebp-320-1x.webp 320w",
       "mulher-preocupada-com-financaswebp-320-2x.webp 640w"
+    ]
+  },
+  "oferece-mil-vagas-gratuitaswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAgBBAYH/8QAIRAAAgEEAgIDAAAAAAAAAAAAAQIDAAQFESExBgcyQXH/xAAUAQEAAAAAAAAAAAAAAAAAAAAF/8QAGhEAAgMBAQAAAAAAAAAAAAAAAAIBAwQTIf/aAAwDAQACEQMRAD8AZjMZa0xsDtczKrBSQu+TXLPU14o8szTzzOouH3GrnscVc9waGUstA7ZNE7+uayXg0cl1nRIZmQQsFCgd90VdtZNHKI8EKsytTLyMLRUR/AflFKh5/9k=",
+    "jpeg": [
+      "oferece-mil-vagas-gratuitaswebp-1216-1x.jpeg 1216w",
+      "oferece-mil-vagas-gratuitaswebp-1216-2x.jpeg 2432w",
+      "oferece-mil-vagas-gratuitaswebp-608-1x.jpeg 608w",
+      "oferece-mil-vagas-gratuitaswebp-608-2x.jpeg 1216w",
+      "oferece-mil-vagas-gratuitaswebp-320-1x.jpeg 320w",
+      "oferece-mil-vagas-gratuitaswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "oferece-mil-vagas-gratuitaswebp-1216-1x.webp 1216w",
+      "oferece-mil-vagas-gratuitaswebp-1216-2x.webp 2432w",
+      "oferece-mil-vagas-gratuitaswebp-608-1x.webp 608w",
+      "oferece-mil-vagas-gratuitaswebp-608-2x.webp 1216w",
+      "oferece-mil-vagas-gratuitaswebp-320-1x.webp 320w",
+      "oferece-mil-vagas-gratuitaswebp-320-2x.webp 640w"
+    ]
+  },
+  "sebraewebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB1klEQVR4nLWS20sbQRTG8//2wfbBl0ALUmwRCVhRsDVl461Rq4htY1YowViDiQ+5uMlu1lx2jdnE7MXNZDe7s5cZS3a1jXQFofhxmIeZ+Z0z58wXuv0PhQJ3MQ6IZ4axFwhj20HQcg3ompZrOwgh/Cjs5R4JeatmOI2OlmOUVKF3Sst1QQND27/g61EYYdxVzHRJ/HzQjGyzMZI7oSRRhX9S/4X9flyEB4Yj9eGVOBQk45SWVw75cJR6MZ9//4XZSV/V2lpHNnqqqQDLspFPhfxMBnSrrUG6JO0etw+yXYLkItvsq8XixELh3Qaz9L2RzHX3T4QMJdE80E3Hp+5gVbMyZTlG8tPrzNzOxds1emqVnvx4Ho5SM/Hq7Ba79K0xE69u/LzMUBLQ7Qcw0O1iXd3PCESSi5Hc7Cb7hii/XCy+JsofdmtEkttMtQiSI8+6FQ4Y0H0AQ8sVVVgXtAoPjoricqIZjlITC4XpdSaeauUYhbkEZa7fEDQFQMe973l82qNRI8xf64lsJ/KVnVqpfPrRPD6XZGD5Ryjwq27vbDRSTzXzNTWR7ez9aqdL4kVbG95PCI+RQQ7zWujrdu/GvL4xlYE1NL1nBjk0wNvjRf6t9pzw0/UbUG+5AtSrxSsAAAAASUVORK5CYII=",
+    "jpeg": [
+      "sebraewebp-1216-1x.jpeg 1216w",
+      "sebraewebp-1216-2x.jpeg 2432w",
+      "sebraewebp-608-1x.jpeg 608w",
+      "sebraewebp-608-2x.jpeg 1216w",
+      "sebraewebp-320-1x.jpeg 320w",
+      "sebraewebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "sebraewebp-1216-1x.webp 1216w",
+      "sebraewebp-1216-2x.webp 2432w",
+      "sebraewebp-608-1x.webp 608w",
+      "sebraewebp-608-2x.webp 1216w",
+      "sebraewebp-320-1x.webp 320w",
+      "sebraewebp-320-2x.webp 640w"
+    ]
+  },
+  "senai-vagaswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAAAAQGAgUH/8QAIhAAAgICAQQDAQAAAAAAAAAAAQIAAwQRBQYSQWEUUVSS/8QAGgEAAQUBAAAAAAAAAAAAAAAAAAECAwUGB//EABwRAAMAAgMBAAAAAAAAAAAAAAABAgMEESExcf/aAAwDAQACEQMRAD8A59XRdYu66rGH2FJmfw8n8938GWHhOpquP41MWzEVyrb7tDZmyr63x0ZSMEaB3oqPXv1Mqohrujv2Xa25pqMPK+lGZSpIYEEeCIkvl8xc/kLclaxWHO+0eIkT96LGG3KdLhkOIiIOEREAP//Z",
+    "jpeg": [
+      "senai-vagaswebp-1216-1x.jpeg 1216w",
+      "senai-vagaswebp-1216-2x.jpeg 2432w",
+      "senai-vagaswebp-608-1x.jpeg 608w",
+      "senai-vagaswebp-608-2x.jpeg 1216w",
+      "senai-vagaswebp-320-1x.jpeg 320w",
+      "senai-vagaswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "senai-vagaswebp-1216-1x.webp 1216w",
+      "senai-vagaswebp-1216-2x.webp 2432w",
+      "senai-vagaswebp-608-1x.webp 608w",
+      "senai-vagaswebp-608-2x.webp 1216w",
+      "senai-vagaswebp-320-1x.webp 320w",
+      "senai-vagaswebp-320-2x.webp 640w"
     ]
   },
   "setor-servicos-brasilwebp": {
@@ -455,6 +987,44 @@
       "setor-servicos-brasilwebp-320-2x.webp 640w"
     ]
   },
+  "shopping-empregoswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAUGBwT/xAAlEAABBAIBAwQDAAAAAAAAAAABAAIDBAUhEQYHExIUMUEzUXH/xAAXAQADAQAAAAAAAAAAAAAAAAAAAgME/8QAHhEAAgIBBQEAAAAAAAAAAAAAAAECESEDEhMxQVH/2gAMAwEAAhEDEQA/AO1xzttVSTK0SEb4Km4Weo+ach4HjPDnE8LnlMXHdQZKnUtFxIAeAfx/xU8rQtYen7symWKMcSAn5H7WPb76VvOOjbTZSr5HeueL51v6RScHUbexkNiOlE9kg5aefpFG9b4XT0jD9t3HyZK24+qeRvLnHe9L1WLU0/T2aE0jnjxk7KIllJ8kVYUtrKnbnJWW9JU2iTQBARERKUr7HjFUsH//2Q==",
+    "jpeg": [
+      "shopping-empregoswebp-1216-1x.jpeg 1216w",
+      "shopping-empregoswebp-1216-2x.jpeg 2432w",
+      "shopping-empregoswebp-608-1x.jpeg 608w",
+      "shopping-empregoswebp-608-2x.jpeg 1216w",
+      "shopping-empregoswebp-320-1x.jpeg 320w",
+      "shopping-empregoswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "shopping-empregoswebp-1216-1x.webp 1216w",
+      "shopping-empregoswebp-1216-2x.webp 2432w",
+      "shopping-empregoswebp-608-1x.webp 608w",
+      "shopping-empregoswebp-608-2x.webp 1216w",
+      "shopping-empregoswebp-320-1x.webp 320w",
+      "shopping-empregoswebp-320-2x.webp 640w"
+    ]
+  },
+  "sinewebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGQABAQADAQAAAAAAAAAAAAAAAAYCBAUH/8QAIhAAAgEEAgIDAQAAAAAAAAAAAQIAAwQFESExEhMGBzJB/8QAFgEBAQEAAAAAAAAAAAAAAAAABAUG/8QAHhEAAgIBBQEAAAAAAAAAAAAAAAECAwQREhMhMUH/2gAMAwEAAhEDEQA/APFrBWuK6Uk/THQlDc4tbSwNZ6h9gOin9E5/1/izmMqyrdJbtSXzVnPBMusj8Rata1rq4zNFyieTIp5J111Fc1rsi4S0j9JeTjWSmtvhCh+Imr5gEgHgGJbV4F43ZOWdxWoMTRqMhPGwdTqUchdcj3vojR57iJn6DQ2mYY67iIlBAGf/2Q==",
+    "jpeg": [
+      "sinewebp-1216-1x.jpeg 1216w",
+      "sinewebp-1216-2x.jpeg 2432w",
+      "sinewebp-608-1x.jpeg 608w",
+      "sinewebp-608-2x.jpeg 1216w",
+      "sinewebp-320-1x.jpeg 320w",
+      "sinewebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "sinewebp-1216-1x.webp 1216w",
+      "sinewebp-1216-2x.webp 2432w",
+      "sinewebp-608-1x.webp 608w",
+      "sinewebp-608-2x.webp 1216w",
+      "sinewebp-320-1x.webp 320w",
+      "sinewebp-320-2x.webp 640w"
+    ]
+  },
   "stock-pexels-8483657-1783022881322webp": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGAgf/xAAiEAACAgIBBAMBAAAAAAAAAAACAwEEAAURBhJBUSEiMWH/xAAWAQEBAQAAAAAAAAAAAAAAAAAEAgP/xAAaEQEAAwEBAQAAAAAAAAAAAAABAAIRQQMS/9oADAMBAAIRAxEAPwDs7tmNW8hBxPe/4GcWJ6mINjdXfNaqy54Epn8n+5MLtu2vU60uORhU/WR8Y32XRFPZtsTZsO4ZPcUR7jB3fT6yvIyjRNeysW4iWJL4ICjmJjzhmdPqwra5KRaZCEdsTPrDNKumyVByf//Z",
     "jpeg": [
@@ -472,6 +1042,44 @@
       "stock-pexels-8483657-1783022881322webp-608-2x.webp 1216w",
       "stock-pexels-8483657-1783022881322webp-320-1x.webp 320w",
       "stock-pexels-8483657-1783022881322webp-320-2x.webp 640w"
+    ]
+  },
+  "thomson-reuterswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQGAf/EACAQAAICAQMFAAAAAAAAAAAAAAACAQQRAwUGMjM0QXH/xAAWAQEBAQAAAAAAAAAAAAAAAAADBgf/xAAbEQACAgMBAAAAAAAAAAAAAAAAAQIRAxIhIv/aAAwDAQACEQMRAD8AzlT6lSkraTSrZ9EpO8W8dUlhzzwU+kAaBD11kHkbi6QxO53c99wFwFoLZn//2Q==",
+    "jpeg": [
+      "thomson-reuterswebp-1216-1x.jpeg 1216w",
+      "thomson-reuterswebp-1216-2x.jpeg 2432w",
+      "thomson-reuterswebp-608-1x.jpeg 608w",
+      "thomson-reuterswebp-608-2x.jpeg 1216w",
+      "thomson-reuterswebp-320-1x.jpeg 320w",
+      "thomson-reuterswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "thomson-reuterswebp-1216-1x.webp 1216w",
+      "thomson-reuterswebp-1216-2x.webp 2432w",
+      "thomson-reuterswebp-608-1x.webp 608w",
+      "thomson-reuterswebp-608-2x.webp 1216w",
+      "thomson-reuterswebp-320-1x.webp 320w",
+      "thomson-reuterswebp-320-2x.webp 640w"
+    ]
+  },
+  "unicamp-campuswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAQFAgP/xAAkEAABBAEDAwUAAAAAAAAAAAABAAIDBBEFBiEHEjIiQVFxkf/EABYBAQEBAAAAAAAAAAAAAAAAAAEABf/EABsRAAIBBQAAAAAAAAAAAAAAAAABAgMFERRB/9oADAMBAAIRAxEAPwDUHU6Z1R/Zp2Jj4ZCXu7z3LPXjY2FkYPlwfUPhRIwC4HAz9LpK92BysR3OowUV0k6vWr3LhnkqGJ7gC5oHuhNvcS7nH4hG5JlhH//Z",
+    "jpeg": [
+      "unicamp-campuswebp-1216-1x.jpeg 1216w",
+      "unicamp-campuswebp-1216-2x.jpeg 2432w",
+      "unicamp-campuswebp-608-1x.jpeg 608w",
+      "unicamp-campuswebp-608-2x.jpeg 1216w",
+      "unicamp-campuswebp-320-1x.jpeg 320w",
+      "unicamp-campuswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "unicamp-campuswebp-1216-1x.webp 1216w",
+      "unicamp-campuswebp-1216-2x.webp 2432w",
+      "unicamp-campuswebp-608-1x.webp 608w",
+      "unicamp-campuswebp-608-2x.webp 1216w",
+      "unicamp-campuswebp-320-1x.webp 320w",
+      "unicamp-campuswebp-320-2x.webp 640w"
     ]
   },
   "url-import-1783033510083webp": {
@@ -512,6 +1120,25 @@
       "url-import-1783074677352webp-320-2x.webp 640w"
     ]
   },
+  "usiminaswebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAMFBP/EACIQAAIBAgUFAAAAAAAAAAAAAAABAgMEBRESMZETQURRYf/EABgBAAIDAAAAAAAAAAAAAAAAAAABAwQH/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECIQMRof/aAAwDAQACEQMRAD8A30m9kxk/T4Oy1v3b09CpQl9aLvF5Px6XBksYYmrlwpUZm24KXNXr1XPSo59kCF6ToRMACAAAAP/Z",
+    "jpeg": [
+      "usiminaswebp-1216-1x.jpeg 1216w",
+      "usiminaswebp-1216-2x.jpeg 2432w",
+      "usiminaswebp-608-1x.jpeg 608w",
+      "usiminaswebp-608-2x.jpeg 1216w",
+      "usiminaswebp-320-1x.jpeg 320w",
+      "usiminaswebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "usiminaswebp-1216-1x.webp 1216w",
+      "usiminaswebp-1216-2x.webp 2432w",
+      "usiminaswebp-608-1x.webp 608w",
+      "usiminaswebp-608-2x.webp 1216w",
+      "usiminaswebp-320-1x.webp 320w",
+      "usiminaswebp-320-2x.webp 640w"
+    ]
+  },
   "vagas-de-emprego-2webp": {
     "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsTAAALEwEAmpwYAAACHUlEQVR4nGNg8JqOBXlO4/SbKRQ0RyhoDqffTAbPadiVMWDTyeA1XTFhsVPZBqeyDYoJixlhggyENXtNZ/SYZpC1Mr57T3z3HoOslYwepNjM6TfTtmhd0YzDRTMO2xWtw+lyBq9pyIjRaxqj51TRsLlOpevypx0smH7QuWy9WPhcRs+pjKgqQYjBYyYyYnSfye49WytlZWjz7vK5JyvnnQpp3q2TuordezajO4pKEJJLqIUj+YRaufgarYxG38YJOTPm1i5dUr9sac6Muf5NE7UymuTia0AKkBBDaJ83Mgrp8Y6fElCyJKp5Q0LLxsTWjYnNGxJKl0YlTA0I6UFRGdrnzdCxWwyKdol17pbo3qMw6aDmrGNGc44bzDpmMPOo3twTIMbkgzrde5Q6d0t27IKp3y3GMO8sAs0/y7LsovjaK9qbrttsuGa58ZrVuqvG664Yrb9qvO6q3opLcgvPcSCrZ5h9CoIYZ51imHOabeVFjW03PA7cS95/N+HAvZR9d+L23onaeydq+w2v1Zf05p3mmnUSpBiii2HOaSiafYph7mmW5RcVNl2z3nU7aNetwN23Q3fdDtpxy3fHLe9N16xWXlSZd4Z9NsgOKELRPOc006JzwisuKq65rLvmss7aK/prrxiuuaK35rLO8ovyi84JzTnNhF0zDDHNPc0y9wzr3NNgdIYNjFjnnmaZc5oJTTG65tlwBA0LFISmGQCRyXywL0xXewAAAABJRU5ErkJggg==",
     "jpeg": [
@@ -529,6 +1156,25 @@
       "vagas-de-emprego-2webp-608-2x.webp 1216w",
       "vagas-de-emprego-2webp-320-1x.webp 320w",
       "vagas-de-emprego-2webp-320-2x.webp 640w"
+    ]
+  },
+  "vagas-empregowebp": {
+    "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAC4jAAAuIwF4pT92AAAFgklEQVR4nDWU21NTVxTG81fAgWK8oLZKKzrqaL1MvVRqbcdqW63taIVzAggBEiBAiQhCEkKAnJDLueTCSXIOlxgwciugFhVv1Vrt2CvTmbYznT70oX1IZxxT4eyvk1Qf1sPes/Zvf2uv/S0NxQgyRfOPKJr7N7vER3KKvUR7miUvFzvIRsZONuvsZAPtIGtpJ1nOeEmeTiC5Op7k0ByhaB+hSnwkfZZi+IeUTohoKEb4mqL5PyiaW8ot9pB8miWbq93kcIuHnOz2k1MOgRy2BcjuBi8prPKQ/FIvWV7uJ3mlIsll+DQsHUsUw/9OMcL9NPAJxfDP0jeuKGHJ6wY3PrGJaInI6BoZgmNEgXlgCGXufhw6y2FztRdrK0Ss0vdDW+5Hrk4gOWkww6coRvhH85yu5hW7yWtnWByzBdA2EIN4OQHvRBR9l8JwxmXYFBmlDh8ONHlRWMXjFUMEq6skLC8P4CWdkFapUjS3qKFo31KuTlBXFLPYWe+FQVTAj8YQnVTQE7LDpbjgC/YhMKSgyS3iww4R2wwcCutkrK9VsPqFUoZ/AeTUvLIAyS9xYp9ZRFM4BmkihotjLMSAAcHBDkghFrF4DF18AMWOEHabeGw1KdjYGMM6QxSrKvuRVyaqOQy/qEmTtRUhslbnxt7POFTxMth4FBfHLJgY0mNuugNXPpcxN3cZQlhGRU8Yb5hE7DDHsdU8itfqB7G2OgLtmYCaqxMWNS+ViurKyn7ySqUfO40eHLWIMAX94AdbMXHBiFtXe/Dg3jRu35mHJIXQ2C3i6LkgiiyXsP1cApuaYlhnlLGyMqTmlYqLmmVlfjVfL5H1hii2Gf3YXefGR60O1HTUobu3BuGIDcMJBZIiw2rvxrlOFo1OCaWuURzouIjNzXEU1A0gX9+vLivzL2q05QF1tV4ir9YPYotJwfY6Pw6aWBytOYtTtY2oarWi0SnA2MZCX92OlkYr/Jwf7lAUNa4BFLUNodA0gPwqSdWWB/4HphW+Wj+Arc1x7DTHUGSO4lC9F4frWXxg5nC8LYgTtU7QpR2w1rZjysdiftiDhOJDsyuEd1okFFSHVG3Z85JX6ftJQZ2Skb/r/Dj2WSdx0DaBd60JHOkcw3HnNPRdQ3B0eDBsseEOZ8fP8V78kujCzKAbDXYPdhl96rIS9/OmVIRI+mE3Ncbw+rkE9lqn8HbPFRxx38Ax7jZOiHfR4P8c0WAQD6MOLEg2/KrY8eeIFQsJB9ysHW8ZetXcU72Lmlwdn66drKkOZ77AluY4drRewh7LJIq6ZnCo5yredX6BM75JBOUoHo95sDBox8NAJ+6FujAXccDSacWeMzaVOtmzqKEYLt1usrIyhIJaBdvMcey3jOMdxzTec17G+64v8EHfHE77rqAlkEA8FsWMLOCCwMHj4mHu7MOHjT0ooLvV7NPujFOW0iqXlfkz/txzfhQn+mZREbqBqvAtGKN3YJTvola+C1PkGtjhGUgXxuEOX0RlzzDeNInYUOGBttilZpf4/gfmMFzaNmSdQSJHHOOkQblJnJOPiGvqG+Kb/TYT3tlvSdfYQ9I99oCw41+R9thtcqx3kqyrkTIjLCc9ZDJeZoQnOYzwLIvmyHqDRE6wU8Qyeo+Er/9AQnPfE3n+RxK98RNRbi6QwNXviG/mMeFmH2dyPmanMsBsmic5jPB8fOmE+5RO+C2rhHuyRh98WtQxkqK52VR95EbKKF1PmaLzqQZ5PtU0cCvVIN/M7NX0X0t96plO7W2NPV1VEXiaRXNPKEb4ldKJX2oonShROuFOFs39pS0Xk4V1keSus0PJA+3x5J7WWHJf24Xk/vPx5FuW0eRBy2jyQPtIZr3DPJgsMEjJvFIhmU3zf1OMcJvSiaH/ADafxlSAhNKqAAAAAElFTkSuQmCC",
+    "jpeg": [
+      "vagas-empregowebp-1216-1x.jpeg 1216w",
+      "vagas-empregowebp-1216-2x.jpeg 2432w",
+      "vagas-empregowebp-608-1x.jpeg 608w",
+      "vagas-empregowebp-608-2x.jpeg 1216w",
+      "vagas-empregowebp-320-1x.jpeg 320w",
+      "vagas-empregowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "vagas-empregowebp-1216-1x.webp 1216w",
+      "vagas-empregowebp-1216-2x.webp 2432w",
+      "vagas-empregowebp-608-1x.webp 608w",
+      "vagas-empregowebp-608-2x.webp 1216w",
+      "vagas-empregowebp-320-1x.webp 320w",
+      "vagas-empregowebp-320-2x.webp 640w"
     ]
   }
 }
