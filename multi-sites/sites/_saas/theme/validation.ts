@@ -13,14 +13,7 @@
  * mudança aqui precisa ser espelhada lá).
  */
 import { FONT_CATALOG } from './fonts';
-import type {
-    BaseElementStyle,
-    ButtonElementStyle,
-    ElementBorder,
-    ElementShadow,
-    MediaElementStyle,
-    TextElementStyle,
-} from '../blocks/style-types';
+import type { BaseElementStyle, ElementBorder, ElementShadow } from '../blocks/style-types';
 
 /** 3/6 dígitos = igual buildBrandVars (cor sólida); 4/8 = com canal alpha (usado em sombras). */
 export const HEX_RE = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
@@ -58,10 +51,10 @@ export function isValidFontKey(v: unknown): v is string {
 export function isValidIdOrClass(v: unknown): v is string {
     return typeof v === 'string' && ID_CLASS_RE.test(v) && !RESERVED_TOKENS.has(v);
 }
-function isValidAlign(v: unknown): v is 'left' | 'center' | 'right' {
-    return v === 'left' || v === 'center' || v === 'right';
+export function isValidAlign(v: unknown): v is 'left' | 'center' | 'right' | 'justify' {
+    return v === 'left' || v === 'center' || v === 'right' || v === 'justify';
 }
-function isValidBorderStyle(v: unknown): v is NonNullable<ElementBorder['style']> {
+export function isValidBorderStyle(v: unknown): v is NonNullable<ElementBorder['style']> {
     return v === 'solid' || v === 'dashed' || v === 'dotted' || v === 'none';
 }
 
@@ -101,7 +94,7 @@ export function parseInlineCss(raw: string): { style: Record<string, string>; er
 }
 
 /** Mesma allowlist/blocklist de `parseInlineCss`, aplicada a um objeto já em camelCase (defesa em profundidade). */
-function sanitizeCssObject(v: unknown): Record<string, string> | undefined {
+export function sanitizeCssObject(v: unknown): Record<string, string> | undefined {
     if (!v || typeof v !== 'object') return undefined;
     const out: Record<string, string> = {};
     for (const [key, val] of Object.entries(v as Record<string, unknown>)) {
@@ -126,7 +119,7 @@ export function sanitizeHtmlAttrs(v: unknown): BaseElementStyle['htmlAttrs'] {
     return Object.keys(out).length ? out : undefined;
 }
 
-function sanitizeBorder(v: unknown): ElementBorder | undefined {
+export function sanitizeBorder(v: unknown): ElementBorder | undefined {
     if (!v || typeof v !== 'object') return undefined;
     const b = v as Record<string, unknown>;
     const out: ElementBorder = {};
@@ -136,7 +129,7 @@ function sanitizeBorder(v: unknown): ElementBorder | undefined {
     return Object.keys(out).length ? out : undefined;
 }
 
-function sanitizeShadow(v: unknown): ElementShadow | undefined {
+export function sanitizeShadow(v: unknown): ElementShadow | undefined {
     if (!v || typeof v !== 'object') return undefined;
     const s = v as Record<string, unknown>;
     const out: ElementShadow = {};
@@ -148,71 +141,9 @@ function sanitizeShadow(v: unknown): ElementShadow | undefined {
     return Object.keys(out).length ? out : undefined;
 }
 
-export function sanitizeTextStyle(s?: unknown): TextElementStyle {
-    if (!s || typeof s !== 'object') return {};
-    const v = s as Record<string, unknown>;
-    const out: TextElementStyle = {};
-    if (isValidHex(v.color)) out.color = v.color;
-    if (isValidFontKey(v.font)) out.font = v.font;
-    if (isValidDimension(v.fontSize)) out.fontSize = v.fontSize;
-    if (isValidDimension(v.fontWeight)) out.fontWeight = v.fontWeight;
-    if (isValidDimension(v.lineHeight)) out.lineHeight = v.lineHeight;
-    if (isValidDimension(v.letterSpacing)) out.letterSpacing = v.letterSpacing;
-    if (isValidAlign(v.align)) out.align = v.align;
-    const css = sanitizeCssObject(v.css);
-    if (css) out.css = css;
-    const htmlAttrs = sanitizeHtmlAttrs(v.htmlAttrs);
-    if (htmlAttrs) out.htmlAttrs = htmlAttrs;
-    return out;
-}
-
-export function sanitizeBadgeStyle(s?: unknown): TextElementStyle & { bgColor?: string; border?: ElementBorder; radius?: string } {
-    const text = sanitizeTextStyle(s);
-    if (!s || typeof s !== 'object') return text;
-    const v = s as Record<string, unknown>;
-    const out: TextElementStyle & { bgColor?: string; border?: ElementBorder; radius?: string } = { ...text };
-    if (isValidHex(v.bgColor)) out.bgColor = v.bgColor;
-    const border = sanitizeBorder(v.border);
-    if (border) out.border = border;
-    if (isValidDimension(v.radius)) out.radius = v.radius as string;
-    return out;
-}
-
-export function sanitizeButtonStyle(s?: unknown): ButtonElementStyle {
-    if (!s || typeof s !== 'object') return {};
-    const v = s as Record<string, unknown>;
-    const out: ButtonElementStyle = {};
-    if (isValidHex(v.color)) out.color = v.color;
-    if (isValidHex(v.bgColor)) out.bgColor = v.bgColor;
-    if (isValidHex(v.hoverBgColor)) out.hoverBgColor = v.hoverBgColor;
-    const border = sanitizeBorder(v.border);
-    if (border) out.border = border;
-    if (isValidDimension(v.radius)) out.radius = v.radius as string;
-    const shadow = sanitizeShadow(v.shadow);
-    if (shadow) out.shadow = shadow;
-    if (isValidFontKey(v.font)) out.font = v.font;
-    if (isValidDimension(v.fontSize)) out.fontSize = v.fontSize as string;
-    if (isValidDimension(v.fontWeight)) out.fontWeight = v.fontWeight as string;
-    if (isValidDimension(v.letterSpacing)) out.letterSpacing = v.letterSpacing as string;
-    const css = sanitizeCssObject(v.css);
-    if (css) out.css = css;
-    const htmlAttrs = sanitizeHtmlAttrs(v.htmlAttrs);
-    if (htmlAttrs) out.htmlAttrs = htmlAttrs;
-    return out;
-}
-
-export function sanitizeMediaStyle(s?: unknown): MediaElementStyle {
-    if (!s || typeof s !== 'object') return {};
-    const v = s as Record<string, unknown>;
-    const out: MediaElementStyle = {};
-    const border = sanitizeBorder(v.border);
-    if (border) out.border = border;
-    if (isValidDimension(v.radius)) out.radius = v.radius as string;
-    const shadow = sanitizeShadow(v.shadow);
-    if (shadow) out.shadow = shadow;
-    const css = sanitizeCssObject(v.css);
-    if (css) out.css = css;
-    const htmlAttrs = sanitizeHtmlAttrs(v.htmlAttrs);
-    if (htmlAttrs) out.htmlAttrs = htmlAttrs;
-    return out;
-}
+// Os sanitizadores POR-TIPO de elemento (texto/botão/mídia/badge) vivem em
+// `blocks/style-registry.ts` — derivados de `STYLE_PROP_REGISTRY`, uma fonte
+// única por propriedade (schema do campo + sanitização + conversão pra CSS),
+// em vez de 4 funções hand-written repetindo a mesma lista de `if`s. Aqui
+// ficam só os validadores PRIMITIVOS (reaproveitados por aquele registry) —
+// movidos pra evitar import circular (`style-registry.ts` importa daqui).
