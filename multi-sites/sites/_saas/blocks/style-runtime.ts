@@ -6,8 +6,8 @@
  *
  * Defesa em profundidade: cada função roda o sanitizador de novo antes de
  * gerar o objeto de estilo, mesmo que algo inválido já esteja salvo em
- * `props.style` (bug futuro, edição direta no banco) — nunca confia no que
- * já está persistido.
+ * `props.<elemento>Style` (bug futuro, edição direta no banco) — nunca
+ * confia no que já está persistido.
  */
 import type { CSSProperties } from 'react';
 import { FONT_CATALOG } from '../theme/fonts';
@@ -115,15 +115,26 @@ interface FontScanDocument {
     content?: { type: string; props?: Record<string, unknown> }[];
 }
 
-/** Varre um documento de blocos e recolhe as chaves de fonte (FONT_CATALOG) usadas em `props.style.*.font`. */
+/** Nomes dos 9 props `<elemento>Style` do Hero — ver HeroElementStyles em blocks/types.ts. */
+const HERO_STYLE_PROP_KEYS = [
+    'eyebrowStyle', 'titleStyle', 'subtitleStyle', 'announcementBadgeStyle',
+    'heroVisualStyle', 'ctasStyle', 'helperTextStyle', 'ratingStyle', 'trustBarStyle',
+];
+
+/** Varre um documento de blocos e recolhe as chaves de fonte (FONT_CATALOG) usadas
+ *  em `props.<elemento>Style.<elemento>.font` (um prop por elemento, ver registry.ts). */
 export function collectBlockFontKeys(doc?: FontScanDocument | null): string[] {
     const keys: string[] = [];
     for (const node of doc?.content ?? []) {
         if (node.type !== 'Hero') continue;
-        const style = (node.props?.style as Record<string, unknown>) ?? {};
-        for (const group of Object.values(style)) {
-            if (group && typeof group === 'object' && typeof (group as { font?: unknown }).font === 'string') {
-                keys.push((group as { font: string }).font);
+        const props = node.props ?? {};
+        for (const propKey of HERO_STYLE_PROP_KEYS) {
+            const wrapper = props[propKey] as Record<string, unknown> | undefined;
+            if (!wrapper || typeof wrapper !== 'object') continue;
+            for (const group of Object.values(wrapper)) {
+                if (group && typeof group === 'object' && typeof (group as { font?: unknown }).font === 'string') {
+                    keys.push((group as { font: string }).font);
+                }
             }
         }
     }

@@ -655,3 +655,15 @@
     background: #eff6ff;
     box-shadow: 0 0 0 2px #93c5fd;
 }
+
+/* =====================================================================
+ * RichTextField — formatação inline estilo Carrd (negrito/itálico/cor/
+ * etc num TRECHO do texto). `id="content-field-<key>"` é o outro alvo
+ * possível do clique-no-canvas (editor/App.tsx), prioritário sobre
+ * appearance-group quando o elemento tem campo de conteúdo próprio.
+ * ===================================================================== */
+.content-field--flash {
+    background: #eff6ff;
+    box-shadow: 0 0 0 2px #93c5fd;
+    border-radius: 8px;
+}

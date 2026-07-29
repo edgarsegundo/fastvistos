@@ -1,6 +1,7 @@
 import type { HeroCta } from '../types';
 import type { ButtonElementStyle, TextElementStyle } from '../style-types';
 import { buttonStyleToCss, styleHtmlAttrs, textStyleToCss } from '../style-runtime';
+import { parseInlineMarkup } from '../inline-markup';
 
 /**
  * Helpers compartilhados entre as variantes de Hero.
@@ -15,7 +16,7 @@ export function Eyebrow({ children }: { children?: string }) {
     if (!children) return null;
     return (
         <span className="font-heading text-sm font-semibold uppercase tracking-widest text-primary">
-            {children}
+            {parseInlineMarkup(children, 'eyebrow')}
         </span>
     );
 }

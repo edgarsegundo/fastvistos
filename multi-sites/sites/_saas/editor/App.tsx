@@ -6,7 +6,7 @@
  * Salvar (explícito) faz POST do estado pro Django, que grava e marca rebuild.
  */
 import React, { useEffect, useState } from 'react';
-import { Puck, type Data } from '@measured/puck';
+import { Puck, registerOverlayPortal, type Data } from '@measured/puck';
 import { puckConfig } from './puck.config';
 import { buildBrandVars, fontLinksForKeys } from '../theme/theme';
 import { FONT_NAMES } from '../theme/fonts';
@@ -237,6 +237,86 @@ export default function App() {
         for (const stale of existing.values()) stale.remove();
     }, [theme, blocks]);
 
+    // Restaura pointer-events/hover nos 4 campos `richText` (eyebrow/title/
+    // subtitle/helperText do Hero centered) via a MESMA função que o
+    // `InlineTextField` nativo do Puck chama sobre si mesmo
+    // (`data-puck-overlay-portal`, ver `[data-puck-overlay-portal]` em
+    // node_modules/@measured/puck/dist/index.css). Sem isso, `[data-puck-
+    // component] * { pointer-events:none }` bloqueia até o hover (:hover do
+    // CSS não dispara em elemento sem pointer-events), então esses 4 campos
+    // nunca mostravam o tooltip individual — só o highlight do bloco Hero
+    // inteiro (igual clicar numa área não-interativa).
+    //
+    // `registerOverlayPortal` sozinha NÃO evita a desseleção ao clicar (ela só
+    // trata mouseover/pointerdown/focus, não click). O wrapper do bloco
+    // (`[data-puck-component]`) sempre despacha a seleção no `click` nativo
+    // (bubble, `el.addEventListener` direto no DOM — não é JSX/React), mas SÓ
+    // chama `stopPropagation()` quando o alvo NÃO está num `[data-puck-
+    // overlay-portal]` — presumindo que algo mais já parou a propagação
+    // antes. Sem esse "algo mais", o clique continua borbulhando até o
+    // `onClick` do `Puck.Preview`
+    // (`if (!el.hasAttribute('data-puck-component') && ...) dispatch({itemSelector:null})`),
+    // que desseleciona porque o alvo real (o span/h1/p, agora com pointer-
+    // events restaurado) não carrega esse atributo.
+    //
+    // TENTATIVA DESCARTADA: `onClickCapture` do React nesses elementos (em
+    // HeroCentered.tsx) parecia replicar o truque do `InlineTextField`, mas
+    // React entrega BOTH fases (captura e bubble) via UM listener nativo só,
+    // registrado na raiz — a fase de captura dele roda durante a CAPTURA
+    // NATIVA do browser, ou seja ANTES do `el.addEventListener('click', ...)`
+    // nativo do wrapper (que só dispara no BUBBLE nativo). `stopPropagation`
+    // ali aborta o ciclo inteiro do evento, matando também o próprio
+    // `dispatch` de seleção do wrapper — pior que o bug original (clique não
+    // faz nada). Confirmado via Playwright lendo o painel de campos (caía no
+    // painel do ROOT, não do Hero).
+    //
+    // FIX: um SEGUNDO listener nativo de `click`, no MESMO nó wrapper,
+    // registrado DEPOIS do listener do Puck (mesma fase = ordem de
+    // registro). Isso roda depois do `dispatch` de seleção do Puck já ter
+    // disparado, mas antes do clique continuar borbulhando pro container
+    // raiz do React (onde o `onClick` do `Puck.Preview` desselecionaria).
+    useEffect(() => {
+        if (tab !== 'page') return;
+
+        const RICHTEXT_KEYS = ['eyebrow', 'title', 'subtitle', 'helperText'];
+        const cleanups = new Map<Element, () => void>();
+        const wrapperListeners = new Map<Element, () => void>();
+
+        function scan() {
+            for (const key of RICHTEXT_KEYS) {
+                const el = document.querySelector<HTMLElement>(`.editor-canvas [data-el="${key}"]`);
+                if (el && !cleanups.has(el)) {
+                    const cleanup = registerOverlayPortal(el);
+                    if (cleanup) cleanups.set(el, cleanup);
+
+                    const wrapper = el.closest<HTMLElement>('[data-puck-component]');
+                    if (wrapper && !wrapperListeners.has(wrapper)) {
+                        const guard = (e: MouseEvent) => {
+                            if ((e.target as HTMLElement | null)?.closest('[data-puck-overlay-portal]')) {
+                                e.stopPropagation();
+                            }
+                        };
+                        wrapper.addEventListener('click', guard);
+                        wrapperListeners.set(wrapper, () => wrapper.removeEventListener('click', guard));
+                    }
+                }
+            }
+        }
+
+        scan();
+        // `.editor-canvas` é remontado internamente pelo Puck logo após o
+        // mount inicial (confirmado: a referência capturada fica com um nó
+        // órfão) — observar `document.body` em vez do canvas evita perder
+        // esse remount.
+        const mo = new MutationObserver(scan);
+        mo.observe(document.body, { childList: true, subtree: true });
+        return () => {
+            mo.disconnect();
+            for (const cleanup of cleanups.values()) cleanup();
+            for (const cleanup of wrapperListeners.values()) cleanup();
+        };
+    }, [tab]);
+
     // Clique num elemento do canvas (via `data-el`, já usado pros labels de
     // hover) só rola/expande a seção "Aparência → <elemento>" no painel de
     // campos já existente — SEM toolbar flutuante, SEM overlay de seleção
@@ -254,20 +334,30 @@ export default function App() {
             document.querySelector<HTMLElement>('.fields-tab')?.focus();
             // A seleção de bloco do Puck não comita no mesmo frame do clique
             // (mecanismo de drag-and-drop por baixo) — poll via rAF, até ~30
-            // frames (~0.5s). Sem grupo até o limite = elemento sem
-            // Aparência nesse bloco, no-op.
+            // frames (~0.5s). Sem alvo até o limite = elemento sem campo
+            // editável nesse bloco, no-op.
             let attempts = 0;
             const tryOpen = () => {
+                // Prioriza o campo de CONTEÚDO (RichTextField, ex: título/
+                // eyebrow) — é o alvo mais útil de "clicar pra editar este
+                // texto", e a Aparência já fica logo abaixo dele (campos
+                // interlear no registry). Cai pro grupo de Aparência
+                // (appearance-group) só quando o elemento não tem campo de
+                // conteúdo próprio (ex: ctas, heroVisual, rating, trustBar).
+                const contentField = document.getElementById(`content-field-${key}`);
                 const group = document.getElementById(`appearance-group-${key}`);
-                if (!group) {
+                const target = contentField ?? group;
+                if (!target) {
                     attempts += 1;
                     if (attempts < 30) requestAnimationFrame(tryOpen);
                     return;
                 }
-                if (group instanceof HTMLDetailsElement) group.open = true;
-                group.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                group.classList.add('appearance-group--flash');
-                setTimeout(() => group.classList.remove('appearance-group--flash'), 1200);
+                if (target === group && group instanceof HTMLDetailsElement) group.open = true;
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const flashClass = target === contentField ? 'content-field--flash' : 'appearance-group--flash';
+                target.classList.add(flashClass);
+                setTimeout(() => target.classList.remove(flashClass), 1200);
+                if (target === contentField) contentField.querySelector('textarea')?.focus();
             };
             requestAnimationFrame(tryOpen);
         }

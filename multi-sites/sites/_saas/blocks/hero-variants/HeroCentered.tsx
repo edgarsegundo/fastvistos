@@ -1,16 +1,18 @@
 import type { HeroCta, HeroProps } from '../types';
 import type { MediaElementStyle } from '../style-types';
-import { Eyebrow, CtaButton, Stars } from './shared';
+import { CtaButton, Stars } from './shared';
 import { badgeStyleToCss, mediaStyleToCss, styleHtmlAttrs, textStyleToCss } from '../style-runtime';
+import { parseInlineMarkup } from '../inline-markup';
 
 /**
  * 01 — Centralizado (paridade com o s1 da galeria). Todos os elementos são
  * opcionais e regidos por CONTEÚDO: campo vazio = elemento não renderiza.
  * Cada elemento leva `data-el`/`data-el-label` (inertes na produção; alimentam
  * os labels do canvas no editor, via CSS do bundle do editor) — a MESMA
- * chave também indexa `props.style` (Aparência por elemento, opt-in). Zero
- * JS na ausência de customização: `style=`/`id=`/`className=` calculados só
- * adicionam o que foi customizado, nunca removem uma classe Tailwind.
+ * chave nomeia seu prop `<elemento>Style` (Aparência por elemento, opt-in,
+ * ver HeroElementStyles em ../types.ts). Zero JS na ausência de
+ * customização: `style=`/`id=`/`className=` calculados só adicionam o que
+ * foi customizado, nunca removem uma classe Tailwind.
  */
 
 /** Caixa do Hero Visual: imagem quando houver; placeholder só no editor. */
@@ -78,7 +80,15 @@ export default function HeroCentered(props: HeroProps) {
         showHelper,
         showRating,
         showTrust,
-        style,
+        eyebrowStyle,
+        titleStyle,
+        subtitleStyle,
+        announcementBadgeStyle,
+        heroVisualStyle,
+        ctasStyle,
+        helperTextStyle,
+        ratingStyle,
+        trustBarStyle,
         puck,
     } = props;
     const isEditing = puck?.isEditing;
@@ -101,20 +111,20 @@ export default function HeroCentered(props: HeroProps) {
         <Stars
             value={rating?.value}
             count={rating?.count}
-            style={style?.rating}
+            style={ratingStyle?.rating}
             dataEl="rating"
             dataElLabel="Avaliação"
             extraClassName="mt-6"
         />
     );
-    const trustAttrs = styleHtmlAttrs(style?.trustBar);
+    const trustAttrs = styleHtmlAttrs(trustBarStyle?.trustBar);
     const trustEl = on(showTrust) && trustBar && trustBar.length > 0 && (
         <div
             data-el="trustBar"
             data-el-label="Confiança"
             id={trustAttrs.id}
             className={`mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs uppercase tracking-widest text-muted opacity-80 ${trustAttrs.className ?? ''}`.trim()}
-            style={textStyleToCss(style?.trustBar)}
+            style={textStyleToCss(trustBarStyle?.trustBar)}
         >
             {trustBar.map((t, i) => (
                 <span key={i}>{t.text}</span>
@@ -134,12 +144,12 @@ export default function HeroCentered(props: HeroProps) {
             </>
         );
 
-    const badgeAttrs = styleHtmlAttrs(style?.announcementBadge);
-    const eyebrowAttrs = styleHtmlAttrs(style?.eyebrow);
-    const titleAttrs = styleHtmlAttrs(style?.title);
-    const subtitleAttrs = styleHtmlAttrs(style?.subtitle);
-    const ctasAttrs = styleHtmlAttrs(style?.ctas);
-    const helperAttrs = styleHtmlAttrs(style?.helperText);
+    const badgeAttrs = styleHtmlAttrs(announcementBadgeStyle?.announcementBadge);
+    const eyebrowAttrs = styleHtmlAttrs(eyebrowStyle?.eyebrow);
+    const titleAttrs = styleHtmlAttrs(titleStyle?.title);
+    const subtitleAttrs = styleHtmlAttrs(subtitleStyle?.subtitle);
+    const ctasAttrs = styleHtmlAttrs(ctasStyle?.ctas);
+    const helperAttrs = styleHtmlAttrs(helperTextStyle?.helperText);
 
     return (
         <section className={`mx-auto flex max-w-4xl flex-col gap-4 px-6 py-16 sm:py-20 md:px-10 ${alignClass}`}>
@@ -150,7 +160,7 @@ export default function HeroCentered(props: HeroProps) {
                     data-el-label="Selo de anúncio"
                     id={badgeAttrs.id}
                     className={`inline-flex items-center gap-2 rounded-full border border-line px-3 py-1 text-xs text-ink no-underline transition hover:border-ink ${badgeAttrs.className ?? ''}`.trim()}
-                    style={badgeStyleToCss(style?.announcementBadge)}
+                    style={badgeStyleToCss(announcementBadgeStyle?.announcementBadge)}
                 >
                     {announcementBadge.tag && (
                         <span className="font-semibold uppercase tracking-wide text-primary">{announcementBadge.tag}</span>
@@ -166,9 +176,9 @@ export default function HeroCentered(props: HeroProps) {
                     data-el-label="Eyebrow"
                     id={eyebrowAttrs.id}
                     className={`font-heading text-sm font-semibold uppercase tracking-widest text-primary ${eyebrowAttrs.className ?? ''}`.trim()}
-                    style={textStyleToCss(style?.eyebrow)}
+                    style={textStyleToCss(eyebrowStyle?.eyebrow)}
                 >
-                    {eyebrow}
+                    {parseInlineMarkup(eyebrow, 'eyebrow')}
                 </span>
             )}
 
@@ -178,9 +188,9 @@ export default function HeroCentered(props: HeroProps) {
                     data-el-label="Título"
                     id={titleAttrs.id}
                     className={`font-heading text-4xl font-bold text-ink sm:text-5xl lg:text-6xl ${titleAttrs.className ?? ''}`.trim()}
-                    style={textStyleToCss(style?.title)}
+                    style={textStyleToCss(titleStyle?.title)}
                 >
-                    {title}
+                    {parseInlineMarkup(title, 'title')}
                 </h1>
             )}
 
@@ -190,14 +200,14 @@ export default function HeroCentered(props: HeroProps) {
                     data-el-label="Subtítulo"
                     id={subtitleAttrs.id}
                     className={`max-w-2xl text-lg text-muted sm:text-xl ${subtitleAttrs.className ?? ''}`.trim()}
-                    style={textStyleToCss(style?.subtitle)}
+                    style={textStyleToCss(subtitleStyle?.subtitle)}
                 >
-                    {subtitle}
+                    {parseInlineMarkup(subtitle, 'subtitle')}
                 </p>
             )}
 
             {pos === 'mid' && showVisual && (
-                <HeroVisual imageUrl={heroVisual?.imageUrl} title={title} isEditing={isEditing} style={style?.heroVisual} />
+                <HeroVisual imageUrl={heroVisual?.imageUrl} title={title} isEditing={isEditing} style={heroVisualStyle?.heroVisual} />
             )}
 
             {ctaList.length > 0 && (
@@ -208,7 +218,7 @@ export default function HeroCentered(props: HeroProps) {
                     className={`mt-5 flex flex-wrap items-center gap-4 ${align === 'center' ? 'justify-center' : 'justify-start'} ${ctasAttrs.className ?? ''}`.trim()}
                 >
                     {ctaList.slice(0, 3).map((cta, i) => (
-                        <CtaButton key={i} cta={cta} style={style?.ctas} />
+                        <CtaButton key={i} cta={cta} style={ctasStyle?.ctas} />
                     ))}
                 </div>
             )}
@@ -219,16 +229,16 @@ export default function HeroCentered(props: HeroProps) {
                     data-el-label="Texto de apoio"
                     id={helperAttrs.id}
                     className={`mt-2 text-sm text-muted ${helperAttrs.className ?? ''}`.trim()}
-                    style={textStyleToCss(style?.helperText)}
+                    style={textStyleToCss(helperTextStyle?.helperText)}
                 >
-                    {helperText}
+                    {parseInlineMarkup(helperText, 'helperText')}
                 </span>
             )}
 
             {socialProof}
 
             {pos === 'bottom' && showVisual && (
-                <HeroVisual imageUrl={heroVisual?.imageUrl} title={title} isEditing={isEditing} style={style?.heroVisual} />
+                <HeroVisual imageUrl={heroVisual?.imageUrl} title={title} isEditing={isEditing} style={heroVisualStyle?.heroVisual} />
             )}
         </section>
     );

@@ -255,11 +255,40 @@ def _sanitize_style_element(v):
     return out
 
 
-def _sanitize_hero_element_styles(style):
-    """Sanitiza `props.style` (Aparência por elemento) do bloco Hero."""
-    if not isinstance(style, dict):
+# Nome do prop `<elemento>Style` → chave interna do wrapper de 1 chave que ele
+# guarda (`{<element_key>: {...}}`) — mesma lista de multi-sites/sites/_saas/
+# blocks/style-runtime.ts::HERO_STYLE_PROP_KEYS. Um prop por elemento (não um
+# `style` único consolidado) pra cada campo do Puck aparecer logo abaixo do
+# campo de conteúdo correspondente no painel — ver blocks/registry.ts.
+_HERO_STYLE_PROP_KEYS = {
+    'eyebrowStyle': 'eyebrow',
+    'titleStyle': 'title',
+    'subtitleStyle': 'subtitle',
+    'announcementBadgeStyle': 'announcementBadge',
+    'heroVisualStyle': 'heroVisual',
+    'ctasStyle': 'ctas',
+    'helperTextStyle': 'helperText',
+    'ratingStyle': 'rating',
+    'trustBarStyle': 'trustBar',
+}
+
+
+def _sanitize_hero_element_styles(props):
+    """Sanitiza os props `<elemento>Style` (Aparência por elemento) do bloco
+    Hero. Devolve um dict de atualizações pro caller aplicar em `props`: valor
+    sanitizado (não-vazio) ou `None` (remove o prop) — só pras chaves
+    `<elemento>Style` que já estavam presentes no `props` de entrada."""
+    if not isinstance(props, dict):
         return {}
-    return {key: _sanitize_style_element(val) for key, val in style.items() if isinstance(key, str)}
+    updates = {}
+    for prop_key, element_key in _HERO_STYLE_PROP_KEYS.items():
+        if prop_key not in props:
+            continue
+        wrapper = props[prop_key]
+        inner = wrapper.get(element_key) if isinstance(wrapper, dict) else None
+        sanitized = _sanitize_style_element(inner)
+        updates[prop_key] = {element_key: sanitized} if sanitized else None
+    return updates
 
 
 # Extensível por `type` de bloco, mesmo espírito de BLOCK_COMPONENTS (TS) —
@@ -415,9 +444,9 @@ class Page(ClientModel):
         HtmlSafe só injeta o HTML já limpo, nunca sanitiza. Blocos Markdown
         (RichText) e iframe (CodeEmbed) passam sem sanitizar, igual ao
         comportamento legado (marked confiável; iframe isolado por sandbox).
-        Blocos com `props.style` (Aparência por elemento, ex: Hero) passam
-        por STYLE_SANITIZERS pelo mesmo motivo: `editor_save` só valida a
-        FORMA do payload, não o conteúdo.
+        Blocos com props `<elemento>Style` (Aparência por elemento, ex: Hero)
+        passam por STYLE_SANITIZERS pelo mesmo motivo: `editor_save` só
+        valida a FORMA do payload, não o conteúdo.
         """
         doc = self.blocks if isinstance(self.blocks, dict) else {}
         content = doc.get('content')
@@ -433,8 +462,12 @@ class Page(ClientModel):
             if node_type == 'HtmlSafe':
                 props['html'] = self._sanitize_html_safe(props.get('html', ''))
             style_sanitizer = STYLE_SANITIZERS.get(node_type)
-            if style_sanitizer and 'style' in props:
-                props['style'] = style_sanitizer(props['style'])
+            if style_sanitizer:
+                for prop_key, sanitized_value in style_sanitizer(props).items():
+                    if sanitized_value is None:
+                        props.pop(prop_key, None)
+                    else:
+                        props[prop_key] = sanitized_value
             serialized.append({'type': node_type, 'props': props})
 
         return {'root': doc.get('root', {}), 'content': serialized}

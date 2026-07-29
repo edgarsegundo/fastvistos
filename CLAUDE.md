@@ -78,6 +78,32 @@ avaliação (rating), barra de confiança (trustBar).
 **Fora de escopo**: animações de entrada/hover (exigem hidratação JS em produção),
 sistema de Estilos salvos/reutilizáveis, outros blocos além do Hero `centered`.
 
+### Formatação inline de texto (estilo Carrd) — DIFERENTE da Aparência acima
+
+Aparência estiliza o elemento INTEIRO; isto formata TRECHOS dentro do mesmo
+texto (uma palavra em negrito, outra colorida). **Implementado** nos 4
+campos de texto do Hero: eyebrow, título, subtítulo, texto de apoio.
+
+- `blocks/inline-markup.ts` — parser da sintaxe (`**negrito**`, `_itálico_`,
+  `__sublinhado__`, `` `código` ``, `~~riscado~~`, `==highlight==`,
+  `~sub~`, `^sobrescrito^`, `||spoiler||`, `[texto](url)`, `[texto]{fg:#hex}`,
+  `[texto]{bg:#hex}`). Converte DIRETO pra React (nunca HTML cru) — o
+  próprio parser já é a sanitização, roda igual no editor e na produção
+  (build-time do Astro, zero JS extra, mesmo padrão do `marked` no bloco
+  RichText). Por isso **não precisou de sanitização nova no Django**.
+- `editor/fields/RichTextField.tsx` — toolbar de botões que envolve a
+  seleção do `<textarea>` com a sintaxe (usuário nunca digita os símbolos).
+  Por isso os 4 campos DEIXARAM de ser `contentEditable` inline no canvas —
+  editam-se pelo painel agora (mesma UX da Aparência).
+- Spoiler é CSS puro (truque do checkbox oculto + `<label>`, regra em
+  `styles/saas.css`) — zero JavaScript, mesma garantia dos outros blocos.
+- **Atenção**: `eyebrow`/`title`/`subtitle` são campos COMPARTILHADOS por
+  todas as variantes do Hero (não só `centered`) — por isso as outras 5
+  variantes (`hero-variants/Hero{Split,Fullbleed,Avatars,Pricing}.tsx` +
+  `Eyebrow` em `shared.tsx`) também foram atualizadas pra chamar
+  `parseInlineMarkup`, senão vazariam os símbolos de marcação como texto
+  literal.
+
 ## Se a tarefa for sobre Upload de imagens / Cloudflare R2 e Editor de imagens
 
 **Backend:** R2 + galeria + busca stock já **pronto e testado**, end-to-end validado.

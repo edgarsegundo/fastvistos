@@ -35,7 +35,7 @@ function buildComponents() {
                     if (f.showFor && !(current != null && f.showFor.includes(current))) continue;
                     // filtro por toggle Mostrar/Ocultar (hideWhen)
                     if (f.hideWhen && props[f.hideWhen.field] === f.hideWhen.equals) continue;
-                    out[key] = toPuckField(f);
+                    out[key] = toPuckField(f, key);
                 }
                 return out;
             };
