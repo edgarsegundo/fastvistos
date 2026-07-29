@@ -1,0 +1,33 @@
+{
+  "propertyKeys": [
+    "align",
+    "bgColor",
+    "border",
+    "color",
+    "css",
+    "font",
+    "fontSize",
+    "fontWeight",
+    "hoverBgColor",
+    "htmlAttrs",
+    "letterSpacing",
+    "lineHeight",
+    "paragraphSpacing",
+    "radius",
+    "shadow",
+    "textTransform"
+  ],
+  "blocks": {
+    "Hero": {
+      "eyebrowStyle": "eyebrow",
+      "titleStyle": "title",
+      "subtitleStyle": "subtitle",
+      "announcementBadgeStyle": "announcementBadge",
+      "heroVisualStyle": "heroVisual",
+      "ctasStyle": "ctas",
+      "helperTextStyle": "helperText",
+      "ratingStyle": "rating",
+      "trustBarStyle": "trustBar"
+    }
+  }
+}

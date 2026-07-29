@@ -1,4 +1,6 @@
+import json
 import re
+from pathlib import Path
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.exceptions import ValidationError
@@ -218,6 +220,40 @@ def _sanitize_style_shadow(v):
     return out or None
 
 
+def _style_is_text_transform(v):
+    return v in ('none', 'uppercase', 'lowercase', 'capitalize')
+
+
+def _style_is_align(v):
+    return v in ('left', 'center', 'right', 'justify')
+
+
+# Uma entrada por PROPRIEDADE lógica (não por tipo de elemento) — espelho
+# manual (Python não importa TS) de `STYLE_PROP_REGISTRY` em
+# multi-sites/sites/_saas/blocks/style-registry.ts. Adicionar uma propriedade
+# nova = 1 entrada aqui + 1 entrada lá; o teste de paridade
+# (core/tests/test_style_sanitizer_parity.py) falha se as duas listas de
+# chaves divergirem. Cada validador devolve o valor sanitizado ou `None`.
+_STYLE_PROP_VALIDATORS = {
+    'color': lambda v: v if _style_is_hex(v) else None,
+    'bgColor': lambda v: v if _style_is_hex(v) else None,
+    'hoverBgColor': lambda v: v if _style_is_hex(v) else None,
+    'font': lambda v: v if _style_is_font_key(v) else None,
+    'fontSize': lambda v: v if _style_is_dimension(v) else None,
+    'fontWeight': lambda v: v if _style_is_dimension(v) else None,
+    'lineHeight': lambda v: v if _style_is_dimension(v) else None,
+    'letterSpacing': lambda v: v if _style_is_dimension(v) else None,
+    'radius': lambda v: v if _style_is_dimension(v) else None,
+    'align': lambda v: v if _style_is_align(v) else None,
+    'textTransform': lambda v: v if _style_is_text_transform(v) else None,
+    'paragraphSpacing': lambda v: v if _style_is_dimension(v) else None,
+    'border': _sanitize_style_border,
+    'shadow': _sanitize_style_shadow,
+    'css': _sanitize_style_css,
+    'htmlAttrs': _sanitize_style_html_attrs,
+}
+
+
 def _sanitize_style_element(v):
     """Sanitiza UM grupo de estilo (qualquer tipo de elemento — texto/botão/
     mídia/badge). Não sabe qual é o tipo do elemento: é generoso sobre QUAIS
@@ -227,74 +263,54 @@ def _sanitize_style_element(v):
     if not isinstance(v, dict):
         return {}
     out = {}
-    if _style_is_hex(v.get('color')):
-        out['color'] = v['color']
-    if _style_is_hex(v.get('bgColor')):
-        out['bgColor'] = v['bgColor']
-    if _style_is_hex(v.get('hoverBgColor')):
-        out['hoverBgColor'] = v['hoverBgColor']
-    if _style_is_font_key(v.get('font')):
-        out['font'] = v['font']
-    for key in ('fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'radius'):
-        if _style_is_dimension(v.get(key)):
-            out[key] = v[key]
-    if v.get('align') in ('left', 'center', 'right'):
-        out['align'] = v['align']
-    border = _sanitize_style_border(v.get('border'))
-    if border:
-        out['border'] = border
-    shadow = _sanitize_style_shadow(v.get('shadow'))
-    if shadow:
-        out['shadow'] = shadow
-    css = _sanitize_style_css(v.get('css'))
-    if css:
-        out['css'] = css
-    html_attrs = _sanitize_style_html_attrs(v.get('htmlAttrs'))
-    if html_attrs:
-        out['htmlAttrs'] = html_attrs
+    for key, validator in _STYLE_PROP_VALIDATORS.items():
+        if key not in v:
+            continue
+        sanitized = validator(v[key])
+        if sanitized:
+            out[key] = sanitized
     return out
 
 
-# Nome do prop `<elemento>Style` → chave interna do wrapper de 1 chave que ele
-# guarda (`{<element_key>: {...}}`) — mesma lista de multi-sites/sites/_saas/
-# blocks/style-runtime.ts::HERO_STYLE_PROP_KEYS. Um prop por elemento (não um
-# `style` único consolidado) pra cada campo do Puck aparecer logo abaixo do
-# campo de conteúdo correspondente no painel — ver blocks/registry.ts.
-_HERO_STYLE_PROP_KEYS = {
-    'eyebrowStyle': 'eyebrow',
-    'titleStyle': 'title',
-    'subtitleStyle': 'subtitle',
-    'announcementBadgeStyle': 'announcementBadge',
-    'heroVisualStyle': 'heroVisual',
-    'ctasStyle': 'ctas',
-    'helperTextStyle': 'helperText',
-    'ratingStyle': 'rating',
-    'trustBarStyle': 'trustBar',
-}
+# Mapa `<prop>Style` → chave interna do wrapper de 1 chave que ele guarda
+# (`{<element_key>: {...}}`), por tipo de bloco — carregado do manifest
+# gerado (`npm run gen:style-manifest`, lê `BLOCK_SCHEMAS`/`elementStyleField`
+# em blocks/registry.ts) em vez de hardcoded aqui. Único ponto de leitura do
+# manifest no lado Python — o teste de paridade lê o mesmo arquivo.
+_STYLE_MANIFEST_PATH = Path(__file__).resolve().parent.parent.parent / 'multi-sites/sites/_saas/blocks/style-manifest.generated.json'
 
 
-def _sanitize_hero_element_styles(props):
-    """Sanitiza os props `<elemento>Style` (Aparência por elemento) do bloco
-    Hero. Devolve um dict de atualizações pro caller aplicar em `props`: valor
-    sanitizado (não-vazio) ou `None` (remove o prop) — só pras chaves
-    `<elemento>Style` que já estavam presentes no `props` de entrada."""
-    if not isinstance(props, dict):
-        return {}
-    updates = {}
-    for prop_key, element_key in _HERO_STYLE_PROP_KEYS.items():
-        if prop_key not in props:
-            continue
-        wrapper = props[prop_key]
-        inner = wrapper.get(element_key) if isinstance(wrapper, dict) else None
-        sanitized = _sanitize_style_element(inner)
-        updates[prop_key] = {element_key: sanitized} if sanitized else None
-    return updates
+def _load_style_manifest():
+    with open(_STYLE_MANIFEST_PATH, encoding='utf-8') as f:
+        return json.load(f)
+
+
+def _make_style_sanitizer(prop_to_element):
+    """Fábrica de sanitizador por bloco: dado o mapa `<prop>Style → element_key`
+    (uma entrada do manifest), devolve a função que `STYLE_SANITIZERS[node_type]`
+    espera — parametrização de `props` que antes era só `_sanitize_hero_element_styles`."""
+    def sanitize(props):
+        if not isinstance(props, dict):
+            return {}
+        updates = {}
+        for prop_key, element_key in prop_to_element.items():
+            if prop_key not in props:
+                continue
+            wrapper = props[prop_key]
+            inner = wrapper.get(element_key) if isinstance(wrapper, dict) else None
+            sanitized = _sanitize_style_element(inner)
+            updates[prop_key] = {element_key: sanitized} if sanitized else None
+        return updates
+    return sanitize
 
 
 # Extensível por `type` de bloco, mesmo espírito de BLOCK_COMPONENTS (TS) —
-# só o Hero tem Aparência por elemento nesta fase.
+# gerado a partir do manifest: um bloco novo com `elementStyleField()` no TS
+# ganha suporte aqui automaticamente na próxima `npm run gen:style-manifest`,
+# sem nenhum código Python novo.
 STYLE_SANITIZERS = {
-    'Hero': _sanitize_hero_element_styles,
+    block_name: _make_style_sanitizer(prop_to_element)
+    for block_name, prop_to_element in _load_style_manifest()['blocks'].items()
 }
 
 

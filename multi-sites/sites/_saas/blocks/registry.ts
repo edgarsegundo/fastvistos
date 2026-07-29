@@ -22,7 +22,7 @@ import Preco from './Preco';
 import Faq from './Faq';
 import Cta from './Cta';
 import Contato from './Contato';
-import { BADGE_STYLE_FIELDS, BUTTON_STYLE_FIELDS, MEDIA_STYLE_FIELDS, TEXT_STYLE_FIELDS } from './style-fields';
+import { elementStyleField } from './style-fields';
 
 export const BLOCK_COMPONENTS: Record<string, ComponentType<any>> = {
     RichText,
@@ -176,23 +176,23 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
             // (HeroCentered.tsx): o `id="appearance-group-<key>"` gerado por
             // ElementStylesField bate com isso, então o clique-no-canvas
             // (editor/App.tsx) acha a seção certa sem tabela de tradução.
-            eyebrowStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
+            eyebrowStyle: elementStyleField({
+                elementKey: 'eyebrow', elementLabel: 'Eyebrow', kind: 'text', showFor: ['centered'],
                 hideWhen: { field: 'showEyebrow', equals: 'no' },
-                objectFields: { eyebrow: { type: 'object', label: 'Eyebrow', objectFields: TEXT_STYLE_FIELDS } },
-            },
+                // eyebrow é 1 linha só — espaçamento entre parágrafos não faz sentido aqui.
+                omit: ['paragraphSpacing'],
+            }),
             title: { type: 'richText', label: 'Título', showFor: ['centered', 'split', 'fullbleed', 'avatars', 'pricing'] },
-            titleStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
-                objectFields: { title: { type: 'object', label: 'Título', objectFields: TEXT_STYLE_FIELDS } },
-            },
+            titleStyle: elementStyleField({
+                elementKey: 'title', elementLabel: 'Título', kind: 'text', showFor: ['centered'],
+                omit: ['paragraphSpacing'],
+            }),
             showSubtitle: { type: 'toggle', label: 'Subtítulo', showFor: ['centered'] },
             subtitle: { type: 'richText', label: 'Texto do subtítulo', showFor: ['centered', 'split', 'pricing'], hideWhen: { field: 'showSubtitle', equals: 'no' } },
-            subtitleStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
+            subtitleStyle: elementStyleField({
+                elementKey: 'subtitle', elementLabel: 'Subtítulo', kind: 'text', showFor: ['centered'],
                 hideWhen: { field: 'showSubtitle', equals: 'no' },
-                objectFields: { subtitle: { type: 'object', label: 'Subtítulo', objectFields: TEXT_STYLE_FIELDS } },
-            },
+            }),
             align: { type: 'select', label: 'Alinhamento', options: ['left', 'center'], showFor: ['centered'] },
             imageUrl: { type: 'image', label: 'Imagem', showFor: ['split', 'fullbleed'] },
             ctaText: { type: 'text', label: 'Texto do botão', showFor: ['split', 'fullbleed', 'avatars'] },
@@ -212,11 +212,10 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     href: { type: 'url', label: 'Link' },
                 },
             },
-            announcementBadgeStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
+            announcementBadgeStyle: elementStyleField({
+                elementKey: 'announcementBadge', elementLabel: 'Selo de anúncio', kind: 'badge', showFor: ['centered'],
                 hideWhen: { field: 'showBadge', equals: 'no' },
-                objectFields: { announcementBadge: { type: 'object', label: 'Selo de anúncio', objectFields: BADGE_STYLE_FIELDS } },
-            },
+            }),
             heroVisual: {
                 type: 'object',
                 label: 'Hero Visual',
@@ -234,10 +233,7 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     },
                 },
             },
-            heroVisualStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
-                objectFields: { heroVisual: { type: 'object', label: 'Hero Visual', objectFields: MEDIA_STYLE_FIELDS } },
-            },
+            heroVisualStyle: elementStyleField({ elementKey: 'heroVisual', elementLabel: 'Hero Visual', kind: 'media', showFor: ['centered'] }),
             ctas: {
                 type: 'array',
                 label: 'Botões (máx. 3)',
@@ -257,17 +253,13 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     },
                 },
             },
-            ctasStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
-                objectFields: { ctas: { type: 'object', label: 'Botões', objectFields: BUTTON_STYLE_FIELDS } },
-            },
+            ctasStyle: elementStyleField({ elementKey: 'ctas', elementLabel: 'Botões', kind: 'button', showFor: ['centered'] }),
             showHelper: { type: 'toggle', label: 'Texto de apoio', showFor: ['centered'] },
             helperText: { type: 'richText', label: 'Texto de apoio', showFor: ['centered'], hideWhen: { field: 'showHelper', equals: 'no' } },
-            helperTextStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
+            helperTextStyle: elementStyleField({
+                elementKey: 'helperText', elementLabel: 'Texto de apoio', kind: 'text', showFor: ['centered'],
                 hideWhen: { field: 'showHelper', equals: 'no' },
-                objectFields: { helperText: { type: 'object', label: 'Texto de apoio', objectFields: TEXT_STYLE_FIELDS } },
-            },
+            }),
             showRating: { type: 'toggle', label: 'Avaliação', showFor: ['centered'] },
             rating: {
                 type: 'object',
@@ -279,11 +271,11 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                     count: { type: 'text', label: 'Nº de avaliações' },
                 },
             },
-            ratingStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
+            ratingStyle: elementStyleField({
+                elementKey: 'rating', elementLabel: 'Avaliação', kind: 'text', showFor: ['centered'],
                 hideWhen: { field: 'showRating', equals: 'no' },
-                objectFields: { rating: { type: 'object', label: 'Avaliação', objectFields: TEXT_STYLE_FIELDS } },
-            },
+                omit: ['paragraphSpacing'],
+            }),
             showTrust: { type: 'toggle', label: 'Barra de confiança', showFor: ['centered'] },
             trustBar: {
                 type: 'array',
@@ -292,11 +284,11 @@ export const BLOCK_SCHEMAS: Record<string, BlockSchema> = {
                 hideWhen: { field: 'showTrust', equals: 'no' },
                 itemFields: { text: { type: 'text', label: 'Nome' } },
             },
-            trustBarStyle: {
-                type: 'elementStyles', label: 'Aparência', showFor: ['centered'],
+            trustBarStyle: elementStyleField({
+                elementKey: 'trustBar', elementLabel: 'Barra de confiança', kind: 'text', showFor: ['centered'],
                 hideWhen: { field: 'showTrust', equals: 'no' },
-                objectFields: { trustBar: { type: 'object', label: 'Barra de confiança', objectFields: TEXT_STYLE_FIELDS } },
-            },
+                omit: ['paragraphSpacing'],
+            }),
             socialProofOrder: {
                 type: 'radio',
                 label: 'Ordem da prova social',
