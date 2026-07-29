@@ -152,6 +152,18 @@ const siteConfig = IS_SAAS
 
 console.log('🟢 Astro site URL:', siteConfig.url);
 
+// _saas serve cada projeto sob /app/{slug}/ (nginx: location ~ ^/app/(?<project>...)/
+// aponta pra /var/www/_saas/$project/current, ver reverse-proxy-config/sites/
+// 030-saas-fastvistos.conf). Sem `base`, o Astro emite assets (`/_astro/...`)
+// absolutos na raiz do domínio — o navegador pede `/_astro/x.css` mas o
+// arquivo só existe em `/app/{slug}/_astro/x.css`, dando 404 sempre (CSS
+// nunca carrega em produção). Só dá pra fixar 1 base por build porque cada
+// build já é sempre escopado a 1 projeto (PROJECT_SLUG_FILTER, decisão
+// fechada — "build sempre por-projeto, nunca site-wide").
+const SAAS_BASE = IS_SAAS && process.env.PROJECT_SLUG_FILTER
+    ? `/app/${process.env.PROJECT_SLUG_FILTER}/`
+    : undefined;
+
 // ================================================================
 // Helpers
 // ================================================================
@@ -199,6 +211,7 @@ function isBlocked(url) {
 // ================================================================
 export default defineConfig({
     site: siteConfig.url,
+    ...(SAAS_BASE ? { base: SAAS_BASE } : {}),
 
     srcDir:    `./multi-sites/sites/${CURRENT_SITE}`,
     publicDir: `./public/${CURRENT_SITE}`,

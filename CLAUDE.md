@@ -50,6 +50,34 @@ não reabrir sem motivo novo). Spec completa:
 Trabalho quebrado em 7 fases (0–6) — não tentar implementar mais de uma por
 sessão. Sempre em plan mode.
 
+## Se a tarefa for sobre Aparência por elemento (estilo Carrd)
+
+Ler primeiro: [vitrine/docs/editor/carrd-features-classificacao.md](vitrine/docs/editor/carrd-features-classificacao.md)
+— classifica as features do Carrd em degraus (1/2/3) de complexidade
+implementacional. Degrau 1 (config declarativa do Puck) já está implementado.
+
+**Implementado (Degrau 1):** painel de estilo opt-in por elemento no Hero
+variante `centered` — cor, fonte, tamanho, peso, espaçamento, sombra, borda,
+alinhamento, ID/classe HTML, CSS customizado. Elementos suportados: eyebrow,
+título, subtítulo, badge de anúncio, botões CTA, imagem (heroVisual),
+avaliação (rating), barra de confiança (trustBar).
+
+- Arquivo de fundação: `multi-sites/sites/_saas/theme/validation.ts` (allowlist
+  de propriedades CSS, regex de hex/dimensão/ID-classe, parseador de CSS inline)
+- Tipos genéricos (reaproveitáveis): `blocks/style-types.ts` (TextElementStyle,
+  ButtonElementStyle, MediaElementStyle, etc.)
+- Runtime (render com fallback): `blocks/style-runtime.ts` (sanitizadores,
+  conversores pra CSSProperties, pont de CSS vars pro hover)
+- Campos custom do editor: `editor/fields/{ColorField,FontField,DimensionField,
+  ShadowField,BorderField,CssField,AttrsField}.tsx`
+- Agrupador do painel: `editor/fields/ElementStylesField.tsx` (renderiza `<details>`
+  por elemento, clique-no-canvas rola/expande via `id="appearance-group-${key}"`)
+- Sanitização server-side: `vitrine/core/models.py` em `serialize_blocks_for_api()`
+  (camada 3: a fronteira de segurança real)
+
+**Fora de escopo**: animações de entrada/hover (exigem hidratação JS em produção),
+sistema de Estilos salvos/reutilizáveis, outros blocos além do Hero `centered`.
+
 ## Se a tarefa for sobre Upload de imagens / Cloudflare R2 e Editor de imagens
 
 **Backend:** R2 + galeria + busca stock já **pronto e testado**, end-to-end validado.
