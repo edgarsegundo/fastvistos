@@ -240,3 +240,6 @@ public/**/assets/images/blog/resized/
 *.zip
 
 plane-frames/
+
+graph.json
+graphify-out/
