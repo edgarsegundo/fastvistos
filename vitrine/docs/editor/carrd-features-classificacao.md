@@ -50,10 +50,9 @@ Ver também: [guia-editor-blocos-context.md](guia-editor-blocos-context.md)
 | Funcionalidade | Degrau | Como |
 |---|---|---|
 | Editar texto por campo no painel | **1** | campos `text`/`textarea` — já existe |
-| Editar texto inline no canvas (contentEditable simples) | **1** | flag `contentEditable` do Puck — já existe |
-| **Toolbar flutuante ao selecionar texto** (bold/itálico/link/cor inline) | **2** | Tiptap/Lexical embutido no render do bloco + toolbar própria; valor rico sincronizado no `prop` |
-| Markdown inline estilo Carrd (`**bold**`, `==highlight==`, `||spoiler||`) | **2** | parser próprio no editor de rich text (o RichText de produção já usa `marked` no build) |
-| Títulos com nível (H1/H2/H3) por elemento | **2** | idem editor de rich text |
+| Editar texto inline no canvas (contentEditable simples) | **1** | flag `contentEditable` do Puck — só nos campos que NÃO viraram `richText` (ver linha abaixo) |
+| **Toolbar de formatação inline** (negrito/itálico/sublinhado/link/código/riscado/highlight/sub/sobrescrito/spoiler/cor/fundo) | **1** (não 2!) | **FEITO** no Hero (eyebrow/título/subtítulo/texto de apoio, todas as variantes) — `<textarea>` do painel (não contentEditable) + toolbar que envolve a seleção com sintaxe própria; `blocks/inline-markup.ts` parseia pra React direto (nunca HTML cru) tanto no preview quanto no build. Rebaixou de Degrau 2 pra 1 exatamente por editar no painel, não inline no canvas — ver decisão registrada no guia do editor |
+| Títulos com nível (H1/H2/H3) por elemento | **2** | editor de rich text embutido — ainda não feito |
 
 ### Aparência por elemento (o painel "Appearance" do Carrd)
 

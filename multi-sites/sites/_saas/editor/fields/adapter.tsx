@@ -17,8 +17,17 @@ import { BorderField } from './BorderField';
 import { CssField } from './CssField';
 import { AttrsField } from './AttrsField';
 import { ElementStylesField } from './ElementStylesField';
+import { RichTextField } from './RichTextField';
 
-export function toPuckField(f: FieldSchema): any {
+/**
+ * `key` = a chave do campo no schema (ex: "title") — só usada pelo
+ * `richText` pra ancorar `id="content-field-<key>"` (clique-no-canvas em
+ * editor/App.tsx rola até lá). Opcional porque a maioria dos campos não
+ * precisa: `fieldsFromSchema`/`resolveFields` (puck.config.tsx) sempre
+ * passam a própria chave; `ElementStylesField` chama `renderField(leaf)`
+ * sem chave pros campos-folha de Aparência (não têm esse anchor).
+ */
+export function toPuckField(f: FieldSchema, key?: string): any {
     switch (f.type) {
         case 'text':
         case 'url':
@@ -107,6 +116,16 @@ export function toPuckField(f: FieldSchema): any {
             const label = f.label;
             return { type: 'custom', render: ({ value, onChange }: any) => <AttrsField label={label} value={value} onChange={onChange} /> };
         }
+        case 'richText': {
+            const label = f.label;
+            const id = key ? `content-field-${key}` : undefined;
+            return {
+                type: 'custom',
+                render: ({ value, onChange }: any) => (
+                    <RichTextField label={label} value={value} onChange={onChange} id={id} />
+                ),
+            };
+        }
         case 'elementStyles': {
             const groups = f.objectFields ?? {};
             return {
@@ -124,7 +143,7 @@ export function toPuckField(f: FieldSchema): any {
 export function fieldsFromSchema(fields: Record<string, FieldSchema>): Fields {
     const out: Record<string, any> = {};
     for (const [key, f] of Object.entries(fields)) {
-        out[key] = toPuckField(f);
+        out[key] = toPuckField(f, key);
     }
     return out as Fields;
 }

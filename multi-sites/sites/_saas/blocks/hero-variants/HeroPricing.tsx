@@ -1,5 +1,6 @@
 import type { HeroProps } from '../types';
 import { Eyebrow } from './shared';
+import { parseInlineMarkup } from '../inline-markup';
 
 /** 18 — Cartão de preço: texto à esquerda, card de plano em destaque à direita. */
 export default function HeroPricing({ eyebrow, title, subtitle, plan }: HeroProps) {
@@ -8,8 +9,8 @@ export default function HeroPricing({ eyebrow, title, subtitle, plan }: HeroProp
         <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 py-16 sm:py-20 md:grid-cols-2 md:gap-12">
             <div className="flex flex-col items-start gap-4 text-left">
                 <Eyebrow>{eyebrow}</Eyebrow>
-                {title && <h1 className="font-heading text-4xl font-bold text-ink sm:text-5xl">{title}</h1>}
-                {subtitle && <p className="max-w-md text-lg text-muted">{subtitle}</p>}
+                {title && <h1 className="font-heading text-4xl font-bold text-ink sm:text-5xl">{parseInlineMarkup(title, 'title')}</h1>}
+                {subtitle && <p className="max-w-md text-lg text-muted">{parseInlineMarkup(subtitle, 'subtitle')}</p>}
             </div>
             <div className="w-full rounded-brand border border-line bg-surface p-7 shadow-sm">
                 {plan?.name && (

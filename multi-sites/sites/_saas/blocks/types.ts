@@ -82,27 +82,33 @@ export interface HeroPlan {
 }
 
 /**
- * Aparência por elemento (estilo Carrd), só na variante `centered`. Chaveado
- * pelo MESMO nome usado em `data-el` no render (HeroCentered.tsx) — elimina
- * qualquer tabela de tradução entre clique-no-canvas e painel (ver
- * editor/App.tsx). Ausência de `style` ou de uma chave = herda do tema/
- * Tailwind, igual hoje (opt-in, nunca substitui o default).
+ * Aparência por elemento (estilo Carrd), só na variante `centered`. Cada
+ * elemento tem seu PRÓPRIO prop `<elemento>Style` (não um `style` único
+ * consolidado) — permite o campo do Puck aparecer logo abaixo do campo de
+ * conteúdo correspondente no painel, em vez de agrupado numa seção à parte
+ * (ordem do painel = ordem das chaves em `BLOCK_SCHEMAS.Hero.fields`, ver
+ * registry.ts). Cada prop é um wrapper de 1 chave — mesmo nome usado em
+ * `data-el` no render (HeroCentered.tsx) — porque reaproveita
+ * `ElementStylesField` como está (ele sempre espera `Record<key, valor>`,
+ * mesmo quando `key` é uma única entrada). Ausência de um `*Style` ou de sua
+ * chave = herda do tema/Tailwind, igual hoje (opt-in, nunca substitui o
+ * default).
  *
- * `ctas` é UM ÚNICO estilo aplicado a todos os botões, não por-item do
+ * `ctasStyle` é UM ÚNICO estilo aplicado a todos os botões, não por-item do
  * array: `data-el="ctas"` está no `<div>` wrapper (não em cada botão), não
  * existe unidade de seleção por-botão no DOM hoje, e criar uma quebraria a
  * decisão de não construir seleção de sub-elemento nova.
  */
 export interface HeroElementStyles {
-    eyebrow?: TextElementStyle;
-    title?: TextElementStyle;
-    subtitle?: TextElementStyle;
-    announcementBadge?: BadgeElementStyle;
-    heroVisual?: MediaElementStyle;
-    ctas?: ButtonElementStyle;
-    helperText?: TextElementStyle;
-    rating?: TextElementStyle;
-    trustBar?: TextElementStyle;
+    eyebrowStyle?: { eyebrow?: TextElementStyle };
+    titleStyle?: { title?: TextElementStyle };
+    subtitleStyle?: { subtitle?: TextElementStyle };
+    announcementBadgeStyle?: { announcementBadge?: BadgeElementStyle };
+    heroVisualStyle?: { heroVisual?: MediaElementStyle };
+    ctasStyle?: { ctas?: ButtonElementStyle };
+    helperTextStyle?: { helperText?: TextElementStyle };
+    ratingStyle?: { rating?: TextElementStyle };
+    trustBarStyle?: { trustBar?: TextElementStyle };
 }
 
 /**
@@ -113,7 +119,7 @@ export interface HeroElementStyles {
  * variante usa o subconjunto que precisa. Ausência de `layout` = 'centered'
  * (retrocompat com Heroes salvos antes das variantes).
  */
-export interface HeroProps extends BaseBlockProps {
+export interface HeroProps extends BaseBlockProps, HeroElementStyles {
     layout?: HeroLayout;
     // compartilhados
     eyebrow?: string;
@@ -148,8 +154,8 @@ export interface HeroProps extends BaseBlockProps {
     ratingCount?: string;
     // cartão de preço
     plan?: HeroPlan;
-    // aparência por elemento (estilo Carrd) — só no centralizado
-    style?: HeroElementStyles;
+    // aparência por elemento (estilo Carrd) — só no centralizado — ver
+    // HeroElementStyles (props `*Style`, herdados via extends acima)
     // contexto injetado pelo Puck no editor (ausente na produção)
     puck?: { isEditing?: boolean };
 }

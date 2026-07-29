@@ -1,5 +1,6 @@
 import type { HeroProps } from '../types';
 import { Eyebrow, PrimaryCta } from './shared';
+import { parseInlineMarkup } from '../inline-markup';
 
 /** 17 — Prova social: fileira de avatares sobrepostos + nota + título + CTA. */
 export default function HeroAvatars({
@@ -36,7 +37,7 @@ export default function HeroAvatars({
                     {ratingCount && <span>· {ratingCount} avaliações</span>}
                 </div>
             )}
-            {title && <h1 className="font-heading text-3xl font-bold text-ink sm:text-4xl">{title}</h1>}
+            {title && <h1 className="font-heading text-3xl font-bold text-ink sm:text-4xl">{parseInlineMarkup(title, 'title')}</h1>}
             <div className="mt-1">
                 <PrimaryCta text={ctaText} href={ctaHref} />
             </div>

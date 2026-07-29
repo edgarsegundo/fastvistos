@@ -83,4 +83,15 @@
      * inline puro, mesmo padrão já usado pro tema global (--brand-*). Ver
      * blocks/style-runtime.ts::buttonStyleToCss. */
     .cta-hover-bg:hover { background-color: var(--cta-hover-bg); }
+
+    /* Spoiler da formatação inline (blocks/inline-markup.ts) — truque do
+     * checkbox oculto + <label>: clique nativo alterna `:checked` via CSS
+     * puro, ZERO JavaScript (mantém a garantia de "zero JS" do Hero). */
+    .spoiler-toggle {
+        position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+    .spoiler-label { cursor: pointer; filter: blur(5px); transition: filter 0.15s ease; }
+    .spoiler-toggle:checked + .spoiler-label { filter: none; cursor: text; }
+    .spoiler-toggle:focus-visible + .spoiler-label { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
 }

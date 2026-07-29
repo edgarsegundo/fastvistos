@@ -1,5 +1,6 @@
 import type { HeroProps } from '../types';
 import { PrimaryCta } from './shared';
+import { parseInlineMarkup } from '../inline-markup';
 
 /**
  * 03 — Imagem de fundo: imagem cobrindo a seção, overlay escuro, texto embaixo.
@@ -23,11 +24,11 @@ export default function HeroFullbleed({
             <div className="relative flex w-full flex-col gap-4 px-4 pb-16 sm:px-8 sm:pb-20 md:px-12">
                 {eyebrow && (
                     <span className="font-heading text-sm font-semibold uppercase tracking-widest text-white/80">
-                        {eyebrow}
+                        {parseInlineMarkup(eyebrow, 'eyebrow')}
                     </span>
                 )}
                 {title && (
-                    <h1 className="max-w-2xl font-heading text-4xl font-bold text-white sm:text-5xl">{title}</h1>
+                    <h1 className="max-w-2xl font-heading text-4xl font-bold text-white sm:text-5xl">{parseInlineMarkup(title, 'title')}</h1>
                 )}
                 <div className="mt-2">
                     <PrimaryCta text={ctaText} href={ctaHref} />
