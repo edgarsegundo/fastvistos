@@ -121,6 +121,7 @@ export const siteConfig = {
             contactOption: "WhatsApp",
             url: 'https://wa.me/',
             message: 'Olá! Quero criar meu currículo com a IA!',
+            chatUrl: 'https://chat.empregoaqui.com.br',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
