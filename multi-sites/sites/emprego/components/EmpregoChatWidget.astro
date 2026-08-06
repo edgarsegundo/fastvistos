@@ -1,53 +1,54 @@
 ---
 /**
- * Widget WhatsApp — simulação de chat exibida na coluna direita do hero (desktop).
+ * Widget de chat — simulação de conversa exibida na coluna direita do hero (desktop).
  * Oculto em mobile (controlado pelo .hero__right do EmpregoHero).
  * Animação de entrada + bolhas + digitação 100% via CSS (sem JS).
+ * Paleta: navy + coral da marca (sem referência visual a apps de terceiros).
  */
 ---
 
-<div class="wpp-widget">
-  <div class="wpp-widget__phone">
+<div class="chat-widget">
+  <div class="chat-widget__phone">
 
     <!-- Header: avatar + nome + status -->
-    <div class="wpp-widget__header">
-      <div class="wpp-widget__avatar">
+    <div class="chat-widget__header">
+      <div class="chat-widget__avatar">
         <img
-          src="/assets/images/v2/emprego-aqui-avatar-whatsapp-widget.webp"
+          src="/assets/images/v2/emprego-aqui-avatar-chat-widget.webp"
           alt="Emprego Aqui"
           width="36"
           height="36"
         />
       </div>
-      <div class="wpp-widget__info">
-        <div class="wpp-widget__name">Emprego Aqui</div>
-        <div class="wpp-widget__status">online agora</div>
+      <div class="chat-widget__info">
+        <div class="chat-widget__name">Emprego Aqui</div>
+        <div class="chat-widget__status">online agora</div>
       </div>
     </div>
 
     <!-- Chat -->
-    <div class="wpp-widget__chat">
-      <div class="wpp-widget__bubble wpp-widget__bubble--in">
+    <div class="chat-widget__chat">
+      <div class="chat-widget__bubble chat-widget__bubble--in">
         Oi! Vi que você está buscando emprego em Campinas 👋
       </div>
-      <div class="wpp-widget__bubble wpp-widget__bubble--in delay-1">
+      <div class="chat-widget__bubble chat-widget__bubble--in delay-1">
         Nossa IA encontrou <strong>3 vagas</strong> perto de você
       </div>
-      <div class="wpp-widget__bubble wpp-widget__bubble--out delay-2">
+      <div class="chat-widget__bubble chat-widget__bubble--out delay-2">
         Sério?! Que vagas são essas? 😮
       </div>
-      <div class="wpp-widget__bubble wpp-widget__bubble--in delay-3">
+      <div class="chat-widget__bubble chat-widget__bubble--in delay-3">
         Vagas com salário compatível, pertinho de você 📍 Quer ver?
       </div>
-      <div class="wpp-widget__typing" id="wppTyping">
+      <div class="chat-widget__typing" id="chatTyping">
         <span></span><span></span><span></span>
       </div>
     </div>
 
     <!-- Input simulado -->
-    <div class="wpp-widget__footer">
-      <div class="wpp-widget__input">Criar meu currículo grátis...</div>
-      <div class="wpp-widget__send" aria-hidden="true">
+    <div class="chat-widget__footer">
+      <div class="chat-widget__input">Criar meu currículo grátis...</div>
+      <div class="chat-widget__send" aria-hidden="true">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
       </div>
     </div>
@@ -56,65 +57,65 @@
 </div>
 
 <style>
-  .wpp-widget {
+  .chat-widget {
     width: 300px;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 24px 64px rgba(0, 0, 0, .45);
-    animation: wppEntrance .7s cubic-bezier(.34, 1.56, .64, 1) .5s both;
+    animation: chatEntrance .7s cubic-bezier(.34, 1.56, .64, 1) .5s both;
   }
-  @keyframes wppEntrance {
+  @keyframes chatEntrance {
     from { opacity: 0; transform: translateY(32px) scale(.96); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  .wpp-widget__phone { background: var(--color-wpp-bg); display: flex; flex-direction: column; }
+  .chat-widget__phone { background: var(--color-navy-card); display: flex; flex-direction: column; }
 
-  .wpp-widget__header {
-    background: var(--color-wpp-header);
+  .chat-widget__header {
+    background: var(--color-bg-dark);
     padding: 12px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .wpp-widget__avatar {
+  .chat-widget__avatar {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
   }
-  .wpp-widget__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .chat-widget__avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .wpp-widget__name { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #E9EDEF; }
-  .wpp-widget__status { font-size: 11px; color: #8696A0; margin-top: 1px; }
+  .chat-widget__name { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #fff; }
+  .chat-widget__status { font-size: 11px; color: rgba(255, 255, 255, .55); margin-top: 1px; }
 
-  .wpp-widget__chat {
+  .chat-widget__chat {
     padding: 16px 12px 8px;
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-height: 180px;
-    background: var(--color-wpp-bg);
+    background: var(--color-navy-card);
   }
 
-  .wpp-widget__bubble {
+  .chat-widget__bubble {
     max-width: 85%;
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 12.5px;
     line-height: 1.5;
-    color: #E9EDEF;
+    color: #fff;
     opacity: 0;
     animation: bubbleIn .4s ease forwards;
   }
-  .wpp-widget__bubble--in  { background: var(--color-wpp-bubble-in); align-self: flex-start; }
-  .wpp-widget__bubble--out { background: var(--color-wpp-bubble-out); align-self: flex-end; }
+  .chat-widget__bubble--in  { background: var(--color-navy-mid); align-self: flex-start; }
+  .chat-widget__bubble--out { background: var(--color-cta-strong); align-self: flex-end; }
 
-  .wpp-widget__bubble.delay-1 { animation-delay: 1.2s; }
-  .wpp-widget__bubble.delay-2 { animation-delay: 2.4s; }
-  .wpp-widget__bubble.delay-3 { animation-delay: 3.6s; }
+  .chat-widget__bubble.delay-1 { animation-delay: 1.2s; }
+  .chat-widget__bubble.delay-2 { animation-delay: 2.4s; }
+  .chat-widget__bubble.delay-3 { animation-delay: 3.6s; }
 
   @keyframes bubbleIn {
     from { opacity: 0; transform: translateY(6px); }
@@ -122,11 +123,11 @@
   }
 
   /* Typing indicator — aparece depois da última bolha */
-  .wpp-widget__typing {
+  .chat-widget__typing {
     display: flex;
     align-items: center;
     gap: 4px;
-    background: var(--color-wpp-bubble-in);
+    background: var(--color-navy-mid);
     align-self: flex-start;
     padding: 10px 14px;
     border-radius: 8px;
@@ -134,44 +135,43 @@
     animation: bubbleIn .3s ease forwards;
     animation-delay: 4.6s;
   }
-  .wpp-widget__typing span {
+  .chat-widget__typing span {
     display: block;
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #8696A0;
+    background: rgba(255, 255, 255, .55);
     animation: typingDot .8s ease infinite;
     animation-delay: 4.6s;
   }
-  .wpp-widget__typing span:nth-child(2) { animation-delay: 4.75s; }
-  .wpp-widget__typing span:nth-child(3) { animation-delay: 4.9s; }
+  .chat-widget__typing span:nth-child(2) { animation-delay: 4.75s; }
+  .chat-widget__typing span:nth-child(3) { animation-delay: 4.9s; }
   @keyframes typingDot {
     0%, 60%, 100% { transform: translateY(0); opacity: .4; }
     30% { transform: translateY(-4px); opacity: 1; }
   }
 
-  .wpp-widget__footer {
+  .chat-widget__footer {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 10px 12px;
-    background: var(--color-wpp-bg);
+    background: var(--color-navy-card);
     border-top: 1px solid rgba(255, 255, 255, .06);
   }
-  .wpp-widget__input {
+  .chat-widget__input {
     flex: 1;
-    background: #2A3942;
+    background: rgba(255, 255, 255, .08);
     border-radius: 20px;
     padding: 8px 14px;
     font-size: 12px;
-    /* #9DAAB4 → 4,52:1 sobre #2A3942 (AA). Mantém visual de placeholder. */
-    color: #9DAAB4;
+    color: rgba(255, 255, 255, .6);
   }
-  .wpp-widget__send {
+  .chat-widget__send {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: var(--color-wpp);
+    background: var(--color-cta-strong);
     display: flex;
     align-items: center;
     justify-content: center;

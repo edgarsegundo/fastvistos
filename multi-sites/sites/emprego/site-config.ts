@@ -86,7 +86,7 @@ export const siteConfig = {
                 priceCurrency: 'BRL',
             },
             {
-                service: 'Contato Direto com Candidatos via WhatsApp',
+                service: 'Contato Direto com Candidatos via chat da Emprego Aqui',
                 priceCurrency: 'BRL',
             },
             {
@@ -115,12 +115,7 @@ export const siteConfig = {
             email: 'contato@empregoaqui.com.br',
         },
         whatsapp: {
-            telephone: '+5519988055816',
-            telephoneFormatted: '+55 (19) 98805-5816',
             contactType: 'customer support',
-            contactOption: "WhatsApp",
-            url: 'https://wa.me/',
-            message: 'Olá! Quero criar meu currículo com a IA!',
             chatUrl: 'https://chat.empregoaqui.com.br',
             areaServed: {
                 "@type": "Country",
@@ -153,7 +148,7 @@ export const siteConfig = {
     homePageConfig: {
         seo: {
             title: 'Emprego Aqui — Precisa Contratar pra Ontem? Fale Direto com Quem Quer Trabalhar',
-            description: 'Sem currículo. Sem anúncio. Sem enrolação. O Emprego Aqui conecta pequenos empresários com candidatos disponíveis agora — contato direto pelo WhatsApp. Quando é pra agora.',
+            description: 'Sem currículo. Sem anúncio. Sem enrolação. A Emprego Aqui conecta pequenos empresários com candidatos disponíveis agora por mensagem ou pelo telefone. Quando é pra agora.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
@@ -165,7 +160,7 @@ export const siteConfig = {
                     alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
                 },
                 title: 'Emprego Aqui — Quando é pra agora.',
-                description: 'Você não publica vaga. Você vê pessoas disponíveis agora. Filtra por região e salário. Fala direto no WhatsApp. Sem burocracia.',
+                description: 'Você não publica vaga. Você vê pessoas disponíveis agora. Filtra por região e salário. Fala direto na Emprego Aqui. Sem burocracia.',
             }
         },
     },
@@ -224,7 +219,7 @@ export const siteConfig = {
     searchPageConfig: {
         seo: {
             title: 'Candidatos Disponíveis para Trabalhar Agora | Emprego Aqui',
-            description: 'Veja candidatos disponíveis na sua região. Filtre por localidade e faixa salarial. Contato direto pelo WhatsApp. Sem publicar vaga, sem burocracia.',
+            description: 'Veja candidatos disponíveis na sua região. Filtre por localidade e faixa salarial. Contato direto pelo telefone ou por mensagem. Sem publicar vaga, sem burocracia.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
@@ -246,8 +241,27 @@ export const siteConfig = {
         youtube: 'https://www.youtube.com/@EmpregoAqui',
     },
 
+    // ⚠️⚠️⚠️ ATENÇÃO — NÃO PREENCHER "facebookPixelId" AQUI ⚠️⚠️⚠️
+    // ============================================================
+    // O Meta Pixel da home (empregoaqui.com.br) já está ativo via
+    // componente próprio: multi-sites/sites/emprego/components/MetaPixel.astro
+    // (importado e renderizado em multi-sites/sites/emprego/pages/index.astro).
+    //
+    // Este bloco "analytics" também é lido por AnalyticsHead.astro, que tem
+    // suporte NATIVO a "facebookPixelId" (hoje vazio/desativado de propósito).
+    //
+    // SE VOCÊ PREENCHER "facebookPixelId" AQUI, o pixel vai disparar
+    // DUAS VEZES na home (uma pelo MetaPixel.astro, outra pelo
+    // AnalyticsHead.astro) — isso DUPLICA o evento PageView enviado
+    // ao Facebook/Meta Ads e infla as métricas de tráfego/campanhas.
+    //
+    // Antes de configurar "facebookPixelId" aqui:
+    //   1) Remova o import e o uso de <MetaPixel /> em pages/index.astro, OU
+    //   2) Delete components/MetaPixel.astro
+    // ============================================================
     analytics: {
         gtmId: 'GTM-TDVVKHKB',
+        // facebookPixelId: NÃO ADICIONAR — ver aviso acima
     },
 
     verification: {

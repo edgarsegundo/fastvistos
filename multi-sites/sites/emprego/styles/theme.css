@@ -32,14 +32,9 @@
   --color-muted: #8a90a2;       /* texto secundário / apoio */
   --color-surface: #f4f5f8;     /* fundo claro alternado (porque, faq, depo) */
 
-  /* ── Cores do widget WhatsApp (namespace isolado, reproduz o app) ── */
-  --color-wpp: #25D366;
-  --color-wpp-dark: #1EBE5B;
-  --color-wpp-bg: #111B21;
-  --color-wpp-header: #202C33;
-  --color-wpp-chat: #0B141A;
-  --color-wpp-bubble-in: #1F2C34;
-  --color-wpp-bubble-out: #005C4B;
+  /* ── Cor do CTA de chat (barra flutuante mobile) ── */
+  --color-chat: #F28B30;
+  --color-chat-dark: #d4751f;
 
   /* ── Fontes ──────────────────────────────────────────────────── */
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif; /* títulos, botões, labels */
@@ -131,11 +126,11 @@
   }
   .btn--ghost-coral:hover { background: rgba(242, 139, 48, .06); text-decoration: none; }
 
-  .btn--wpp { background: var(--color-wpp); color: #fff; font-size: 15px; padding: 15px 28px; }
-  .btn--wpp:hover {
-    background: var(--color-wpp-dark);
+  .btn--chat { background: var(--color-chat); color: #fff; font-size: 15px; padding: 15px 28px; }
+  .btn--chat:hover {
+    background: var(--color-chat-dark);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(37, 211, 102, .35);
+    box-shadow: 0 8px 24px rgba(242, 139, 48, .35);
     text-decoration: none;
   }
 

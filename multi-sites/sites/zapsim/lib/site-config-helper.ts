@@ -61,14 +61,7 @@ export class SiteConfigHelper {
     static getContactInfo(config: SiteConfig) {
         return {
             email: config.contact?.email,
-            whatsapp: config.contact?.whatsapp,
             socialMedia: config.socialMedia,
         };
-    }
-
-    static getWhatsAppLink(config: SiteConfig, message?: string): string {
-        const whatsapp = config.contact?.whatsapp || '';
-        const encodedMessage = message ? encodeURIComponent(message) : '';
-        return `https://wa.me/${whatsapp.replace(/\D/g, '')}${encodedMessage ? `?text=${encodedMessage}` : ''}`;
     }
 }

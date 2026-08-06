@@ -1,11 +1,11 @@
 ---
 /**
- * Hero — fullscreen com slideshow de fundo (3 imagens) + dots.
- * Texto à esquerda, widget WhatsApp à direita (desktop) / oculto em mobile.
+ * Hero — fullscreen com slideshow de fundo (2 imagens) + dots.
+ * Texto à esquerda, widget de chat à direita (desktop) / oculto em mobile.
  * Slider automático (5s) com navegação por dots — JS no final.
  */
 import { siteConfig } from '../site-config.ts';
-import EmpregoWppWidget from './EmpregoWppWidget.astro';
+import EmpregoChatWidget from './EmpregoChatWidget.astro';
 
 const { chatUrl } = siteConfig.site.whatsapp;
 const whatsappUrl = chatUrl;
@@ -13,7 +13,6 @@ const whatsappUrl = chatUrl;
 const slides = [
   '/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp',
   '/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-2.webp',
-  '/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-3.webp',
 ];
 ---
 
@@ -34,7 +33,7 @@ const slides = [
     <div class="hero__content">
       <div class="hero__eyebrow">
         <span class="badge badge--white">
-          <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#25D366"/></svg>
+          <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#22C55E"/></svg>
           100% gratuito para candidatos
         </span>
       </div>
@@ -46,12 +45,12 @@ const slides = [
 
       <p class="hero__sub">
         <span class="hero__sub-full">
-          Responda algumas perguntas simples pelo WhatsApp, nossa IA monta
+          Responda algumas perguntas simples pelo chat, nossa IA monta
           seu currículo e empresas da região de Campinas entram em contato
           direto com você.
         </span>
         <span class="hero__sub-short">
-          Responda no WhatsApp e empresas de Campinas entram em contato com você.
+          Responda no chat e empresas de Campinas entram em contato com você.
         </span>
       </p>
 
@@ -59,9 +58,9 @@ const slides = [
         <a
           href={whatsappUrl}
           class="btn btn--coral"
-          aria-label="Criar currículo grátis agora pelo WhatsApp"
+          aria-label="Criar currículo grátis agora"
         >
-          <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16 .396C7.16.396 0 7.557 0 16.396c0 2.872.755 5.566 2.072 7.897L.066 32l7.934-2.006A15.9 15.9 0 0 0 16 32.396c8.84 0 16-7.16 16-16S24.84.396 16 .396zm0 29.2a13.2 13.2 0 0 1-6.71-1.84l-.48-.285-4.97 1.255 1.327-4.843-.313-.497A13.13 13.13 0 0 1 2.8 16.396c0-7.28 5.92-13.2 13.2-13.2s13.2 5.92 13.2 13.2-5.92 13.2-13.2 13.2z"/><path d="M23.2 19.2c-.39-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.39-1.01 1.27-1.24 1.53-.23.26-.46.29-.85.1-.39-.2-1.65-.61-3.14-1.94-1.16-1.03-1.94-2.31-2.17-2.7-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.11-1.2-2.89-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.81 1.61 4.07c.2.26 2.78 4.25 6.73 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.32-.95 2.65-1.87.33-.92.33-1.7.23-1.87-.1-.16-.36-.26-.75-.45z"/></svg>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="10" width="18" height="10" rx="2"/><circle cx="8.5" cy="15" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15" r="1.5" fill="currentColor" stroke="none"/><path d="M12 10V6"/><circle cx="12" cy="4" r="2"/><path d="M3 14H1"/><path d="M23 14h-2"/></svg>
           Criar currículo grátis
         </a>
         <a href="#para-empresas"
@@ -70,7 +69,7 @@ const slides = [
 
       <div class="hero__note">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-        Sem cadastro, sem senha — só o Whats que você já usa
+        Sem cadastro, sem senha — só o celular que você já usa
       </div>
       <div class="hero__security">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
@@ -84,9 +83,9 @@ const slides = [
       </div>
     </div>
 
-    <!-- Coluna direita: widget WPP (oculto em mobile via CSS) -->
+    <!-- Coluna direita: widget de chat (oculto em mobile via CSS) -->
     <div class="hero__right" aria-hidden="true">
-      <EmpregoWppWidget />
+      <EmpregoChatWidget />
     </div>
 
   </div>
@@ -132,13 +131,11 @@ const slides = [
   /* Imagens de fundo — desktop (≥861px) */
   .hero__slide-bg--0 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1.webp'); }
   .hero__slide-bg--1 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-2.webp'); }
-  .hero__slide-bg--2 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-3.webp'); }
 
   /* Mobile: variante 800px — 75% menor, mesma qualidade visual na tela pequena */
   @media (max-width: 860px) {
     .hero__slide-bg--0 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-1-mobile.webp'); }
     .hero__slide-bg--1 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-2-mobile.webp'); }
-    .hero__slide-bg--2 { background-image: url('/assets/images/v2/emprego-aqui-hero-bg-candidatos-slide-3-mobile.webp'); }
   }
 
   /* Overlay gradiente */

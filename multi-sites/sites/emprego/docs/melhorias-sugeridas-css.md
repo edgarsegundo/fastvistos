@@ -10,7 +10,7 @@ inconsistência de cascata) — não inclui ajustes cosméticos triviais.
 
 ## 🔴 1. Regressão visual: títulos perderam a fonte Bricolage Grotesque
 
-**Onde:** [`pages/index.astro`](../pages/index.astro) linhas 53 e 61 (os `<h2>` "Porque o emprego aqui é diferente?" e "EMPRESAS").
+**Onde:** [`pages/index.astro`](../pages/index.astro) linhas 53 e 61 (os `<h2>` "Porque a emprego aqui é diferente?" e "EMPRESAS").
 
 No código original esses títulos usavam **Bricolage Grotesque**:
 ```html

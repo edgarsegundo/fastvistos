@@ -290,22 +290,36 @@ const orgBlock = !disableOrganization && {
                           email: siteConfig.site.contactPoint.email,
                       }),
                   },
-                  ...(siteConfig.site?.whatsapp
+                  ...(siteConfig.site?.whatsapp?.chatUrl
                       ? [
                             {
                                 '@type': 'ContactPoint',
                                 contactType:
                                     siteConfig.site.whatsapp.contactType || 'customer support',
-                                contactOption: siteConfig.site.whatsapp.contactOption || 'WhatsApp',
-                                url: siteConfig.site.whatsapp.url,
-                                telephone: siteConfig.site.whatsapp.telephone,
+                                contactOption: 'Chat',
+                                url: siteConfig.site.whatsapp.chatUrl,
                                 areaServed: siteConfig.site.whatsapp.areaServed || 'BR',
                                 availableLanguage: siteConfig.site.whatsapp.availableLanguage || [
                                     'pt-BR',
                                 ],
                             },
                         ]
-                      : []),
+                      : siteConfig.site?.whatsapp
+                        ? [
+                              {
+                                  '@type': 'ContactPoint',
+                                  contactType:
+                                      siteConfig.site.whatsapp.contactType || 'customer support',
+                                  contactOption: siteConfig.site.whatsapp.contactOption || 'WhatsApp',
+                                  url: siteConfig.site.whatsapp.url,
+                                  telephone: siteConfig.site.whatsapp.telephone,
+                                  areaServed: siteConfig.site.whatsapp.areaServed || 'BR',
+                                  availableLanguage: siteConfig.site.whatsapp.availableLanguage || [
+                                      'pt-BR',
+                                  ],
+                              },
+                          ]
+                        : []),
               ],
 
               geo: {

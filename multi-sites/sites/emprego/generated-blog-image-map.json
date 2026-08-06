@@ -664,6 +664,25 @@
       "fiemgwebp-320-2x.webp 640w"
     ]
   },
+  "funsatwebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAECBQQH/8QAJRAAAQQBAwIHAAAAAAAAAAAAAQACAwQRBRIhBkEUIiMxMlHw/8QAGQEAAgMBAAAAAAAAAAAAAAAAAAQBAwUG/8QAHhEAAgEEAwEAAAAAAAAAAAAAAAECBBEhQQMSFFH/2gAMAwEAAhEDEQA/APOaunWbLy2CIvcOwXZJoOoRM3SVntHvkqNM1KOpEXF8glJ4LT2/ZWqOpK73GOy6w9hHIyujnXcin1UcGeqONruRgeEf9IrWrDHTuMBLYz8QTyisVVN6I8kPpn5xY29gMq7j6W7AzlESu0OaZLPOMuHKIiJPIJYP/9k=",
+    "jpeg": [
+      "funsatwebp-1216-1x.jpeg 1216w",
+      "funsatwebp-1216-2x.jpeg 2432w",
+      "funsatwebp-608-1x.jpeg 608w",
+      "funsatwebp-608-2x.jpeg 1216w",
+      "funsatwebp-320-1x.jpeg 320w",
+      "funsatwebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "funsatwebp-1216-1x.webp 1216w",
+      "funsatwebp-1216-2x.webp 2432w",
+      "funsatwebp-608-1x.webp 608w",
+      "funsatwebp-608-2x.webp 1216w",
+      "funsatwebp-320-1x.webp 320w",
+      "funsatwebp-320-2x.webp 640w"
+    ]
+  },
   "gov-brasilwebp": {
     "blurDataURL": "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsSAAALEgHS3X78AAACBklEQVR4nO2T208TQRSH+zfyJxA1+mJMiJoQE5XEJzU+NN4FY2MkIEkplChpggqs1LbhUmy1F4EtuGxvW8ru9kI785ktFWhMKpI+epJfZjI58505l3EBjV7KJaUUvZSLHpvrX5zlCfUGKI/VFShbTrIl0V4PJdqSXUUrgvwTKLoAnfOCVUcv18iWaxw0fwcSnUBnL4TEsA/YKlZIZC30UpGKqVK3E+xZaYqVHJqd5/OWhv9rBn9UJ60XKZd3ENVNZH0X2ay0wC4nsgOLbJXwruh4lCTKuoK6MYWlDRNXX6OoXvzqR9xLQYZmwwxOJvB+WWYtNoO560Oay8jGfhsoJJlihbeRn9ycTnLJs8Crd8NEgkOYifMsRgd4GhpgMOim3ztG/5sP9D1e4c7EJL7AfXLJB4jypzZQHALVgs1oaJsr43H63AHuTTxhfuE2tR+XicRv8Cx8jevKQy5OT3B1MsQ5T4y7Xh9Tc4/Ib75E2lGkODhO2Sn2+1iWW/4kFzwhngcCrMW8iPw4mj7DgupjLDHPi0iY0XCGEWWH2ZVV1lNL2IaTbuGo287Xo94QJHQT3+ouI4rK3LcMWn4TWVOpVTWMaoHtfYMNo0Q6Z5HK2WhGCdMykI09ELWjAW11uSkOX5nKWXzXTfRylXqj+df565zDUww2p4XJLsAO5zOY60y3/gM5UcNfyOD57nSxvRcAAAAASUVORK5CYII=",
     "jpeg": [
@@ -797,6 +816,25 @@
       "leroy-merlinwebp-320-2x.webp 640w"
     ]
   },
+  "maior-60-anos-trabalhowebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAYHA//EACAQAAEEAgIDAQAAAAAAAAAAAAECAwQRAAUSIQYxQSL/xAAVAQEBAAAAAAAAAAAAAAAAAAAEA//EABgRAQEBAQEAAAAAAAAAAAAAAAEAAxES/9oADAMBAAIRAxEAPwBi0nksGenYRJEVSZbf65H5jTpURpTEWUySlYfAokerGTfVx0tyH37JW+KX1jPo2Ah1sJWsDlVX1h8tOotfTLglR0Le5u830A8zXfzDMmYbKGwCCo+7Jwx3iKX/2Q==",
+    "jpeg": [
+      "maior-60-anos-trabalhowebp-1216-1x.jpeg 1216w",
+      "maior-60-anos-trabalhowebp-1216-2x.jpeg 2432w",
+      "maior-60-anos-trabalhowebp-608-1x.jpeg 608w",
+      "maior-60-anos-trabalhowebp-608-2x.jpeg 1216w",
+      "maior-60-anos-trabalhowebp-320-1x.jpeg 320w",
+      "maior-60-anos-trabalhowebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "maior-60-anos-trabalhowebp-1216-1x.webp 1216w",
+      "maior-60-anos-trabalhowebp-1216-2x.webp 2432w",
+      "maior-60-anos-trabalhowebp-608-1x.webp 608w",
+      "maior-60-anos-trabalhowebp-608-2x.webp 1216w",
+      "maior-60-anos-trabalhowebp-320-1x.webp 320w",
+      "maior-60-anos-trabalhowebp-320-2x.webp 640w"
+    ]
+  },
   "marinha-empregoswebp": {
     "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAMABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAYEBQcI/8QAIxAAAQQCAQMFAAAAAAAAAAAAAQIDBAUAEQYHEiEUIjFCUf/EABUBAQEAAAAAAAAAAAAAAAAAAAED/8QAGxEAAgIDAQAAAAAAAAAAAAAAAQIAEQMEEiH/2gAMAwEAAhEDEQA/AEfi/DJ7da3JSz6qUVfU+EZZ2fBbWfZpVIjrU32+0nfk/nzknohdzn0tR3HdthOahf2clpbLaFgJI3rWCaqsvZPscm46PyBOfLzp5as2C0twVBOgQAcMZeYcotW7t1LcjtSEjwBhk+QPLlxkJF0J/9k=",
     "jpeg": [
@@ -928,6 +966,25 @@
       "oferece-mil-vagas-gratuitaswebp-608-2x.webp 1216w",
       "oferece-mil-vagas-gratuitaswebp-320-1x.webp 320w",
       "oferece-mil-vagas-gratuitaswebp-320-2x.webp 640w"
+    ]
+  },
+  "petrolinawebp": {
+    "blurDataURL": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAYHAwX/xAAhEAACAgICAQUAAAAAAAAAAAABAgMEACEREgUjMUFRcf/EABYBAQEBAAAAAAAAAAAAAAAAAAUEBv/EABwRAAICAgMAAAAAAAAAAAAAAAECAAMRIQQFM//aAAwDAQACEQMRAD8Abor9WFWZ4omJ1s5rY8jRATvFWRuNce+TWOWQqwLsR+50vEAWK1wz+p0Xle2+MuavkDBd9E4mdq7Gi1iiVbAzuNscFKVe4WLZ+Thk1azMGIErAA/eGNLw3A9DDD2iZ8Vn/9k=",
+    "jpeg": [
+      "petrolinawebp-1216-1x.jpeg 1216w",
+      "petrolinawebp-1216-2x.jpeg 2432w",
+      "petrolinawebp-608-1x.jpeg 608w",
+      "petrolinawebp-608-2x.jpeg 1216w",
+      "petrolinawebp-320-1x.jpeg 320w",
+      "petrolinawebp-320-2x.jpeg 640w"
+    ],
+    "webp": [
+      "petrolinawebp-1216-1x.webp 1216w",
+      "petrolinawebp-1216-2x.webp 2432w",
+      "petrolinawebp-608-1x.webp 608w",
+      "petrolinawebp-608-2x.webp 1216w",
+      "petrolinawebp-320-1x.webp 320w",
+      "petrolinawebp-320-2x.webp 640w"
     ]
   },
   "sebraewebp": {
