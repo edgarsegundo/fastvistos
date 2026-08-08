@@ -234,6 +234,24 @@ export const siteConfig = {
         },
     },
 
+    privacyPolicyPageConfig: {
+        seo: {
+            title: 'Política de Privacidade | Emprego Aqui',
+            description: 'Saiba como a Emprego Aqui coleta, utiliza, armazena e compartilha seus dados pessoais, em conformidade com a LGPD.',
+            themeColor: '#1F2237',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    width: 1200,
+                    height: 630,
+                    type: 'image/webp',
+                    alt: 'Política de Privacidade — Emprego Aqui',
+                },
+            },
+        },
+    },
+
     socialMedia: {
         facebook: 'https://www.facebook.com/empregoaqui/',
         twitter: '@EmpregoAqui',
