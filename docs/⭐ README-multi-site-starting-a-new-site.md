@@ -1,16 +1,57 @@
 # Starting a New Site
 
-## antes precisa criar business e usuario e profile no microservices
+## ✅ RESOLVIDO: `create-site.js` já cria o business, o usuário e o profile automaticamente
+(chama `BlogService.createBusiness()` e a API `create-user-for-business`) — não é mais necessário
+fazer isso manualmente antes de rodar o script. Ver detalhes na seção "Create a New Site" abaixo.
 
-## Aqui preciso melhorar a copia de um template que funcione e já atualizar o arquivo site-config.ts
+## ⚠️ AINDA PENDENTE: melhorar a cópia do template para já atualizar o `site-config.ts` de verdade
+O `templates/site-template/site-config.ts` ainda é uma cópia praticamente hardcoded dos dados reais
+do fastvistos (telefone, endereço, geo, WhatsApp, redes sociais, GTM id, etc.). O `create-site.js`
+só substitui `[SITE_ID]`, `[SITE_NAME]`, `[BUSINESS_ID]`, `[COMPANY_NAME]`, `[COMPANY_SHORT_NAME]`,
+`[COMPANY_DESCRIPTION]`, `[COMPANY_CATEGORY_1]` e `[YOUR_DOMAIN]` — os demais campos de negócio
+continuam com os valores do fastvistos e precisam ser editados manualmente após a criação do site.
 
-## precisa ajeitar o faq e inclusive no fastvistos está fixo na parte que cria o ld+json e precisa puxar do banco
+## ⚠️ AINDA PENDENTE: FAQ / ld+json no fastvistos está fixo, precisa puxar do banco
+Em `multi-sites/sites/fastvistos/pages/index.astro`, `faqData` vem de um arquivo estático
+(`../config/faqConfig.js`), e não do `WebpageFaqService.getPageFaqList()` (`lib/webpage-faq.ts`),
+que já existe mas não está sendo usado ali.
 
 ## **🆕 Create a New Site**
 
 ```bash
 node create-site.js
+```
 
+O script `create-site.js` é um wizard interativo que faz tudo isso, nesta ordem:
+
+1. **Pergunta o Site ID** (minúsculo, sem espaços, ex.: `mysite`) e valida (`a-z0-9-`, mín. 2
+   caracteres). Aborta se já existir `multi-sites/sites/<siteId>` ou `public/<siteId>`.
+2. **Pergunta o domínio** (sugere `<siteId>.com` como padrão) e valida o formato.
+3. **Deriva automaticamente** o nome de exibição (`siteName`) a partir do `siteId`
+   (primeira letra maiúscula, hífens viram espaços) — **não pergunta um nome separado**.
+4. **Pergunta dados de negócio (opcionais)** para o banco: email, e telefone (código do país,
+   DDD, número) — todos opcionais, mas validados se preenchidos.
+5. **Mostra um resumo** e pede confirmação (`y/N`) antes de prosseguir.
+6. **Cria o `business` no banco** via `BlogService.createBusiness()` (`multi-sites/core/lib/blog-service.js`),
+   usando `siteId` como `name`, o nome derivado como `display_name` e o domínio como `canonical_domain`.
+7. **Cria o usuário/perfil** chamando a API
+   `POST https://sys.fastvistos.com.br/api/create-user-for-business/` (header `X-API-Key` vindo de
+   `process.env.API_KEY`), passando `business_id`, `email` (ou `<siteId>@example.com` se não informado)
+   e `username = siteId`. Se essa chamada falhar, o business já criado permanece e é preciso criar o
+   usuário manualmente — o script não desfaz o passo anterior.
+8. **Copia os templates** de `templates/site-template/` para `multi-sites/sites/<siteId>/` e de
+   `templates/public-template/` para `public/<siteId>/`, substituindo os placeholders `[SITE_ID]`,
+   `[SITE_NAME]`, `[BUSINESS_ID]`, `[COMPANY_NAME]`, `[COMPANY_SHORT_NAME]`, `[COMPANY_DESCRIPTION]`,
+   `[COMPANY_CATEGORY_1]` e `[YOUR_DOMAIN]` em todos os arquivos (recursivamente).
+9. **Adiciona scripts ao `package.json`** raiz automaticamente (só se ainda não existirem):
+   `dev:<siteId>`, `dev:watch:<siteId>`, `build:<siteId>`, `preview:<siteId>` e `download-images:<siteId>`.
+10. **Ao final, já inicia automaticamente** `npm run dev:watch:<siteId>` (não precisa rodar manualmente).
+
+> ⚠️ Não cria mais `tailwind.<siteId>.config.js` a partir de template — esse trecho está comentado
+> no script atualmente. O tema é feito via `styles/theme.css` do site (ver seção abaixo).
+
+> ⚠️ O script não pede mais "nome do site" separadamente — ele deriva do Site ID. Se quiser um nome
+> de exibição diferente, ajuste depois no banco (`display_name` do business) e no `site-config.ts`.
 
 Creating the main homepage image, see guidelines. The first image I created for fastvistos and serves as an example can be found [here](multi-sites/sites/fastvistos/docs/images/home-page-main-image.svg)
 

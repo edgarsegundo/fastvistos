@@ -1,0 +1,200 @@
+/*
+  arquivo de customização deste site — estende e sobrescreve o global.css.
+  
+  Use este arquivo para:
+  - Adicionar cores e fontes da marca via @theme
+  - Sobrescrever variáveis do global.css via @theme
+  - Adicionar componentes específicos deste site via @layer components
+  - Adicionar utilities específicas deste site via @layer utilities
+  - Sobrescrever o reset do global.css via @layer base (só se necessário)
+
+  O Tailwind e o CSS juntam este arquivo com o global.css automaticamente.
+  O que estiver aqui tem prioridade sobre o global.css.
+*/
+
+/*
+  @theme — cores e fontes da marca deste site.
+  Cada variável --color-* gera automaticamente classes Tailwind:
+  --color-primary-500 → bg-primary-500, text-primary-500, border-primary-500, etc.
+*/
+@theme {
+
+  /* =====================
+     CORES DA MARCA
+     — usadas diretamente pelos componentes CriaCurriculo*.astro
+       (migrados de arquivos_refatorados/, baseados no emprego)
+     ===================== */
+
+  /* Fundo escuro — hero, navbar, footer, "pra ontem" (mesmo tom que --color-bg-dark, contrato do body) */
+  --color-bg: #1e2237;
+  --color-bg-mid: #2c3154;   /* tom intermediário — avatares/mock do hero */
+  --color-bg-light: #f4f5f8; /* seções claras — como funciona, faq */
+  --color-card: #252a42;     /* cards sobre fundo escuro (painel do hero, card "por que ser parceiro") */
+
+  /* Coral — CTA, badges, destaques */
+  --color-cta: #F28B30;
+  --color-cta-dark: #d4751f;
+
+  /* Texto secundário sobre fundo claro (ex: faq, "como funciona") */
+  --color-text-muted: #565c6e;
+
+  /* =====================
+     CORES SEMÂNTICAS
+     — contrato consumido pelo reset do body (global.css)
+     ===================== */
+
+  /* Texto */
+  --color-text-main:    #1e2237; /* corpo principal sobre fundo claro */
+  --color-text-inverse: #ffffff; /* texto sobre fundo escuro */
+
+  /* Backgrounds */
+  --color-bg-dark:      #1e2237; /* contrato do body — mesmo tom de --color-bg acima */
+
+  /* Bordas */
+  --color-border:       rgba(30, 34, 55, .08);
+
+  /* Estados */
+  --color-success:      #34d399;
+  --color-warning:      #f59e0b;
+  --color-error:        #ef4444;
+
+  /* =====================
+     TIPOGRAFIA — FAMÍLIAS
+     ===================== */
+
+  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif; /* corpo, parágrafos — contrato do body */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;    /* títulos, botões, labels (usado pelos componentes) */
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;    /* títulos h1-h4 */
+  --font-mono:    ui-monospace, monospace;
+
+  /* =====================
+     TIPOGRAFIA — TAMANHOS
+     ===================== */
+
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg:   1.125rem;
+  --font-size-xl:   1.25rem;
+  --font-size-2xl:  1.5rem;
+  --font-size-3xl:  1.875rem;
+  --font-size-4xl:  2.25rem;
+
+  /* =====================
+     TIPOGRAFIA — PESOS
+     ===================== */
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* =====================
+     TIPOGRAFIA — LINE HEIGHT
+     ===================== */
+
+  --line-height-tight:  1.25;
+  --line-height-base:   1.6;
+  --line-height-loose:  1.8;
+
+  /* =====================
+     ESPAÇAMENTO
+     ===================== */
+
+  --spacing-section: ; /* padding entre seções da página */
+
+  /* =====================
+     BORDAS — RAIOS
+     ===================== */
+
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   1rem;
+  --radius-full: 9999px;
+
+  /* =====================
+     SOMBRAS
+     ===================== */
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg:  0 10px 25px -5px rgba(0,0,0,0.15);
+
+  /* =====================
+     TRANSIÇÕES
+     ===================== */
+
+  --transition-fast:   150ms ease;
+  --transition-base:   300ms ease;
+  --transition-slow:   500ms ease;
+
+  /* =====================
+     Z-INDEX
+     ===================== */
+
+  --z-base:    0;
+  --z-above:   10;
+  --z-sticky:  100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
+
+  /* =====================
+     CONTAINER / LAYOUT
+     ===================== */
+
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1280px;
+  --container-2xl: 1536px;
+
+  /* =====================
+     BREAKPOINTS
+     ===================== */
+
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  1024px;
+  --breakpoint-xl:  1280px;
+  --breakpoint-2xl: 1536px;
+
+}
+
+/*
+  Largura máxima do container (.wrap) usado pelos componentes CriaCurriculo*.astro.
+  Não vira classe Tailwind automática (não é --container-*), por isso fica num
+  :root comum e é consumida via var() dentro do .wrap abaixo.
+*/
+:root {
+  --max-w: 1160px;
+}
+
+/*
+  @layer base — use apenas para sobrescrever o reset do global.css.
+  Ex: mudar line-height do body, background-color padrão, etc.
+*/
+@layer base {
+}
+
+/*
+  @layer components — classes reutilizáveis específicas deste site.
+  Use quando uma combinação de estilos se repete em mais de um lugar.
+  Ex: .btn-primary, .hero-section, .card-produto
+*/
+@layer components {
+  /* Container centralizado usado por todos os componentes CriaCurriculo*.astro */
+  .wrap {
+    max-width: var(--max-w);
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+}
+
+/*
+  @layer utilities — classes atômicas específicas deste site.
+  Use quando a classe faz uma coisa só.
+  Ex: .text-brand-primary, .fill-brand
+*/
+@layer utilities {
+}

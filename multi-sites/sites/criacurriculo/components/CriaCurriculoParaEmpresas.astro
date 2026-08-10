@@ -1,0 +1,114 @@
+---
+/**
+ * "Quando você precisa contratar, precisa pra ontem" — seção B2B principal.
+ * Fundo navy sólido, esquerda headline, direita card de benefícios + stats + CTA.
+ */
+
+// TODO: link mocado — trocar por WhatsApp/chat real quando definido
+const contactUrl = '#';
+
+const beneficios = [
+  { strong: 'Candidatos com currículo completo', text: '— captado gratuitamente, sem espera.' },
+  { strong: 'Todos os dados antes de ligar', text: '— região, pretensão salarial, disponibilidade.' },
+  { strong: 'Conectamos empresas e candidatos', text: '— sua empresa fala direto com quem quer trabalhar.' },
+];
+---
+
+<section class="pra-ontem" id="pra-ontem" aria-labelledby="pra-ontem-title">
+  <div class="wrap pra-ontem__inner">
+
+    <div class="pra-ontem__left">
+      <p class="section-label">Por que ser parceiro</p>
+      <h2 class="pra-ontem__title" id="pra-ontem-title">
+        Quando você precisa contratar,<br/>precisa <em>pra ontem.</em>
+      </h2>
+      <p class="pra-ontem__sub">
+        Sem filtrar 200 currículos. Sem marcar 3 entrevistas. Sem esperar
+        enquanto a vaga fica aberta e a equipe sobrecarregada.
+      </p>
+    </div>
+
+    <div class="pra-ontem__card">
+      <ul class="card__list" role="list">
+        {beneficios.map((b) => (
+          <li class="card__item">
+            <span class="card__check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <p class="card__text"><strong>{b.strong}</strong> {b.text}</p>
+          </li>
+        ))}
+      </ul>
+
+      <!-- TODO: números de exemplo — trocar por métricas reais quando disponíveis -->
+      <div class="card__stats">
+        <div class="card__stat">
+          <div class="card__stat-value">Em captação</div>
+          <div class="card__stat-label">Empresas parceiras</div>
+        </div>
+        <div class="card__stat">
+          <div class="card__stat-value">Em captação</div>
+          <div class="card__stat-label">Currículos ativos</div>
+        </div>
+      </div>
+
+      <a href={contactUrl} class="card__cta">Quero ser parceiro</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .pra-ontem { background: var(--color-bg); padding: 100px 24px; }
+  .pra-ontem__inner { display: flex; gap: 64px; align-items: center; flex-wrap: wrap; }
+  .section-label { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-cta); margin: 0 0 14px; }
+
+  .pra-ontem__left { flex: 1 1 420px; min-width: 300px; }
+  .pra-ontem__title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.6vw, 42px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0 0 20px;
+  }
+  .pra-ontem__title em { font-style: normal; color: var(--color-cta); }
+  .pra-ontem__sub { font-size: 16px; color: rgba(255,255,255,.65); max-width: 460px; margin: 0; }
+
+  .pra-ontem__card {
+    flex: 1 1 380px;
+    min-width: 300px;
+    max-width: 460px;
+    background: var(--color-card);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35);
+  }
+
+  .card__list { list-style: none; padding: 0; margin: 0 0 24px; display: flex; flex-direction: column; gap: 16px; }
+  .card__item { display: flex; align-items: flex-start; gap: 12px; }
+  .card__check { width: 22px; height: 22px; border-radius: 50%; background: rgba(242,139,48,.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .card__text { font-size: 14px; color: rgba(255,255,255,.75); margin: 0; line-height: 1.55; }
+  .card__text strong { color: #fff; }
+
+  .card__stats { display: flex; gap: 12px; margin-bottom: 22px; }
+  .card__stat { flex: 1; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 16px 12px; text-align: center; }
+  .card__stat-value { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--color-cta); }
+  .card__stat-label { font-size: 11px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+
+  .card__cta {
+    display: block;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-cta);
+    padding: 15px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .card__cta:hover { background: var(--color-cta-dark); }
+</style>

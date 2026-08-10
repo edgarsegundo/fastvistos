@@ -1,0 +1,113 @@
+---
+/**
+ * FAQ B2B — accordion (1 aberto por vez; 1º item aberto por padrão).
+ */
+// TODO: revisar respostas (cobertura geográfica, condições) antes de publicar
+const faqs = [
+  {
+    q: 'Quanto custa acessar os currículos?',
+    a: 'Você não paga para criar uma conta e olhar a base. Cobramos apenas das empresas parceiras que fecham contratação, com planos por volume de acesso — sem taxa de cadastro.',
+  },
+  {
+    q: 'Vocês atendem agências de recrutamento?',
+    a: 'Sim. Trabalhamos com empresas que contratam diretamente e com agências que fazem recrutamento para terceiros, com condições específicas para volume.',
+  },
+  {
+    q: 'Como garantem a qualidade dos candidatos?',
+    a: 'Cada currículo é captado gratuitamente a partir de um cadastro guiado com o candidato, o que garante dados completos e atualizados — sem formulários abandonados pela metade.',
+  },
+  {
+    // TODO: preencher região real de cobertura
+    q: 'Qual é a cobertura geográfica?',
+    a: 'A cobertura está em definição — em breve atualizamos esta resposta com as regiões atendidas.',
+  },
+  {
+    q: 'Como funciona o contato com o candidato?',
+    a: 'O contato é direto, sem intermediário: sua empresa recebe os dados do candidato e conduz a conversa e a entrevista do seu jeito.',
+  },
+  {
+    q: 'Existe fidelidade ou contrato de permanência?',
+    a: 'Não. Você pode testar o acesso, pausar ou cancelar quando quiser — sem multa e sem contrato de fidelidade.',
+  },
+];
+---
+
+<section class="faq" id="faq" aria-labelledby="faq-title">
+  <div class="faq__inner">
+    <div class="faq__header">
+      <p class="section-label">Perguntas frequentes</p>
+      <h2 class="section-title" id="faq-title">Dúvidas de quem vai contratar</h2>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map((item, i) => (
+        <div class:list={['faq-item', { open: i === 0 }]}>
+          <button class="faq-item__question" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`faq-ans-${i}`}>
+            {item.q}
+            <div class="faq-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+          </button>
+          <div class="faq-item__answer" id={`faq-ans-${i}`} role="region">
+            <p>{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { padding: 100px 24px; background: var(--color-bg-light); }
+  .faq__inner { max-width: 740px; margin: 0 auto; }
+  .faq__header { text-align: center; margin-bottom: 48px; }
+  .section-label { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-cta); margin: 0 0 12px; }
+  .section-title { font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 34px); font-weight: 800; color: var(--color-bg); margin: 0; }
+
+  .faq-item { background: #fff; border: 1px solid rgba(30,34,55,.08); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transform: translateZ(0); }
+  .faq-item__question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-bg);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+  .faq-item__icon {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--color-bg-light);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .3s;
+  }
+  .faq-item__icon path { stroke: var(--color-bg); }
+  .faq-item.open .faq-item__icon { background: var(--color-cta); transform: rotate(45deg); }
+  .faq-item.open .faq-item__icon path { stroke: #fff; }
+
+  .faq-item__answer { max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; padding: 0 22px; }
+  .faq-item__answer p { font-size: 14.5px; color: var(--color-text-muted); line-height: 1.7; margin: 0; }
+  .faq-item.open .faq-item__answer { max-height: 300px; padding: 0 22px 20px; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.faq-item__question').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach((i) => {
+        i.classList.remove('open');
+        i.querySelector('.faq-item__question')?.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>

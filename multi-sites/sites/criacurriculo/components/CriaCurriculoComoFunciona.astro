@@ -1,0 +1,65 @@
+---
+/**
+ * Como Funciona (B2B) — 3 passos, ícones simples (sem fotos).
+ */
+
+// TODO: link mocado — trocar por WhatsApp/chat real quando definido
+const contactUrl = '#';
+
+const steps = [
+  { n: 1, title: 'Cadastre sua empresa como parceira', desc: 'Leva 2 minutos e não custa nada para começar a ver a base de currículos captados.' },
+  { n: 2, title: 'Filtre por cargo e região', desc: 'Veja quem está disponível entre os currículos captados gratuitamente pela Cria Currículo.' },
+  { n: 3, title: 'Fale direto com o candidato', desc: 'Sem intermediário no contato. Sua empresa decide com quem falar.' },
+];
+---
+
+<section class="funciona" id="como-funciona" aria-labelledby="funciona-title">
+  <div class="wrap">
+    <div class="funciona__header">
+      <p class="section-label">Como funciona</p>
+      <h2 class="section-title" id="funciona-title">Três passos até a contratação</h2>
+      <p class="section-sub">Sem burocracia, sem taxa de cadastro, sem intermediário no meio da conversa.</p>
+    </div>
+
+    <div class="funciona__steps">
+      {steps.map((s) => (
+        <div class="step">
+          <div class="step__badge">{s.n}</div>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__desc">{s.desc}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="funciona__cta">
+      <a href={contactUrl} class="btn btn--coral">Cadastrar minha empresa</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .funciona { padding: 100px 0; background: #fff; }
+  .funciona__header { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+  .section-label { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-cta); margin: 0 0 12px; }
+  .section-title { font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 38px); font-weight: 800; color: var(--color-bg); margin: 0 0 14px; }
+  .section-sub { font-size: 16px; color: var(--color-text-muted); margin: 0; }
+
+  .funciona__steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; }
+  .step { text-align: center; padding: 0 12px; }
+  .step__badge {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--color-bg-light); border: 1.5px solid rgba(242,139,48,.3);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
+    font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--color-cta);
+  }
+  .step__title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--color-bg); margin: 0 0 10px; }
+  .step__desc { font-size: 15px; color: var(--color-text-muted); margin: 0 auto; max-width: 260px; }
+
+  .funciona__cta { text-align: center; margin-top: 56px; }
+  .btn--coral {
+    font-family: var(--font-display); font-size: 15px; font-weight: 700; color: #fff;
+    background: var(--color-cta); padding: 15px 30px; border-radius: 8px; text-decoration: none;
+    display: inline-flex; transition: background .2s;
+  }
+  .btn--coral:hover { background: var(--color-cta-dark); }
+</style>

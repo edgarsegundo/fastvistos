@@ -1,0 +1,186 @@
+---
+/**
+ * Hero B2B — fundo navy sólido (sem foto/slideshow), texto à esquerda,
+ * painel "candidatos disponíveis" (mockup de UI) à direita.
+ */
+
+// TODO: link mocado — trocar por WhatsApp/chat real quando definido
+const contactUrl = '#';
+
+// TODO: dados de exemplo — trocar por candidatos/regiões reais quando disponíveis
+const candidatos = [
+  { initials: 'J.S.', bg: 'var(--color-cta)', role: 'Auxiliar administrativo', city: 'Região a definir' },
+  { initials: 'M.O.', bg: 'var(--color-bg-mid)', role: 'Atendente / vendas', city: 'Região a definir' },
+  { initials: 'R.C.', bg: 'var(--color-cta-dark)', role: 'Assistente de logística', city: 'Região a definir' },
+];
+---
+
+<section class="hero" id="topo" aria-labelledby="hero-title">
+  <div class="hero__dots" aria-hidden="true"></div>
+
+  <div class="hero__inner wrap">
+    <div class="hero__content">
+      <div class="hero__eyebrow">
+        <span class="badge">
+          <svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="#F28B30"/></svg>
+          Para empresas parceiras de recrutamento
+        </span>
+      </div>
+
+      <h1 class="hero__title" id="hero-title">
+        Currículos prontos.<br/>Candidatos reais.<br/><em>Parceria sem burocracia.</em>
+      </h1>
+
+      <p class="hero__sub">
+        Captamos currículos gratuitamente e conectamos sua empresa direto a
+        candidatos que querem trabalhar — sem custo para o candidato, sem
+        processo demorado.
+      </p>
+
+      <div class="hero__actions">
+        <a href={contactUrl} class="btn btn--coral">Quero ser parceiro</a>
+        <a href="#como-funciona" class="btn btn--ghost">Ver como funciona</a>
+      </div>
+
+      <div class="hero__trust">
+        <span class="hero__trust-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          Captação de currículos contínua
+        </span>
+        <span class="hero__trust-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          Sem contrato de fidelidade
+        </span>
+      </div>
+    </div>
+
+    <div class="hero__panel">
+      <div class="panel">
+        <div class="panel__header">
+          <span>Candidatos disponíveis</span>
+          <span class="panel__live">AO VIVO</span>
+        </div>
+        <div class="panel__filters">
+          <span class="panel__chip">Região: a definir</span>
+          <span class="panel__chip">Cargo: qualquer</span>
+        </div>
+        <div class="panel__list">
+          {candidatos.map((c) => (
+            <div class="panel__row">
+              <span class="panel__avatar" style={`background:${c.bg}`}>{c.initials}</span>
+              <div class="panel__info">
+                <div class="panel__role">{c.role}</div>
+                <div class="panel__city">{c.city}</div>
+              </div>
+              <span class="panel__dot"></span>
+            </div>
+          ))}
+        </div>
+        <div class="panel__footer">Candidatos captados gratuitamente na sua região</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { background: var(--color-bg); padding: 88px 24px 96px; position: relative; overflow: hidden; }
+  .hero__dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity: .5;
+  }
+
+  .hero__inner { position: relative; display: flex; gap: 56px; align-items: center; flex-wrap: wrap; }
+  .hero__content { flex: 1 1 480px; min-width: 320px; }
+  .hero__eyebrow { margin-bottom: 24px; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(242, 139, 48, .14);
+    border: 1px solid rgba(242, 139, 48, .35);
+    padding: 7px 16px;
+    border-radius: 30px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--color-cta);
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 4.4vw, 52px);
+    font-weight: 800;
+    line-height: 1.12;
+    color: #fff;
+    margin: 0 0 22px;
+  }
+  .hero__title em { font-style: normal; color: var(--color-cta); }
+
+  .hero__sub { font-size: 17px; color: rgba(255,255,255,.68); max-width: 480px; margin: 0 0 32px; }
+
+  .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .btn {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 15px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    transition: all .2s;
+  }
+  .btn--coral { color: #fff; background: var(--color-cta); }
+  .btn--coral:hover { background: var(--color-cta-dark); }
+  .btn--ghost { color: #fff; background: transparent; border: 1.5px solid rgba(255,255,255,.3); }
+  .btn--ghost:hover { border-color: rgba(255,255,255,.6); background: rgba(255,255,255,.06); }
+
+  .hero__trust { display: flex; gap: 24px; flex-wrap: wrap; }
+  .hero__trust-item { font-size: 13px; color: rgba(255,255,255,.5); display: flex; align-items: center; gap: 7px; }
+
+  .hero__panel { flex: 1 1 380px; min-width: 300px; max-width: 440px; }
+  .panel {
+    background: var(--color-card);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 30px 70px rgba(0,0,0,.4);
+    overflow: hidden;
+  }
+  .panel__header {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .panel__live { font-size: 11px; font-weight: 700; color: var(--color-cta); background: rgba(242,139,48,.15); padding: 4px 10px; border-radius: 20px; }
+  .panel__filters { padding: 16px 20px; display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .panel__chip { font-size: 11px; color: rgba(255,255,255,.55); background: rgba(255,255,255,.06); padding: 5px 12px; border-radius: 20px; }
+  .panel__list { padding: 8px 12px; }
+  .panel__row { display: flex; align-items: center; gap: 12px; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .panel__row:last-child { border-bottom: none; }
+  .panel__avatar {
+    width: 38px; height: 38px; border-radius: 50%; color: #fff;
+    font-family: var(--font-display); font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .panel__info { flex: 1; min-width: 0; }
+  .panel__role { font-size: 13px; font-weight: 600; color: #fff; }
+  .panel__city { font-size: 12px; color: rgba(255,255,255,.45); }
+  .panel__dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; flex-shrink: 0; }
+  .panel__footer { padding: 14px 20px; background: rgba(0,0,0,.15); font-size: 12px; color: rgba(255,255,255,.45); text-align: center; }
+
+  @media (max-width: 860px) {
+    .hero__inner { flex-direction: column; align-items: stretch; }
+    .hero__panel { max-width: none; }
+  }
+</style>

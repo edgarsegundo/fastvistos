@@ -1,0 +1,138 @@
+---
+/**
+ * MostReadSection.astro
+ * Exibe os 25 artigos mais lidos em layout 3 colunas (1 destaque + 2 colunas de lista)
+ * Usa BlogService.getMostReadArticles no lado do servidor Astro
+ */
+import { BlogService } from '../lib/blog-service.ts';
+import { siteConfig } from '../site-config.ts';
+
+const [verticalArticle, mostReadArticles] = await Promise.all([
+  BlogService.getArticleWithVerticalImage(),
+  BlogService.getMostReadArticles(12, true),
+]);
+
+function formatDate(date) {
+  if (!date) return '';
+  const d = new Date(date);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Remove vertical article from mostReadArticles if present
+const filteredArticles = verticalArticle
+  ? mostReadArticles.filter(a => a.id !== verticalArticle.id)
+  : mostReadArticles;
+---
+
+<section class="w-full max-w-7xl mx-auto px-4 py-12">
+  
+  <h2 class="text-2xl font-bold mb-10">Artigos mais lidos</h2>
+  <div class="w-1/12 border-b-2 border-gray-200 mb-8"></div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {verticalArticle ? (
+      <>
+        
+        <div class="md:col-span-1 flex flex-col">
+          <a href={`/blog/${verticalArticle.slug}`} class="block group">
+            <div class="aspect-[2/3] w-full overflow-hidden p-2">
+              <img
+                src={
+                  verticalArticle.image_vertical
+                    ? `/assets/images/blog/${verticalArticle.image_vertical.replace(/^.*\//, '')}`
+                    : 'https://via.placeholder.com/600x400'
+                }
+                alt={verticalArticle.title}
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+
+            <h3 class="mt-4 text-2xl p-2 font-bold text-gray-900 transition-colors group-hover:text-blue-700">
+              {verticalArticle.title}
+            </h3>
+
+            <div class="mt-2 text-base p-2 text-gray-500">
+              {formatDate(verticalArticle.published)}
+            </div>
+          </a>
+        </div>
+        
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-2 content-start">
+          {filteredArticles.map((article, idx) => (
+            <a
+              href={`/blog/${article.slug}`}
+              class="flex items-start gap-3 bg-white transition-all p-2 group"
+            >
+              <div class="w-28 h-22 flex-shrink-0 overflow-hidden">
+                <img
+                  src={
+                    article.image
+                      ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}`
+                      : 'https://via.placeholder.com/200x140'
+                  }
+                  alt={article.title}
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <h3 class="text-base font-semibold text-gray-900 line-clamp-2 transition-colors group-hover:text-blue-700">
+                  {article.title}
+                </h3>
+
+
+                <div class="flex flex-wrap gap-1 mt-1 items-center">
+                  {article.blog_topic && (
+                    <span class="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded">
+                      {article.blog_topic.title}
+                    </span>
+                  )}
+                  <span class="text-xs text-gray-500">
+                    {formatDate(article.published)}
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    ) : (
+      <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-2 content-start">
+        {filteredArticles.map((article, idx) => (
+          <a
+            href={`/blog/${article.slug}`}
+            class="flex items-start gap-3 bg-white transition-all p-2 group"
+          >
+            <div class="w-28 h-22 flex-shrink-0 overflow-hidden">
+              <img
+                src={
+                  article.image
+                    ? `/assets/images/blog/${article.image.replace(/^.*\//, '')}`
+                    : 'https://via.placeholder.com/200x140'
+                }
+                alt={article.title}
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <h3 class="text-base font-semibold text-gray-900 line-clamp-2 transition-colors group-hover:text-blue-700">
+                {article.title}
+              </h3>
+
+              <div class="flex flex-wrap gap-1 mt-1 items-center">
+                {article.blog_topic && (
+                  <span class="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-0.5 rounded">
+                    {article.blog_topic.title}
+                  </span>
+                )}
+                <span class="text-xs text-gray-500">
+                  {formatDate(article.published)}
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>

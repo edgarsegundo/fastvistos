@@ -1,0 +1,104 @@
+---
+/**
+ * Navbar — Cria Currículo B2B (site para empresas parceiras de recrutamento)
+ * Fixa no topo. Logo + nav + CTA coral "Quero ser parceiro".
+ */
+
+// TODO: link mocado — trocar por WhatsApp/chat real quando definido
+const contactUrl = '#';
+---
+
+<header class="navbar" role="navigation" aria-label="Menu principal">
+  <div class="navbar__inner wrap">
+    <a href="/" class="navbar__logo" aria-label="Cria Currículo - página inicial">
+      <img
+        src="/assets/images/logo/criacurriculo_logo_icone.svg"
+        alt=""
+        class="navbar__logo-icon"
+        width="40"
+        height="40"
+      />
+      <span class="navbar__logo-text">Cria<span class="navbar__logo-text--accent">Currículo</span></span>
+      <span class="navbar__tag">Empresas parceiras</span>
+    </a>
+
+    <nav class="navbar__nav">
+      <a href="#como-funciona" class="navbar__link">Como funciona</a>
+      <a href="#pra-ontem" class="navbar__link">Por que ser parceiro</a>
+      <a href="#faq" class="navbar__link">Dúvidas</a>
+      <a href={contactUrl} class="navbar__btn">Quero ser parceiro</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(30, 34, 55, .97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .navbar__logo { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+  .navbar__logo-icon { display: block; flex-shrink: 0; }
+  .navbar__logo-text {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -.01em;
+  }
+  .navbar__logo-text--accent { color: var(--color-cta); }
+  .navbar__tag {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .5);
+    border-left: 1px solid rgba(255, 255, 255, .25);
+    padding-left: 8px;
+  }
+
+  .navbar__nav { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+  .navbar__link {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .75);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .navbar__link:hover { color: #fff; }
+
+  .navbar__btn {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-cta);
+    padding: 11px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background .2s;
+  }
+  .navbar__btn:hover { background: var(--color-cta-dark); }
+
+  @media (max-width: 760px) {
+    .navbar__link:not(.navbar__btn) { display: none; }
+  }
+</style>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 260">
+  <title>CriaCurrículo - ícone de documento</title>
+  <g transform="rotate(-8 128 130)">
+    <!-- Folha -->
+    <path
+      d="M48 24
+         Q48 10 62 10
+         H174
+         L218 54
+         V220
+         Q218 234 204 234
+         H62
+         Q48 234 48 220
+         Z"
+      fill="#FFFFFF"/>
+    <!-- Dobra laranja -->
+    <path
+      d="M174 10
+         L218 54
+         H188
+         Q174 54 174 40
+         Z"
+      fill="#F39A24"/>
+    <!-- Linhas do documento -->
+    <rect x="76" y="92" width="72" height="14" rx="7" fill="#F39A24"/>
+    <rect x="76" y="128" width="112" height="14" rx="7" fill="#1F2338"/>
+    <rect x="76" y="164" width="94" height="14" rx="7" fill="#1F2338"/>
+  </g>
+</svg>

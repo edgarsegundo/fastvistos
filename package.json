@@ -67,7 +67,12 @@
     "dev:watch:flyfred": "node dev-with-sync.js flyfred",
     "build:flyfred": "node sync-blog.js flyfred && SITE_ID=flyfred astro build && node postbuild-updatable.js flyfred",
     "preview:flyfred": "SITE_ID=flyfred astro preview",
-    "download-images:flyfred": "node download-blog-images.js flyfred"
+    "download-images:flyfred": "node download-blog-images.js flyfred",
+    "dev:criacurriculo": "node sync-blog.js criacurriculo && SITE_ID=criacurriculo astro dev",
+    "dev:watch:criacurriculo": "node dev-with-sync.js criacurriculo",
+    "build:criacurriculo": "node sync-blog.js criacurriculo && SITE_ID=criacurriculo astro build && node postbuild-updatable.js criacurriculo",
+    "preview:criacurriculo": "SITE_ID=criacurriculo astro preview",
+    "download-images:criacurriculo": "node download-blog-images.js criacurriculo"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
