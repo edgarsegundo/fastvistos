@@ -1,15 +1,33 @@
 ---
 /**
- * Como Funciona (B2B) — 3 passos, ícones simples (sem fotos).
+ * Como Funciona (B2B) — 4 passos, ícones em outline (sem fotos).
+ * Grid explícito: 4 colunas no desktop, 2 no tablet (≤900px), 1 no mobile (≤560px).
  */
 
 // TODO: link mocado — trocar por WhatsApp/chat real quando definido
 const contactUrl = '#';
 
 const steps = [
-  { n: 1, title: 'Cadastre sua empresa como parceira', desc: 'Leva 2 minutos e não custa nada para começar a ver a base de currículos captados.' },
-  { n: 2, title: 'Filtre por cargo e região', desc: 'Veja quem está disponível entre os currículos captados gratuitamente pela Cria Currículo.' },
-  { n: 3, title: 'Fale direto com o candidato', desc: 'Sem intermediário no contato. Sua empresa decide com quem falar.' },
+  {
+    title: 'Nós captamos os candidatos',
+    desc: 'Investimos em divulgação e captação ativa para atrair milhares de currículos qualificados todo mês.',
+    icon: 'search-person',
+  },
+  {
+    title: 'Cadastre sua empresa',
+    desc: 'Leva 2 minutos e não custa nada para começar a ver a base de currículos captados.',
+    icon: 'clipboard-check',
+  },
+  {
+    title: 'Filtre por cargo e região',
+    desc: 'Veja quem está disponível entre os currículos captados gratuitamente pela Cria Currículo.',
+    icon: 'filter',
+  },
+  {
+    title: 'Fale direto com o candidato',
+    desc: 'Sem intermediário no contato. Sua empresa decide com quem falar.',
+    icon: 'chat',
+  },
 ];
 ---
 
@@ -17,14 +35,42 @@ const steps = [
   <div class="wrap">
     <div class="funciona__header">
       <p class="section-label">Como funciona</p>
-      <h2 class="section-title" id="funciona-title">Três passos até a contratação</h2>
+      <h2 class="section-title" id="funciona-title">Quatro passos até a contratação</h2>
       <p class="section-sub">Sem burocracia, sem taxa de cadastro, sem intermediário no meio da conversa.</p>
     </div>
 
     <div class="funciona__steps">
       {steps.map((s) => (
         <div class="step">
-          <div class="step__badge">{s.n}</div>
+          <div class="step__icon" aria-hidden="true">
+            {s.icon === 'search-person' && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9.5" cy="7" r="2.6"/>
+                <path d="M4.5 16.5 C4.5 12.8 6.7 11 9.5 11 C10.4 11 11.2 11.2 11.9 11.6"/>
+                <circle cx="16.3" cy="15.8" r="3.4"/>
+                <path d="M18.7 18.2 L21 20.5"/>
+              </svg>
+            )}
+            {s.icon === 'clipboard-check' && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4.5" y="3.5" width="11" height="17" rx="1.2"/>
+                <path d="M7.3 7 H12.7 M7.3 10.2 H12.7 M7.3 13.4 H12.7 M7.3 16.6 H10.5"/>
+                <circle cx="17.7" cy="17.3" r="4.3" class="step__icon-fill"/>
+                <path d="M15.9 17.3 L17 18.5 L19.5 15.9"/>
+              </svg>
+            )}
+            {s.icon === 'filter' && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 4.5 H20.5 L14 12 V19.5 L10 21.5 V12 Z"/>
+              </svg>
+            )}
+            {s.icon === 'chat' && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 4.5 H14.5 a1.5 1.5 0 0 1 1.5 1.5 V11.5 a1.5 1.5 0 0 1 -1.5 1.5 H8.5 L5 16.5 V13 H3 Z"/>
+                <path d="M9.5 10.5 H20 a1 1 0 0 1 1 1 V16.5 a1 1 0 0 1 -1 1 H15 L12 20.5 V17.5 H9.5 a1 1 0 0 1 -1 -1 V11.5 a1 1 0 0 1 1 -1 Z" class="step__icon-fill"/>
+              </svg>
+            )}
+          </div>
           <h3 class="step__title">{s.title}</h3>
           <p class="step__desc">{s.desc}</p>
         </div>
@@ -39,27 +85,51 @@ const steps = [
 
 <style>
   .funciona { padding: 100px 0; background: #fff; }
-  .funciona__header { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+  .funciona__header { text-align: center; max-width: 640px; margin: 0 auto 56px; }
   .section-label { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-cta); margin: 0 0 12px; }
-  .section-title { font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 38px); font-weight: 800; color: var(--color-bg); margin: 0 0 14px; }
+  .section-title { font-family: var(--font-display); font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; color: var(--color-bg); margin: 0 0 14px; }
   .section-sub { font-size: 16px; color: var(--color-text-muted); margin: 0; }
 
-  .funciona__steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; }
-  .step { text-align: center; padding: 0 12px; }
-  .step__badge {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: var(--color-bg-light); border: 1.5px solid rgba(242,139,48,.3);
-    display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
-    font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--color-cta);
+  /* Desktop: 4 colunas */
+  .funciona__steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
   }
-  .step__title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--color-bg); margin: 0 0 10px; }
-  .step__desc { font-size: 15px; color: var(--color-text-muted); margin: 0 auto; max-width: 260px; }
+  .step { text-align: center; padding: 0 8px; }
 
-  .funciona__cta { text-align: center; margin-top: 56px; }
+  .step__icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--color-bg-light); border: 1.5px solid rgba(242,139,48,.3);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    color: var(--color-cta);
+  }
+  .step__icon svg { width: 30px; height: 30px; }
+  .step__icon-fill { fill: var(--color-bg-light); }
+
+  .step__title { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--color-bg); margin: 0 0 8px; }
+  .step__desc { font-size: 14px; color: var(--color-text-muted); line-height: 1.6; margin: 0 auto; max-width: 260px; }
+
+  .funciona__cta { text-align: center; margin-top: 48px; }
   .btn--coral {
     font-family: var(--font-display); font-size: 15px; font-weight: 700; color: #fff;
     background: var(--color-cta); padding: 15px 30px; border-radius: 8px; text-decoration: none;
     display: inline-flex; transition: background .2s;
   }
   .btn--coral:hover { background: var(--color-cta-dark); }
+
+  /* Tablet: 2 colunas */
+  @media (max-width: 900px) {
+    .funciona { padding: 72px 0; }
+    .funciona__steps { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
+  }
+
+  /* Mobile: 1 coluna */
+  @media (max-width: 560px) {
+    .funciona { padding: 56px 0; }
+    .funciona__header { margin-bottom: 40px; }
+    .funciona__steps { grid-template-columns: 1fr; gap: 36px; }
+    .step__desc { max-width: 320px; }
+    .funciona__cta .btn--coral { width: 100%; justify-content: center; }
+  }
 </style>

@@ -2,6 +2,8 @@
 /**
  * Navbar — Cria Currículo B2B (site para empresas parceiras de recrutamento)
  * Fixa no topo. Logo + nav + CTA coral "Quero ser parceiro".
+ * Mobile (≤760px): links e CTA colapsam num menu hamburguer
+ * (padrão adaptado de multi-sites/sites/zenith/components/NavigationSection.astro).
  */
 
 // TODO: link mocado — trocar por WhatsApp/chat real quando definido
@@ -28,6 +30,29 @@ const contactUrl = '#';
       <a href="#faq" class="navbar__link">Dúvidas</a>
       <a href={contactUrl} class="navbar__btn">Quero ser parceiro</a>
     </nav>
+
+    <button
+      id="navbar-toggle"
+      class="navbar__toggle"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="navbar-mobile-menu"
+    >
+      <svg class="navbar__toggle-icon navbar__toggle-icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <svg class="navbar__toggle-icon navbar__toggle-icon--close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="navbar-mobile-menu" class="navbar__mobile">
+    <a href="#como-funciona" class="navbar__mobile-link">Como funciona</a>
+    <a href="#pra-ontem" class="navbar__mobile-link">Por que ser parceiro</a>
+    <a href="#faq" class="navbar__mobile-link">Dúvidas</a>
+    <a href={contactUrl} class="navbar__mobile-btn">Quero ser parceiro</a>
   </div>
 </header>
 
@@ -46,12 +71,12 @@ const contactUrl = '#';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 72px;
+    min-height: 72px;
+    padding-block: 12px;
     gap: 16px;
-    flex-wrap: wrap;
   }
 
-  .navbar__logo { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+  .navbar__logo { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; min-width: 0; }
   .navbar__logo-icon { display: block; flex-shrink: 0; }
   .navbar__logo-text {
     font-family: var(--font-display);
@@ -59,6 +84,7 @@ const contactUrl = '#';
     font-weight: 900;
     color: #fff;
     letter-spacing: -.01em;
+    white-space: nowrap;
   }
   .navbar__logo-text--accent { color: var(--color-cta); }
   .navbar__tag {
@@ -70,9 +96,10 @@ const contactUrl = '#';
     color: rgba(255, 255, 255, .5);
     border-left: 1px solid rgba(255, 255, 255, .25);
     padding-left: 8px;
+    white-space: nowrap;
   }
 
-  .navbar__nav { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .navbar__nav { display: flex; align-items: center; gap: 28px; flex-shrink: 0; }
 
   .navbar__link {
     font-family: var(--font-display);
@@ -98,7 +125,94 @@ const contactUrl = '#';
   }
   .navbar__btn:hover { background: var(--color-cta-dark); }
 
+  /* ── Botão hamburguer — escondido no desktop ─────────────────── */
+  .navbar__toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .navbar__toggle:hover { background: rgba(255,255,255,.08); }
+  .navbar__toggle-icon--close { display: none; }
+  .navbar__toggle[aria-expanded="true"] .navbar__toggle-icon--open { display: none; }
+  .navbar__toggle[aria-expanded="true"] .navbar__toggle-icon--close { display: block; }
+
+  /* ── Painel do menu mobile — escondido por padrão ────────────── */
+  .navbar__mobile {
+    display: none;
+    flex-direction: column;
+    padding: 8px 24px 20px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+  }
+  .navbar__mobile.is-open { display: flex; }
+
+  .navbar__mobile-link {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .85);
+    text-decoration: none;
+    padding: 14px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+  }
+  .navbar__mobile-link:hover { color: #fff; }
+
+  .navbar__mobile-btn {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--color-cta);
+    padding: 14px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 16px;
+    transition: background .2s;
+  }
+  .navbar__mobile-btn:hover { background: var(--color-cta-dark); }
+
   @media (max-width: 760px) {
-    .navbar__link:not(.navbar__btn) { display: none; }
+    .navbar__tag { display: none; }
+    .navbar__nav { display: none; }
+    .navbar__toggle { display: inline-flex; }
   }
 </style>
+
+<script>
+  const toggle = document.getElementById('navbar-toggle');
+  const menu = document.getElementById('navbar-mobile-menu');
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Abrir menu');
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as Node;
+      if (!menu.classList.contains('is-open')) return;
+      if (toggle.contains(target) || menu.contains(target)) return;
+      menu.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menu');
+    });
+  }
+</script>
