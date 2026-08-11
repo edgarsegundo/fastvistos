@@ -1,0 +1,43 @@
+---
+// Cria Currículo — Política de Privacidade (página própria)
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import { siteConfig } from '../site-config.ts';
+
+import CriaCurriculoNavbar from '../components/CriaCurriculoNavbar.astro';
+import CriaCurriculoFooter from '../components/CriaCurriculoFooter.astro';
+import CriaCurriculoPrivacyPolicy from '../components/CriaCurriculoPrivacyPolicySection.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+---
+
+<SharedHomeLayout
+    bodyClass={`${bodyClass} antialiased`}
+    bodyStyle={`${bodyStyle}`}
+    themeToggleDisable={true}
+    canonicalConf={`${siteConfig.site.canonical}politica-de-privacidade/`}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.privacyPolicyPageConfig.seo}
+    titleFromConf={siteConfig.privacyPolicyPageConfig.seo.title}
+    descriptionFromConf={siteConfig.privacyPolicyPageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.alt}
+    imageWidthFromConf={siteConfig.site.primaryImage.width}
+    imageHeightFromConf={siteConfig.site.primaryImage.height}
+>
+    <Fragment slot="head">
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'"
+        />
+    </Fragment>
+
+    <CriaCurriculoNavbar />
+    <main style="padding-top: 80px;">
+        <CriaCurriculoPrivacyPolicy />
+    </main>
+    <CriaCurriculoFooter />
+</SharedHomeLayout>

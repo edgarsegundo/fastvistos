@@ -83,7 +83,7 @@ const candidatos = [
 </section>
 
 <style>
-  .hero { background: var(--color-bg); padding: 88px 24px 96px; position: relative; overflow: hidden; }
+  .hero { background: var(--color-bg); padding: 88px 0 96px; position: relative; overflow: hidden; }
   .hero__dots {
     position: absolute;
     inset: 0;
@@ -185,6 +185,8 @@ const candidatos = [
   }
 
   @media (max-width: 760px) {
+    .hero { padding: 28px 0 48px; }
+    .hero__eyebrow { margin-bottom: 18px; }
     .hero__panel { display: none; }
   }
 </style>

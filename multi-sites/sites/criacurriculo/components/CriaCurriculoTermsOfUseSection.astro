@@ -1,0 +1,191 @@
+---
+/**
+ * Terms of Use Section — cards sobre fundo navy, espelha
+ * multi-sites/sites/emprego/components/EmpregoTermsOfUseSection.astro,
+ * adaptado ao modelo de negócio do Cria Currículo (captação gratuita de
+ * currículos + conexão com empresas parceiras de recrutamento).
+ *
+ * TODO antes de publicar:
+ * - Região de cobertura (não afirmada abaixo — ainda "a definir" no site-config)
+ * - Comarca/foro eleito no item 8 (placeholder)
+ * - Confirmar se o fluxo do candidato é mesmo "pelo site" ou outro canal (chat, etc.)
+ */
+const cards = [
+  {
+    n: '1',
+    title: 'Objeto',
+    body: `Este documento estabelece as regras de uso da plataforma Cria Currículo, operada via
+      site, que capta currículos gratuitamente e conecta candidatos a empresas parceiras de
+      recrutamento. Ao usar nossos canais, seja como candidato, seja como empresa parceira, você
+      confirma que leu, compreendeu e concorda com estas disposições.`,
+  },
+  {
+    n: '2',
+    title: 'Natureza do serviço',
+    body: `O Cria Currículo é uma plataforma de intermediação e divulgação de currículos. Não
+      somos uma agência de emprego e não somos parte da relação de trabalho eventualmente firmada
+      entre candidato e empresa parceira.<br><br>
+      Não garantimos contratação, e o currículo exibido é construído a partir das informações
+      fornecidas pelo próprio candidato em nossa plataforma, sem verificação de veracidade por
+      parte do Cria Currículo.`,
+  },
+  {
+    n: '3',
+    title: 'Como funciona para candidatos',
+    list: [
+      'Uso feito diretamente pelo nosso site, sem necessidade de aplicativo.',
+      'Currículo construído a partir das informações fornecidas pelo próprio candidato.',
+      'Uso 100% gratuito, sem cobrança para criar currículo ou receber propostas.',
+    ],
+  },
+  {
+    n: '4',
+    title: 'Como funciona para empresas parceiras',
+    list: [
+      'Acesso gratuito aos 5 primeiros currículos, sem necessidade de cartão de crédito.',
+      'Currículos adicionais e funcionalidades estendidas mediante plano pago.',
+      'Contato direto com o candidato, sem intermediário.',
+    ],
+  },
+  {
+    n: '5',
+    title: 'Responsabilidades do candidato',
+    body: `Fornecer informações verdadeiras e atualizadas ao construir seu currículo, utilizar a
+      plataforma de forma ética, e reconhecer que o contato de empresas parceiras depende da
+      disponibilidade de vagas compatíveis, sem prazo garantido para receber propostas.`,
+  },
+  {
+    n: '6',
+    title: 'Responsabilidades da empresa parceira',
+    body: `Utilizar os dados dos candidatos exclusivamente para recrutamento, sem repassá-los a
+      terceiros ou usá-los para outra finalidade, conduzindo o processo seletivo em conformidade
+      com a legislação trabalhista, sem práticas discriminatórias.`,
+  },
+  {
+    n: '7',
+    title: 'Limitação de responsabilidade',
+    intro: 'O Cria Currículo não pode ser responsabilizado por:',
+    list: [
+      'Veracidade das informações fornecidas por candidatos ou empresas parceiras.',
+      'Condutas das partes durante entrevistas ou após o contato inicial.',
+      'Decisões de contratação, não contratação ou desligamento.',
+    ],
+  },
+  {
+    n: '8',
+    title: 'Pagamento e cancelamento',
+    body: `Empresas parceiras podem cancelar planos pagos a qualquer momento pelos canais
+      oficiais. Nos termos do art. 49 do Código de Defesa do Consumidor, contratações feitas
+      online podem ser canceladas em até 7 dias corridos, com devolução integral dos valores
+      pagos.<br><br>
+      Estes termos são regidos pelas leis brasileiras, com foro eleito na comarca de
+      [a definir]. Dúvidas podem ser enviadas pelo nosso e-mail contato@criacurriculo.com.br.`,
+  },
+];
+---
+
+<section id="termsOfUse" class="terms">
+  <div class="terms__inner">
+    <p class="terms__label">Regras de uso</p>
+    <h2 class="terms__title">Termos de Uso</h2>
+    <p class="terms__updated">Última atualização: 11 de agosto de 2026</p>
+
+    <div class="terms__grid">
+      {cards.map((c) => (
+        <div class="terms__card">
+          <h3 class="terms__card-title">{c.n}. {c.title}</h3>
+          <div class="terms__card-divider"></div>
+          {c.intro && <p class="terms__card-text">{c.intro}</p>}
+          {c.body && <p class="terms__card-text" set:html={c.body} />}
+          {c.list && (
+            <ul class="terms__card-list">
+              {c.list.map((item) => (
+                <li><span class="terms__card-check" aria-hidden="true">✓</span>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .terms { background: var(--color-bg); padding: 80px 20px; }
+  .terms__inner { max-width: var(--max-w); margin: 0 auto; }
+
+  .terms__label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--color-cta);
+    text-align: center;
+    margin: 0 0 12px;
+  }
+  .terms__title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+    text-align: center;
+    margin: 0 0 16px;
+  }
+  .terms__updated {
+    font-size: 13px;
+    color: rgba(255, 255, 255, .45);
+    text-align: center;
+    margin: 0 0 56px;
+  }
+
+  .terms__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .terms__card {
+    background: var(--color-card);
+    border-radius: 12px;
+    padding: 32px;
+    border-left: 3px solid var(--color-cta);
+  }
+  .terms__card-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+  }
+  .terms__card-divider {
+    width: 36px;
+    height: 2px;
+    background: var(--color-cta);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .terms__card-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, .6);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .terms__card-text:last-child { margin-bottom: 0; }
+
+  .terms__card-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .terms__card-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .6);
+    line-height: 1.6;
+  }
+  .terms__card-check { color: var(--color-cta); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  @media (max-width: 640px) {
+    .terms__card { padding: 24px; }
+  }
+</style>

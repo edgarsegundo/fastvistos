@@ -1,0 +1,47 @@
+---
+// Emprego Aqui — Termos de Uso (página própria)
+import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
+import { siteConfig } from '../site-config.ts';
+
+import EmpregoNavbar from '../components/EmpregoNavbar.astro';
+import EmpregoFooter from '../components/EmpregoFooter.astro';
+import EmpregoChatBar from '../components/EmpregoChatBar.astro';
+import EmpregoTermsOfUse from '../components/EmpregoTermsOfUseSection.astro';
+import MetaPixel from '../components/MetaPixel.astro';
+
+const { bodyClass = '', bodyStyle = '' } = Astro.props;
+---
+
+<SharedHomeLayout
+    bodyClass={`${bodyClass} antialiased`}
+    bodyStyle={`${bodyStyle}`}
+    themeToggleDisable={true}
+    canonicalConf={`${siteConfig.site.canonical}termos-de-uso/`}
+    faviconPathFromConf={siteConfig.site.faviconPath}
+    seoFromConf={siteConfig.termsOfUsePageConfig.seo}
+    titleFromConf={siteConfig.termsOfUsePageConfig.seo.title}
+    descriptionFromConf={siteConfig.termsOfUsePageConfig.seo.description}
+    authorNameFromConf={siteConfig.site.authorName}
+    imageFromConf={null}
+    imageUrlFromConf={siteConfig.site.primaryImage.url}
+    imageCaptionFromConf={siteConfig.site.primaryImage.alt}
+    imageWidthFromConf={siteConfig.site.primaryImage.width}
+    imageHeightFromConf={siteConfig.site.primaryImage.height}
+>
+    <Fragment slot="head">
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'"
+        />
+        <MetaPixel />
+    </Fragment>
+
+    <EmpregoNavbar />
+    <main style="padding-top: 80px;">
+        <EmpregoTermsOfUse />
+    </main>
+    <EmpregoFooter />
+    <EmpregoChatBar />
+</SharedHomeLayout>

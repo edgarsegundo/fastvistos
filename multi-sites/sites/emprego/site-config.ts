@@ -252,6 +252,24 @@ export const siteConfig = {
         },
     },
 
+    termsOfUsePageConfig: {
+        seo: {
+            title: 'Termos de Uso | Emprego Aqui',
+            description: 'Regras de uso da plataforma Emprego Aqui para candidatos e empresas: como funciona, responsabilidades e limitações.',
+            themeColor: '#1F2237',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    width: 1200,
+                    height: 630,
+                    type: 'image/webp',
+                    alt: 'Termos de Uso — Emprego Aqui',
+                },
+            },
+        },
+    },
+
     socialMedia: {
         facebook: 'https://www.facebook.com/empregoaqui/',
         twitter: '@EmpregoAqui',

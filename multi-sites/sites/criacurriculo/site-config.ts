@@ -124,6 +124,42 @@ export const siteConfig = {
         },
     },
 
+    privacyPolicyPageConfig: {
+        seo: {
+            title: 'Política de Privacidade | Cria Currículo',
+            description: 'Saiba como a Cria Currículo coleta, utiliza, armazena e compartilha seus dados pessoais, em conformidade com a LGPD.',
+            themeColor: '#1e2237',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do criacurriculo
+                    width: 1200,
+                    height: 630,
+                    type: 'image/webp',
+                    alt: 'Política de Privacidade — Cria Currículo',
+                },
+            },
+        },
+    },
+
+    termsOfUsePageConfig: {
+        seo: {
+            title: 'Termos de Uso | Cria Currículo',
+            description: 'Regras de uso da plataforma Cria Currículo para candidatos e empresas parceiras: como funciona, responsabilidades e limitações.',
+            themeColor: '#1e2237',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do criacurriculo
+                    width: 1200,
+                    height: 630,
+                    type: 'image/webp',
+                    alt: 'Termos de Uso — Cria Currículo',
+                },
+            },
+        },
+    },
+
     blogPageConfig: {
         seo: {
             title: 'Blog | Currículo, Vagas e Recrutamento | Cria Currículo',

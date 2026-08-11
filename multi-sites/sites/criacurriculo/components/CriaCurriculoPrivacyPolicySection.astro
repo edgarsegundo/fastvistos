@@ -1,0 +1,340 @@
+---
+// Privacy Policy Section component — texto completo, no tema visual do Cria Currículo
+// (paleta --color-bg / --color-cta, tipografia Plus Jakarta Sans + Inter).
+// Espelha multi-sites/sites/emprego/components/EmpregoPrivacyPolicySection.astro,
+// adaptado ao modelo de negócio do Cria Currículo (captação gratuita de currículos +
+// conexão com empresas parceiras de recrutamento).
+//
+// TODO antes de publicar:
+// - CNPJ real do Cria Currículo (campo abaixo está com placeholder)
+// - Confirmar se o Cria Currículo de fato usa formulários via Meta/Instagram/Facebook
+//   (seção 6) — se não usar, remover essa seção
+const sections = [
+  {
+    n: '1',
+    title: 'Quem somos',
+    body: `
+      <p>O Cria Currículo é uma plataforma que capta currículos gratuitamente e conecta candidatos a empresas parceiras de recrutamento.</p>
+      <ul>
+        <li><strong>Controlador dos dados:</strong> Cria Currículo</li>
+        <li><strong>CNPJ:</strong> [a preencher]</li>
+        <li><strong>E-mail para assuntos de privacidade:</strong> contato@criacurriculo.com.br</li>
+      </ul>
+      <p>Para fins da Lei Geral de Proteção de Dados Pessoais — LGPD (Lei nº 13.709/2018), o Cria Currículo é responsável pelas decisões relacionadas ao tratamento dos dados pessoais coletados por meio de seus serviços.</p>
+    `,
+  },
+  {
+    n: '2',
+    title: 'Quais dados coletamos',
+    body: `
+      <p>Ao criar seu currículo pelo Cria Currículo, podemos coletar informações como:</p>
+      <ul>
+        <li>nome;</li>
+        <li>número de telefone/WhatsApp;</li>
+        <li>cidade onde mora;</li>
+        <li>cargo ou tipo de trabalho que procura;</li>
+        <li>experiência profissional;</li>
+        <li>disponibilidade para trabalho;</li>
+        <li>formação e qualificações profissionais;</li>
+        <li>habilidades e outras informações relacionadas à sua busca por emprego.</li>
+      </ul>
+      <p>Coletamos apenas as informações necessárias para as finalidades descritas nesta Política.</p>
+      <p>Não solicitamos intencionalmente dados pessoais sensíveis, como informações sobre saúde, religião, opinião política, origem racial ou étnica, entre outros dados classificados como sensíveis pela LGPD.</p>
+    `,
+  },
+  {
+    n: '3',
+    title: 'Para que utilizamos seus dados',
+    body: `
+      <p>Utilizamos os dados coletados principalmente para:</p>
+      <ul>
+        <li>criar seu currículo e organizar seu perfil profissional;</li>
+        <li>identificar oportunidades de trabalho compatíveis com seu perfil;</li>
+        <li>apresentar seu currículo a empresas parceiras de recrutamento;</li>
+        <li>permitir que empresas parceiras interessadas entrem em contato com você;</li>
+        <li>administrar e melhorar os serviços do Cria Currículo;</li>
+        <li>prevenir fraudes, abusos e usos indevidos da plataforma;</li>
+        <li>cumprir obrigações legais e atender solicitações de autoridades competentes.</li>
+      </ul>
+      <p>O Cria Currículo não utiliza seus dados para enviar mensagens de marketing ou oportunidades diretamente a você, salvo se você autorizar posteriormente esse tipo de comunicação.</p>
+    `,
+  },
+  {
+    n: '4',
+    title: 'Compartilhamento do seu currículo com empresas parceiras',
+    body: `
+      <p>Ao criar seu currículo pelo Cria Currículo, você poderá autorizar o compartilhamento de suas informações profissionais e de contato com empresas parceiras de recrutamento interessadas em contratar profissionais.</p>
+      <p>Podemos compartilhar, conforme a finalidade da oportunidade, informações como:</p>
+      <ul>
+        <li>nome;</li>
+        <li>telefone/WhatsApp;</li>
+        <li>cidade;</li>
+        <li>cargo ou área de interesse;</li>
+        <li>experiência profissional;</li>
+        <li>qualificações;</li>
+        <li>disponibilidade;</li>
+        <li>outras informações profissionais fornecidas por você.</li>
+      </ul>
+      <p>O objetivo desse compartilhamento é permitir que empresas parceiras interessadas em contratar profissionais entrem em contato diretamente com você.</p>
+      <p>O Cria Currículo não vende seus dados pessoais como uma lista de contatos. O compartilhamento ocorre no contexto da finalidade de conectar candidatos e empresas parceiras para oportunidades de trabalho.</p>
+      <p><strong>Ao autorizar o compartilhamento, você declara estar ciente de que uma empresa parceira poderá utilizar os dados disponibilizados para entrar em contato com você sobre uma oportunidade de trabalho.</strong></p>
+    `,
+  },
+  {
+    n: '5',
+    title: 'Quem poderá receber seus dados',
+    body: `
+      <p>Seus dados poderão ser disponibilizados para empresas parceiras de recrutamento que utilizam ou tenham acesso aos serviços do Cria Currículo e que estejam buscando profissionais compatíveis com as informações fornecidas.</p>
+      <p>Também podemos utilizar empresas prestadoras de serviços de tecnologia que nos auxiliem na operação da plataforma, como serviços de hospedagem, armazenamento, processamento de dados e infraestrutura tecnológica.</p>
+      <p>Esses prestadores tratam os dados conforme as finalidades e instruções aplicáveis aos serviços prestados.</p>
+    `,
+  },
+  {
+    n: '6',
+    title: 'Meta / Instagram / Facebook',
+    body: `
+      <p>Caso você preencha um formulário do Cria Currículo disponibilizado no Instagram ou Facebook, seus dados poderão ser coletados inicialmente pela Meta e posteriormente disponibilizados ao Cria Currículo para tratamento conforme a finalidade informada no formulário.</p>
+      <p>A utilização das plataformas da Meta também está sujeita às respectivas políticas e termos da Meta.</p>
+    `,
+  },
+  {
+    n: '7',
+    title: 'Por quanto tempo guardamos seus dados',
+    body: `
+      <p>Manteremos seus dados pelo período necessário para cumprir as finalidades descritas nesta Política.</p>
+      <p>Quando os dados não forem mais necessários, eles poderão ser eliminados ou anonimizados, salvo quando houver fundamento legal para sua conservação.</p>
+      <p>Por exemplo, determinados dados poderão precisar ser mantidos para cumprimento de obrigações legais, exercício regular de direitos ou outras hipóteses previstas na legislação.</p>
+    `,
+  },
+  {
+    n: '8',
+    title: 'Segurança',
+    body: `
+      <p>Adotamos medidas técnicas e administrativas destinadas a proteger os dados pessoais contra acessos não autorizados, perda, alteração, divulgação ou destruição indevida.</p>
+      <p>Apesar das medidas adotadas, nenhum sistema eletrônico pode ser considerado completamente seguro. Por isso, também recomendamos que você não forneça informações pessoais desnecessárias nos campos destinados à criação do seu currículo.</p>
+    `,
+  },
+  {
+    n: '9',
+    title: 'Seus direitos',
+    body: `
+      <p>Você possui diversos direitos relacionados aos seus dados pessoais, incluindo, conforme aplicável:</p>
+      <ul>
+        <li>confirmar se tratamos seus dados;</li>
+        <li>solicitar acesso aos seus dados;</li>
+        <li>solicitar correção de dados incorretos ou desatualizados;</li>
+        <li>solicitar informações sobre o compartilhamento dos seus dados;</li>
+        <li>solicitar anonimização, bloqueio ou eliminação de dados em determinadas situações;</li>
+        <li>revogar consentimentos quando o tratamento estiver baseado em consentimento;</li>
+        <li>solicitar informações sobre as finalidades e formas de tratamento;</li>
+        <li>exercer outros direitos previstos na LGPD.</li>
+      </ul>
+      <p>Alguns desses direitos podem estar sujeitos às exceções previstas na legislação, inclusive quando houver obrigação legal de conservação dos dados.</p>
+    `,
+  },
+  {
+    n: '10',
+    title: 'Como exercer seus direitos',
+    body: `
+      <p>Para solicitar informações sobre seus dados ou exercer seus direitos relacionados à privacidade, entre em contato pelo e-mail <strong>contato@criacurriculo.com.br</strong>.</p>
+      <p>Ao receber uma solicitação, poderemos pedir informações adicionais para confirmar a identidade do solicitante e proteger os dados pessoais contra acesso indevido.</p>
+    `,
+  },
+  {
+    n: '11',
+    title: 'Alterações nesta Política',
+    body: `
+      <p>Podemos atualizar esta Política de Privacidade periodicamente para refletir alterações em nossos serviços, procedimentos ou requisitos legais.</p>
+      <p>A versão mais recente estará sempre disponível nesta página, acompanhada da respectiva data de atualização.</p>
+    `,
+  },
+  {
+    n: '12',
+    title: 'Contato',
+    body: `
+      <p>Para dúvidas, solicitações ou questões relacionadas ao tratamento de dados pessoais:</p>
+      <ul>
+        <li><strong>Cria Currículo</strong></li>
+        <li>E-mail: contato@criacurriculo.com.br</li>
+      </ul>
+    `, // <li>CNPJ: [a preencher]</li>
+  },
+];
+---
+
+<section id="privacyPolicy" class="privacy">
+  <div class="privacy__inner">
+
+    <!-- Heading -->
+    <p class="privacy__label">Transparência &amp; Conformidade</p>
+    <h2 class="privacy__title">Política de Privacidade</h2>
+    <p class="privacy__intro">
+      O Cria Currículo valoriza a sua privacidade e está comprometido com a proteção dos seus
+      dados pessoais. Esta Política explica como coletamos, utilizamos, armazenamos e
+      compartilhamos seus dados quando você utiliza nossos serviços para criar seu currículo,
+      inclusive quando preenche formulários disponibilizados pelo Cria Currículo no Instagram,
+      Facebook ou em outras plataformas.
+    </p>
+    <p class="privacy__updated">Última atualização: 11 de agosto de 2026</p>
+
+    <!-- Sumário -->
+    <nav class="privacy__toc" aria-label="Sumário da Política de Privacidade">
+      <ol>
+        {sections.map((s) => (
+          <li><a href={`#privacy-${s.n}`}>{s.n}. {s.title}</a></li>
+        ))}
+      </ol>
+    </nav>
+
+    <!-- Seções -->
+    <div class="privacy__sections">
+      {sections.map((s) => (
+        <article class="privacy__section" id={`privacy-${s.n}`}>
+          <h3 class="privacy__section-title">
+            <span class="privacy__section-num">{s.n}</span>
+            {s.title}
+          </h3>
+          <div class="privacy__section-body" set:html={s.body} />
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .privacy { background: var(--color-bg-light); padding: 80px 20px; }
+  .privacy__inner { max-width: 860px; margin: 0 auto; }
+
+  .privacy__label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--color-cta);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .privacy__title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-bg);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .privacy__intro {
+    font-size: 16px;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 8px;
+  }
+  .privacy__updated {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  /* Sumário */
+  .privacy__toc {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 4px 24px rgba(30, 34, 55, .08);
+    margin-bottom: 48px;
+  }
+  .privacy__toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px 24px;
+  }
+  .privacy__toc a {
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-bg);
+    text-decoration: none;
+    line-height: 1.6;
+  }
+  .privacy__toc a:hover { color: var(--color-cta); }
+
+  /* Seções */
+  .privacy__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .privacy__section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(30, 34, 55, .08);
+    border-top: 3px solid var(--color-cta);
+    scroll-margin-top: 24px;
+  }
+  .privacy__section-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-bg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .privacy__section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: rgba(242, 139, 48, .1);
+    color: var(--color-cta);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .privacy__section-body {
+    font-size: 14.5px;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+  }
+  .privacy__section-body :global(p) { margin-bottom: 14px; }
+  .privacy__section-body :global(p:last-child) { margin-bottom: 0; }
+  .privacy__section-body :global(ul) {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .privacy__section-body :global(ul li) {
+    padding-left: 20px;
+    position: relative;
+  }
+  .privacy__section-body :global(ul li::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-cta);
+  }
+  .privacy__section-body :global(strong) { color: var(--color-bg); font-weight: 700; }
+
+  @media (max-width: 640px) {
+    .privacy__toc ol { grid-template-columns: 1fr; }
+    .privacy__section { padding: 24px; }
+  }
+</style>
