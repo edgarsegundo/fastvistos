@@ -9,9 +9,7 @@ import { siteConfig } from '../site-config.ts';
 const { url } = siteConfig.site.whatsapp;
 const whatsappUrl = url;
 
-// TODO: emprego usa um endpoint real (admin.empregoaqui.com.br/.../search-page/) pra abrir
-// a busca de candidatos; o criacurriculo ainda não tem essa ferramenta — link mocado por ora.
-const searchUrl = '#';
+const searchUrl = 'https://empresas.criacurriculo.com.br/api/posts/search-page/';
 ---
 
 <section class="b2b" id="para-empresas" aria-labelledby="b2b-title">
@@ -221,7 +219,21 @@ const searchUrl = '#';
     border-top: 1px solid rgba(255, 255, 255, .07);
   }
 
-  .b2b__actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .b2b__actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .btn {
+    font-family: var(--font-display);
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+  }
+  .btn--coral { color: #fff; background: var(--color-cta); }
+  .btn--coral:hover { background: var(--color-cta-dark); }
+  .btn--ghost { color: #fff; background: transparent; border: 1.5px solid rgba(255,255,255,.3); }
+  .btn--ghost:hover { border-color: rgba(255,255,255,.6); background: rgba(255,255,255,.06); }
   .b2b__actions .btn { font-size: 14px; padding: 13px 22px; }
 
   /* ── MOBILE: 2 blocos empilhados ── */
