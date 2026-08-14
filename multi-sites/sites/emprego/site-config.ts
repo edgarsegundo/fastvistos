@@ -10,7 +10,7 @@ export const siteConfig = {
         canonical: 'https://empregoaqui.com.br/',
         authorName: 'Edgar Rezende',
         primaryImage: {
-            url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+            url: 'https://empregoaqui.com.br/assets/images/v2/emprego-aqui-imagem-principal-1200x630.webp',
             width: 1200,
             height: 630,
             type: 'image/webp',

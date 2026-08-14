@@ -8,7 +8,7 @@ export const siteConfig = {
         faviconPath: '/favicon.ico',
         domain: 'criacurriculo.com.br',
         canonical: 'https://criacurriculo.com.br/',
-        authorName: 'Cria Currículo', // TODO: confirmar nome do autor/responsável editorial
+        authorName: 'Edgar Rezende',
         primaryImage: {
             url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do criacurriculo (1200x630)
             width: 1200,

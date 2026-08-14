@@ -95,6 +95,7 @@
     "multer": "^2.1.1",
     "openai": "^6.7.0",
     "pexels": "^1.4.0",
+    "png-to-ico": "^3.0.2",
     "prisma": "^6.15.0",
     "rehype-external-links": "^3.0.0",
     "remark": "^15.0.1",
