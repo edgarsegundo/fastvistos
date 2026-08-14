@@ -171,8 +171,19 @@ export interface FeaturesProps extends BaseBlockProps {
     items: FeatureItem[];
 }
 
+/** Aparência por elemento do Sobre — mesmo padrão de HeroElementStyles
+ *  (um prop `<elemento>Style` por elemento, cada um um wrapper de 1 chave). */
+export interface SobreElementStyles {
+    headingStyle?: { heading?: TextElementStyle };
+    /** Estilo do BLOCO de parágrafos inteiro (não por-parágrafo — `text` vira N `<p>`
+     *  derivados de 1 campo só, não um array do Puck; cor/fonte/alinhamento cascateiam
+     *  via CSS normalmente, `paragraphSpacing` só afeta o espaço após o bloco todo). */
+    textStyle?: { text?: TextElementStyle };
+    imageStyle?: { image?: MediaElementStyle };
+}
+
 /** Sobre/Apresentação — texto + imagem opcional ao lado. */
-export interface SobreProps extends BaseBlockProps {
+export interface SobreProps extends BaseBlockProps, SobreElementStyles {
     heading?: string;
     text: string;
     imageUrl?: string;
@@ -219,17 +230,36 @@ export interface FaqProps extends BaseBlockProps {
     items: FaqItem[];
 }
 
+/** Aparência por elemento do CTA final. */
+export interface CtaElementStyles {
+    titleStyle?: { title?: TextElementStyle };
+    subtitleStyle?: { subtitle?: TextElementStyle };
+    ctaStyle?: { cta?: ButtonElementStyle };
+}
+
 /** CTA final. */
-export interface CtaProps extends BaseBlockProps {
+export interface CtaProps extends BaseBlockProps, CtaElementStyles {
     title: string;
     subtitle?: string;
     ctaText?: string;
     ctaHref?: string;
 }
 
+/** Aparência por elemento do Contato — um texto simples por campo de contato
+ *  (telefone/whatsapp/e-mail/endereço/horário), mais o mapa como mídia. */
+export interface ContatoElementStyles {
+    headingStyle?: { heading?: TextElementStyle };
+    phoneStyle?: { phone?: TextElementStyle };
+    whatsappStyle?: { whatsapp?: TextElementStyle };
+    emailStyle?: { email?: TextElementStyle };
+    addressStyle?: { address?: TextElementStyle };
+    hoursStyle?: { hours?: TextElementStyle };
+    mapStyle?: { map?: MediaElementStyle };
+}
+
 /** Contato display-only — telefone/WhatsApp/endereço/horário/mapa, SEM
  *  formulário que envia (o form real é fase própria). */
-export interface ContatoProps extends BaseBlockProps {
+export interface ContatoProps extends BaseBlockProps, ContatoElementStyles {
     heading?: string;
     phone?: string;
     whatsapp?: string;

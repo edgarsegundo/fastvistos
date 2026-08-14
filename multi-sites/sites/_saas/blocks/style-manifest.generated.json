@@ -28,6 +28,25 @@
       "helperTextStyle": "helperText",
       "ratingStyle": "rating",
       "trustBarStyle": "trustBar"
+    },
+    "Sobre": {
+      "headingStyle": "heading",
+      "textStyle": "text",
+      "imageStyle": "image"
+    },
+    "Cta": {
+      "titleStyle": "title",
+      "subtitleStyle": "subtitle",
+      "ctaStyle": "cta"
+    },
+    "Contato": {
+      "headingStyle": "heading",
+      "phoneStyle": "phone",
+      "whatsappStyle": "whatsapp",
+      "emailStyle": "email",
+      "addressStyle": "address",
+      "hoursStyle": "hours",
+      "mapStyle": "map"
     }
   }
 }
