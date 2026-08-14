@@ -98,6 +98,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'tenancy.middleware.CurrentClientMiddleware',
+    'vitrine_core.middleware.AutoSyncSiteMiddleware',  # dev: sincroniza Site com host automaticamente
 ]
 
 AUTHENTICATION_BACKENDS = [
