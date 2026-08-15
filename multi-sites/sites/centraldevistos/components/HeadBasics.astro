@@ -129,6 +129,7 @@ const imageType = getImageType(imageUrlValidated ?? '');
     imageType={imageType}
     imageAlt={imageCaption}
     siteName={siteConfig?.site.siteName}
+    fbAppId={siteConfig.verification?.facebookAppId}
     type={seo.openGraph?.type}
     locale={siteConfig.site.locale}
     author={authorName}

@@ -302,6 +302,10 @@ export const siteConfig = {
 
     verification: {
         googleSiteVerification: '4mijW5761WZ6vWOjZQUEWgweTpAfpAzSNAjfZLSXyxk',
+        // fb:app_id exigido pelo Meta Sharing Debugger. Crie um app em
+        // https://developers.facebook.com/apps/ (tipo "Business" ou "Consumer")
+        // e cole aqui o "ID do Aplicativo" (App ID, numérico).
+        facebookAppId: '',
     },
 
     features: {

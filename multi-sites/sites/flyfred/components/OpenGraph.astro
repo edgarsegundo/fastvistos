@@ -16,6 +16,7 @@ export interface Props {
     imageType?: string; // Open Graph image MIME type (optional)
     imageAlt?: string; // Open Graph image alt text (optional)
     siteName?: string;
+    fbAppId?: string; // Facebook App ID, required by Meta's Sharing Debugger (fb:app_id)
     type?:
         | 'website'
         | 'article'
@@ -59,6 +60,7 @@ const {
     imageType,
     imageAlt,
     siteName,
+    fbAppId,
     type = 'website',
     locale = 'pt-BR',
     author,
@@ -101,6 +103,7 @@ const {
 
 {siteName && <meta property="og:site_name" content={siteName} />}
 <meta property="og:locale" content={locale} />
+{fbAppId && <meta property="fb:app_id" content={fbAppId} />}
 
 
 {type === 'article' && author && <meta property="article:author" content={author} />}
