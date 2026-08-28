@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
 
     lines.push(`# ${siteConfig.site.siteName}`);
     lines.push('');
-    lines.push(siteConfig.homePageConfig.seo.description);
+    lines.push(`> ${siteConfig.homePageConfig.seo.description}`);
     lines.push('');
     lines.push('## Páginas');
     lines.push('');
