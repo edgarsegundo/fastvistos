@@ -471,6 +471,15 @@ async function syncBlogToSite(siteId) {
         console.error(`⚠️  Warning: Could not copy content-processor.ts to ${siteId}/lib/:`, contentProcessorErr);
     }
 
+    // Copy llms.txt.ts endpoint to site pages directory
+    try {
+        const llmsTxtContent = await fs.readFile(join(CORE_PAGES_DIR, 'llms.txt.ts'), 'utf-8');
+        await fs.writeFile(join(sitePagesDir, 'llms.txt.ts'), llmsTxtContent);
+        console.log(`📄 Copied llms.txt.ts to ${siteId}/pages/`);
+    } catch (llmsTxtErr) {
+        console.error(`⚠️  Warning: Could not copy llms.txt.ts to ${siteId}/pages/:`, llmsTxtErr);
+    }
+
     console.log(`✅ Blog synced to ${siteId}`);
 }
 

@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
 
+# LLM/AI agent discovery
+Allow: /llms.txt
+
 # Sitemap location
 Sitemap: https://criacurriculo.com.br/sitemap-index.xml
 
