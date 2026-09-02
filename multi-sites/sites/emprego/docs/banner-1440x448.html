@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Banner Emprego Aqui — Para Empresas 1440x448</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#14172a;
+    --cta:#F28B30;
+    --cta-strong:#B25C08;
+    --display:'Plus Jakarta Sans', system-ui, sans-serif;
+    --body:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0b0d18}
+  body{font-family:var(--body);-webkit-font-smoothing:antialiased}
+
+  /* O banner tem tamanho FIXO: é exatamente a área capturada. */
+  .banner{
+    position:relative;
+    width:1440px;height:448px;
+    overflow:hidden;
+  }
+  .banner__bg{
+    position:absolute;inset:0;
+    background-image:url('../../../../public/emprego/assets/images/v2/emprego-aqui-empresas-bg-secao.webp');
+    background-size:cover;background-position:center 35%;
+  }
+  .banner__overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(100deg, rgba(20,23,42,.94) 0%, rgba(20,23,42,.82) 46%, rgba(20,23,42,.40) 100%);
+  }
+  .banner__inner{
+    position:relative;z-index:2;height:100%;
+    display:grid;grid-template-columns:1fr 468px;gap:56px;align-items:center;
+    padding:0 64px;
+  }
+
+  /* ── Esquerda ── */
+  .label{
+    font-family:var(--display);font-size:12px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--cta);
+    margin-bottom:14px;
+  }
+  .title{
+    font-family:var(--display);font-size:52px;font-weight:800;line-height:1.06;
+    color:#fff;letter-spacing:-.01em;margin-bottom:18px;
+  }
+  .title em{font-style:normal;color:var(--cta)}
+  .sub{
+    font-size:15px;line-height:1.65;color:rgba(255,255,255,.66);max-width:470px;
+    margin-bottom:22px;
+  }
+  .cta{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--display);font-size:15px;font-weight:700;color:#fff;
+    background:var(--cta-strong);border-radius:10px;padding:14px 26px;
+    text-decoration:none;box-shadow:0 10px 26px rgba(178,92,8,.35);
+  }
+  .cta svg{flex-shrink:0}
+
+  /* ── Card direita ── */
+  .card{
+    background:rgba(20,23,42,.86);
+    border:1px solid rgba(255,255,255,.11);
+    border-radius:18px;
+    box-shadow:0 28px 70px rgba(0,0,0,.5);
+    padding:22px 24px;
+  }
+  .free{
+    display:flex;align-items:center;gap:12px;
+    background:linear-gradient(135deg, rgba(242,139,48,.20) 0%, rgba(242,139,48,.08) 100%);
+    border:1px solid rgba(242,139,48,.36);
+    border-radius:10px;padding:12px 14px;margin-bottom:16px;
+  }
+  .free__icon{
+    width:36px;height:36px;border-radius:8px;flex-shrink:0;
+    background:rgba(242,139,48,.22);color:var(--cta);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .free__title{font-family:var(--display);font-size:14px;font-weight:800;color:var(--cta);margin-bottom:2px}
+  .free__sub{font-size:12px;line-height:1.45;color:rgba(255,255,255,.62)}
+  .free__sub strong{color:#fff;font-weight:700}
+
+  .list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
+  .item{display:flex;align-items:flex-start;gap:11px}
+  .check{
+    width:20px;height:20px;border-radius:50%;flex-shrink:0;margin-top:1px;
+    background:rgba(242,139,48,.18);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .item p{font-size:13px;line-height:1.5;color:rgba(255,255,255,.72)}
+  .item strong{color:#fff;font-family:var(--display);font-weight:700}
+
+  .stats{display:flex;gap:10px}
+  .stat{
+    flex:1;text-align:center;padding:12px 10px;border-radius:10px;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  }
+  .stat__v{font-family:var(--display);font-size:22px;font-weight:800;color:var(--cta);line-height:1;margin-bottom:4px}
+  .stat__l{font-family:var(--display);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+</style>
+</head>
+<body>
+<div class="banner">
+  <div class="banner__bg"></div>
+  <div class="banner__overlay"></div>
+
+  <div class="banner__inner">
+    <div>
+      <p class="label">Para empresas</p>
+      <h1 class="title">Quando você precisa contratar,<br><em>precisa pra ontem.</em></h1>
+      <p class="sub">Sem filtrar 200 currículos. Sem marcar 3 entrevistas. Candidatos da sua cidade, prontos a começar — você fala direto com eles.</p>
+      <a class="cta" href="https://app.empregoaqui.com.br/buscar/">
+        Quero contratar agora
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="free">
+        <div class="free__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></div>
+        <div>
+          <div class="free__title">Experimente grátis agora</div>
+          <div class="free__sub">Acesse os <strong>5 primeiros currículos</strong> sem pagar nada. Sem cadastro, sem cartão.</div>
+        </div>
+      </div>
+
+      <ul class="list">
+        <li class="item">
+          <div class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <p><strong>Veja quem está disponível agora</strong> — candidatos da sua região</p>
+        </li>
+        <li class="item">
+          <div class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <p><strong>Onde mora, quanto espera ganhar, quando começa</strong> — antes de ligar</p>
+        </li>
+        <li class="item">
+          <div class="check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <p><strong>Fale direto com os candidatos</strong> — sem intermediário</p>
+        </li>
+      </ul>
+
+      <div class="stats">
+        <div class="stat"><div class="stat__v">2.500+</div><div class="stat__l">Empresas</div></div>
+        <div class="stat"><div class="stat__v">10k+</div><div class="stat__l">Candidatos</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
