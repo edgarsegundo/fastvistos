@@ -72,7 +72,12 @@
     "dev:watch:criacurriculo": "node dev-with-sync.js criacurriculo",
     "build:criacurriculo": "node sync-blog.js criacurriculo && SITE_ID=criacurriculo astro build && node postbuild-updatable.js criacurriculo",
     "preview:criacurriculo": "SITE_ID=criacurriculo astro preview",
-    "download-images:criacurriculo": "node download-blog-images.js criacurriculo"
+    "download-images:criacurriculo": "node download-blog-images.js criacurriculo",
+    "dev:contratar": "node sync-blog.js contratar && SITE_ID=contratar astro dev",
+    "dev:watch:contratar": "node dev-with-sync.js contratar",
+    "build:contratar": "node sync-blog.js contratar && SITE_ID=contratar astro build && node postbuild-updatable.js contratar",
+    "preview:contratar": "SITE_ID=contratar astro preview",
+    "download-images:contratar": "node download-blog-images.js contratar"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

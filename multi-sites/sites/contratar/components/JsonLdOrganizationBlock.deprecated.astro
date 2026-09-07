@@ -1,0 +1,40 @@
+---
+export function getOrganizationBlock({
+    disableOrganization,
+    orgId,
+    org,
+    logoId,
+    site,
+}: {
+    disableOrganization: boolean;
+    orgId: string;
+    org: {
+        name: string;
+        url: string;
+        logo: string;
+        logoWidth?: number;
+        logoHeight?: number;
+    };
+    logoId: string;
+    site: { language: string };
+}) {
+    if (disableOrganization) return null;
+    return {
+        '@type': 'Organization',
+        '@id': orgId,
+        name: org.name,
+        url: org.url,
+        logo: {
+            '@type': 'ImageObject',
+            inLanguage: site.language,
+            '@id': logoId,
+            url: org.logo,
+            contentUrl: org.logo,
+            ...(org.logoWidth ? { width: org.logoWidth } : {}),
+            ...(org.logoHeight ? { height: org.logoHeight } : {}),
+            ...(org.name ? { caption: org.name } : {}),
+        },
+        image: { '@id': logoId },
+    };
+}
+---
