@@ -1,6 +1,6 @@
 /*
   arquivo de customização deste site — estende e sobrescreve o global.css.
-  
+
   Use este arquivo para:
   - Adicionar cores e fontes da marca via @theme
   - Sobrescrever variáveis do global.css via @theme
@@ -21,63 +21,51 @@
 
   /* =====================
      CORES DA MARCA
+     — usadas diretamente pelos componentes Contratar*.astro
+       (migrados de arquivos_refatorados/, baseados no emprego)
      ===================== */
 
-  /* Cor principal — botões, links, destaques */
-  --color-primary-50:  ;
-  --color-primary-100: ;
-  --color-primary-200: ;
-  --color-primary-300: ;
-  --color-primary-400: ;
-  --color-primary-500: ; /* tom base → bg-primary-500, text-primary-500, etc. */
-  --color-primary-600: ;
-  --color-primary-700: ;
-  --color-primary-800: ;
-  --color-primary-900: ;
-  --color-primary-950: ;
+  /* Fundo escuro — hero, navbar, footer, "pra ontem" (mesmo tom que --color-bg-dark, contrato do body) */
+  --color-bg: #1e2237;
+  --color-bg-mid: #2c3154;   /* tom intermediário — avatares/mock do hero */
+  --color-bg-light: #f4f5f8; /* seções claras — como funciona, faq */
+  --color-card: #252a42;     /* cards sobre fundo escuro (painel do hero, card "por que ser parceiro") */
 
-  /* Cor secundária — CTAs, badges, elementos de apoio */
-  --color-secondary-50:  ;
-  --color-secondary-100: ;
-  --color-secondary-200: ;
-  --color-secondary-300: ;
-  --color-secondary-400: ;
-  --color-secondary-500: ; /* tom base */
-  --color-secondary-600: ;
-  --color-secondary-700: ;
-  --color-secondary-800: ;
-  --color-secondary-900: ;
-  --color-secondary-950: ;
+  /* Coral — CTA, badges, destaques */
+  --color-cta: #F28B30;
+  --color-cta-dark: #d4751f;
+
+  /* Texto secundário sobre fundo claro (ex: faq, "como funciona") */
+  --color-text-muted: #565c6e;
 
   /* =====================
      CORES SEMÂNTICAS
+     — contrato consumido pelo reset do body (global.css)
      ===================== */
 
   /* Texto */
-  --color-text:         ; /* corpo principal */
-  --color-text-muted:   ; /* secundário, legendas, metadados */
-  --color-text-inverse: ; /* texto sobre fundo escuro */
+  --color-text-main:    #1e2237; /* corpo principal sobre fundo claro */
+  --color-text-inverse: #ffffff; /* texto sobre fundo escuro */
 
   /* Backgrounds */
-  --color-bg:           ; /* fundo padrão do site */
-  --color-bg-alt:       ; /* seções alternadas (zebra pattern) */
-  --color-bg-dark:      ; /* seções escuras, hero */
+  --color-bg-dark:      #1e2237; /* contrato do body — mesmo tom de --color-bg acima */
 
   /* Bordas */
-  --color-border:       ; /* divisores, bordas de cards */
+  --color-border:       rgba(30, 34, 55, .08);
 
   /* Estados */
-  --color-success:      ;
-  --color-warning:      ;
-  --color-error:        ;
+  --color-success:      #34d399;
+  --color-warning:      #f59e0b;
+  --color-error:        #ef4444;
 
   /* =====================
      TIPOGRAFIA — FAMÍLIAS
      ===================== */
 
-  --font-sans:    ; /* corpo, parágrafos — sobrescreve o padrão do Tailwind */
-  --font-heading: ; /* títulos h1-h4 */
-  --font-mono:    ; /* código */
+  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif; /* corpo, parágrafos — contrato do body */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;    /* títulos, botões, labels (usado pelos componentes) */
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;    /* títulos h1-h4 */
+  --font-mono:    ui-monospace, monospace;
 
   /* =====================
      TIPOGRAFIA — TAMANHOS
@@ -174,6 +162,15 @@
 }
 
 /*
+  Largura máxima do container (.wrap) usado pelos componentes Contratar*.astro.
+  Não vira classe Tailwind automática (não é --container-*), por isso fica num
+  :root comum e é consumida via var() dentro do .wrap abaixo.
+*/
+:root {
+  --max-w: 1160px;
+}
+
+/*
   @layer base — use apenas para sobrescrever o reset do global.css.
   Ex: mudar line-height do body, background-color padrão, etc.
 */
@@ -186,6 +183,12 @@
   Ex: .btn-primary, .hero-section, .card-produto
 */
 @layer components {
+  /* Container centralizado usado por todos os componentes Contratar*.astro */
+  .wrap {
+    max-width: var(--max-w);
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
 }
 
 /*

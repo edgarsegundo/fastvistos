@@ -1,15 +1,11 @@
 ---
-// ContratarAqui — Landing Page B2B (empresas parceiras de recrutamento)
+// ContratarAqui — Termos de Uso (página própria)
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
-import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 import ContratarNavbar from '../components/ContratarNavbar.astro';
-import ContratarHero from '../components/ContratarHero.astro';
-import ContratarComoFunciona from '../components/ContratarComoFunciona.astro';
-import ContratarParaEmpresas from '../components/ContratarParaEmpresas.astro';
-import ContratarFaq from '../components/ContratarFaq.astro';
 import ContratarFooter from '../components/ContratarFooter.astro';
+import ContratarTermsOfUse from '../components/ContratarTermsOfUseSection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -18,11 +14,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     bodyClass={`${bodyClass} antialiased`}
     bodyStyle={`${bodyStyle}`}
     themeToggleDisable={true}
-    canonicalConf={siteConfig.site.canonical}
+    canonicalConf={`${siteConfig.site.canonical}termos-de-uso/`}
     faviconPathFromConf={siteConfig.site.faviconPath}
-    seoFromConf={siteConfig.homePageConfig.seo}
-    titleFromConf={siteConfig.homePageConfig.seo.title}
-    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    seoFromConf={siteConfig.termsOfUsePageConfig.seo}
+    titleFromConf={siteConfig.termsOfUsePageConfig.seo.title}
+    descriptionFromConf={siteConfig.termsOfUsePageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}
     imageFromConf={null}
     imageUrlFromConf={siteConfig.site.primaryImage.url}
@@ -37,13 +33,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
           onload="this.onload=null;this.rel='stylesheet'"
         />
-        <JsonLdHomePageBase faqList={[]} servicesList={[]} reviewsList={[]} disableReviews={false} />
     </Fragment>
 
     <ContratarNavbar />
-    <ContratarHero />
-    <ContratarComoFunciona />
-    <ContratarParaEmpresas />
-    <ContratarFaq />
+    <main style="padding-top: 80px;">
+        <ContratarTermsOfUse />
+    </main>
     <ContratarFooter />
 </SharedHomeLayout>

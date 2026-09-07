@@ -1,145 +1,178 @@
 // 🌐 Shared Site Config (site + branding + global stuff)
 export const siteConfig = {
     site: {
-        business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
-        id: 'fastvistos',
-        siteName: 'Fast Vistos',
+        business_id: '3b514325-d9f7-4bbe-af5e-a7750c6d9a07',
+        id: 'contratar',
+        siteName: 'ContratarAqui',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: 'fastvistos.com.br',
-        canonical: 'https://fastvistos.com.br/',
-        authorName: 'Daniela Otaviano',
+        domain: 'contrataraqui.com.br',
+        canonical: 'https://contrataraqui.com.br/',
+        authorName: 'Edgar Rezende',
         primaryImage: {
-            url: '/images/og-fast-vistos.jpg',
+            url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar (1200x630)
             width: 1200,
             height: 630,
-            type: 'image/jpeg',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+            type: 'image/webp',
+            alt: 'ContratarAqui — Captação gratuita de currículos e conexão com empresas parceiras de recrutamento'
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
-            width: 512,
-            height: 512,
+            url: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo-icone.svg',
+            alt: 'ContratarAqui',
+            width: 256,
+            height: 260,
         },
-        primaryColor: '#0070f3',
-        secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+        primaryColor: '#F28B30',
+        secondaryColor: '#1e2237',
+        thumbnailUrl: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo-icone.svg', // TODO: trocar por uma imagem retangular quando existir (ideal p/ social previews)
 
-        assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
+        assetsUrlBase: 'https://contrataraqui.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
-        priceRange: '$$', // e.g. $, $$, $$$, $$$$
+        priceRange: 'R$',
         openingHours: [
             'Mo-Fr 09:00-18:00',
             'Sa 09:00-13:00',
         ],
-        sameAs: [  // Social media profiles
-            'https://www.facebook.com/fastvistos/',
-            'https://x.com/FVistos32701',
-            'https://www.youtube.com/@FastVistos/shorts',
-        ],
+        sameAs: [], // TODO: preencher com redes sociais quando existirem
+
         geo: {
-            latitude: -22.8807734, // Latitude for the business location
-            longitude: -47.0596895, // Longitude for the business location
+            latitude: -22.8807734, // TODO: confirmar geo real do negócio
+            longitude: -47.0596895,
         },
         serviceArea: {
-            name: 'Campinas e região metropolitana de São Paulo',
+            name: '', // TODO: definir região de cobertura
         },
         aggregateRating: {
-            ratingValue: '5.0',
-            reviewCount: '277',
+            ratingValue: '0', // TODO: preencher quando houver avaliações reais
+            reviewCount: '0',
         },
 
         address: {
-            streetAddress: 'Av. Júlio Diniz, 257',
-            addressLocality: 'Taquaral, Campinas',
-            addressRegion: 'SP',
-            postalCode: '13075-420',
+            streetAddress: '', // TODO: preencher endereço, se aplicável
+            addressLocality: '',
+            addressRegion: '',
+            postalCode: '',
             addressCountry: 'BR',
         },
 
         contactPoint: {
-            telephone: '+551920422785',
-            telephoneFormatted: '+55 (19) 2042-2785',
+            telephone: '+5519988055816',
+            telephoneFormatted: '+55 (19) 98805-5816',
             contactType: 'Customer Service',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
-            },            
-            availableLanguage: ['Portuguese', 'English'],
-            email: 'contato@fastvistos.com.br',
+            },
+            availableLanguage: ['Portuguese'],
+            email: 'contato@contrataraqui.com.br',
         },
         whatsapp: {
-            telephone: '+551150283044',
-            telephoneFormatted: '+55 (11) 5028-3044',
+            telephone: '+5519988055816',
+            telephoneFormatted: '+55 (19) 98805-5816',
             contactType: 'customer support',
-            contactOption: "WhatsApp",
-            url: 'https://wa.me/551150283044',
+            contactOption: 'WhatsApp',
+            url: 'https://wa.me/5519988055816',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
             },
-            availableLanguage: ["pt-BR", "en"],
-            email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
+            availableLanguage: ['pt-BR'],
+            email: 'contato@contrataraqui.com.br',
         },
 
         socialMedia: {
-            facebook: 'https://www.facebook.com/fastvistos/',
-            twitter: '@yourtwitter',
+            facebook: '',
+            twitter: '',
             instagram: '',
             youtube: '',
         },
     },
 
     organization: {
-        id: 'https://fastvistos.com.br/#organization',
-        name: 'Fast Vistos',
-        url: 'https://fastvistos.com.br',
-        canonical: 'https://fastvistos.com.br/',
+        id: 'https://contrataraqui.com.br/#organization',
+        name: 'ContratarAqui',
+        url: 'https://contrataraqui.com.br',
+        canonical: 'https://contrataraqui.com.br/',
         logo: {
-            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas',
-            width: 530,
-            height: 67,
+            url: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo-icone.svg',
+            alt: 'ContratarAqui',
+            width: 256,
+            height: 260,
         },
-    },    
+    },
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
-            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
-            themeColor: '#0070f3',
+            title: 'ContratarAqui — Currículo Gratuito e Conexão com Empresas Parceiras de Recrutamento',
+            description: 'Captamos currículos gratuitamente e conectamos candidatos a empresas parceiras de recrutamento. Sem custo para o candidato, sem burocracia para quem contrata.',
+            themeColor: '#F28B30',
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '/images/og-fast-vistos.jpg',
+                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar
                     width: 1200,
                     height: 630,
-                    type: 'image/jpeg',
-                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+                    type: 'image/webp',
+                    alt: 'ContratarAqui — Captação gratuita de currículos e conexão com empresas parceiras de recrutamento'
                 },
-                title: 'Guia completo para tirar visto americano 🇺🇸',
-                description: 'Entenda como funciona o processo, documentos e entrevista para tirar o visto americano.'
+                title: 'ContratarAqui — Conectamos candidatos a empresas parceiras',
+                description: 'Captação gratuita de currículos e conexão direta com empresas parceiras de recrutamento.'
             }
+        },
+    },
+
+    privacyPolicyPageConfig: {
+        seo: {
+            title: 'Política de Privacidade | ContratarAqui',
+            description: 'Saiba como a ContratarAqui coleta, utiliza, armazena e compartilha seus dados pessoais, em conformidade com a LGPD.',
+            themeColor: '#1e2237',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar
+                    width: 1200,
+                    height: 630,
+                    type: 'image/webp',
+                    alt: 'Política de Privacidade — ContratarAqui',
+                },
+            },
+        },
+    },
+
+    termsOfUsePageConfig: {
+        seo: {
+            title: 'Termos de Uso | ContratarAqui',
+            description: 'Regras de uso da plataforma ContratarAqui para candidatos e empresas parceiras: como funciona, responsabilidades e limitações.',
+            themeColor: '#1e2237',
+            openGraph: {
+                type: 'website',
+                image: {
+                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar
+                    width: 1200,
+                    height: 630,
+                    type: 'image/webp',
+                    alt: 'Termos de Uso — ContratarAqui',
+                },
+            },
         },
     },
 
     blogPageConfig: {
         seo: {
-            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Central de Vistos',
-            description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
-            themeColor: '#0070f3',
-            canonical: 'https://centraldevistos.com/',
+            title: 'Blog | Currículo, Vagas e Recrutamento | ContratarAqui',
+            description: 'Dicas para montar um currículo melhor, entender processos seletivos e se conectar com empresas parceiras de recrutamento.',
+            themeColor: '#1e2237',
+            canonical: 'https://contrataraqui.com.br/',
             openGraph: {
                 type: 'blog',
                 tags: [
-                    'vistos internacionais',
-                    'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro'
+                    'currículo gratuito',
+                    'como fazer currículo',
+                    'vagas de emprego',
+                    'recrutamento',
                 ],
             }
         },
@@ -148,23 +181,23 @@ export const siteConfig = {
         },
         customStyles: {
             cssVars: {
-                '--blog-bg-color': '#4A4047',
+                '--blog-bg-color': '#1e2237',
             },
         },
     },
 
     blogPostConfig: {
         seo: {
-            themeColor: '#0070f3',
+            themeColor: '#F28B30',
             openGraph: {
                 type: 'article',
-                author: 'Fast Vistos',
-                section: 'Serviços de Vistos e Documentos',
+                author: 'ContratarAqui',
+                section: 'Currículo, Vagas e Recrutamento',
                 tags: [
-                    'vistos internacionais',
-                    'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro'
+                    'currículo gratuito',
+                    'como fazer currículo',
+                    'vagas de emprego',
+                    'recrutamento',
                 ],
             }
         },
@@ -174,18 +207,18 @@ export const siteConfig = {
     },
 
     socialMedia: {
-        facebook: 'https://facebook.com/fastvistos',
-        twitter: '@fastvistos',
-        instagram: 'https://instagram.com/fastvistos',
-        youtube: 'https://youtube.com/@fastvistos',
+        facebook: '',
+        twitter: '',
+        instagram: '',
+        youtube: '',
     },
 
     analytics: {
-        gtmId: 'GTM-59SRNCQD',
+        gtmId: '', // TODO: preencher quando existir (não copiado do criacurriculo de propósito)
     },
 
     verification: {
-        googleSiteVerification: '',
+        googleSiteVerification: '', // TODO: preencher quando existir
     },
 
     features: {
@@ -197,7 +230,7 @@ export const siteConfig = {
 
     customStyles: {
         cssVars: {
-            '--accent-color': '#ACCENT',
+            '--accent-color': '#F28B30',
         },
     },
 };

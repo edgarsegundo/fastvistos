@@ -1,15 +1,11 @@
 ---
-// ContratarAqui — Landing Page B2B (empresas parceiras de recrutamento)
+// ContratarAqui — Política de Privacidade (página própria)
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
-import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 
 import ContratarNavbar from '../components/ContratarNavbar.astro';
-import ContratarHero from '../components/ContratarHero.astro';
-import ContratarComoFunciona from '../components/ContratarComoFunciona.astro';
-import ContratarParaEmpresas from '../components/ContratarParaEmpresas.astro';
-import ContratarFaq from '../components/ContratarFaq.astro';
 import ContratarFooter from '../components/ContratarFooter.astro';
+import ContratarPrivacyPolicy from '../components/ContratarPrivacyPolicySection.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -18,11 +14,11 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     bodyClass={`${bodyClass} antialiased`}
     bodyStyle={`${bodyStyle}`}
     themeToggleDisable={true}
-    canonicalConf={siteConfig.site.canonical}
+    canonicalConf={`${siteConfig.site.canonical}politica-de-privacidade/`}
     faviconPathFromConf={siteConfig.site.faviconPath}
-    seoFromConf={siteConfig.homePageConfig.seo}
-    titleFromConf={siteConfig.homePageConfig.seo.title}
-    descriptionFromConf={siteConfig.homePageConfig.seo.description}
+    seoFromConf={siteConfig.privacyPolicyPageConfig.seo}
+    titleFromConf={siteConfig.privacyPolicyPageConfig.seo.title}
+    descriptionFromConf={siteConfig.privacyPolicyPageConfig.seo.description}
     authorNameFromConf={siteConfig.site.authorName}
     imageFromConf={null}
     imageUrlFromConf={siteConfig.site.primaryImage.url}
@@ -34,16 +30,14 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         <link
           rel="preload"
           as="style"
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
           onload="this.onload=null;this.rel='stylesheet'"
         />
-        <JsonLdHomePageBase faqList={[]} servicesList={[]} reviewsList={[]} disableReviews={false} />
     </Fragment>
 
     <ContratarNavbar />
-    <ContratarHero />
-    <ContratarComoFunciona />
-    <ContratarParaEmpresas />
-    <ContratarFaq />
+    <main style="padding-top: 80px;">
+        <ContratarPrivacyPolicy />
+    </main>
     <ContratarFooter />
 </SharedHomeLayout>
