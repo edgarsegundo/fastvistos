@@ -10,7 +10,7 @@ export const siteConfig = {
         canonical: 'https://empregoaqui.com.br/',
         authorName: 'Edgar Rezende',
         primaryImage: {
-            url: 'https://empregoaqui.com.br/assets/images/v2/emprego-aqui-imagem-principal-1200x630.webp',
+            url: 'https://empregoaqui.com.br/assets/images/home/home-page-main-image-empregoaqui-para-empresas.webp',
             width: 1200,
             height: 630,
             type: 'image/webp',
@@ -27,7 +27,7 @@ export const siteConfig = {
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+        thumbnailUrl: 'https://empregoaqui.com.br/assets/images/home/home-page-main-image-empregoaqui-para-empresas.webp',
 
         assetsUrlBase: 'https://empregoaqui.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
@@ -153,7 +153,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    url: 'https://empregoaqui.com.br/assets/images/home/home-page-main-image-empregoaqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
@@ -224,7 +224,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    url: 'https://empregoaqui.com.br/assets/images/home/home-page-main-image-empregoaqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
@@ -242,7 +242,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    url: 'https://empregoaqui.com.br/assets/images/home/home-page-main-image-empregoaqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
@@ -260,7 +260,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: 'https://empregoaqui.com.br/assets/images/ld-json/primary-image/home-page-main-image-emprego.webp',
+                    url: 'https://empregoaqui.com.br/assets/images/home/home-page-main-image-empregoaqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
