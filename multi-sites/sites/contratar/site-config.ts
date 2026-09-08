@@ -10,17 +10,17 @@ export const siteConfig = {
         canonical: 'https://contrataraqui.com.br/',
         authorName: 'Edgar Rezende',
         primaryImage: {
-            url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar (1200x630)
+            url: '/assets/images/home/home-page-main-image-contrataraqui-para-empresas.webp',
             width: 1200,
             height: 630,
             type: 'image/webp',
-            alt: 'ContratarAqui — Captação gratuita de currículos e conexão com empresas parceiras de recrutamento'
+            alt: 'ContratarAqui — Quando sua empresa precisa contratar, nós conectamos você a candidatos qualificados.',
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo-icone.svg',
+            url: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo.svg',
             alt: 'ContratarAqui',
             width: 256,
             height: 260,
@@ -112,7 +112,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar
+                    url: '/assets/images/home/home-page-main-image-contrataraqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
@@ -132,7 +132,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar
+                    url: '/assets/images/home/home-page-main-image-contrataraqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
@@ -150,7 +150,7 @@ export const siteConfig = {
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '/assets/images/logo/home-page-main-image-fastvistos-mulher-passaporte.webp', // TODO: trocar pela imagem principal do contratar
+                    url: '/assets/images/home/home-page-main-image-contrataraqui-para-empresas.webp',
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
