@@ -7,28 +7,27 @@
  */
 
 // Link para seção "Para empresas" (scroll âncora)
-const contactUrl = '#para-empresas';
+const contactUrl = 'https://app.empregoaqui.com.br/buscar';
 ---
 
 <header class="navbar" role="navigation" aria-label="Menu principal">
   <div class="navbar__inner wrap">
     <a href="/" class="navbar__logo" aria-label="ContratarAqui - página inicial">
       <img
-        src="/assets/images/logo/contratar-logo-icone.svg"
+        src="/assets/images/v2/contratar-aqui-logo.svg"
         alt=""
         class="navbar__logo-icon"
-        width="40"
-        height="40"
+        width="80"
+        height="80"
       />
-      <span class="navbar__logo-text">Contratar<span class="navbar__logo-text--accent">Aqui</span></span>
-      <span class="navbar__tag">Empresas parceiras</span>
+      <!-- <span class="navbar__logo-text">Contratar<span class="navbar__logo-text--accent">Aqui</span></span> -->
+      <!-- <span class="navbar__tag">Empresas parceiras</span> -->
     </a>
 
     <nav class="navbar__nav">
       <a href="#como-funciona" class="navbar__link">Como funciona</a>
-      <a href="#para-empresas" class="navbar__link">Por que ser parceiro</a>
       <a href="#faq" class="navbar__link">Dúvidas</a>
-      <a href={contactUrl} class="navbar__btn">Quero ser parceiro</a>
+      <a href={contactUrl} class="navbar__btn" target="_blank" rel="noopener noreferrer">Preciso contratar</a>
     </nav>
 
     <button
