@@ -74,7 +74,13 @@ iVBORw0KGgoAAAANSUhEUgAABXgAAAMXCAIAAAAPG6rVAAAgAElEQVR4nOy965Lkuo0uiguV1b1sLzv2
   <!-- Free banner -->
   <rect x="708" y="123" width="404" height="64" rx="10" fill="rgba(242,139,48,0.16)" stroke="rgba(242,139,48,0.4)"/>
   <rect x="720" y="135" width="40" height="40" rx="10" fill="rgba(242,139,48,0.25)"/>
-  <text x="740" y="162" font-family="Arial, sans-serif" font-size="19" font-weight="800" fill="#F28B30" text-anchor="middle">%</text>
+  <svg x="729" y="144" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="2" stroke-linecap="round">
+    <path d="M20 12V22H4V12"/>
+    <path d="M22 7H2v5h20V7z"/>
+    <path d="M12 22V7"/>
+    <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/>
+    <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>
+  </svg>
   <text x="772" y="149" font-family="Arial, sans-serif" font-size="15" font-weight="800" fill="#F28B30">Experimente grátis agora</text>
   <text x="772" y="168" font-family="Arial, sans-serif" font-size="12" font-weight="400" fill="rgba(255,255,255,0.65)">Acesse os 5 primeiros currículos sem pagar nada.</text>
 

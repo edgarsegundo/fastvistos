@@ -106,8 +106,8 @@ export const siteConfig = {
 
     homePageConfig: {
         seo: {
-            title: 'ContratarAqui — Currículo Gratuito e Conexão com Empresas Parceiras de Recrutamento',
-            description: 'Captamos currículos gratuitamente e conectamos candidatos a empresas parceiras de recrutamento. Sem custo para o candidato, sem burocracia para quem contrata.',
+            title: 'ContratarAqui — Contratação Sem Burocracia, Pra Ontem',
+            description: 'Sem filtrar 200 currículos, sem marcar entrevistas. Fale direto com candidatos da sua região. Acesse grátis os 5 primeiros currículos, sem cadastro.',
             themeColor: '#F28B30',
             openGraph: {
                 type: 'website',
@@ -116,10 +116,10 @@ export const siteConfig = {
                     width: 1200,
                     height: 630,
                     type: 'image/webp',
-                    alt: 'ContratarAqui — Captação gratuita de currículos e conexão com empresas parceiras de recrutamento'
+                    alt: 'ContratarAqui — Quando você precisa contratar, precisa pra ontem. Candidatos disponíveis na sua região.'
                 },
-                title: 'ContratarAqui — Conectamos candidatos a empresas parceiras',
-                description: 'Captação gratuita de currículos e conexão direta com empresas parceiras de recrutamento.'
+                title: 'ContratarAqui — Contrate Sem Burocracia',
+                description: 'Veja candidatos disponíveis na sua região e fale direto com eles. Acesse grátis os 5 primeiros currículos, sem cadastro e sem cartão.'
             }
         },
     },
