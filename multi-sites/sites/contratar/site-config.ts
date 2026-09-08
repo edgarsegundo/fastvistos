@@ -218,7 +218,7 @@ export const siteConfig = {
     },
 
     verification: {
-        googleSiteVerification: '', // TODO: preencher quando existir
+        googleSiteVerification: 'WXIlLRD2zq572jWB49qRzoAWXVbV9SYjkQ9rzmQXZNk', // TODO: preencher quando existir
     },
 
     features: {
