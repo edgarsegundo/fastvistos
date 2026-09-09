@@ -210,7 +210,7 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
       div.style.cssText = 'width:100%;aspect-ratio:1/1;flex-shrink:0;overflow:hidden;';
       div.innerHTML = `
         <img src="${thumbUrl}" alt="${alt}" loading="lazy"
-          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;"
           class="transition-transform duration-200 group-hover:scale-105"
           onerror="this.parentElement.style.display='none'"
           onload="this.nextElementSibling && typeof this.nextElementSibling.setAttribute === 'function' && (this.nextElementSibling.textContent = this.naturalWidth && this.naturalHeight ? this.naturalWidth + 'x' + this.naturalHeight : '')"
@@ -227,7 +227,7 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
   }
 
   function renderEmpty(msg) {
-    el.grid().innerHTML = `<p class="col-span-3 text-center text-gray-400 text-sm py-8">${msg}</p>`;
+    el.grid().innerHTML = `<p class="text-center text-gray-400 text-sm py-8" style="grid-column:1/-1;">${msg}</p>`;
   }
 
   async function onPhotoClick(photo, idx, largeUrl, alt) {

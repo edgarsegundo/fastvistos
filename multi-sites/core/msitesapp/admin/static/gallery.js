@@ -181,7 +181,7 @@ const GalleryOverlay = (() => {
     grid.innerHTML = '';
 
     if (images.length === 0) {
-      grid.innerHTML = '<p class="col-span-3 text-center text-gray-400 text-sm py-8">Nenhuma imagem encontrada.</p>';
+      grid.innerHTML = '<p class="text-center text-gray-400 text-sm py-8" style="grid-column:1/-1;">Nenhuma imagem encontrada.</p>';
       return;
     }
 
@@ -197,7 +197,7 @@ const GalleryOverlay = (() => {
           src="${imgUrl}"
           alt="${altText}"
           loading="lazy"
-          style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
+          style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain;"
           class="transition-transform duration-200 group-hover:scale-105"
           onload="this.nextElementSibling && typeof this.nextElementSibling.setAttribute === 'function' && (this.nextElementSibling.textContent = this.naturalWidth && this.naturalHeight ? this.naturalWidth + 'x' + this.naturalHeight : '')"
         >

@@ -27,9 +27,11 @@
     .cropper-container { max-height: 260px !important; }
 
     /* Gallery grid — classe separada para não conflitar com hidden (display:none) */
+    /* auto-fill mantém as células pequenas (~150px) em qualquer largura de tela:
+       em telas largas surgem mais colunas em vez de 3 colunas gigantes. */
     .gallery-grid-layout {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 6px;
       align-content: start;
     }
@@ -50,7 +52,7 @@
     /* Stock gallery grid */
     .stock-grid-layout {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 6px;
       align-content: start;
     }
