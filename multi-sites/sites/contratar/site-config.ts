@@ -215,6 +215,7 @@ export const siteConfig = {
 
     analytics: {
         gtmId: '', // TODO: preencher quando existir (não copiado do criacurriculo de propósito)
+        facebookPixelId: '1635838731405802',
     },
 
     verification: {
