@@ -269,31 +269,36 @@
   <div id="overlay-gallery" class="overlay">
 
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
+    <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-gray-100 shrink-0">
       <button id="btn-close-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
       <span class="font-semibold text-sm">Galeria</span>
-      <!-- Toggle grade / carousel -->
-      <div class="flex rounded-lg overflow-hidden border border-gray-200 text-sm">
-        <button id="btn-gallery-grid"
-          class="px-3 h-8 transition-colors" title="Grade">⊞</button>
-        <button id="btn-gallery-carousel"
-          class="px-3 h-8 transition-colors border-l border-gray-200" title="Carousel">▶</button>
-      </div>
-    </div>
 
-    <!-- Barra de busca por nome do arquivo -->
-    <div id="gallery-search-bar" class="flex gap-2 px-3 py-2 border-b border-gray-100 shrink-0">
-      <input
-        id="gallery-search-input"
-        type="text"
-        placeholder="Buscar por nome do arquivo..."
-        class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-blue-400 transition-colors"
-      >
-      <button
-        id="btn-gallery-search"
-        class="h-10 px-4 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors shrink-0">
-        🔍
-      </button>
+      <!-- Busca + toggle de visualização agrupados à direita -->
+      <div class="flex items-center gap-2 ml-auto">
+        <!-- Barra de busca por nome do arquivo -->
+        <div id="gallery-search-bar" class="flex gap-1 shrink-0">
+          <input
+            id="gallery-search-input"
+            type="text"
+            placeholder="Buscar por nome do arquivo..."
+            style="width:200px"
+            class="border border-gray-200 rounded-xl px-3 h-8 text-sm focus:outline-none focus:border-blue-400 transition-colors"
+          >
+          <button
+            id="btn-gallery-search"
+            class="h-8 px-3 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors shrink-0">
+            🔍
+          </button>
+        </div>
+
+        <!-- Toggle grade / carousel -->
+        <div class="flex rounded-lg overflow-hidden border border-gray-200 text-sm shrink-0">
+          <button id="btn-gallery-grid"
+            class="px-3 h-8 transition-colors" title="Grade">⊞</button>
+          <button id="btn-gallery-carousel"
+            class="px-3 h-8 transition-colors border-l border-gray-200" title="Carousel">▶</button>
+        </div>
+      </div>
     </div>
 
     <!-- Spinner -->
@@ -365,8 +370,24 @@
       <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
       <span class="font-semibold text-sm">Imagens Stock</span>
 
-      <!-- Abas + busca agrupadas à direita -->
+      <!-- Busca + abas agrupadas à direita -->
       <div class="flex items-center gap-2 ml-auto">
+        <!-- Barra de busca -->
+        <div id="stock-search-bar" class="flex gap-1 shrink-0">
+          <input
+            id="stock-search-input"
+            type="text"
+            placeholder="Buscar imagens..."
+            style="width:200px"
+            class="border border-gray-200 rounded-xl px-3 h-8 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
+          >
+          <button
+            id="btn-stock-search"
+            class="h-8 px-3 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
+            🔍
+          </button>
+        </div>
+
         <!-- Abas Pexels / Pixabay / Unsplash / URL -->
         <div class="flex rounded-lg overflow-hidden border border-gray-200 text-xs shrink-0">
           <button id="tab-stock-pexels"
@@ -384,22 +405,6 @@
           <button id="tab-stock-url"
             class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
             URL
-          </button>
-        </div>
-
-        <!-- Barra de busca -->
-        <div id="stock-search-bar" class="flex gap-1 shrink-0">
-          <input
-            id="stock-search-input"
-            type="text"
-            placeholder="Buscar imagens..."
-            style="width:200px"
-            class="border border-gray-200 rounded-xl px-3 h-8 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
-          >
-          <button
-            id="btn-stock-search"
-            class="h-8 px-3 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
-            🔍
           </button>
         </div>
       </div>
