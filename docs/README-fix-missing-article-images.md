@@ -47,25 +47,15 @@ DRY RUN concluído — 7 artigos seriam atualizados.
 
 ## ⚠️ Rodar na VPS, não local
 
-A porta 3306 do MySQL foi fechada para acesso externo (só aceita conexão vindo da própria VPS). Por isso, rodar este script direto da máquina local não funciona mais — o `DATABASE_URL` do `.env` local aponta pro IP público da VPS (`72.60.57.150`) e a conexão vai falhar com `Can't reach database server`.
-
-**Solução:** entrar na VPS via SSH e rodar o script de lá, sobrescrevendo o `DATABASE_URL` para usar `127.0.0.1` (a porta continua aberta localmente na própria VPS, só não é mais exposta pra fora):
+Porta 3306 fechada externamente. Rodar via SSH na VPS com `DATABASE_URL` apontando pra `127.0.0.1`:
 
 ```sh
 ssh edgar@72.60.57.150
 cd ~/Repos/fastvistos
-
-DATABASE_URL="mysql://microservicesadm_appuser:sT4-J9fb1OtYzN1Rq1qe@127.0.0.1/microservicesadm" \
-  node scripts/fix-missing-article-images.js fastvistos --dry-run
-
-# Se o dry-run parecer certo, roda de verdade:
-DATABASE_URL="mysql://microservicesadm_appuser:sT4-J9fb1OtYzN1Rq1qe@127.0.0.1/microservicesadm" \
-  node scripts/fix-missing-article-images.js fastvistos
+DATABASE_URL="mysql://microservicesadm_appuser:sT4-J9fb1OtYzN1Rq1qe@127.0.0.1/microservicesadm" node scripts/fix-missing-article-images.js emprego
 ```
 
-### E depois?
-
-Depois de rodar o script na VPS (que só mexe no banco de dados), o `pub fastvistos` local volta a funcionar normalmente — ele builda e publica o site estático, não depende de acessar o MySQL da VPS diretamente.
+Depois disso, `pub fastvistos` local funciona normal (só builda/publica estático, não toca no MySQL).
 
 ## Como a imagem é escolhida
 
