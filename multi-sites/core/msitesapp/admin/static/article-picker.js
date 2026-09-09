@@ -13,6 +13,7 @@ function getQueryParam(name) {
 }
 
 const token = getQueryParam('token');
+const group = getQueryParam('group');
 const preselectedBusinessId = getQueryParam('business_id');
 
 const state = {
@@ -160,9 +161,9 @@ function renderArticles(articles) {
 }
 
 function goToArticle(article) {
-  const business = state.businesses.find(b => b.id === article.business_id);
-  const group = business ? business.name : '';
-
+  // `group` não tem relação com business/artigo no banco — é a categoria de
+  // imagens digitada manualmente na URL original, então só é repassada adiante,
+  // nunca recalculada (senão a galeria do artigo de destino fica vazia).
   const params = new URLSearchParams();
   params.set('blog_article_id', article.id);
   if (token) params.set('token', token);

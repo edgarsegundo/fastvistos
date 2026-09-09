@@ -481,14 +481,25 @@
   <script src="static/stock-gallery.js"></script>
   <script type="module">
     import { fetchArticleMeta } from './static/get-article-title.js';
-    const blogArticleId = new URLSearchParams(window.location.search).get('blog_article_id');
-    const token = new URLSearchParams(window.location.search).get('token');
+    const currentParams = new URLSearchParams(window.location.search);
+    const blogArticleId = currentParams.get('blog_article_id');
+    const token = currentParams.get('token');
+    const group = currentParams.get('group');
+
+    // O link "Trocar artigo" sempre repassa o `group` atual (categoria de imagens
+    // digitada manualmente na URL original) — ele não tem relação com business_id
+    // no banco, então não pode ser recalculado, só propagado.
+    function buildPickerUrl(businessId) {
+      const params = new URLSearchParams();
+      if (token) params.set('token', token);
+      if (group) params.set('group', group);
+      if (businessId) params.set('business_id', businessId);
+      return `article-picker?${params.toString()}`;
+    }
 
     const linkEl = document.getElementById('link-article-picker');
     if (linkEl) {
-      const pickerParams = new URLSearchParams();
-      if (token) pickerParams.set('token', token);
-      linkEl.href = `article-picker?${pickerParams.toString()}`;
+      linkEl.href = buildPickerUrl();
     }
 
     if (blogArticleId) {
@@ -497,10 +508,7 @@
         if (titleEl) titleEl.textContent = (data && data.title) || '(Sem título)';
 
         if (linkEl && data && data.business_id) {
-          const pickerParams = new URLSearchParams();
-          if (token) pickerParams.set('token', token);
-          pickerParams.set('business_id', data.business_id);
-          linkEl.href = `article-picker?${pickerParams.toString()}`;
+          linkEl.href = buildPickerUrl(data.business_id);
         }
       });
     }
