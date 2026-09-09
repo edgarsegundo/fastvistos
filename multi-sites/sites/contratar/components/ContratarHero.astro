@@ -28,23 +28,33 @@ const candidatos = [
       </div>
 
       <h1 class="hero__title" id="hero-title">
-        Quando você precisa<br/>contratar, precisa<br/><em>pra ontem.</em>
+        Você não está<br/><em>sozinho nisso.</em>
       </h1>
 
       <p class="hero__sub">
-        Sem filtrar 200 currículos. Sem marcar 3 entrevistas.<br/>
-        Sem esperar enquanto a equipe fica sobrecarregada.
+        8 em cada 10 donos de negócio no Brasil travam na hora de
+        contratar. A diferença é quem já tem onde procurar.
       </p>
 
+      <div class="hero__stat">
+        <span class="hero__stat-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          Dado de mercado
+        </span>
+        <span class="hero__stat-value">80%</span>
+        <span class="hero__stat-text">dos empregadores brasileiros relatam dificuldade para contratar.</span>
+        <span class="hero__stat-source">Fonte: ManpowerGroup, 2026</span>
+      </div>
+
       <div class="hero__actions">
-        <a href={contactUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Quero contratar</a>
+        <a href={contactUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Ver quem está disponível →</a>
         <a href="#como-funciona" class="btn btn--ghost">Ver como funciona</a>
       </div>
 
       <div class="hero__trust">
         <span class="hero__trust-item">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Captação de currículos contínua
+          5 primeiros currículos grátis
         </span>
         <span class="hero__trust-item">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
@@ -121,7 +131,48 @@ const candidatos = [
   }
   .hero__title em { font-style: normal; color: var(--color-cta); }
 
-  .hero__sub { font-size: 17px; color: rgba(255,255,255,.68); max-width: 480px; margin: 0 0 32px; }
+  .hero__sub { font-size: 17px; color: rgba(255,255,255,.68); max-width: 480px; margin: 0 0 24px; }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius-lg);
+    padding: 18px 22px 20px;
+    max-width: 420px;
+    margin-bottom: 28px;
+  }
+  .hero__stat-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    margin-bottom: 10px;
+  }
+  .hero__stat-value {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 800;
+    color: var(--color-cta);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .hero__stat-text { font-size: 15px; color: rgba(255,255,255,.75); line-height: 1.45; }
+  .hero__stat-source {
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 11px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    margin-top: 10px;
+  }
 
   .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
   .btn {
