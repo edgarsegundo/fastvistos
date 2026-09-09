@@ -20,10 +20,10 @@ export const siteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://empregoaqui.com.br/assets/images/ld-json/logo/logo-emprego-aqui.png',
+            url: 'https://empregoaqui.com.br/assets/images/logo/empregoaqui-circular-logo.svg',
             alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
-            width: 300,
-            height: 60,
+            width: 512,
+            height: 512,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
@@ -138,10 +138,10 @@ export const siteConfig = {
         url: 'https://empregoaqui.com.br',
         canonical: 'https://empregoaqui.com.br/',
         logo: {
-            url: 'https://empregoaqui.com.br/assets/images/ld-json/logo/logo-emprego-aqui.png',
+            url: 'https://empregoaqui.com.br/assets/images/logo/empregoaqui-circular-logo.svg',
             alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
-            width: 300,
-            height: 60,
+            width: 512,
+            height: 512,
         },
     },
 
