@@ -20,14 +20,14 @@ export const siteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo.svg',
+            url: 'https://contrataraqui.com.br/assets/images/logo/contrataraqui-logo.svg',
             alt: 'ContratarAqui',
-            width: 256,
-            height: 260,
+            width: 550,
+            height: 303,
         },
         primaryColor: '#F28B30',
         secondaryColor: '#1e2237',
-        thumbnailUrl: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo-icone.svg', // TODO: trocar por uma imagem retangular quando existir (ideal p/ social previews)
+        thumbnailUrl: 'https://contrataraqui.com.br/assets/images/logo/contrataraqui-circular-logo.svg', // TODO: trocar por uma imagem retangular quando existir (ideal p/ social previews)
 
         assetsUrlBase: 'https://contrataraqui.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
 
@@ -97,10 +97,10 @@ export const siteConfig = {
         url: 'https://contrataraqui.com.br',
         canonical: 'https://contrataraqui.com.br/',
         logo: {
-            url: 'https://contrataraqui.com.br/assets/images/logo/contratar-logo-icone.svg',
+            url: 'https://contrataraqui.com.br/assets/images/logo/contrataraqui-circular-logo.svg',
             alt: 'ContratarAqui',
-            width: 256,
-            height: 260,
+            width: 512,
+            height: 512,
         },
     },
 

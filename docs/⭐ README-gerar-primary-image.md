@@ -48,7 +48,7 @@ numa imagem estática de compartilhamento).
 5. **Aplicar um overlay escuro em gradiente** (`linearGradient`, mais opaco à esquerda onde fica o
    texto, mais transparente à direita) — mesma lógica do `.b2b__overlay` do componente original,
    pra garantir contraste do texto sobre a foto.
-6. **Embutir o logo real da marca**: abri `public/contratar/assets/images/logo/contratar-logo.svg`,
+6. **Embutir o logo real da marca**: abri `public/contratar/assets/images/logo/contrataraqui-logo.svg`,
    extraí só o conteúdo interno (removendo `<?xml?>`, `<sodipodi:namedview>` e atributos
    `sodipodi:*`, que quebram o parser XML quando aninhados sem o namespace declarado), e colei como
    `<svg>` aninhado (`viewBox` original + `x`/`y`/`width`/`height` novos) no lugar de um texto
