@@ -345,11 +345,17 @@ const orgBlock = !disableOrganization && {
                       'Campinas e região metropolitana de São Paulo',
               },
 
-              aggregateRating: {
-                  '@type': 'AggregateRating',
-                  ratingValue: siteConfig.site?.aggregateRating?.ratingValue,
-                  reviewCount: siteConfig.site?.aggregateRating?.reviewCount,
-              },
+              ...(Number(siteConfig.site?.aggregateRating?.reviewCount) > 0
+                  ? {
+                        aggregateRating: {
+                            '@type': 'AggregateRating',
+                            ratingValue: Number(siteConfig.site.aggregateRating.ratingValue),
+                            reviewCount: Number(siteConfig.site.aggregateRating.reviewCount),
+                            bestRating: 5,
+                            worstRating: 1,
+                        },
+                    }
+                  : {}),
 
               ...(siteConfig.site?.reviews?.length > 0
                   ? {
@@ -365,6 +371,7 @@ const orgBlock = !disableOrganization && {
                                 '@type': 'Rating',
                                 ratingValue: review.ratingValue,
                                 bestRating: 5,
+                                worstRating: 1,
                             },
                         })),
                     }
