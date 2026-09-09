@@ -27,6 +27,7 @@ const GalleryOverlay = (() => {
   let images        = [];
   let carouselIndex = 0;
   let loading       = false;
+  let searchTerm    = '';
 
   // ---------------------------------------------------------------------------
   // Referências ao DOM
@@ -49,6 +50,8 @@ const GalleryOverlay = (() => {
     carouselNext:  () => document.getElementById('btn-carousel-next'),
     carouselCount: () => document.getElementById('gallery-carousel-count'),
     btnCarouselSel:() => document.getElementById('btn-carousel-select'),
+    searchInput:   () => document.getElementById('gallery-search-input'),
+    btnSearch:     () => document.getElementById('btn-gallery-search'),
   };
 
   // ---------------------------------------------------------------------------
@@ -80,6 +83,18 @@ const GalleryOverlay = (() => {
       onImageClick(images[carouselIndex]);
       flashCarouselCheck();
     });
+
+    // Busca por nome do arquivo
+    el.btnSearch().addEventListener('click', applySearch);
+    el.searchInput().addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') applySearch();
+    });
+  }
+
+  function applySearch() {
+    searchTerm    = el.searchInput().value.trim();
+    carouselIndex = 0;
+    loadPage(1);
   }
 
   // ---------------------------------------------------------------------------
@@ -90,6 +105,8 @@ const GalleryOverlay = (() => {
     currentPage   = 1;
     images        = [];
     carouselIndex = 0;
+    searchTerm    = '';
+    el.searchInput().value = '';
 
     el.overlay().classList.add('open');
     setViewMode(viewMode, true);
@@ -110,7 +127,8 @@ const GalleryOverlay = (() => {
     setError('');
 
     try {
-      const url  = `${API_BASE}/gallery/?group=${encodeURIComponent(currentGroup)}&page=${page}&limit=${PAGE_LIMIT}`;
+      const searchParam = searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '';
+      const url  = `${API_BASE}/gallery/?group=${encodeURIComponent(currentGroup)}&page=${page}&limit=${PAGE_LIMIT}${searchParam}`;
       const res  = await fetch(url);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
@@ -173,7 +191,7 @@ const GalleryOverlay = (() => {
 
       const div = document.createElement('div');
       div.className = 'relative group cursor-pointer overflow-hidden bg-gray-100';
-      div.style.cssText = 'width: 100%; height: 100px; flex-shrink: 0; overflow: hidden;';
+      div.style.cssText = 'width: 100%; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden;';
       div.innerHTML = `
         <img
           src="${imgUrl}"

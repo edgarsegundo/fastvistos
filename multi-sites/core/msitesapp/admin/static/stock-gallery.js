@@ -207,7 +207,7 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
 
       const div = document.createElement('div');
       div.className = 'relative group cursor-pointer overflow-hidden bg-gray-100';
-      div.style.cssText = 'width:100%;height:100px;flex-shrink:0;overflow:hidden;';
+      div.style.cssText = 'width:100%;aspect-ratio:1/1;flex-shrink:0;overflow:hidden;';
       div.innerHTML = `
         <img src="${thumbUrl}" alt="${alt}" loading="lazy"
           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"

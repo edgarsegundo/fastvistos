@@ -60,8 +60,12 @@
 <body class="max-w-[480px] mx-auto bg-white min-h-screen">
 
   <!-- ===== TÍTULO DO ARTIGO (dinâmico) ===== -->
-  <div id="article-title-bar" class="w-full px-4 pt-4 pb-1">
+  <div id="article-title-bar" class="w-full px-4 pt-4 pb-1 flex items-start justify-between gap-2">
     <h1 id="article-title" class="text-lg font-semibold text-gray-800" style="min-height:1.5em"></h1>
+    <a id="link-article-picker" href="#"
+      class="shrink-0 text-xs text-blue-600 hover:underline whitespace-nowrap pt-1">
+      🔄 Trocar artigo
+    </a>
   </div>
 
   <!-- ===== PÁGINA PRINCIPAL ===== -->
@@ -275,6 +279,21 @@
       </div>
     </div>
 
+    <!-- Barra de busca por nome do arquivo -->
+    <div id="gallery-search-bar" class="flex gap-2 px-3 py-2 border-b border-gray-100 shrink-0">
+      <input
+        id="gallery-search-input"
+        type="text"
+        placeholder="Buscar por nome do arquivo..."
+        class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-blue-400 transition-colors"
+      >
+      <button
+        id="btn-gallery-search"
+        class="h-10 px-4 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors shrink-0">
+        🔍
+      </button>
+    </div>
+
     <!-- Spinner -->
     <div id="gallery-spinner" class="hidden flex justify-center py-6 shrink-0">
       <div class="spinner"></div>
@@ -340,43 +359,48 @@
   <div id="overlay-stock-gallery" class="overlay">
 
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 h-14 border-b border-gray-100 shrink-0">
+    <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-gray-100 shrink-0">
       <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
       <span class="font-semibold text-sm">Imagens Stock</span>
-      <!-- Abas Pexels / Pixabay / Unsplash / URL -->
-      <div class="flex rounded-lg overflow-hidden border border-gray-200 text-xs">
-        <button id="tab-stock-pexels"
-          class="px-3 h-8 transition-colors font-medium">
-          Pexels
-        </button>
-        <button id="tab-stock-pixabay"
-          class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-          Pixabay
-        </button>
-        <button id="tab-stock-unsplash"
-          class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-          Unsplash
-        </button>
-        <button id="tab-stock-url"
-          class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-          URL
-        </button>
-      </div>
-    </div>
 
-    <!-- Barra de busca -->
-    <div id="stock-search-bar" class="flex gap-2 px-3 py-2 border-b border-gray-100 shrink-0">
-      <input
-        id="stock-search-input"
-        type="text"
-        placeholder="Buscar imagens..."
-        class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
-      >
-      <button
-        id="btn-stock-search"
-        class="h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
-        🔍
-      </button>
+      <!-- Abas + busca agrupadas à direita -->
+      <div class="flex items-center gap-2 ml-auto">
+        <!-- Abas Pexels / Pixabay / Unsplash / URL -->
+        <div class="flex rounded-lg overflow-hidden border border-gray-200 text-xs shrink-0">
+          <button id="tab-stock-pexels"
+            class="px-3 h-8 transition-colors font-medium">
+            Pexels
+          </button>
+          <button id="tab-stock-pixabay"
+            class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
+            Pixabay
+          </button>
+          <button id="tab-stock-unsplash"
+            class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
+            Unsplash
+          </button>
+          <button id="tab-stock-url"
+            class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
+            URL
+          </button>
+        </div>
+
+        <!-- Barra de busca -->
+        <div id="stock-search-bar" class="flex gap-1 shrink-0">
+          <input
+            id="stock-search-input"
+            type="text"
+            placeholder="Buscar imagens..."
+            style="width:200px"
+            class="border border-gray-200 rounded-xl px-3 h-8 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
+          >
+          <button
+            id="btn-stock-search"
+            class="h-8 px-3 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
+            🔍
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Spinner -->
@@ -449,12 +473,28 @@
   <script src="static/gallery.js"></script>
   <script src="static/stock-gallery.js"></script>
   <script type="module">
-    import { fetchArticleTitle } from './static/get-article-title.js';
+    import { fetchArticleMeta } from './static/get-article-title.js';
     const blogArticleId = new URLSearchParams(window.location.search).get('blog_article_id');
+    const token = new URLSearchParams(window.location.search).get('token');
+
+    const linkEl = document.getElementById('link-article-picker');
+    if (linkEl) {
+      const pickerParams = new URLSearchParams();
+      if (token) pickerParams.set('token', token);
+      linkEl.href = `article-picker?${pickerParams.toString()}`;
+    }
+
     if (blogArticleId) {
-      fetchArticleTitle(blogArticleId).then(title => {
-        const el = document.getElementById('article-title');
-        if (el) el.textContent = title || '(Sem título)';
+      fetchArticleMeta(blogArticleId).then(data => {
+        const titleEl = document.getElementById('article-title');
+        if (titleEl) titleEl.textContent = (data && data.title) || '(Sem título)';
+
+        if (linkEl && data && data.business_id) {
+          const pickerParams = new URLSearchParams();
+          if (token) pickerParams.set('token', token);
+          pickerParams.set('business_id', data.business_id);
+          linkEl.href = `article-picker?${pickerParams.toString()}`;
+        }
       });
     }
   </script>

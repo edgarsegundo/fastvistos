@@ -42,6 +42,8 @@ export default (BlogService) => {
         // para marcar quais artigos já têm imagem definida no CMS.
         image: article.image || null,
         has_image: Boolean(article.image),
+        business_id: article.business_id || null,
+        blog_topic_id: article.blog_topic_id || null,
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -148,13 +150,14 @@ export default (BlogService) => {
   router.get('/image-editor/gallery/', async (req, res) => {
     const { group } = req.query;
     if (!group) return res.status(400).json({ error: 'O parâmetro "group" é obrigatório.' });
- 
+
     const limit  = Math.min(parseInt(req.query.limit) || 24, 100);
     const page   = Math.max(parseInt(req.query.page)  || 1,  1);
     const offset = (page - 1) * limit;
- 
+    const search = (req.query.search || '').trim();
+
     try {
-      const { images, total } = await BlogService.getBlogImagesByGroup(group, offset, limit);
+      const { images, total } = await BlogService.getBlogImagesByGroup(group, offset, limit, search);
       res.json({ images, total, page, limit, pages: Math.ceil(total / limit) });
     } catch (err) {
       console.error('Erro ao buscar galeria:', err);
@@ -181,6 +184,78 @@ export default (BlogService) => {
       res.json({ success: true, updated });
     } catch (err) {
       console.error(`Error renaming image ${image_id}:`, err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * GET /image-editor/businesses/
+   *
+   * Lista todos os businesses, para popular o dropdown da navegação de artigos.
+   * Resposta: { businesses: [{ id, name, display_name }] }
+   */
+  router.get('/image-editor/businesses/', async (req, res) => {
+    try {
+      const businesses = await BlogService.listBusinesses();
+      res.json({ businesses });
+    } catch (err) {
+      console.error('Erro ao listar businesses:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * GET /image-editor/blog-topics/?business_id=
+   *
+   * Lista os blog_topics de um business, para popular o dropdown da navegação de artigos.
+   * Resposta: { topics: [{ id, title, slug }] }
+   */
+  router.get('/image-editor/blog-topics/', async (req, res) => {
+    const { business_id } = req.query;
+    if (!business_id) return res.status(400).json({ error: 'O parâmetro "business_id" é obrigatório.' });
+    try {
+      const topics = await BlogService.listBlogTopicsByBusiness(business_id);
+      res.json({ topics });
+    } catch (err) {
+      console.error('Erro ao listar blog_topics:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * GET /image-editor/articles-list/
+   *
+   * Lista artigos com filtros opcionais de business/topic/busca por título,
+   * com paginação. Usado pela navegação de troca de artigo no admin.
+   *
+   * Query params:
+   *   business_id     {string}  opcional
+   *   blog_topic_id   {string}  opcional
+   *   search          {string}  opcional, busca por título
+   *   page            {number}  opcional, default 1
+   *   limit           {number}  opcional, default 20 (máx 100)
+   *
+   * Resposta:
+   *   { articles: [...], total, page, limit, pages }
+   */
+  router.get('/image-editor/articles-list/', async (req, res) => {
+    const { business_id, blog_topic_id, search } = req.query;
+
+    const limit  = Math.min(parseInt(req.query.limit) || 20, 100);
+    const page   = Math.max(parseInt(req.query.page)  || 1,  1);
+    const offset = (page - 1) * limit;
+
+    try {
+      const { articles, total } = await BlogService.listBlogArticles({
+        businessId: business_id,
+        blogTopicId: blog_topic_id,
+        search,
+        offset,
+        limit,
+      });
+      res.json({ articles, total, page, limit, pages: Math.ceil(total / limit) });
+    } catch (err) {
+      console.error('Erro ao listar artigos:', err);
       res.status(500).json({ error: err.message });
     }
   });

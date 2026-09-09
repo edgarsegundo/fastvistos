@@ -294,16 +294,20 @@ export class BlogService {
      * @param {string} group      - O group a filtrar (obrigatório)
      * @param {number} offset     - Quantos registros pular (default 0)
      * @param {number} limit      - Quantos registros retornar por página (default 24)
+     * @param {string} [search]   - Filtro opcional por nome do arquivo (case-insensitive, substring)
      * @returns {Promise<{ images: Array, total: number }>}
      *
      * O campo `image` é o path relativo gravado pelo Django (ex: "blog/images/foo.webp").
      * O frontend é responsável por montar a URL absoluta prefixando com MEDIA_BASE.
      */
-    static async getBlogImagesByGroup(group, offset = 0, limit = 24) {
-        console.log(`[DEBUG] getBlogImagesByGroup called with group="${group}", offset=${offset}, limit=${limit}`);
+    static async getBlogImagesByGroup(group, offset = 0, limit = 24, search = '') {
+        console.log(`[DEBUG] getBlogImagesByGroup called with group="${group}", offset=${offset}, limit=${limit}, search="${search}"`);
         if (!group) throw new Error('group é obrigatório');
         try {
-            const where = { group };
+            const where = {
+                group,
+                ...(search ? { filename: { contains: search } } : {}),
+            };
             const [images, total] = await Promise.all([
                 prisma.blog_image.findMany({
                     where,
@@ -325,6 +329,85 @@ export class BlogService {
             return { images, total };
         } catch (error) {
             console.error('Erro ao buscar imagens por group:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Lista todos os businesses (não removidos), para popular dropdown no admin.
+     * @returns {Promise<Array>} Array de { id, name, display_name }
+     */
+    static async listBusinesses() {
+        try {
+            return await prisma.business.findMany({
+                where: { is_removed: false },
+                orderBy: { name: 'asc' },
+                select: { id: true, name: true, display_name: true },
+            });
+        } catch (error) {
+            console.error('Erro ao listar businesses:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Lista os blog_topics de um business, para popular dropdown no admin.
+     * @param {string} businessId
+     * @returns {Promise<Array>} Array de { id, title, slug }
+     */
+    static async listBlogTopicsByBusiness(businessId) {
+        if (!businessId) return [];
+        try {
+            return await prisma.blog_topic.findMany({
+                where: { business_id: businessId, is_removed: false },
+                orderBy: { title: 'asc' },
+                select: { id: true, title: true, slug: true },
+            });
+        } catch (error) {
+            console.error('Erro ao listar blog_topics por business:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Lista blog_articles com filtros opcionais de business/topic/busca por título,
+     * com paginação por offset/limit. Usado pela navegação de troca de artigo no admin.
+     * @param {Object} params
+     * @param {string} [params.businessId]
+     * @param {string} [params.blogTopicId]
+     * @param {string} [params.search]
+     * @param {number} [params.offset=0]
+     * @param {number} [params.limit=20]
+     * @returns {Promise<{ articles: Array, total: number }>}
+     */
+    static async listBlogArticles({ businessId, blogTopicId, search, offset = 0, limit = 20 } = {}) {
+        try {
+            const where = { is_removed: false };
+            if (businessId) where.business_id = businessId;
+            if (blogTopicId) where.blog_topic_id = blogTopicId;
+            if (search) where.title = { contains: search };
+
+            const [articles, total] = await Promise.all([
+                prisma.blog_article.findMany({
+                    where,
+                    orderBy: { modified: 'desc' },
+                    skip: offset,
+                    take: limit,
+                    select: {
+                        id: true,
+                        title: true,
+                        slug: true,
+                        published: true,
+                        image: true,
+                        business_id: true,
+                        blog_topic_id: true,
+                    },
+                }),
+                prisma.blog_article.count({ where }),
+            ]);
+            return { articles, total };
+        } catch (error) {
+            console.error('Erro ao listar blog_articles:', error);
             throw error;
         }
     }

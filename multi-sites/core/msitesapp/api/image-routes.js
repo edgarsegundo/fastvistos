@@ -39,5 +39,15 @@ export default (BlogService) => {
       }
   });
 
+  // Rota para servir a navegação de troca de artigo
+  router.get('/admin/article-picker', (req, res) => {
+      const htmlPath = path.join(__dirname, '../admin/article-picker.html');
+      if (fs.existsSync(htmlPath)) {
+          res.sendFile(htmlPath);
+      } else {
+          res.status(404).send('Navegação de artigos não encontrada');
+      }
+  });
+
   return router;
 };

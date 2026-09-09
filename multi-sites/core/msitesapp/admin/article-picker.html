@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin — Trocar Artigo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 3px solid #e5e7eb; border-top-color: #2563eb;
+      animation: spin 0.8s linear infinite;
+    }
+  </style>
+</head>
+<body class="max-w-[480px] mx-auto bg-white min-h-screen flex flex-col">
+
+  <div class="p-4 border-b border-gray-100">
+    <h1 class="text-lg font-semibold text-gray-800">Trocar artigo</h1>
+  </div>
+
+  <!-- Filtros -->
+  <div class="p-4 flex flex-col gap-3 border-b border-gray-100">
+    <select id="select-business"
+      class="h-11 rounded-xl border border-gray-200 px-3 text-sm text-gray-700">
+      <option value="">Carregando businesses…</option>
+    </select>
+
+    <select id="select-topic" disabled
+      class="h-11 rounded-xl border border-gray-200 px-3 text-sm text-gray-700 disabled:opacity-50">
+      <option value="">Todos os tópicos</option>
+    </select>
+
+    <div class="flex gap-2">
+      <input id="search-input" type="text" placeholder="Buscar por título…"
+        class="flex-1 h-11 rounded-xl border border-gray-200 px-3 text-sm text-gray-700">
+      <button id="btn-search"
+        class="h-11 px-4 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors shrink-0">
+        Buscar
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista -->
+  <div class="flex-1 relative p-4 overflow-y-auto">
+    <div id="spinner" class="hidden absolute inset-0 flex items-center justify-center bg-white/70 z-10">
+      <div class="spinner"></div>
+    </div>
+    <div id="error" class="hidden text-sm text-red-600 mb-3"></div>
+    <div id="article-list" class="flex flex-col gap-2"></div>
+  </div>
+
+  <!-- Paginação -->
+  <div class="shrink-0 border-t border-gray-100">
+    <div class="flex items-center justify-between px-4 h-12">
+      <button id="btn-prev"
+        class="h-8 px-3 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30">
+        ← Anterior
+      </button>
+      <span id="page-info" class="text-xs text-gray-400">1 / 1</span>
+      <button id="btn-next"
+        class="h-8 px-3 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30">
+        Próxima →
+      </button>
+    </div>
+  </div>
+
+  <script src="static/article-picker.js"></script>
+</body>
+</html>
