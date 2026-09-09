@@ -45,6 +45,28 @@ DRY RUN concluído — 7 artigos seriam atualizados.
 - As imagens da galeria ficam na tabela `blog_image` — se a galeria estiver vazia o script avisa e encerra
 - O campo `image` do artigo recebe o path relativo da imagem (ex: `images/foo.webp`), igual ao que o editor visual usa
 
+## ⚠️ Rodar na VPS, não local
+
+A porta 3306 do MySQL foi fechada para acesso externo (só aceita conexão vindo da própria VPS). Por isso, rodar este script direto da máquina local não funciona mais — o `DATABASE_URL` do `.env` local aponta pro IP público da VPS (`72.60.57.150`) e a conexão vai falhar com `Can't reach database server`.
+
+**Solução:** entrar na VPS via SSH e rodar o script de lá, sobrescrevendo o `DATABASE_URL` para usar `127.0.0.1` (a porta continua aberta localmente na própria VPS, só não é mais exposta pra fora):
+
+```sh
+ssh edgar@72.60.57.150
+cd ~/Repos/fastvistos
+
+DATABASE_URL="mysql://microservicesadm_appuser:sT4-J9fb1OtYzN1Rq1qe@127.0.0.1/microservicesadm" \
+  node scripts/fix-missing-article-images.js fastvistos --dry-run
+
+# Se o dry-run parecer certo, roda de verdade:
+DATABASE_URL="mysql://microservicesadm_appuser:sT4-J9fb1OtYzN1Rq1qe@127.0.0.1/microservicesadm" \
+  node scripts/fix-missing-article-images.js fastvistos
+```
+
+### E depois?
+
+Depois de rodar o script na VPS (que só mexe no banco de dados), o `pub fastvistos` local volta a funcionar normalmente — ele builda e publica o site estático, não depende de acessar o MySQL da VPS diretamente.
+
 ## Como a imagem é escolhida
 
 1. **Pool de imagens** — o script carrega todas as imagens da tabela `blog_image` que têm um path válido. Se `--group=<nome>` for passado, filtra apenas as desse grupo; caso contrário usa tudo (hoje: 46 imagens nos grupos `visto-americano` e `disney-orlando`).
