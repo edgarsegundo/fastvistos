@@ -1,5 +1,8 @@
 import express from 'express';
 import multer from 'multer';
+import fs from 'fs/promises';
+import path from 'path';
+import crypto from 'crypto';
 
 const router = express.Router();
 
@@ -10,6 +13,44 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 20 * 1024 * 1024 }, // 20 MB
 });
+
+// Diretório onde o cron-manager grava artifacts/image-search/<slug>.json
+// (mesma VPS/filesystem — ver CRON_MANAGER_ARTIFACTS_DIR no .env).
+const CRON_MANAGER_ARTIFACTS_DIR =
+  process.env.CRON_MANAGER_ARTIFACTS_DIR || '/home/edgar/Repos/cron-manager/cron-manager/artifacts';
+
+/**
+ * Filename determinístico a partir da URL original da candidata — usado tanto
+ * pra saber se ela já foi enviada (compara contra a galeria real) quanto como
+ * `filename` no upload pro Django. Não precisa de estado novo: a galeria
+ * (`blog_image`) já é a fonte da verdade.
+ */
+function uploadFilenameFor(url) {
+  return 'is-' + crypto.createHash('sha1').update(url).digest('hex').slice(0, 12);
+}
+
+/**
+ * Coleta TODOS os filenames já existentes na galeria de um group, paginando
+ * até cobrir o `total` real — um cap fixo (ex: 500) faria a checagem de
+ * "já enviada" falhar silenciosamente assim que o group acumulasse mais
+ * imagens que o cap, permitindo reenvio duplicado de candidatas antigas.
+ */
+async function fetchAllGalleryFilenames(BlogService, group) {
+  const PAGE_SIZE = 200;
+  const filenames = new Set();
+  let offset = 0;
+  let total = Infinity;
+
+  while (offset < total) {
+    const { images, total: t } = await BlogService.getBlogImagesByGroup(group, offset, PAGE_SIZE);
+    total = t;
+    for (const img of images) filenames.add(img.filename);
+    if (images.length === 0) break; // segurança contra loop infinito
+    offset += PAGE_SIZE;
+  }
+
+  return filenames;
+}
 
 export default (BlogService) => {
 
@@ -161,6 +202,64 @@ export default (BlogService) => {
       res.json({ images, total, page, limit, pages: Math.ceil(total / limit) });
     } catch (err) {
       console.error('Erro ao buscar galeria:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * GET /image-editor/articles/:blog_article_id/search-candidates/
+   *
+   * Lista as imagens candidatas encontradas pela task `image-search` do
+   * cron-manager (SerpAPI) para o slug deste artigo, lendo
+   * artifacts/image-search/<slug>.json direto do disco (mesma VPS).
+   *
+   * Cada candidata vem marcada com `already_sent` — calculado comparando um
+   * filename determinístico (hash da URL original) contra a galeria real
+   * (`blog_image`), sem precisar de nenhum estado novo.
+   *
+   * Query params:
+   *   group  {string}  obrigatório — usado pra cross-referenciar a galeria
+   *
+   * Resposta:
+   *   { images: [...], slug }                    — candidatas encontradas
+   *   { images: [], reason: 'not_found' }         — sem arquivo pra esse slug
+   *   { images: [], reason: 'expired' }           — arquivo passou do TTL de 24h
+   *   { images: [], reason: 'article_not_found' } — blog_article_id inválido
+   */
+  router.get('/image-editor/articles/:blog_article_id/search-candidates/', async (req, res) => {
+    const { blog_article_id } = req.params;
+    const { group } = req.query;
+
+    if (!blog_article_id) return res.status(400).json({ error: 'blog_article_id é obrigatório.' });
+    if (!group) return res.status(400).json({ error: 'O parâmetro "group" é obrigatório.' });
+
+    try {
+      const article = await BlogService.getBlogArticleById(blog_article_id);
+      if (!article?.slug) return res.json({ images: [], reason: 'article_not_found' });
+
+      const filePath = path.join(CRON_MANAGER_ARTIFACTS_DIR, 'image-search', `${article.slug}.json`);
+
+      let data;
+      try {
+        data = JSON.parse(await fs.readFile(filePath, 'utf8'));
+      } catch {
+        return res.json({ images: [], reason: 'not_found' });
+      }
+
+      if (data.expires_at && new Date(data.expires_at).getTime() < Date.now()) {
+        return res.json({ images: [], reason: 'expired' });
+      }
+
+      const existingFilenames = await fetchAllGalleryFilenames(BlogService, group);
+
+      const images = (data.images || []).map((img) => {
+        const upload_filename = uploadFilenameFor(img.url);
+        return { ...img, upload_filename, already_sent: existingFilenames.has(upload_filename) };
+      });
+
+      res.json({ images, slug: article.slug });
+    } catch (err) {
+      console.error(`Erro ao buscar candidatas de image-search para ${blog_article_id}:`, err);
       res.status(500).json({ error: err.message });
     }
   });

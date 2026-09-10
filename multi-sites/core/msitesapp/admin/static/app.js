@@ -453,6 +453,9 @@ AdjustOverlay.init((result) => {
 // Passa função para acessar imagens salvas
 EditArticleOverlay.init(blogArticleId, () => state.imagesSaved);
 
+// Imagens candidatas encontradas pela task image-search (cron-manager/SerpAPI)
+SearchCandidatesSection.init(blogArticleId, group);
+
 /**
  * Callback da galeria do servidor.
  * Recebe { filename, url, path, alt } e adiciona à lista de imagens salvas.
