@@ -372,13 +372,12 @@
 
   <!-- ===== OVERLAY: STOCK GALLERY (Pexels + Pixabay) ===== -->
   <div id="overlay-stock-gallery" class="overlay">
-   <div class="w-full max-w-[480px] mx-auto flex flex-col h-full overflow-hidden">
 
-    <!-- Header -->
-    <div class="shrink-0 border-b border-gray-100">
+    <!-- Header (largura fixa, centralizado) -->
+    <div class="w-full max-w-[480px] mx-auto shrink-0 border-b border-gray-100">
       <div class="flex items-center gap-2 px-2 py-1.5">
-        <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm shrink-0">← Voltar</button>
-        <span class="font-semibold text-sm">Imagens Stock</span>
+        <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm shrink-0">←</button>
+        <span class="font-semibold text-sm ml-auto">Imagens Stock</span>
       </div>
 
       <!-- Abas Pexels / Pixabay / Unsplash / URL -->
@@ -440,7 +439,7 @@
     </div>
 
     <!-- Painel URL direta -->
-    <div id="stock-url-panel" class="hidden flex-1 flex flex-col gap-2 px-2 pb-2 overflow-y-auto">
+    <div id="stock-url-panel" class="hidden flex-1 flex flex-col gap-2 px-2 pb-2 overflow-y-auto w-full max-w-[480px] mx-auto">
       <div class="flex gap-1">
         <input
           id="stock-url-input"
@@ -460,7 +459,7 @@
     </div>
 
     <!-- Attribution + Paginação (rodapé fixo) -->
-    <div id="stock-gallery-pagination" class="shrink-0 border-t border-gray-100">
+    <div id="stock-gallery-pagination" class="shrink-0 border-t border-gray-100 w-full max-w-[480px] mx-auto">
       <div id="stock-gallery-attribution" class="text-center text-xs text-gray-400 pt-2 px-4"></div>
       <div class="flex items-center justify-between px-4 h-12">
         <button id="btn-stock-gallery-prev"
@@ -474,7 +473,6 @@
         </button>
       </div>
     </div>
-   </div>
   </div>
 
   <script src="static/adjust.js"></script>
