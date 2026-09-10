@@ -374,47 +374,46 @@
   <div id="overlay-stock-gallery" class="overlay">
 
     <!-- Header -->
-    <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2 border-b border-gray-100 shrink-0">
-      <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm">← Voltar</button>
-      <span class="font-semibold text-sm">Imagens Stock</span>
+    <div class="shrink-0 border-b border-gray-100">
+      <div class="flex items-center justify-between gap-2 px-4 py-2">
+        <button id="btn-close-stock-gallery" class="text-gray-500 hover:text-gray-900 transition-colors text-sm shrink-0">← Voltar</button>
+        <span class="font-semibold text-sm">Imagens Stock</span>
+        <span class="w-14 shrink-0"></span><!-- spacer p/ centralizar título -->
+      </div>
 
-      <!-- Busca + abas agrupadas à direita -->
-      <div class="flex items-center gap-2 ml-auto">
-        <!-- Barra de busca -->
-        <div id="stock-search-bar" class="flex gap-1 shrink-0">
-          <input
-            id="stock-search-input"
-            type="text"
-            placeholder="Buscar imagens..."
-            style="width:200px"
-            class="border border-gray-200 rounded-xl px-3 h-8 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
-          >
-          <button
-            id="btn-stock-search"
-            class="h-8 px-3 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0">
-            🔍
-          </button>
-        </div>
+      <!-- Abas Pexels / Pixabay / Unsplash / URL -->
+      <div class="flex gap-1.5 px-4 pb-2">
+        <button id="tab-stock-pexels"
+          class="stock-tab-btn flex-1 min-w-0 h-9 rounded-xl border text-xs font-medium transition-colors truncate">
+          Pexels
+        </button>
+        <button id="tab-stock-pixabay"
+          class="stock-tab-btn flex-1 min-w-0 h-9 rounded-xl border text-xs font-medium transition-colors truncate">
+          Pixabay
+        </button>
+        <button id="tab-stock-unsplash"
+          class="stock-tab-btn flex-1 min-w-0 h-9 rounded-xl border text-xs font-medium transition-colors truncate">
+          Unsplash
+        </button>
+        <button id="tab-stock-url"
+          class="stock-tab-btn flex-1 min-w-0 h-9 rounded-xl border text-xs font-medium transition-colors truncate">
+          URL
+        </button>
+      </div>
 
-        <!-- Abas Pexels / Pixabay / Unsplash / URL -->
-        <div class="flex rounded-lg overflow-hidden border border-gray-200 text-xs shrink-0">
-          <button id="tab-stock-pexels"
-            class="px-3 h-8 transition-colors font-medium">
-            Pexels
-          </button>
-          <button id="tab-stock-pixabay"
-            class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-            Pixabay
-          </button>
-          <button id="tab-stock-unsplash"
-            class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-            Unsplash
-          </button>
-          <button id="tab-stock-url"
-            class="px-3 h-8 transition-colors border-l border-gray-200 font-medium">
-            URL
-          </button>
-        </div>
+      <!-- Barra de busca -->
+      <div id="stock-search-bar" class="flex gap-2 px-4 pb-2">
+        <input
+          id="stock-search-input"
+          type="text"
+          placeholder="Buscar imagens..."
+          class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
+        >
+        <button
+          id="btn-stock-search"
+          class="h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0 flex items-center gap-1.5">
+          <span>🔍</span><span id="btn-stock-search-label">Buscar</span>
+        </button>
       </div>
     </div>
 
@@ -441,19 +440,13 @@
     </div>
 
     <!-- Painel URL direta -->
-    <div id="stock-url-panel" class="hidden flex-1 flex flex-col gap-3 p-4 overflow-y-auto">
-      <p class="text-xs text-gray-500">Cole a URL de qualquer imagem (https).</p>
-      <button
-        id="btn-open-google-images"
-        class="self-start h-9 px-4 rounded-xl border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-1.5">
-        <span>🔍</span> Buscar no Google Imagens ↗
-      </button>
-      <div class="flex gap-2">
+    <div id="stock-url-panel" class="hidden flex-1 flex-col gap-3 px-4 pb-4 overflow-y-auto">
+      <div class="flex flex-wrap gap-2">
         <input
           id="stock-url-input"
           type="url"
-          placeholder="https://... (cole a URL da imagem aqui)"
-          class="flex-1 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
+          placeholder="Cole a URL de qualquer imagem (https)"
+          class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-emerald-400 transition-colors"
         >
         <button
           id="btn-stock-load-url"

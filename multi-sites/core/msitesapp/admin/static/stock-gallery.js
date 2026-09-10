@@ -25,9 +25,9 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     tabPixabay:     () => document.getElementById('tab-stock-pixabay'),
     tabUnsplash:    () => document.getElementById('tab-stock-unsplash'),
     tabUrl:         () => document.getElementById('tab-stock-url'),
-    searchBar:      () => document.getElementById('stock-search-bar'),
     searchInput:    () => document.getElementById('stock-search-input'),
     btnSearch:      () => document.getElementById('btn-stock-search'),
+    btnSearchLabel: () => document.getElementById('btn-stock-search-label'),
     spinner:        () => document.getElementById('stock-gallery-spinner'),
     error:          () => document.getElementById('stock-gallery-error'),
     grid:           () => document.getElementById('stock-gallery-grid'),
@@ -56,13 +56,14 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
     el.tabPixabay().addEventListener('click',  () => switchSource('pixabay'));
     el.tabUnsplash().addEventListener('click', () => switchSource('unsplash'));
     el.tabUrl().addEventListener('click',      () => switchSource('url'));
-    el.btnSearch().addEventListener('click', () => triggerSearch());
-    el.searchInput().addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') triggerSearch();
+    el.btnSearch().addEventListener('click', () => {
+      if (currentSource === 'url') openGoogleImages();
+      else triggerSearch();
     });
-    document.getElementById('btn-open-google-images').addEventListener('click', () => {
-      const q = el.urlInput().value.trim() || currentQuery || '';
-      window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q), '_blank');
+    el.searchInput().addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      if (currentSource === 'url') openGoogleImages();
+      else triggerSearch();
     });
     el.btnPrev().addEventListener('click', () => { if (currentPage > 1) loadPage(currentPage - 1); });
     el.btnNext().addEventListener('click', () => { if (currentPage < totalPages) loadPage(currentPage + 1); });
@@ -121,14 +122,20 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
   function showUrlPanel(active) {
     el.urlPanel().classList.toggle('hidden', !active);
     el.grid().classList.toggle('hidden', active);
-    el.searchBar().classList.toggle('hidden', active);
     el.pagination().classList.toggle('hidden', active);
     el.spinner().classList.add('hidden');
+    el.btnSearchLabel().textContent = active ? 'Buscar ↗' : 'Buscar';
     if (active) {
       el.urlInput().value = '';
       el.urlPreview().classList.add('hidden');
       el.urlPreviewImg().src = '';
     }
+  }
+
+  function openGoogleImages() {
+    const q = el.searchInput().value.trim();
+    if (!q) return;
+    window.open('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(q), '_blank');
   }
 
   function updateTabs() {
@@ -137,7 +144,9 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
       if (!tabEl) return;
       const isActive = currentSource === src;
       tabEl.classList.toggle('bg-blue-600',   isActive);
+      tabEl.classList.toggle('border-blue-600', isActive);
       tabEl.classList.toggle('text-white',    isActive);
+      tabEl.classList.toggle('border-gray-200', !isActive);
       tabEl.classList.toggle('text-gray-600', !isActive);
     });
   }
