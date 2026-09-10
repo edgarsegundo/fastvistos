@@ -19,14 +19,29 @@ const upload = multer({
 const CRON_MANAGER_ARTIFACTS_DIR =
   process.env.CRON_MANAGER_ARTIFACTS_DIR || '/home/edgar/Repos/cron-manager/cron-manager/artifacts';
 
+/** lowercase, sem acento/pontuação, cortado — pra virar prefixo de filename legível. */
+function slugifyKeyword(text) {
+  return (text || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40);
+}
+
 /**
- * Filename determinístico a partir da URL original da candidata — usado tanto
- * pra saber se ela já foi enviada (compara contra a galeria real) quanto como
- * `filename` no upload pro Django. Não precisa de estado novo: a galeria
+ * Filename a partir da keyword que encontrou a candidata + um hash curto da
+ * URL original. A keyword deixa o arquivo físico rastreável/legível (pedido
+ * original); o hash garante que continue determinístico por URL — usado tanto
+ * pra saber se a imagem já foi enviada (compara contra a galeria real) quanto
+ * como `filename` no upload pro Django. Não precisa de estado novo: a galeria
  * (`blog_image`) já é a fonte da verdade.
  */
-function uploadFilenameFor(url) {
-  return 'is-' + crypto.createHash('sha1').update(url).digest('hex').slice(0, 12);
+function uploadFilenameFor(url, query) {
+  const hash = crypto.createHash('sha1').update(url).digest('hex').slice(0, 10);
+  const keyword = slugifyKeyword(query) || 'is';
+  return `${keyword}-${hash}`;
 }
 
 /**
@@ -253,7 +268,7 @@ export default (BlogService) => {
       const existingFilenames = await fetchAllGalleryFilenames(BlogService, group);
 
       const images = (data.images || []).map((img) => {
-        const upload_filename = uploadFilenameFor(img.url);
+        const upload_filename = uploadFilenameFor(img.url, img.query);
         return { ...img, upload_filename, already_sent: existingFilenames.has(upload_filename) };
       });
 
