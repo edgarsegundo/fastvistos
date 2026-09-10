@@ -10,6 +10,7 @@ import ContratarComoFunciona from '../components/ContratarComoFunciona.astro';
 import ContratarParaEmpresas from '../components/ContratarParaEmpresas.astro';
 import ContratarFaq from '../components/ContratarFaq.astro';
 import ContratarFooter from '../components/ContratarFooter.astro';
+import MetaPixel from '../components/MetaPixel.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
@@ -38,6 +39,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
           onload="this.onload=null;this.rel='stylesheet'"
         />
         <JsonLdHomePageBase faqList={[]} servicesList={[]} reviewsList={[]} disableReviews={false} />
+        <MetaPixel />
     </Fragment>
 
     <ContratarNavbar />

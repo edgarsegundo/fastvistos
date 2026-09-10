@@ -213,9 +213,27 @@ export const siteConfig = {
         youtube: '',
     },
 
+    // ⚠️⚠️⚠️ ATENÇÃO — NÃO PREENCHER "facebookPixelId" AQUI ⚠️⚠️⚠️
+    // ============================================================
+    // O Meta Pixel da home (contratar) está ativo via componente próprio:
+    // multi-sites/sites/contratar/components/MetaPixel.astro
+    // (importado e renderizado em multi-sites/sites/contratar/pages/index.astro).
+    //
+    // Este bloco "analytics" também é lido por AnalyticsHead.astro, que tem
+    // suporte NATIVO a "facebookPixelId" (hoje vazio/desativado de propósito).
+    //
+    // SE VOCÊ PREENCHER "facebookPixelId" AQUI, o pixel vai disparar
+    // DUAS VEZES na home (uma pelo MetaPixel.astro, outra pelo
+    // AnalyticsHead.astro) — isso DUPLICA o evento PageView enviado
+    // ao Facebook/Meta Ads e infla as métricas de tráfego/campanhas.
+    //
+    // Antes de configurar "facebookPixelId" aqui:
+    //   1) Remova o import e o uso de <MetaPixel /> em pages/index.astro, OU
+    //   2) Delete components/MetaPixel.astro
+    // ============================================================
     analytics: {
-        gtmId: '', // TODO: preencher quando existir (não copiado do criacurriculo de propósito)
-        facebookPixelId: '1635838731405802',
+        gtmId: 'GTM-K4T447TC', // TODO: preencher quando existir (não copiado do criacurriculo de propósito)
+        // facebookPixelId: NÃO ADICIONAR — ver aviso acima
     },
 
     verification: {
