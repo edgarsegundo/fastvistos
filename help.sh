@@ -26,6 +26,7 @@ while true; do
   echo "4) Enter MySQL shell (dbshell)"
   echo "5) View msitesapp logs"
   echo "6) Clear msitesapp logs"
+  echo "7) Fix missing article images"
   echo "q) Quit"
   read -p "Choose an option: " opt
 
@@ -64,6 +65,15 @@ while true; do
       ;;
     6)
       pm2 flush msitesapp
+      ;;
+    7)
+      read -p "Digite o site_id (centraldevistos, emprego, fastvistos, flyfred, revistadoturismo, zapsim, zenith): " site_id
+      read -p "Dry run? (s/n): " dry_run
+      if [ "$dry_run" = "s" ]; then
+        node scripts/fix-missing-article-images.js "$site_id" --dry-run
+      else
+        node scripts/fix-missing-article-images.js "$site_id"
+      fi
       ;;
     q)
       echo "Goodbye!"
