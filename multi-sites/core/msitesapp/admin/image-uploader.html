@@ -75,6 +75,31 @@
     </a>
   </div>
 
+  <!-- ===== AÇÕES DO ARTIGO (título / ver / excluir) ===== -->
+  <div id="article-actions-bar" class="w-full px-4 pb-2 flex items-center justify-end gap-3 flex-wrap">
+    <a id="link-edit-title" href="#"
+      class="text-xs text-blue-600 hover:underline whitespace-nowrap">
+      ✏️ Título
+    </a>
+    <a id="link-view-article" href="#" target="_blank" rel="noopener"
+      class="hidden text-xs text-blue-600 hover:underline whitespace-nowrap">
+      🔗 Ver artigo
+    </a>
+    <a id="link-delete-article" href="#"
+      class="text-xs text-red-600 hover:underline whitespace-nowrap">
+      🗑️ Excluir artigo
+    </a>
+  </div>
+
+  <!-- ===== TÓPICO DO ARTIGO ===== -->
+  <div id="article-topic-bar" class="w-full px-4 pb-2 flex items-center gap-2">
+    <label for="article-topic-select" class="text-xs text-gray-500 shrink-0">Tópico:</label>
+    <select id="article-topic-select"
+      class="flex-1 min-w-0 border border-gray-200 rounded-lg px-2 h-8 text-xs focus:outline-none focus:border-blue-400 transition-colors">
+      <option value="">—</option>
+    </select>
+  </div>
+
   <!-- ===== PÁGINA PRINCIPAL ===== -->
   <div id="main-page" class="p-4">
 
@@ -542,16 +567,134 @@
     }
     window.setCurrentArticleImage = setCurrentArticleImage;
 
+    // ===== Ações do artigo: editar título / ver publicado / excluir =====
+    const API_BASE = 'https://fastvistos.com.br/msitesapp/api/image-editor';
+    const titleEl        = document.getElementById('article-title');
+    const linkEditTitle   = document.getElementById('link-edit-title');
+    const linkViewArticle = document.getElementById('link-view-article');
+    const linkDeleteArticle = document.getElementById('link-delete-article');
+
+    // Estado mínimo do artigo atual, preenchido após o fetch de metadados,
+    // usado pelos handlers de título/ver/excluir/tópico abaixo.
+    let currentTitle = '';
+    let currentBusinessId = null;
+    let currentBlogTopicId = null;
+
+    const topicSelect = document.getElementById('article-topic-select');
+
+    async function loadTopicSelect(businessId, blogTopicId) {
+      if (!topicSelect || !businessId) return;
+      try {
+        const res = await fetch(`${API_BASE}/blog-topics/?business_id=${encodeURIComponent(businessId)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+        const topics = data.topics || [];
+
+        topicSelect.innerHTML = '';
+        topics.forEach((topic) => {
+          const opt = document.createElement('option');
+          opt.value = topic.id;
+          opt.textContent = topic.title;
+          if (topic.id === blogTopicId) opt.selected = true;
+          topicSelect.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Erro ao carregar tópicos:', err);
+        topicSelect.innerHTML = '<option value="">Erro ao carregar tópicos</option>';
+      }
+    }
+
+    if (topicSelect) {
+      topicSelect.addEventListener('change', async () => {
+        const novoTopicId = topicSelect.value;
+        if (!blogArticleId || !novoTopicId || novoTopicId === currentBlogTopicId) return;
+        const previousTopicId = currentBlogTopicId;
+
+        try {
+          const res = await fetch(`${API_BASE}/articles/${blogArticleId}/update-topic/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ blog_topic_id: novoTopicId }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+          currentBlogTopicId = novoTopicId;
+        } catch (err) {
+          alert('Erro ao atualizar tópico: ' + err.message);
+          topicSelect.value = previousTopicId || '';
+        }
+      });
+    }
+
+    function updateViewArticleLink(slug, canonicalDomain) {
+      if (!linkViewArticle) return;
+      if (!slug || !canonicalDomain) {
+        linkViewArticle.classList.add('hidden');
+        linkViewArticle.removeAttribute('href');
+        return;
+      }
+      linkViewArticle.href = `https://${canonicalDomain}/blog/${slug}`;
+      linkViewArticle.classList.remove('hidden');
+    }
+
+    if (linkEditTitle) {
+      linkEditTitle.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (!blogArticleId) return;
+        const novoTitulo = prompt('Editar título do artigo:', currentTitle);
+        if (novoTitulo === null) return; // Cancelou
+        const trimmed = novoTitulo.trim();
+        if (!trimmed || trimmed === currentTitle) return;
+
+        try {
+          const res = await fetch(`${API_BASE}/articles/${blogArticleId}/update-title/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: trimmed }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+          currentTitle = trimmed;
+          if (titleEl) titleEl.textContent = trimmed;
+        } catch (err) {
+          alert('Erro ao atualizar título: ' + err.message);
+        }
+      });
+    }
+
+    if (linkDeleteArticle) {
+      linkDeleteArticle.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (!blogArticleId) return;
+        const ok = confirm(`Excluir o artigo "${currentTitle || '(sem título)'}"? Essa ação não pode ser desfeita.`);
+        if (!ok) return;
+
+        try {
+          const res = await fetch(`${API_BASE}/articles/${blogArticleId}/delete/`, { method: 'POST' });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+          alert('Artigo excluído.');
+          window.location.href = buildPickerUrl(currentBusinessId);
+        } catch (err) {
+          alert('Erro ao excluir artigo: ' + err.message);
+        }
+      });
+    }
+
     if (blogArticleId) {
       fetchArticleMeta(blogArticleId).then(data => {
-        const titleEl = document.getElementById('article-title');
-        if (titleEl) titleEl.textContent = (data && data.title) || '(Sem título)';
+        currentTitle = (data && data.title) || '';
+        currentBusinessId = (data && data.business_id) || null;
+        currentBlogTopicId = (data && data.blog_topic_id) || null;
+        if (titleEl) titleEl.textContent = currentTitle || '(Sem título)';
 
         if (linkEl && data && data.business_id) {
           linkEl.href = buildPickerUrl(data.business_id);
         }
 
+        updateViewArticleLink(data && data.slug, data && data.canonical_domain);
         setCurrentArticleImage(data && data.image);
+        loadTopicSelect(currentBusinessId, currentBlogTopicId);
       });
     }
   </script>

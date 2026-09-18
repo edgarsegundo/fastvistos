@@ -100,6 +100,9 @@ export default (BlogService) => {
         has_image: Boolean(article.image),
         business_id: article.business_id || null,
         blog_topic_id: article.blog_topic_id || null,
+        // Domínio canônico do business dono do artigo — usado pelo link "Ver artigo"
+        // do image-uploader.html para montar a URL pública (/blog/<slug>).
+        canonical_domain: article.business?.canonical_domain || null,
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -147,6 +150,68 @@ export default (BlogService) => {
       res.json({ success: true, updated });
     } catch (err) {
       console.error(`Error setting main image for article ${blog_article_id}:`, err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * POST /image-editor/articles/:blog_article_id/update-title/
+   *
+   * Atualiza só o título do artigo. Usado pelo link "✏️ Título" do
+   * image-uploader.html (prompt com confirm/enter, sem abrir o editor completo).
+   */
+  router.post('/image-editor/articles/:blog_article_id/update-title/', async (req, res) => {
+    const { blog_article_id } = req.params;
+    const { title } = req.body;
+
+    if (!blog_article_id || typeof title !== 'string' || !title.trim()) {
+      return res.status(400).json({ error: 'blog_article_id e title são obrigatórios.' });
+    }
+    try {
+      const updated = await BlogService.updateBlogArticleTitle(blog_article_id, title.trim());
+      res.json({ success: true, updated });
+    } catch (err) {
+      console.error(`Error updating title for article ${blog_article_id}:`, err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * POST /image-editor/articles/:blog_article_id/update-topic/
+   *
+   * Move o artigo para outro blog_topic. Usado pelo select "Tópico" do
+   * image-uploader.html.
+   */
+  router.post('/image-editor/articles/:blog_article_id/update-topic/', async (req, res) => {
+    const { blog_article_id } = req.params;
+    const { blog_topic_id } = req.body;
+
+    if (!blog_article_id || !blog_topic_id) {
+      return res.status(400).json({ error: 'blog_article_id e blog_topic_id são obrigatórios.' });
+    }
+    try {
+      const updated = await BlogService.updateBlogArticleTopic(blog_article_id, blog_topic_id);
+      res.json({ success: true, updated });
+    } catch (err) {
+      console.error(`Error updating topic for article ${blog_article_id}:`, err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  /**
+   * POST /image-editor/articles/:blog_article_id/delete/
+   *
+   * Soft delete (is_removed = true) do artigo. Usado pelo link "🗑️ Excluir
+   * artigo" do image-uploader.html, sempre precedido de confirm() no browser.
+   */
+  router.post('/image-editor/articles/:blog_article_id/delete/', async (req, res) => {
+    const { blog_article_id } = req.params;
+    if (!blog_article_id) return res.status(400).json({ error: 'blog_article_id é obrigatório.' });
+    try {
+      const updated = await BlogService.softDeleteBlogArticle(blog_article_id);
+      res.json({ success: true, updated });
+    } catch (err) {
+      console.error(`Error deleting article ${blog_article_id}:`, err);
       res.status(500).json({ error: err.message });
     }
   });

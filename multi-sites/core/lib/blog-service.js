@@ -20,11 +20,81 @@ export class BlogService {
                     id,
                     is_removed: false,
                 },
+                include: {
+                    business: true,
+                },
             });
             return article || null;
         } catch (error) {
             console.error('Error fetching blog article by ID:', error);
             return null;
+        }
+    }
+
+    /**
+     * Atualiza o título de um artigo pelo ID.
+     * @param {string} id - O ID do artigo
+     * @param {string} title - O novo título
+     * @returns {Promise<Object>} O artigo atualizado
+     */
+    static async updateBlogArticleTitle(id, title) {
+        try {
+            const updated = await prisma.blog_article.update({
+                where: { id },
+                data: {
+                    title,
+                    modified: new Date(),
+                },
+            });
+            return updated;
+        } catch (error) {
+            console.error('Erro ao atualizar título do artigo:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Atualiza o tópico (blog_topic_id) de um artigo pelo ID.
+     * @param {string} id - O ID do artigo
+     * @param {string} blogTopicId - O novo blog_topic_id
+     * @returns {Promise<Object>} O artigo atualizado
+     */
+    static async updateBlogArticleTopic(id, blogTopicId) {
+        try {
+            const updated = await prisma.blog_article.update({
+                where: { id },
+                data: {
+                    blog_topic_id: blogTopicId,
+                    modified: new Date(),
+                },
+            });
+            return updated;
+        } catch (error) {
+            console.error('Erro ao atualizar tópico do artigo:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Marca um artigo como removido (soft delete), consistente com o resto do
+     * sistema — nada consulta blog_article sem filtrar is_removed: false, então
+     * um hard delete não é necessário e um soft delete é reversível.
+     * @param {string} id - O ID do artigo
+     * @returns {Promise<Object>} O artigo atualizado
+     */
+    static async softDeleteBlogArticle(id) {
+        try {
+            const updated = await prisma.blog_article.update({
+                where: { id },
+                data: {
+                    is_removed: true,
+                    modified: new Date(),
+                },
+            });
+            return updated;
+        } catch (error) {
+            console.error('Erro ao remover artigo:', error);
+            throw error;
         }
     }
 
