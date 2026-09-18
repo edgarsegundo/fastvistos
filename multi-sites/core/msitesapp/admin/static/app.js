@@ -216,6 +216,8 @@ async function setArticleMainImage(imageUrl) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+    // Atualiza a preview do topo (definida em image-uploader.html) sem recarregar a página.
+    if (window.setCurrentArticleImage) window.setCurrentArticleImage(imageUrl);
   } catch (err) {
     console.error('Erro ao definir imagem principal do artigo:', err);
     setError('Imagem salva, mas falhou ao definir como principal: ' + err.message, true);

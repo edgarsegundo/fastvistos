@@ -124,6 +124,8 @@ const EditArticleOverlay = (() => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Erro ${res.status} ao salvar`);
+      // Atualiza a preview do topo (definida em image-uploader.html) sem recarregar a página.
+      if (window.setCurrentArticleImage) window.setCurrentArticleImage(mainImageUrl);
       close();
     } catch (err) {
       setError(err.message);
