@@ -1,0 +1,97 @@
+---
+/**
+ * CTA final — fundo com foto + overlay navy; foto de RH em moldura
+ * levemente inclinada à esquerda, headline e botão à direita.
+ */
+const searchUrl = 'https://app.empregoaqui.com.br/buscar';
+---
+
+<section class="cta" id="cta-final" aria-labelledby="cta-title">
+  <div class="cta__bg" aria-hidden="true"></div>
+  <div class="cta__overlay" aria-hidden="true"></div>
+
+  <div class="wrap cta__inner">
+    <div class="cta__photo reveal">
+      <img
+        src="/assets/images/empresas/contratar-empresas-foto-rh.webp"
+        alt="Empresária analisando candidatos disponíveis"
+        width="1200"
+        height="669"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <div class="cta__content reveal reveal-delay-1">
+      <h2 class="cta__title" id="cta-title">
+        Chega de esperar <span class="cta__title-accent">por candidatos.</span>
+      </h2>
+      <p class="cta__sub">Encontre profissionais disponíveis e entre em contato diretamente.</p>
+      <a href={searchUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { position: relative; overflow: hidden; padding: 100px 0; background: var(--color-bg); }
+  .cta__bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/images/empresas/contratar-empresas-bg-secao.webp');
+    background-size: cover;
+    background-position: center 12%;
+  }
+  .cta__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(20, 23, 42, .94) 0%, rgba(20, 23, 42, .82) 55%, rgba(20, 23, 42, .6) 100%);
+  }
+  .cta__inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+
+  .cta__photo { position: relative; }
+  .cta__photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--color-cta);
+    border-radius: 20px;
+    transform: translate(14px, 14px);
+  }
+  .cta__photo img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, .45);
+  }
+
+  .cta__title { font-family: var(--font-display); font-size: clamp(30px, 4vw, 48px); font-weight: 800; line-height: 1.12; color: #fff; margin: 0 0 18px; }
+  .cta__title-accent { display: block; color: var(--color-cta); }
+  .cta__sub { font-size: 18px; line-height: 1.6; color: rgba(255, 255, 255, .9); margin: 0 0 32px; max-width: 480px; }
+  .btn {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 17px 34px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    transition: all .2s;
+  }
+  .btn--coral { color: var(--color-bg); background: var(--color-cta); }
+  .btn--coral:hover { background: var(--color-cta-dark); }
+
+  @media (max-width: 860px) {
+    .cta { padding: 64px 0; }
+    .cta__inner { grid-template-columns: 1fr; gap: 44px; }
+    .cta__photo { margin-right: 14px; }
+    .cta__content { text-align: center; }
+    .cta__sub { margin-left: auto; margin-right: auto; }
+  }
+  @media (max-width: 560px) {
+    .cta { padding: 48px 0; }
+    .cta__sub { font-size: 16px; }
+    .cta .btn { width: 100%; justify-content: center; }
+  }
+</style>
