@@ -45,7 +45,7 @@ const faqs = [
           <button class="faq-item__question" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`faq-ans-${i}`}>
             {item.q}
             <div class="faq-item__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
           </button>
           <div class="faq-item__answer" id={`faq-ans-${i}`} role="region">
@@ -64,16 +64,16 @@ const faqs = [
   .section-label { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-cta); margin: 0 0 12px; }
   .section-title { font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 34px); font-weight: 800; color: var(--color-bg); margin: 0; }
 
-  .faq-item { background: #fff; border: 1px solid rgba(30,34,55,.08); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transform: translateZ(0); }
+  .faq-item { background: #fff; border: 1px solid var(--color-cta); border-radius: 16px; margin-bottom: 16px; overflow: hidden; transform: translateZ(0); }
   .faq-item__question {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 20px 22px;
+    padding: 24px 28px;
     font-family: var(--font-display);
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--color-bg);
     background: none;
@@ -82,16 +82,14 @@ const faqs = [
     text-align: left;
   }
   .faq-item__icon {
-    width: 26px; height: 26px; border-radius: 50%; background: var(--color-bg-light);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .3s;
+    width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--color-cta); color: var(--color-cta);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .3s;
   }
-  .faq-item__icon path { stroke: var(--color-bg); }
-  .faq-item.open .faq-item__icon { background: var(--color-cta); transform: rotate(45deg); }
-  .faq-item.open .faq-item__icon path { stroke: #fff; }
+  .faq-item.open .faq-item__icon { transform: rotate(180deg); }
 
-  .faq-item__answer { max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; padding: 0 22px; }
-  .faq-item__answer p { font-size: 14.5px; color: var(--color-text-muted); line-height: 1.7; margin: 0; }
-  .faq-item.open .faq-item__answer { max-height: 300px; padding: 0 22px 20px; }
+  .faq-item__answer { max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; padding: 0 28px; }
+  .faq-item__answer p { font-size: 16px; color: var(--color-text-muted); line-height: 1.7; margin: 0; }
+  .faq-item.open .faq-item__answer { max-height: 300px; padding: 0 28px 24px; }
 </style>
 
 <script>
