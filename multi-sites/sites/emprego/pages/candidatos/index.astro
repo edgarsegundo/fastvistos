@@ -1,0 +1,68 @@
+---
+// /candidatos/ — hub geral: cargos e cidades com candidatos disponíveis.
+import EmpregoSeoLayout from '../../components/EmpregoSeoLayout.astro';
+import JsonLdEmpregoSeo from '../../components/JsonLdEmpregoSeo.astro';
+import EmpregoBreadcrumb from '../../components/EmpregoBreadcrumb.astro';
+import {
+    seoBundle, cap, candidatosLabel, maxDate, formatDateBR, linkAppGenerico, urlHub, urlCargo, urlCidade, urlCombo, path,
+} from '../../lib/emprego-seo.ts';
+
+const url = urlHub();
+const combos = seoBundle.combos;
+// Sem nenhuma página gerada, este hub seria uma página vazia indexável.
+if (combos.length === 0) return Astro.redirect('/');
+
+const lastmod = maxDate(combos.map((x) => x.lastmod));
+const total = combos.reduce((n, x) => n + x.stats.total, 0);
+const h1 = 'Candidatos disponíveis para contratar agora';
+const title = 'Candidatos disponíveis por cargo e cidade | Emprego Aqui';
+const description = `Encontre candidatos por cargo e cidade: ${combos.length} combinações com ${total} perfis disponíveis. Fale direto no WhatsApp, sem publicar vaga.`;
+const crumbs = [
+    { name: 'Início', item: 'https://empregoaqui.com.br/' },
+    { name: 'Candidatos', item: url },
+];
+const topCombos = [...combos].sort((a, b) => b.stats.total - a.stats.total).slice(0, 30);
+---
+
+<EmpregoSeoLayout canonical={url} title={title} description={description} updatedDate={lastmod}>
+    <JsonLdEmpregoSeo
+        slot="jsonld" url={url} name={h1} description={description} updatedDate={lastmod}
+        breadcrumbs={crumbs}
+        items={topCombos.map((x) => ({ name: `${cap(x.cargo_label)} em ${x.cidade_nome}, ${x.uf}`, description: `${candidatosLabel(x.stats.total)} disponíveis` }))}
+    />
+    <EmpregoBreadcrumb items={crumbs.map((x) => ({ name: x.name, href: path(x.item) }))} />
+    <h1 class="seo-h1">{h1}</h1>
+    <p class="seo-updated">atualizado em {formatDateBR(lastmod)}</p>
+    <p class="seo-intro">
+        Escolha o cargo e a cidade para ver os candidatos cadastrados no Emprego Aqui e falar direto com eles pelo
+        WhatsApp, sem publicar vaga e sem esperar candidaturas.
+    </p>
+    <a class="seo-cta" href={linkAppGenerico('topo')} rel="nofollow">Buscar candidatos agora</a>
+
+    <section class="seo-section" aria-labelledby="h-top">
+        <h2 class="seo-h2" id="h-top">Mais procurados</h2>
+        <ul class="seo-links">
+            {topCombos.map((x) => (
+                <li><a href={path(urlCombo(x.cargo_slug, x.cidade_slug))}>{cap(x.cargo_label)} em {x.cidade_nome}, {x.uf} ({x.stats.total})</a></li>
+            ))}
+        </ul>
+    </section>
+
+    {seoBundle.cargos.length > 0 && (
+        <section class="seo-section" aria-labelledby="h-cargos">
+            <h2 class="seo-h2" id="h-cargos">Por cargo</h2>
+            <ul class="seo-links">
+                {seoBundle.cargos.map((x) => <li><a href={path(urlCargo(x.cargo_slug))}>{cap(x.cargo_label)} ({x.total})</a></li>)}
+            </ul>
+        </section>
+    )}
+
+    {seoBundle.cidades.length > 0 && (
+        <section class="seo-section" aria-labelledby="h-cidades">
+            <h2 class="seo-h2" id="h-cidades">Por cidade</h2>
+            <ul class="seo-links">
+                {seoBundle.cidades.map((x) => <li><a href={path(urlCidade(x.cidade_slug))}>{x.cidade_nome}, {x.uf} ({x.total})</a></li>)}
+            </ul>
+        </section>
+    )}
+</EmpregoSeoLayout>

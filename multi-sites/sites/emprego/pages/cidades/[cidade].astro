@@ -1,0 +1,47 @@
+---
+// /cidades/<cidade-uf>/ — hub: todos os cargos com candidatos suficientes na cidade.
+import EmpregoSeoLayout from '../../components/EmpregoSeoLayout.astro';
+import JsonLdEmpregoSeo from '../../components/JsonLdEmpregoSeo.astro';
+import EmpregoBreadcrumb from '../../components/EmpregoBreadcrumb.astro';
+import {
+    seoBundle, cap, candidatosLabel, maxDate, formatDateBR, urlCidade, urlCombo, urlHub, path,
+} from '../../lib/emprego-seo.ts';
+import type { SeoCidadeHub } from '../../lib/emprego-seo.ts';
+
+export function getStaticPaths() {
+    return seoBundle.cidades.map((hub) => ({ params: { cidade: hub.cidade_slug }, props: { hub } }));
+}
+
+const { hub } = Astro.props as { hub: SeoCidadeHub };
+const local = `${hub.cidade_nome}, ${hub.uf}`;
+const url = urlCidade(hub.cidade_slug);
+const lastmod = maxDate(seoBundle.combos.filter((x) => x.cidade_slug === hub.cidade_slug).map((x) => x.lastmod));
+const h1 = `Candidatos disponíveis em ${local}`;
+const title = `Candidatos em ${local}: ${hub.cargos.length} cargos disponíveis | Emprego Aqui`;
+const description = `Candidatos a ${hub.cargos.slice(0, 3).map((x) => x.cargo_label.toLowerCase()).join(', ')} e mais em ${local}. Fale direto no WhatsApp, sem publicar vaga.`;
+const crumbs = [
+    { name: 'Início', item: 'https://empregoaqui.com.br/' },
+    { name: 'Candidatos', item: urlHub() },
+    { name: local, item: url },
+];
+---
+
+<EmpregoSeoLayout canonical={url} title={title} description={description} updatedDate={lastmod}>
+    <JsonLdEmpregoSeo
+        slot="jsonld" url={url} name={h1} description={description} updatedDate={lastmod}
+        breadcrumbs={crumbs}
+        items={hub.cargos.map((x) => ({ name: `${cap(x.cargo_label)} em ${local}`, description: `${candidatosLabel(x.total)} a ${x.cargo_label.toLowerCase()}` }))}
+    />
+    <EmpregoBreadcrumb items={crumbs.map((x) => ({ name: x.name, href: path(x.item) }))} />
+    <h1 class="seo-h1">{h1}</h1>
+    {lastmod && <p class="seo-updated">{candidatosLabel(hub.total)} · {hub.cargos.length} cargos · atualizado em {formatDateBR(lastmod)}</p>}
+    <p class="seo-intro">
+        Veja os cargos com candidatos disponíveis em {hub.cidade_nome} e fale direto com eles pelo WhatsApp,
+        sem publicar vaga.
+    </p>
+    <ul class="seo-links">
+        {hub.cargos.map((x) => (
+            <li><a href={path(urlCombo(x.cargo_slug, hub.cidade_slug))}>{cap(x.cargo_label)} ({x.total})</a></li>
+        ))}
+    </ul>
+</EmpregoSeoLayout>

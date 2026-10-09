@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
-import { promises as fs } from 'fs';
+import { promises as fs, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { config as loadDotenv } from 'dotenv';
@@ -22,12 +22,15 @@ const DEFAULT_CHANGEFREQ = 'monthly';  // fallback para outras páginas
 const HOME_PRIORITY     = 1.0;
 const STANDARD_PRIORITY = 1.0;
 const BLOG_PRIORITY     = 0.7;
+const SEO_LANDING_PRIORITY   = 0.8;   // /candidatos/... e /cidades/... (emprego)
+const SEO_LANDING_CHANGEFREQ = 'daily';
 
 // ================================================================
 // Páginas que nunca devem aparecer no sitemap
 // ================================================================
 const SITEMAP_BLOCKLIST = [
     'styleguide-tailwind',
+    '/test/', // pages/test.html do site emprego (página de teste que estava sendo indexada)
     // adicione outras rotas de dev/admin aqui se necessário
 ];
 
@@ -150,10 +153,40 @@ function formatDate(dateString) {
 }
 
 /**
+ * lastmod real das páginas de SEO programático do emprego (/candidatos/, /cidades/):
+ * vem do mesmo seo-bundle.json que gera as páginas (fetch-emprego-seo.js roda antes
+ * do build). Mapa pathname -> data ISO; hubs usam a data mais recente dos filhos.
+ */
+function loadSeoLastmods() {
+    const map = new Map();
+    try {
+        const file = join(__dirname, 'multi-sites/sites/emprego/lib/generated/seo-bundle.json');
+        const bundle = JSON.parse(readFileSync(file, 'utf8'));
+        const newest = (a, b) => (!a || (b && b > a) ? b : a);
+        const bump = (key, iso) => map.set(key, newest(map.get(key), iso));
+        for (const c of bundle.combos || []) {
+            map.set(`/candidatos/${c.cargo_slug}/${c.cidade_slug}/`, c.lastmod);
+            bump(`/candidatos/${c.cargo_slug}/`, c.lastmod);
+            bump(`/cidades/${c.cidade_slug}/`, c.lastmod);
+            bump('/candidatos/', c.lastmod);
+        }
+    } catch {
+        // sem bundle (outros sites / primeira execução): sem lastmod de SEO
+    }
+    return map;
+}
+const seoLastmods = loadSeoLastmods();
+
+function isSeoLanding(url) {
+    return url.includes('/candidatos/') || url.includes('/cidades/');
+}
+
+/**
  * Determina o changefreq com base no tipo de página.
  */
 function resolveChangefreq(url, override) {
     if (override) return override;
+    if (isSeoLanding(url)) return SEO_LANDING_CHANGEFREQ;
     if (url === siteConfig.url || url === siteConfig.url + '/') return HOME_CHANGEFREQ;
     if (url.includes('/blog/'))   return BLOG_CHANGEFREQ;
     if (url.includes('/vistos/')) return VISTOS_CHANGEFREQ;
@@ -165,6 +198,7 @@ function resolveChangefreq(url, override) {
  */
 function resolvePriority(url, override) {
     if (override !== undefined) return override;
+    if (isSeoLanding(url)) return SEO_LANDING_PRIORITY;
     if (url === siteConfig.url || url === siteConfig.url + '/') return HOME_PRIORITY;
     if (url.includes('/blog/')) return BLOG_PRIORITY;
     return STANDARD_PRIORITY;
@@ -204,7 +238,8 @@ export default defineConfig({
             serialize: ({ url, data }) => {
                 const lastModified  = data?.lastModified || data?.frontmatter?.dateModified;
                 const sitemapMeta   = data?.frontmatter?.sitemap;
-                const lastmod       = formatDate(lastModified); // null se não houver data real
+                const seoLastmod    = seoLastmods.get(new URL(url).pathname);
+                const lastmod       = formatDate(lastModified || seoLastmod); // null se não houver data real
 
                 const entry = {
                     url,

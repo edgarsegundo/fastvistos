@@ -1,15 +1,31 @@
-User-agent: *
+# Buscadores e assistentes de IA: liberados explicitamente
+# (páginas /candidatos/ e /cidades/ são feitas para serem indexadas e citadas)
+User-agent: Googlebot
 Allow: /
 
-# LLM/AI agent discovery
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Demais robôs
+User-agent: *
+Allow: /
 Allow: /llms.txt
+Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://empregoaqui.com.br/sitemap-index.xml
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-# Disallow admin or private areas (if any)
-# Disallow: /admin/
-# Disallow: /private/

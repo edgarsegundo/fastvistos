@@ -228,3 +228,6 @@ public/**/assets/images/blog/resized/
 *.zip
 
 plane-frames/
+
+# SEO programático do emprego (gerado por fetch-emprego-seo.js)
+multi-sites/sites/emprego/lib/generated/

@@ -1,0 +1,120 @@
+---
+// /candidatos/<cargo>/<cidade-uf>/ — página de SEO programático (build estático).
+// Dados: lib/generated/seo-bundle.json (fetch-emprego-seo.js). Só existem as
+// combinações com candidatos suficientes (regra no Django: SEO_MIN_CANDIDATES).
+import EmpregoSeoLayout from '../../../components/EmpregoSeoLayout.astro';
+import JsonLdEmpregoSeo from '../../../components/JsonLdEmpregoSeo.astro';
+import EmpregoBreadcrumb from '../../../components/EmpregoBreadcrumb.astro';
+import EmpregoCandidateCard from '../../../components/EmpregoCandidateCard.astro';
+import EmpregoLandingStats from '../../../components/EmpregoLandingStats.astro';
+import {
+    seoBundle, buildTexts, cap, candidatosLabel, linkApp,
+    urlCombo, urlCargo, urlCidade, urlHub, path,
+} from '../../../lib/emprego-seo.ts';
+import type { SeoCombo } from '../../../lib/emprego-seo.ts';
+
+export function getStaticPaths() {
+    return seoBundle.combos.map((combo) => ({
+        params: { cargo: combo.cargo_slug, cidade: combo.cidade_slug },
+        props: { combo },
+    }));
+}
+
+const { combo } = Astro.props as { combo: SeoCombo };
+const c = combo;
+const t = buildTexts(c);
+const cargoLc = c.cargo_label.toLowerCase();
+const local = `${c.cidade_nome}, ${c.uf}`;
+const url = urlCombo(c.cargo_slug, c.cidade_slug);
+const cargoRef = { slug: c.cargo_slug, label: c.cargo_label };
+const cidadeRef = { slug: c.cidade_slug, nome: c.cidade_nome, uf: c.uf };
+const h1 = `Candidatos a ${cargoLc} em ${local}`;
+
+const crumbs = [
+    { name: 'Início', item: 'https://empregoaqui.com.br/' },
+    { name: 'Candidatos', item: urlHub() },
+    ...(c.tem_hub_cargo ? [{ name: cap(c.cargo_label), item: urlCargo(c.cargo_slug) }] : []),
+    { name: local, item: url },
+];
+---
+
+<EmpregoSeoLayout canonical={url} title={t.title} description={t.description} updatedDate={c.lastmod}>
+    <JsonLdEmpregoSeo
+        slot="jsonld"
+        url={url}
+        name={h1}
+        description={t.description}
+        updatedDate={c.lastmod}
+        breadcrumbs={crumbs}
+        items={c.candidatos.map((k) => ({
+            name: [k.cargo, k.bairro, k.faixa_etaria && `${k.faixa_etaria} anos`].filter(Boolean).join(' · '),
+            description: k.resumo,
+        }))}
+        faq={t.faq}
+    />
+
+    <EmpregoBreadcrumb items={crumbs.map((x) => ({ name: x.name, href: path(x.item) }))} />
+    <h1 class="seo-h1">{h1}</h1>
+    <p class="seo-updated">{candidatosLabel(c.stats.total)} · atualizado em {t.updated}</p>
+    <p class="seo-intro">{t.intro}</p>
+    <a class="seo-cta" href={linkApp(cargoRef, cidadeRef, 'topo')} rel="nofollow">
+        Ver os {c.stats.total} candidatos e chamar no WhatsApp
+    </a>
+
+    <section class="seo-section" aria-labelledby="h-perfis">
+        <h2 class="seo-h2" id="h-perfis">Candidatos a {cargoLc} mais recentes em {c.cidade_nome}</h2>
+        <div class="grid">
+            {c.candidatos.map((k) => (
+                <EmpregoCandidateCard card={k} href={linkApp(cargoRef, cidadeRef, 'card')} />
+            ))}
+        </div>
+        <a class="seo-cta seo-cta--center" href={linkApp(cargoRef, cidadeRef, 'lista')} rel="nofollow">
+            {c.stats.total > c.candidatos.length
+                ? `Ver todos os ${c.stats.total} candidatos`
+                : 'Buscar e chamar no WhatsApp'}
+        </a>
+    </section>
+
+    <section class="seo-section" aria-labelledby="h-numeros">
+        <h2 class="seo-h2" id="h-numeros">Perfil dos candidatos a {cargoLc} em {c.cidade_nome}</h2>
+        <EmpregoLandingStats stats={c.stats} />
+    </section>
+
+    {c.cidades_proximas.length > 0 && (
+        <section class="seo-section" aria-labelledby="h-cidades">
+            <h2 class="seo-h2" id="h-cidades">Candidatos a {cargoLc} em outras cidades</h2>
+            <ul class="seo-links">
+                {c.cidades_proximas.map((x) => (
+                    <li><a href={path(urlCombo(c.cargo_slug, x.cidade_slug))}>{cap(cargoLc)} em {x.cidade_nome}, {x.uf} ({x.total})</a></li>
+                ))}
+                {c.tem_hub_cargo && <li><a href={path(urlCargo(c.cargo_slug))}>Todas as cidades</a></li>}
+            </ul>
+        </section>
+    )}
+
+    {c.cargos_parecidos.length > 0 && (
+        <section class="seo-section" aria-labelledby="h-cargos">
+            <h2 class="seo-h2" id="h-cargos">Outros cargos em {c.cidade_nome}</h2>
+            <ul class="seo-links">
+                {c.cargos_parecidos.map((x) => (
+                    <li><a href={path(urlCombo(x.cargo_slug, c.cidade_slug))}>{cap(x.cargo_label)} em {c.cidade_nome} ({x.total})</a></li>
+                ))}
+                {c.tem_hub_cidade && <li><a href={path(urlCidade(c.cidade_slug))}>Todos os cargos em {c.cidade_nome}</a></li>}
+            </ul>
+        </section>
+    )}
+
+    <section class="seo-section seo-faq" aria-labelledby="h-faq">
+        <h2 class="seo-h2" id="h-faq">Perguntas frequentes</h2>
+        {t.faq.map((f) => (
+            <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+            </details>
+        ))}
+    </section>
+</EmpregoSeoLayout>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+</style>

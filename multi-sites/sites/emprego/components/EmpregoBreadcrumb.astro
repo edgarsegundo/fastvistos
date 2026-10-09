@@ -1,0 +1,24 @@
+---
+/** Breadcrumb visível (espelha o BreadcrumbList do JSON-LD). */
+interface Props { items: { name: string; href?: string }[] }
+const { items } = Astro.props;
+---
+
+<nav class="bc" aria-label="Você está em">
+  <ol>
+    {items.map((it, i) => (
+      <li>
+        {it.href && i < items.length - 1
+          ? <a href={it.href}>{it.name}</a>
+          : <span aria-current={i === items.length - 1 ? 'page' : undefined}>{it.name}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .bc ol { display: flex; flex-wrap: wrap; gap: 4px 0; list-style: none; padding: 0; margin: 0; font-size: 14px; color: var(--color-muted); }
+  .bc li:not(:last-child)::after { content: '›'; margin: 0 8px; }
+  .bc a { color: var(--color-muted); text-decoration: none; }
+  .bc a:hover { text-decoration: underline; }
+</style>

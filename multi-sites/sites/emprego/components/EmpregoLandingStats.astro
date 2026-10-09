@@ -1,0 +1,40 @@
+---
+/** Números reais da página: experiência, faixa etária, bairros, disponibilidade. */
+import type { SeoStats } from '../lib/emprego-seo.ts';
+interface Props { stats: SeoStats }
+const { stats } = Astro.props;
+const blocks = [
+  { title: 'Experiência', rows: stats.experiencia },
+  { title: 'Faixa etária', rows: stats.idade },
+  { title: 'Bairros com mais candidatos', rows: stats.bairros },
+  { title: 'Disponibilidade', rows: stats.disponibilidade },
+].filter((b) => b.rows.length > 0);
+---
+
+<div class="st">
+  {blocks.map((b) => (
+    <section class="st__box">
+      <h3>{b.title}</h3>
+      <ul>
+        {b.rows.map((r) => (
+          <li>
+            <span class="st__label">{r.label}</span>
+            <span class="st__bar" aria-hidden="true"><i style={`width:${Math.max(r.pct, 3)}%`}></i></span>
+            <span class="st__pct">{r.pct}%</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>
+
+<style>
+  .st { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .st__box { background: var(--color-surface); border-radius: var(--radius); padding: 16px 18px; }
+  .st__box h3 { font-family: var(--font-display); font-size: 16px; margin: 0 0 10px; }
+  .st ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .st li { display: grid; grid-template-columns: minmax(90px, 1.2fr) 2fr 40px; gap: 10px; align-items: center; font-size: 14px; }
+  .st__bar { height: 8px; border-radius: 99px; background: rgba(30,34,55,.1); overflow: hidden; }
+  .st__bar i { display: block; height: 100%; background: var(--color-cta-strong); border-radius: 99px; }
+  .st__pct { text-align: right; color: var(--color-muted); }
+</style>

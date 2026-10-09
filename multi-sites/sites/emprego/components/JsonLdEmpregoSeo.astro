@@ -1,0 +1,107 @@
+---
+/**
+ * JSON-LD das páginas de SEO programático (/candidatos/..., /cidades/...).
+ * Um único @graph: WebPage (CollectionPage), BreadcrumbList, ItemList dos perfis
+ * (sem nome nem URL — privacidade), FAQPage e referências a WebSite/Organization
+ * com os mesmos @id da home. Reaproveita os blocos helpers já existentes.
+ */
+import { getWebPageBlock } from './JsonLdWebPageBlock.astro';
+import { getBreadcrumbBlock } from './JsonLdBreadcrumbBlock.astro';
+import { ensureTrailingSlash } from '../lib/utils.ts';
+import { siteConfig } from '../site-config.ts';
+
+interface Props {
+    url: string;
+    name: string;
+    description: string;
+    updatedDate?: string | null;
+    breadcrumbs: { name: string; item: string }[];
+    items?: { name: string; description: string }[];
+    faq?: { q: string; a: string }[];
+}
+const { url, name, description, updatedDate = null, breadcrumbs, items = [], faq = [] } = Astro.props;
+
+const site = ensureTrailingSlash(siteConfig.site.canonical);
+const websiteId = `${site}#website`;
+const orgId = `${ensureTrailingSlash(siteConfig.organization?.canonical || siteConfig.site.canonical)}#organization`;
+const breadcrumbId = `${url}#breadcrumb`;
+const lang = siteConfig.site.locale || 'pt-BR';
+
+const webPage = getWebPageBlock({
+    disableWebPage: false,
+    includeCollection: true,
+    pageUrl: url,
+    siteName: name,
+    websiteId,
+    orgId,
+    imageId: null,
+    breadcrumbId,
+    description,
+    pubDate: null,
+    updatedDate,
+    imageUrlValidated: siteConfig.site.primaryImage?.url,
+});
+
+const breadcrumb = getBreadcrumbBlock({
+    disableBreadcrumb: false,
+    breadcrumbId,
+    breadcrumbList: breadcrumbs,
+    canonical: url,
+});
+
+const itemList = items.length
+    ? {
+          '@type': 'ItemList',
+          '@id': `${url}#lista`,
+          name,
+          numberOfItems: items.length,
+          itemListOrder: 'https://schema.org/ItemListOrderDescending',
+          itemListElement: items.map((it, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: it.name,
+              description: it.description,
+          })),
+      }
+    : null;
+
+const faqBlock = faq.length
+    ? {
+          '@type': 'FAQPage',
+          '@id': `${url}#faq`,
+          inLanguage: lang,
+          mainEntity: faq.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+          })),
+      }
+    : null;
+
+const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        webPage,
+        breadcrumb,
+        itemList,
+        faqBlock,
+        { '@type': 'WebSite', '@id': websiteId, url: site, name: siteConfig.site.siteName, inLanguage: lang },
+        {
+            '@type': 'Organization',
+            '@id': orgId,
+            name: siteConfig.organization?.name || siteConfig.site.siteName,
+            url: siteConfig.site.canonical,
+            logo: siteConfig.site.logo?.url,
+        },
+    ].filter(Boolean),
+};
+
+// Os textos vêm de candidatos (bairro, bio): JSON.stringify não escapa "<", então
+// "</script>" num bairro fecharia a tag e injetaria HTML/JS na página pública.
+const safeJson = JSON.stringify(graph)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+---
+
+<script type="application/ld+json" is:inline set:html={safeJson} />
