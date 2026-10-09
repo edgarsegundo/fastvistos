@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Avisa Bing/Yandex (IndexNow) das páginas /candidatos/ e /cidades/ atualizadas
- * recentemente — o Bing é de onde o ChatGPT/Copilot tiram resultados.
+ * recentemente (padrão: últimos 7 dias) — o Bing é de onde o ChatGPT/Copilot tiram resultados.
  *
  * Roda DEPOIS do deploy (ver scripts/emprego-daily-rebuild.sh). Usa o mesmo
  * seo-bundle.json do build. Só envia URLs com lastmod nas últimas HOURS horas.
@@ -16,7 +16,8 @@ import { config as loadDotenv } from 'dotenv';
 loadDotenv();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const HOST = 'empregoaqui.com.br';
-const HOURS = Number(process.env.INDEXNOW_WINDOW_HOURS || 26);
+// 170 h = 7 dias + folga: o cron roda UMA vez por semana (scripts/emprego-daily-rebuild.sh).
+const HOURS = Number(process.env.INDEXNOW_WINDOW_HOURS || 170);
 const key = process.env.EMPREGO_INDEXNOW_KEY;
 if (!key) {
     console.log('EMPREGO_INDEXNOW_KEY ausente: IndexNow ignorado.');

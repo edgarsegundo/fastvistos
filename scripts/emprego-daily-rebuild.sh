@@ -1,5 +1,5 @@
 #!/bin/bash
-# Rebuild diário do site emprego (páginas /candidatos/ e /cidades/ dependem dos
+# Rebuild periódico (hoje: semanal, sábado) do site emprego (páginas /candidatos/ e /cidades/ dependem dos
 # dados do Django, então precisam ser regeneradas periodicamente).
 #
 # Build (mesmo do publish-from-local.sh) + deploy via script root fixo + IndexNow. Não faz git,
@@ -12,8 +12,9 @@
 #   sudo chmod 440 /etc/sudoers.d/emprego-deploy && sudo visudo -cf /etc/sudoers.d/emprego-deploy
 # (reinstale o script com o mesmo `sudo install` sempre que scripts/emprego-deploy-root.sh mudar)
 #
-# Exemplo de cron (04:30 UTC = 01:30 em Brasília):
-#   30 4 * * * flock -n /tmp/emprego-rebuild.lock /home/edgar/Repos/fastvistos/scripts/emprego-daily-rebuild.sh >> /home/edgar/deploy_logs/emprego-daily.log 2>&1
+# Cron SEMANAL, sábado 04:30 UTC (= 01:30 em Brasília):
+#   30 4 * * 6 flock -n /tmp/emprego-rebuild.lock /home/edgar/Repos/fastvistos/scripts/emprego-daily-rebuild.sh >> /home/edgar/deploy_logs/emprego-daily.log 2>&1
+# (o nome do arquivo ficou "daily" por histórico; a frequência é a do crontab. O IndexNow olha os últimos 7 dias.)
 #
 # Pré-requisitos no .env da raiz: EMPREGO_API_BASE, EMPREGO_SEO_API_KEY, EMPREGO_INDEXNOW_KEY.
 # O deploy usa rsync --delete: uma página que deixa de ser elegível some no próximo rebuild.
