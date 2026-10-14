@@ -5,7 +5,7 @@
  */
 
 // Link para seção "Para empresas" (scroll âncora)
-const contactUrl = 'https://app.empregoaqui.com.br/buscar';
+const contactUrl = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=hero';
 ---
 
 <section class="hero" id="topo" aria-labelledby="hero-title">
@@ -25,7 +25,7 @@ const contactUrl = 'https://app.empregoaqui.com.br/buscar';
 
       <div class="hero__actions">
         <a href="#como-funciona" class="btn btn--ghost">Como funciona</a>
-        <a href={contactUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
+        <a href={contactUrl} data-cta="hero" class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
       </div>
 
       <div class="hero__trust">

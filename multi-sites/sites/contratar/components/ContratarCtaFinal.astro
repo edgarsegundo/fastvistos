@@ -3,7 +3,7 @@
  * CTA final — fundo com foto + overlay navy; foto de RH em moldura
  * levemente inclinada à esquerda, headline e botão à direita.
  */
-const searchUrl = 'https://app.empregoaqui.com.br/buscar';
+const searchUrl = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=cta_final';
 ---
 
 <section class="cta" id="cta-final" aria-labelledby="cta-title">
@@ -27,7 +27,7 @@ const searchUrl = 'https://app.empregoaqui.com.br/buscar';
         Chega de esperar <span class="cta__title-accent">por candidatos.</span>
       </h2>
       <p class="cta__sub">Encontre profissionais disponíveis e entre em contato diretamente.</p>
-      <a href={searchUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
+      <a href={searchUrl} data-cta="cta_final" class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
     </div>
   </div>
 </section>

@@ -5,7 +5,8 @@
  */
 
 // TODO: link mocado — trocar por WhatsApp/chat real quando definido
-const contactUrl = 'https://app.empregoaqui.com.br/buscar';
+const contactUrl = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=como_funciona_botao';
+const stepsUrl = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=como_funciona_passos';
 
 const steps = [
   {
@@ -37,7 +38,7 @@ const steps = [
       <p class="section-sub">Sem agência, sem troca de e-mails e sem burocracia. Contato direto no WhatsApp.</p>
     </div>
 
-    <a href={contactUrl} class="funciona__steps" target="_blank" rel="noopener noreferrer" tabindex="-1">
+    <a href={stepsUrl} data-cta="como_funciona_passos" class="funciona__steps" target="_blank" rel="noopener noreferrer" tabindex="-1">
       {steps.map((s) => (
         <div class="step">
           <img class="step__img" src={s.img} alt="" width="400" height="300" loading="lazy" decoding="async" />
@@ -49,7 +50,7 @@ const steps = [
     </a>
 
     <div class="funciona__cta">
-      <a href={contactUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
+      <a href={contactUrl} data-cta="como_funciona_botao" class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
     </div>
   </div>
 </section>

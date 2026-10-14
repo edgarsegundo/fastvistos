@@ -50,4 +50,16 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
     <ContratarFaq />
     <ContratarCtaFinal />
     <ContratarFooter />
+    <script is:inline>
+        document.addEventListener('click', function (e) {
+            var a = e.target.closest && e.target.closest('a[data-cta]');
+            if (!a) return;
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'cta_click',
+                cta_location: a.getAttribute('data-cta'),
+                link_url: a.href
+            });
+        });
+    </script>
 </SharedHomeLayout>

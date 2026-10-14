@@ -4,7 +4,7 @@
  * 4 cards de benefícios e CTA centralizado.
  */
 
-const searchUrl = 'https://app.empregoaqui.com.br/buscar';
+const searchUrl = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=para_empresas';
 
 const beneficios = [
   { title: 'Encontre rapidamente', desc: 'Veja candidatos disponíveis para sua necessidade.' },
@@ -54,7 +54,7 @@ const beneficios = [
     </ul>
 
     <div class="b2b__actions">
-      <a href={searchUrl} class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
+      <a href={searchUrl} data-cta="para_empresas" class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
     </div>
 
   </div>
