@@ -62,6 +62,11 @@ const imageUrlValidated = getValidatedImageUrl({
     assetsUrlBase: siteConfig.site.assetsUrlBase,
 });
 const imageType = getImageType(imageUrlValidated ?? '');
+const faviconType = faviconPath?.endsWith('.svg')
+    ? 'image/svg+xml'
+    : faviconPath?.endsWith('.png')
+      ? 'image/png'
+      : 'image/x-icon';
 ---
 
 <!-- Character encoding - MUST be first for proper detection -->
@@ -71,8 +76,14 @@ const imageType = getImageType(imageUrlValidated ?? '');
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href={faviconPath} />
+<link rel="icon" type={faviconType} href={faviconPath} />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+{
+    siteConfig.site.pngIcons?.map((icon: { href: string; sizes: string }) => (
+        <link rel="icon" type="image/png" sizes={icon.sizes} href={icon.href} />
+    ))
+}
+{siteConfig.site.manifestPath && <link rel="manifest" href={siteConfig.site.manifestPath} />}
 
 <!--
     Search engines usually discover your sitemap.xml from the robots.txt file,

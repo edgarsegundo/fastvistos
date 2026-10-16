@@ -6,6 +6,13 @@ export const siteConfig = {
         siteName: 'Emprego Aqui',
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
+        // Ícones grandes (PNG) + manifest: usados por buscadores/IA (ChatGPT, Google) para o logo do site
+        pngIcons: [
+            { href: '/favicon-32x32.png', sizes: '32x32' },
+            { href: '/android-chrome-192x192.png', sizes: '192x192' },
+            { href: '/logo.png', sizes: '512x512' },
+        ],
+        manifestPath: '/manifest.json',
         domain: 'empregoaqui.com.br',
         canonical: 'https://empregoaqui.com.br/',
         authorName: 'Edgar Rezende',
@@ -20,7 +27,7 @@ export const siteConfig = {
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://empregoaqui.com.br/assets/images/logo/empregoaqui-circular-logo.svg',
+            url: 'https://empregoaqui.com.br/logo.png',
             alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
             width: 512,
             height: 512,
@@ -138,7 +145,7 @@ export const siteConfig = {
         url: 'https://empregoaqui.com.br',
         canonical: 'https://empregoaqui.com.br/',
         logo: {
-            url: 'https://empregoaqui.com.br/assets/images/logo/empregoaqui-circular-logo.svg',
+            url: 'https://empregoaqui.com.br/logo.png',
             alt: 'Emprego Aqui — Conexão direta entre pequenos empresários e candidatos disponíveis para trabalhar agora',
             width: 512,
             height: 512,
