@@ -62,4 +62,24 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
             });
         });
     </script>
+    <script is:inline>
+        // Mantém os parâmetros de campanha ao ir da landing para o app.
+        (function () {
+            try {
+                var qs = new URLSearchParams(window.location.search);
+                var keys = ['gclid', 'gbraid', 'wbraid'];
+                var found = [];
+                keys.forEach(function (k) {
+                    var v = (qs.get(k) || '').replace(/\/+$/, '');
+                    if (v) found.push([k, v]);
+                });
+                if (!found.length) return;
+                document.querySelectorAll('a[href^="https://app.empregoaqui.com.br"]').forEach(function (a) {
+                    var url = new URL(a.href);
+                    found.forEach(function (kv) { url.searchParams.set(kv[0], kv[1]); });
+                    a.href = url.toString();
+                });
+            } catch (e) { /* ignora */ }
+        })();
+    </script>
 </SharedHomeLayout>
