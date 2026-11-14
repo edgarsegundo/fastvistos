@@ -77,7 +77,12 @@
     "dev:watch:contratar": "node dev-with-sync.js contratar",
     "build:contratar": "node sync-blog.js contratar && SITE_ID=contratar astro build && node postbuild-updatable.js contratar",
     "preview:contratar": "SITE_ID=contratar astro preview",
-    "download-images:contratar": "node download-blog-images.js contratar"
+    "download-images:contratar": "node download-blog-images.js contratar",
+    "dev:ea": "node sync-blog.js ea && SITE_ID=ea astro dev",
+    "dev:watch:ea": "node dev-with-sync.js ea",
+    "build:ea": "node sync-blog.js ea && SITE_ID=ea astro build && node postbuild-updatable.js ea",
+    "preview:ea": "SITE_ID=ea astro preview",
+    "download-images:ea": "node download-blog-images.js ea"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",
