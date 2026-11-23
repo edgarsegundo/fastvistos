@@ -1,145 +1,120 @@
 // 🌐 Shared Site Config (site + branding + global stuff)
+// Blog "O Dono que Constrói" — blog.ea.tv.br (siteId: ea)
+// Casos reais de donos de pequenos negócios que criaram seus próprios apps/sistemas com IA.
+//
+// Itens marcados com [PREENCHER] ainda não existem e foram deixados vazios
+// de propósito, para não publicar dados falsos (Schema.org / Open Graph).
+
+const DOMAIN = 'blog.ea.tv.br';
+const BASE_URL = `https://${DOMAIN}`;
+const SITE_NAME = 'O Dono que Constrói';
+const TAGLINE = 'Casos reais de donos de negócio que criaram o próprio app com IA';
+
 export const siteConfig = {
     site: {
-        business_id: '41a5c7f95e924d54b120ab9a0e1843c8',
-        id: 'fastvistos',
-        siteName: 'Fast Vistos',
+        business_id: '0cd1a371be1f482c85a21edcef60555e',
+        id: 'ea',
+        siteName: SITE_NAME,
         locale: 'pt-BR',
         faviconPath: '/favicon.ico',
-        domain: 'fastvistos.com.br',
-        canonical: 'https://fastvistos.com.br/',
-        authorName: 'Daniela Otaviano',
+        domain: DOMAIN,
+        canonical: `${BASE_URL}/`,
+        authorName: 'Edgar Rezende',
         primaryImage: {
-            url: '/images/og-fast-vistos.jpg',
+            url: '/images/og-dono-que-constroi.jpg', // [PREENCHER] criar imagem 1200x630
             width: 1200,
             height: 630,
             type: 'image/jpeg',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+            alt: `${SITE_NAME} — ${TAGLINE}`
         },
         useFullLanguageTag: true, // true/false
         currency: 'BRL',
         timezone: 'America/Sao_Paulo',
         logo: {
-            url: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem',
+            url: `${BASE_URL}/logo.png`, // [PREENCHER] subir logo 512x512
+            alt: SITE_NAME,
             width: 512,
             height: 512,
         },
         primaryColor: '#0070f3',
         secondaryColor: '#1c1c1e',
-        thumbnailUrl: 'https://fastvistos.com.br/assets/images/logo/logo-footer.png', // Important for search and social previews
+        thumbnailUrl: `${BASE_URL}/logo.png`, // Important for search and social previews
 
-        assetsUrlBase: 'https://fastvistos.com.br/assets/images/blog/', // Base URL for images used in blog posts and other content
+        assetsUrlBase: `${BASE_URL}/assets/images/blog/`, // Base URL for images used in blog posts and other content
 
-        priceRange: '$$', // e.g. $, $$, $$$, $$$$
-        openingHours: [
-            'Mo-Fr 09:00-18:00',
-            'Sa 09:00-13:00',
-        ],
-        sameAs: [  // Social media profiles
-            'https://www.facebook.com/fastvistos/',
-            'https://x.com/FVistos32701',
-            'https://www.youtube.com/@FastVistos/shorts',
-        ],
-        geo: {
-            latitude: -22.8807734, // Latitude for the business location
-            longitude: -47.0596895, // Longitude for the business location
-        },
+        // Blog editorial: sem endereço físico, horário, avaliações nem faixa de preço.
+        // (removidos os dados copiados do Fast Vistos: endereço, geo, horários, nota 5.0/277)
+        sameAs: [], // [PREENCHER] perfis sociais do blog, quando existirem
+
         serviceArea: {
-            name: 'Campinas e região metropolitana de São Paulo',
-        },
-        aggregateRating: {
-            ratingValue: '5.0',
-            reviewCount: '277',
-        },
-
-        address: {
-            streetAddress: 'Av. Júlio Diniz, 257',
-            addressLocality: 'Taquaral, Campinas',
-            addressRegion: 'SP',
-            postalCode: '13075-420',
-            addressCountry: 'BR',
+            name: 'Brazil',
         },
 
         contactPoint: {
-            telephone: '+551920422785',
-            telephoneFormatted: '+55 (19) 2042-2785',
-            contactType: 'Customer Service',
-            areaServed: {
-                "@type": "Country",
-                "name": "Brazil"
-            },            
-            availableLanguage: ['Portuguese', 'English'],
-            email: 'contato@fastvistos.com.br',
-        },
-        whatsapp: {
-            telephone: '+551150283044',
-            telephoneFormatted: '+55 (11) 5028-3044',
-            contactType: 'customer support',
-            contactOption: "WhatsApp",
-            url: 'https://wa.me/551150283044',
+            contactType: 'customer service',
             areaServed: {
                 "@type": "Country",
                 "name": "Brazil"
             },
-            availableLanguage: ["pt-BR", "en"],
-            email: 'contato@fastvistos.com.br', // ex: 'contato@fastvistos.com.br'
+            availableLanguage: ['Portuguese'],
+            email: 'contato@empregoaqui.com.br', // [CONFIRMAR] e-mail de contato do blog
         },
 
         socialMedia: {
-            facebook: 'https://www.facebook.com/fastvistos/',
-            twitter: '@yourtwitter',
+            facebook: '',
+            twitter: '',
             instagram: '',
             youtube: '',
         },
     },
 
     organization: {
-        id: 'https://fastvistos.com.br/#organization',
-        name: 'Fast Vistos',
-        url: 'https://fastvistos.com.br',
-        canonical: 'https://fastvistos.com.br/',
+        id: `${BASE_URL}/#organization`,
+        name: SITE_NAME,
+        url: BASE_URL,
+        canonical: `${BASE_URL}/`,
         logo: {
-            url: 'https://fastvistos.com.br/assets/images/logo/logo-fast-orange.png',
-            alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem, sede em Campinas',
-            width: 530,
-            height: 67,
+            url: `${BASE_URL}/logo.png`, // [PREENCHER] mesma logo acima
+            alt: SITE_NAME,
+            width: 512,
+            height: 512,
         },
-    },    
+    },
 
     homePageConfig: {
         seo: {
-            title: 'Fast Vistos — Assessoria Especializada em Vistos e Documentos de Viagem',
-            description: 'Fast Vistos — Assessoria especializada em vistos e documentos para viagens internacionais. Facilitamos a obtenção de vistos e passaportes com agilidade.',
+            title: `${SITE_NAME} — Casos reais de apps criados com IA por donos de negócio`,
+            description: 'Histórias de donos de pequenos negócios que criaram o próprio site, app ou sistema com IA: o que deu certo, quanto custou e onde pediram ajuda.',
             themeColor: '#0070f3',
             openGraph: {
                 type: 'website',
                 image: {
-                    url: '/images/og-fast-vistos.jpg',
+                    url: '/images/og-dono-que-constroi.jpg',
                     width: 1200,
                     height: 630,
                     type: 'image/jpeg',
-                    alt: 'Fast Vistos - Assessoria de vistos e documentos de viagem'
+                    alt: `${SITE_NAME} — ${TAGLINE}`
                 },
-                title: 'Guia completo para tirar visto americano 🇺🇸',
-                description: 'Entenda como funciona o processo, documentos e entrevista para tirar o visto americano.'
+                title: `${SITE_NAME}: donos de negócio que criam o próprio app com IA`,
+                description: 'Casos reais, com números e limites honestos: até onde a IA leva sozinha e onde vale pedir ajuda.'
             }
         },
     },
 
     blogPageConfig: {
         seo: {
-            title: 'Blog | Visto Americano, DS-160, Entrevista Consular e Mais | Central de Vistos',
-            description: 'Tire suas dúvidas sobre visto americano, DS-160, entrevista consular e documentação. Conteúdo atualizado para brasileiros em todo o país.',
+            title: `Casos | ${SITE_NAME}`,
+            description: 'Casos reais de donos de pequenos negócios que construíram o próprio app com IA: ferramentas, custos, resultados e os limites de cada história.',
             themeColor: '#0070f3',
-            canonical: 'https://centraldevistos.com/',
+            canonical: `${BASE_URL}/`,
             openGraph: {
                 type: 'blog',
                 tags: [
-                    'vistos internacionais',
-                    'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro'
+                    'inteligência artificial',
+                    'pequenos negócios',
+                    'dono que constrói',
+                    'criar app com IA',
+                    'casos reais'
                 ],
             }
         },
@@ -158,13 +133,14 @@ export const siteConfig = {
             themeColor: '#0070f3',
             openGraph: {
                 type: 'article',
-                author: 'Fast Vistos',
-                section: 'Serviços de Vistos e Documentos',
+                author: 'Edgar Rezende',
+                section: 'Casos: O Dono que Constrói',
                 tags: [
-                    'vistos internacionais',
-                    'visto americano',
-                    'visto canadense',
-                    'passaporte brasileiro'
+                    'inteligência artificial',
+                    'pequenos negócios',
+                    'dono que constrói',
+                    'criar app com IA',
+                    'casos reais'
                 ],
             }
         },
@@ -174,14 +150,14 @@ export const siteConfig = {
     },
 
     socialMedia: {
-        facebook: 'https://facebook.com/fastvistos',
-        twitter: '@fastvistos',
-        instagram: 'https://instagram.com/fastvistos',
-        youtube: 'https://youtube.com/@fastvistos',
+        facebook: '',
+        twitter: '',
+        instagram: '',
+        youtube: '',
     },
 
     analytics: {
-        gtmId: 'GTM-59SRNCQD',
+        gtmId: '', // [PREENCHER] o GTM do Fast Vistos foi removido; criar um container próprio
     },
 
     verification: {
@@ -197,7 +173,7 @@ export const siteConfig = {
 
     customStyles: {
         cssVars: {
-            '--accent-color': '#ACCENT',
+            '--accent-color': '#0070f3',
         },
     },
 };
