@@ -12,6 +12,15 @@ import { ensureTrailingSlash } from '../lib/utils.ts';
 
 export const prerender = true;
 
+// Gancho opcional por site: se existir `lib/llms-extra.ts` exportando
+// `llmsExtraLines(canonical: string): string[]`, as linhas devolvidas entram no llms.txt
+// logo depois da home (ex.: páginas de SEO programático do emprego). Site sem esse arquivo
+// não muda nada: o glob devolve {} e o laço abaixo não roda.
+const extraModules = import.meta.glob('../lib/llms-extra.ts', { eager: true }) as Record<
+    string,
+    { llmsExtraLines?: (canonical: string) => string[] }
+>;
+
 export const GET: APIRoute = async () => {
     const canonical = ensureTrailingSlash(siteConfig.site.canonical);
     const lines: string[] = [];
@@ -23,6 +32,14 @@ export const GET: APIRoute = async () => {
     lines.push('## Páginas');
     lines.push('');
     lines.push(`- [${siteConfig.site.siteName}](${canonical}): ${siteConfig.homePageConfig.seo.description}`);
+
+    for (const mod of Object.values(extraModules)) {
+        const extra = mod.llmsExtraLines?.(canonical) ?? [];
+        if (extra.length > 0) {
+            lines.push('');
+            lines.push(...extra);
+        }
+    }
 
     if (siteConfig.features?.blog) {
         // Only list articles that also have a routable page: getStaticPaths()

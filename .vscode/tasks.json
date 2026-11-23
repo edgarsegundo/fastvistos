@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Túnel SSH do banco (fv-db)",
+      "type": "shell",
+      "command": "lsof -iTCP:3307 -sTCP:LISTEN >/dev/null && echo 'Túnel já ativo na 3307' || ssh -N fv-db",
+      "isBackground": true,
+      "problemMatcher": [],
+      "runOptions": { "runOn": "folderOpen" },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "showReuseMessage": false
+      }
+    }
+  ]
+}
