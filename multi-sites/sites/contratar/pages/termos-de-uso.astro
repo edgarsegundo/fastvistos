@@ -3,7 +3,6 @@
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 
-import ContratarNavbar from '../components/ContratarNavbar.astro';
 import ContratarFooter from '../components/ContratarFooter.astro';
 import ContratarTermsOfUse from '../components/ContratarTermsOfUseSection.astro';
 
@@ -35,8 +34,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         />
     </Fragment>
 
-    <ContratarNavbar />
-    <main style="padding-top: 80px;">
+    <main>
         <ContratarTermsOfUse />
     </main>
     <ContratarFooter />

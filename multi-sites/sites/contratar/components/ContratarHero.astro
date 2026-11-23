@@ -77,7 +77,12 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
   .hero__gift { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #1f6136; }
 
   @media (max-width: 760px) {
-    .hero__bg { left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; -webkit-mask-image: none; mask-image: none; }
+    /* foto na largura toda da tela (sem o zoom do "cover"), sem cortar nas laterais;
+       a base esmaece no fundo do hero para a tela continuar coberta */
+    .hero__bg { left: 0; width: 100%; height: auto; -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%); mask-image: linear-gradient(to bottom, #000 60%, transparent 100%); }
+    /* escurece a partir do pescoço (≈ 45vw do topo, já que a foto tem a largura da tela) */
+    .hero__overlay { background: linear-gradient(to bottom, rgba(20,26,32,.15) 0, rgba(20,26,32,.15) 38vw, rgba(20,26,32,.88) 62vw, rgba(20,26,32,.94) 100%); }
+    .hero__inner { padding-top: calc(73px + 40px + 56px); }
     .hero__title { line-height: 1.12; }
     .hero__sub { font-size: 16px; }
     .hero__form { flex: 1 1 100%; padding: 24px; }
@@ -103,7 +108,7 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
   const ctx = c?.getContext('2d');
   if (c && ctx) {
     const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const DIST = 140;
+    const DIST = 120;
     let w = 0, h = 0, rafId = 0, visivel = true;
     let pts: { x: number; y: number; vx: number; vy: number; r: number; laranja: boolean }[] = [];
     // Faixa vertical onde a mulher está (fração da largura da foto): a rede não é desenhada ali
@@ -121,11 +126,11 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
         : null;
       c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.max(30, Math.min(110, Math.round((w * h) / 11000)));
+      const n = Math.max(18, Math.min(50, Math.round((w * h) / 24000)));
       pts = Array.from({ length: n }, () => ({
         x: Math.random() * w, y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.42, vy: (Math.random() - 0.5) * 0.42,
-        r: 1 + Math.random() * 1.6, laranja: Math.random() < 0.35,
+        vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+        r: 0.8 + Math.random() * 1.2, laranja: Math.random() < 0.25,
       }));
     };
     const desenhar = () => {
@@ -144,13 +149,13 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
           const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
           const d = Math.hypot(dx, dy);
           if (d < DIST) {
-            ctx.strokeStyle = `rgba(255,255,255,${(0.28 * (1 - d / DIST)).toFixed(3)})`;
+            ctx.strokeStyle = `rgba(255,255,255,${(0.14 * (1 - d / DIST)).toFixed(3)})`;
             ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
           }
         }
       }
       for (const p of pts) {
-        ctx.fillStyle = p.laranja ? 'rgba(242,139,48,.95)' : 'rgba(255,255,255,.85)';
+        ctx.fillStyle = p.laranja ? 'rgba(242,139,48,.7)' : 'rgba(255,255,255,.55)';
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
       }
       ctx.restore();
