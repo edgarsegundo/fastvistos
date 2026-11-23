@@ -7,7 +7,8 @@ import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
 import ContratarNavbar from '../components/ContratarNavbar.astro';
 import ContratarHero from '../components/ContratarHero.astro';
 import ContratarComoFunciona from '../components/ContratarComoFunciona.astro';
-import ContratarParaEmpresas from '../components/ContratarParaEmpresas.astro';
+import ContratarCandidatos from '../components/ContratarCandidatos.astro';
+import ContratarAreas from '../components/ContratarAreas.astro';
 import ContratarCtaFinal from '../components/ContratarCtaFinal.astro';
 import ContratarFaq from '../components/ContratarFaq.astro';
 import ContratarFooter from '../components/ContratarFooter.astro';
@@ -36,7 +37,7 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         <link
           rel="preload"
           as="style"
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Lora:wght@400;500&display=swap"
           onload="this.onload=null;this.rel='stylesheet'"
         />
         <JsonLdHomePageBase faqList={[]} servicesList={[]} reviewsList={[]} disableReviews={false} />
@@ -45,8 +46,9 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 
     <ContratarNavbar />
     <ContratarHero />
+    <ContratarCandidatos />
     <ContratarComoFunciona />
-    <ContratarParaEmpresas />
+    <ContratarAreas />
     <ContratarFaq />
     <ContratarCtaFinal />
     <ContratarFooter />
@@ -74,6 +76,13 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
                     if (v) found.push([k, v]);
                 });
                 if (!found.length) return;
+                document.querySelectorAll('form[action^="https://app.empregoaqui.com.br"]').forEach(function (f) {
+                    found.forEach(function (kv) {
+                        var i = document.createElement('input');
+                        i.type = 'hidden'; i.name = kv[0]; i.value = kv[1];
+                        f.appendChild(i);
+                    });
+                });
                 document.querySelectorAll('a[href^="https://app.empregoaqui.com.br"]').forEach(function (a) {
                     var url = new URL(a.href);
                     found.forEach(function (kv) { url.searchParams.set(kv[0], kv[1]); });

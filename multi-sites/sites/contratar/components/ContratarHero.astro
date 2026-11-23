@@ -1,117 +1,159 @@
 ---
 /**
- * Hero B2B — fundo navy sólido (sem foto/slideshow), texto à esquerda,
- * imagem do app com a lista de candidatos à direita.
+ * Hero — foto de fundo + overlay + rede animada de pontos (canvas),
+ * texto à esquerda e formulário de busca (cargo + cidade) à direita.
+ * O form monta ?q="cargo cidade" e abre a busca do app.
  */
-
-// Link para seção "Para empresas" (scroll âncora)
-const contactUrl = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=hero';
+const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
 ---
 
 <section class="hero" id="topo" aria-labelledby="hero-title">
-  <div class="hero__dots" aria-hidden="true"></div>
+  <img class="hero__bg" src="/assets/images/hero/hero-bg.webp" alt="" aria-hidden="true" width="1197" height="1024" fetchpriority="high" decoding="async" />
+  <div class="hero__overlay" aria-hidden="true"></div>
+  <canvas id="rede" class="hero__rede" aria-hidden="true"></canvas>
 
-  <div class="hero__inner wrap">
+  <div class="wrap hero__inner">
     <div class="hero__content">
-      <h1 class="hero__title" id="hero-title">
-        <span class="hero__title-accent">Precisa contratar?</span>
-        Encontre seu próximo candidato aqui.
-      </h1>
-
-      <p class="hero__sub">
-        Encontre candidatos por cargo e região, veja os perfis disponíveis e
-        fale diretamente com quem pode fazer parte da sua equipe.
+      <span class="eyebrow">RECRUTAMENTO EM CAMPINAS E REGIÃO</span>
+      <h1 class="hero__title" id="hero-title">Está precisando contratar?</h1>
+      <p class="hero__sub">Encontre profissionais para sua vaga, consulte os currículos e fale direto com quem faz sentido para sua equipe.</p>
+      <p class="hero__free">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        Sem mensalidades ou cartões.
       </p>
-
-      <div class="hero__actions">
-        <a href="#como-funciona" class="btn btn--ghost">Como funciona</a>
-        <a href={contactUrl} data-cta="hero" class="btn btn--coral" target="_blank" rel="noopener noreferrer">Procurar candidatos →</a>
-      </div>
-
-      <div class="hero__trust">
-        <span class="hero__trust-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          5 contatos grátis para começar
-        </span>
-        <span class="hero__trust-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Sem mensalidade
-        </span>
-        <span class="hero__trust-item">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F28B30" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-          Sem burocracia
-        </span>
-      </div>
+      <a href="#como-funciona" class="hero__link">Veja como funciona</a>
     </div>
 
-    <div class="hero__panel">
-      <img
-        src="/assets/images/hero/lista-app-candidatos.webp"
-        alt="Lista de candidatos disponíveis com contato direto pelo WhatsApp"
-        class="hero__panel-img"
-        width="998"
-        height="1184"
-        fetchpriority="high"
-        decoding="async"
-      />
-    </div>
+    <form id="form-busca" class="hero__form" action="https://app.empregoaqui.com.br/buscar" method="get">
+      <h2 class="hero__form-title">Busque agora o profissional</h2>
+      <div class="field">
+        <label for="cargo">CARGO</label>
+        <input id="cargo" type="search" placeholder="Ex.: garçom, vendedor, estoquista" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="cidade">CIDADE</label>
+        <select id="cidade">
+          {cidades.map((c) => <option>{c}</option>)}
+        </select>
+      </div>
+      <input type="hidden" name="q" id="q" value="garcom campinas" />
+      <input type="hidden" name="utm_source" value="contrataraqui" />
+      <input type="hidden" name="utm_medium" value="cta" />
+      <input type="hidden" name="utm_campaign" value="lp_principal" />
+      <input type="hidden" name="utm_content" value="hero_form" />
+      <button type="submit" class="hero__submit" data-cta="hero_form">BUSCAR CANDIDATOS</button>
+      <p class="hero__gift">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 21V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        5 contatos grátis ao criar sua conta de empresa
+      </p>
+    </form>
   </div>
 </section>
 
 <style>
-  .hero { background: var(--color-bg); padding: 88px 0 96px; position: relative; overflow: hidden; }
-  .hero__dots {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px);
-    background-size: 26px 26px;
-    opacity: .5;
-  }
+  .hero { position: relative; overflow: hidden; background: #1e2a36; }
+  .hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transform: scale(1.4); transform-origin: 50% 28%; }
+  .hero__overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,26,32,.88) 0%, rgba(20,26,32,.55) 45%, rgba(20,26,32,.25) 100%); }
+  .hero__rede { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-  .hero__inner { position: relative; display: flex; gap: 56px; align-items: center; flex-wrap: wrap; }
-  .hero__content { flex: 1 1 480px; min-width: 320px; }
+  .hero__inner { position: relative; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-end; justify-content: space-between; padding-block: calc(73px + clamp(40px, 8vw, 88px)) clamp(48px, 8vw, 96px); }
+  .hero__content { flex: 999 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 22px; padding-bottom: 8px; }
+  .eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 3px; color: #f7b57a; }
+  .hero__title { margin: 0; font-family: var(--font-serif); font-size: clamp(40px, 5vw, 68px); line-height: 1.1; font-weight: 400; color: #fff; }
+  .hero__sub { margin: 0; font-size: 19px; line-height: 1.55; color: #e3e8ee; max-width: 520px; }
+  .hero__free { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; color: var(--color-cta); }
+  .hero__link { align-self: flex-start; display: flex; align-items: center; min-height: 44px; color: #fff; font-size: 15px; font-weight: 600; text-decoration: underline; }
 
-  .hero__title {
-    font-family: var(--font-display);
-    font-size: clamp(34px, 4.4vw, 52px);
-    font-weight: 800;
-    line-height: 1.12;
-    color: #fff;
-    margin: 0 0 24px;
-  }
-  .hero__title-accent { display: block; color: var(--color-cta); }
-
-  .hero__sub { font-size: 17px; line-height: 1.6; color: rgba(255,255,255,.9); max-width: 520px; margin: 0 0 32px; }
-
-  .hero__actions { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; }
-  .btn {
-    font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 700;
-    padding: 15px 28px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-flex;
-    transition: all .2s;
-  }
-  .btn--coral { color: var(--color-bg); background: var(--color-cta); border: 1.5px solid var(--color-cta); }
-  .btn--coral:hover { background: var(--color-cta-dark); border-color: var(--color-cta-dark); }
-  .btn--ghost { color: var(--color-cta); background: transparent; border: 1.5px solid var(--color-cta); }
-  .btn--ghost:hover { background: rgba(242,139,48,.1); }
-
-  .hero__trust { display: flex; gap: 24px; flex-wrap: wrap; }
-  .hero__trust-item { font-size: 14px; color: rgba(255,255,255,.9); display: flex; align-items: center; gap: 8px; }
-
-  .hero__panel { flex: 1 1 380px; min-width: 300px; max-width: 580px; }
-  .hero__panel-img { display: block; width: 100%; height: auto; }
-
-  @media (max-width: 860px) {
-    .hero__inner { flex-direction: column; align-items: stretch; }
-    .hero__panel { max-width: 480px; margin: 0 auto; }
-  }
+  .hero__form { flex: 0 1 380px; min-width: 0; margin: 0; background: #fff; padding: 32px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+  .hero__form-title { margin: 0; font-family: var(--font-serif); font-size: 30px; line-height: 1.15; font-weight: 400; color: #d9721a; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; font-weight: 600; letter-spacing: 1px; color: #5b6673; }
+  .field input, .field select { height: 44px; border: none; border-bottom: 1px solid #c9d0d8; padding: 0 2px; font-family: inherit; font-size: 16px; color: #1e2a36; background: transparent; border-radius: 0; }
+  .field input:focus, .field select:focus { outline: none; border-bottom-color: var(--color-cta); }
+  .hero__submit { display: flex; align-items: center; justify-content: center; min-height: 52px; border: none; cursor: pointer; background: var(--color-cta); color: #231a12; font-family: inherit; font-size: 15px; font-weight: 700; letter-spacing: 1px; transition: background .2s; }
+  .hero__submit:hover { background: var(--color-cta-dark); }
+  .hero__gift { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #1f6136; }
 
   @media (max-width: 760px) {
-    .hero { padding: 28px 0 48px; }
-    .hero__panel { display: none; }
+    .hero__title { line-height: 1.12; }
+    .hero__sub { font-size: 16px; }
+    .hero__form { flex: 1 1 100%; padding: 24px; }
+    .hero__form-title { font-size: 24px; }
   }
 </style>
+
+<script>
+  // Busca: monta q = "cargo cidade"
+  const form = document.getElementById('form-busca');
+  const cargo = document.getElementById('cargo') as HTMLInputElement | null;
+  const cidade = document.getElementById('cidade') as HTMLSelectElement | null;
+  const q = document.getElementById('q') as HTMLInputElement | null;
+  form?.addEventListener('submit', () => {
+    if (!cargo || !cidade || !q) return;
+    const c = cargo.value.trim();
+    q.value = c ? `${c} ${cidade.value}` : 'garcom campinas';
+    (window as any).dataLayer?.push({ event: 'cta_click', cta_location: 'hero_form', link_url: form.getAttribute('action') });
+  });
+
+  // Rede animada de pontos
+  const c = document.getElementById('rede') as HTMLCanvasElement | null;
+  const ctx = c?.getContext('2d');
+  if (c && ctx) {
+    const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DIST = 140;
+    let w = 0, h = 0, rafId = 0, visivel = true;
+    let pts: { x: number; y: number; vx: number; vy: number; r: number; laranja: boolean }[] = [];
+
+    const ajustar = () => {
+      const r = c.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = Math.max(1, r.width); h = Math.max(1, r.height);
+      c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.max(30, Math.min(110, Math.round((w * h) / 11000)));
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.42, vy: (Math.random() - 0.5) * 0.42,
+        r: 1 + Math.random() * 1.6, laranja: Math.random() < 0.35,
+      }));
+    };
+    const desenhar = () => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.lineWidth = 0.7;
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const d = Math.hypot(dx, dy);
+          if (d < DIST) {
+            ctx.strokeStyle = `rgba(255,255,255,${(0.28 * (1 - d / DIST)).toFixed(3)})`;
+            ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+          }
+        }
+      }
+      for (const p of pts) {
+        ctx.fillStyle = p.laranja ? 'rgba(242,139,48,.95)' : 'rgba(255,255,255,.85)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      }
+    };
+    const passo = () => {
+      for (const a of pts) {
+        a.x += a.vx; a.y += a.vy;
+        if (a.x < 0 || a.x > w) a.vx *= -1;
+        if (a.y < 0 || a.y > h) a.vy *= -1;
+      }
+      desenhar();
+      rafId = visivel ? requestAnimationFrame(passo) : 0;
+    };
+    window.addEventListener('resize', () => { ajustar(); desenhar(); });
+    ajustar();
+    if (reduzir) desenhar();
+    else {
+      rafId = requestAnimationFrame(passo);
+      // pausa a animação quando o hero sai da tela
+      new IntersectionObserver(([e]) => {
+        visivel = e.isIntersecting;
+        if (visivel && !rafId) rafId = requestAnimationFrame(passo);
+      }).observe(c);
+    }
+  }
+</script>

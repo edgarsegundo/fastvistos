@@ -1,0 +1,47 @@
+---
+/** Áreas de atuação — texto + lista de categorias. */
+const url = 'https://app.empregoaqui.com.br/buscar?utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal&utm_content=areas';
+const areas = [
+  { nome: 'Alimentação', desc: 'Cozinheiro, garçom e auxiliar de cozinha' },
+  { nome: 'Comércio e varejo', desc: 'Vendedor, caixa e atendente' },
+  { nome: 'Logística', desc: 'Estoquista, auxiliar de expedição e conferente' },
+  { nome: 'Serviços e atendimento', desc: 'Recepcionista, auxiliar de limpeza e serviços gerais' },
+];
+---
+
+<section class="areas" id="areas" aria-labelledby="titulo-areas">
+  <div class="wrap areas__inner">
+    <div class="areas__text">
+      <span class="eyebrow">ÁREAS DE ATUAÇÃO</span>
+      <h2 class="areas__title" id="titulo-areas">Profissionais para a rotina da sua empresa</h2>
+      <p class="areas__sub">Busque perfis para o salão, a cozinha, a loja, o estoque ou o atendimento. A disponibilidade varia conforme o cargo e a cidade.</p>
+      <a href={url} data-cta="areas" class="areas__link" target="_blank" rel="noopener noreferrer">
+        Consultar a base de candidatos
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+      </a>
+    </div>
+    <ul class="areas__list">
+      {areas.map((a) => (
+        <li><span class="areas__nome">{a.nome}</span><span class="areas__desc">{a.desc}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .areas { background: #f2faf4; scroll-margin-top: 72px; }
+  .areas__inner { padding-block: 88px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .areas__text { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 3px; color: #2e7d46; }
+  .areas__title { margin: 0; font-family: var(--font-serif); font-size: clamp(28px, 3.4vw, 42px); font-weight: 400; line-height: 1.15; color: #1e2a36; }
+  .areas__sub { margin: 0; font-size: 17px; line-height: 1.55; color: #45515e; }
+  .areas__link { align-self: flex-start; display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 16px; font-weight: 700; color: #b4530a; text-decoration: none; }
+  .areas__link:hover { color: #8a3f07; }
+  .areas__list { flex: 1 1 420px; min-width: 0; margin: 0; padding: 8px 24px; list-style: none; background: #fff; border-radius: 18px; box-shadow: 0 4px 18px rgba(30,42,54,.06); display: flex; flex-direction: column; }
+  .areas__list li { padding: 18px 0; border-bottom: 1px solid #eceff3; display: flex; flex-direction: column; gap: 4px; }
+  .areas__list li:last-child { border-bottom: none; }
+  .areas__nome { font-size: 17px; font-weight: 700; color: #1e2a36; }
+  .areas__desc { font-size: 15px; color: #45515e; }
+
+  @media (max-width: 760px) { .areas__inner { padding-block: 56px; } }
+</style>

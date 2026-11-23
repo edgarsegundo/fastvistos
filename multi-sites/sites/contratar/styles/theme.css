@@ -65,6 +65,7 @@
   --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif; /* corpo, parágrafos — contrato do body */
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;    /* títulos, botões, labels (usado pelos componentes) */
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;    /* títulos h1-h4 */
+  --font-serif:   'Lora', Georgia, serif;                           /* títulos de seção (landing) */
   --font-mono:    ui-monospace, monospace;
 
   /* =====================

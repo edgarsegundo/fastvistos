@@ -1,111 +1,43 @@
 ---
-/**
- * FAQ B2B — accordion (1 aberto por vez; 1º item aberto por padrão).
- */
-// TODO: revisar respostas (cobertura geográfica, condições) antes de publicar
+/** Perguntas frequentes — lista de definição + foto de entrevista por vídeo. */
 const faqs = [
-  {
-    q: 'Quanto custa acessar os currículos?',
-    a: 'Você não paga para criar uma conta e olhar a base. Cobramos por créditos: você compra o acesso avulso, por currículo, sem taxa de cadastro. Para grandes volumes, podemos combinar direto com sua empresa outro modelo de contratação.',
-  },
-  {
-    q: 'Vocês atendem agências de recrutamento?',
-    a: 'Sim. Trabalhamos com empresas que contratam diretamente e com agências que fazem recrutamento para terceiros, com condições específicas para volume.',
-  },
-  {
-    q: 'Como garantem a qualidade dos candidatos?',
-    a: 'Cada currículo é captado gratuitamente a partir de um cadastro guiado com o candidato, o que garante dados completos e atualizados — sem formulários abandonados pela metade.',
-  },
-  {
-    // TODO: preencher região real de cobertura
-    q: 'Qual é a cobertura geográfica?',
-    a: 'A cobertura está em definição — em breve atualizamos esta resposta com as regiões atendidas.',
-  },
-  {
-    q: 'Como funciona o contato com o candidato?',
-    a: 'O contato é direto, sem intermediário: sua empresa recebe os dados do candidato e conduz a conversa e a entrevista do seu jeito.',
-  },
-  {
-    q: 'Existe fidelidade ou contrato de permanência?',
-    a: 'Não. Você pode testar o acesso, pausar ou cancelar quando quiser — sem multa e sem contrato de fidelidade.',
-  },
+  { q: 'Preciso publicar uma vaga?', a: 'Você pode ir direto à busca de candidatos por cargo e cidade e consultar os perfis disponíveis.' },
+  { q: 'Como funcionam os 5 contatos grátis?', a: 'Ao criar uma conta de empresa, você recebe cinco contatos para experimentar. Use esses contatos nos perfis que quiser chamar pelo WhatsApp.' },
+  { q: 'Quem faz a entrevista e decide a contratação?', a: 'Sua empresa conversa com o candidato, avalia as informações e decide os próximos passos. Os currículos usam dados declarados pelos candidatos.' },
+  { q: 'Onde a plataforma atua?', a: 'O foco é a Região Metropolitana de Campinas, incluindo cidades como Hortolândia, Sumaré, Valinhos e Vinhedo.' },
 ];
 ---
 
-<section class="faq" id="faq" aria-labelledby="faq-title">
-  <div class="faq__inner">
-    <div class="faq__header">
-      <p class="section-label">Perguntas frequentes</p>
-      <h2 class="section-title" id="faq-title">Tudo o que você precisa saber para começar</h2>
+<section class="faq" id="duvidas" aria-labelledby="titulo-duvidas">
+  <div class="wrap faq__inner">
+    <div class="faq__side">
+      <span class="eyebrow">PERGUNTAS FREQUENTES</span>
+      <h2 class="faq__title" id="titulo-duvidas">Antes de começar</h2>
+      <img class="faq__img" src="/assets/images/faq/entrevista-video.webp" alt="Empregador conversando por vídeo com uma candidata sorridente" width="800" height="800" loading="lazy" decoding="async" />
     </div>
-
-    <div class="faq__list">
-      {faqs.map((item, i) => (
-        <div class:list={['faq-item', { open: i === 0 }]}>
-          <button class="faq-item__question" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`faq-ans-${i}`}>
-            {item.q}
-            <div class="faq-item__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-          </button>
-          <div class="faq-item__answer" id={`faq-ans-${i}`} role="region">
-            <p>{item.a}</p>
-          </div>
+    <dl class="faq__list">
+      {faqs.map((f) => (
+        <div class="faq__item">
+          <dt>{f.q}</dt>
+          <dd>{f.a}</dd>
         </div>
       ))}
-    </div>
+    </dl>
   </div>
 </section>
 
 <style>
-  .faq { padding: 100px 24px; background: var(--color-bg-light); }
-  .faq__inner { max-width: 740px; margin: 0 auto; }
-  .faq__header { text-align: center; margin-bottom: 48px; }
-  .section-label { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-cta); margin: 0 0 12px; }
-  .section-title { font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 34px); font-weight: 800; color: var(--color-bg); margin: 0; }
+  .faq { background: #fff; scroll-margin-top: 72px; }
+  .faq__inner { padding-block: 88px; display: flex; flex-wrap: wrap; gap: 48px; }
+  .faq__side { flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 3px; color: #2e7d46; }
+  .faq__title { margin: 0; font-family: var(--font-serif); font-size: clamp(28px, 3.4vw, 42px); font-weight: 400; color: #1e2a36; }
+  .faq__img { flex: 1 1 0; min-height: 260px; width: 100%; height: auto; margin-top: 16px; object-fit: cover; object-position: 55% 45%; border-radius: 18px; display: block; }
+  .faq__list { flex: 2 1 560px; min-width: 0; margin: 0; display: flex; flex-direction: column; }
+  .faq__item { padding: 20px 0; border-top: 1px solid #eceff3; display: flex; flex-direction: column; gap: 6px; }
+  .faq__item:last-child { border-bottom: 1px solid #eceff3; }
+  .faq__item dt { font-size: 17px; font-weight: 700; color: #1e2a36; }
+  .faq__item dd { margin: 0; font-size: 16px; line-height: 1.55; color: #45515e; }
 
-  .faq-item { background: #fff; border: 1px solid var(--color-cta); border-radius: 16px; margin-bottom: 16px; overflow: hidden; transform: translateZ(0); }
-  .faq-item__question {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 24px 28px;
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--color-bg);
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-  }
-  .faq-item__icon {
-    width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--color-cta); color: var(--color-cta);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform .3s;
-  }
-  .faq-item.open .faq-item__icon { transform: rotate(180deg); }
-
-  .faq-item__answer { max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; padding: 0 28px; }
-  .faq-item__answer p { font-size: 16px; color: var(--color-text-muted); line-height: 1.7; margin: 0; }
-  .faq-item.open .faq-item__answer { max-height: 300px; padding: 0 28px 24px; }
+  @media (max-width: 760px) { .faq__inner { padding-block: 56px; } }
 </style>
-
-<script>
-  document.querySelectorAll<HTMLButtonElement>('.faq-item__question').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const item = btn.closest('.faq-item');
-      if (!item) return;
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach((i) => {
-        i.classList.remove('open');
-        i.querySelector('.faq-item__question')?.setAttribute('aria-expanded', 'false');
-      });
-      if (!isOpen) {
-        item.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-</script>

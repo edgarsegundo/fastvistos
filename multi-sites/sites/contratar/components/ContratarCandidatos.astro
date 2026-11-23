@@ -1,0 +1,119 @@
+---
+/**
+ * Feed de candidatos (ilustrativo) — cartões que entram em sequência ao rolar.
+ * Cada cartão inteiro é clicável (leva à busca de candidatos).
+ */
+const utm = 'utm_source=contrataraqui&utm_medium=cta&utm_campaign=lp_principal';
+const allUrl = `https://app.empregoaqui.com.br/buscar?${utm}&utm_content=candidatos_ver_todos`;
+const cardUrl = `https://app.empregoaqui.com.br/buscar?${utm}&utm_content=candidatos_card`;
+
+const perfis = [
+  { nome: 'Rafael', cargo: 'Garçom', cidade: 'Campinas', tags: ['Mais de 5 anos', 'Tarde e noite'], novo: false, bg: '#FDEBD8', fg: '#8A3F07', desc: 'Experiência em restaurantes e eventos, com atendimento de salão e caixa. Ensino médio completo.' },
+  { nome: 'Luana', cargo: 'Vendedora', cidade: 'Sumaré', tags: ['1 a 2 anos', 'Manhã e tarde'], novo: true, bg: '#DCF3E3', fg: '#1F6136', desc: 'Atuou em loja de roupas e calçados, com metas de venda e organização de vitrine.' },
+  { nome: 'Diego', cargo: 'Estoquista', cidade: 'Hortolândia', tags: ['3 a 5 anos', 'Escala 6×1'], novo: false, bg: '#E6ECF7', fg: '#2C4472', desc: 'Recebimento, conferência e expedição em centro de distribuição. Opera paleteira.' },
+  { nome: 'Sandra', cargo: 'Recepcionista', cidade: 'Valinhos', tags: ['Mais de 5 anos', 'Escala 5×2'], novo: false, bg: '#F2E6F7', fg: '#5E2C72', desc: 'Atendimento ao público em clínica e escritório, agenda e telefone. Ensino superior.' },
+];
+---
+
+<section class="cand" aria-labelledby="titulo-feed">
+  <div class="wrap cand__inner">
+    <div class="cand__head">
+      <div class="cand__head-text">
+        <span class="eyebrow">CANDIDATOS DISPONÍVEIS</span>
+        <h2 class="cand__title" id="titulo-feed">Veja como os perfis aparecem</h2>
+        <p class="cand__sub">Cargo, cidade, experiência e disponibilidade em cada cartão.</p>
+      </div>
+      <a href={allUrl} data-cta="candidatos_ver_todos" class="cand__all" target="_blank" rel="noopener noreferrer">
+        Ver todos os candidatos
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <div class="feed" id="feed">
+      {perfis.map((p) => (
+        <article class="card">
+          <div class="card__top">
+            <div class="card__avatar" aria-hidden="true" style={`background:${p.bg};color:${p.fg}`}>{p.nome[0]}</div>
+            <div class="card__who">
+              <h3 class="card__name">{p.nome}</h3>
+              <span class="card__role">{p.cargo} · {p.cidade}</span>
+            </div>
+          </div>
+          <div class="card__tags">
+            {p.novo && <span class="tag tag--new">Novo</span>}
+            {p.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+          <p class="card__desc">{p.desc}</p>
+          <a href={cardUrl} data-cta="candidatos_card" class="card__wpp" target="_blank" rel="noopener noreferrer" aria-label={`Conversar com ${p.nome} no WhatsApp`}>
+            <span class="card__wpp-main">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>
+              Conversar no WhatsApp
+            </span>
+            <span class="card__wpp-sub">Grátis · usa 1 dos 5 contatos</span>
+          </a>
+        </article>
+      ))}
+    </div>
+    <p class="cand__note">Perfis ilustrativos. Os candidatos reais aparecem na busca.</p>
+  </div>
+</section>
+
+<style>
+  .cand { background: #fff; }
+  .cand__inner { padding-block: 72px 88px; display: flex; flex-direction: column; gap: 28px; }
+  .cand__head { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; }
+  .cand__head-text { display: flex; flex-direction: column; gap: 8px; }
+  .eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 3px; color: #2e7d46; }
+  .cand__title { margin: 0; font-family: var(--font-serif); font-size: clamp(28px, 3.4vw, 42px); font-weight: 400; color: #1e2a36; }
+  .cand__sub { margin: 0; font-size: 17px; color: #45515e; }
+  .cand__all { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 16px; font-weight: 700; color: #b4530a; text-decoration: none; }
+  .cand__all:hover { color: #8a3f07; }
+
+  .feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+  .card { position: relative; cursor: pointer; background: #fff; border: 1px solid #e4e8ee; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 2px 10px rgba(30,42,54,.05); opacity: 0; transform: translateY(48px) scale(.96); transition: opacity .875s ease, transform 1s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease; }
+  /* o link do WhatsApp cobre o cartão inteiro */
+  .card__wpp::after { content: ""; position: absolute; inset: 0; border-radius: 16px; }
+  .feed.visivel .card { opacity: 1; transform: none; }
+  .feed.visivel .card:nth-child(2) { transition-delay: .225s; }
+  .feed.visivel .card:nth-child(3) { transition-delay: .45s; }
+  .feed.visivel .card:nth-child(4) { transition-delay: .675s; }
+  .feed.pronto .card { transition-delay: 0s !important; }
+  .feed.pronto .card:hover { transform: translateY(-6px); box-shadow: 0 16px 32px rgba(30,42,54,.14); }
+
+  .card__top { display: flex; gap: 10px; align-items: center; }
+  .card__avatar { width: 40px; height: 40px; border-radius: 50%; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card__who { display: flex; flex-direction: column; }
+  .card__name { margin: 0; font-size: 17px; font-weight: 700; color: #1e2a36; }
+  .card__role { font-size: 13px; color: #5b6673; }
+  .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 3px 9px; border-radius: 6px; background: #eef1f5; color: #3a4654; font-size: 12px; font-weight: 500; }
+  .tag--new { background: var(--color-cta); color: #231a12; font-weight: 700; }
+  .card__desc { margin: 0; font-size: 14px; line-height: 1.55; color: #3a4654; }
+  .card__wpp { margin-top: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 54px; border-radius: 12px; background: #2e7d46; color: #fff; text-decoration: none; transition: background .2s; }
+  .card__wpp:hover { background: #256a3a; color: #fff; }
+  .card__wpp-main { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+  .card__wpp-sub { font-size: 12px; color: #e2f4e8; }
+  .cand__note { margin: 0; font-size: 13px; color: #5b6673; }
+
+  @media (max-width: 760px) { .cand__inner { padding-block: 48px 56px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+</style>
+
+<script>
+  const feed = document.getElementById('feed');
+  if (feed) {
+    const mostrar = () => {
+      feed.classList.add('visivel');
+      setTimeout(() => feed.classList.add('pronto'), 1900);
+    };
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) { obs.disconnect(); mostrar(); }
+      }, { threshold: 0.15 });
+      obs.observe(feed);
+    } else mostrar();
+  }
+</script>
