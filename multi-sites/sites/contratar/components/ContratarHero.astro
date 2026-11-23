@@ -52,7 +52,9 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
 
 <style>
   .hero { position: relative; overflow: hidden; background: #1e2a36; }
-  .hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; transform: translateX(var(--foto-x, -165px)) scale(var(--foto-s, 1)); transform-origin: 100% 0%; -webkit-mask-image: linear-gradient(to right, #000 80%, transparent 100%); mask-image: linear-gradient(to right, #000 80%, transparent 100%); }
+  /* Foto: --foto-s = largura em % do hero, --foto-x = posição esquerda em % do hero.
+     Altura automática; o hero (overflow hidden) corta a parte de baixo. Bordas esmaecem. */
+  .hero__bg { position: absolute; top: 0; left: var(--foto-x, 7%); width: calc(var(--foto-s, 0.7) * 100%); height: auto; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 15%, #000 80%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 15%, #000 80%, transparent 100%); }
   .hero__overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,26,32,.88) 0%, rgba(20,26,32,.55) 45%, rgba(20,26,32,.25) 100%); }
   .hero__rede { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
@@ -64,7 +66,7 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
   .hero__free { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; color: var(--color-cta); }
   .hero__link { align-self: flex-start; display: flex; align-items: center; min-height: 44px; color: #fff; font-size: 15px; font-weight: 600; text-decoration: underline; }
 
-  .hero__form { flex: 0 1 320px; min-width: 0; margin: 0; background: #fff; padding: 32px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+  .hero__form { flex: 0 1 320px; min-width: 0; margin: 0; background: rgba(255,255,255,.8); padding: 32px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
   .hero__form-title { margin: 0; font-family: var(--font-serif); font-size: 30px; line-height: 1.15; font-weight: 400; color: #d9721a; }
   .field { display: flex; flex-direction: column; gap: 4px; }
   .field label { font-size: 12px; font-weight: 600; letter-spacing: 1px; color: #5b6673; }
@@ -75,7 +77,7 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
   .hero__gift { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #1f6136; }
 
   @media (max-width: 760px) {
-    .hero__bg { transform: none; -webkit-mask-image: none; mask-image: none; }
+    .hero__bg { left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; -webkit-mask-image: none; mask-image: none; }
     .hero__title { line-height: 1.12; }
     .hero__sub { font-size: 16px; }
     .hero__form { flex: 1 1 100%; padding: 24px; }
@@ -104,11 +106,19 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
     const DIST = 140;
     let w = 0, h = 0, rafId = 0, visivel = true;
     let pts: { x: number; y: number; vx: number; vy: number; r: number; laranja: boolean }[] = [];
+    // Faixa vertical onde a mulher está (fração da largura da foto): a rede não é desenhada ali
+    const FAIXA_MULHER = [0.38, 0.92];
+    let faixa: { x0: number; x1: number } | null = null;
+    const hero = c.closest('.hero')?.querySelector('.hero__bg') as HTMLElement | null;
 
     const ajustar = () => {
       const r = c.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = Math.max(1, r.width); h = Math.max(1, r.height);
+      const fb = hero?.getBoundingClientRect();
+      faixa = fb && fb.width > 0
+        ? { x0: fb.left - r.left + fb.width * FAIXA_MULHER[0], x1: fb.left - r.left + fb.width * FAIXA_MULHER[1] }
+        : null;
       c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.max(30, Math.min(110, Math.round((w * h) / 11000)));
@@ -120,6 +130,14 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
     };
     const desenhar = () => {
       ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      if (faixa) {
+        // recorte "evenodd": desenha em tudo, exceto dentro da faixa da mulher
+        ctx.beginPath();
+        ctx.rect(0, 0, w, h);
+        ctx.rect(faixa.x0, 0, faixa.x1 - faixa.x0, h);
+        ctx.clip('evenodd');
+      }
       ctx.lineWidth = 0.7;
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
@@ -135,6 +153,7 @@ const cidades = ['Campinas', 'Hortolândia', 'Sumaré', 'Valinhos', 'Vinhedo'];
         ctx.fillStyle = p.laranja ? 'rgba(242,139,48,.95)' : 'rgba(255,255,255,.85)';
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
       }
+      ctx.restore();
     };
     const passo = () => {
       for (const a of pts) {
