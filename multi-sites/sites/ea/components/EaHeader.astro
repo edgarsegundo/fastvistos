@@ -1,0 +1,59 @@
+---
+/** Header — logo, links de âncora e CTA. Mobile: menu hambúrguer. */
+import { siteConfig } from '../site-config.ts';
+// [PREENCHER] links do menu
+const links = [
+  { href: '#roda', label: 'Recursos' },
+  { href: '#capacidades', label: 'O que dá para fazer' },
+  { href: '#exemplos', label: 'Exemplos' },
+  { href: '#passos', label: 'Como funciona' },
+  { href: '/blog/', label: 'Casos' },
+];
+---
+<header class="hdr">
+  <div class="ea-wrap hdr__in">
+    <a href="/" class="hdr__logo" aria-label={`${siteConfig.site.siteName} — início`}>
+      <span class="hdr__mark" aria-hidden="true"></span>
+      <span>{siteConfig.site.siteName}</span>
+    </a>
+    <nav class="hdr__nav" aria-label="Principal">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <a href="#contato" class="ea-btn ea-btn--dark hdr__cta">Falar conosco</a>
+    <button class="hdr__toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="hdr-menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div id="hdr-menu" class="hdr__menu" hidden>
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    <a href="#contato" class="ea-btn ea-btn--dark">Falar conosco</a>
+  </div>
+</header>
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--ea-line); }
+  .hdr__in { display: flex; align-items: center; gap: 32px; min-height: 56px; }
+  .hdr__logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--ea-font-display); font-weight: 700; font-size: 18px; color: var(--ea-ink); text-decoration: none; letter-spacing: -.01em; margin-right: auto; }
+  .hdr__mark { width: 22px; height: 22px; background: var(--ea-orange); display: inline-block; }
+  .hdr__nav { display: flex; gap: 6px; }
+  .hdr__nav a { display: flex; align-items: center; min-height: 36px; padding: 0 12px; font-size: 15px; font-weight: 500; color: var(--ea-ink); text-decoration: none; }
+  .hdr__nav a:hover { color: var(--ea-orange); }
+  .hdr__toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; background: none; border: 1px solid var(--ea-ink); color: var(--ea-ink); cursor: pointer; }
+  .hdr__menu { display: flex; flex-direction: column; padding: 8px 24px 20px; border-top: 1px solid var(--ea-line); background: #fff; }
+  .hdr__menu[hidden] { display: none; }
+  .hdr__menu a:not(.ea-btn) { padding: 14px 0; border-bottom: 1px solid var(--ea-line); color: var(--ea-ink); text-decoration: none; font-weight: 500; }
+  .hdr__menu .ea-btn { margin-top: 16px; justify-content: center; }
+  @media (max-width: 900px) {
+    .hdr__nav, .hdr__cta { display: none; }
+    .hdr__toggle { display: inline-flex; }
+  }
+  @media (min-width: 901px) { .hdr__menu { display: none !important; } }
+</style>
+<script>
+  const t = document.querySelector<HTMLButtonElement>('.hdr__toggle');
+  const m = document.getElementById('hdr-menu');
+  if (t && m) {
+    const set = (o: boolean) => { m.hidden = !o; t.setAttribute('aria-expanded', String(o)); t.setAttribute('aria-label', o ? 'Fechar menu' : 'Abrir menu'); };
+    t.addEventListener('click', () => set(m.hidden));
+    m.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => set(false)));
+  }
+</script>

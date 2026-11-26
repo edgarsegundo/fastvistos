@@ -1,0 +1,46 @@
+---
+/** 8 cards de problemas resolvidos. [PREENCHER] títulos, textos e links. Ícones vêm da roda. */
+import { ICONS } from '../lib/ea-roda-data';
+const cards = [
+  { icon: 'doc', t: 'Chega de digitar nota e boleto', d: '[PREENCHER] Documentos fotografados e lançados sozinhos no sistema.' },
+  { icon: 'msg', t: 'Cobrança que não depende de lembrar', d: '[PREENCHER] Lembretes e cobranças automáticas pelo WhatsApp.' },
+  { icon: 'cam', t: 'Conferência sem olho cansado', d: '[PREENCHER] Câmera que confere, conta e avisa quando algo foge do padrão.' },
+  { icon: 'geo', t: 'Equipe de rua sob controle', d: '[PREENCHER] Rotas, presença e serviço comprovados no mapa.' },
+  { icon: 'ia', t: 'Respostas prontas para perguntas repetidas', d: '[PREENCHER] IA que responde clientes com base nos dados da empresa.' },
+  { icon: 'pai', t: 'Decisão com número, não com palpite', d: '[PREENCHER] Painéis com alertas de estoque, atraso e meta.' },
+  { icon: 'voz', t: 'Reunião que vira ata sozinha', d: '[PREENCHER] Áudio transcrito, resumido e com tarefas registradas.' },
+  { icon: 'int', t: 'Sistemas que conversam entre si', d: '[PREENCHER] Venda gera nota, nota atualiza estoque, sem copiar dado.' },
+];
+---
+<section class="cards ea-section" id="recursos-cards">
+  <div class="ea-wrap">
+    <header class="cards__head">
+      <h2 class="ea-title">Tudo o que <em>dá para resolver</em>, e o que cada solução entrega.</h2>
+      <p class="ea-sub">[PREENCHER] Automatize o que é tedioso. Acelere o que é ambicioso.</p>
+    </header>
+    <ul class="cards__grid" role="list">
+      {cards.map((c) => (
+        <li class="card">
+          <div class="card__ico"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ICONS[c.icon]} /></div>
+          <h3>{c.t}</h3>
+          <p>{c.d}</p>
+          <a href="#contato" class="ea-btn ea-btn--dark">Quero isso</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<style>
+  .cards { background: var(--ea-bg-soft); }
+  .cards__head { max-width: 720px; margin-bottom: 48px; }
+  .cards__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .card { background: #fff; border: 1px solid var(--ea-line); padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: border-color .15s, transform .15s; }
+  .card:hover { border-color: var(--ea-orange); transform: translateY(-3px); }
+  .card__ico { background: var(--ea-sky-soft); aspect-ratio: 16 / 10; display: grid; place-items: center; margin-bottom: 4px; }
+  .card__ico svg { width: 52px; height: 52px; stroke: var(--ea-ink-2); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .card h3 { font-family: var(--ea-font-display); font-size: 19px; font-weight: 600; line-height: 1.2; margin: 0; }
+  .card p { margin: 0 0 8px; color: var(--ea-mute); font-size: 15px; line-height: 1.55; flex: 1; }
+  .card .ea-btn { align-self: flex-start; min-height: 40px; font-size: 12px; }
+  @media (max-width: 1000px) { .cards__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .cards__grid { grid-template-columns: 1fr; } }
+</style>

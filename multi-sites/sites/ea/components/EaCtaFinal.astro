@@ -1,0 +1,20 @@
+---
+/** CTA final (#contato). [PREENCHER] texto e links (WhatsApp/formulário). */
+const whatsapp = '#'; // [PREENCHER] link do WhatsApp
+---
+<section class="cta ea-section" id="contato" aria-labelledby="cta-title">
+  <div class="ea-wrap cta__in">
+    <h2 class="ea-title" id="cta-title">Descubra o que a tecnologia pode fazer <em>pela sua empresa.</em></h2>
+    <p class="ea-sub">[PREENCHER] Sem compromisso: uma conversa para mapear onde está o custo escondido.</p>
+    <div class="cta__actions">
+      <a href={whatsapp} class="ea-btn ea-btn--orange">Falar pelo WhatsApp →</a>
+      <a href="#roda" class="ea-btn ea-btn--light">Voltar à roda</a>
+    </div>
+  </div>
+</section>
+<style>
+  .cta { background-color: var(--ea-sky); background-image: linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px); background-size: 32px 32px; }
+  .cta__in { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .cta .ea-title { max-width: 20ch; }
+  .cta__actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 28px; }
+</style>

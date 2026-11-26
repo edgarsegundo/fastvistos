@@ -1,0 +1,28 @@
+---
+/** "Ponte" — bloco azul-acinzentado com texto, lista e ilustração. [PREENCHER] */
+import EaPlaceholder from './EaPlaceholder.astro';
+const pontos = ['Entende documentos, mensagens e imagens', 'Conversa com os sistemas que você já usa', 'Funciona no celular, no escritório e no campo', 'Se adapta quando o processo muda', 'Começa pequeno e cresce com o negócio'];
+---
+<section class="ponte ea-section">
+  <div class="ea-wrap ponte__in">
+    <div>
+      <h2 class="ea-title">Tecnologia que trabalha <em>como parte da equipe.</em></h2>
+      <p class="ea-sub">[PREENCHER] Você não precisa entender de tecnologia: precisa saber onde o dinheiro escorre. O resto a gente conecta.</p>
+      <h3 class="ponte__ponte">Sua <mark>PONTE</mark> entre o <mark>PROCESSO</mark> e o <mark>RESULTADO</mark></h3>
+      <ul class="ponte__list" role="list">
+        {pontos.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+    <EaPlaceholder label="Ilustração principal (ex.: computador, fluxo)" ratio="11 / 9" />
+  </div>
+</section>
+<style>
+  .ponte { background: var(--ea-sky); }
+  .ponte__in { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .ponte__ponte { font-family: var(--ea-font-mono); font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; margin: 32px 0 14px; line-height: 2; }
+  .ponte__ponte mark { background: var(--ea-ink); color: #fff; padding: 3px 8px; }
+  .ponte__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .ponte__list li { position: relative; padding-left: 26px; font-size: 16px; }
+  .ponte__list li::before { content: ''; position: absolute; left: 0; top: .5em; width: 10px; height: 10px; background: var(--ea-orange); }
+  @media (max-width: 860px) { .ponte__in { grid-template-columns: 1fr; gap: 32px; } }
+</style>

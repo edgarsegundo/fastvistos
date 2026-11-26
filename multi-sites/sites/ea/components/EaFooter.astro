@@ -1,0 +1,38 @@
+---
+/** Rodapé. [PREENCHER] colunas, redes e links legais. */
+import { siteConfig } from '../site-config.ts';
+const colunas = [
+  { t: 'Recursos', links: [['IA', '#roda'], ['App no celular', '#roda'], ['Painéis', '#roda'], ['Integração', '#roda'], ['Automação', '#roda'], ['Visão computacional', '#roda']] },
+  { t: 'Conteúdo', links: [['Casos', '/blog/'], ['Exemplos', '#exemplos'], ['Como funciona', '#passos']] },
+  { t: 'Empresa', links: [['Sobre', '#'], ['Contato', '#contato'], ['Privacidade', '#']] },
+];
+const year = new Date().getFullYear();
+---
+<footer class="ftr">
+  <div class="ea-wrap ftr__in">
+    <div class="ftr__brand">
+      <a href="/" class="ftr__logo"><span aria-hidden="true"></span>{siteConfig.site.siteName}</a>
+      <p>[PREENCHER] Tecnologia explicada em português simples, para quem toca um negócio.</p>
+    </div>
+    {colunas.map((c) => (
+      <nav aria-label={c.t}>
+        <h3>{c.t}</h3>
+        <ul role="list">{c.links.map(([l, h]) => <li><a href={h}>{l}</a></li>)}</ul>
+      </nav>
+    ))}
+  </div>
+  <div class="ea-wrap ftr__bottom">© {year} {siteConfig.site.siteName}. Todos os direitos reservados.</div>
+</footer>
+<style>
+  .ftr { background: var(--ea-ink); color: #fff; padding: 64px 0 0; }
+  .ftr__in { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 40px; padding-bottom: 48px; }
+  .ftr__logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--ea-font-display); font-weight: 700; font-size: 18px; color: #fff; text-decoration: none; }
+  .ftr__logo span { width: 20px; height: 20px; background: var(--ea-orange); }
+  .ftr__brand p { color: #aab3c5; font-size: 15px; line-height: 1.55; max-width: 34ch; }
+  .ftr h3 { font-family: var(--ea-font-mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #aab3c5; margin: 0 0 14px; }
+  .ftr ul { list-style: none; margin: 0; padding: 0; }
+  .ftr nav a { display: inline-block; padding: 6px 0; color: #fff; text-decoration: none; font-size: 15px; }
+  .ftr nav a:hover { color: var(--ea-orange); }
+  .ftr__bottom { border-top: 1px solid var(--ea-ink-3); padding-block: 22px; font-size: 13px; color: #aab3c5; }
+  @media (max-width: 760px) { .ftr__in { grid-template-columns: 1fr 1fr; } .ftr__brand { grid-column: 1 / -1; } }
+</style>

@@ -1,0 +1,42 @@
+---
+/** "O que a tecnologia pode fazer" — 3 linhas alternando mídia/texto. [PREENCHER] textos e imagens. */
+import EaPlaceholder from './EaPlaceholder.astro';
+import { ICONS } from '../lib/ea-roda-data';
+const itens = [
+  { icon: 'int', titulo: 'Tarefas repetitivas que se resolvem sozinhas', texto: '[PREENCHER] Dados que hoje alguém copia de um lugar para outro passam a fluir entre os sistemas, sem digitação e sem esquecimento.', cta: 'Ver integrações', href: '#roda' },
+  { icon: 'pai', titulo: 'O negócio inteiro numa tela só', texto: '[PREENCHER] Vendas, estoque, atrasos e contas a receber consolidados, com alerta quando algo foge do esperado.', cta: 'Ver painéis', href: '#roda' },
+  { icon: 'msg', titulo: 'Atendimento que não depende de quem está disponível', texto: '[PREENCHER] Confirmações, lembretes, cobranças e pedidos acontecendo pelo WhatsApp, com registro automático.', cta: 'Ver mensagens', href: '#roda' },
+];
+---
+<section class="cap ea-section" id="capacidades">
+  <div class="ea-wrap">
+    <header class="cap__head">
+      <h2 class="ea-title">Veja o que a <em>tecnologia pode fazer</em> pela sua empresa.</h2>
+      <p class="ea-sub">[PREENCHER] Do pedido à cobrança, a tecnologia assume o trabalho que consome tempo e deixa para a equipe o que exige decisão.</p>
+    </header>
+    <ul class="cap__list" role="list">
+      {itens.map((it) => (
+        <li class="cap__item">
+          <div class="cap__media"><EaPlaceholder label={`Ilustração: ${it.titulo}`} ratio="16 / 10" icon={ICONS[it.icon]} /></div>
+          <div class="cap__text">
+            <h3>{it.titulo}</h3>
+            <p>{it.texto}</p>
+            <a class="ea-link" href={it.href}>{it.cta} →</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<style>
+  .cap__head { max-width: 720px; margin-bottom: 56px; }
+  .cap__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 48px; }
+  .cap__item { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; align-items: center; }
+  .cap__item:nth-child(even) .cap__media { order: 2; }
+  .cap__text h3 { font-family: var(--ea-font-display); font-size: clamp(24px, 2.6vw, 32px); font-weight: 600; letter-spacing: -.01em; line-height: 1.15; margin: 0 0 14px; }
+  .cap__text p { color: var(--ea-mute); font-size: 17px; line-height: 1.6; margin: 0 0 22px; }
+  @media (max-width: 860px) {
+    .cap__item { grid-template-columns: 1fr; gap: 20px; }
+    .cap__item:nth-child(even) .cap__media { order: 0; }
+  }
+</style>

@@ -1,0 +1,13 @@
+{
+  "name": "vitrine-local-edit-package",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "watch": "node watch.mjs --dir .",
+    "restore": "node restore.mjs --dir ."
+  },
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "express": "^4.18.2"
+  }
+}

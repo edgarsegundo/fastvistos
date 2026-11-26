@@ -1,0 +1,15 @@
+{
+  "pageId": 45,
+  "projectId": 43,
+  "blockId": "cloned",
+  "blockIndex": 0,
+  "projectSlug": "browserbase",
+  "pageSlug": "browserbase",
+  "djangoBaseUrl": "https://saas.fastvistos.com.br",
+  "endpoint": "https://saas.fastvistos.com.br/_local-edit/pages/45/blocks/cloned/html",
+  "imagesEndpoint": "https://saas.fastvistos.com.br/_local-edit/pages/45/images",
+  "token": "H93XAqLmjeKS4CI4NpYo3OwUhqBm_xRApZkJfku9tB8",
+  "allowScripts": true,
+  "baseHash": "807c6924e2918863de01244a8c1dde038027ce1f2b1eddf1c60adc56e91200de",
+  "exportedAt": "2026-11-26T14:27:05.441036+00:00"
+}

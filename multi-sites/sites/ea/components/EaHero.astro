@@ -1,0 +1,36 @@
+---
+/**
+ * Hero — título com destaque laranja (como o site-modelo) + Roda de recursos.
+ * [PREENCHER] título, subtítulo e CTAs.
+ */
+import EaRodaRecursos from './EaRodaRecursos.astro';
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="ea-wrap hero__top">
+    <h1 class="hero__title" id="hero-title"><mark>Descubra onde a tecnologia reduz custo na sua empresa.</mark></h1>
+    <p class="hero__sub">
+      <span class="hero__sub-full">Escolha um recurso na roda e veja o que ele faz hoje e como aplicar no seu negócio.</span>
+      <span class="hero__sub-short">Escolha um recurso e veja como aplicar no seu negócio.</span>
+    </p>
+    <div class="hero__actions">
+      <a href="#contato" class="ea-btn ea-btn--dark">Falar com um especialista</a>
+    </div>
+  </div>
+  <EaRodaRecursos />
+</section>
+<style>
+  .hero { background: #C6D3E8; padding: 40px 0 88px; }
+  .hero__top { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
+  .hero__title { font-family: var(--ea-font-display); font-size: clamp(28px, 4.4vw, 50px); line-height: 1.18; font-weight: 600; letter-spacing: -.02em; margin: 0 0 22px; max-width: 30ch; }
+  .hero__title mark { background: var(--ea-orange); color: #fff; padding: .04em .22em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .hero__sub { font-size: 18px; line-height: 1.55; color: var(--ea-ink); max-width: 72ch; margin: 0 0 28px; }
+  .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .hero__sub-short { display: none; }
+  @media (max-width: 760px) {
+    .hero { padding: 20px 0 56px; }
+    .hero__top { margin-bottom: 8px; }
+    .hero__sub { font-size: 16px; margin-bottom: 18px; }
+    .hero__sub-full { display: none; }
+    .hero__sub-short { display: inline; }
+  }
+</style>

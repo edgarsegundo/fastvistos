@@ -1,0 +1,197 @@
+---
+/**
+ * Roda de recursos — onde a tecnologia reduz custo.
+ * Fatias e painéis são renderizados no servidor (conteúdo indexável, funciona sem JS);
+ * o script só alterna a fatia/painel ativos.
+ * Dados: lib/ea-roda-data.ts
+ */
+import { ICONS, RECURSOS } from '../lib/ea-roda-data';
+
+// Tons pastéis, um por fatia (ciclam se houver mais fatias que cores)
+const PASTEIS = ['#F9D5C2', '#FBE9A8', '#CDEBD0', '#BFE3EE', '#D8CCF0', '#F7C9DA', '#C9F0E8', '#FFE0B8', '#E2E8A8', '#D6DCF2', '#F2D0F0'];
+
+const CX = 300, CY = 300, R = 284, r = 100;
+const n = RECURSOS.length;
+const step = (2 * Math.PI) / n;
+const start = -Math.PI / 2 - step / 2;
+const pt = (rad: number, a: number) => [CX + rad * Math.cos(a), CY + rad * Math.sin(a)].map((v) => +v.toFixed(2));
+
+const fatias = RECURSOS.map((t, i) => {
+  const a0 = start + i * step, a1 = a0 + step, am = (a0 + a1) / 2;
+  const [x1, y1] = pt(R, a0), [x2, y2] = pt(R, a1), [x3, y3] = pt(r, a1), [x4, y4] = pt(r, a0);
+  const d = `M${x1} ${y1}A${R} ${R} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${r} ${r} 0 0 0 ${x4} ${y4}Z`;
+  const [ix, iy] = pt(196, am);
+  // rótulos com espaço quebram em duas linhas (ex.: Visão / computacional)
+  const palavras = t.n.split(' ');
+  let linhas = [t.n];
+  if (palavras.length > 1) {
+    // divide no espaço que deixa as duas linhas mais equilibradas
+    let melhor = Infinity;
+    for (let k = 1; k < palavras.length; k++) {
+      const a = palavras.slice(0, k).join(' '), b = palavras.slice(k).join(' ');
+      const m = Math.max(a.length, b.length);
+      if (m < melhor) { melhor = m; linhas = [a, b]; }
+    }
+  }
+  return { ...t, d, ix, iy, i, linhas, cor: PASTEIS[i % PASTEIS.length] };
+});
+---
+
+<div class="roda ea-wrap" id="roda">
+  <div class="roda__wheel">
+    <svg class="wheel" style={`--fs:${n > 10 ? 15 : 17}px`} viewBox="0 0 600 600" role="group" aria-label={`Roda com ${n} recursos tecnológicos. Escolha um para ver o que ele faz.`}>
+      {fatias.map((f) => (
+        <g class:list={['slice', { on: f.i === 0 }]} data-i={f.i} tabindex="0" role="button" aria-pressed={f.i === 0 ? 'true' : 'false'} aria-controls={`painel-${f.k}`} aria-label={f.n}>
+          <path d={f.d} style={`fill:${f.cor}`} />
+          <g class="ic" transform={`translate(${f.ix - 22} ${f.iy - 40}) scale(1.83)`} set:html={ICONS[f.k]} />
+          <text x={f.ix} y={f.iy + (f.linhas.length > 1 ? 22 : 26)} class:list={{ 'two-lines': f.linhas.length > 1 }}>
+            {f.linhas.map((l, k) => <tspan x={f.ix} dy={k === 0 ? 0 : 17}>{l}</tspan>)}
+          </text>
+        </g>
+      ))}
+      <circle class="hub" cx={CX} cy={CY} r={r - 10} />
+      <text class="hubt" x={CX} y={CY - 6}>Toque em</text>
+      <text class="hubt hubt--accent" x={CX} y={CY + 20}>uma fatia</text>
+    </svg>
+  </div>
+
+  <div class="roda__backdrop" aria-hidden="true"></div>
+  <div class="roda__panels">
+    {RECURSOS.map((t, i) => (
+      <section class="painel" id={`painel-${t.k}`} hidden={i !== 0} aria-live="polite">
+        <header class="painel__head">
+          <span class="painel__badge"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={ICONS[t.k]} /></span>
+          <div>
+            <p class="ea-eyebrow">Recurso {String(i + 1).padStart(2, '0')} de {String(RECURSOS.length).padStart(2, '0')}</p>
+            <h2 class="painel__title">{t.n}</h2>
+          </div>
+          <button type="button" class="painel__close" aria-label="Fechar">×</button>
+        </header>
+        <h3 class="painel__h3">O que dá para fazer ({t.v.length}) — toque em cada verbo</h3>
+        <div class="verbos">
+          {t.v.map(([verbo, faz, pergunta]) => (
+            <details>
+              <summary>{verbo}</summary>
+              <p>{faz}</p>
+              <p class="qq">Pergunte: “{pergunta}”</p>
+            </details>
+          ))}
+        </div>
+        <a href="#contato" class="ea-btn ea-btn--dark painel__cta">Quero ver isso na minha empresa →</a>
+      </section>
+    ))}
+  </div>
+</div>
+
+<style>
+  .roda { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+  @media (max-width: 900px) { .roda { grid-template-columns: 1fr; gap: 28px; } }
+
+  .roda__wheel { background: #C6D3E8; border: 0; padding: 0 24px 18px; }
+  .wheel { width: 100%; max-width: 560px; margin: 0 auto; display: block; }
+  .slice { cursor: pointer; outline: none; }
+  .slice path { stroke: #fff; stroke-width: 4; transition: filter .18s ease, transform .18s ease; transform-origin: 300px 300px; }
+  .slice:hover path { filter: brightness(.96) saturate(1.1); }
+  .slice.on path { fill: var(--ea-orange) !important; transform: scale(1.04); }
+  .slice:focus-visible path { stroke: var(--ea-blue); stroke-width: 5; }
+  .slice text { fill: #14181f; font-family: var(--ea-font-mono); font-size: var(--fs, 17px); font-weight: 500; letter-spacing: .02em; text-anchor: middle; pointer-events: none; }
+  .slice.on text { fill: #14181f; }
+  .slice .ic { stroke: #14181f; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+  .slice text.two-lines { font-size: calc(var(--fs, 17px) - 3px); }
+  .hub { fill: var(--ea-ink); }
+  .hubt { fill: #fff; font-family: var(--ea-font-display); font-size: 20px; font-weight: 600; text-anchor: middle; }
+  .hubt--accent { fill: var(--ea-orange); }
+
+  .painel { background: #fff; border: 1px solid var(--ea-line); border-top: 4px solid var(--ea-orange); padding: 20px 24px; }
+  .painel[hidden] { display: none; }
+  .painel__head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  .painel__head .ea-eyebrow { margin: 0 0 2px; font-size: 11px; }
+  .painel__badge { width: 36px; height: 36px; flex-shrink: 0; display: grid; place-items: center; background: var(--ea-ink-2); }
+  .painel__badge svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .painel__title { font-family: var(--ea-font-display); font-size: 24px; font-weight: 600; letter-spacing: -.02em; margin: 0; line-height: 1.1; }
+  .painel__cen { margin: 0 0 20px; padding: 14px 16px; background: var(--ea-sky-soft); border-left: 4px solid var(--ea-orange); font-size: 15.5px; line-height: 1.55; }
+  .painel__cen strong { display: block; font-family: var(--ea-font-mono); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ea-mute); margin-bottom: 4px; }
+  .painel__h3 { font-family: var(--ea-font-mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--ea-mute); margin: 0 0 6px; }
+  details { border-top: 1px solid var(--ea-line); }
+  details:last-child { border-bottom: 1px solid var(--ea-line); }
+  summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 13px 0; font-weight: 600; min-height: 44px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; font-family: var(--ea-font-mono); font-size: 20px; color: var(--ea-orange); }
+  details[open] summary::after { content: '–'; }
+  details p { margin: 0 0 10px; font-size: 15px; line-height: 1.55; color: var(--ea-ink); }
+  details .qq { color: var(--ea-mute); font-style: italic; padding-bottom: 6px; }
+  .painel__hint { margin: 18px 0; font-size: 14px; color: var(--ea-mute); }
+  .painel__cta { width: 100%; justify-content: center; }
+
+  .painel__close { display: none; }
+  .roda__backdrop { display: none; }
+
+  /* Mobile: o painel vira um modal sobre a roda */
+  @media (max-width: 900px) {
+    .roda__backdrop { position: fixed; inset: 0; z-index: 199; background: rgba(10,12,22,.6); }
+    .roda__backdrop.aberto { display: block; }
+    .roda__panels { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .roda__panels.aberto { display: flex; }
+    .roda__panels .painel { width: 100%; max-width: 520px; max-height: calc(100vh - 32px); overflow-y: auto; margin: 0; }
+    .painel__close { display: grid; place-items: center; flex-shrink: 0; margin-left: auto; width: 40px; height: 40px; background: none; border: 1px solid var(--ea-ink); font-size: 24px; line-height: 1; color: var(--ea-ink); cursor: pointer; align-self: flex-start; }
+  }
+
+  @media (max-width: 560px) {
+    .roda__wheel { padding: 0 8px 12px; }
+    .wheel { max-width: 340px; }
+    .painel { padding: 20px 18px; }
+    .painel__title { font-size: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slice path { transition: none; } }
+</style>
+
+<script>
+  const fatias = Array.from(document.querySelectorAll<SVGGElement>('#roda .slice'));
+  const paineis = Array.from(document.querySelectorAll<HTMLElement>('#roda .painel'));
+  const mobile = window.matchMedia('(max-width: 900px)');
+  const painelBox = document.querySelector<HTMLElement>('#roda .roda__panels');
+  const fundo = document.querySelector<HTMLElement>('#roda .roda__backdrop');
+  const fechar = document.querySelectorAll<HTMLButtonElement>('#roda .painel__close');
+  let ativo = 0;
+
+  function abrirModal() {
+    if (!painelBox || !fundo) return;
+    painelBox.classList.add('aberto');
+    fundo.classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+    paineis[ativo]?.querySelector<HTMLElement>('.painel__close')?.focus();
+  }
+
+  function fecharModal() {
+    if (!painelBox || !fundo) return;
+    painelBox.classList.remove('aberto');
+    fundo.classList.remove('aberto');
+    document.body.style.overflow = '';
+    fatias[ativo]?.focus();
+  }
+
+  function selecionar(i: number, rolar: boolean) {
+    ativo = i;
+    fatias.forEach((f, j) => {
+      f.classList.toggle('on', i === j);
+      f.setAttribute('aria-pressed', String(i === j));
+    });
+    paineis.forEach((p, j) => { p.hidden = i !== j; });
+    if (rolar && mobile.matches) abrirModal();
+  }
+
+  fechar.forEach((b) => b.addEventListener('click', fecharModal));
+  fundo?.addEventListener('click', fecharModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && painelBox?.classList.contains('aberto')) fecharModal();
+  });
+
+  fatias.forEach((f, i) => {
+    f.addEventListener('click', () => selecionar(i, true));
+    f.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selecionar(i, true); }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); fatias[(i + 1) % fatias.length].focus(); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); fatias[(i - 1 + fatias.length) % fatias.length].focus(); }
+    });
+  });
+</script>

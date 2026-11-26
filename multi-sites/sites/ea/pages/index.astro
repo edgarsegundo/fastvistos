@@ -2,13 +2,27 @@
 import SharedHomeLayout from '../layouts/SharedHomeLayout.astro';
 import { siteConfig } from '../site-config.ts';
 import JsonLdHomePageBase from '../components/JsonLdHomePageBase.astro';
+import '../styles/ea-landing.css';
+
+import EaHeader from '../components/EaHeader.astro';
+import EaHero from '../components/EaHero.astro';
+import EaLogos from '../components/EaLogos.astro';
+import EaCapacidades from '../components/EaCapacidades.astro';
+import EaPonte from '../components/EaPonte.astro';
+import EaCards from '../components/EaCards.astro';
+import EaExemplos from '../components/EaExemplos.astro';
+import EaPassos from '../components/EaPassos.astro';
+import EaNumeros from '../components/EaNumeros.astro';
+import EaCtaFinal from '../components/EaCtaFinal.astro';
+import EaFooter from '../components/EaFooter.astro';
 
 const { bodyClass = '', bodyStyle = '' } = Astro.props;
 ---
 
 <SharedHomeLayout
     bodyClass={`${bodyClass} leading-normal tracking-normal antialiased`}
-    bodyStyle={`${bodyStyle} font-family: 'Source Sans Pro', sans-serif;`}
+    bodyStyle={bodyStyle}
+    themeToggleDisable={true}
     canonicalConf={siteConfig.site.canonical}
     faviconPathFromConf={siteConfig.site.faviconPath}
     seoFromConf={siteConfig.homePageConfig.seo}
@@ -23,6 +37,14 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
 >
     <!-- Additional head content specific to this layout -->
     <Fragment slot="head">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'"
+        />
         <JsonLdHomePageBase
             faqList={[]}
             servicesList={[]}
@@ -31,20 +53,17 @@ const { bodyClass = '', bodyStyle = '' } = Astro.props;
         />
     </Fragment>
 
-    <!-- Body content -->
-    <p>This is the home page content for {siteConfig.site.siteName}.</p>
+    <EaHeader />
+    <main>
+        <EaHero />
+        <EaLogos />
+        <EaCapacidades />
+        <EaPonte />
+        <EaCards />
+        <EaExemplos />
+        <EaPassos />
+        <EaNumeros />
+        <EaCtaFinal />
+    </main>
+    <EaFooter />
 </SharedHomeLayout>
-
-<style is:global>
-    .home-layout p,
-    .home-layout h3,
-    .home-layout ul,
-    .home-layout a,
-    .home-layout span {
-        color: #1b375c !important;
-    }
-
-    .home-main {
-        min-height: 100vh;
-    }
-</style>

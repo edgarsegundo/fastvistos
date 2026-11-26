@@ -1,0 +1,71 @@
+---
+/** "Tem um exemplo para isso" — abas com exemplos. [PREENCHER] */
+const exemplos = [
+  { aba: 'Lê notas fiscais e lança no sistema', texto: '[PREENCHER] Foto da nota, leitura automática dos campos, validação e lançamento sem digitação.', recursos: ['Visão computacional', 'IA', 'Banco de dados'], integra: ['Sistema de gestão', 'WhatsApp'] },
+  { aba: 'Cobra clientes pelo WhatsApp', texto: '[PREENCHER] Lembrete antes do vencimento, cobrança automática e baixa quando o pagamento entra.', recursos: ['Comunicação', 'Automação'], integra: ['WhatsApp', 'Banco'] },
+  { aba: 'Acompanha a equipe de campo', texto: '[PREENCHER] Rota do dia, comprovação de visita por localização e relatório ditado por voz.', recursos: ['Localização', 'App no celular', 'Voz'], integra: ['App de campo'] },
+  { aba: 'Mostra o caixa e o estoque numa tela', texto: '[PREENCHER] Painel com vendas, contas a receber e alertas de estoque baixo.', recursos: ['Painéis', 'Integração'], integra: ['Planilhas', 'ERP'] },
+  { aba: 'Responde dúvidas de clientes', texto: '[PREENCHER] Assistente treinado nos dados da empresa que passa para humano só o que precisa.', recursos: ['IA', 'Comunicação'], integra: ['Site', 'WhatsApp'] },
+];
+---
+<section class="ex ea-section" id="exemplos">
+  <div class="ea-wrap">
+    <h2 class="ea-title">Tem um <em>exemplo</em> para isso.</h2>
+    <div class="ex__box">
+      <div class="ex__tabs" role="tablist" aria-label="Exemplos">
+        {exemplos.map((e, i) => (
+          <button role="tab" type="button" id={`ex-tab-${i}`} aria-controls={`ex-panel-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{e.aba}</button>
+        ))}
+      </div>
+      <div class="ex__panels">
+        {exemplos.map((e, i) => (
+          <div role="tabpanel" id={`ex-panel-${i}`} aria-labelledby={`ex-tab-${i}`} hidden={i !== 0}>
+            <p class="ex__texto">{e.texto}</p>
+            <div class="ex__tags">
+              <div><h4>Recursos usados</h4><ul role="list">{e.recursos.map((r) => <li>{r}</li>)}</ul></div>
+              <div><h4>Conecta com</h4><ul role="list">{e.integra.map((r) => <li>{r}</li>)}</ul></div>
+            </div>
+            <a class="ea-btn ea-btn--orange" href="#contato">Quero algo assim →</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .ex__box { display: grid; grid-template-columns: 1fr 1.1fr; gap: 0; margin-top: 40px; border: 1px solid var(--ea-line); }
+  .ex__tabs { display: flex; flex-direction: column; background: var(--ea-bg-soft); }
+  .ex__tabs button { text-align: left; padding: 18px 22px; background: none; border: 0; border-bottom: 1px solid var(--ea-line); font: 500 15px var(--ea-font-body); color: var(--ea-ink); cursor: pointer; min-height: 56px; border-left: 4px solid transparent; }
+  .ex__tabs button:last-child { border-bottom: 0; }
+  .ex__tabs button:hover { background: #fff; }
+  .ex__tabs button[aria-selected='true'] { background: #fff; border-left-color: var(--ea-orange); font-weight: 600; }
+  .ex__panels { background: var(--ea-sky-soft); padding: 32px; }
+  .ex__panels [hidden] { display: none; }
+  .ex__texto { font-size: 17px; line-height: 1.6; margin: 0 0 24px; }
+  .ex__tags { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .ex__tags h4 { font-family: var(--ea-font-mono); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ea-mute); margin: 0 0 8px; }
+  .ex__tags ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .ex__tags li { background: #fff; border: 1px solid var(--ea-ink); padding: 4px 10px; font-family: var(--ea-font-mono); font-size: 12px; }
+  @media (max-width: 860px) {
+    .ex__box { grid-template-columns: 1fr; }
+    .ex__panels { padding: 22px 18px; }
+  }
+</style>
+<script>
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('#exemplos [role=tab]'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('#exemplos [role=tabpanel]'));
+  const ativar = (i: number) => {
+    tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
+    panels.forEach((p, j) => { p.hidden = i !== j; });
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => ativar(i));
+    t.addEventListener('keydown', (e) => {
+      const k = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+      if (!k) return;
+      e.preventDefault();
+      const j = (i + k + tabs.length) % tabs.length;
+      ativar(j); tabs[j].focus();
+    });
+  });
+</script>

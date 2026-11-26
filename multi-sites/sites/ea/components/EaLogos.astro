@@ -1,0 +1,20 @@
+---
+/** Faixa de prova social. [PREENCHER] texto e logos (troque os blocos por <img>). */
+const logos = ['Cliente 1', 'Cliente 2', 'Cliente 3', 'Cliente 4', 'Cliente 5', 'Cliente 6'];
+---
+<section class="logos" aria-label="Empresas atendidas">
+  <div class="ea-wrap">
+    <p class="ea-eyebrow">[PREENCHER] +00 empresas já reduziram custo com tecnologia</p>
+    <ul class="logos__row" role="list">
+      {logos.map((l) => <li>[Logo] {l}</li>)}
+    </ul>
+  </div>
+</section>
+<style>
+  .logos { padding: 48px 0; border-bottom: 1px solid var(--ea-line); }
+  .logos .ea-eyebrow { text-align: center; margin-bottom: 24px; }
+  .logos__row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .logos__row li { display: flex; align-items: center; justify-content: center; min-height: 64px; border: 1px dashed var(--ea-line); font-family: var(--ea-font-mono); font-size: 12px; color: var(--ea-mute); text-align: center; padding: 8px; }
+  @media (max-width: 900px) { .logos__row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 520px) { .logos__row { grid-template-columns: repeat(2, 1fr); } }
+</style>
